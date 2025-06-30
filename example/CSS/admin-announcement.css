@@ -1,0 +1,125 @@
+    body {
+      background: #181C23;
+      color: #D4B97F;
+      font-family: 'Segoe UI', 'Pretendard', sans-serif;
+      margin: 0;
+    }
+    .navbar {
+      background: #181C23 !important;
+      border-bottom: 1px solid #222;
+    }
+    .navbar-brand span {
+      color: #D4B97F;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    .navbar-nav .nav-link {
+      color: #D4B97F !important;
+    }
+    .navbar-nav .nav-link.active, .navbar-nav .nav-link:focus, .navbar-nav .nav-link:hover {
+      color: #fffbe6 !important;
+    }
+    .resonos-card {
+      background: rgba(24,28,35,0.96);
+      border: 1.5px solid #D4B97F;
+      border-radius: 20px;
+      color: #fffbe6;
+      box-shadow: 0 2px 16px rgba(24,28,35,0.10);
+      margin-bottom: 24px;
+    }
+    .section-title {
+      color: #fffbe6;
+      font-size: 1.22rem;
+      margin-bottom: 22px;
+      font-weight: bold;
+    }
+    .notice-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: none;
+      color: #fffbe6;
+      font-size: 1.01rem;
+    }
+    .notice-table th, .notice-table td {
+      border-bottom: 1px solid #222;
+      padding: 13px 10px;
+      text-align: left;
+    }
+    .notice-table th {
+      color: #D4B97F;
+      font-size: 1.02rem;
+      font-weight: bold;
+      background: #222;
+    }
+    .notice-table tr:last-child td {
+      border-bottom: none;
+    }
+    .btn-gold, .btn-gold.btn-sm {
+      background: #D4B97F;
+      color: #181C23;
+      font-weight: bold;
+      border-radius: 30px;
+      border: none;
+      transition: background 0.2s, color 0.2s;
+      padding: 7px 18px;
+    }
+    .btn-gold:hover, .btn-gold:focus {
+      background: #fffbe6;
+      color: #181C23;
+    }
+    .btn-outline-gold, .btn-outline-gold.btn-sm {
+      background: none;
+      color: #D4B97F;
+      border: 1.5px solid #D4B97F;
+      font-weight: bold;
+      border-radius: 30px;
+      transition: background 0.2s, color 0.2s;
+      padding: 7px 18px;
+    }
+    .btn-outline-gold:hover, .btn-outline-gold:focus {
+      background: #D4B97F;
+      color: #181C23;
+    }
+    .notice-form label {
+      color: #D4B97F;
+      font-weight: bold;
+      margin-bottom: 7px;
+      display: block;
+    }
+    .notice-form input, .notice-form textarea {
+      width: 100%;
+      background: #222;
+      color: #fffbe6;
+      border: 1.5px solid #D4B97F;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 14px;
+      padding: 10px 14px;
+      box-sizing: border-box;
+    }
+    .notice-form input:focus, .notice-form textarea:focus {
+      border-color: #fffbe6;
+      outline: none;
+    }
+    .notice-form {
+      margin-bottom: 28px;
+    }
+    .logo-img {
+      height: 38px;
+      border-radius: 6px;
+      background: #181C23;
+      margin-right: 13px;
+    }
+    .logo-text {
+      font-size: 1.7rem;
+      font-weight: bold;
+      color: #D4B97F;
+      letter-spacing: 2px;
+    }
+    footer {
+      text-align: center;
+      color: #B0B6BE;
+      padding: 24px 0 8px 0;
+      font-size: 1rem;
+      border-top: 1px solid #222;
+    }

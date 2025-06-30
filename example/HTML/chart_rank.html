@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>RESONOS - 차트/랭킹</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/CSS/chart_rank.css">
+</head>
+<body>
+  <!-- 헤더 (로고/네비) -->
+  <nav class="navbar navbar-expand-lg" style="background:#181C23; border-bottom:1px solid #222;">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="https://pplx-res.cloudinary.com/image/private/user_uploads/71501722/4852723f-0f3f-4793-9eaf-749463c33650/image.jpg" alt="RESONOS Logo" style="height:38px; border-radius:6px; margin-right:12px;">
+        <span style="color:#D4B97F;font-weight:bold;letter-spacing:2px;">RESONOS</span>
+      </a>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" style="color:#D4B97F;" href="#">Home</a></li>
+        <li class="nav-item"><a class="nav-link active" style="color:#fffbe6;" href="#">Charts</a></li>
+        <li class="nav-item"><a class="nav-link" style="color:#D4B97F;" href="#">Playlists</a></li>
+        <li class="nav-item"><a class="nav-link" style="color:#D4B97F;" href="#">Community</a></li>
+      </ul>
+    </div>
+  </nav>
+  <!-- 차트/랭킹 메인 -->
+  <main class="resonos-bg py-5">
+    <div class="container">
+      <h1 class="mb-4" style="color:#fffbe6;">차트 & 랭킹</h1>
+      <!-- 차트 탭 -->
+      <ul class="nav nav-pills mb-4" id="chartTabs">
+        <li class="nav-item"><a class="nav-link active" data-bs-toggle="pill" href="#album-chart">인기 앨범</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#track-chart">인기 곡</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#artist-chart">인기 아티스트</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#trend-chart">트렌딩</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#fan-chart">팬 차트/투표</a></li>
+      </ul>
+      <div class="tab-content">
+        <!-- 인기 앨범 차트 -->
+        <div class="tab-pane fade show active" id="album-chart">
+          <h4 class="mb-3" style="color:#D4B97F;">실시간 인기 앨범</h4>
+          <ol class="resonos-chart-list">
+            <li>
+              <span class="rank gold">1</span>
+              <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=facearea&w=80&q=80" class="chart-thumb" alt="앨범커버">
+              <span class="title">Starlight Symphony</span>
+              <span class="artist">Orion Sound</span>
+              <span class="score">4.8 ★</span>
+            </li>
+            <li>
+              <span class="rank silver">2</span>
+              <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=80&q=80" class="chart-thumb" alt="앨범커버">
+              <span class="title">Cosmic Groove</span>
+              <span class="artist">Luna Beats</span>
+              <span class="score">4.7 ★</span>
+            </li>
+            <li>
+              <span class="rank bronze">3</span>
+              <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=80&q=80" class="chart-thumb" alt="앨범커버">
+              <span class="title">Nebula Jam</span>
+              <span class="artist">GalaxiNote</span>
+              <span class="score">4.6 ★</span>
+            </li>
+          </ol>
+        </div>
+        <!-- 인기 곡 차트 -->
+        <div class="tab-pane fade" id="track-chart">
+          <h4 class="mb-3" style="color:#D4B97F;">실시간 인기 곡</h4>
+          <ol class="resonos-chart-list">
+            <li>
+              <span class="rank gold">1</span>
+              <span class="title">Starlight Overture</span>
+              <span class="artist">Orion Sound</span>
+              <span class="score">4.9 ★</span>
+            </li>
+            <li>
+              <span class="rank silver">2</span>
+              <span class="title">Cosmic Groove</span>
+              <span class="artist">Luna Beats</span>
+              <span class="score">4.8 ★</span>
+            </li>
+            <li>
+              <span class="rank bronze">3</span>
+              <span class="title">Nebula Waltz</span>
+              <span class="artist">GalaxiNote</span>
+              <span class="score">4.7 ★</span>
+            </li>
+          </ol>
+        </div>
+        <!-- 인기 아티스트 차트 -->
+        <div class="tab-pane fade" id="artist-chart">
+          <h4 class="mb-3" style="color:#D4B97F;">인기 아티스트</h4>
+          <ol class="resonos-chart-list">
+            <li>
+              <span class="rank gold">1</span>
+              <img src="https://randomuser.me/api/portraits/men/44.jpg" class="chart-thumb" alt="아티스트">
+              <span class="title">Orion Sound</span>
+              <span class="score">4.8 ★</span>
+            </li>
+            <li>
+              <span class="rank silver">2</span>
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" class="chart-thumb" alt="아티스트">
+              <span class="title">Luna Beats</span>
+              <span class="score">4.7 ★</span>
+            </li>
+            <li>
+              <span class="rank bronze">3</span>
+              <img src="https://randomuser.me/api/portraits/women/55.jpg" class="chart-thumb" alt="아티스트">
+              <span class="title">GalaxiNote</span>
+              <span class="score">4.6 ★</span>
+            </li>
+          </ol>
+        </div>
+        <!-- 트렌딩/급상승 차트 -->
+        <div class="tab-pane fade" id="trend-chart">
+          <h4 class="mb-3" style="color:#D4B97F;">트렌딩/급상승</h4>
+          <ul class="resonos-trend-list">
+            <li>🔥 <b>Celestial Finale</b> - 24시간 내 1,200회 청취 (+320%)</li>
+            <li>🚀 <b>Starlight Overture</b> - 급상승 검색어</li>
+            <li>🌟 <b>Luna Beats</b> - 팬 투표 Top 3 진입</li>
+          </ul>
+        </div>
+        <!-- 팬 차트/투표 -->
+        <div class="tab-pane fade" id="fan-chart">
+          <h4 class="mb-3" style="color:#D4B97F;">팬 차트 & 인기 투표</h4>
+          <ol class="resonos-chart-list">
+            <li>
+              <span class="rank gold">1</span>
+              <span class="title">Starlight Symphony</span>
+              <span class="artist">Orion Sound</span>
+              <span class="score">팬 투표 1,230</span>
+            </li>
+            <li>
+              <span class="rank silver">2</span>
+              <span class="title">Cosmic Groove</span>
+              <span class="artist">Luna Beats</span>
+              <span class="score">팬 투표 1,010</span>
+            </li>
+            <li>
+              <span class="rank bronze">3</span>
+              <span class="title">Nebula Jam</span>
+              <span class="artist">GalaxiNote</span>
+              <span class="score">팬 투표 850</span>
+            </li>
+          </ol>
+          <form class="mt-3">
+            <label class="form-label" style="color:#fffbe6;">내가 뽑은 인기 앨범</label>
+            <select class="form-select mb-2" style="background:#222; color:#D4B97F; border:1px solid #D4B97F;">
+              <option>Starlight Symphony - Orion Sound</option>
+              <option>Cosmic Groove - Luna Beats</option>
+              <option>Nebula Jam - GalaxiNote</option>
+            </select>
+            <button class="btn btn-gold btn-sm">투표하기</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer class="text-center text-secondary py-3" style="background:none; border-top:1px solid #222;">
+    <img src="https://pplx-res.cloudinary.com/image/private/user_uploads/71501722/4852723f-0f3f-4793-9eaf-749463c33650/image.jpg" alt="RESONOS Logo" style="height:24px;vertical-align:middle;margin-right:8px;">
+    <span style="color:#D4B97F;font-weight:bold;">RESONOS</span>
+    <span class="ms-2" style="color:#B0B6BE;">© 2025 All rights reserved.</span>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

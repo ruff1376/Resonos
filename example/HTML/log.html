@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/CSS/log.css">
+</head>
+<body>
+    <!-- 활동로그 모달/패널 (회원관리 화면 내에 포함) -->
+<div class="activity-log-modal">
+  <div class="activity-log-inner">
+    <div class="activity-log-header">
+      <span class="activity-log-title">활동 로그</span>
+      <button class="activity-log-close" onclick="document.querySelector('.activity-log-modal').style.display='none'">×</button>
+    </div>
+    <div class="activity-log-user">
+      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="프로필" class="activity-log-avatar">
+      <div>
+        <div class="activity-log-nick">별빛소년</div>
+        <div class="activity-log-email">star@gmail.com</div>
+      </div>
+    </div>
+    <ul class="activity-log-list">
+      <li>
+        <span class="activity-log-time">2025-06-27 09:14</span>
+        <span class="activity-log-type post">게시글 작성</span>
+        <span class="activity-log-desc">[자유게시판] "오늘의 추천 앨범"</span>
+      </li>
+      <li>
+        <span class="activity-log-time">2025-06-26 22:02</span>
+        <span class="activity-log-type comment">댓글</span>
+        <span class="activity-log-desc">"좋은 정보 감사합니다!"</span>
+      </li>
+      <li>
+        <span class="activity-log-time">2025-06-26 18:40</span>
+        <span class="activity-log-type review">리뷰</span>
+        <span class="activity-log-desc">앨범 [Starlight Symphony] 평점 5점</span>
+      </li>
+      <li>
+        <span class="activity-log-time">2025-06-26 17:10</span>
+        <span class="activity-log-type like">좋아요</span>
+        <span class="activity-log-desc">트랙 [Nebula Waltz]</span>
+      </li>
+      <li>
+        <span class="activity-log-time">2025-06-25 23:01</span>
+        <span class="activity-log-type login">로그인</span>
+        <span class="activity-log-desc">Chrome / Windows</span>
+      </li>
+      <li>
+        <span class="activity-log-time">2025-06-25 20:55</span>
+        <span class="activity-log-type report">신고</span>
+        <span class="activity-log-desc">[Q&A] "스팸 광고 신고"</span>
+      </li>
+      <!-- 더 많은 로그 항목 -->
+    </ul>
+  </div>
+</div>
+
+</body>
+</html>

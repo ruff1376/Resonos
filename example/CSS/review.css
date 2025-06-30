@@ -1,0 +1,97 @@
+body, .resonos-bg {
+  background: #181C23 !important;
+  color: #D4B97F;
+  font-family: 'Segoe UI', 'Pretendard', sans-serif;
+}
+.btn-gold, .btn-gold.btn-sm {
+  background: #D4B97F;
+  color: #181C23;
+  font-weight: bold;
+  border-radius: 30px;
+  border: none;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-gold:hover, .btn-gold:focus {
+  background: #fffbe6;
+  color: #181C23;
+}
+.btn-outline-gold, .btn-outline-gold.btn-sm {
+  background: none;
+  color: #D4B97F;
+  border: 1.5px solid #D4B97F;
+  font-weight: bold;
+  border-radius: 30px;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-outline-gold:hover, .btn-outline-gold:focus {
+  background: #D4B97F;
+  color: #181C23;
+}
+.bg-gold {
+  background: #D4B97F !important;
+  color: #181C23 !important;
+}
+.text-secondary {
+  color: #B0B6BE !important;
+}
+.resonos-card {
+  background: rgba(24,28,35,0.95);
+  border: 1.5px solid #D4B97F;
+  border-radius: 20px;
+  color: #fffbe6;
+  box-shadow: 0 2px 16px rgba(24,28,35,0.10);
+  margin-bottom: 24px;
+}
+.resonos-ranking-list {
+  list-style: decimal;
+  padding-left: 18px;
+  color: #fffbe6;
+  font-size: 1.01rem;
+}
+.resonos-ranking-list li {
+  margin-bottom: 6px;
+}
+.resonos-review-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.resonos-review-list li {
+  border-bottom: 1px solid #222;
+  padding: 14px 0 10px 0;
+  margin-bottom: 0;
+}
+.review-content {
+  color: #fffbe6;
+  font-size: 1.03rem;
+}
+.review-actions button {
+  margin-right: 6px;
+}
+.btn-like, .btn-dislike {
+  background: #222;
+  color: #D4B97F;
+  border: 1.2px solid #D4B97F;
+  border-radius: 30px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  padding: 2px 14px;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-like:hover, .btn-dislike:hover {
+  background: #D4B97F;
+  color: #181C23;
+}
+.review-reply {
+  background: #222;
+  border-radius: 10px;
+  padding: 7px 14px;
+  color: #fffbe6;
+  font-size: 0.96rem;
+}
+.ai-summary {
+  background: #222;
+  border-radius: 10px;
+  color: #fffbe6;
+  font-size: 1.01rem;
+}

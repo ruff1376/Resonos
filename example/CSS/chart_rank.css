@@ -1,0 +1,110 @@
+body, .resonos-bg {
+  background: #181C23 !important;
+  color: #D4B97F;
+  font-family: 'Segoe UI', 'Pretendard', sans-serif;
+}
+.nav-pills .nav-link {
+  background: none;
+  color: #D4B97F;
+  border-radius: 30px;
+  font-weight: bold;
+  margin-right: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+.nav-pills .nav-link.active, .nav-pills .nav-link:hover {
+  background: #D4B97F;
+  color: #181C23;
+}
+.resonos-chart-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+}
+.resonos-chart-list li {
+  display: flex;
+  align-items: center;
+  background: #222;
+  border: 1.5px solid #D4B97F;
+  border-radius: 14px;
+  margin-bottom: 12px;
+  padding: 14px 18px;
+  color: #fffbe6;
+  font-size: 1.07rem;
+  gap: 14px;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+.resonos-chart-list li:hover {
+  border-color: #fffbe6;
+  box-shadow: 0 2px 10px rgba(212,185,127,0.10);
+}
+.rank {
+  display: inline-block;
+  width: 32px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  text-align: center;
+}
+.rank.gold { color: #D4B97F; }
+.rank.silver { color: #B0B6BE; }
+.rank.bronze { color: #BFA76A; }
+.chart-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1.5px solid #B0B6BE;
+}
+.title {
+  font-weight: bold;
+  color: #fffbe6;
+  min-width: 120px;
+  margin-right: 10px;
+}
+.artist {
+  color: #D4B97F;
+  min-width: 100px;
+  margin-right: 10px;
+}
+.score {
+  color: #B0B6BE;
+  font-size: 1.02rem;
+  margin-left: auto;
+}
+.resonos-trend-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+}
+.resonos-trend-list li {
+  background: #222;
+  border: 1.5px solid #D4B97F;
+  border-radius: 14px;
+  margin-bottom: 12px;
+  padding: 12px 18px;
+  color: #fffbe6;
+  font-size: 1.05rem;
+}
+.btn-gold, .btn-gold.btn-sm {
+  background: #D4B97F;
+  color: #181C23;
+  border: none;
+  font-weight: bold;
+  border-radius: 30px;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-gold:hover, .btn-gold:focus {
+  background: #fffbe6;
+  color: #181C23;
+}
+.form-select {
+  background: #222;
+  color: #D4B97F;
+  border: 1.5px solid #D4B97F;
+}
+.form-select:focus {
+  border-color: #fffbe6;
+  box-shadow: none;
+}
+.text-secondary {
+  color: #B0B6BE !important;
+}

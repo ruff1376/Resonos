@@ -1,0 +1,132 @@
+    body {
+      background: #181C23;
+      color: #D4B97F;
+      font-family: 'Segoe UI', 'Pretendard', sans-serif;
+    }
+    .navbar {
+      background: #181C23 !important;
+      border-bottom: 1px solid #222;
+    }
+    .navbar-brand span {
+      color: #D4B97F;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    .navbar-nav .nav-link {
+      color: #D4B97F !important;
+    }
+    .navbar-nav .nav-link.active, .navbar-nav .nav-link:focus, .navbar-nav .nav-link:hover {
+      color: #fffbe6 !important;
+    }
+    .resonos-card {
+      background: rgba(24,28,35,0.96);
+      border: 1.5px solid #D4B97F;
+      border-radius: 20px;
+      color: #fffbe6;
+      box-shadow: 0 2px 16px rgba(24,28,35,0.10);
+      margin-bottom: 24px;
+    }
+    .btn-gold, .btn-gold.btn-sm {
+      background: #D4B97F;
+      color: #181C23;
+      font-weight: bold;
+      border-radius: 30px;
+      border: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-gold:hover, .btn-gold:focus {
+      background: #fffbe6;
+      color: #181C23;
+    }
+    .btn-outline-gold, .btn-outline-gold.btn-sm {
+      background: none;
+      color: #D4B97F;
+      border: 1.5px solid #D4B97F;
+      font-weight: bold;
+      border-radius: 30px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-outline-gold:hover, .btn-outline-gold:focus {
+      background: #D4B97F;
+      color: #181C23;
+    }
+    .section-title {
+      color: #fffbe6;
+      font-size: 1.22rem;
+      margin-bottom: 22px;
+      font-weight: bold;
+    }
+    .setting-label {
+      color: #D4B97F;
+      font-weight: bold;
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .setting-row {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 10px;
+    }
+    .setting-row input, .setting-row textarea, .setting-row select {
+      background: #222;
+      color: #fffbe6;
+      border: 1.5px solid #D4B97F;
+      border-radius: 10px;
+      padding: 7px 13px;
+      font-size: 1.01rem;
+    }
+    .setting-row textarea {
+      width: 100%;
+      min-height: 60px;
+      max-width: 600px;
+    }
+    .setting-row input[type="checkbox"], .setting-row input[type="radio"] {
+      accent-color: #D4B97F;
+      width: 20px;
+      height: 20px;
+    }
+    .policy-list {
+      background: #222;
+      border: 1.5px solid #D4B97F;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
+      color: #fffbe6;
+    }
+    .policy-list h5 {
+      color: #D4B97F;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+    }
+    .policy-list pre {
+      color: #B0B6BE;
+      font-size: 0.98rem;
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0 0 10px 0;
+    }
+    .policy-edit-form {
+      margin-bottom: 18px;
+    }
+    footer {
+      text-align: center;
+      color: #B0B6BE;
+      padding: 24px 0 8px 0;
+      font-size: 1rem;
+      border-top: 1px solid #222;
+    }
+    .logo-img {
+      height: 38px;
+      border-radius: 6px;
+      background: #181C23;
+      margin-right: 13px;
+    }
+    .logo-text {
+      font-size: 1.7rem;
+      font-weight: bold;
+      color: #D4B97F;
+      letter-spacing: 2px;
+    }

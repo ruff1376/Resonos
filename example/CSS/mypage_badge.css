@@ -1,0 +1,63 @@
+.badge-section {
+  background: rgba(24,28,35,0.95);
+  border: 1.5px solid #D4B97F;
+  border-radius: 20px;
+  padding: 36px 38px;
+  margin-bottom: 38px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.badge-section h2 {
+  color: #D4B97F;
+  font-size: 1.15rem;
+  margin-bottom: 18px;
+}
+.badge-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+}
+.badge-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: #222;
+  border: 1.2px solid #D4B97F;
+  border-radius: 14px;
+  padding: 16px 22px;
+  min-width: 170px;
+  margin-bottom: 10px;
+}
+.badge {
+  font-weight: bold;
+  font-size: 1.05rem;
+  border-radius: 14px;
+  padding: 6px 18px 6px 10px;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.badge-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  object-fit: cover;
+  background: #181C23;
+  margin-right: 4px;
+}
+.badge.acquired {
+  background: #D4B97F;
+  color: #181C23;
+}
+.badge.not-acquired {
+  background: #444;
+  color: #B0B6BE;
+  opacity: 0.5;
+}
+.badge-desc {
+  color: #B0B6BE;
+  font-size: 0.97rem;
+}

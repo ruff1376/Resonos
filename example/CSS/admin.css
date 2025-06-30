@@ -1,0 +1,64 @@
+body, .resonos-bg {
+  background: #181C23 !important;
+  color: #D4B97F;
+  font-family: 'Segoe UI', 'Pretendard', sans-serif;
+}
+.resonos-card {
+  background: rgba(24,28,35,0.96);
+  border: 1.5px solid #D4B97F;
+  border-radius: 20px;
+  color: #fffbe6;
+  box-shadow: 0 2px 16px rgba(24,28,35,0.10);
+  margin-bottom: 24px;
+}
+.btn-gold, .btn-gold.btn-sm {
+  background: #D4B97F;
+  color: #181C23;
+  font-weight: bold;
+  border-radius: 30px;
+  border: none;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-gold:hover, .btn-gold:focus {
+  background: #fffbe6;
+  color: #181C23;
+}
+.btn-outline-gold, .btn-outline-gold.btn-sm {
+  background: none;
+  color: #D4B97F;
+  border: 1.5px solid #D4B97F;
+  font-weight: bold;
+  border-radius: 30px;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-outline-gold:hover, .btn-outline-gold:focus {
+  background: #D4B97F;
+  color: #181C23;
+}
+.text-gold {
+  color: #D4B97F !important;
+}
+.table.resonos-table {
+  background: #181C23;
+  color: #fffbe6;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.table.resonos-table th, .table.resonos-table td {
+  border-color: #222;
+  vertical-align: middle;
+}
+.table.resonos-table thead {
+  background: #222;
+  color: #D4B97F;
+}
+.table.resonos-table tbody tr:hover {
+  background: #222 !important;
+}
+.bg-gold {
+  background: #D4B97F !important;
+  color: #181C23 !important;
+}
+.text-secondary {
+  color: #B0B6BE !important;
+}

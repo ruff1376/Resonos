@@ -1,0 +1,138 @@
+    body {
+      background: #181C23;
+      color: #D4B97F;
+      font-family: 'Segoe UI', 'Pretendard', sans-serif;
+      margin: 0;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 28px 0 18px 0;
+      background: #181C23;
+    }
+    .logo-img {
+      height: 48px;
+      border-radius: 8px;
+      background: #181C23;
+    }
+    .logo-text {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #D4B97F;
+      letter-spacing: 2px;
+    }
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 36px 0 60px 0;
+    }
+    .qna-title {
+      color: #fffbe6;
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .qna-form {
+      background: rgba(24,28,35,0.96);
+      border: 1.5px solid #D4B97F;
+      border-radius: 20px;
+      padding: 28px 32px 22px 32px;
+      margin-bottom: 36px;
+    }
+    .qna-form label {
+      color: #D4B97F;
+      font-weight: bold;
+      margin-bottom: 7px;
+      display: block;
+    }
+    .qna-form input, .qna-form textarea, .qna-form select {
+      width: 100%;
+      background: #222;
+      color: #fffbe6;
+      border: 1.5px solid #D4B97F;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 14px;
+      padding: 10px 14px;
+      box-sizing: border-box;
+    }
+    .qna-form input:focus, .qna-form textarea:focus, .qna-form select:focus {
+      border-color: #fffbe6;
+      outline: none;
+    }
+    .btn-gold {
+      background: #D4B97F;
+      color: #181C23;
+      border: none;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 1.08rem;
+      padding: 11px 0;
+      width: 100%;
+      margin-top: 8px;
+      transition: background 0.2s, color 0.2s;
+      cursor: pointer;
+    }
+    .btn-gold:hover {
+      background: #fffbe6;
+      color: #181C23;
+    }
+    .qna-list-section {
+      background: rgba(24,28,35,0.96);
+      border: 1.5px solid #D4B97F;
+      border-radius: 20px;
+      padding: 28px 32px 18px 32px;
+    }
+    .qna-list-title {
+      color: #D4B97F;
+      font-size: 1.08rem;
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
+    .qna-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .qna-item {
+      border-bottom: 1px solid #222;
+      padding: 13px 0;
+      color: #fffbe6;
+    }
+    .qna-item:last-child {
+      border-bottom: none;
+    }
+    .qna-q {
+      font-weight: bold;
+      color: #D4B97F;
+      margin-bottom: 5px;
+    }
+    .qna-meta {
+      color: #B0B6BE;
+      font-size: 0.96rem;
+      margin-bottom: 2px;
+    }
+    .qna-a {
+      color: #fffbe6;
+      background: #23262d;
+      border-radius: 10px;
+      padding: 7px 12px;
+      margin-top: 5px;
+      margin-bottom: 3px;
+      font-size: 0.98rem;
+    }
+    .qna-a.unanswered {
+      color: #B0B6BE;
+      background: #23262d;
+      font-style: italic;
+    }
+    footer {
+      text-align: center;
+      color: #B0B6BE;
+      padding: 24px 0 8px 0;
+      font-size: 1rem;
+      border-top: 1px solid #222;
+    }

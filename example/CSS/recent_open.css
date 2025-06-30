@@ -1,0 +1,86 @@
+body {
+  background: #181C23;
+  color: #D4B97F;
+  font-family: 'Segoe UI', 'Pretendard', sans-serif;
+  margin: 0;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 48px 10px 48px;
+  background: #181C23;
+  border-bottom: 1px solid #222;
+}
+.logo {
+  display: flex;
+  align-items: center;
+}
+.logo-img {
+  height: 38px;
+  margin-right: 13px;
+  border-radius: 6px;
+  background: #181C23;
+}
+.logo-text {
+  font-size: 1.7rem;
+  font-weight: bold;
+  color: #D4B97F;
+  letter-spacing: 2px;
+}
+nav a {
+  color: #D4B97F;
+  text-decoration: none;
+  margin: 0 16px;
+  font-size: 1.05rem;
+  transition: color 0.2s;
+}
+nav a.active,
+nav a:hover {
+  color: #fffbe6;
+}
+main {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 50px 0 40px 0;
+}
+.notification-select-box {
+  background: rgba(24,28,35,0.95);
+  border: 1.5px solid #D4B97F;
+  border-radius: 18px;
+  padding: 32px 32px 28px 32px;
+  box-shadow: 0 2px 16px rgba(24,28,35,0.10);
+  margin: 40px auto 0 auto;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.notification-label {
+  color: #D4B97F;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+.notification-select {
+  width: 100%;
+  background: #222;
+  color: #fffbe6;
+  border: 1.5px solid #D4B97F;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  padding: 13px 16px;
+  appearance: none;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.notification-select:focus {
+  border-color: #fffbe6;
+}
+footer {
+  text-align: center;
+  color: #B0B6BE;
+  padding: 24px 0 8px 0;
+  font-size: 1rem;
+  border-top: 1px solid #222;
+}

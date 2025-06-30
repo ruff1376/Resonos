@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>RESONOS 마이페이지 - 팔로워</title>
+  <link rel="stylesheet" href="/CSS/mypage_follower.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+      <img src="https://pplx-res.cloudinary.com/image/private/user_uploads/71501722/4852723f-0f3f-4793-9eaf-749463c33650/image.jpg" alt="RESONOS Logo" class="logo-img" />
+      <span class="logo-text">RESONOS</span>
+    </div>
+    <nav>
+      <a href="#">홈</a>
+      <a href="#">차트</a>
+      <a href="#">플레이리스트</a>
+      <a href="#">커뮤니티</a>
+      <a href="#" class="active">마이페이지</a>
+    </nav>
+  </header>
+  <main>
+    <!-- 상단 탭 고정 -->
+    <section class="mypage-tabs">
+      <a href="#" class="tab">회원정보</a>
+      <a href="#" class="tab active">팔로워</a>
+      <a href="#" class="tab">팔로우</a>
+      <a href="#" class="tab">배지</a>
+      <a href="#" class="tab">내 활동</a>
+    </section>
+
+    <!-- 팔로워 목록 출력 -->
+    <section class="follower-section">
+      <h2>팔로워 <span class="follower-count">128</span></h2>
+      <ul class="follower-list">
+        <li class="follower-item">
+          <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="JazzCat" class="follower-img" />
+          <div class="follower-info">
+            <span class="follower-nick">JazzCat</span>
+            <span class="follower-badge">JAZZ LOVER</span>
+          </div>
+          <button class="btn-outline-gold btn-sm">맞팔로우</button>
+        </li>
+        <li class="follower-item">
+          <img src="https://randomuser.me/api/portraits/men/21.jpg" alt="NightOwl" class="follower-img" />
+          <div class="follower-info">
+            <span class="follower-nick">NightOwl</span>
+            <span class="follower-badge">NIGHT OWL</span>
+          </div>
+          <button class="btn-outline-gold btn-sm">맞팔로우</button>
+        </li>
+        <!-- 추가 팔로워 항목 반복 -->
+      </ul>
+    </section>
+  </main>
+  <footer>
+    <p>© 2025 RESONOS. All rights reserved.</p>
+  </footer>
+</body>
+</html>

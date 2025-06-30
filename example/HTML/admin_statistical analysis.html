@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>RESONOS 통계 분석</title>
+  <link rel="stylesheet" href="/CSS/stats.css">
+  <link rel="stylesheet" href="/CSS/admin_statistical analysis.css">
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+      <img src="https://pplx-res.cloudinary.com/image/private/user_uploads/71501722/4852723f-0f3f-4793-9eaf-749463c33650/image.jpg" alt="RESONOS Logo" class="logo-img">
+      <span class="logo-text">RESONOS</span>
+    </div>
+    <h1 class="stats-title">통계 분석</h1>
+  </header>
+  <main>
+    <section class="stats-panel">
+      <div class="stats-tabs">
+        <button class="tab active">일간</button>
+        <button class="tab">주간</button>
+        <button class="tab">월간</button>
+      </div>
+      <div class="stats-cards">
+        <div class="stats-card">
+          <div class="stats-label">신규 회원</div>
+          <div class="stats-value">1,897</div>
+        </div>
+        <div class="stats-card">
+          <div class="stats-label">리뷰 수</div>
+          <div class="stats-value">8,648</div>
+        </div>
+        <div class="stats-card">
+          <div class="stats-label">페이지뷰</div>
+          <div class="stats-value">21,320</div>
+        </div>
+        <div class="stats-card">
+          <div class="stats-label">활동 회원</div>
+          <div class="stats-value">1,122</div>
+        </div>
+      </div>
+      <div class="stats-chart-area">
+        <h3>일간 가입/리뷰/방문 추이</h3>
+        <svg width="100%" height="120" viewBox="0 0 400 120" class="stats-chart">
+          <!-- 예시: 단순 라인차트 -->
+          <polyline
+            fill="none"
+            stroke="#D4B97F"
+            stroke-width="3"
+            points="10,100 60,90 110,70 160,80 210,60 260,65 310,50 360,60"
+          />
+          <!-- X축 레이블 -->
+          <text x="10" y="115" fill="#B0B6BE" font-size="12">월</text>
+          <text x="60" y="115" fill="#B0B6BE" font-size="12">화</text>
+          <text x="110" y="115" fill="#B0B6BE" font-size="12">수</text>
+          <text x="160" y="115" fill="#B0B6BE" font-size="12">목</text>
+          <text x="210" y="115" fill="#B0B6BE" font-size="12">금</text>
+          <text x="260" y="115" fill="#B0B6BE" font-size="12">토</text>
+          <text x="310" y="115" fill="#B0B6BE" font-size="12">일</text>
+        </svg>
+      </div>
+      <div class="stats-lists">
+        <div class="stats-list">
+          <h4>인기 아티스트</h4>
+          <ol>
+            <li>Orion Sound</li>
+            <li>Luna Beats</li>
+            <li>GalaxiNote</li>
+          </ol>
+        </div>
+        <div class="stats-list">
+          <h4>인기 앨범</h4>
+          <ol>
+            <li>Starlight Symphony</li>
+            <li>Cosmic Groove</li>
+            <li>Nebula Jam</li>
+          </ol>
+        </div>
+        <div class="stats-list">
+          <h4>인기 곡</h4>
+          <ol>
+            <li>Nebula Waltz</li>
+            <li>Night Sky Jazz</li>
+            <li>Stellar Dream</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p>© 2025 RESONOS. All rights reserved.</p>
+  </footer>
+</body>
+</html>

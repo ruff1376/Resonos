@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>RESONOS 마이페이지 - 상세</title>
+  <link rel="stylesheet" href="/CSS/mypage-detail.css">
+  <link rel="stylesheet" href="/CSS/mypage2.css">
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+      <img src="https://pplx-res.cloudinary.com/image/private/user_uploads/71501722/4852723f-0f3f-4793-9eaf-749463c33650/image.jpg" alt="RESONOS Logo" class="logo-img">
+      <span class="logo-text">RESONOS</span>
+    </div>
+    <nav>
+      <a href="#">홈</a>
+      <a href="#">차트</a>
+      <a href="#">플레이리스트</a>
+      <a href="#">커뮤니티</a>
+      <a href="#" class="active">마이페이지</a>
+    </nav>
+  </header>
+  <main>
+    <section class="mypage-tabs">
+      <a href="#" class="tab active">회원정보 수정</a>
+      <a href="#" class="tab">팔로워</a>
+      <a href="#" class="tab">팔로우</a>
+      <a href="#" class="tab">배지</a>
+    </section>
+
+    <!-- 회원정보 수정 -->
+    <section class="profile-edit-section">
+      <h2>회원정보 수정</h2>
+      <form class="profile-edit-form">
+        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="프로필 이미지" class="profile-img-edit">
+        <label>프로필 이미지 변경
+          <input type="file" accept="image/*">
+        </label>
+        <label>닉네임
+          <input type="text" value="별빛소년">
+        </label>
+        <label>이메일
+          <input type="email" value="starlight@resonos.com" disabled>
+        </label>
+        <label>비밀번호 변경
+          <input type="password" placeholder="새 비밀번호">
+        </label>
+        <label>자기소개
+          <textarea rows="2">음악과 우주, 그리고 커뮤니티를 사랑합니다.</textarea>
+        </label>
+        <button class="btn-gold" type="submit">정보 수정</button>
+        <button class="btn-outline" type="button">회원 탈퇴</button>
+      </form>
+    </section>
+
+    <!-- 팔로워 목록 -->
+    <section class="follow-list-section">
+      <h2>팔로워 <span class="count">128</span></h2>
+      <ul class="follow-list">
+        <li>
+          <img src="https://randomuser.me/api/portraits/women/44.jpg" class="follow-img" alt="팔로워">
+          <span class="follow-nick">JazzCat</span>
+          <span class="follow-badge">JAZZ LOVER</span>
+          <button class="btn-outline btn-sm">맞팔로우</button>
+        </li>
+        <li>
+          <img src="https://randomuser.me/api/portraits/men/21.jpg" class="follow-img" alt="팔로워">
+          <span class="follow-nick">NightOwl</span>
+          <span class="follow-badge">NIGHT OWL</span>
+          <button class="btn-outline btn-sm">맞팔로우</button>
+        </li>
+        <!-- ... -->
+      </ul>
+    </section>
+
+    <!-- 팔로우(유저) 목록 -->
+    <section class="follow-list-section">
+      <h2>팔로우 <span class="count">92</span></h2>
+      <ul class="follow-list">
+        <li>
+          <img src="https://randomuser.me/api/portraits/men/45.jpg" class="follow-img" alt="팔로우">
+          <span class="follow-nick">GalaxiNote</span>
+          <span class="follow-badge">CLASSICIAN</span>
+          <button class="btn-outline btn-sm">언팔로우</button>
+        </li>
+        <li>
+          <img src="https://randomuser.me/api/portraits/women/55.jpg" class="follow-img" alt="팔로우">
+          <span class="follow-nick">LunaBeats</span>
+          <span class="follow-badge">JAZZ LOVER</span>
+          <button class="btn-outline btn-sm">언팔로우</button>
+        </li>
+        <!-- ... -->
+      </ul>
+    </section>
+
+    <!-- 배지 목록 -->
+    <section class="badge-section">
+      <h2>나의 배지</h2>
+      <div class="badge-list">
+        <div class="badge-item">
+          <span class="badge acquired">JAZZ LOVER</span>
+          <div class="badge-desc">재즈 장르 리뷰 10회 이상</div>
+        </div>
+        <div class="badge-item">
+          <span class="badge acquired">CLASSICIAN</span>
+          <div class="badge-desc">클래식 곡 평점 20회 이상</div>
+        </div>
+        <div class="badge-item">
+          <span class="badge acquired">NIGHT OWL</span>
+          <div class="badge-desc">심야시간 활동 30회 달성</div>
+        </div>
+        <div class="badge-item">
+          <span class="badge not-acquired">ROOKIE</span>
+          <div class="badge-desc">첫 리뷰 작성 시 획득</div>
+        </div>
+        <div class="badge-item">
+          <span class="badge not-acquired">FAN MASTER</span>
+          <div class="badge-desc">팔로워 100명 달성</div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p>© 2025 RESONOS. All rights reserved.</p>
+  </footer>
+</body>
+</html>

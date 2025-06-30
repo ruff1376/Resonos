@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>RESONOS - 트랙 상세</title>
+  <link rel="stylesheet" href="/CSS/trap.css">
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+      <img src="https://pplx-res.cloudinary.com/image/private/user_uploads/71501722/4852723f-0f3f-4793-9eaf-749463c33650/image.jpg" alt="RESONOS Logo" class="logo-img">
+      <span class="logo-text">RESONOS</span>
+    </div>
+    <nav>
+      <a href="#">홈</a>
+      <a href="#">차트</a>
+      <a href="#">플레이리스트</a>
+      <a href="#">커뮤니티</a>
+      <a href="#" class="active">트랙</a>
+    </nav>
+  </header>
+  <main>
+    <!-- 트랙 정보 -->
+    <section class="track-info">
+      <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=facearea&w=400&q=80" alt="앨범 커버" class="track-art">
+      <div class="track-meta">
+        <h1>Starlight Overture</h1>
+        <p class="artist">Orion Sound</p>
+        <p class="album">앨범: <a href="#">Starlight Symphony</a></p>
+        <p class="track-detail">길이: 3:44 | 장르: Jazz, Fusion</p>
+        <div class="track-actions">
+          <button class="btn-gold">트랙 저장</button>
+          <button class="btn-outline">공유</button>
+        </div>
+      </div>
+    </section>
+    <!-- 스트리밍/뮤비 임베드 -->
+    <section class="media-section">
+      <h2>스트리밍 & 뮤직비디오</h2>
+      <div class="media-embed">
+        <!-- Spotify Embed 예시 -->
+        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/4uLU6hMCjMI75M1A2tKUQC?utm_source=generator" width="100%" height="80" frameborder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>
+        <!-- YouTube Embed 예시 -->
+        <iframe width="100%" height="160" src="https://www.youtube.com/embed/5qap5aO4i9A" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      </div>
+    </section>
+    <!-- 평점/리뷰/댓글 -->
+    <section class="review-section">
+      <h2>평점 & 리뷰</h2>
+      <div class="review-summary">
+        <div class="score">4.8 <span class="star">★</span></div>
+        <div class="score-bar">
+          <span style="width: 92%"></span>
+        </div>
+        <div class="score-meta">유저 평점 분포: ★★★★★ 75% | ★★★★☆ 20% | ★★★☆☆ 5%</div>
+      </div>
+      <div class="review-list">
+        <div class="review">
+          <b>별빛소년</b> <span class="star">★★★★★</span>
+          <p>첫 음부터 우주로 빨려드는 느낌! 반복 재생 중입니다.</p>
+          <span class="review-meta">2025.06.25 · 좋아요 7 · <a href="#">신고</a></span>
+        </div>
+        <div class="review">
+          <b>JazzCat</b> <span class="star">★★★★☆</span>
+          <p>섬세한 피아노와 신스의 조화가 환상적이에요.</p>
+          <span class="review-meta">2025.06.22 · 좋아요 2 · <a href="#">신고</a></span>
+        </div>
+      </div>
+      <form class="review-form">
+        <textarea placeholder="리뷰를 남겨보세요"></textarea>
+        <button class="btn-gold-sm">리뷰 등록</button>
+      </form>
+    </section>
+    <!-- 태그/분위기 투표 -->
+    <section class="tag-mood-section">
+      <h2>태그 & 분위기 투표</h2>
+      <div class="tag-list">
+        <span class="tag">#몽환적</span>
+        <span class="tag">#재즈</span>
+        <span class="tag">#우주감성</span>
+        <span class="tag">#피아노</span>
+        <span class="tag">#심야</span>
+      </div>
+      <div class="mood-bar">
+        <span style="width: 60%">몽환적 (60%)</span>
+        <span style="width: 25%">감성적 (25%)</span>
+        <span style="width: 15%">에너지틱 (15%)</span>
+      </div>
+      <button class="btn-outline">분위기 투표 참여</button>
+    </section>
+  </main>
+  <footer>
+    <p>© 2025 RESONOS. All rights reserved.</p>
+  </footer>
+</body>
+</html>

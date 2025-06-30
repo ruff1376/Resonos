@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>RESONOS - 리뷰/평론 커뮤니티</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/CSS/review.css">
+</head>
+<body>
+  <!-- 헤더 -->
+  <nav class="navbar navbar-expand-lg" style="background:#181C23; border-bottom:1px solid #222;">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="https://pplx-res.cloudinary.com/image/private/user_uploads/71501722/4852723f-0f3f-4793-9eaf-749463c33650/image.jpg" alt="RESONOS Logo" style="height:38px; border-radius:6px; margin-right:12px;">
+        <span style="color:#D4B97F;font-weight:bold;letter-spacing:2px;">RESONOS</span>
+      </a>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" style="color:#D4B97F;" href="#">Home</a></li>
+        <li class="nav-item"><a class="nav-link" style="color:#D4B97F;" href="#">Charts</a></li>
+        <li class="nav-item"><a class="nav-link" style="color:#D4B97F;" href="#">Playlists</a></li>
+        <li class="nav-item"><a class="nav-link active" style="color:#fffbe6;" href="#">Review</a></li>
+      </ul>
+    </div>
+  </nav>
+  <!-- 메인 -->
+  <main class="resonos-bg py-5">
+    <div class="container" style="max-width: 900px;">
+      <h1 class="mb-4" style="color:#fffbe6;">리뷰/평론 커뮤니티</h1>
+      <!-- 오늘의 추천 앨범/리뷰 -->
+      <div class="resonos-card p-4 mb-4">
+        <h5 class="mb-3" style="color:#D4B97F;">오늘의 추천 앨범 & 리뷰</h5>
+        <div class="d-flex align-items-center">
+          <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=facearea&w=80&q=80" class="rounded-4 me-3" style="width:70px; height:70px; object-fit:cover; border:2px solid #D4B97F;">
+          <div>
+            <b style="color:#fffbe6;">Starlight Symphony</b> <span class="text-secondary">Orion Sound</span>
+            <div class="mt-1">
+              <span class="badge rounded-pill bg-gold text-dark">4.8 ★</span>
+              <span class="badge rounded-pill bg-secondary text-light">평론가 추천</span>
+            </div>
+            <div class="mt-2" style="color:#D4B97F;">"우주적 사운드와 감성의 절정! 밤마다 듣고 싶어요."</div>
+          </div>
+        </div>
+      </div>
+      <!-- 리뷰 많은 앨범/유저 랭킹 -->
+      <div class="row mb-4 g-3">
+        <div class="col-md-6">
+          <div class="resonos-card p-4">
+            <h6 style="color:#D4B97F;">리뷰 많은 앨범</h6>
+            <ol class="resonos-ranking-list">
+              <li>Starlight Symphony <span class="text-secondary">215 리뷰</span></li>
+              <li>Cosmic Groove <span class="text-secondary">180 리뷰</span></li>
+              <li>Nebula Jam <span class="text-secondary">140 리뷰</span></li>
+            </ol>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="resonos-card p-4">
+            <h6 style="color:#D4B97F;">리뷰 많은 유저</h6>
+            <ol class="resonos-ranking-list">
+              <li>별빛소년 <span class="text-secondary">52개</span></li>
+              <li>JazzCat <span class="text-secondary">41개</span></li>
+              <li>팬스타 <span class="text-secondary">37개</span></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <!-- 리뷰/평점/댓글/좋아요/싫어요/AI 요약 -->
+      <div class="resonos-card p-4 mb-4">
+        <h5 class="mb-3" style="color:#D4B97F;">앨범 리뷰</h5>
+        <!-- 리뷰 작성 -->
+        <form class="d-flex gap-2 mb-3">
+          <select class="form-select resonos-filter" style="max-width:130px;">
+            <option>5점</option><option>4점</option><option>3점</option><option>2점</option><option>1점</option>
+          </select>
+          <input type="text" class="form-control" placeholder="리뷰를 입력하세요">
+          <button class="btn btn-gold btn-sm">등록</button>
+        </form>
+        <!-- 리뷰 목록 -->
+        <ul class="resonos-review-list">
+          <li>
+            <div class="d-flex align-items-center">
+              <b style="color:#D4B97F;">별빛소년</b>
+              <span class="badge bg-gold text-dark ms-2">5 ★</span>
+              <span class="ms-3 text-secondary">2025.06.26</span>
+              <button class="btn btn-sm btn-outline-gold ms-2">신고</button>
+            </div>
+            <div class="review-content mt-1">우주적 사운드와 감성의 절정! 밤마다 듣고 싶어요.</div>
+            <div class="review-actions mt-1">
+              <button class="btn btn-like btn-sm">👍 12</button>
+              <button class="btn btn-dislike btn-sm">👎 7</button>
+              <button class="btn btn-outline-gold btn-sm">댓글</button>
+              <!-- 블라인드 처리 예시 -->
+              <span class="badge rounded-pill bg-secondary text-light ms-2">블라인드</span>
+            </div>
+            <!-- 대댓글 예시 -->
+            <div class="review-reply mt-2 ms-4">
+              <b style="color:#D4B97F;">JazzCat</b>
+              <span class="text-secondary ms-2">2025.06.26</span>
+              <span class="ms-2">저도 이 곡 정말 좋아합니다!</span>
+            </div>
+          </li>
+          <li>
+            <div class="d-flex align-items-center">
+              <b style="color:#D4B97F;">팬스타</b>
+              <span class="badge bg-gold text-dark ms-2">4 ★</span>
+              <span class="ms-3 text-secondary">2025.06.25</span>
+              <button class="btn btn-sm btn-outline-gold ms-2">신고</button>
+            </div>
+            <div class="review-content mt-1">재즈와 일렉트로닉의 조화가 신선합니다.</div>
+            <div class="review-actions mt-1">
+              <button class="btn btn-like btn-sm">👍 4</button>
+              <button class="btn btn-dislike btn-sm">👎 0</button>
+              <button class="btn btn-outline-gold btn-sm">댓글</button>
+            </div>
+          </li>
+        </ul>
+        <!-- AI 리뷰 요약/감성 분석 -->
+        <div class="ai-summary mt-4 p-3">
+          <b style="color:#D4B97F;">AI 요약</b> : "몽환적, 감성적, 우주적 분위기라는 평이 많아요. 긍정 리뷰 92%!"
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer class="text-center text-secondary py-3" style="background:none; border-top:1px solid #222;">
+    <img src="https://pplx-res.cloudinary.com/image/private/user_uploads/71501722/4852723f-0f3f-4793-9eaf-749463c33650/image.jpg" alt="RESONOS Logo" style="height:24px;vertical-align:middle;margin-right:8px;">
+    <span style="color:#D4B97F;font-weight:bold;">RESONOS</span>
+    <span class="ms-2" style="color:#B0B6BE;">© 2025 All rights reserved.</span>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

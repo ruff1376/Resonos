@@ -1,0 +1,155 @@
+    body {
+      background: #181C23;
+      color: #D4B97F;
+      font-family: 'Segoe UI', 'Pretendard', sans-serif;
+      margin: 0;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 28px 0 18px 0;
+      background: #181C23;
+      justify-content: center;
+    }
+    .logo-img {
+      height: 38px;
+      border-radius: 8px;
+      background: #181C23;
+    }
+    .logo-text {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #D4B97F;
+      letter-spacing: 2px;
+    }
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 36px 0 60px 0;
+    }
+    .board-title {
+      color: #fffbe6;
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .board-toolbar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 18px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    .board-toolbar input[type="text"] {
+      background: #222;
+      color: #fffbe6;
+      border: 1.5px solid #D4B97F;
+      border-radius: 12px;
+      font-size: 1.01rem;
+      padding: 8px 13px;
+      width: 200px;
+    }
+    .board-toolbar select {
+      background: #222;
+      color: #D4B97F;
+      border: 1.5px solid #D4B97F;
+      border-radius: 12px;
+      font-size: 1.01rem;
+      padding: 8px 13px;
+    }
+    .btn-gold {
+      background: #D4B97F;
+      color: #181C23;
+      border: none;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 1.02rem;
+      padding: 8px 22px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-gold:hover {
+      background: #fffbe6;
+      color: #181C23;
+    }
+    .board-list-section {
+      background: rgba(24,28,35,0.96);
+      border: 1.5px solid #D4B97F;
+      border-radius: 20px;
+      padding: 30px 32px 18px 32px;
+    }
+    .board-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: none;
+      color: #fffbe6;
+      font-size: 1.01rem;
+    }
+    .board-table th, .board-table td {
+      border-bottom: 1px solid #222;
+      padding: 13px 10px;
+      text-align: left;
+    }
+    .board-table th {
+      color: #D4B97F;
+      font-size: 1.02rem;
+      font-weight: bold;
+      background: #222;
+    }
+    .board-table tr:last-child td {
+      border-bottom: none;
+    }
+    .board-title-link {
+      color: #fffbe6;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.2s;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+      max-width: 320px;
+    }
+    .board-title-link:hover {
+      color: #D4B97F;
+      text-decoration: underline;
+    }
+    .board-meta {
+      color: #B0B6BE;
+      font-size: 0.97rem;
+    }
+    .board-paging {
+      text-align: center;
+      margin-top: 24px;
+    }
+    .board-paging button {
+      background: none;
+      color: #D4B97F;
+      border: 1.5px solid #D4B97F;
+      border-radius: 8px;
+      font-size: 1.02rem;
+      font-weight: bold;
+      padding: 5px 13px;
+      margin: 0 3px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .board-paging button.active,
+    .board-paging button:hover {
+      background: #D4B97F;
+      color: #181C23;
+    }
+    @media (max-width: 700px) {
+      main { padding: 18px 0 40px 0; }
+      .board-list-section { padding: 10px 2vw; }
+      .board-table th, .board-table td { font-size: 0.93rem; padding: 8px 3px; }
+    }
+    footer {
+      text-align: center;
+      color: #B0B6BE;
+      padding: 24px 0 8px 0;
+      font-size: 1rem;
+      border-top: 1px solid #222;
+    }

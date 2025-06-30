@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>RESONOS - 공지사항</title>
+  <script>
+    // 데모용: 상세보기/목록 전환
+    function showNoticeDetail(title, date, content) {
+      document.getElementById('notice-list-section').style.display = 'none';
+      document.getElementById('notice-detail-section').style.display = 'block';
+      document.getElementById('notice-detail-title').textContent = title;
+      document.getElementById('notice-detail-date').textContent = date;
+      document.getElementById('notice-detail-content').textContent = content;
+    }
+    function backToNoticeList() {
+      document.getElementById('notice-list-section').style.display = 'block';
+      document.getElementById('notice-detail-section').style.display = 'none';
+    }
+  </script>
+  <link rel="stylesheet" href="/CSS/announcement.css">
+</head>
+<body>
+  <div class="header">
+    <img src="https://pplx-res.cloudinary.com/image/private/user_uploads/71501722/4852723f-0f3f-4793-9eaf-749463c33650/image.jpg" alt="RESONOS Logo" class="logo-img">
+    <span class="logo-text">RESONOS</span>
+  </div>
+  <main>
+    <div class="notice-title">공지사항</div>
+    <!-- 공지 리스트 -->
+    <section class="notice-list-section" id="notice-list-section">
+      <table class="notice-table">
+        <thead>
+          <tr>
+            <th style="width:60px;">번호</th>
+            <th>제목</th>
+            <th style="width:140px;">작성일</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>5</td>
+            <td>
+              <a href="javascript:void(0);" class="notice-title-link"
+                 onclick="showNoticeDetail('7월 업데이트 안내', '2025-06-27', '7월 신규 기능 및 UI 개선 업데이트 안내입니다.\n- 신규 다크 테마 추가\n- 모바일 최적화\n- 버그 수정 등')">
+                7월 업데이트 안내
+              </a>
+            </td>
+            <td class="notice-date">2025-06-27</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>
+              <a href="javascript:void(0);" class="notice-title-link"
+                 onclick="showNoticeDetail('Starlight Night Live 공연 공지', '2025-06-25', 'Starlight Night Live 공연이 7월 3일 개최됩니다.\n- 장소: 서울시청 앞 광장\n- 시간: 19:00~22:00\n많은 참여 바랍니다.')">
+                Starlight Night Live 공연 공지
+              </a>
+            </td>
+            <td class="notice-date">2025-06-25</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>
+              <a href="javascript:void(0);" class="notice-title-link"
+                 onclick="showNoticeDetail('이용약관 및 개인정보처리방침 개정 안내', '2025-06-20', '이용약관 및 개인정보처리방침이 2025년 7월 1일부로 개정됩니다.\n자세한 내용은 정책 메뉴를 참고하세요.')">
+                이용약관 및 개인정보처리방침 개정 안내
+              </a>
+            </td>
+            <td class="notice-date">2025-06-20</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <!-- 공지 상세 -->
+    <section class="notice-detail-section" id="notice-detail-section" style="display:none;">
+      <div class="notice-detail-title" id="notice-detail-title"></div>
+      <div class="notice-detail-date" id="notice-detail-date"></div>
+      <div class="notice-detail-content" id="notice-detail-content"></div>
+      <button class="notice-back-btn" onclick="backToNoticeList()">목록으로</button>
+    </section>
+  </main>
+  <footer>
+    <p>© 2025 RESONOS. All rights reserved.</p>
+  </footer>
+</body>
+</html>

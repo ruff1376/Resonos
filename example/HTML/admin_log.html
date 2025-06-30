@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>RESONOS 관리자 - 운영 로그/공지/알림 발송</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/CSS/admin_log.css">
+
+</head>
+<body>
+  <!-- 관리자 헤더 -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="https://pplx-res.cloudinary.com/image/private/user_uploads/71501722/4852723f-0f3f-4793-9eaf-749463c33650/image.jpg" alt="RESONOS Logo" class="logo-img">
+        <span>RESONOS Admin</span>
+      </a>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#">대시보드</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">회원관리</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">게시글/신고</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">음악데이터</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">공연/이벤트</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">QnA</a></li>
+        <li class="nav-item"><a class="nav-link active" href="#">운영로그/공지/알림</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main class="resonos-bg py-5">
+    <div class="container" style="max-width: 900px;">
+      <div class="resonos-card p-5">
+        <div class="section-title">운영 로그</div>
+        <table class="log-table mb-4">
+          <thead>
+            <tr>
+              <th style="width:60px;">번호</th>
+              <th style="width:120px;">관리자</th>
+              <th>활동 내용</th>
+              <th style="width:140px;">일시</th>
+              <th style="width:100px;">분류</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>23</td>
+              <td>admin01</td>
+              <td>전체 공지사항 등록: "7월 업데이트 안내"</td>
+              <td>2025-06-27 10:12</td>
+              <td><span class="badge log-notice">공지</span></td>
+            </tr>
+            <tr>
+              <td>22</td>
+              <td>admin02</td>
+              <td>전체 알림 발송: "Starlight Night Live 공연 시작"</td>
+              <td>2025-06-26 17:20</td>
+              <td><span class="badge log-action">알림</span></td>
+            </tr>
+            <tr>
+              <td>21</td>
+              <td>admin01</td>
+              <td>회원 JazzCat 제재(7일 정지)</td>
+              <td>2025-06-25 13:45</td>
+              <td><span class="badge log-action">관리</span></td>
+            </tr>
+            <tr>
+              <td>20</td>
+              <td>admin01</td>
+              <td>QnA 답변 등록</td>
+              <td>2025-06-25 09:22</td>
+              <td><span class="badge log-action">QnA</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="section-title">전체 공지 등록</div>
+        <form class="notice-form">
+          <label for="notice-title">공지 제목</label>
+          <input type="text" id="notice-title" placeholder="예: 7월 업데이트 안내" required>
+          <label for="notice-content">공지 내용</label>
+          <textarea id="notice-content" rows="3" placeholder="공지사항 내용을 입력하세요." required></textarea>
+          <button class="btn-gold" type="submit">공지 등록</button>
+        </form>
+
+        <div class="section-title">전체 알림 발송</div>
+        <form class="alert-form">
+          <label for="alert-title">알림 제목</label>
+          <input type="text" id="alert-title" placeholder="예: 공연 시작 안내" required>
+          <label for="alert-content">알림 내용</label>
+          <textarea id="alert-content" rows="2" placeholder="알림 내용을 입력하세요." required></textarea>
+          <button class="btn-gold" type="submit">알림 발송</button>
+        </form>
+      </div>
+    </div>
+  </main>
+  <footer class="text-center text-secondary py-3" style="background:none; border-top:1px solid #222;">
+    <img src="https://pplx-res.cloudinary.com/image/private/user_uploads/71501722/4852723f-0f3f-4793-9eaf-749463c33650/image.jpg" alt="RESONOS Logo" style="height:24px;vertical-align:middle;margin-right:8px;">
+    <span style="color:#D4B97F;font-weight:bold;">RESONOS</span>
+    <span class="ms-2" style="color:#B0B6BE;">© 2025 All rights reserved.</span>
+  </footer>
+</body>
+</html>

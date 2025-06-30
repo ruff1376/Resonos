@@ -1,0 +1,126 @@
+body.bg {
+  background: #181C23;
+  color: #D4B97F;
+  font-family: 'Segoe UI', 'Pretendard', sans-serif;
+  margin: 0;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 48px 12px 48px;
+  background: #181C23;
+  border-bottom: 1px solid #222;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  height: 40px;
+  margin-right: 16px;
+  border-radius: 6px;
+  background: #181C23;
+}
+
+.logo-text {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #D4B97F;
+  letter-spacing: 2px;
+}
+
+nav a {
+  color: #D4B97F;
+  text-decoration: none;
+  margin: 0 18px;
+  font-size: 1.1rem;
+  transition: color 0.2s;
+}
+nav a.active,
+nav a:hover {
+  color: #fffbe6;
+}
+
+.charts-hero {
+  text-align: center;
+  margin: 60px 0 30px 0;
+}
+.charts-hero h1 {
+  font-size: 2.2rem;
+  color: #fffbe6;
+  margin-bottom: 0.5em;
+}
+.charts-hero p {
+  color: #D4B97F;
+  font-size: 1.1rem;
+}
+
+.chart-list {
+  max-width: 600px;
+  margin: 0 auto 60px auto;
+}
+
+.chart-entry {
+  display: flex;
+  align-items: center;
+  background: rgba(24,28,35,0.92);
+  border: 1.5px solid #D4B97F;
+  border-radius: 16px;
+  padding: 18px 28px;
+  margin-bottom: 18px;
+  color: #fffbe6;
+  box-shadow: 0 2px 12px rgba(24,28,35,0.13);
+  transition: transform 0.16s;
+}
+.chart-entry:hover {
+  transform: scale(1.025);
+  border-color: #fffbe6;
+}
+
+.rank {
+  display: inline-block;
+  width: 38px;
+  font-size: 1.6rem;
+  font-weight: bold;
+  text-align: center;
+  margin-right: 24px;
+}
+.rank.gold { color: #D4B97F; }
+.rank.silver { color: #B0B6BE; }
+.rank.bronze { color: #BFA76A; }
+
+.track-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.track-title {
+  font-size: 1.18rem;
+  font-weight: bold;
+  color: #fffbe6;
+}
+.track-artist {
+  font-size: 1rem;
+  color: #D4B97F;
+  margin-top: 2px;
+}
+
+.trend {
+  font-size: 1.3rem;
+  margin-left: 16px;
+  color: #1CA982;
+}
+
+footer {
+  text-align: center;
+  color: #B0B6BE;
+  padding: 24px 0 8px 0;
+  font-size: 1rem;
+  background: none;
+  border-top: 1px solid #222;
+}

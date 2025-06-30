@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RESONOS - Home</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #181C23;
+      color: #D4B97F;
+      font-family: 'Segoe UI', 'Pretendard', sans-serif;
+    }
+    .navbar {
+      background: #181C23 !important;
+      border-bottom: 1px solid #222;
+    }
+    .navbar-brand, .nav-link, .navbar-text {
+      color: #D4B97F !important;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .nav-link.active, .nav-link:hover {
+      color: #fffbe6 !important;
+    }
+    .logo-img {
+      height: 38px;
+      margin-right: 14px;
+      border-radius: 6px;
+      background: #181C23;
+    }
+    .hero-section {
+      text-align: center;
+      margin-top: 80px;
+      margin-bottom: 50px;
+    }
+    .hero-section h1 {
+      color: #fffbe6;
+      font-size: 2.7rem;
+      margin-bottom: 0.7em;
+    }
+    .hero-section p {
+      color: #D4B97F;
+      font-size: 1.2rem;
+      margin-bottom: 2em;
+    }
+    .btn-gold {
+      background: #D4B97F;
+      color: #181C23;
+      border: none;
+      padding: 14px 38px;
+      border-radius: 40px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      box-shadow: 0 2px 12px rgba(212,185,127,0.15);
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-gold:hover {
+      background: #fffbe6;
+      color: #181C23;
+    }
+    .card {
+      background: rgba(24,28,35,0.93);
+      border: 1.5px solid #D4B97F;
+      border-radius: 20px;
+      color: #fffbe6;
+      box-shadow: 0 2px 16px rgba(24,28,35,0.16);
+      transition: transform 0.18s, border-color 0.18s;
+    }
+    .card:hover {
+      transform: translateY(-8px) scale(1.04);
+      border-color: #fffbe6;
+    }
+    .card-title {
+      color: #D4B97F;
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+    .footer {
+      text-align: center;
+      color: #B0B6BE;
+      padding: 24px 0 8px 0;
+      font-size: 1rem;
+      border-top: 1px solid #222;
+      background: none;
+      margin-top: 60px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="/img/logo5.png" alt="RESONOS Logo" class="logo-img">
+        RESONOS
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon" style="filter: invert(80%)"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Charts</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Playlists</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Community</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Login</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <h1>음악의 우주, 커뮤니티의 연결</h1>
+      <p>별처럼 빛나는 음악과 사람들의 소통 공간</p>
+      <button class="btn btn-gold">시작하기</button>
+    </div>
+  </section>
+  <!-- Cards Section -->
+  <section>
+    <div class="container">
+      <div class="row g-4 justify-content-center">
+        <div class="col-12 col-md-4">
+          <div class="card h-100 text-center p-4">
+            <h2 class="card-title">🔥 인기 차트</h2>
+            <p class="card-text">실시간으로 업데이트되는 음악 랭킹</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="card h-100 text-center p-4">
+            <h2 class="card-title">🎧 추천 플레이리스트</h2>
+            <p class="card-text">AI가 골라주는 오늘의 음악</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="card h-100 text-center p-4">
+            <h2 class="card-title">🌌 커뮤니티</h2>
+            <p class="card-text">음악 팬들과 별처럼 연결되는 공간</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 RESONOS. All rights reserved.</p>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

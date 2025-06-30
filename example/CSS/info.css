@@ -1,0 +1,105 @@
+    body {
+      background: #181C23;
+      color: #D4B97F;
+      font-family: 'Segoe UI', 'Pretendard', sans-serif;
+      margin: 0;
+    }
+    .footer-info {
+      background: #181C23;
+      border-top: 1px solid #222;
+      padding: 38px 0 24px 0;
+      color: #B0B6BE;
+      font-size: 1.01rem;
+    }
+    .footer-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .footer-logo img {
+      width: 54px;
+      height: 38px;
+      border-radius: 8px;
+      margin-right: 13px;
+      background: #181C23;
+    }
+    .footer-logo span {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #D4B97F;
+      letter-spacing: 2px;
+    }
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      min-width: 140px;
+    }
+    .footer-links a {
+      color: #D4B97F;
+      text-decoration: none;
+      font-size: 1.01rem;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover {
+      color: #fffbe6;
+      text-decoration: underline;
+    }
+    .footer-policies {
+      flex: 1;
+      min-width: 200px;
+      margin-bottom: 10px;
+    }
+    .footer-policies h4 {
+      color: #D4B97F;
+      font-size: 1.09rem;
+      margin-bottom: 7px;
+      font-weight: bold;
+    }
+    .footer-policies p {
+      color: #B0B6BE;
+      font-size: 0.97rem;
+      margin-bottom: 7px;
+      line-height: 1.6;
+    }
+    .footer-sns {
+      display: flex;
+      gap: 13px;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .footer-sns a {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #222;
+      color: #D4B97F;
+      font-size: 1.25rem;
+      text-align: center;
+      line-height: 32px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .footer-sns a:hover {
+      background: #D4B97F;
+      color: #181C23;
+    }
+    .footer-copyright {
+      text-align: center;
+      color: #B0B6BE;
+      font-size: 0.98rem;
+      margin-top: 24px;
+    }
+    @media (max-width: 700px) {
+      .footer-inner { flex-direction: column; gap: 18px; align-items: flex-start; }
+      .footer-logo img { width: 38px; height: 28px; }
+    }
