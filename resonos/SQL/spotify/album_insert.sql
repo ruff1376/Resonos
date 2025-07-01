@@ -1,3 +1,4 @@
+TRUNCATE TABLE album;
 
 -- 아티스트: The Weeknd
 INSERT INTO album (id, title, cover_image, release_date, genre, label, description, artist_id) VALUES ('3OxfaVgvTxUTy7276t7SPU', 'Hurry Up Tomorrow', 'https://i.scdn.co/image/ab67616d0000b273982320da137d0de34410df61', '2025-01-31', '', 'XO / Republic Records', '', '1Xyo4u8uXC1ZmMpatF05PJ');

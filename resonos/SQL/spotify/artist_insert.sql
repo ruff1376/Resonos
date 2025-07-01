@@ -1,3 +1,4 @@
+TRUNCATE TABLE artist;
 
 -- 아티스트: The Weeknd
 INSERT INTO artist (id, name, profile_image, genres) VALUES ('1Xyo4u8uXC1ZmMpatF05PJ', 'The Weeknd', 'https://i.scdn.co/image/ab6761610000e5eb9e528993a2820267b97f6aae', '');

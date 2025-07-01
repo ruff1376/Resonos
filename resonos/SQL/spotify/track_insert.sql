@@ -1,3 +1,4 @@
+TRUNCATE TABLE track;
 
 -- 아티스트: The Weeknd
 INSERT INTO track (id, title, duration, genre, streaming_url, mv_url, album_id, artist_id, popularity, track_no) VALUES ('5673WA8EEUSPx1ir26lhGW', 'Wake Me Up (feat. Justice)', 308, '', 'None', '', '3OxfaVgvTxUTy7276t7SPU', '1Xyo4u8uXC1ZmMpatF05PJ', 76, 1);
