@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.ArtistMapper">
+
+  <resultMap id="ArtistResultMap" type="com.cosmus.resonos.domain.Artist">
+    <id property="id" column="id"/>
+    <result property="name" column="name"/>
+    <result property="profileImage" column="profile_image"/>
+    <result property="genres" column="genres"/>
+  </resultMap>
+
+  <select id="selectAll" resultMap="ArtistResultMap">
+    SELECT * FROM artist
+  </select>
+
+  <select id="selectById"  resultMap="ArtistResultMap">
+    SELECT * FROM artist WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO artist (id, name, profile_image, genres)
+    VALUES (#{id}, #{name}, #{profileImage}, #{genres})
+  </insert>
+
+  <update id="update">
+    UPDATE artist
+    SET name = #{name},
+        profile_image = #{profileImage},
+        genres = #{genres}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete" >
+    DELETE FROM artist WHERE id = #{id}
+  </delete>
+
+</mapper>

@@ -1,5 +1,7 @@
 package com.cosmus.resonos.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,4 +21,9 @@ public interface UserMapper {
     // 회원 조회
     public User select(@Param("username") String username) throws Exception;
 
+    public List<User> selectAll();
+    public User selectById(Long id);
+    public int insert(User user);
+    public int update(User user);
+    public int delete(Long id);
 }

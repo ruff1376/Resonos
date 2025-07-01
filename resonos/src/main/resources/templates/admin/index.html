@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>어드민 메인</title>
+    <th:block th:replace="~{fragments/link::admin}"></th:block>
+</head>
+<th:block layout:fragment="content">
+<body class="bg-dark text-light">
+
+    <!-- 관리자 헤더 -->
+    <nav class="navbar navbar-expand-lg border-bottom">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+          <img th:src="@{/img/resonosLogo.png}" alt="RESONOS Logo" class="rounded" >
+          <span class="fw-bold text-main">RESONOS Admin</span> <!-- text-main: var(--main-color) -->
+        </a>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link nav-text" href="#">대시보드</a></li>
+          <li class="nav-item"><a class="nav-link nav-text" href="#">회원관리</a></li>
+          <li class="nav-item"><a class="nav-link nav-text" href="#">게시글/신고</a></li>
+          <li class="nav-item"><a class="nav-link nav-text" href="#">음악데이터</a></li>
+          <li class="nav-item"><a class="nav-link nav-text" href="#">공연/이벤트</a></li>
+          <li class="nav-item"><a class="nav-link nav-text" href="#">설정</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- 관리자 대시보드 -->
+    <main class="py-5 bg-resonos-dark">
+      <div class="container" style="max-width: 1100px;">
+        <h1 class="mb-4 text-light-gold">관리자 대시보드</h1>
+
+        <!-- 통계 카드 -->
+        <div class="row g-4 mb-4">
+          <div class="col-md-3">
+            <div class="resonos-card">
+              <div class="card-title">회원</div>
+              <div class="card-value">12,340</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="resonos-card">
+              <div class="card-title">게시글</div>
+              <div class="card-value">8,210</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="resonos-card">
+              <div class="card-title">신고</div>
+              <div class="card-value">31</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="resonos-card">
+              <div class="card-title">블라인드</div>
+              <div class="card-value">7</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 승인 대기 테이블 -->
+        <div class="resonos-card text-start">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="card-title">게시판 작성 승인 대기</h5>
+            <button class="btn btn-gold">일괄 승인</button>
+          </div>
+
+          <table class="table table-dark table-hover align-middle rounded overflow-hidden">
+            <thead class="bg-dark text-main">
+              <tr>
+                <th>번호</th>
+                <th>게시판</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>작성일</th>
+                <th>첨부</th>
+                <th>상태</th>
+                <th>승인/반려</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>101</td>
+                <td>자유게시판</td>
+                <td>별빛 챌린지 참여합니다!</td>
+                <td>별빛소년</td>
+                <td>2025-06-26</td>
+                <td><a href="#" class="text-main">이미지</a></td>
+                <td><span class="badge bg-secondary">대기</span></td>
+                <td>
+                  <button class="btn btn-sm btn-gold me-1">승인</button>
+                  <button class="btn btn-sm btn-outline-gold">반려</button>
+                </td>
+              </tr>
+              <tr>
+                <td>100</td>
+                <td>Q&A</td>
+                <td>재즈 입문 추천 앨범?</td>
+                <td>JazzCat</td>
+                <td>2025-06-26</td>
+                <td>-</td>
+                <td><span class="badge bg-secondary">대기</span></td>
+                <td>
+                  <button class="btn btn-sm btn-gold me-1">승인</button>
+                  <button class="btn btn-sm btn-outline-gold">반려</button>
+                </td>
+              </tr>
+              <tr>
+                <td>99</td>
+                <td>팬덤</td>
+                <td>Orion Sound 팬 인증합니다!</td>
+                <td>팬스타</td>
+                <td>2025-06-25</td>
+                <td><a href="#" class="text-main">이미지</a></td>
+                <td><span class="badge bg-secondary">대기</span></td>
+                <td>
+                  <button class="btn btn-sm btn-gold me-1">승인</button>
+                  <button class="btn btn-sm btn-outline-gold">반려</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 관리 메뉴 요약 -->
+        <div class="row g-4 mt-4">
+          <div class="col-md-3">
+            <div class="resonos-card">
+              <div class="card-sm-title card-title">회원 관리</div>
+              <a href="#" class="btn btn-sm mt-2 btn-outline-gold">회원 목록</a>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="resonos-card">
+              <div class="card-sm-title card-title">게시글/신고 관리</div>
+              <a href="#" class="btn btn-sm mt-2 btn-outline-gold">게시글/신고</a>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="resonos-card">
+              <div class="card-sm-title card-title">음악 데이터 관리</div>
+              <a href="#" class="btn btn-sm mt-2 btn-outline-gold">아티스트/앨범/곡</a>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="resonos-card">
+              <div class="card-sm-title card-title">공연/이벤트 관리</div>
+              <a href="#" class="btn btn-sm mt-2 btn-outline-gold">공연/이벤트</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4 mt-2">
+          <div class="col-md-3">
+            <div class="resonos-card">
+              <div class="card-sm-title card-title">통계/분석</div>
+              <a href="#" class="btn btn-sm mt-2 btn-outline-gold">통계 대시보드</a>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="resonos-card">
+              <div class="card-sm-title card-title">권한/역할 관리</div>
+              <a href="#" class="btn btn-sm mt-2 btn-outline-gold">권한 관리</a>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="resonos-card">
+              <div class="card-sm-title card-title">오픈 API 관리</div>
+              <a href="#" class="btn btn-sm mt-2 btn-outline-gold">API 키/쿼터</a>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="resonos-card">
+              <div class="card-sm-title card-title">정책/환경설정</div>
+              <a href="#" class="btn btn-sm mt-2 btn-outline-gold">설정</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </body>
+</th:block>
+
+
+
+
+</html>

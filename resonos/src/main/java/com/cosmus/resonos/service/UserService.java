@@ -1,6 +1,8 @@
 package com.cosmus.resonos.service;
 
 
+import java.util.List;
+
 import com.cosmus.resonos.domain.User;
 import com.cosmus.resonos.domain.UserAuth;
 
@@ -22,5 +24,11 @@ public interface UserService {
 
     // 👮‍♂️ 관리자 체크
     public boolean isAdmin() throws Exception;
+
+    List<User> getAllUsers();
+    User getUserById(Long id);
+    boolean addUser(User user);
+    boolean updateUser(User user);
+    boolean deleteUser(Long id);
 
 }

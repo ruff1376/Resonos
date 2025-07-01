@@ -1,0 +1,64 @@
+/* 퀵 네비 */
+.nav-text { 
+  color: var(--main-color);
+  font-size: 1.6rem;
+}
+
+/* 카드 공통 스타일 */
+.resonos-card {
+  background: var(--background-color);
+  border: 1.5px solid var(--main-color);
+  border-radius: 1.6rem;
+  padding: 2rem;
+  color: #fffbe6;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* 카드 안의 타이틀 텍스트 (골드색) */
+.card-title {
+  color: var(--main-color);
+  font-size: 2.0rem;
+}
+/* 카드 안의 타이틀 텍스트(작은거) */
+.card-sm-title { 
+    color: var(--main-color);
+  font-size: 1.6rem;
+}
+
+/* 카드 안의 숫자 텍스트 */
+.card-value {
+  font-size: 2.4rem;
+  font-weight: bold;
+  color: #fffbe6;
+}
+
+/* 공통 버튼 - 골드 배경 */
+.btn-gold {
+  background: var(--main-color);
+  color: #181C23;
+  font-weight: bold;
+  border-radius: 30px;
+  border: none;
+  padding: 0.4rem 1.2rem;
+}
+
+/* 공통 버튼 - 골드 테두리 */
+.btn-outline-gold {
+  background: none;
+  color: var(--main-color);
+  border: 1.5px solid var(--main-color);
+  font-weight: bold;
+  border-radius: 30px;
+  padding: 0.4rem 1.2rem;
+}
+
+/* 공통 배경 다크 카드 */
+.bg-resonos-dark {
+  background: var(--background-color);
+}
+
+/* 공통 글자색 - 연금색 */
+.text-light-gold {
+  color: #fffbe6 !important;
+}
