@@ -2,6 +2,7 @@ package com.cosmus.resonos.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.Album;
@@ -10,12 +11,8 @@ import com.cosmus.resonos.mapper.AlbumMapper;
 @Service
 public class AlbumServiceImpl implements AlbumService {
 
-    private final AlbumMapper albumMapper;
-
-    // 생성자 주입
-    public AlbumServiceImpl(AlbumMapper albumMapper) {
-        this.albumMapper = albumMapper;
-    }
+    @Autowired
+    private AlbumMapper albumMapper;
 
     // 앨범 목록 조회
     @Override

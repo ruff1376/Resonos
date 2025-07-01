@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.ChartElementMapper">
+
+  <resultMap id="ChartElementResultMap" type="com.cosmus.resonos.domain.ChartElement">
+    <id property="id" column="id"/>
+    <result property="lyric" column="lyric"/>
+    <result property="sound" column="sound"/>
+    <result property="melody" column="melody"/>
+    <result property="storytelling" column="storytelling"/>
+    <result property="cohesiveness" column="cohesiveness"/>
+    <result property="creativity" column="creativity"/>
+    <result property="albumId" column="album_id"/>
+  </resultMap>
+
+  <select id="list" resultMap="ChartElementResultMap">
+    SELECT * FROM chart_element
+  </select>
+
+  <select id="select" resultMap="ChartElementResultMap">
+    SELECT * FROM chart_element WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO chart_element (id, lyric, sound, melody, storytelling, cohesiveness, creativity, album_id)
+    VALUES (#{id}, #{lyric}, #{sound}, #{melody}, #{storytelling}, #{cohesiveness}, #{creativity}, #{albumId})
+  </insert>
+
+  <update id="update">
+    UPDATE chart_element
+    SET lyric = #{lyric},
+        sound = #{sound},
+        melody = #{melody},
+        storytelling = #{storytelling},
+        cohesiveness = #{cohesiveness},
+        creativity = #{creativity},
+        album_id = #{albumId}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM chart_element WHERE id = #{id}
+  </delete>
+
+</mapper>

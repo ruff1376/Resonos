@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.UserRoleMapper">
+
+  <resultMap id="UserRoleResultMap" type="com.cosmus.resonos.domain.UserRole">
+    <id property="id" column="id"/>
+    <result property="assignedAt" column="assigned_at"/>
+    <result property="userId" column="user_id"/>
+    <result property="roleId" column="role_id"/>
+  </resultMap>
+
+  <select id="list" resultMap="UserRoleResultMap">
+    SELECT * FROM user_role ORDER BY assigned_at DESC
+  </select>
+
+  <select id="select" resultMap="UserRoleResultMap">
+    SELECT * FROM user_role WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO user_role (id, assigned_at, user_id, role_id)
+    VALUES (#{id}, #{assignedAt}, #{userId}, #{roleId})
+  </insert>
+
+  <update id="update">
+    UPDATE user_role
+    SET assigned_at = #{assignedAt},
+        user_id = #{userId},
+        role_id = #{roleId}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM user_role WHERE id = #{id}
+  </delete>
+
+</mapper>

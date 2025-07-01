@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.UserFollowMapper">
+
+  <resultMap id="UserFollowResultMap" type="com.cosmus.resonos.domain.UserFollow">
+    <id property="id" column="id"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="followerId" column="follower_id"/>
+    <result property="followingId" column="following_id"/>
+  </resultMap>
+
+  <select id="list" resultMap="UserFollowResultMap">
+    SELECT * FROM user_follow ORDER BY created_at DESC
+  </select>
+
+  <select id="select" resultMap="UserFollowResultMap">
+    SELECT * FROM user_follow WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO user_follow (id, created_at, follower_id, following_id)
+    VALUES (#{id}, #{createdAt}, #{followerId}, #{followingId})
+  </insert>
+
+  <update id="update">
+    UPDATE user_follow
+    SET created_at = #{createdAt},
+        follower_id = #{followerId},
+        following_id = #{followingId}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM user_follow WHERE id = #{id}
+  </delete>
+
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.ChartEntryMapper">
+
+  <resultMap id="ChartEntryResultMap" type="com.cosmus.resonos.domain.ChartEntry">
+    <id property="id" column="id"/>
+    <result property="type" column="type"/>
+    <result property="rank" column="rank"/>
+    <result property="calculatedAt" column="calculated_at"/>
+    <result property="trackId" column="track_id"/>
+  </resultMap>
+
+  <select id="list" resultMap="ChartEntryResultMap">
+    SELECT * FROM chart_entry ORDER BY calculated_at DESC
+  </select>
+
+  <select id="select" resultMap="ChartEntryResultMap">
+    SELECT * FROM chart_entry WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO chart_entry (id, type, rank, calculated_at, track_id)
+    VALUES (#{id}, #{type}, #{rank}, #{calculatedAt}, #{trackId})
+  </insert>
+
+  <update id="update">
+    UPDATE chart_entry
+    SET type = #{type},
+        rank = #{rank},
+        calculated_at = #{calculatedAt},
+        track_id = #{trackId}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM chart_entry WHERE id = #{id}
+  </delete>
+
+</mapper>
