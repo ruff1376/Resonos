@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}"
+>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,5 +14,8 @@
     <h1>Spring 평가</h1>
     <h3>ALOHA</h3>
     <a href="/posts/list">게시판</a>
+    <th:block layout:fragment="content">
+        <h1>여기가 main_layout 의 content 로 들어감</h1>
+    </th:block>
 </body>
 </html>
