@@ -1,13 +1,10 @@
-package com.cosmus.resonos.mapper;
+package com.cosmus.resonos.service;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Mapper;
-
 import com.cosmus.resonos.domain.Artist;
 
-@Mapper
-public interface ArtistMapper {
+public interface ArtistService {
     // 목록
     public List<Artist> list() throws Exception;
     // 조회
