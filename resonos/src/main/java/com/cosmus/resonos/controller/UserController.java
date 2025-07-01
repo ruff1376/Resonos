@@ -1,16 +1,20 @@
 package com.cosmus.resonos.controller;
 
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties.Http;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cosmus.resonos.domain.User;
 
-import groovy.util.logging.Slf4j;
-
+import lombok.extern.slf4j.Slf4j;
 
 
 
@@ -35,7 +39,21 @@ public class UserController {
   }
 
   @GetMapping("/edit")
-  public String edit() {
+  public String edit(Model model) {
+    User user = User.builder().nickname("김조김조은").bio("안녕하세요 음악과 우주를 사랑하는 김조은입니다.").email("resonos12@gmail.com").username("김조은").build();
+    model.addAttribute("user", user);
+
     return "user/edit";
+  }
+
+  @PostMapping("/edit")
+  public ResponseEntity<?> editPost(@ModelAttribute User user) {
+
+    if(user != null) {
+      log.info("user : {}", user);
+      return new ResponseEntity<>("SUCESS", HttpStatus.OK);
+    }
+
+    return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
   }
 }

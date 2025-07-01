@@ -302,7 +302,7 @@ main {
   background: #D4B97F;
   color: #181C23;
   border-radius: 14px;
-  font-size: 0.82rem;
+  font-size: 1.2rem;
   font-weight: bold;
   padding: 3px 12px;
   letter-spacing: 1px;
@@ -432,6 +432,7 @@ body {
   border-radius: 17px;
   border: 1.5px solid #D4B97F;
   box-shadow: 0 2px 12px rgba(24,28,35,0.10);
+  padding: 0 15px;
 }
 .input-area {
   padding: 0 100px;
@@ -457,3 +458,4 @@ textarea.form-control {
   gap: 10px;
   flex: 0 0 auto;
 }
+.bg-badge p {color: #fff;}
