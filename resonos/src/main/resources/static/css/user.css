@@ -1,3 +1,4 @@
+/* 로그인 페이지 */
 body {
       background-color: #181C23;
       font-family: 'Segoe UI', 'Pretendard', sans-serif;
@@ -27,7 +28,7 @@ body {
       background-color: #fffbe6;
       color: #181C23;
     }
-    .social-btn {
+    button.social-btn {
       background-color: #222;
       color: #D4B97F;
       border: 1.5px solid #D4B97F;
@@ -35,7 +36,7 @@ body {
       font-weight: bold;
       padding: 10px 0;
     }
-    .social-btn:hover {
+    button.social-btn:hover {
       background-color: #D4B97F;
       color: #181C23;
     }
@@ -44,7 +45,7 @@ body {
       color: #fffbe6;
       border: 1.5px solid #D4B97F;
       border-radius: 14px;
-      padding: 12px 16px;
+      padding: 12px 16px !important;
     }
     .form-control:focus {
       background-color: #222;

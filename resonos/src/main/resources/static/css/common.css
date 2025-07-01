@@ -4,12 +4,15 @@ body {font-size: 1.6rem;}
 
 :root {
   /* 메인 컬러 */
-  --main-color: #D4B97F;
+  --main-color: #D4B97F !important;
   /* 백그라운드 컬러 */
-  --background-color : #181C23;
+  --background-color : #181C23 !important;
   /* 컨테이너 크기 */
-  --container : 1440px;
+  --container : 1440px !important;
 }
 
+body {
+  background-color: var(--background-color);
+}
 /* 컨테이너 기본 크기 */
-.container {width: 100%; max-width: var(--container); margin: 0 auto;}
+.container {width: 100% !important; max-width: var(--container) !important; margin: auto !important;}
