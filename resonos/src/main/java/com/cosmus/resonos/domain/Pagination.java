@@ -1,4 +1,4 @@
-package com.aloha.security.domain;
+package com.cosmus.resonos.domain;
 
 import lombok.Data;
 
