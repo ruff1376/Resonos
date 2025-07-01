@@ -5,11 +5,17 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.cosmus.resonos.domain.Album;
+
 @Mapper
 public interface AlbumMapper {
-    public List<Album> selectAll();
-    public Album selectById(String id);
+    // 목록
+    public List<Album> list() throws Exception;
+    // 조회
+    public Album select(Integer no) throws Exception;
+    // 삽입
     public int insert(Album album);
+    // 수정
     public int update(Album album);
+    // 삭제
     public int delete(String id);
 }
