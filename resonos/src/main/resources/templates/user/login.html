@@ -8,26 +8,31 @@
 <head>
   <meta charset="UTF-8">
   <title>RESONOS - 로그인</title>
+  <th:block layout:fragment=""></th:block>
 </head>
 <body>
   <th:block layout:fragment="content">
-    <form class="login-box">
-      <img th:src="@{/img/resonosLogo.png}"
-          alt="RESONOS Logo" class="img-fluid rounded mb-3" style="height: 54px; background: #181C23;">
-      <h2 class="text-light mb-4">로그인</h2>
-      <input name="username" type="text" class="form-control mb-3" placeholder="아이디" required>
-      <input name="password" type="password" class="form-control mb-3" placeholder="비밀번호" required>
-      <button class="btn btn-gold w-100 mb-2" type="submit">로그인</button>
-      <a href="#" class="login-link d-block mt-2">비밀번호를 잊으셨나요?</a>
-      <div class="text-secondary my-3">또는</div>
-      <button class="btn social-btn w-100 mb-2" type="button">Google로 로그인</button>
-      <button class="btn social-btn w-100 mb-2" type="button">Kakao로 로그인</button>
-      <button class="btn social-btn w-100 mb-3" type="button">Naver로 로그인</button>
-      <div>
-        <span class="text-secondary">아직 회원이 아니신가요?</span>
-        <a href="signup.html" class="login-link">회원가입</a>
-      </div>
-    </form>
+    <div class="content-wrap">
+      <form class="login-box">
+        <img th:src="@{/img/resonosLogo.png}"
+            width="250px"
+            height="167px"
+            alt="RESONOS Logo" class="img-fluid rounded mb-3">
+        <h2 class="text-light mb-4">로그인</h2>
+        <input name="username" type="text" class="form-control mb-3" placeholder="아이디" required>
+        <input name="password" type="password" class="form-control mb-3" placeholder="비밀번호" required>
+        <button class="btn btn-gold w-100 mb-2" type="submit">로그인</button>
+        <a href="#" class="login-link d-block mt-2">비밀번호를 잊으셨나요?</a>
+        <div class="text-secondary my-3">또는</div>
+        <button class="btn social-btn w-100 mb-2" type="button">Google로 로그인</button>
+        <button class="btn social-btn w-100 mb-2" type="button">Kakao로 로그인</button>
+        <button class="btn social-btn w-100 mb-3" type="button">Naver로 로그인</button>
+        <div>
+          <span class="text-secondary">아직 회원이 아니신가요?</span>
+          <a href="signup.html" class="login-link">회원가입</a>
+        </div>
+      </form>
+    </div>
   </th:block>
 </body>
 </html>
