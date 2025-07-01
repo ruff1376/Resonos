@@ -1,3 +1,4 @@
+TRUNCATE TABLE album;
 
 -- 아티스트: The Weeknd
 INSERT INTO album (id, title, cover_image, release_date, genre, label, description, artist_id) VALUES ('3OxfaVgvTxUTy7276t7SPU', 'Hurry Up Tomorrow', 'https://i.scdn.co/image/ab67616d0000b273982320da137d0de34410df61', '2025-01-31', '', 'XO / Republic Records', '', '1Xyo4u8uXC1ZmMpatF05PJ');
@@ -123,7 +124,7 @@ INSERT INTO album (id, title, cover_image, release_date, genre, label, descripti
 INSERT INTO album (id, title, cover_image, release_date, genre, label, description, artist_id) VALUES ('3T4tUhGYeRNVUGevb0wThu', '÷ (Deluxe)', 'https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96', '2017-03-03', '', 'Atlantic Records UK', '', '6eUKZXaKkcviH0Ku9w2n3V');
 INSERT INTO album (id, title, cover_image, release_date, genre, label, description, artist_id) VALUES ('1xn54DMo2qIqBuMqHtUsFd', 'x (Deluxe Edition)', 'https://i.scdn.co/image/ab67616d0000b27313b3e37318a0c247b550bccd', '2014-06-21', '', 'Atlantic Records UK', '', '6eUKZXaKkcviH0Ku9w2n3V');
 INSERT INTO album (id, title, cover_image, release_date, genre, label, description, artist_id) VALUES ('2hyDesSAYNefikDJXlqhPE', '5', 'https://i.scdn.co/image/ab67616d0000b2732fec3ad10ab2f3a637e7a127', '2014-06-20', '', 'Gingerbread Man Records', '', '6eUKZXaKkcviH0Ku9w2n3V');
-INSERT INTO album (id, title, cover_image, release_date, genre, label, description, artist_id) VALUES ('0Yi8StK0Si3u2bLr3Qsm2Q', 'x (Wembley Edition)', 'https://i.scdn.co/image/ab67616d0000b273b81ce469fb895a3dbd7f896d', '2013', '', 'Atlantic Records UK', '', '6eUKZXaKkcviH0Ku9w2n3V');
+INSERT INTO album (id, title, cover_image, release_date, genre, label, description, artist_id) VALUES ('0Yi8StK0Si3u2bLr3Qsm2Q', 'x (Wembley Edition)', 'https://i.scdn.co/image/ab67616d0000b273b81ce469fb895a3dbd7f896d', '2015-11-13', '', 'Atlantic Records UK', '', '6eUKZXaKkcviH0Ku9w2n3V');
 INSERT INTO album (id, title, cover_image, release_date, genre, label, description, artist_id) VALUES ('3QbPtoOWiJqZurXXxJwaOD', 'Loose Change', 'https://i.scdn.co/image/ab67616d0000b273bc17a9c21d5a81d341945ed2', '2011-12-09', '', 'Atlantic Records UK', '', '6eUKZXaKkcviH0Ku9w2n3V');
 INSERT INTO album (id, title, cover_image, release_date, genre, label, description, artist_id) VALUES ('4JUtnlZKdLr01xEIymhm0G', 'Live at the Bedford', 'https://i.scdn.co/image/ab67616d0000b2734dc715d4872af21780dc2b1e', '2011-12-09', '', 'Atlantic Records UK', '', '6eUKZXaKkcviH0Ku9w2n3V');
 INSERT INTO album (id, title, cover_image, release_date, genre, label, description, artist_id) VALUES ('6DpIyaMgt5p9HlGd1c0LDM', 'No.5 Collaborations Project', 'https://i.scdn.co/image/ab67616d0000b2733c33fbe943babf9510e3715c', '2011-09-09', '', 'Atlantic Records UK', '', '6eUKZXaKkcviH0Ku9w2n3V');
