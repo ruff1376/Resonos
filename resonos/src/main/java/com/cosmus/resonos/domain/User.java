@@ -3,18 +3,24 @@ package com.cosmus.resonos.domain;
 import java.util.Date;
 import java.util.List;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class User {
     private Long no;
     private String username;
-    private String password;
-    private String name;
     private String email;
+    private String password;
+    private String nickname;
+    private String profileImage;
+    private String bio;
+    private boolean isPro;
+    private boolean enabled;
+    private String provider;
+    private String provider_id;
     private Date createdAt;
-    private Date updatedAt;
-    private int enabled;
 
     private List<UserAuth> authList;
 }
