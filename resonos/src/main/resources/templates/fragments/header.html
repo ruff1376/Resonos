@@ -1,0 +1,15 @@
+<!-- 프래그먼트 : 레이아웃에서 공통적으로 사용할 UI -->
+<!-- th:fragment="프래그먼트 명" -->
+<th:block th:fragment="header">
+    <header>
+        <ul>
+            <li><a href="/user">사용자</a></li>
+            <li><a href="/admin">관리자</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="/login">로그인</a></li>
+            <li><a href="/join">회원가입</a></li>
+        </ul>
+    </header>
+</th:block>
