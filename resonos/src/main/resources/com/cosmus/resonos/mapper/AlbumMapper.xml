@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.AlbumMapper">
+
+  <resultMap id="AlbumResultMap" type="com.cosmus.resonos.domain.Album">
+    <id property="id" column="id"/>
+    <result property="title" column="title"/>
+    <result property="coverImage" column="cover_image"/>
+    <result property="releaseDate" column="release_date"/>
+    <result property="genre" column="genre"/>
+    <result property="label" column="label"/>
+    <result property="description" column="description"/>
+    <result property="artistId" column="artist_id"/>
+  </resultMap>
+
+  <select id="selectAll" resultMap="AlbumResultMap">
+    SELECT * FROM album
+  </select>
+
+  <select id="selectById" resultMap="AlbumResultMap">
+    SELECT * FROM album WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO album (id, title, cover_image, release_date, genre, label, description, artist_id)
+    VALUES (#{id}, #{title}, #{coverImage}, #{releaseDate}, #{genre}, #{label}, #{description}, #{artistId})
+  </insert>
+
+  <update id="update">
+    UPDATE album
+    SET title = #{title},
+        cover_image = #{coverImage},
+        release_date = #{releaseDate},
+        genre = #{genre},
+        label = #{label},
+        description = #{description},
+        artist_id = #{artistId}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM album WHERE id = #{id}
+  </delete>
+
+</mapper>

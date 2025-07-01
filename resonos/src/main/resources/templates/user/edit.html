@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}"
+>
+<head>
+  <meta charset="UTF-8">
+  <title>회원 정보 수정</title>
+  <th:block th:replace="~{fragments/link::user}"></th:block>
+</head>
+<body>
+  <th:block layout:fragment="content">
+    <div class="d-flex justify-content-center">
+      <form th:action="@{/user/edit}" method="post" class="profile-edit-box" th:object="${user}">
+        <h3>프로필 편집</h3>
+        <img src="https://i.scdn.co/image/ab6761610000e5eba00b11c129b27a88fc72f36b" alt="프로필 이미지" class="profile-img edit">
+        <p>
+          <span class="badge">
+            현재 배지
+          </span>
+        </p>
+        <div class="input-area">
+          <label class="profile-edit-label" for="profileImage">보유 배지</label>
+          <div class="change-edge">
+            <th:block th:each="i : ${#numbers.sequence(1, 10)}">
+              <div class="bg-badge">
+                <div class="badge">
+                  <span th:text="|배지 이름 ${i}|"></span>
+                </div>
+                <p>획득 조건 출력</p>
+              </div>
+            </th:block>
+          </div>
+          <label class="profile-edit-label" for="nickname">닉네임</label>
+          <input type="text" class="form-control" th:field="*{nickname}">
+          <label class="profile-edit-label" for="email">이메일</label>
+          <input type="email" class="form-control" th:field="*{email}">
+          <label class="profile-edit-label" for="bio">자기소개</label>
+          <textarea class="form-control" th:field="*{bio}" rows="2" placeholder="자기소개를 입력하세요.">음악과 우주, 그리고 커뮤니티를 사랑합니다.</textarea>
+        </div>
+        <div class="btn-area">
+          <button class="btn btn-gold" type="submit">정보 수정</button>
+          <button class="btn btn-outline-gold" type="button">회원 탈퇴</button>
+        </div>
+      </form>
+    </div>
+  </th:block>
+</body>
+</html>

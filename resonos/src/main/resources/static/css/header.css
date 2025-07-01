@@ -1,0 +1,103 @@
+body {
+    background: #181C23;
+    color: #D4B97F;
+    font-family: 'Segoe UI', 'Pretendard', sans-serif;
+}
+.navbar {
+    background: #181C23 !important;
+    border-bottom: 1px solid #D4B97F;
+}
+.navbar-brand,
+.nav-link,
+.navbar-text {
+    color: #D4B97F !important;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.nav-link.active,
+.nav-link:hover {
+    color: #fffbe6 !important;
+}
+.logo-img {
+    width: 150px;
+    height: 100px;
+    margin-right: 10px;
+    border-radius: 6px;
+    background: #181C23;
+    object-fit: contain;
+}
+.logo-img-sub {
+    width: 100px;
+    height: 66px;
+    border-radius: 6px;
+    background: #181C23;
+    object-fit: contain;
+}
+.search-box {
+    border: 1px solid #B1B1B1;
+    border-radius: 10px;
+    height: 35px;
+    background: transparent;
+    color: #B1B1B1;
+    padding-left: 35px;
+    font-size: 12px;
+}
+.search-box::placeholder {
+    color: #B1B1B1;
+    opacity: 1;
+}
+.search-box:focus {
+    background: transparent !important;
+    color: #B1B1B1;
+    box-shadow: none;
+    border-color: #B1B1B1;
+}
+.search-icon {
+    position: absolute;
+    left: 10px;
+    top: 7px;
+    font-size: 20px;
+    color: #B1B1B1;
+    pointer-events: none;
+}
+.btn-outline-gold {
+    border: 1px solid #D4B97F;
+    color: #D4B97F;
+    border-radius: 10px;
+    background: transparent;
+    font-size: 12px;
+    height: 35px;
+    width: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+.btn-outline-gold:hover {
+    background: #D4B97F;
+    color: #181C23;
+}
+/* 프로필 드롭다운 화살표 색상 */
+.profile-dropdown .dropdown-toggle::after {
+    color: #B1B1B1 !important;
+    filter: none;
+}
+/* 검색창, 종, 프로필 간격 */
+.header-gap {
+    gap: 24px;
+}
+.dropdown-menu {
+    background-color: #181C23;
+    border-radius: 15px;
+}
+.dropdown-item {
+    color: #B1B1B1;
+}
+.dropdown-item:hover {
+    background-color: transparent;
+    color: #D4B97F;
+}
+.dropdown-divider {
+    border-top: 1px solid #D4B97F !important;
+    opacity: 1;
+}
