@@ -5,8 +5,11 @@ body {font-size: 1.6rem;}
 :root {
   /* 메인 컬러 */
   --main-color: #D4B97F;
+  /* 백그라운드 컬러 */
+  --background-color : #181C23;
   /* 컨테이너 크기 */
   --container : 1440px;
 }
 
+/* 컨테이너 기본 크기 */
 .container {width: 100%; max-width: var(--container); margin: 0 auto;}
