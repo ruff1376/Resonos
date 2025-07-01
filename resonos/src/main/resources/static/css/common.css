@@ -1,0 +1,10 @@
+/* 기본 폰트 사이즈 */
+html {font-size: 62.5%;}
+body {font-size: 1.6rem;}
+
+:root {
+  /* 메인 컬러 */
+  --main-color: #D4B97F;
+  /* 컨테이너 크기 */
+  --container : 1440px;
+}
