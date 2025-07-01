@@ -1,39 +1,61 @@
 <!DOCTYPE html>
-<html
-    lang="ko"
-    xmlns:th="http://www.thymeleaf.org"
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{/layouts/main_layout}"
->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>아티스트 리뷰</title>
     <th:block th:replace="~{fragments/link::artist}"></th:block>
 </head>
+
 <body>
     <th:block layout:fragment="content">
         <div class="wrapper">
-            <div class="artist-card">
-                <div class="artist-img">
-                    <div class="img-circle">
-                        <img src="https://i.namu.wiki/i/-vNKcLEUUt0DKmlnwNQzgC5cLUfxxN-0nr1EDI47H5mEOD0ul3q0lMR3uhd82WyL_PYyrdlK1ljo9OvP9gtz_YrJpm3Reky4x6A_IPG4KokaEobGCHFkXRZWoXOtnVRVfCEepwSPYtvlfULcsn4qWA.webp" alt="">
+            <div class="artist-card d-flex">
+                    <div class="artist-img">
+                        <div class="artist-circle">
+                            <img src="https://i.namu.wiki/i/-vNKcLEUUt0DKmlnwNQzgC5cLUfxxN-0nr1EDI47H5mEOD0ul3q0lMR3uhd82WyL_PYyrdlK1ljo9OvP9gtz_YrJpm3Reky4x6A_IPG4KokaEobGCHFkXRZWoXOtnVRVfCEepwSPYtvlfULcsn4qWA.webp"
+                                alt="페페">
+                        </div>
+                    </div>
+                    <div class="artist-info">
+                        <p id="headline">페페</p>
+                        <div class="info-text">
+                            <p id="subtitle">페페는 어쩌고 저쩌고 아주 좋은 음악을 만드는 개구리입니다.
+                                이번에 무슨 상을 받았으며 아주 멋쟁이 개구리입니다.
+                            </p>
+                        </div>
+                        <div class="d-flex gap-4">
+                            <p>팔로워 99,999</p>
+                            <p>앨범 35</p>
+                            <p>곡 350</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-gold">❤ 팔로우</button>
+                        </div>
                     </div>
                 </div>
-                <div class="artist-info">
-                    <p id="headline">페페</p>
-                    <p id="subtitle">페페는 어쩌고 저쩌고 아주 좋은 음악을 만드는 개구리 입니다.
-                        이번에 무슨 상을 받았으며 아주 멋쟁이 개구리 입니다.
-                    </p>
-                    <div class="artist-statics">
-                        <p>팔로워 99,999</p>
-                        <p>앨범 35</p>
-                        <p>곡 350</p>
+            <div class="disco-graphy">
+                <div class="card-header">
+                    <p id="headline">디스코 그래피</p>
+                </div>
+                <div class="card-container">
+                    <div class="album-card p-1">
+                        <div class="album-img">
+                            <div class="album-circle">
+                                <img src="https://i.namu.wiki/i/P0JikxFV739tGZESEMNtd6mtVAyK6WJzbLfj8YZLzT_i_xxPdENz0B-bvofZjAO9-0SpjeA6gyckiDSMVzmwodhPH-Nj1K_u-srLcoxGNwGSeVDCeZXYUdjxHsKCYAHrDmGo7EjgsuwXTSU2m6kpBg.webp" alt="">
+                            </div>
+                        </div>
+                        <div class="album-info">
+                            <p id="subtitle">모르시나요...</p>
+                            <p>2025</p>
+                        </div>
                     </div>
-                    <div class="btn-gold" id="headline">❤ 팔로우</div>
                 </div>
             </div>
         </div>
     </th:block>
 </body>
+
 </html>
