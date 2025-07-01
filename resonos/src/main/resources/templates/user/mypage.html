@@ -7,108 +7,163 @@
 >
 <head>
   <meta charset="UTF-8">
-  <title>RESONOS 마이페이지</title>
-  <link rel="stylesheet" href="/example/CSS/mypage.css">
+  <title>마이페이지</title>
+  <th:block th:replace="~{fragments/link::user}"></th:block>
 </head>
 <body>
-  <header class="header">
-    <div class="logo">
-      <img src="https://pplx-res.cloudinary.com/image/private/user_uploads/71501722/4852723f-0f3f-4793-9eaf-749463c33650/image.jpg" alt="RESONOS Logo" class="logo-img">
-      <span class="logo-text">RESONOS</span>
-    </div>
-    <nav>
-      <a href="#">홈</a>
-      <a href="#">차트</a>
-      <a href="#">플레이리스트</a>
-      <a href="#">커뮤니티</a>
-      <a href="#" class="active">마이페이지</a>
-    </nav>
-  </header>
-  <main>
+  <main layout:fragment="content">
     <section class="profile-section">
       <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="프로필 이미지" class="profile-img">
       <div class="profile-info">
         <h2>별빛소년 <span class="badge">JAZZ LOVER</span></h2>
         <p>음악과 우주, 그리고 커뮤니티를 사랑하는 평론가입니다.</p>
         <div class="profile-actions">
-          <button class="btn-gold">프로필 편집</button>
-          <button class="btn-outline">로그아웃</button>
+          <a th:href="@{/user/edit}" class="mybtn-gold">프로필 편집</a>
+          <button class="mybtn-outline">로그아웃</button>
         </div>
       </div>
       <div class="profile-meta">
-        <div><b>팔로워</b><br>128</div>
-        <div><b>팔로우</b><br>92</div>
-        <div><b>뱃지</b><br>3</div>
+        <div><a href=""><b>팔로워</b><br>128</a></div>
+        <div><a href=""><b>팔로우</b><br>92</a></div>
+        <div><a href=""><b>뱃지</b><br>3</a></div>
       </div>
     </section>
-    <section class="mypage-grid">
-      <div class="mypage-card">
-        <h3>내 플레이리스트</h3>
-        <ul>
-          <li>🌌 우주감성 재즈 <span class="edit">편집</span></li>
-          <li>🎧 밤하늘 Lo-fi <span class="edit">편집</span></li>
-          <li>⭐️ 별빛 클래식 <span class="edit">편집</span></li>
-        </ul>
-        <button class="btn-gold-sm">+ 새 플레이리스트</button>
-      </div>
-      <div class="mypage-card">
-        <h3>찜한 앨범/트랙</h3>
-        <ul>
-          <li>Starlight Symphony - Orion Sound</li>
-          <li>Cosmic Groove - Luna Beats</li>
-          <li>Nebula Jam - GalaxiNote</li>
-        </ul>
-      </div>
-      <div class="mypage-card">
-        <h3>팔로우 아티스트/게시판</h3>
-        <ul>
-          <li>Orion Sound</li>
-          <li>Luna Beats</li>
-          <li>자유게시판, 재즈 토론방</li>
-        </ul>
-      </div>
-      <div class="mypage-card">
-        <h3>내 활동</h3>
-        <ul>
-          <li>리뷰 12개, 댓글 34개, 평점 8.9점</li>
-          <li>최근 게시글: "별과 음악의 공명"</li>
-        </ul>
-      </div>
-      <div class="mypage-card stats-card">
-        <h3>내 활동 통계</h3>
-        <div class="stat-bar">
-          <span style="width: 80%"></span>
+    <div class="my-middle">
+      <!-- 플레이리스트 -->
+      <a href="#">
+        <div class="mypage-card playlist">
+          <h3>내 플레이리스트</h3>
+          <ul>
+            <th:block th:each="i : ${#numbers.sequence(1, 3)}">
+              <li>🌌 내 플레이스트 <th:block th:text="${i}"></th:block>
+                <div>
+                  <span th:text="${like_count}">123</span>
+                  <span class="like">♥</span>
+                </div>
+              </li>
+            </th:block>
+          </ul>
         </div>
-        <p>평점 분포: ★★★★★ 60% | ★★★★☆ 30% | ★★★☆☆ 10%</p>
+      </a>
+      <div class="chart-area">
+        차트영역
       </div>
-      <div class="mypage-card">
-        <h3>계정/보안</h3>
-        <ul>
-          <li>이메일: starlight@resonos.com</li>
-          <li>소셜 연동: Google, Spotify</li>
-          <li><a href="#">비밀번호 변경</a> | <a href="#">탈퇴</a></li>
-        </ul>
-      </div>
-      <div class="mypage-card">
-        <h3>알림/구독 설정</h3>
-        <ul>
-          <li>아티스트 새 앨범 알림: ON</li>
-          <li>게시판 새 글 알림: OFF</li>
-          <li>키워드 알림: "재즈", "우주"</li>
-        </ul>
-      </div>
-      <div class="mypage-card">
-        <h3>음악 취향/뱃지</h3>
-        <ul>
-          <li>취향 테스트 결과: Jazz, Classic, Lo-fi</li>
-          <li>획득 뱃지: <span class="badge">JAZZ LOVER</span> <span class="badge">CLASSICIAN</span> <span class="badge">NIGHT OWL</span></li>
-          <li><a href="#">취향 테스트 다시하기</a></li>
-        </ul>
-      </div>
+    </div>
+    <section class="mypage-grid">
+      <!-- 좋아요 한 앨범 -->
+      <a href="#">
+        <div class="mypage-card album">
+          <h3>좋아요 표시한 앨범<p>></p></h3>
+          <ul>
+            <li>
+              <img width="50px" height="50px" src="https://i.scdn.co/image/ab67616d0000b27340735818c3f8f04ba30e47c2" alt="커버이미지">
+              <p>좋아요 표시한 앨범</p>
+            </li>
+            <li>
+              <img width="50px" height="50px" src="https://i.scdn.co/image/ab67616d0000b273df1580ff05c0fb1b0cd23e1a">
+              <p>좋아요 표시한 앨범</p>
+            </li>
+            <li>
+              <img width="50px" height="50px" src="https://i.scdn.co/image/ab67616d0000b27373f85e8b4338d2aa07f59f3a">
+              <p>좋아요 표시한 앨범</p>
+            </li>
+          </ul>
+        </div>
+      </a>
+      <!-- 좋아요 한 트랙 -->
+      <a href="#">
+        <div class="mypage-card track">
+          <h3>좋아요 표시한 트랙<p>></p></h3>
+          <ul>
+            <li>
+              <img width="50px" height="50px" src="https://i.scdn.co/image/ab67616d0000b27340735818c3f8f04ba30e47c2" alt="커버이미지">
+              <p>좋아요 표시한 트랙</p>
+            </li>
+            <li>
+              <img width="50px" height="50px" src="https://i.scdn.co/image/ab67616d0000b273df1580ff05c0fb1b0cd23e1a">
+              <p>좋아요 표시한 트랙</p>
+            </li>
+            <li>
+              <img width="50px" height="50px" src="https://i.scdn.co/image/ab67616d0000b27373f85e8b4338d2aa07f59f3a">
+              <p>좋아요 표시한 트랙</p>
+            </li>
+          </ul>
+        </div>
+      </a>
+      <!-- 팔로우 한 아티스트 -->
+      <a href="#">
+        <div class="mypage-card artist">
+          <h3>팔로우 아티스트<p>></p></h3>
+          <ul>
+            <li>
+              <img width="50px" height="50px" src="https://i.scdn.co/image/ab6761610000e5eb667b1c37aac06716daa5fe92" alt="커버이미지">
+              <p>팔로우 한 아티스트</p>
+            </li>
+            <li>
+              <img width="50px" height="50px" src="https://i.scdn.co/image/ab6761610000e5eb538dad5b42d963e338726c26">
+              <p>팔로우 한 아티스트</p>
+            </li>
+            <li>
+              <img width="50px" height="50px" src="https://i.scdn.co/image/ab6761610000e5ebd642648235ebf3460d2d1f6a">
+              <p>팔로우 한 아티스트</p>
+            </li>
+          </ul>
+        </div>
+      </a>
+      <!-- 내 활동 -->
+      <a href="#">
+        <div class="mypage-card activate">
+          <h3>내 활동</h3>
+          <ul>
+            <li>
+              <span>게시글</span>
+              <p>10</p>
+            </li>
+            <li>
+              <span>댓글</span>
+              <p>25</p>
+            </li>
+            <li>
+              <span>리뷰</span>
+              <p>5</p>
+            </li>
+          </ul>
+        </div>
+      </a>
+      <!-- 배지 -->
+      <a href="">
+        <div class="mypage-card badge-area">
+          <h3>배지<p>></p></h3>
+          <ul>
+            <li>최근 획득한 배지</li>
+            <li>
+              <th:block th:each="i : ${#numbers.sequence(1, 10)}">
+                <span class="badge" th:text="${i}"></span>
+              </th:block>
+            </li>
+          </ul>
+        </div>
+      </a>
+      <!-- 알림 설정 -->
+      <a href="">
+        <div class="mypage-card alarm">
+          <h3>알림 설정<p>></p></h3>
+          <ul>
+            <li></li>
+          </ul>
+        </div>
+      </a>
+      <!-- 계정 / 보안 -->
+      <a href="">
+        <div class="mypage-card security">
+          <h3>계정 / 보안<p>></p></h3>
+          <ul>
+            <li>이메일: <th:block th:text="${user.email}"></th:block></li>
+            <li class="impor"><span>비밀번호 변경</span>&nbsp;/&nbsp;<span>탈퇴</span></li>
+          </ul>
+        </div>
+      </a>
     </section>
   </main>
-  <footer>
-    <p>© 2025 RESONOS. All rights reserved.</p>
-  </footer>
 </body>
 </html>

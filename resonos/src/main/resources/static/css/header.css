@@ -77,3 +77,27 @@ body {
     background: #D4B97F;
     color: #181C23;
 }
+/* 프로필 드롭다운 화살표 색상 */
+.profile-dropdown .dropdown-toggle::after {
+    color: #B1B1B1 !important;
+    filter: none;
+}
+/* 검색창, 종, 프로필 간격 */
+.header-gap {
+    gap: 24px;
+}
+.dropdown-menu {
+    background-color: #181C23;
+    border-radius: 15px;
+}
+.dropdown-item {
+    color: #B1B1B1;
+}
+.dropdown-item:hover {
+    background-color: transparent;
+    color: #D4B97F;
+}
+.dropdown-divider {
+    border-top: 1px solid #D4B97F !important;
+    opacity: 1;
+}
