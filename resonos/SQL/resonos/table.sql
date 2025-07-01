@@ -1,3 +1,5 @@
+-- Active: 1745889699154@@127.0.0.1@3306@resonos
+
 -- 💥 기존 테이블 모두 삭제
 DROP TABLE IF EXISTS
     user_activity_log, admin_log, user_role, role, user_sanction,
@@ -81,8 +83,8 @@ CREATE TABLE `track` (
 	`mv_url`	VARCHAR(200)	NULL,
 	`album_id`	VARCHAR(200)	NOT NULL,
 	`artist_id`	VARCHAR(200)	NOT NULL,
-	`popularity` INT NOT NULL,
-	`track_no` INT NOT NULL
+	`popularity`	INT	NOT NULL,
+	`track_no`	INT	NOT NULL
 );
 
 CREATE TABLE `user` (
@@ -113,7 +115,7 @@ CREATE TABLE `liked_playlist` (
 	`id`	BIGINT	NULL,
 	`created_at`	DATETIME	NOT NULL	DEFAULT CURRENT_TIMESTAMP,
 	`user_id`	BIGINT	NOT NULL,
-	`playlist_id`	VARCHAR(200)	NOT NULL
+	`playlist_id`	BIGINT	NOT NULL
 );
 
 CREATE TABLE `report` (
@@ -161,7 +163,7 @@ CREATE TABLE `playlist` (
 	`thumbnail_url`	VARCHAR(200)	NULL,
 	`is_public`	BOOLEAN	NOT NULL,
 	`created_at`	TIMESTAMP	NOT NULL	DEFAULT CURRENT_TIMESTAMP,
-	`Field`	VARCHAR(255)	NULL
+	`track_id`	VARCHAR(200)	NOT NULL
 );
 
 CREATE TABLE `album` (
@@ -209,9 +211,10 @@ CREATE TABLE `artist_follow` (
 
 CREATE TABLE `playlist_detail` (
 	`id`	BIGINT	NOT NULL,
-	`playlist_id`	BIGINT	NOT NULL,
 	`track_id`	VARCHAR(200)	NOT NULL,
-	`order_no`	INT	NOT NULL
+	`playlist_id`	BIGINT	NOT NULL,
+	`order_no`	INT	NOT NULL,
+	`Field`	VARCHAR(255)	NULL
 );
 
 CREATE TABLE `policy` (
@@ -271,6 +274,13 @@ CREATE TABLE `setting` (
 	`id`	BIGINT	NOT NULL,
 	`value`	VARCHAR(100)	NULL,
 	`updated_at`	DATETIME	NULL
+);
+
+CREATE TABLE `track_mood_vote` (
+	`id`	BIGINT	NOT NULL,
+	`user_id`	BIGINT	NOT NULL,
+	`track_id`	VARCHAR(200)	NOT NULL,
+	`mood`	BIGINT	NOT NULL
 );
 
 CREATE TABLE `track_review` (
@@ -338,13 +348,6 @@ CREATE TABLE `plugin` (
 	`enabled`	BOOLEAN	NULL,
 	`config_json`	TEXT	NULL,
 	`created_at`	DATETIME	NULL
-);
-
-CREATE TABLE `track_mood_vote` (
-	`id`	BIGINT	NOT NULL,
-	`user_id`	BIGINT	NOT NULL,
-	`track_id`	VARCHAR(200)	NOT NULL,
-	`mood`	BIGINT	NOT NULL
 );
 
 ALTER TABLE `notice` ADD CONSTRAINT `PK_NOTICE` PRIMARY KEY (
@@ -463,6 +466,10 @@ ALTER TABLE `setting` ADD CONSTRAINT `PK_SETTING` PRIMARY KEY (
 	`id`
 );
 
+ALTER TABLE `track_mood_vote` ADD CONSTRAINT `PK_TRACK_MOOD_VOTE` PRIMARY KEY (
+	`id`
+);
+
 ALTER TABLE `track_review` ADD CONSTRAINT `PK_TRACK_REVIEW` PRIMARY KEY (
 	`id`
 );
@@ -488,10 +495,6 @@ ALTER TABLE `liked_album` ADD CONSTRAINT `PK_LIKED_ALBUM` PRIMARY KEY (
 );
 
 ALTER TABLE `plugin` ADD CONSTRAINT `PK_PLUGIN` PRIMARY KEY (
-	`id`
-);
-
-ALTER TABLE `track_mood_vote` ADD CONSTRAINT `PK_TRACK_MOOD_VOTE` PRIMARY KEY (
 	`id`
 );
 
@@ -529,3 +532,340 @@ ALTER TABLE user_role MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
 ALTER TABLE admin_log MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
 ALTER TABLE user_activity_log MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
 ALTER TABLE notice MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `notice` ADD CONSTRAINT `FK_user_TO_notice_1` FOREIGN KEY (
+	`author_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `qna_answer` ADD CONSTRAINT `FK_qna_TO_qna_answer_1` FOREIGN KEY (
+	`qna_id`
+)
+REFERENCES `qna` (
+	`id`
+);
+
+ALTER TABLE `qna_answer` ADD CONSTRAINT `FK_user_TO_qna_answer_1` FOREIGN KEY (
+	`admin_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `community` ADD CONSTRAINT `FK_user_TO_community_1` FOREIGN KEY (
+	`creator_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `qna` ADD CONSTRAINT `FK_user_TO_qna_1` FOREIGN KEY (
+	`user_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `liked_track` ADD CONSTRAINT `FK_user_TO_liked_track_1` FOREIGN KEY (
+	`user_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `liked_track` ADD CONSTRAINT `FK_track_TO_liked_track_1` FOREIGN KEY (
+	`track_id`
+)
+REFERENCES `track` (
+	`id`
+);
+
+ALTER TABLE `track` ADD CONSTRAINT `FK_album_TO_track_1` FOREIGN KEY (
+	`album_id`
+)
+REFERENCES `album` (
+	`id`
+);
+
+ALTER TABLE `track` ADD CONSTRAINT `FK_artist_TO_track_1` FOREIGN KEY (
+	`artist_id`
+)
+REFERENCES `artist` (
+	`id`
+);
+
+ALTER TABLE `liked_playlist` ADD CONSTRAINT `FK_user_TO_liked_playlist_1` FOREIGN KEY (
+	`user_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `liked_playlist` ADD CONSTRAINT `FK_playlist_TO_liked_playlist_1` FOREIGN KEY (
+	`playlist_id`
+)
+REFERENCES `playlist` (
+	`id`
+);
+
+ALTER TABLE `report` ADD CONSTRAINT `FK_user_TO_report_1` FOREIGN KEY (
+	`reporter_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `report` ADD CONSTRAINT `FK_user_TO_report_2` FOREIGN KEY (
+	`target_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `album_mood_vote` ADD CONSTRAINT `FK_user_TO_album_mood_vote_1` FOREIGN KEY (
+	`user_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `album_mood_vote` ADD CONSTRAINT `FK_album_TO_album_mood_vote_1` FOREIGN KEY (
+	`album_id`
+)
+REFERENCES `album` (
+	`id`
+);
+
+ALTER TABLE `album_mood_vote` ADD CONSTRAINT `FK_tag_TO_album_mood_vote_1` FOREIGN KEY (
+	`mood`
+)
+REFERENCES `tag` (
+	`id`
+);
+
+ALTER TABLE `chart_element` ADD CONSTRAINT `FK_album_TO_chart_element_1` FOREIGN KEY (
+	`album_id`
+)
+REFERENCES `album` (
+	`id`
+);
+
+ALTER TABLE `comment` ADD CONSTRAINT `FK_user_TO_comment_1` FOREIGN KEY (
+	`user_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `playlist` ADD CONSTRAINT `FK_user_TO_playlist_1` FOREIGN KEY (
+	`user_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `album` ADD CONSTRAINT `FK_artist_TO_album_1` FOREIGN KEY (
+	`artist_id`
+)
+REFERENCES `artist` (
+	`id`
+);
+
+ALTER TABLE `user_sanction` ADD CONSTRAINT `FK_user_TO_user_sanction_1` FOREIGN KEY (
+	`user_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `user_sanction` ADD CONSTRAINT `FK_user_TO_user_sanction_2` FOREIGN KEY (
+	`admin_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `admin_log` ADD CONSTRAINT `FK_user_TO_admin_log_1` FOREIGN KEY (
+	`actor_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `admin_log` ADD CONSTRAINT `FK_user_TO_admin_log_2` FOREIGN KEY (
+	`target_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `artist_follow` ADD CONSTRAINT `FK_user_TO_artist_follow_1` FOREIGN KEY (
+	`user_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `artist_follow` ADD CONSTRAINT `FK_artist_TO_artist_follow_1` FOREIGN KEY (
+	`artist_id`
+)
+REFERENCES `artist` (
+	`id`
+);
+
+ALTER TABLE `playlist_detail` ADD CONSTRAINT `FK_track_TO_playlist_detail_1` FOREIGN KEY (
+	`track_id`
+)
+REFERENCES `track` (
+	`id`
+);
+
+ALTER TABLE `playlist_detail` ADD CONSTRAINT `FK_playlist_TO_playlist_detail_1` FOREIGN KEY (
+	`playlist_id`
+)
+REFERENCES `playlist` (
+	`id`
+);
+
+ALTER TABLE `board_post` ADD CONSTRAINT `FK_community_TO_board_post_1` FOREIGN KEY (
+	`community_id`
+)
+REFERENCES `community` (
+	`id`
+);
+
+ALTER TABLE `board_post` ADD CONSTRAINT `FK_user_TO_board_post_1` FOREIGN KEY (
+	`user_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `chart_entry` ADD CONSTRAINT `FK_track_TO_chart_entry_1` FOREIGN KEY (
+	`track_id`
+)
+REFERENCES `track` (
+	`id`
+);
+
+ALTER TABLE `user_role` ADD CONSTRAINT `FK_user_TO_user_role_1` FOREIGN KEY (
+	`user_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `user_role` ADD CONSTRAINT `FK_role_TO_user_role_1` FOREIGN KEY (
+	`role_id`
+)
+REFERENCES `role` (
+	`id`
+);
+
+ALTER TABLE `notification` ADD CONSTRAINT `FK_user_TO_notification_1` FOREIGN KEY (
+	`user_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `track_mood_vote` ADD CONSTRAINT `FK_user_TO_track_mood_vote_1` FOREIGN KEY (
+	`user_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `track_mood_vote` ADD CONSTRAINT `FK_track_TO_track_mood_vote_1` FOREIGN KEY (
+	`track_id`
+)
+REFERENCES `track` (
+	`id`
+);
+
+ALTER TABLE `track_mood_vote` ADD CONSTRAINT `FK_tag_TO_track_mood_vote_1` FOREIGN KEY (
+	`mood`
+)
+REFERENCES `tag` (
+	`id`
+);
+
+ALTER TABLE `track_review` ADD CONSTRAINT `FK_user_TO_track_review_1` FOREIGN KEY (
+	`user_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `track_review` ADD CONSTRAINT `FK_track_TO_track_review_1` FOREIGN KEY (
+	`track_id`
+)
+REFERENCES `track` (
+	`id`
+);
+
+ALTER TABLE `user_activity_log` ADD CONSTRAINT `FK_user_TO_user_activity_log_1` FOREIGN KEY (
+	`user_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `user_badge` ADD CONSTRAINT `FK_user_TO_user_badge_1` FOREIGN KEY (
+	`user_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `user_badge` ADD CONSTRAINT `FK_badge_TO_user_badge_1` FOREIGN KEY (
+	`badge_id`
+)
+REFERENCES `badge` (
+	`id`
+);
+
+ALTER TABLE `user_follow` ADD CONSTRAINT `FK_user_TO_user_follow_1` FOREIGN KEY (
+	`follower_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `user_follow` ADD CONSTRAINT `FK_user_TO_user_follow_2` FOREIGN KEY (
+	`following_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `album_review` ADD CONSTRAINT `FK_user_TO_album_review_1` FOREIGN KEY (
+	`user_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `album_review` ADD CONSTRAINT `FK_album_TO_album_review_1` FOREIGN KEY (
+	`album_id`
+)
+REFERENCES `album` (
+	`id`
+);
+
+ALTER TABLE `liked_album` ADD CONSTRAINT `FK_user_TO_liked_album_1` FOREIGN KEY (
+	`user_id`
+)
+REFERENCES `user` (
+	`id`
+);
+
+ALTER TABLE `liked_album` ADD CONSTRAINT `FK_album_TO_liked_album_1` FOREIGN KEY (
+	`album_id`
+)
+REFERENCES `album` (
+	`id`
+);
+
