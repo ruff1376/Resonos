@@ -1,0 +1,61 @@
+body {
+      background-color: #181C23;
+      font-family: 'Segoe UI', 'Pretendard', sans-serif;
+      color: #D4B97F;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-box {
+      background-color: rgba(24,28,35,0.96);
+      border: 1.5px solid #D4B97F;
+      border-radius: 24px;
+      padding: 48px 36px 32px 36px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    .btn-gold {
+      background-color: #D4B97F;
+      color: #181C23;
+      border-radius: 30px;
+      font-weight: bold;
+      padding: 12px 16px;
+    }
+    .btn-gold:hover {
+      background-color: #fffbe6;
+      color: #181C23;
+    }
+    .social-btn {
+      background-color: #222;
+      color: #D4B97F;
+      border: 1.5px solid #D4B97F;
+      border-radius: 30px;
+      font-weight: bold;
+      padding: 10px 0;
+    }
+    .social-btn:hover {
+      background-color: #D4B97F;
+      color: #181C23;
+    }
+    .form-control {
+      background-color: #222;
+      color: #fffbe6;
+      border: 1.5px solid #D4B97F;
+      border-radius: 14px;
+      padding: 12px 16px;
+    }
+    .form-control:focus {
+      background-color: #222;
+      color: #fffbe6;
+      border-color: #fffbe6;
+      box-shadow: none;
+    }
+    .login-link {
+      color: #D4B97F;
+      text-decoration: underline;
+    }
+    .login-link:hover {
+      color: #fffbe6;
+    }
