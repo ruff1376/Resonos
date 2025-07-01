@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.LikedPlaylistMapper">
+
+  <resultMap id="LikedPlaylistResultMap" type="com.cosmus.resonos.domain.LikedPlaylist">
+    <id property="id" column="id"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="userId" column="user_id"/>
+    <result property="playlistId" column="playlist_id"/>
+  </resultMap>
+
+  <select id="list" resultMap="LikedPlaylistResultMap">
+    SELECT * FROM liked_playlist ORDER BY created_at DESC
+  </select>
+
+  <select id="select" resultMap="LikedPlaylistResultMap">
+    SELECT * FROM liked_playlist WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO liked_playlist (id, created_at, user_id, playlist_id)
+    VALUES (#{id}, #{createdAt}, #{userId}, #{playlistId})
+  </insert>
+
+  <update id="update">
+    UPDATE liked_playlist
+    SET created_at = #{createdAt},
+        user_id = #{userId},
+        playlist_id = #{playlistId}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM liked_playlist WHERE id = #{id}
+  </delete>
+
+</mapper>

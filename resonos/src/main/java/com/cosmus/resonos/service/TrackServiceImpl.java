@@ -2,6 +2,7 @@ package com.cosmus.resonos.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.Track;
@@ -10,12 +11,8 @@ import com.cosmus.resonos.mapper.TrackMapper;
 @Service
 public class TrackServiceImpl implements TrackService {
 
-    private final TrackMapper trackMapper;
-
-    // 생성자 주입
-    public TrackServiceImpl(TrackMapper trackMapper) {
-        this.trackMapper = trackMapper;
-    }
+    @Autowired
+    private TrackMapper trackMapper;
 
     // 트랙 목록 조회
     @Override

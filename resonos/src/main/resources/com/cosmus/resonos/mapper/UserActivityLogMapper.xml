@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.UserActivityLogMapper">
+
+  <resultMap id="UserActivityLogResultMap" type="com.cosmus.resonos.domain.UserActivityLog">
+    <id property="id" column="id"/>
+    <result property="action" column="action"/>
+    <result property="targetType" column="target_type"/>
+    <result property="targetId" column="target_id"/>
+    <result property="detail" column="detail"/>
+    <result property="ipAddress" column="ip_address"/>
+    <result property="userAgent" column="user_agent"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="userId" column="user_id"/>
+  </resultMap>
+
+  <select id="list" resultMap="UserActivityLogResultMap">
+    SELECT * FROM user_activity_log ORDER BY created_at DESC
+  </select>
+
+  <select id="select" resultMap="UserActivityLogResultMap">
+    SELECT * FROM user_activity_log WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO user_activity_log
+    (id, action, target_type, target_id, detail, ip_address, user_agent, created_at, user_id)
+    VALUES
+    (#{id}, #{action}, #{targetType}, #{targetId}, #{detail}, #{ipAddress}, #{userAgent}, #{createdAt}, #{userId})
+  </insert>
+
+  <update id="update">
+    UPDATE user_activity_log
+    SET action = #{action},
+        target_type = #{targetType},
+        target_id = #{targetId},
+        detail = #{detail},
+        ip_address = #{ipAddress},
+        user_agent = #{userAgent},
+        created_at = #{createdAt},
+        user_id = #{userId}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM user_activity_log WHERE id = #{id}
+  </delete>
+
+</mapper>

@@ -1,6 +1,8 @@
 package com.cosmus.resonos.service;
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.cosmus.resonos.domain.AdminLog;
 import com.cosmus.resonos.mapper.AdminLogMapper;
@@ -8,11 +10,8 @@ import com.cosmus.resonos.mapper.AdminLogMapper;
 @Service
 public class AdminLogServiceImpl implements AdminLogService {
 
-    private final AdminLogMapper adminLogMapper;
-
-    public AdminLogServiceImpl(AdminLogMapper adminLogMapper) {
-        this.adminLogMapper = adminLogMapper;
-    }
+    @Autowired
+    private AdminLogMapper adminLogMapper;
 
     @Override
     public List<AdminLog> list() throws Exception {

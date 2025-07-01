@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.SettingMapper">
+
+  <resultMap id="SettingResultMap" type="com.cosmus.resonos.domain.Setting">
+    <id property="id" column="id"/>
+    <result property="value" column="value"/>
+    <result property="updatedAt" column="updated_at"/>
+  </resultMap>
+
+  <select id="list" resultMap="SettingResultMap">
+    SELECT * FROM setting ORDER BY updated_at DESC
+  </select>
+
+  <select id="select" resultMap="SettingResultMap">
+    SELECT * FROM setting WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO setting (id, value, updated_at)
+    VALUES (#{id}, #{value}, #{updatedAt})
+  </insert>
+
+  <update id="update">
+    UPDATE setting
+    SET value = #{value},
+        updated_at = #{updatedAt}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM setting WHERE id = #{id}
+  </delete>
+
+</mapper>

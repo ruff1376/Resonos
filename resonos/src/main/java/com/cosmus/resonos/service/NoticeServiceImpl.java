@@ -2,6 +2,7 @@ package com.cosmus.resonos.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.Notice;
@@ -9,12 +10,10 @@ import com.cosmus.resonos.mapper.NoticeMapper;
 
 @Service
 public class NoticeServiceImpl implements NoticeService {
-        private final NoticeMapper noticeMapper;
 
-    public NoticeServiceImpl(NoticeMapper noticeMapper) {
-        this.noticeMapper = noticeMapper;
-    }
-
+    @Autowired
+    private NoticeMapper noticeMapper;
+    
     @Override
     public List<Notice> list() throws Exception {
         return noticeMapper.list();

@@ -2,86 +2,104 @@ package com.cosmus.resonos.controller;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.cosmus.resonos.domain.Notice;
 import com.cosmus.resonos.service.NoticeService;
 
-import groovy.util.logging.Slf4j;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
 @RequestMapping("/notices")
 public class NoticeController {
 
-    private final NoticeService noticeService;
+    @Autowired
+    private NoticeService noticeService;
 
-    public NoticeController(NoticeService noticeService) {
-        this.noticeService = noticeService;
-    }
-
+    // 공지사항 목록 화면
     @GetMapping
-    public ResponseEntity<List<Notice>> getAllNotices() {
-        try {
-            List<Notice> notices = noticeService.list();
-            return ResponseEntity.ok(notices);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).build();
-        }
+    public String list(Model model) throws Exception {
+        log.info("[NoticeController] 공지사항 목록 요청");
+        List<Notice> notices = noticeService.list();
+        log.info("[NoticeController] 공지사항 수: {}", notices.size());
+        model.addAttribute("notices", notices);
+        return "notice/list"; // notice/list.html
     }
 
+    // 공지사항 상세 화면
     @GetMapping("/{id}")
-    public ResponseEntity<Notice> getNotice(@PathVariable Long id) {
-        try {
-            Notice notice = noticeService.select(id);
-            if (notice == null) {
-                return ResponseEntity.notFound().build();
-            }
-            return ResponseEntity.ok(notice);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).build();
+    public String detail(@PathVariable Long id, Model model) throws Exception {
+        log.info("[NoticeController] 공지사항 상세 요청 - id: {}", id);
+        Notice notice = noticeService.select(id);
+        if (notice == null) {
+            log.warn("[NoticeController] 공지사항 없음 - id: {}", id);
+            return "redirect:/notices?error=notfound";
         }
+        log.info("[NoticeController] 공지사항 상세: {}", notice);
+        model.addAttribute("notice", notice);
+        return "notice/detail"; // notice/detail.html
     }
 
+    // 공지사항 등록 폼
+    @GetMapping("/new")
+    public String create(Model model) {
+        log.info("[NoticeController] 공지사항 등록 폼 요청");
+        model.addAttribute("notice", new Notice());
+        return "notice/form"; // notice/form.html
+    }
+
+    // 공지사항 등록 처리
     @PostMapping
-    public ResponseEntity<String> createNotice(@RequestBody Notice notice) {
-        try {
-            boolean success = noticeService.insert(notice);
-            if (success) {
-                return ResponseEntity.ok("Notice created");
-            }
-            return ResponseEntity.status(500).body("Failed to create notice");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to create notice: " + e.getMessage());
+    public String createPost(@ModelAttribute Notice notice, Model model) throws Exception {
+        log.info("[NoticeController] 공지사항 등록 시도: {}", notice);
+        boolean success = noticeService.insert(notice);
+        if (success) {
+            log.info("[NoticeController] 공지사항 등록 성공: {}", notice);
+            return "redirect:/notices";
         }
+        log.warn("[NoticeController] 공지사항 등록 실패: {}", notice);
+        model.addAttribute("error", "등록 실패");
+        return "notice/form";
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updateNotice(@PathVariable Long id, @RequestBody Notice notice) {
-        try {
-            notice.setId(id);
-            boolean success = noticeService.update(notice);
-            if (success) {
-                return ResponseEntity.ok("Notice updated");
-            }
-            return ResponseEntity.status(500).body("Failed to update notice");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to update notice: " + e.getMessage());
+    // 공지사항 수정 폼
+    @GetMapping("/{id}/edit")
+    public String update(@PathVariable Long id, Model model) throws Exception {
+        log.info("[NoticeController] 공지사항 수정 폼 요청 - id: {}", id);
+        Notice notice = noticeService.select(id);
+        if (notice == null) {
+            log.warn("[NoticeController] 수정할 공지사항 없음 - id: {}", id);
+            return "redirect:/notices?error=notfound";
         }
+        model.addAttribute("notice", notice);
+        return "notice/form";
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteNotice(@PathVariable Long id) {
-        try {
-            boolean success = noticeService.delete(id);
-            if (success) {
-                return ResponseEntity.ok("Notice deleted");
-            }
-            return ResponseEntity.status(500).body("Failed to delete notice");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to delete notice: " + e.getMessage());
+    // 공지사항 수정 처리
+    @PostMapping("/{id}/edit")
+    public String updatePost(@PathVariable Long id, @ModelAttribute Notice notice, Model model) throws Exception {
+        log.info("[NoticeController] 공지사항 수정 시도 - id: {}, notice: {}", id, notice);
+        notice.setId(id);
+        boolean success = noticeService.update(notice);
+        if (success) {
+            log.info("[NoticeController] 공지사항 수정 성공 - id: {}", id);
+            return "redirect:/notices/" + id;
         }
+        log.warn("[NoticeController] 공지사항 수정 실패 - id: {}", id);
+        model.addAttribute("error", "수정 실패");
+        return "notice/form";
+    }
+
+    // 공지사항 삭제 처리
+    @PostMapping("/{id}/delete")
+    public String delete(@PathVariable Long id) throws Exception {
+        log.info("[NoticeController] 공지사항 삭제 시도 - id: {}", id);
+        noticeService.delete(id);
+        log.info("[NoticeController] 공지사항 삭제 완료 - id: {}", id);
+        return "redirect:/notices";
     }
 }

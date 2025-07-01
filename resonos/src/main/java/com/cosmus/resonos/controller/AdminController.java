@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/admin")
 public class AdminController {
     
-    @GetMapping("/")
+    @GetMapping({"/",""})
     public String admin() {
         return "/admin/index";
     }

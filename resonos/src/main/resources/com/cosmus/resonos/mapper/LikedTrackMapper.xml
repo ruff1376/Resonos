@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.LikedTrackMapper">
+
+  <resultMap id="LikedTrackResultMap" type="com.cosmus.resonos.domain.LikedTrack">
+    <id property="id" column="id"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="userId" column="user_id"/>
+    <result property="trackId" column="track_id"/>
+  </resultMap>
+
+  <select id="list" resultMap="LikedTrackResultMap">
+    SELECT * FROM liked_track ORDER BY created_at DESC
+  </select>
+
+  <select id="select" resultMap="LikedTrackResultMap">
+    SELECT * FROM liked_track WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO liked_track (id, created_at, user_id, track_id)
+    VALUES (#{id}, #{createdAt}, #{userId}, #{trackId})
+  </insert>
+
+  <update id="update">
+    UPDATE liked_track
+    SET created_at = #{createdAt},
+        user_id = #{userId},
+        track_id = #{trackId}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM liked_track WHERE id = #{id}
+  </delete>
+
+</mapper>

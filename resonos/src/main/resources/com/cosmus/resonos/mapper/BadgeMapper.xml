@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.BadgeMapper">
+
+  <resultMap id="BadgeResultMap" type="com.cosmus.resonos.domain.Badge">
+    <id property="id" column="id"/>
+    <result property="name" column="name"/>
+    <result property="description" column="description"/>
+    <result property="iconUrl" column="icon_url"/>
+    <result property="criteria" column="criteria"/>
+    <result property="createdAt" column="created_at"/>
+  </resultMap>
+
+  <select id="list" resultMap="BadgeResultMap">
+    SELECT * FROM badge ORDER BY created_at DESC
+  </select>
+
+  <select id="select" resultMap="BadgeResultMap">
+    SELECT * FROM badge WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO badge (id, name, description, icon_url, criteria, created_at)
+    VALUES (#{id}, #{name}, #{description}, #{iconUrl}, #{criteria}, #{createdAt})
+  </insert>
+
+  <update id="update">
+    UPDATE badge
+    SET name = #{name},
+        description = #{description},
+        icon_url = #{iconUrl},
+        criteria = #{criteria},
+        created_at = #{createdAt}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM badge WHERE id = #{id}
+  </delete>
+
+</mapper>

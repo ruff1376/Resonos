@@ -2,90 +2,104 @@ package com.cosmus.resonos.controller;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.service.ArtistService;
 
-import groovy.util.logging.Slf4j;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@ControllerAdvice
+@Controller
 @RequestMapping("/artists")
 public class ArtistController {
 
-    private final ArtistService artistService;
+    @Autowired
+    private ArtistService artistService;
 
-    public ArtistController(ArtistService artistService) {
-        this.artistService = artistService;
-    }
-
-    // 아티스트 목록 조회
+    // 아티스트 목록 화면
     @GetMapping
-    public ResponseEntity<List<Artist>> getAllArtists() {
-        try {
-            List<Artist> artists = artistService.list();
-            return ResponseEntity.ok(artists);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).build();
-        }
+    public String list(Model model) throws Exception {
+        log.info("[ArtistController] 아티스트 목록 요청");
+        List<Artist> artists = artistService.list();
+        log.info("[ArtistController] 아티스트 수: {}", artists.size());
+        model.addAttribute("artists", artists);
+        return "artist/list"; // artist/list.html
     }
 
-    // 아티스트 단건 조회 (id를 Integer로 변환해서 전달)
+    // 아티스트 상세 화면
     @GetMapping("/{id}")
-    public ResponseEntity<Artist> getArtist(@PathVariable String id) {
-        try {
-            Artist artist = artistService.select(Integer.valueOf(id));
-            if (artist == null) {
-                return ResponseEntity.notFound().build();
-            }
-            return ResponseEntity.ok(artist);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).build();
+    public String detail(@PathVariable String id, Model model) throws Exception {
+        log.info("[ArtistController] 아티스트 상세 요청 - id: {}", id);
+        Artist artist = artistService.select(Integer.valueOf(id));
+        if (artist == null) {
+            log.warn("[ArtistController] 아티스트 없음 - id: {}", id);
+            return "redirect:/artists?error=notfound";
         }
+        log.info("[ArtistController] 아티스트 상세: {}", artist);
+        model.addAttribute("artist", artist);
+        return "artist/detail"; // artist/detail.html
     }
 
-    // 아티스트 등록
+    // 아티스트 등록 폼
+    @GetMapping("/new")
+    public String create(Model model) {
+        log.info("[ArtistController] 아티스트 등록 폼 요청");
+        model.addAttribute("artist", new Artist());
+        return "artist/form"; // artist/form.html
+    }
+
+    // 아티스트 등록 처리
     @PostMapping
-    public ResponseEntity<String> createArtist(@RequestBody Artist artist) {
-        try {
-            boolean success = artistService.insert(artist);
-            if (success) {
-                return ResponseEntity.ok("Artist created");
-            }
-            return ResponseEntity.status(500).body("Failed to create artist");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to create artist: " + e.getMessage());
+    public String createPost(@ModelAttribute Artist artist, Model model) throws Exception {
+        log.info("[ArtistController] 아티스트 등록 시도: {}", artist);
+        boolean success = artistService.insert(artist);
+        if (success) {
+            log.info("[ArtistController] 아티스트 등록 성공: {}", artist);
+            return "redirect:/artists";
         }
+        log.warn("[ArtistController] 아티스트 등록 실패: {}", artist);
+        model.addAttribute("error", "등록 실패");
+        return "artist/form";
     }
 
-    // 아티스트 수정
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updateArtist(@PathVariable String id, @RequestBody Artist artist) {
-        try {
-            artist.setId(id);
-            boolean success = artistService.update(artist);
-            if (success) {
-                return ResponseEntity.ok("Artist updated");
-            }
-            return ResponseEntity.status(500).body("Failed to update artist");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to update artist: " + e.getMessage());
+    // 아티스트 수정 폼
+    @GetMapping("/{id}/edit")
+    public String update(@PathVariable String id, Model model) throws Exception {
+        log.info("[ArtistController] 아티스트 수정 폼 요청 - id: {}", id);
+        Artist artist = artistService.select(Integer.valueOf(id));
+        if (artist == null) {
+            log.warn("[ArtistController] 수정할 아티스트 없음 - id: {}", id);
+            return "redirect:/artists?error=notfound";
         }
+        model.addAttribute("artist", artist);
+        return "artist/form";
     }
 
-    // 아티스트 삭제
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteArtist(@PathVariable String id) {
-        try {
-            boolean success = artistService.delete(id);
-            if (success) {
-                return ResponseEntity.ok("Artist deleted");
-            }
-            return ResponseEntity.status(500).body("Failed to delete artist");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to delete artist: " + e.getMessage());
+    // 아티스트 수정 처리
+    @PostMapping("/{id}/edit")
+    public String updatePost(@PathVariable String id, @ModelAttribute Artist artist, Model model) throws Exception {
+        log.info("[ArtistController] 아티스트 수정 시도 - id: {}, artist: {}", id, artist);
+        artist.setId(id);
+        boolean success = artistService.update(artist);
+        if (success) {
+            log.info("[ArtistController] 아티스트 수정 성공 - id: {}", id);
+            return "redirect:/artists/" + id;
         }
+        log.warn("[ArtistController] 아티스트 수정 실패 - id: {}", id);
+        model.addAttribute("error", "수정 실패");
+        return "artist/form";
+    }
+
+    // 아티스트 삭제 처리
+    @PostMapping("/{id}/delete")
+    public String delete(@PathVariable String id) throws Exception {
+        log.info("[ArtistController] 아티스트 삭제 시도 - id: {}", id);
+        artistService.delete(id);
+        log.info("[ArtistController] 아티스트 삭제 완료 - id: {}", id);
+        return "redirect:/artists";
     }
 }
