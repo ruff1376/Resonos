@@ -8,3 +8,5 @@ body {font-size: 1.6rem;}
   /* 컨테이너 크기 */
   --container : 1440px;
 }
+
+.container {width: 100%; max-width: var(--container); margin: 0 auto;}
