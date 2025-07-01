@@ -80,7 +80,9 @@ CREATE TABLE `track` (
 	`streaming_url`	VARCHAR(200)	NULL,
 	`mv_url`	VARCHAR(200)	NULL,
 	`album_id`	VARCHAR(200)	NOT NULL,
-	`artist_id`	VARCHAR(200)	NOT NULL
+	`artist_id`	VARCHAR(200)	NOT NULL,
+	`popularity` INT NOT NULL,
+	`track_no` INT NOT NULL
 );
 
 CREATE TABLE `user` (
