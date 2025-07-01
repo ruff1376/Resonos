@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.TrackMapper">
+
+  <resultMap id="TrackResultMap" type="com.cosmus.resonos.domain.Track">
+    <id property="id" column="id"/>
+    <result property="title" column="title"/>
+    <result property="duration" column="duration"/>
+    <result property="genre" column="genre"/>
+    <result property="streamingUrl" column="streaming_url"/>
+    <result property="mvUrl" column="mv_url"/>
+    <result property="albumId" column="album_id"/>
+    <result property="artistId" column="artist_id"/>
+    <result property="popularity" column="popularity"/>
+    <result property="trackNo" column="track_no"/>
+  </resultMap>
+
+  <select id="selectAll" resultMap="TrackResultMap">
+    SELECT * FROM track
+  </select>
+
+  <select id="selectById"  resultMap="TrackResultMap">
+    SELECT * FROM track WHERE id = #{id}
+  </select>
+
+  <insert id="insert" >
+    INSERT INTO track 
+      (id, title, duration, genre, streaming_url, mv_url, album_id, artist_id, popularity, track_no)
+    VALUES
+      (#{id}, #{title}, #{duration}, #{genre}, #{streamingUrl}, #{mvUrl}, #{albumId}, #{artistId}, #{popularity}, #{trackNo})
+  </insert>
+
+  <update id="update" >
+    UPDATE track
+    SET title = #{title},
+        duration = #{duration},
+        genre = #{genre},
+        streaming_url = #{streamingUrl},
+        mv_url = #{mvUrl},
+        album_id = #{albumId},
+        artist_id = #{artistId},
+        popularity = #{popularity},
+        track_no = #{trackNo}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete" >
+    DELETE FROM track WHERE id = #{id}
+  </delete>
+
+</mapper>

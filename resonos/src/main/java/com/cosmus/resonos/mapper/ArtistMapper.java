@@ -12,4 +12,10 @@ public interface ArtistMapper {
     public List<Artist> list() throws Exception;
     // 조회
     public Artist select(Integer no) throws Exception;
+    // 삽입
+    public int insert(Artist artist) throws Exception;
+    // 수정
+    public int update(Artist artist) throws Exception;
+    // 삭제
+    public int delete(String id) throws Exception;
 }

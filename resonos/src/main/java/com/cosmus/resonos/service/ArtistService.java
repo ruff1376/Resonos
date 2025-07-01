@@ -9,4 +9,10 @@ public interface ArtistService {
     public List<Artist> list() throws Exception;
     // 조회
     public Artist select(Integer no) throws Exception;
+    // 삽입
+    public boolean insert(Artist artist) throws Exception;
+    // 수정
+    public boolean update(Artist artist) throws Exception;
+    // 삭제
+    public boolean delete(String id) throws Exception;
 }

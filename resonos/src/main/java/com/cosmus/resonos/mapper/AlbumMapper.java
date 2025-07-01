@@ -12,4 +12,10 @@ public interface AlbumMapper {
     public List<Album> list() throws Exception;
     // 조회
     public Album select(Integer no) throws Exception;
+    // 삽입
+    public int insert(Album album) throws Exception;
+    // 수정
+    public int update(Album album) throws Exception;
+    // 삭제
+    public int delete(String id) throws Exception;
 }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.UserMapper">
+
+  <resultMap id="UserResultMap" type="com.cosmus.resonos.domain.User">
+    <id property="id" column="id"/>
+    <result property="username" column="username"/>
+    <result property="email" column="email"/>
+    <result property="password" column="password"/>
+    <result property="nickname" column="nickname"/>
+    <result property="profileImage" column="profile_image"/>
+    <result property="bio" column="bio"/>
+    <result property="isPro" column="is_pro"/>
+    <result property="enabled" column="enabled"/>
+    <result property="provider" column="provider"/>
+    <result property="providerId" column="provider_id"/>
+    <result property="createdAt" column="created_at"/>
+  </resultMap>
+
+  <select id="selectAll" resultMap="UserResultMap">
+    SELECT * FROM user
+  </select>
+
+  <select id="selectById"  resultMap="UserResultMap">
+    SELECT * FROM user WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO user 
+      (id, username, email, password, nickname, profile_image, bio, is_pro, enabled, provider, provider_id, created_at)
+    VALUES
+      (#{id}, #{username}, #{email}, #{password}, #{nickname}, #{profileImage}, #{bio}, #{isPro}, #{enabled}, #{provider}, #{providerId}, #{createdAt})
+  </insert>
+
+  <update id="update">
+    UPDATE user
+    SET username = #{username},
+        email = #{email},
+        password = #{password},
+        nickname = #{nickname},
+        profile_image = #{profileImage},
+        bio = #{bio},
+        is_pro = #{isPro},
+        enabled = #{enabled},
+        provider = #{provider},
+        provider_id = #{providerId},
+        created_at = #{createdAt}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete" >
+    DELETE FROM user WHERE id = #{id}
+  </delete>
+
+</mapper>
