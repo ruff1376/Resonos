@@ -4,16 +4,18 @@ body {font-size: 1.6rem;}
 
 :root {
   /* 메인 컬러 */
-  --main-color: #D4B97F !important;
+  --main-color: #D4B97F;
   /* 백그라운드 컬러 */
-  --background-color : #181C23 !important;
+  --background-color : #181C23;
   /* 컨테이너 크기 */
-  --container : 1440px !important;
+  --container : 1440px;
 }
 
 body {
   color: #fff;
   background-color: var(--background-color);
 }
+
 /* 컨테이너 기본 크기 */
 .container {width: 100% !important; max-width: var(--container) !important; margin: auto !important;}
+a {text-decoration: none !important; color: inherit !important;}
