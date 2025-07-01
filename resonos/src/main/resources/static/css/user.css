@@ -1,11 +1,15 @@
 /* 로그인 페이지 */
 body {
-      background-color: #181C23;
+      background-color: var(--background-color) !important;
       font-family: 'Segoe UI', 'Pretendard', sans-serif;
       color: #D4B97F;
       min-height: 100vh;
       display: flex;
       align-items: center;
+      justify-content: center;
+    }
+    .content-wrap {
+      display: flex;
       justify-content: center;
     }
     .login-box {

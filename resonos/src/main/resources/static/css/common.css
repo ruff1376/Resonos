@@ -12,6 +12,7 @@ body {font-size: 1.6rem;}
 }
 
 body {
+  color: #fff;
   background-color: var(--background-color);
 }
 /* 컨테이너 기본 크기 */
