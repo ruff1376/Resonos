@@ -13,9 +13,9 @@ public interface AlbumMapper {
     // 조회
     public Album select(Integer no) throws Exception;
     // 삽입
-    public int insert(Album album);
+    public int insert(Album album) throws Exception;
     // 수정
-    public int update(Album album);
+    public int update(Album album) throws Exception;
     // 삭제
-    public int delete(String id);
+    public int delete(String id) throws Exception;
 }

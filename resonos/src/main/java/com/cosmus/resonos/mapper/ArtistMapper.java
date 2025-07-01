@@ -13,9 +13,9 @@ public interface ArtistMapper {
     // 조회
     public Artist select(Integer no) throws Exception;
     // 삽입
-    public int insert(Artist artist);
+    public int insert(Artist artist) throws Exception;
     // 수정
-    public int update(Artist artist);
+    public int update(Artist artist) throws Exception;
     // 삭제
-    public int delete(String id);
+    public int delete(String id) throws Exception;
 }

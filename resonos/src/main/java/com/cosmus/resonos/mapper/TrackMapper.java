@@ -13,9 +13,9 @@ public interface TrackMapper {
     // 조회
     public Track select(Integer no) throws Exception;
     // 삽입
-    public int insert(Track track);
+    public int insert(Track track) throws Exception;
     // 수정
-    public int update(Track track);
+    public int update(Track track) throws Exception;
     // 삭제
-    public int delete(String id);
+    public int delete(String id) throws Exception;
 }

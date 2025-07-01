@@ -11,9 +11,9 @@ public interface AlbumService {
     // 조회
     public Album select(Integer no) throws Exception;
     // 삽입
-    public boolean insert(Album track);
+    public boolean insert(Album track) throws Exception;
     // 수정
-    public boolean update(Album track);
+    public boolean update(Album track) throws Exception;
     // 삭제
-    public boolean delete(String id);
+    public boolean delete(String id) throws Exception;
 }
