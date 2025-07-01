@@ -7,26 +7,43 @@
   <title>RESONOS 관리자 페이지</title>
 </head>
 <body>
-<th:block layout:fragment="content">
+  <!-- 관리자 헤더 -->
+  <nav class="navbar navbar-expand-lg" style="background:#181C23; border-bottom:1px solid #222;">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="https://pplx-res.cloudinary.com/image/private/user_uploads/71501722/4852723f-0f3f-4793-9eaf-749463c33650/image.jpg" alt="RESONOS Logo" style="height:38px; border-radius:6px; margin-right:12px;">
+        <span style="color:#D4B97F;font-weight:bold;letter-spacing:2px;">RESONOS Admin</span>
+      </a>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" style="color:#D4B97F;" th:href="@{/admin}">대시보드</a></li>
+        <li class="nav-item"><a class="nav-link" style="color:#D4B97F;" th:href="@{/admin/users}">회원관리</a></li>
+        <li class="nav-item"><a class="nav-link" style="color:#D4B97F;" th:href="@{/admin/boards}">게시글/신고</a></li>
+        <li class="nav-item"><a class="nav-link" style="color:#D4B97F;" th:href="@{/admin/music}">음악데이터</a></li>
+        <li class="nav-item"><a class="nav-link" style="color:#D4B97F;" th:href="@{/admin/events}">공연/이벤트</a></li>
+        <li class="nav-item"><a class="nav-link" style="color:#fffbe6;" th:href="@{/admin/settings}">설정</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- 관리자 대시보드 -->
   <main class="resonos-bg py-5">
     <div class="container" style="max-width: 1100px;">
       <h1 class="mb-4" style="color:#fffbe6;">관리자 대시보드</h1>
-
       <!-- 대시보드 요약 -->
       <div class="row g-4 mb-4">
         <div class="col-md-3" th:each="summary : ${dashboardSummary}">
           <div class="resonos-card p-4 text-center">
-            <div class="fs-4" style="color:#D4B97F;" th:text="${summary.title}">제목</div>
+            <div class="fs-4" style="color:#D4B97F;" th:text="${summary.title}">회원</div>
             <div class="fs-2 fw-bold" style="color:#fffbe6;" th:text="${summary.count}">0</div>
           </div>
         </div>
       </div>
 
-      <!-- 게시글 승인 대기 목록 -->
+      <!-- 게시판 작성 승인 대기 목록 -->
       <div class="resonos-card p-4 mb-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h5 style="color:#D4B97F;">게시판 작성 승인 대기</h5>
-          <button class="btn btn-gold btn-sm">일괄 승인</button>
+          <button class="btn btn-gold btn-sm" th:onclick="'location.href=\'/admin/boards/approveAll\''">일괄 승인</button>
         </div>
         <table class="table table-dark table-hover align-middle resonos-table">
           <thead>
@@ -43,10 +60,10 @@
           </thead>
           <tbody>
             <tr th:each="post : ${pendingPosts}">
-              <td th:text="${post.id}">1</td>
-              <td th:text="${post.boardType}">자유</td>
-              <td th:text="${post.title}">제목</td>
-              <td th:text="${post.author}">작성자</td>
+              <td th:text="${post.id}">101</td>
+              <td th:text="${post.boardType}">자유게시판</td>
+              <td th:text="${post.title}">별빛 챌린지 참여합니다!</td>
+              <td th:text="${post.author}">별빛소년</td>
               <td th:text="${post.createdAt}">2025-06-26</td>
               <td>
                 <a th:href="@{${post.attachmentUrl}}" class="text-gold" th:if="${post.hasAttachment}">이미지</a>
@@ -54,25 +71,33 @@
               </td>
               <td><span class="badge bg-secondary" th:text="${post.status}">대기</span></td>
               <td>
-                <button class="btn btn-gold btn-sm">승인</button>
-                <button class="btn btn-outline-gold btn-sm">반려</button>
+                <button class="btn btn-gold btn-sm" th:onclick="'location.href=\'/admin/boards/approve/' + ${post.id} + '\''">승인</button>
+                <button class="btn btn-outline-gold btn-sm" th:onclick="'location.href=\'/admin/boards/reject/' + ${post.id} + '\''">반려</button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <!-- 관리 링크 -->
+      <!-- 기타 관리 메뉴 요약 -->
       <div class="row g-4">
         <div class="col-md-3" th:each="menu : ${adminMenus}">
           <div class="resonos-card p-4 text-center">
-            <div class="fs-5" style="color:#D4B97F;" th:text="${menu.name}">메뉴</div>
+            <div class="fs-5" style="color:#D4B97F;" th:text="${menu.name}">회원 관리</div>
             <a th:href="@{${menu.link}}" class="btn btn-outline-gold btn-sm mt-2">이동</a>
           </div>
         </div>
       </div>
     </div>
   </main>
-</th:block>
+
+  <footer class="text-center text-secondary py-3" style="background:none; border-top:1px solid #222;">
+    <img src="https://pplx-res.cloudinary.com/image/private/user_uploads/71501722/4852723f-0f3f-4793-9eaf-749463c33650/image.jpg" alt="RESONOS Logo" style="height:24px;vertical-align:middle;margin-right:8px;">
+    <span style="color:#D4B97F;font-weight:bold;">RESONOS</span>
+    <span class="ms-2" style="color:#B0B6BE;">© 2025 All rights reserved.</span>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
+
 </html>

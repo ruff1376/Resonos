@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cosmus.resonos.mapper.AdminMapper">
+
+  <select id="selectDashboardSummary" resultType="com.cosmus.resonos.dto.AdminDashboardSummary">
+    SELECT '회원' AS title, COUNT(*) AS count FROM user
+    UNION ALL
+    SELECT '게시글', COUNT(*) FROM boardpost
+    UNION ALL
+    SELECT '신고', COUNT(*) FROM report
+    UNION ALL
+    SELECT '블라인드', COUNT(*) FROM boardpost WHERE is_notice = 1
+  </select>
+
+  <select id="selectPendingPosts" resultType="com.cosmus.resonos.dto.PendingPostDto">
+    SELECT
+      bp.id,
+      bp.type AS boardType,
+      bp.title,
+      u.nickname AS author,
+      DATE_FORMAT(bp.created_at, '%Y-%m-%d') AS createdAt,
+      IF(bp.attachment_url IS NOT NULL, TRUE, FALSE) AS hasAttachment,
+      bp.attachment_url AS attachmentUrl,
+      bp.status
+    FROM boardpost bp
+    JOIN user u ON bp.author_id = u.id
+    WHERE bp.status = '대기'
+    ORDER BY bp.created_at DESC
+    LIMIT 10
+  </select>
+
+  <select id="selectAdminMenus" resultType="com.cosmus.resonos.dto.AdminMenuDto">
+    SELECT '회원 관리' AS name, '/admin/users' AS link
+    UNION ALL
+    SELECT '게시글/신고 관리', '/admin/boards'
+    UNION ALL
+    SELECT '음악 데이터 관리', '/admin/music'
+    UNION ALL
+    SELECT '공연/이벤트 관리', '/admin/events'
+    UNION ALL
+    SELECT '통계/분석', '/admin/stats'
+    UNION ALL
+    SELECT '권한/역할 관리', '/admin/roles'
+    UNION ALL
+    SELECT '오픈 API 관리', '/admin/apis'
+    UNION ALL
+    SELECT '정책/환경설정', '/admin/settings'
+  </select>
+
+</mapper>
