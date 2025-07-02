@@ -15,28 +15,30 @@
     <!-- 왼쪽 리모컨 -->
     <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
     <!-- 팔로워 -->
-    <section class="info-section">
-      <div class="title">
-        <div>
-          <h2 class="text-start">최근 알림</h2>
+    <section class="info-wrapper">
+      <div class="info-section">
+        <div class="title">
+          <div>
+            <h2 class="text-start">최근 알림</h2>
+          </div>
+          <div>
+            <button onclick="readAll()">전체 읽음</button>
+            <button onclick="deleteAll()">전체 삭제</button>
+          </div>
         </div>
-        <div>
-          <button onclick="readAll()">전체 읽음</button>
-          <button onclick="deleteAll()">전체 삭제</button>
-        </div>
+        <ul class="follow-list">
+          <th:block th:each="i : ${#numbers.sequence(1,20)}">
+              <label th:for="is-read + ${i}">
+                <li class="list-item">
+                  <input class="is-read" th:id="'is-read' + ${i}" type="checkbox" th:value="'알람' + ${i} + '번'" th:checked="${i < 11}">
+                  <span class="red-circle">●</span>
+                  <p>OOO님이 회원님의 리뷰/플레이리스트를 좋아합니다.</p>
+                  <p class="date">2025.06.12 13:11:00</p>
+                </li>
+              </label>
+          </th:block>
+        </ul>
       </div>
-      <ul class="follow-list">
-        <th:block th:each="i : ${#numbers.sequence(1,20)}">
-            <label th:for="is-read + ${i}">
-              <li class="list-item">
-                <input class="is-read" th:id="'is-read' + ${i}" type="checkbox" th:value="'알람' + ${i} + '번'" th:checked="${i < 11}">
-                <span class="red-circle">●</span>
-                <p>OOO님이 회원님의 리뷰/플레이리스트를 좋아합니다.</p>
-                <p class="date">2025.06.12 13:11:00</p>
-              </li>
-            </label>
-        </th:block>
-      </ul>
     </section>
   </main>
   <th:block layout:fragment="pageScript">

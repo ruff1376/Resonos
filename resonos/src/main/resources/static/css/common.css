@@ -18,4 +18,4 @@ body {
 
 /* 컨테이너 기본 크기 */
 .container {width: 100% !important; max-width: var(--container) !important; margin: auto !important; padding: 0 !important;}
-a {text-decoration: none !important; color: inherit !important;}
+a {text-decoration: none !important; color: inherit;}

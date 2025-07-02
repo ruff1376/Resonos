@@ -32,6 +32,7 @@ button {background-color: inherit; border: none;}
   border-radius: 10px;
 }
 
+
 /* 로그인 페이지 */
 p {margin-bottom: 0;}
 body {
@@ -354,7 +355,7 @@ a:hover > .mypage-card {
 }
 
 .con .title {display: flex; align-items: center; justify-content: space-between;}
-.con .title > div {display: flex; align-items: center;}
+.con .title > div {display: flex; align-items: center; gap: 10px;}
 .con .title h2 {margin-bottom: 0;}
 
 /* 회원정보수정 */
@@ -518,19 +519,23 @@ textarea.form-control {
   background: #D4B97F;
   color: #fff;
 }
+.info-wrapper {
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1.5px solid #D4B97F;
+  box-shadow: 0 2px 16px rgba(24, 28, 35, 0.13);
+  margin-left: 20%;
+  max-width: 1000px;
+}
 .info-section {
+  padding: 0 30px 20px;
   align-items: center;
   background: rgba(24, 28, 35, 0.96);
-  border: 1.5px solid #D4B97F;
-  border-radius: 24px;
-  box-shadow: 0 2px 16px rgba(24, 28, 35, 0.13);
-  padding: 0 30px 20px;
-  width: 100%;
-  max-width: 1000px;
   text-align: center;
-  margin-left: 20%;
   overflow-y: auto;
   position: relative;
+  width: 100%;
+  max-height: 500px;
 }
 .info-section .title {
   color: #D4B97F;
@@ -540,6 +545,7 @@ textarea.form-control {
   position: sticky;
   top: 0;
   background-color: inherit;
+  z-index: 10;
 }
 .count {
   color: #B0B6BE;
@@ -617,7 +623,7 @@ textarea.form-control {
 .detail-box {
 
 }
-.con-follow .info-section + .info-section {margin-top: 50px;}
+.con-follow .info-wrapper + .info-wrapper {margin-top: 50px;}
 .con-follow .bio {flex: 1;}
 .con-follow .btn-outline-gold {width: 15%;}
 
@@ -628,7 +634,7 @@ textarea.form-control {
 }
 
 /* 좋아요 한 앨범 / 트랙  */
-.con-music .info-section + .info-section {margin-top: 50px;}
+.con-music .info-wrapper + .info-wrapper {margin-top: 50px;}
 .con-music .list-item {padding: 5px 22px;}
 .name-album {font-size: 1.4rem;}
 .name-artist {font-size: 1.2rem; color: #B0B6BE}
@@ -646,7 +652,7 @@ button.like {background-color: inherit; border: none;}
 #addPli:hover {transform: scale(1.1);}
 
 /* 플레이리스트 추가 */
-.con-cre-pli ` {min-height: 750px;}
+.con-cre-pli .info-section {min-height: 750px;}
 .con-cre-pli .profile-edit-box {border: none; border-radius: 0;}
 .con-cre-pli input[type="radio"] + .profile-edit-label {display: inline-block; margin: 0 5px;}
 
@@ -672,8 +678,10 @@ button.like {background-color: inherit; border: none;}
 .con-noti .title button:last-child {color: #FF8383;}
 
 /* 플레이리스트 상세 */
-.con-pli-detail .info-section {}
-.con-pli-detail .info-section .info-section {max-height: 500px; margin-left: 0; margin-top: 100px;}
+.con-pli-detail > .info-wrapper > .info-section {max-height: 1000px;}
+.con-pli-detail .info-section .info-wrapper {margin-left: 0; margin-top: 60px;}
+.con-pli-detail .info-section .info-wrapper .info-section {max-height: 500px;}
 .con-pli-detail .profile-edit-box {border: none; border-radius: 0;}
+.con-pli-detail .input-area {flex: 1; padding: 0;}
 .con-pli-detail input[type="radio"] + .profile-edit-label {display: inline-block; margin: 0 5px;}
 .con-pli-detail .like {font-size: 3rem; margin-left: auto;}
