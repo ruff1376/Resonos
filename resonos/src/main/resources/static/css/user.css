@@ -1,4 +1,8 @@
+main {margin: 100px 0;}
+
 /* 가로 스크롤바 전체 */
+button {background-color: inherit; border: none;}
+
 ::-webkit-scrollbar {
   height: 10px;
   width: 5px;
@@ -40,6 +44,7 @@ body {
   align-items: center;
   justify-content: center;
 }
+.con-mypage a {color: #fff !important;}
 .content-wrap {
   display: flex;
   justify-content: center;
@@ -349,6 +354,9 @@ a:hover > .mypage-card {
   transition: all 0.3s;
 }
 
+.title {display: flex; align-items: center; justify-content: space-between;}
+.title > div {display: flex; align-items: center;}
+.title h2 {margin-bottom: 0;}
 /* 회원정보수정 */
 body {
   background: #181C23;
@@ -489,34 +497,7 @@ textarea.form-control {
 #profileBtn {cursor: pointer;}
 
 
-/* 유저간 팔로우 */
-.logo {
-  display: flex;
-  align-items: center;
-}
-.logo-img {
-  height: 38px;
-  margin-right: 13px;
-  border-radius: 6px;
-  background: #181C23;
-}
-.logo-text {
-  font-size: 1.7rem;
-  font-weight: bold;
-  color: #D4B97F;
-  letter-spacing: 2px;
-}
-nav a {
-  color: #D4B97F;
-  text-decoration: none;
-  margin: 0 16px;
-  font-size: 1.05rem;
-  transition: color 0.2s;
-}
-nav a.active,
-nav a:hover {
-  color: #fffbe6;
-}
+/* 유저 팔로우 */
 .mypage-tabs {
   padding: 10px 0;
   width: 10%;
@@ -534,7 +515,7 @@ nav a:hover {
   color: #D4B97F;
   background: none;
   border: none;
-  font-size: 1.11rem;
+  font-size: 1.2rem;
   font-weight: bold;
   padding: 8px 22px;
   border-radius: 30px;
@@ -562,7 +543,7 @@ nav a:hover {
   overflow-y: auto;
   position: relative;
 }
-.info-section h2 {
+.info-section .title {
   color: #D4B97F;
   font-size: 1.6rem;
   font-weight: bold;
@@ -571,9 +552,10 @@ nav a:hover {
   top: 0;
   background-color: inherit;
 }
-.follow-count {
+.count {
   color: #B0B6BE;
   font-size: 1.4rem;
+  font-weight: bold;
   margin-left: 8px;
 }
 .follow-list {
@@ -649,3 +631,26 @@ nav a:hover {
 .con-follow .info-section + .info-section {margin-top: 50px;}
 .con-follow .bio {flex: 1;}
 .con-follow .btn-outline-gold {width: 15%;}
+
+
+/* 아티스트 팔로우 */
+.con-follow-art .info-section {
+  min-height: 800px;
+}
+
+/* 좋아요 한 앨범 / 트랙  */
+.con-music .info-section + .info-section {margin-top: 50px;}
+.con-music .follow-item {padding: 5px 22px;}
+.name-album {font-size: 1.4rem;}
+.name-artist {font-size: 1.2rem; color: #B0B6BE}
+.con-music .follow-img {border-radius: 10px; width: 60px; height: 60px; border: none;}
+.con-music .like {font-size: 3rem; margin-left: auto;}
+
+/* 플레이리스트 */
+.name-playlist {font-size: 1.4rem; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.right {display:flex; align-items: center; margin-left: auto; gap: 20px;}
+.like-area {display: flex; align-items: center; gap: 2px;}
+.like-area .count {font-size: 1.4rem;}
+button.like {background-color: inherit; border: none;}
+.btn.btn-danger {margin-left: auto;}
+#addPli {color: var(--main-color); display: flex; align-items: center; gap: 5px;}

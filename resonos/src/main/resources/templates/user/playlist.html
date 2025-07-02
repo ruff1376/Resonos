@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}"
+>
+<head>
+  <meta charset="UTF-8" />
+  <title>플레이리스트</title>
+  <th:block th:replace="~{fragments/link::user}"></th:block>
+</head>
+<body>
+  <main class="con-music position-relative" layout:fragment="content">
+    <!-- 왼쪽 리모컨 -->
+    <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
+    <!-- 내 플레이리스트 -->
+    <section class="info-section">
+      <div class="title">
+        <div>
+          <h2 class="text-start">내 플레이리스트</h2>
+          <span class="count">92</span>
+        </div>
+        <a th:href="@{/user/playlist/create}" id="addPli">추가하기<img width="25px" height="25px" th:src="@{/img/plus_circle.png}" alt="추가버튼"></a>
+      </div>
+      <ul class="follow-list">
+        <th:block th:each="i : ${#numbers.sequence(1,20)}">
+          <li class="follow-item">
+            <input type="hidden" th:value="${i}" name="id">
+            <img src="https://i.scdn.co/image/ab67616d0000b2738ad8f5243d6534e03b656c8b" alt="GalaxiNote" class="follow-img" />
+            <div class="follow-info">
+              <span class="name-playlist">플레이리스트 명</span>
+            </div>
+            <div class="right">
+              <div class="like-area">
+                <span class="count">123</span>
+                <span class="like">♥</span>
+              </div>
+              <button onclick="deletePli(event)" class="btn btn-danger">
+                삭제
+              </button>
+            </div>
+          </li>
+        </th:block>
+      </ul>
+    </section>
+    <!-- 좋아요 한 플레이 리스트 -->
+    <section class="info-section">
+      <div class="title">
+        <div>
+          <h2 class="text-start">좋아요 한 플레이리스트</h2>
+          <span class="count">92</span>
+        </div>
+      </div>
+      <ul class="follow-list">
+        <th:block th:each="i : ${#numbers.sequence(1,20)}">
+          <li class="follow-item">
+            <input type="hidden" th:value="${i}" name="id">
+            <img src="https://i.scdn.co/image/ab67616d0000b2738ad8f5243d6534e03b656c8b" alt="GalaxiNote" class="follow-img" />
+            <div class="follow-info">
+              <span class="name-album">좋아요 한 플레이리스트 명</span>
+            </div>
+            <button class="like">♥</button>
+          </li>
+        </th:block>
+      </ul>
+    </section>
+  </main>
+  <th:block layout:fragment="pageScript">
+    <script>
+
+      function deletePli(e) {
+        const check = confirm("삭제하시겠습니까?")
+        if(check) {
+          alert(e.target.closest('li').querySelector('input[type="hidden"]').value + "번 플리 삭제")
+        }
+      }
+
+      const likeButton = document.querySelectorAll("button.like");
+      likeButton.forEach(button => {
+        button.addEventListener('click', (e) => {
+          alert(e.target.closest('li').querySelector('input[type="hidden"]').value + "번 플리 좋아요 취소")
+        })
+      })
+    </script>
+  </th:block>
+</body>
+</html>

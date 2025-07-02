@@ -11,7 +11,7 @@
   <th:block th:replace="~{fragments/link::user}"></th:block>
 </head>
 <body>
-  <main layout:fragment="content">
+  <main class="con-mypage" layout:fragment="content">
     <section class="profile-section">
       <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="프로필 이미지" class="profile-img">
       <div class="profile-info">
@@ -23,9 +23,9 @@
         </div>
       </div>
       <div class="profile-meta">
-        <div><a href=""><b>팔로워</b><br>128</a></div>
-        <div><a href=""><b>팔로우</b><br>92</a></div>
-        <div><a href=""><b>뱃지</b><br>3</a></div>
+        <div><a th:href="@{/user/follow-user}"><b>팔로워</b><br>128</a></div>
+        <div><a th:href="@{/user/follow-user}"><b>팔로우</b><br>92</a></div>
+        <div><a><b>뱃지</b><br>3</a></div>
       </div>
     </section>
     <div class="my-middle">
