@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.PlaylistMapper">
+
+  <resultMap id="PlaylistResultMap" type="com.cosmus.resonos.domain.Playlist">
+    <id property="id" column="id"/>
+    <result property="userId" column="user_id"/>
+    <result property="title" column="title"/>
+    <result property="description" column="description"/>
+    <result property="thumbnailUrl" column="thumbnail_url"/>
+    <result property="isPublic" column="is_public"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="trackId" column="track_id"/>
+  </resultMap>
+
+  <select id="list" resultMap="PlaylistResultMap">
+    SELECT * FROM playlist ORDER BY created_at DESC
+  </select>
+
+  <select id="select" resultMap="PlaylistResultMap">
+    SELECT * FROM playlist WHERE id = #{id}
+  </select>
+
+  <insert id="insert" >
+    INSERT INTO playlist
+      (id, user_id, title, description, thumbnail_url, is_public, created_at, track_id)
+    VALUES
+      (#{id}, #{userId}, #{title}, #{description}, #{thumbnailUrl}, #{isPublic}, #{createdAt}, #{trackId})
+  </insert>
+
+  <update id="update" >
+    UPDATE playlist
+    SET user_id = #{userId},
+        title = #{title},
+        description = #{description},
+        thumbnail_url = #{thumbnailUrl},
+        is_public = #{isPublic},
+        created_at = #{createdAt},
+        track_id = #{trackId}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM playlist WHERE id = #{id}
+  </delete>
+
+</mapper>

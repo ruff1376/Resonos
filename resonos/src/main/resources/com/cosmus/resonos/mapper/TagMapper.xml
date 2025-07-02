@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.TagMapper">
+
+  <resultMap id="TagResultMap" type="com.cosmus.resonos.domain.Tag">
+    <id property="id" column="id"/>
+    <result property="name" column="name"/>
+  </resultMap>
+
+  <select id="list" resultMap="TagResultMap">
+    SELECT * FROM tag ORDER BY name
+  </select>
+
+  <select id="select" resultMap="TagResultMap">
+    SELECT * FROM tag WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO tag (id, name) VALUES (#{id}, #{name})
+  </insert>
+
+  <update id="update">
+    UPDATE tag SET name = #{name} WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM tag WHERE id = #{id}
+  </delete>
+
+</mapper>
