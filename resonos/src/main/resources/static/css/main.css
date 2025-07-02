@@ -1,0 +1,153 @@
+body {
+    background-color: var(--background-color);
+    color: var(--main-color);
+    font-family: 'Inter', 'Segoe UI', 'Pretendard', sans-serif;
+}
+
+.main-section-bg {
+    background: var(--background-color);
+}
+
+.album-card {
+    background: #222222;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+    color: #fff;
+    min-width: 320px;
+    max-width: 480px;
+    margin-bottom: 16px;
+    height: 70px;
+    /* 높이 축소 */
+    padding: 0 !important;
+}
+
+.album-card.secondary {
+    border-color: #B1B1B1;
+    min-width: 260px;
+    max-width: 380px;
+    height: 50px;
+}
+
+.album-rank {
+    color: var(--main-color);
+    font-size: 16px;
+    /* 크기 축소 */
+    font-weight: 400;
+    width: 24px;
+    text-align: center;
+}
+
+.album-title {
+    font-weight: 700;
+    font-size: 16px;
+    /* 크기 축소 */
+    color: #fff;
+}
+
+.album-artist {
+    font-size: 12px;
+    /* 크기 축소 */
+    color: #B1B1B1;
+}
+
+.album-card.secondary .album-title {
+    font-size: 12px;
+}
+
+.album-card.secondary .album-artist {
+    font-size: 10px;
+}
+
+.album-img {
+    width: 48px;
+    /* 크기 축소 */
+    height: 48px;
+    object-fit: cover;
+    background: var(--background-color);
+}
+
+.album-card.secondary .album-img {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    background: var(--background-color);
+}
+
+.album-rating {
+    width: 32px;
+    /* 크기 축소 */
+    height: 32px;
+    object-fit: cover;
+    background: var(--background-color);
+}
+
+.album-card .album-rating {
+    margin-left: auto;
+}
+
+.main-title {
+    font-size: 24px;
+    color: #fff;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-size: 20px;
+    color: #fff;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+.album-grid {
+    background: var(--background-color);
+    border-top: 1px solid var(--main-color);
+    border-bottom: 1px solid var(--main-color);
+    padding: 40px 0;
+}
+
+.album-grid .card {
+    background: var(--background-color);
+    border: none;
+    color: #fff;
+}
+
+.album-grid .card-img-top {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin: 0 auto;
+    background: var(--background-color);
+}
+
+.album-grid .card-title {
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.album-grid .card-text {
+    font-size: 12px;
+    color: #B1B1B1;
+}
+
+.album-grid .album-rating {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: var(--background-color);
+    margin: 0 auto;
+}
+
+.more-link {
+    color: #B1B1B1;
+    font-size: 16px;
+    text-align: right;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 35px;
+}

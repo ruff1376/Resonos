@@ -5,920 +5,794 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resonos</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: #181C23;
-            color: #D4B97F;
-            font-family: 'Inter', 'Segoe UI', 'Pretendard', sans-serif;
-        }
-        .main-section-bg {
-            background: #181C23;
-        }
-        .album-card {
-            background: #222222;
-            border-radius: 20px;
-            border: 2px solid #D4B97F;
-            color: #fff;
-            min-width: 320px;
-            max-width: 480px;
-            margin-bottom: 16px;
-            height: 70px; /* 높이 축소 */
-            padding: 0 !important;
-        }
-        .album-card.secondary {
-            border-color: #B1B1B1;
-            min-width: 260px;
-            max-width: 380px;
-            height: 50px;
-        }
-        .album-rank {
-            color: #D4B97F;
-            font-size: 16px;   /* 크기 축소 */
-            font-weight: 400;
-            width: 24px;
-            text-align: center;
-        }
-        .album-title {
-            font-weight: 700;
-            font-size: 16px;   /* 크기 축소 */
-            color: #fff;
-        }
-        .album-artist {
-            font-size: 12px;   /* 크기 축소 */
-            color: #B1B1B1;
-        }
-        .album-card.secondary .album-title {
-            font-size: 12px;
-        }
-        .album-card.secondary .album-artist {
-            font-size: 10px;
-        }
-        .album-img {
-            width: 48px;       /* 크기 축소 */
-            height: 48px;
-            object-fit: cover;
-            background: #181C23;
-        }
-        .album-card.secondary .album-img {
-            width: 32px;
-            height: 32px;
-            object-fit: cover;
-            background: #181C23;
-        }
-        .album-rating {
-            width: 32px;       /* 크기 축소 */
-            height: 32px;
-            object-fit: cover;
-            background: #181C23;
-        }
-        .album-card .album-rating {
-            margin-left: auto;
-        }
-        .main-title {
-            font-size: 24px;
-            color: #fff;
-            font-weight: 400;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .section-title {
-            font-size: 20px;
-            color: #fff;
-            font-weight: 400;
-            margin-bottom: 20px;
-        }
-        .album-grid {
-            background: #181C23;
-            border-top: 1px solid #D4B97F;
-            border-bottom: 1px solid #D4B97F;
-            padding: 40px 0;
-        }
-        .album-grid .card {
-            background: #181C23;
-            border: none;
-            color: #fff;
-        }
-        .album-grid .card-img-top {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            margin: 0 auto;
-            background: #181C23;
-        }
-        .album-grid .card-title {
-            font-size: 16px;
-            color: #fff;
-            margin-bottom: 4px;
-        }
-        .album-grid .card-text {
-            font-size: 12px;
-            color: #B1B1B1;
-        }
-        .album-grid .album-rating {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 8px;
-            background: #181C23;
-            margin: 0 auto;
-        }
-        .more-link {
-            color: #B1B1B1;
-            font-size: 16px;
-            text-align: right;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            height: 35px;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <th:block th:replace="~{fragments/link::main}"></th:block>
 </head>
 <body>
-    <div class="container-fluid d-flex flex-column align-items-center px-0" style="max-width:1440px; min-height:4900px; padding-top:150px; gap:50px;">
-        <!-- 리뷰 급상승 국내/해외 앨범 섹션 -->
-        <div class="d-flex flex-row mb-5 w-100" style="max-width:1440px; margin:10px auto; gap:10px;">
-            <!-- 국내 앨범 -->
-            <div class="d-flex flex-column align-items-start justify-content-start p-0" style="width:50%; min-width:320px; margin: 50px;">
-                <div class="main-title py-3 px-4 w-100" style="background:#181C23;">🔥 🇰🇷 리뷰 급상승 국내 앨범</div>
-                <div class="d-flex flex-column justify-content-start gap-3 w-100" style="margin: 20px 10px;">
-                    <!-- 앨범 카드 예시 -->
-                    <div class="album-card d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-2">
-                        <div class="album-rank">1</div>
-                        <img src="4094379.jpg" alt="앨범커버" class="album-img">
-                        <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
-                            <div class="album-title">POWER ANDRE 99</div>
-                            <div class="album-artist">실리카겔</div>
+    <th:block layout:fragment="content">
+        <div class="container-fluid d-flex flex-column align-items-center px-0" style="max-width:1440px; min-height:4900px; padding-top:150px; gap:50px;">
+            <!-- 리뷰 급상승 국내/해외 앨범 섹션 -->
+            <div class="d-flex flex-row mb-5 w-100" style="max-width:1440px; margin:10px auto; gap:10px;">
+                <!-- 국내 앨범 -->
+                <div class="d-flex flex-column align-items-start justify-content-start p-0" style="width:50%; min-width:320px; margin: 50px;">
+                    <div class="main-title py-3 px-4 w-100" style="background:var(--background-color);">🔥 🇰🇷 리뷰 급상승 국내 앨범</div>
+                    <div class="d-flex flex-column justify-content-start gap-3 w-100" style="margin: 20px 10px;">
+                        <!-- 앨범 카드 예시 -->
+                        <div class="album-card d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-2">
+                            <div class="album-rank">1</div>
+                            <img src="4094379.jpg" alt="앨범커버" class="album-img">
+                            <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
+                                <div class="album-title">POWER ANDRE 99</div>
+                                <div class="album-artist">실리카겔</div>
+                            </div>
+                            <img src="캡처.png" alt="rating" class="album-rating">
                         </div>
-                        <img src="캡처.png" alt="rating" class="album-rating">
-                    </div>
-                    <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
-                        <div class="album-rank text-white">2</div>
-                        <img src="4094379.jpg" alt="앨범커버" class="album-img">
-                        <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
-                            <div class="album-title">POWER ANDRE 99</div>
-                            <div class="album-artist">실리카겔</div>
+                        <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
+                            <div class="album-rank text-white">2</div>
+                            <img src="4094379.jpg" alt="앨범커버" class="album-img">
+                            <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
+                                <div class="album-title">POWER ANDRE 99</div>
+                                <div class="album-artist">실리카겔</div>
+                            </div>
+                            <img src="캡처.png" alt="rating" class="album-rating">
                         </div>
-                        <img src="캡처.png" alt="rating" class="album-rating">
-                    </div>
-                    <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
-                        <div class="album-rank text-white">3</div>
-                        <img src="4094379.jpg" alt="앨범커버" class="album-img">
-                        <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
-                            <div class="album-title">POWER ANDRE 99</div>
-                            <div class="album-artist">실리카겔</div>
+                        <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
+                            <div class="album-rank text-white">3</div>
+                            <img src="4094379.jpg" alt="앨범커버" class="album-img">
+                            <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
+                                <div class="album-title">POWER ANDRE 99</div>
+                                <div class="album-artist">실리카겔</div>
+                            </div>
+                            <img src="캡처.png" alt="rating" class="album-rating">
                         </div>
-                        <img src="캡처.png" alt="rating" class="album-rating">
-                    </div>
-                    <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
-                        <div class="album-rank text-white">4</div>
-                        <img src="4094379.jpg" alt="앨범커버" class="album-img">
-                        <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
-                            <div class="album-title">POWER ANDRE 99</div>
-                            <div class="album-artist">실리카겔</div>
+                        <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
+                            <div class="album-rank text-white">4</div>
+                            <img src="4094379.jpg" alt="앨범커버" class="album-img">
+                            <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
+                                <div class="album-title">POWER ANDRE 99</div>
+                                <div class="album-artist">실리카겔</div>
+                            </div>
+                            <img src="캡처.png" alt="rating" class="album-rating">
                         </div>
-                        <img src="캡처.png" alt="rating" class="album-rating">
-                    </div>
-                    <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
-                        <div class="album-rank text-white">5</div>
-                        <img src="4094379.jpg" alt="앨범커버" class="album-img">
-                        <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
-                            <div class="album-title">POWER ANDRE 99</div>
-                            <div class="album-artist">실리카겔</div>
+                        <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
+                            <div class="album-rank text-white">5</div>
+                            <img src="4094379.jpg" alt="앨범커버" class="album-img">
+                            <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
+                                <div class="album-title">POWER ANDRE 99</div>
+                                <div class="album-artist">실리카겔</div>
+                            </div>
+                            <img src="캡처.png" alt="rating" class="album-rating">
                         </div>
-                        <img src="캡처.png" alt="rating" class="album-rating">
+                        <!-- 추가 앨범 카드 반복 ... -->
                     </div>
-                    <!-- 추가 앨범 카드 반복 ... -->
+                </div>
+                <!-- 해외 앨범 -->
+                <div class="d-flex flex-column align-items-start justify-content-start p-0" style="width:50%; min-width:320px; margin: 50px;">
+                    <div class="main-title py-3 px-4 w-100" style="background:var(--background-color);">🔥 🌎 리뷰 급상승 해외 앨범</div>
+                    <div class="d-flex flex-column justify-content-start gap-3 w-100" style="margin: 20px 10px;">
+                        <!-- 앨범 카드 예시 (구조 동일, 내용만 변경) -->
+                        <div class="album-card d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4 w-100">
+                            <div class="album-rank">1</div>
+                            <img src="4094379.jpg" alt="앨범커버" class="album-img">
+                            <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
+                                <div class="album-title">POWER ANDRE 99</div>
+                                <div class="album-artist">실리카겔</div>
+                            </div>
+                            <img src="캡처.png" alt="rating" class="album-rating">
+                        </div>
+                        <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
+                            <div class="album-rank text-white">2</div>
+                            <img src="4094379.jpg" alt="앨범커버" class="album-img">
+                            <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
+                                <div class="album-title">POWER ANDRE 99</div>
+                                <div class="album-artist">실리카겔</div>
+                            </div>
+                            <img src="캡처.png" alt="rating" class="album-rating">
+                        </div>
+                        <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
+                            <div class="album-rank text-white">3</div>
+                            <img src="4094379.jpg" alt="앨범커버" class="album-img">
+                            <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
+                                <div class="album-title">POWER ANDRE 99</div>
+                                <div class="album-artist">실리카겔</div>
+                            </div>
+                            <img src="캡처.png" alt="rating" class="album-rating">
+                        </div>
+                        <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
+                            <div class="album-rank text-white">4</div>
+                            <img src="4094379.jpg" alt="앨범커버" class="album-img">
+                            <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
+                                <div class="album-title">POWER ANDRE 99</div>
+                                <div class="album-artist">실리카겔</div>
+                            </div>
+                            <img src="캡처.png" alt="rating" class="album-rating">
+                        </div>
+                        <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
+                            <div class="album-rank text-white">5</div>
+                            <img src="4094379.jpg" alt="앨범커버" class="album-img">
+                            <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
+                                <div class="album-title">POWER ANDRE 99</div>
+                                <div class="album-artist">실리카겔</div>
+                            </div>
+                            <img src="캡처.png" alt="rating" class="album-rating">
+                        </div>
+                        <!-- 추가 앨범 카드 반복 ... -->
+                    </div>
                 </div>
             </div>
-            <!-- 해외 앨범 -->
-            <div class="d-flex flex-column align-items-start justify-content-start p-0" style="width:50%; min-width:320px; margin: 50px;">
-                <div class="main-title py-3 px-4 w-100" style="background:#181C23;">🔥 🌎 리뷰 급상승 해외 앨범</div>
-                <div class="d-flex flex-column justify-content-start gap-3 w-100" style="margin: 20px 10px;">
-                    <!-- 앨범 카드 예시 (구조 동일, 내용만 변경) -->
-                    <div class="album-card d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4 w-100">
-                        <div class="album-rank">1</div>
-                        <img src="4094379.jpg" alt="앨범커버" class="album-img">
-                        <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
-                            <div class="album-title">POWER ANDRE 99</div>
-                            <div class="album-artist">실리카겔</div>
-                        </div>
-                        <img src="캡처.png" alt="rating" class="album-rating">
-                    </div>
-                    <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
-                        <div class="album-rank text-white">2</div>
-                        <img src="4094379.jpg" alt="앨범커버" class="album-img">
-                        <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
-                            <div class="album-title">POWER ANDRE 99</div>
-                            <div class="album-artist">실리카겔</div>
-                        </div>
-                        <img src="캡처.png" alt="rating" class="album-rating">
-                    </div>
-                    <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
-                        <div class="album-rank text-white">3</div>
-                        <img src="4094379.jpg" alt="앨범커버" class="album-img">
-                        <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
-                            <div class="album-title">POWER ANDRE 99</div>
-                            <div class="album-artist">실리카겔</div>
-                        </div>
-                        <img src="캡처.png" alt="rating" class="album-rating">
-                    </div>
-                    <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
-                        <div class="album-rank text-white">4</div>
-                        <img src="4094379.jpg" alt="앨범커버" class="album-img">
-                        <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
-                            <div class="album-title">POWER ANDRE 99</div>
-                            <div class="album-artist">실리카겔</div>
-                        </div>
-                        <img src="캡처.png" alt="rating" class="album-rating">
-                    </div>
-                    <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
-                        <div class="album-rank text-white">5</div>
-                        <img src="4094379.jpg" alt="앨범커버" class="album-img">
-                        <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
-                            <div class="album-title">POWER ANDRE 99</div>
-                            <div class="album-artist">실리카겔</div>
-                        </div>
-                        <img src="캡처.png" alt="rating" class="album-rating">
-                    </div>
-                    <!-- 추가 앨범 카드 반복 ... -->
+    
+            <!-- 최신 앨범 섹션 -->
+            <section class="main-section-bg w-100 py-4 mb-5">
+                <div class="d-flex flex-row align-items-center px-4 mb-3" style="height:50px;">
+                    <div class="section-title flex-grow-1">최신 앨범</div>
                 </div>
-            </div>
+                <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-4 justify-content-start">
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style="height:50px;">
+                    <a href="#" class="more-link">더 보기 &gt;</a>
+                </div>
+            </section>
+    
+            <!-- 인기 앨범 섹션 -->
+            <section class="main-section-bg w-100 py-4 mb-5">
+                <div class="d-flex flex-row align-items-center px-4 mb-3" style="height:50px;">
+                    <div class="section-title flex-grow-1">인기 앨범</div>
+                </div>
+                <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-4 justify-content-start">
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style="height:50px;">
+                    <a href="#" class="more-link">더 보기 &gt;</a>
+                </div>
+            </section>
+    
+            <!-- 최신 트랙 섹션 -->
+            <section class="main-section-bg w-100 py-4 mb-5">
+                <div class="d-flex flex-row align-items-center px-4 mb-3" style="height:50px;">
+                    <div class="section-title flex-grow-1">최신 트랙</div>
+                </div>
+                <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-4 justify-content-start">
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style="height:50px;">
+                    <a href="#" class="more-link">더 보기 &gt;</a>
+                </div>
+            </section>
+    
+            <!-- 인기 트랙 섹션 -->
+            <section class="main-section-bg w-100 py-4 mb-5">
+                <div class="d-flex flex-row align-items-center px-4 mb-3" style="height:50px;">
+                    <div class="section-title flex-grow-1">인기 트랙</div>
+                </div>
+                <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-4 justify-content-start">
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 앨범/트랙 카드 예시 -->
+                    <div class="col d-flex">
+                        <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
+                            <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-title">glow forever</div>
+                                <div class="card-text">The Quiett</div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center" style="height:75px;">
+                                <img src="캡처.png" alt="rating" class="album-rating">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style="height:50px;">
+                    <a href="#" class="more-link">더 보기 &gt;</a>
+                </div>
+            </section>
         </div>
-
-        <!-- 최신 앨범 섹션 -->
-        <section class="main-section-bg w-100 py-4 mb-5">
-            <div class="d-flex flex-row align-items-center px-4 mb-3" style="height:50px;">
-                <div class="section-title flex-grow-1">최신 앨범</div>
-            </div>
-            <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-4 justify-content-start">
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style="height:50px;">
-                <a href="#" class="more-link">더 보기 &gt;</a>
-            </div>
-        </section>
-
-        <!-- 인기 앨범 섹션 -->
-        <section class="main-section-bg w-100 py-4 mb-5">
-            <div class="d-flex flex-row align-items-center px-4 mb-3" style="height:50px;">
-                <div class="section-title flex-grow-1">인기 앨범</div>
-            </div>
-            <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-4 justify-content-start">
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style="height:50px;">
-                <a href="#" class="more-link">더 보기 &gt;</a>
-            </div>
-        </section>
-
-        <!-- 최신 트랙 섹션 -->
-        <section class="main-section-bg w-100 py-4 mb-5">
-            <div class="d-flex flex-row align-items-center px-4 mb-3" style="height:50px;">
-                <div class="section-title flex-grow-1">최신 트랙</div>
-            </div>
-            <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-4 justify-content-start">
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style="height:50px;">
-                <a href="#" class="more-link">더 보기 &gt;</a>
-            </div>
-        </section>
-
-        <!-- 인기 트랙 섹션 -->
-        <section class="main-section-bg w-100 py-4 mb-5">
-            <div class="d-flex flex-row align-items-center px-4 mb-3" style="height:50px;">
-                <div class="section-title flex-grow-1">인기 트랙</div>
-            </div>
-            <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-4 justify-content-start">
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-                <!-- 앨범/트랙 카드 예시 -->
-                <div class="col d-flex">
-                    <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                        <img src="https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d" class="card-img-top" alt="앨범커버">
-                        <div class="card-body d-flex flex-column align-items-center p-2">
-                            <div class="card-title">glow forever</div>
-                            <div class="card-text">The Quiett</div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style="height:50px;">
-                <a href="#" class="more-link">더 보기 &gt;</a>
-            </div>
-        </section>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    </th:block>
 </body>
 </html>
