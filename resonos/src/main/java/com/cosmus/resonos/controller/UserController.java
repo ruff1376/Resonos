@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.cosmus.resonos.domain.Users;
+import com.cosmus.resonos.domain.User;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +40,7 @@ public class UserController {
   // security 활성화 하면
   // public String mypage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
   public String mypage(Model model) {
-    Users user = Users.builder().email("resonos12@gmail.com").username("김조은").build();
+    User user = User.builder().email("resonos12@gmail.com").username("김조은").build();
 
     model.addAttribute("user", user);
     return "user/mypage";
@@ -53,7 +53,7 @@ public class UserController {
    */
   @GetMapping("/edit")
   public String edit(Model model) {
-    Users user = Users.builder().nickname("김조김조은").bio("안녕하세요 음악과 우주를 사랑하는 김조은입니다.").email("resonos12@gmail.com").username("김조은").build();
+    User user = User.builder().nickname("김조김조은").bio("안녕하세요 음악과 우주를 사랑하는 김조은입니다.").email("resonos12@gmail.com").username("김조은").build();
     model.addAttribute("user", user);
 
     return "user/edit";
@@ -65,7 +65,7 @@ public class UserController {
    * @return
    */
   @PostMapping("/edit")
-  public ResponseEntity<?> editPost(@ModelAttribute Users user) {
+  public ResponseEntity<?> editPost(@ModelAttribute User user) {
 
     if(user != null) {
       log.info("user : {}", user);
