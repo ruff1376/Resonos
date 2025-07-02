@@ -20,7 +20,11 @@ body {
   color: white;
   border-color: goldenrod;
 }
-
+canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
 p {
     word-break: break-word;
     white-space: normal;
@@ -34,76 +38,128 @@ img {
     object-fit: cover;
 }
 .artist-card {
-    border: 2px solid var(--main-color);
-    border-radius: 20px;
-    margin: 0 auto;
-    max-width: 1350px;
-    height: 350px;
-}
-.artist-img {
-    width: 400px;
-    height: 300px;
     display: flex;
+    max-width: 1350px;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+}
+.artist-card .artist-overall {
+    display: flex;
+    width: 350px;
+    height: 250px;
     justify-content: center;
     align-items: center;
+    gap: 30px;
 }
-.artist-circle {
-    width: 250px;
-    height: 250px;
+.artist-card .artist-overall .artist-img {
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     overflow: hidden;
+    border: 2px solid var(--main-color);
 }
-.artist-info {
-    /* max-width: 700px; */
-    height: 300px;
-    padding-top: 20px;
-    padding-right: 20px;
+.artist-card .artist-overall .artist-info {
     display: flex;
-    flex: 1;
-    min-width: 0;
-    overflow-wrap: break-word;
     flex-direction: column;
     justify-content: space-evenly;
 }
-.info-text{
-    max-width: 700px;
+.artist-card .disco-graphy {
+    display: flex;
+    flex-direction: column;
+    height: 250px;
+    flex: 1;
 }
-.artist-static {
+.disco-graphy .graphy-header {
+    padding-top: 20px;
+}
+.album-container {
     display: flex;
     gap: 15px;
+    padding-top: 10px;
+}
+.album {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
     align-items: center;
-}
-.disco-graphy {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-}
-.album-card {
+    gap: 10px;
+    border-radius: 10px;
     border: 2px solid var(--main-color);
-    border-radius: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    height: 170px;
 }
 .album-img {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 170px;
-    height: 100%;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 10px;
+    border: 2px solid var(--main-color);
 }
-.album-circle {
+.hottest-card {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+    max-width: 1350px;
     border-radius: 20px;
-    width: 150px;
-    height: 150px;
+    border: 2px solid var(--main-color);
+    justify-content: space-between;
+}
+.songs > p:not(:first-child) {
+    padding-left: 10px;
+}
+.youtube {
+    border-radius: 10px;
+    border: 2px solid var(--main-color);
     overflow: hidden;
 }
-.album-info {
+.info-card {
+    display: flex;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    max-width: 1350px;
+    justify-content: space-between;
+    gap: 15px;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+}
+.info {
+    min-width: 30%;
+    padding-top: 5px;
+    padding-left: 10px;
+    padding-bottom: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding-right: 10px;
-    padding-left: 10px;
-    gap: 20px;
+    justify-content: space-between;
+    border-radius: 10px;
+    border: 2px solid var(--main-color);
 }
-.album-info > p:first-child { font-weight: bold; color: var(--main-color);}
+.concert-schedule {
+    justify-content: start;
+}
+.mood-card {
+    max-width: 1350px;
+    padding: 10px;
+    display: flex;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+    gap: 30px;
+    padding-left: 20px;
+}
+.chart {
+    width: 400px;
+    height: 400px;
+    background: #fafafa;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+    overflow: hidden;
+    padding: 10px;
+}
+.mood-vote {
+    display: flex;
+    flex:1;
+    flex-direction: column;
+}
+.moods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
