@@ -25,10 +25,10 @@
       </div>
       <ul class="follow-list">
         <th:block th:each="i : ${#numbers.sequence(1,20)}">
-          <li class="list-item">
+          <li onclick="goToDetail(event)" class="list-item">
             <input type="hidden" th:value="${i}" name="id">
             <img src="https://i.scdn.co/image/ab67616d0000b2738ad8f5243d6534e03b656c8b" alt="GalaxiNote" class="follow-img" />
-            <div class="follow-info">
+            <div class="info">
               <span class="name-playlist">플레이리스트 명</span>
             </div>
             <div class="right">
@@ -57,7 +57,7 @@
           <li class="list-item">
             <input type="hidden" th:value="${i}" name="id">
             <img src="https://i.scdn.co/image/ab67616d0000b2738ad8f5243d6534e03b656c8b" alt="GalaxiNote" class="follow-img" />
-            <div class="follow-info">
+            <div class="info">
               <span class="name-album">좋아요 한 플레이리스트 명</span>
             </div>
             <button class="like">♥</button>
@@ -82,6 +82,11 @@
           alert(e.target.closest('li').querySelector('input[type="hidden"]').value + "번 플리 좋아요 취소")
         })
       })
+
+      function goToDetail(e) {
+        const id = e.target.querySelector('input[type="hidden"]').value
+        location.href = `playlists/${id}`
+      }
     </script>
   </th:block>
 </body>

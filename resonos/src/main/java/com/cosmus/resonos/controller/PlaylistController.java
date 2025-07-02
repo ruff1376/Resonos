@@ -15,6 +15,8 @@ import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.service.PlaylistService;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Slf4j
 @RequestMapping("/playlists")
@@ -31,7 +33,6 @@ public class PlaylistController {
     /**
      * 플레이리스트 페이지 요청
      * @param model
-     * @param request
      * @return
      */
     @GetMapping("")
@@ -44,7 +45,6 @@ public class PlaylistController {
     /**
      * 플레이리스트 추가 페이지 요청
      * @param model
-     * @param request
      * @return
      */
     @GetMapping("/create")
@@ -55,6 +55,22 @@ public class PlaylistController {
 
         return "user/create_playlist";
     }
+
+    /**
+     * 플레이리스트 상세 페이지 요청
+     * @param model
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public String playlistDetail(Model model, @PathVariable("id") long id) {
+        // TODO: 플레이리스트 DB 조회
+
+        model.addAttribute("lastPath", "playlist");
+        model.addAttribute("playlistObj", new Playlist());
+        return "user/playlist_detail";
+    }
+
 
     @PostMapping
     public ResponseEntity<String> createPlaylist(@RequestBody Playlist playlist) {
