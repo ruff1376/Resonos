@@ -7,53 +7,125 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>아티스트 리뷰</title>
     <th:block th:replace="~{fragments/link::artist}"></th:block>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
     <th:block layout:fragment="content">
         <div class="wrapper">
-            <div class="artist-card d-flex">
+            <!-- 아티스트 카드 -->
+            <div class="artist-card">
+                <div class="artist-overall">
                     <div class="artist-img">
-                        <div class="artist-circle">
-                            <img src="https://i.namu.wiki/i/-vNKcLEUUt0DKmlnwNQzgC5cLUfxxN-0nr1EDI47H5mEOD0ul3q0lMR3uhd82WyL_PYyrdlK1ljo9OvP9gtz_YrJpm3Reky4x6A_IPG4KokaEobGCHFkXRZWoXOtnVRVfCEepwSPYtvlfULcsn4qWA.webp"
-                                alt="페페">
-                        </div>
+                        <img src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/38/cc5a526bf63046da3ed3123f55f5c1ca_res.jpeg" alt="">
                     </div>
                     <div class="artist-info">
                         <p id="headline">페페</p>
-                        <div class="info-text">
-                            <p id="subtitle">페페는 어쩌고 저쩌고 아주 좋은 음악을 만드는 개구리입니다.
-                                이번에 무슨 상을 받았으며 아주 멋쟁이 개구리입니다.
-                            </p>
-                        </div>
-                        <div class="d-flex gap-4">
-                            <p>팔로워 99,999</p>
-                            <p>앨범 35</p>
-                            <p>곡 350</p>
-                        </div>
+                        <p>팔로워 99,999</p>
+                        <p>앨범 30</p>
+                        <p>곡 300</p>
                         <div>
-                            <button class="btn btn-gold">❤ 팔로우</button>
+                            <div class="btn btn-gold">❤ 팔로우</div>
                         </div>
                     </div>
                 </div>
-            <div class="disco-graphy">
-                <div class="card-header">
-                    <p id="headline">디스코 그래피</p>
-                </div>
-                <div class="card-container">
-                    <div class="album-card p-1">
-                        <div class="album-img">
-                            <div class="album-circle">
-                                <img src="https://i.namu.wiki/i/P0JikxFV739tGZESEMNtd6mtVAyK6WJzbLfj8YZLzT_i_xxPdENz0B-bvofZjAO9-0SpjeA6gyckiDSMVzmwodhPH-Nj1K_u-srLcoxGNwGSeVDCeZXYUdjxHsKCYAHrDmGo7EjgsuwXTSU2m6kpBg.webp" alt="">
+                <div class="disco-graphy">
+                    <div class="graphy-header">
+                        <p id="headline">디스코 그래피</p>
+                    </div>
+                    <div class="album-container">
+                        <!-- 반복문 구간 -->
+                         <div class="album">
+                            <div class="album-img">
+                                <img src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/38/cc5a526bf63046da3ed3123f55f5c1ca_res.jpeg" alt="">
                             </div>
-                        </div>
-                        <div class="album-info">
-                            <p id="subtitle">모르시나요...</p>
-                            <p>2025</p>
-                        </div>
+                            <div class="album-info">
+                                <p id="subtitle">모르시나요</p>
+                                <p>16 Nov 2016 · 11 tracks</p>
+                            </div>
+                         </div>
+                         <div class="album">
+                            <div class="album-img">
+                                <img src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/38/cc5a526bf63046da3ed3123f55f5c1ca_res.jpeg" alt="">
+                            </div>
+                            <div class="album-info">
+                                <p id="subtitle">모르시나요</p>
+                                <p>16 Nov 2016 · 11 tracks</p>
+                            </div>
+                         </div>
                     </div>
                 </div>
             </div>
+            <!-- 아티스트 카드 끝 -->
+            <!-- 인기곡 유튜브 -->
+            <div class="hottest-card">
+                <div class="songs">
+                    <p id="headline">인기곡</p>
+                    <!-- 반복문 인기곡 -->
+                    <p>1. Drowning 출시연도 곡 길이</p>
+                    <p>1. Drowning 출시연도 곡 길이</p>
+                    <p>1. Drowning 출시연도 곡 길이</p>
+                    <p>1. Drowning 출시연도 곡 길이</p>
+                </div>
+                <div class="youtube">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/Oeda7KVkFog?si=6f3qJAZGD7iLaUsJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+            </div>
+            <!-- 인기곡 카드 끝 -->
+            <!-- 아티스트 리뷰/일정.. -->
+            <div class="info-card">
+                <div class="info recent-review">
+                    <p id="headline">최근 앨범 리뷰</p>
+                    <p>이번 신곡 쩔었다</p>
+                    <p>동해물과 백두산이 마르고 닳도록</p>
+                    <p>동해물과 백두산이 마르고 닳도록</p>
+                    <p>동해물과 백두산이 마르고 닳도록</p>
+                    <p>동해물과 백두산이 마르고 닳도록</p>
+                    <div>
+                        <button class="btn btn-gold">앨범 전체 보기</button>
+                    </div>
+                </div>
+                <div class="info simillar-artist">
+                    <p id="headline">와 유사한 아티스트</p>
+                    <p>1.쩔었다</p>
+                    <p>2.동해물</p>
+                    <p>3.백두산</p>
+                    <p>4.마르고</p>
+                    <p>4.마르고</p>
+                    <div>
+                        <button class="btn btn-gold">아티스트 더보기</button>
+                    </div>
+                </div>
+                <div class="info concert-schedule">
+                    <p id="headline">공연/이벤트 일정</p>
+                    <p>2025. 08.  25 - 우리집 안방</p>
+                    <p>2025. 08.  25 - 우리집 안방</p>
+                    <p>2025. 08.  25 - 우리집 안방</p>
+                    <p>2025. 08.  25 - 우리집 안방</p>
+                </div>
+            </div>
+            <!-- 아티스트 리뷰/일정.. -->
+            <!-- 분위기 -->
+            <div class="mood-card">
+                <div class="chart">
+                    <canvas id="hexRadarChart"></canvas>
+                </div>
+                <div class="mood-vote">
+                    <div class="vote-header">
+                        <p id="headline">Mood Tag</p>
+                    </div>
+                    <div class="moods">
+                        <!-- 분위기 반복문 -->
+                        <div class="btn btn-gold">분위기1</div>
+                        <div class="btn btn-gold">분위기1234</div>
+                        <div class="btn btn-gold">분위기13</div>
+                        <div class="btn btn-gold">분위기1</div>
+                        <div class="btn btn-gold">분위기144</div>
+                        <div class="btn btn-gold">분위기1</div>
+                    </div>
+                </div>
+            </div>
+            <!-- 분위기 끝 -->
         </div>
     </th:block>
 </body>
