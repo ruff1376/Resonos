@@ -10,10 +10,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cosmus.resonos.domain.Policy;
+import com.cosmus.resonos.domain.Setting;
 import com.cosmus.resonos.service.PolicyService;
+import com.cosmus.resonos.service.SettingService;
 
+import groovy.util.logging.Slf4j;
+
+@Slf4j
 @Controller
 @RequestMapping("/admin/PolicySetting")
 public class PolicyController {
@@ -21,11 +27,16 @@ public class PolicyController {
     @Autowired
     private PolicyService policyService;
 
+    @Autowired
+    private SettingService settingService;
+
     // 목록
     @GetMapping
     public String list(Model model) throws Exception {
         List<Policy> policies = policyService.list();
+        List<Setting> settings = settingService.list();
         model.addAttribute("policies", policies);
+        model.addAttribute("settings", settings);
         return "/admin/PolicySetting"; // policy/list.html
     }
 
@@ -80,6 +91,38 @@ public class PolicyController {
     public String delete(@PathVariable("id") Long id) throws Exception {
         policyService.delete(id);
         return "redirect:/admin/PolicySetting";
+    }
+
+    // 환경설정 저장
+    @PostMapping("/setting/save")
+    public String saveSetting(
+            @RequestParam(value = "allowSignUp", required = false) String allowSignUp,
+            @RequestParam(value = "enableCommunity", required = false) String enableCommunity,
+            @RequestParam(value = "externalMusicApi", required = false) String externalMusicApi,
+            @RequestParam(value = "theme", required = false) String theme,
+            @RequestParam(value = "notice", required = false) String notice
+    ) throws Exception {
+        // id로 구분, 각 항목은 id(숫자)로 관리, value에 값만 저장
+        saveOrUpdateSetting(1L, allowSignUp != null ? "Y" : "N");
+        saveOrUpdateSetting(2L, enableCommunity != null ? "Y" : "N");
+        saveOrUpdateSetting(3L, externalMusicApi != null ? "Y" : "N");
+        saveOrUpdateSetting(4L, theme != null ? theme : "dark");
+        saveOrUpdateSetting(5L, notice != null ? notice : "");
+        return "redirect:/admin/PolicySetting";
+    }
+
+    // id로 환경설정 저장/수정 (없으면 insert, 있으면 update)
+    private void saveOrUpdateSetting(Long id, String value) throws Exception {
+        Setting setting = settingService.select(id);
+        if (setting == null) {
+            setting = new Setting();
+            setting.setId(id);
+            setting.setValue(value);
+            settingService.insert(setting);
+        } else {
+            setting.setValue(value);
+            settingService.update(setting);
+        }
     }
 
 }

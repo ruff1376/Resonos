@@ -20,7 +20,7 @@
     SELECT * FROM policy WHERE id = #{id}
   </select>
 
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insert" useGeneratedKeys="true" >
     INSERT INTO policy (type, content, version)
     VALUES (#{type}, #{content}, #{version})
   </insert>

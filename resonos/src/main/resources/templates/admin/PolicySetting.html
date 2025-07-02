@@ -37,8 +37,10 @@
       <div class="container" style="max-width: 1100px;">
         <h1 class="mb-4 text-light-gold text-start">정책/환경설정</h1>
         <div class="row g-4">
-          <div class="col-12">
+          <!-- 정책 관리 영역 -->
+          <div class="col-12 col-lg-6">
             <div class="resonos-card p-4 text-start">
+              <h3 class="mb-3 text-light-gold">정책 관리</h3>
 
               <!-- 정책 추가 버튼 및 폼 (collapse) -->
               <div class="mb-3 text-end">
@@ -105,36 +107,62 @@
                   </form>
                 </div>
               </div>
+            </div>
+          </div>
 
-              <!-- 환경설정 (별도 구현 필요) -->
-              <form class="mt-4 text-start">
-                <div class="setting-label fw-bold mb-2">서비스 환경설정</div>
+          <!-- 환경설정 관리 영역 -->
+          <div class="col-12 col-lg-6">
+            <div class="resonos-card p-4 text-start">
+              <h3 class="mb-3 text-light-gold">서비스 환경설정</h3>
+
+              <!-- 환경설정 저장 폼 -->
+              <form class="mb-4" th:action="@{/admin/PolicySetting/setting/save}" method="post">
                 <div class="setting-row d-flex align-items-center mb-2">
                   <span class="me-3">신규 가입 허용</span>
-                  <input type="checkbox" checked>
+                  <input type="checkbox" name="allowSignUp" th:checked="${settings[0]?.value == 'Y'}">
                 </div>
                 <div class="setting-row d-flex align-items-center mb-2">
                   <span class="me-3">커뮤니티 게시판 활성화</span>
-                  <input type="checkbox" checked>
+                  <input type="checkbox" name="enableCommunity" th:checked="${settings[1]?.value == 'Y'}">
                 </div>
                 <div class="setting-row d-flex align-items-center mb-2">
                   <span class="me-3">음악 데이터 외부 연동</span>
-                  <input type="checkbox">
+                  <input type="checkbox" name="externalMusicApi" th:checked="${settings[2]?.value == 'Y'}">
                 </div>
                 <div class="setting-row d-flex align-items-center mb-2">
                   <span class="me-3">기본 테마</span>
-                  <select class="form-select w-auto ms-2">
-                    <option selected>다크</option>
-                    <option>라이트</option>
+                  <select class="form-select w-auto ms-2" name="theme">
+                    <option th:selected="${settings[3]?.value == 'dark'}" value="dark">다크</option>
+                    <option th:selected="${settings[3]?.value == 'light'}" value="light">라이트</option>
                   </select>
                 </div>
                 <div class="setting-row d-flex align-items-center mb-2">
                   <span class="me-3">공지사항</span>
-                  <input type="text" class="form-control w-50 ms-2" value="2025년 7월 업데이트 안내">
+                  <input type="text" class="form-control w-50 ms-2" name="notice" th:value="${settings[4]?.value}">
                 </div>
                 <button class="btn btn-gold mt-3" type="submit">저장</button>
               </form>
 
+              <!-- 환경설정 전체 목록 테이블 -->
+              <div class="mt-4">
+                <h5 class="fw-bold mb-2">환경설정 전체 목록</h5>
+                <table class="table table-dark table-bordered align-middle">
+                  <thead>
+                    <tr>
+                      <th style="width:60px;">ID</th>
+                      <th>설정값</th>
+                      <th>수정일시</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr th:each="setting : ${settings}">
+                      <td th:text="${setting.id}">1</td>
+                      <td th:text="${setting.value}">값</td>
+                      <td th:text="${#dates.format(setting.updatedAt, 'yyyy-MM-dd HH:mm')}">2024-01-01 12:00</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>

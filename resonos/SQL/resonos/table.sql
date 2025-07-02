@@ -230,12 +230,14 @@ CREATE TABLE `playlist_detail` (
 	`Field`	VARCHAR(255)	NULL
 );
 
+DROP TABLE IF EXISTS policy;
+
 CREATE TABLE `policy` (
-	`id`	BIGINT	NOT NULL,
-	`type`	VARCHAR(100)	NULL,
-	`content`	TEXT	NULL,
-	`version`	VARCHAR(100)	NULL,
-	`updated_at`	DATETIME	NULL
+    `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `type` VARCHAR(100) NULL,
+    `content` TEXT NULL,
+    `version` VARCHAR(100) NULL,
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE `board_post` (
