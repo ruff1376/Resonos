@@ -147,7 +147,6 @@ img {
 .chart {
     width: 400px;
     height: 400px;
-    background: #fafafa;
     border-radius: 20px;
     border: 2px solid var(--main-color);
     overflow: hidden;
