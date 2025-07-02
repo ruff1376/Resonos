@@ -163,7 +163,7 @@ CREATE TABLE `playlist` (
 	`thumbnail_url`	VARCHAR(200)	NULL,
 	`is_public`	BOOLEAN	NOT NULL,
 	`created_at`	TIMESTAMP	NOT NULL	DEFAULT CURRENT_TIMESTAMP,
-	`track_id`	VARCHAR(200)	NOT NULL
+	`track_id`	VARCHAR(200) NULL
 );
 
 CREATE TABLE `album` (

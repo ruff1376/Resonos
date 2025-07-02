@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,11 +16,9 @@ import com.cosmus.resonos.domain.Users;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
-
-
 @Slf4j
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
   /**
@@ -77,69 +76,15 @@ public class UserController {
   }
 
   /**
-   * 유저 팔로우 페이지 요청
-   * @param model
-   * @param request
-   * @return
-   */
-  @GetMapping("/follow-user")
-  public String followUsers(Model model, HttpServletRequest request) {
-    String uri = request.getRequestURI();
-    String[] parts = uri.split("/");
-    String lastPath = parts[parts.length - 1];
-    log.info("lastPath : {}", lastPath);
-
-    model.addAttribute("lastPath", lastPath);
-
-    return "user/follow_user";
-  }
-
-  @GetMapping("/playlist")
-  public String playlist(Model model, HttpServletRequest request) {
-    String uri = request.getRequestURI();
-    String[] parts = uri.split("/");
-    String lastPath = parts[parts.length - 1];
-    log.info("lastPath : {}", lastPath);
-
-    model.addAttribute("lastPath", lastPath);
-    return "user/playlist";
-  }
-
-
-  /**
-   * 아티스트 팔로우 페이지 요청
-   * @param model
-   * @param request
-   * @return
-   */
-  @GetMapping("/follow-artist")
-  public String followArtists(Model model, HttpServletRequest request) {
-    String uri = request.getRequestURI();
-    String[] parts = uri.split("/");
-    String lastPath = parts[parts.length - 1];
-    log.info("lastPath : {}", lastPath);
-
-    model.addAttribute("lastPath", lastPath);
-    return "user/follow_artist";
-  }
-
-  /**
    * 좋아요 한 앨범/트랙 페이지 요청
    * @param model
    * @param request
    * @return
    */
-  @GetMapping("/liked-music")
-  public String likedMusic(Model model, HttpServletRequest request) {
-    String uri = request.getRequestURI();
-    String[] parts = uri.split("/");
-    String lastPath = parts[parts.length - 1];
-    log.info("lastPath : {}", lastPath);
+  @GetMapping("/{id}/liked-music")
+  public String likedMusic(Model model, @PathVariable("id") long id) {
 
-    model.addAttribute("lastPath", lastPath);
+    model.addAttribute("lastPath", "liked-music");
     return "user/liked_music";
   }
-
-
-
 }
