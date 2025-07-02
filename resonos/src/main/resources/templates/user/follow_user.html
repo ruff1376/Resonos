@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}"
+>
+<head>
+  <meta charset="UTF-8" />
+  <title>유저 팔로우</title>
+  <th:block th:replace="~{fragments/link::user}"></th:block>
+</head>
+<body>
+  <main class="con-follow my-5 position-relative" layout:fragment="content">
+    <!-- 왼쪽 리모컨 -->
+    <section class="mypage-tabs">
+      <a href="#" class="tab">내 활동</a>
+      <a href="#" class="tab">내 플레이리스트</a>
+      <a href="#" class="tab">좋아요 표시한 앨범 / 트랙</a>
+      <a href="#" class="tab">팔로우 아티스트</a>
+      <a href="#" class="tab" th:classappend="${lastPath == 'userFollow'} ? 'active' : ''">팔로워 / 팔로우</a>
+      <a href="#" class="tab">배지</a>
+      <a href="#" class="tab">계정 / 보안</a>
+      <a href="#" class="tab">알림 설정</a>
+    </section>
+
+    <section class="info-section">
+      <h2 class="text-start">팔로워<span class="follow-count">92</span></h2>
+      <ul class="follow-list">
+        <th:block th:each="i : ${#numbers.sequence(1,20)}">
+          <li class="follow-item">
+            <img src="https://randomuser.me/api/portraits/men/44.jpg" alt="GalaxiNote" class="follow-img" />
+            <div class="follow-info">
+              <span class="follow-nick">GalaxiNote</span>
+              <span class="follow-badge">CLASSICIAN</span>
+            </div>
+            <p class="bio">
+                자기소개 자기소개 자기소개
+            </p>
+            <button class="btn-outline-gold btn-sm">언팔로우</button>
+          </li>
+          <li class="follow-item">
+            <img src="https://randomuser.me/api/portraits/women/55.jpg" alt="LunaBeats" class="follow-img" />
+            <div class="follow-info">
+              <span class="follow-nick">LunaBeats</span>
+              <span class="follow-badge">JAZZ LOVER</span>
+            </div>
+            <p class="bio">
+                자기소개 자기소개 자기소개
+            </p>
+            <button class="btn-outline-gold btn-sm">언팔로우</button>
+          </li>
+        </th:block>
+      </ul>
+    </section>
+
+    <section class="info-section">
+      <h2 class="text-start">팔로우<span class="follow-count">92</span></h2>
+      <ul class="follow-list">
+        <th:block th:each="i : ${#numbers.sequence(1,2)}">
+          <li class="follow-item">
+            <img src="https://randomuser.me/api/portraits/men/44.jpg" alt="GalaxiNote" class="follow-img" />
+            <div class="follow-info">
+              <span class="follow-nick">GalaxiNote</span>
+              <span class="follow-badge">CLASSICIAN</span>
+            </div>
+            <p class="bio">
+                자기소개 자기소개 자기소개
+            </p>
+            <button class="btn-outline-gold btn-sm">언팔로우</button>
+          </li>
+          <li class="follow-item">
+            <img src="https://randomuser.me/api/portraits/women/55.jpg" alt="LunaBeats" class="follow-img" />
+            <div class="follow-info">
+              <span class="follow-nick">LunaBeats</span>
+              <span class="follow-badge">JAZZ LOVER</span>
+            </div>
+            <p class="bio">
+                자기소개 자기소개 자기소개
+            </p>
+            <button class="btn-outline-gold btn-sm">언팔로우</button>
+          </li>
+        </th:block>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
