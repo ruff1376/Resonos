@@ -15,4 +15,8 @@ public interface ReportService {
     public boolean update(Report report) throws Exception;
     // 삭제
     public boolean delete(Long id) throws Exception;
+    // 어드민 통계용
+    public int countAll() throws Exception;
+    // 어드민 블라인드
+    public int countByBlind() throws Exception;
 }

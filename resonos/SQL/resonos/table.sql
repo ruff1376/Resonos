@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+-- Active: 1751337677491@@127.0.0.1@3306@resonos
+=======
 -- Active: 1745889699154@@127.0.0.1@3306@aloha
+>>>>>>> main
 
 -- 💥 기존 테이블 모두 삭제
 DROP TABLE IF EXISTS
@@ -10,6 +14,8 @@ DROP TABLE IF EXISTS
     liked_playlist, external_api_config, user, track, tag,
     artist, liked_track, qna, community, qna_answer, notice,
     track_mood_vote;
+
+
 
 CREATE TABLE `notice` (
 	`id`	BIGINT	NOT NULL,
@@ -102,13 +108,24 @@ CREATE TABLE `user` (
 	`created_at`	TIMESTAMP	NULL	DEFAULT CURRENT_TIMESTAMP
 );
 
+drop Table external_api_config
+
 CREATE TABLE `external_api_config` (
-	`id`	BIGINT	NOT NULL,
-	`provider`	VARCHAR(100)	NULL,
-	`apiKey`	VARCHAR(100)	NULL,
-	`secret`	VARCHAR(100)	NULL,
-	`enabled`	BOOLEAN	NULL,
-	`created_at`	DATETIME	NULL
+    `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `provider` VARCHAR(100) NOT NULL,
+    `apiKey` VARCHAR(100) NOT NULL,
+    `secret` VARCHAR(100) NOT NULL,
+    `enabled` BOOLEAN NOT NULL DEFAULT FALSE,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+drop Table plugin
+
+CREATE TABLE `plugin` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(100) NOT NULL,
+    `enabled` BOOLEAN NOT NULL DEFAULT FALSE,
+    `config_json` TEXT,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE `liked_playlist` (
@@ -217,12 +234,14 @@ CREATE TABLE `playlist_detail` (
 	`Field`	VARCHAR(255)	NULL
 );
 
+DROP TABLE IF EXISTS policy;
+
 CREATE TABLE `policy` (
-	`id`	BIGINT	NOT NULL,
-	`type`	VARCHAR(100)	NULL,
-	`content`	TEXT	NULL,
-	`version`	VARCHAR(100)	NULL,
-	`updated_at`	DATETIME	NULL
+    `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `type` VARCHAR(100) NULL,
+    `content` TEXT NULL,
+    `version` VARCHAR(100) NULL,
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE `board_post` (
@@ -342,13 +361,8 @@ CREATE TABLE `liked_album` (
 	`album_id`	VARCHAR(200)	NOT NULL
 );
 
-CREATE TABLE `plugin` (
-	`id`	BIGINT	NOT NULL,
-	`name`	VARCHAR(100)	NULL,
-	`enabled`	BOOLEAN	NULL,
-	`config_json`	TEXT	NULL,
-	`created_at`	DATETIME	NULL
-);
+
+
 
 ALTER TABLE `notice` ADD CONSTRAINT `PK_NOTICE` PRIMARY KEY (
 	`id`
@@ -393,6 +407,7 @@ ALTER TABLE `user` ADD CONSTRAINT `PK_USER` PRIMARY KEY (
 ALTER TABLE `external_api_config` ADD CONSTRAINT `PK_EXTERNAL_API_CONFIG` PRIMARY KEY (
 	`id`
 );
+
 
 ALTER TABLE `liked_playlist` ADD CONSTRAINT `PK_LIKED_PLAYLIST` PRIMARY KEY (
 	`id`

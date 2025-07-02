@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="~{fragments/link::admin}"></th:block>
+</head>
+<body>
+    <!-- 관리자 헤더 프래그먼트 사용 -->
+    <th:block th:replace="~{fragments/admin_header::admin_header}"></th:block>
+
+    <!-- content fragment -->
+    <th:block layout:fragment="content"></th:block>
+
+    <th:block th:replace="~{fragments/footer::footer}"></th:block>
+    <th:block th:replace="~{fragments/script::script}"></th:block>
+</body>
+</html>

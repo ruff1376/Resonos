@@ -38,4 +38,15 @@ public class ReportServiceImpl implements ReportService {
     public boolean delete(Long id) throws Exception {
         return reportMapper.delete(id) > 0;
     }
+    @Override
+    public int countAll() throws Exception {
+    return reportMapper.countAll();
+    }
+
+    @Override
+    public int countByBlind() throws Exception {
+        return reportMapper.countByBlind();
+    }
+    
+
 }
