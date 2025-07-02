@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}"
+>
+<head>
+  <meta charset="UTF-8">
+  <title>RESONOS - 로그인</title>
+  <th:block th:replace="~{fragments/link::user}"></th:block>
+</head>
+<body>
+  <th:block layout:fragment="content">
+    <div class="content-wrap">
+      <form class="login-box" action="/login" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <img th:src="@{/img/resonosLogo.png}"
+            width="250px"
+            height="167px"
+            alt="RESONOS Logo" class="img-fluid rounded mb-3">
+        <h2 class="text-light mb-4">로그인</h2>
+        <input name="username" id="username" type="text" class="form-control mb-3" placeholder="아이디" required th:value="${username}">
+        <input name="password" id="password" type="password" class="form-control mb-3" placeholder="비밀번호" required>
+        <div class="form-check text-start my-3 d-flex justify-content-around">
+          <div class="item">
+            <input class="form-check-input" type="checkbox" name="remember-id" id="remember-id-check" th:checked="${rememberId}">
+            <label class="form-check-label" for="remember-id-check">아이디 저장</label>
+          </div>
+          <div class="item">
+            <input class="form-check-input" type="checkbox" name="auto-login" id="remember-me-check">
+            <label class="form-check-label" for="remember-me-check">자동 로그인</label>
+          </div>
+        </div>
+        <th:block th:if="${param.error}">
+          <p class="text-center text-danger">아이디 또는 비밀번호를 잘못 입력했습니다.</p>
+        </th:block>
+        <th:block th:if="${param.logout}">
+          <p class="text-center text-success">정상적으로 로그아웃 되었습니다.</p>
+        </th:block>
+        <button class="btn btn-gold w-100 mb-2" type="submit">로그인</button>
+        <a href="#" class="login-link d-block mt-2">비밀번호를 잊으셨나요?</a>
+        <div class="text-secondary my-3">또는</div>
+        <button class="btn social-btn w-100 mb-2" type="button">Google로 로그인</button>
+        <button class="btn social-btn w-100 mb-2" type="button">Kakao로 로그인</button>
+        <button class="btn social-btn w-100 mb-3" type="button">Naver로 로그인</button>
+        <div>
+          <span class="text-secondary">아직 회원이 아니신가요?</span>
+          <a href="signup.html" class="login-link">회원가입</a>
+        </div>
+      </form>
+    </div>
+  </th:block>
+</body>
+</html>

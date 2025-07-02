@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
         int result = userMapper.join(user);
         if (result > 0) {
             UserRole userRole = new UserRole();
-            userRole.setUserId(user.getId());
+            userRole.setUserId(user.getNo());
             userRole.setRoleId(2L); // 2L = ROLE_USER, 1L = ROLE_ADMIN 등
             userRoleMapper.insert(userRole);
         }

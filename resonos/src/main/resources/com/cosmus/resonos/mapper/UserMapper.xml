@@ -4,8 +4,9 @@
 
 <mapper namespace="com.cosmus.resonos.mapper.UserMapper">
 
-  <resultMap id="UserResultMap" type="com.cosmus.resonos.domain.Users">
+  <resultMap id="UserResultMap" type="User">
     <id property="id" column="id"/>
+
     <result property="username" column="username"/>
     <result property="email" column="email"/>
     <result property="password" column="password"/>
@@ -17,7 +18,18 @@
     <result property="provider" column="provider"/>
     <result property="providerId" column="provider_id"/>
     <result property="createdAt" column="created_at"/>
+
+    <collection property="authList" ofType="UserAuth"
+            select="selectAuth"
+            column="username"></collection>
+
   </resultMap>
+
+    <resultMap id="AuthMap" type="UserAuth">
+        <result property="no" column="no" />
+        <result property="username" column="username" />
+        <result property="auth" column="auth" />
+    </resultMap>
 
   <select id="selectAll" resultMap="UserResultMap">
     SELECT * FROM user

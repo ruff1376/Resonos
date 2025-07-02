@@ -23,8 +23,6 @@ public interface UserMapper {
 
     // 전체 조회
     public List<User> list() throws Exception;
-    // 아이디 조회
-    public User selectById(Long id) throws Exception;
     // 수정
     public int update(User user) throws Exception;
     // 삭제
