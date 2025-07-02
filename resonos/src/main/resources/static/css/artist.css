@@ -1,5 +1,5 @@
 *{margin: 0; padding: 0; box-sizing: border-box;}
-.wrapper { width: 100%; display: flex; flex-direction: column; gap: 30px;}
+.wrapper { width: 100%; display: flex; flex-direction: column; gap: 30px; align-items: center;}
 body {
     background-color: var(--background-color);
     color: white;
@@ -41,6 +41,7 @@ img {
     margin-top: 50px;
     display: flex;
     max-width: 1350px;
+    width: 100%;
     border-radius: 20px;
     border: 2px solid var(--main-color);
 }
@@ -99,6 +100,7 @@ img {
     gap: 20px;
     padding: 10px;
     max-width: 1350px;
+    width: 100%;
     border-radius: 20px;
     border: 2px solid var(--main-color);
     justify-content: space-between;
@@ -117,6 +119,7 @@ img {
     padding-left: 20px;
     padding-right: 20px;
     max-width: 1350px;
+    width: 100%;
     justify-content: space-between;
     gap: 15px;
     border-radius: 20px;
@@ -134,11 +137,14 @@ img {
     border: 2px solid var(--main-color);
 }
 .concert-schedule {
-    flex:0 0 250px;
+    flex: 1 1 auto;         /* 유연하게 줄어들고 늘어남 */
+    max-width: 250px;       /* 최대 너비 제한 */
+    min-width: 100px; 
     justify-content: start;
 }
 .mood-card {
     max-width: 1350px;
+    width: 100%;
     padding: 10px;
     display: flex;
     border-radius: 20px;

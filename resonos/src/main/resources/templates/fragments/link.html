@@ -25,6 +25,13 @@
 <th:block th:fragment="artist">
     <th:block th:replace="~{fragments/link::base}"/>
     <link rel="stylesheet" th:href="@{/css/artist.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</th:block>
+
+<th:block th:fragment="album">
+    <th:block th:replace="~{fragments/link::base}"/>
+    <link rel="stylesheet" th:href="@{/css/album.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </th:block>
 
 <th:block th:fragment="main">
