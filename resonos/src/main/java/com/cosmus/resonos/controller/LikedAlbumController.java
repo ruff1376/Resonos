@@ -19,14 +19,18 @@ public class LikedAlbumController {
     @Autowired
     private LikedAlbumService likedAlbumService;
 
-    // 목록
-    @GetMapping
-    public String list(Model model) throws Exception {
-        log.info("[LikedAlbumController] 좋아요 앨범 목록 요청");
-        List<LikedAlbum> likedAlbums = likedAlbumService.list();
-        log.info("[LikedAlbumController] 좋아요 앨범 수: {}", likedAlbums.size());
-        model.addAttribute("likedAlbums", likedAlbums);
-        return "likedalbum/list"; // likedalbum/list.html
+    /**
+     * 좋아요 한 앨범/트랙 페이지 요청
+     * @param model
+     * @param request
+     * @return
+     */
+    @GetMapping("")
+    // TODO: @AuthenticationPrincipal 로 출력할 리스트 나누기
+    public String likedMusic(Model model) {
+
+        model.addAttribute("lastPath", "liked-music");
+        return "user/liked_music";
     }
 
     // 상세

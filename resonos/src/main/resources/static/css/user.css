@@ -484,9 +484,8 @@ textarea.form-control {
   flex: 0 0 auto;
 }
 .con .bg-badge p {color: #fff;}
-#profileImage {display: none;}
+#profileImage, #thumbnailUrl {display: none;}
 #profileBtn {cursor: pointer;}
-
 
 /* 유저 팔로우 */
 .mypage-tabs {
@@ -554,7 +553,7 @@ textarea.form-control {
   padding: 0;
   margin: 0;
 }
-.follow-item {
+.list-item {
   display: flex;
   align-items: center;
   background: #222;
@@ -566,10 +565,10 @@ textarea.form-control {
   transition: border-color 0.18s, box-shadow 0.18s;
   cursor: pointer;
 }
-.follow-item + .follow-item {
+.list-item + .list-item {
   margin-top: 14px;
 }
-.follow-item:hover {
+.list-item:hover {
   border-color: #fffbe6;
   box-shadow: 0 2px 10px rgba(212,185,127,0.10);
 }
@@ -631,7 +630,7 @@ textarea.form-control {
 
 /* 좋아요 한 앨범 / 트랙  */
 .con-music .info-section + .info-section {margin-top: 50px;}
-.con-music .follow-item {padding: 5px 22px;}
+.con-music .list-item {padding: 5px 22px;}
 .name-album {font-size: 1.4rem;}
 .name-artist {font-size: 1.2rem; color: #B0B6BE}
 .con-music .follow-img {border-radius: 10px; width: 60px; height: 60px; border: none;}
@@ -650,3 +649,23 @@ button.like {background-color: inherit; border: none;}
 /* 플레이리스트 추가 */
 .con-cre-pli .info-section {min-height: 750px;}
 .con-cre-pli .profile-edit-box {border: none; border-radius: 0;}
+.con-cre-pli input[type="radio"] + .profile-edit-label {display: inline-block; margin: 0 5px;}
+
+/* 알림함 */
+.con-noti .info-section {min-height: 800px;}
+.con-noti .list-item {justify-content: space-between; align-items: center; padding: 10px 22px; position: relative;}
+.con-noti .list-item p {margin-bottom: 0;}
+.is-read {display: none;}
+.is-read + span {display: none;}
+.is-read:checked + span {
+  display: block;
+  color: red;
+  font-size: 2.5rem;
+  position: absolute;
+  top: -20px;
+  left: 0;
+}
+.con-noti label {display: block;}
+.con-noti label + label {
+  margin-top: 14px;
+}

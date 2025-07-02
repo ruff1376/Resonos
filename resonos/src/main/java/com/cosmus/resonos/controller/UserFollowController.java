@@ -26,25 +26,12 @@ public class UserFollowController {
      * @param request
      * @return
      */
-    @GetMapping("/{id}")
-    public String followUsers(Model model, @PathVariable("id") long id) {
+    @GetMapping("")
+    // TODO: @AuthenticationPrincipal 로 출력할 리스트 나누기
+    public String followUsers(Model model) {
 
         model.addAttribute("lastPath", "user-follows");
-
         return "user/follow_user";
-    }
-
-
-
-
-    // 목록
-    @GetMapping
-    public String list(Model model) throws Exception {
-        log.info("[UserFollowController] 팔로우 목록 요청");
-        List<UserFollow> follows = userFollowService.list();
-        log.info("[UserFollowController] 팔로우 수: {}", follows.size());
-        model.addAttribute("follows", follows);
-        return "userfollow/list"; // userfollow/list.html
     }
 
     // 등록 폼
