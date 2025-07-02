@@ -43,4 +43,8 @@ public class BoardPostServiceImpl implements BoardPostService {
     public List<BoardPost> findByCommunity(Long communityId) throws Exception {
         return boardPostMapper.findByCommunity(communityId);
     }
+    @Override
+    public int countAll() throws Exception {
+        return boardPostMapper.countAll();
+    }
 }

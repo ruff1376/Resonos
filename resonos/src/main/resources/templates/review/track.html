@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아티스트 리뷰</title>
+    <link rel="stylesheet" th:href="@{/css/artist.css}">
+    <th:block th:replace="~{fragments/link::artist}"></th:block>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <th:block layout:fragment="content">
+        <div class="wrapper">
+            <!-- 아티스트 카드 -->
+            <div class="artist-card">
+                <div class="artist-overall">
+                    <div class="artist-img">
+                        <img src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/38/cc5a526bf63046da3ed3123f55f5c1ca_res.jpeg" alt="">
+                    </div>
+                    <div class="artist-info">
+                        <p id="headline">페페</p>
+                        <p>팔로워 99,999</p>
+                        <p>앨범 30</p>
+                        <p>곡 300</p>
+                        <div>
+                            <div class="btn btn-gold">❤ 팔로우</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="disco-graphy">
+                    <div class="graphy-header">
+                        <p id="headline">디스코 그래피</p>
+                    </div>
+                    <div class="album-container">
+                        <!-- 반복문 구간 -->
+                         <div class="album">
+                            <div class="album-img">
+                                <img src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/38/cc5a526bf63046da3ed3123f55f5c1ca_res.jpeg" alt="">
+                            </div>
+                            <div class="album-info">
+                                <p id="subtitle">모르시나요</p>
+                                <p>16 Nov 2016 </p>
+                                <p>11 tracks</p>
+                            </div>
+                         </div>
+                         <div class="album">
+                            <div class="album-img">
+                                <img src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/38/cc5a526bf63046da3ed3123f55f5c1ca_res.jpeg" alt="">
+                            </div>
+                            <div class="album-info">
+                                <p id="subtitle">모르시나요</p>
+                                <p>16 Nov 2016 </p>
+                                <p>11 tracks</p>
+                            </div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 아티스트 카드 끝 -->
+            <!-- 인기곡 유튜브 -->
+            <div class="hottest-card">
+                <div class="songs">
+                    <p id="headline">인기곡</p>
+                    <!-- 반복문 인기곡 -->
+                    <p>1. Drowning 출시연도 곡 길이</p>
+                    <p>1. Drowning 출시연도 곡 길이</p>
+                    <p>1. Drowning 출시연도 곡 길이</p>
+                    <p>1. Drowning 출시연도 곡 길이</p>
+                </div>
+                <div class="youtube">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/Oeda7KVkFog?si=6f3qJAZGD7iLaUsJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+            </div>
+            <!-- 인기곡 카드 끝 -->
+            <!-- 아티스트 리뷰/일정.. -->
+            <div class="info-card">
+                <div class="info recent-review">
+                    <p id="headline">최근 앨범 리뷰</p>
+                    <p>이번 신곡 쩔었다</p>
+                    <p>동해물과 백두산이 마르고 닳도록</p>
+                    <p>동해물과 백두산이 마르고 닳도록</p>
+                    <p>동해물과 백두산이 마르고 닳도록</p>
+                    <p>동해물과 백두산이 마르고 닳도록</p>
+                    <div>
+                        <button class="btn btn-gold">앨범 전체 보기</button>
+                    </div>
+                </div>
+                <div class="info simillar-artist">
+                    <p id="headline">와 유사한 아티스트</p>
+                    <p>1.쩔었다</p>
+                    <p>2.동해물</p>
+                    <p>3.백두산</p>
+                    <p>4.마르고</p>
+                    <p>4.마르고</p>
+                    <div>
+                        <button class="btn btn-gold">아티스트 더보기</button>
+                    </div>
+                </div>
+                <div class="info concert-schedule">
+                    <p id="headline">공연/이벤트 일정</p>
+                    <p>2025. 08.  25 - 우리집 안방</p>
+                    <p>한국(서울)</p>
+                    <p>2025. 08.  25 - 우리집 안방</p>
+                    <p>한국(서울)</p>
+                    <p>2025. 08.  25 - 우리집 안방</p>
+                    <p>한국(서울)</p>
+                    </p>
+                </div>
+            </div>
+            <!-- 아티스트 리뷰/일정.. -->
+            <!-- 분위기 -->
+            <div class="mood-card">
+                <div class="chart">
+                    <canvas id="hexRadarChart"></canvas>
+                </div>
+                <div class="mood-vote">
+                    <div class="vote-header">
+                        <p id="headline">Mood Tag</p>
+                    </div>
+                    <div class="moods">
+                        <!-- 분위기 반복문 -->
+                        <div class="btn btn-gold">분위기1</div>
+                        <div class="btn btn-gold">분위기1234</div>
+                        <div class="btn btn-gold">분위기13</div>
+                        <div class="btn btn-gold">분위기1</div>
+                        <div class="btn btn-gold">분위기144</div>
+                        <div class="btn btn-gold">분위기1</div>
+                    </div>
+                </div>
+            </div>
+            <!-- 분위기 끝 -->
+        </div>
+    </th:block>
+</body>
+
+</html>

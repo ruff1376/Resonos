@@ -44,4 +44,17 @@
     DELETE FROM report WHERE id = #{id}
   </delete>
 
+<select id="countAll" resultType="int">
+  SELECT COUNT(*) FROM report
+</select>
+
+<select id="countByBlind" resultType="int">
+  SELECT COUNT(DISTINCT target_id)
+  FROM report
+  WHERE status = 'BLIND'
+</select>
+
+
+
+
 </mapper>

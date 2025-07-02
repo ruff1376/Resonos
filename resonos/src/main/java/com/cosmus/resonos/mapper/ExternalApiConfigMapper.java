@@ -18,4 +18,5 @@ public interface ExternalApiConfigMapper {
     public int update(ExternalApiConfig config) throws Exception;
     // 삭제
     public int delete(Long id) throws Exception;
+
 }

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/admin_layout}"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>RESONOS 관리자 - 오픈 API 관리</title>
+    <th:block th:replace="~{fragments/link::admin}"></th:block>
+</head>
+<th:block layout:fragment="content">
+<body class="bg-dark text-light">
+    <main class="py-5 bg-resonos-dark">
+        <div class="container" style="max-width: 950px;">
+            <h2 class="mb-3 text-light-gold">오픈 API 및 Plugin 관리</h2>
+            <div class="api-desc mb-3">
+                외부 파트너/개발자를 위한 API 키 발급, 사용량 관리, 등록/삭제, 사용 권한, 쿼터 설정을 관리합니다.<br>
+                <span style="color:#D4B97F;">※ API 키 노출에 주의하세요.</span>
+            </div>
+            <!-- API 키 목록 테이블 -->
+            <div class="resonos-card p-4">
+                <h3 class="mb-3 text-light-gold text-start">API 관리</h3>
+<form class="mb-4 d-flex gap-2 align-items-center"
+      th:action="@{/admin/AnP/createApi}" method="post" onsubmit="saveScroll()">
+    <input type="text" class="api-key-input" name="apiKey" placeholder="신규 API 키 (자동 생성 또는 수동 입력)">
+    <input type="text" class="api-key-input" name="provider" placeholder="설명 (예: 파트너사, 용도)">
+    <input type="text" class="api-key-input" name="secret" placeholder="API Secret">
+    <button class="btn btn-gold btn-sm" type="submit">등록</button>
+</form>
+
+                <table class="table table-dark table-hover align-middle resonos-table">
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>API 키</th>
+                        <th>설명</th>
+                        <th>등록일</th>
+                        <th>상태</th>
+                        <th>관리</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="api, iterStat : ${apiKeys}">
+                        <td th:text="${iterStat.count}">1</td>
+                        <td style="font-family:monospace;font-size:0.98rem;" th:text="${api.apiKey}">a1b2-c3d4-5678-efgh</td>
+                        <td th:text="${api.provider}">Spotify 연동 파트너</td>
+                        <td th:text="${#dates.format(api.createdAt, 'yyyy-MM-dd')}">2025-06-01</td>
+                        <td>
+                            <form th:action="@{|/admin/AnP/api/toggle/${api.id}|}" method="post" style="display:inline;" onsubmit="saveScroll()">
+                                <button class="btn btn-sm"
+                                        th:classappend="${api.enabled} ? 'btn-outline-gold' : 'btn-gold'"
+                                        th:text="${api.enabled} ? '비활성' : '활성'"></button>
+                            </form>
+                        </td>
+                        <td>
+                            <form th:action="@{|/admin/AnP/deleteApit/${api.id}|}" method="post" style="display:inline;" onsubmit="saveScroll()">
+                                <button class="btn btn-outline-gold btn-sm" type="submit">삭제</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(apiKeys)}">
+                        <td colspan="6" class="text-center text-secondary">등록된 API 키가 없습니다.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 플러그인 관리 테이블 -->
+            <div class="resonos-card p-4 mt-5">
+                <h3 class="mb-3 text-light-gold text-start">플러그인 관리</h3>
+                <form class="mb-4 d-flex gap-2 align-items-center"
+                      th:action="@{/admin/AnP/createPlugin}" method="post" onsubmit="saveScroll()">
+                    <input type="text" class="api-key-input" name="name" placeholder="플러그인 이름">
+                    <input type="text" class="api-key-input" name="configJson" placeholder="설정(JSON)">
+                    <button class="btn btn-gold btn-sm" type="submit">등록</button>
+                </form>
+                <table class="table table-dark table-hover align-middle resonos-table">
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>플러그인 이름</th>
+                        <th>설정</th>
+                        <th>등록일</th>
+                        <th>상태</th>
+                        <th>관리</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="plugin, iterStat : ${plugins}">
+                        <td th:text="${iterStat.count}">1</td>
+                        <td th:text="${plugin.name}">플러그인명</td>
+                        <td>
+                            <span th:text="${plugin.configJson}">{"key":"value"}</span>
+                        </td>
+                        <td th:text="${#dates.format(plugin.createdAt, 'yyyy-MM-dd')}">2025-06-01</td>
+                        <td>
+                            <form th:action="@{|/admin/AnP/plugin/toggle/${plugin.id}|}" method="post" style="display:inline;" onsubmit="saveScroll()">
+                                <button class="btn btn-sm"
+                                        th:classappend="${plugin.enabled} ? 'btn-outline-gold' : 'btn-gold'"
+                                        th:text="${plugin.enabled} ? '비활성' : '활성'"></button>
+                            </form>
+                        </td>
+                        <td>
+                            <form th:action="@{|/admin/AnP/delete/${plugin.id}|}" method="post" style="display:inline;" onsubmit="saveScroll()">
+                                <button class="btn btn-outline-gold btn-sm" type="submit">삭제</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(plugins)}">
+                        <td colspan="6" class="text-center text-secondary">등록된 플러그인이 없습니다.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <script>
+        function saveScroll() {
+            sessionStorage.setItem('scrollY', window.scrollY);
+        }
+        window.addEventListener('load', function() {
+            const scrollY = sessionStorage.getItem('scrollY');
+            if (scrollY !== null) {
+                window.scrollTo(0, parseInt(scrollY));
+                sessionStorage.removeItem('scrollY');
+            }
+        });
+    </script>
+</body>
+</th:block>
+</html>

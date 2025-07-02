@@ -4,6 +4,7 @@
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </th:block>
 
 <th:block th:fragment="user">
@@ -24,4 +25,9 @@
 <th:block th:fragment="artist">
     <th:block th:replace="~{fragments/link::base}"/>
     <link rel="stylesheet" th:href="@{/css/artist.css}">
+</th:block>
+
+<th:block th:fragment="main">
+    <th:block th:replace="~{fragments/link::base}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
 </th:block>
