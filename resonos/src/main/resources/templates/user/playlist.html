@@ -11,7 +11,7 @@
   <th:block th:replace="~{fragments/link::user}"></th:block>
 </head>
 <body>
-  <main class="con-music position-relative" layout:fragment="content">
+  <main class="con con-music position-relative" layout:fragment="content">
     <!-- 왼쪽 리모컨 -->
     <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
     <!-- 내 플레이리스트 -->
@@ -21,7 +21,7 @@
           <h2 class="text-start">내 플레이리스트</h2>
           <span class="count">92</span>
         </div>
-        <a th:href="@{/user/playlist/create}" id="addPli">추가하기<img width="25px" height="25px" th:src="@{/img/plus_circle.png}" alt="추가버튼"></a>
+        <a th:href="@{/playlists/create}" id="addPli">추가하기<img width="20px" height="20px" th:src="@{/img/plus_circle.png}" alt="추가버튼"></a>
       </div>
       <ul class="follow-list">
         <th:block th:each="i : ${#numbers.sequence(1,20)}">

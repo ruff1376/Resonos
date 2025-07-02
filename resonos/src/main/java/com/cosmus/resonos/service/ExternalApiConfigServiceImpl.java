@@ -38,4 +38,12 @@ public class ExternalApiConfigServiceImpl implements ExternalApiConfigService {
     public boolean delete(Long id) throws Exception {
         return mapper.delete(id) > 0;
     }
+    @Override
+    public void toggleEnabled(Long id) throws Exception {
+        ExternalApiConfig config = mapper.select(id);
+        if (config != null) {
+            config.setEnabled(!config.getEnabled());
+            mapper.update(config);
+        }
+    }
 }

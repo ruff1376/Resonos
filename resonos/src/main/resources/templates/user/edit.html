@@ -12,8 +12,8 @@
 </head>
 <body>
   <th:block layout:fragment="content">
-    <div class="d-flex justify-content-center">
-      <form th:action="@{/user/edit}" method="post" class="profile-edit-box" th:object="${user}">
+    <div class="con edit d-flex justify-content-center">
+      <form th:action="@{/users/edit}" method="post" class="profile-edit-box" th:object="${user}">
         <h3>프로필 편집</h3>
         <label id="profileBtn" for="profileImage">
           <img src="https://i.scdn.co/image/ab6761610000e5eba00b11c129b27a88fc72f36b" alt="프로필 이미지" class="profile-img edit">

@@ -22,17 +22,16 @@
   </select>
 
   <insert id="insert">
-    INSERT INTO external_api_config (id, provider, apiKey, secret, enabled, created_at)
-    VALUES (#{id}, #{provider}, #{apiKey}, #{secret}, #{enabled}, #{createdAt})
+    INSERT INTO external_api_config (id, provider, apiKey, secret)
+    VALUES (#{id}, #{provider}, #{apiKey}, #{secret})
   </insert>
 
   <update id="update">
     UPDATE external_api_config
     SET provider = #{provider},
+        enabled = NOT enabled,
         apiKey = #{apiKey},
-        secret = #{secret},
-        enabled = #{enabled},
-        created_at = #{createdAt}
+        secret = #{secret}
     WHERE id = #{id}
   </update>
 

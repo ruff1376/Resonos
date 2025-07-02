@@ -1,76 +1,5 @@
 <th:block th:fragment="footer">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <style>
-        body {
-            background: #181C23;
-            color: #D4B97F;
-            font-family: 'Segoe UI', 'Pretendard', sans-serif;
-        }
-        .footer-container {
-            background: #181C23;
-            width: 100%;
-            max-width: 1440px;
-            margin: 0 auto;
-        }
-        .footer-logo-section {
-            border-right: 1px solid rgba(212,185,127,0.7);
-        }
-        .footer-logo-img {
-            width: 300px;
-            height: 200px;
-            margin: 0 auto;
-        }
-        .footer-sns-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: #181C23;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .footer-link {
-            font-family: 'Inter', sans-serif;
-            font-size: 20px;
-            color: #D4B97F;
-            background: none;
-            border: none;
-            outline: none;
-            cursor: pointer;
-            font-weight: 400;
-            text-align: center;
-            width: 100%;
-            transition: font-weight 0.2s;
-        }
-        .footer-link.selected {
-            font-weight: 700;
-        }
-        .footer-info-title {
-            color: #D4B97F;
-            font-weight: 700;
-            font-size: 20px;
-            margin-bottom: 0;
-        }
-        .footer-info-desc {
-            color: #fff;
-            font-size: 16px;
-            white-space: pre-line;
-            margin-top: 0;
-        }
-        .footer-bottom {
-            border-top: 1px solid rgba(212,185,127,0.7);
-        }
-        .navbar {
-            background: #181C23 !important;
-            border-top: 1px solid #D4B97F;
-        }
-        .footer-copyright {
-            color: #B1B1B1;
-            font-size: 16px;
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
     <footer>
         <div class="footer-container">
             <div class="d-flex flex-row align-items-start gap-3" style="height:300px;">
@@ -147,6 +76,5 @@
                 }
             }
         </script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
     </footer>
 </th:block>

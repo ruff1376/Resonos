@@ -1,10 +1,10 @@
 <!-- 왼쪽 리모컨 -->
 <section class="mypage-tabs" th:fragment="mypage-tabs">
   <a href="#" class="tab">내 활동</a>
-  <a th:href="@{/user/playlist}" class="tab" th:classappend="${lastPath == 'playlist'} ? 'active' : ''">플레이리스트</a>
-  <a th:href="@{/user/liked-music}" class="tab" th:classappend="${lastPath == 'liked-music'} ? 'active' : ''">좋아요 표시한 앨범 / 트랙</a>
-  <a th:href="@{/user/follow-artist}" class="tab" th:classappend="${lastPath == 'follow-artist'} ? 'active' : ''">팔로우 아티스트</a>
-  <a th:href="@{/user/follow-user}" class="tab" th:classappend="${lastPath == 'follow-user'} ? 'active' : ''">팔로워 / 팔로우</a>
+  <a th:href="@{/playlists/123}" class="tab" th:classappend="${lastPath == 'playlist'} ? 'active' : ''">플레이리스트</a>
+  <a th:href="@{/users/123/liked-music}" class="tab" th:classappend="${lastPath == 'liked-music'} ? 'active' : ''">좋아요 표시한 앨범 / 트랙</a>
+  <a th:href="@{/artist-follows/123}" class="tab" th:classappend="${lastPath == 'artist-follows'} ? 'active' : ''">팔로우 아티스트</a>
+  <a th:href="@{/user-follows/123}" class="tab" th:classappend="${lastPath == 'user-follows'} ? 'active' : ''">팔로워 / 팔로우</a>
   <a href="#" class="tab">배지</a>
   <a href="#" class="tab">계정 / 보안</a>
   <a href="#" class="tab">알림 설정</a>

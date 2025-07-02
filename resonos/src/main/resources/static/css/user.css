@@ -1,11 +1,11 @@
 main {margin: 100px 0;}
 
-/* 가로 스크롤바 전체 */
 button {background-color: inherit; border: none;}
 
+/* 가로 스크롤바 전체 */
 ::-webkit-scrollbar {
   height: 10px;
-  width: 5px;
+  width: 10px;
 }
 
 /* 가로 스크롤바 트랙 (배경) */
@@ -19,7 +19,6 @@ button {background-color: inherit; border: none;}
   background: var(--main-color);
   border-radius: 10px;
 }
-
 
 /* 세로 스크롤바 트랙 */
 ::-webkit-scrollbar-track:vertical {
@@ -328,7 +327,7 @@ nav a:hover {
   background: linear-gradient(90deg, #D4B97F 60%, #B0B6BE 100%);
   border-radius: 8px;
 }
-.badge {
+.con .badge {
   display: inline-block;
   background: #D4B97F;
   color: #181C23;
@@ -354,19 +353,11 @@ a:hover > .mypage-card {
   transition: all 0.3s;
 }
 
-.title {display: flex; align-items: center; justify-content: space-between;}
-.title > div {display: flex; align-items: center;}
-.title h2 {margin-bottom: 0;}
+.con .title {display: flex; align-items: center; justify-content: space-between;}
+.con .title > div {display: flex; align-items: center;}
+.con .title h2 {margin-bottom: 0;}
+
 /* 회원정보수정 */
-body {
-  background: #181C23;
-  color: #D4B97F;
-  font-family: 'Segoe UI', 'Pretendard', sans-serif;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 .profile-edit-box {
   align-items: center;
   background: rgba(24,28,35,0.96);
@@ -395,7 +386,7 @@ body {
   margin-top: 20px;
   margin-bottom: 60px;
 }
-.form-control {
+.con .form-control {
   background: #222;
   color: #fffbe6;
   border: 1.5px solid #D4B97F;
@@ -404,13 +395,13 @@ body {
   margin-bottom: 16px;
   padding: 12px 16px;
 }
-.form-control:focus {
+.con .form-control:focus {
   border-color: #fffbe6;
   box-shadow: none;
   background: #222;
   color: #fffbe6;
 }
-.btn-gold {
+.con .btn-gold {
   background: #D4B97F;
   color: #181C23;
   border: none;
@@ -422,11 +413,11 @@ body {
   margin-bottom: 10px;
   transition: background 0.2s, color 0.2s;
 }
-.btn-gold:hover, .btn-gold:focus {
+.con .btn-gold:hover, .btn-gold:focus {
   background: #fffbe6;
   color: #181C23;
 }
-.btn-outline-gold {
+.con .btn-outline-gold {
   background: none;
   color: #D4B97F;
   border: 1.5px solid #D4B97F;
@@ -438,11 +429,11 @@ body {
   margin-bottom: 10px;
   transition: background 0.2s, color 0.2s;
 }
-.btn-outline-gold:hover, .btn-outline-gold:focus {
+.con .btn-outline-gold:hover, .btn-outline-gold:focus {
   background: #D4B97F;
   color: #181C23;
 }
-.profile-edit-label {
+.con .profile-edit-label {
   color: #D4B97F;
   font-weight: bold;
   text-align: left;
@@ -479,7 +470,7 @@ textarea.form-control {
   resize: none;
   height: 100px;
 }
-.bg-badge {
+.con .bg-badge {
   background-color: #222;
   width: 200px;
   height: 60px;
@@ -492,7 +483,7 @@ textarea.form-control {
   gap: 10px;
   flex: 0 0 auto;
 }
-.bg-badge p {color: #fff;}
+.con .bg-badge p {color: #fff;}
 #profileImage {display: none;}
 #profileBtn {cursor: pointer;}
 
@@ -653,4 +644,9 @@ textarea.form-control {
 .like-area .count {font-size: 1.4rem;}
 button.like {background-color: inherit; border: none;}
 .btn.btn-danger {margin-left: auto;}
-#addPli {color: var(--main-color); display: flex; align-items: center; gap: 5px;}
+#addPli {color: var(--main-color); display: flex; align-items: center; gap: 5px; transition: all 0.2s;}
+#addPli:hover {transform: scale(1.1);}
+
+/* 플레이리스트 추가 */
+.con-cre-pli .info-section {min-height: 750px;}
+.con-cre-pli .profile-edit-box {border: none; border-radius: 0;}

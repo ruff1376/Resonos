@@ -3,7 +3,7 @@
     lang="ko"
     xmlns:th="http://www.thymeleaf.org"
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{/layouts/admin_layout}"
+    layout:decorate="~{/layouts/main_layout}"
 >
 <head>
     <meta charset="UTF-8">
@@ -13,6 +13,24 @@
 </head>
 <th:block layout:fragment="content">
 <body class="bg-dark text-light">
+
+    <!-- 관리자 헤더 -->
+    <nav class="navbar navbar-expand-lg border-bottom">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+          <img th:src="@{/img/resonosLogo.png}" alt="RESONOS Logo" class="rounded" >
+          <span class="fw-bold text-main">RESONOS Admin</span> <!-- text-main: var(--main-color) -->
+        </a>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link nav-text" href="#">대시보드</a></li>
+          <li class="nav-item"><a class="nav-link nav-text" href="#">회원관리</a></li>
+          <li class="nav-item"><a class="nav-link nav-text" href="#">게시글/신고</a></li>
+          <li class="nav-item"><a class="nav-link nav-text" href="#">음악데이터</a></li>
+          <li class="nav-item"><a class="nav-link nav-text" href="#">공연/이벤트</a></li>
+          <li class="nav-item"><a class="nav-link nav-text" href="#">설정</a></li>
+        </ul>
+      </div>
+    </nav>
 
     <!-- 관리자 대시보드 -->
     <main class="py-5 bg-resonos-dark">
@@ -46,6 +64,7 @@
             </div>
           </div>
         </div>
+
 
 
         <!-- 관리 메뉴 요약 -->
@@ -92,7 +111,7 @@
           <div class="col-md-3">
             <div class="resonos-card">
               <div class="card-sm-title card-title">오픈 API 관리</div>
-              <a th:href="@{/admin/AnP}" class="btn btn-sm mt-2 btn-outline-gold">API 키/쿼터</a>
+              <a href="#" class="btn btn-sm mt-2 btn-outline-gold">API 키/쿼터</a>
             </div>
           </div>
           <div class="col-md-3">
