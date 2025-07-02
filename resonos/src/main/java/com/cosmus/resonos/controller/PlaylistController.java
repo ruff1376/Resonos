@@ -3,10 +3,17 @@ package com.cosmus.resonos.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.service.PlaylistService;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -27,9 +34,9 @@ public class PlaylistController {
      * @param request
      * @return
      */
-    @GetMapping("/{id}")
-        public String playlist(Model model, @PathVariable("id") long id) {
-
+    @GetMapping("")
+    // TODO: @AuthenticationPrincipal 로 출력할 리스트 나누기
+    public String playlist(Model model) {
         model.addAttribute("lastPath", "playlist");
         return "user/playlist";
     }
@@ -43,7 +50,9 @@ public class PlaylistController {
     @GetMapping("/create")
     public String playlistCreate(Model model) {
 
+        model.addAttribute("playlistObj", Playlist.builder().isPublic(true).build());
         model.addAttribute("lastPath", "playlist");
+
         return "user/create_playlist";
     }
 
