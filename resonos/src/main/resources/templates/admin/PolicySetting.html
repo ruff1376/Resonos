@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>어드민 메인</title>
+    <th:block th:replace="~{fragments/link::admin}"></th:block>
+</head>
+<th:block layout:fragment="content">
+<body class="bg-dark text-light">
+
+    <!-- 관리자 헤더 -->
+    <nav class="navbar navbar-expand-lg border-bottom">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+          <img th:src="@{/img/resonosLogo.png}" alt="RESONOS Logo" class="rounded" >
+          <span class="fw-bold text-main">RESONOS Admin</span>
+        </a>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link nav-text" href="#">대시보드</a></li>
+          <li class="nav-item"><a class="nav-link nav-text" href="#">회원관리</a></li>
+          <li class="nav-item"><a class="nav-link nav-text" href="#">게시글/신고</a></li>
+          <li class="nav-item"><a class="nav-link nav-text" href="#">음악데이터</a></li>
+          <li class="nav-item"><a class="nav-link nav-text" href="#">공연/이벤트</a></li>
+          <li class="nav-item"><a class="nav-link nav-text active" href="#">정책/환경설정</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- 관리자 대시보드 -->
+    <main class="py-5 bg-resonos-dark">
+      <div class="container" style="max-width: 1100px;">
+        <h1 class="mb-4 text-light-gold text-start">정책/환경설정</h1>
+        <div class="row g-4">
+          <div class="col-12">
+            <div class="resonos-card p-4 text-start">
+
+              <!-- 정책 추가 버튼 및 폼 (collapse) -->
+              <div class="mb-3 text-end">
+                <a class="btn btn-gold btn-sm"
+                   data-bs-toggle="collapse"
+                   href="#policyCreateForm"
+                   role="button"
+                   aria-expanded="false"
+                   aria-controls="policyCreateForm">
+                  + 정책 추가
+                </a>
+              </div>
+              <div class="collapse mb-4" id="policyCreateForm">
+                <form th:action="@{/admin/PolicySetting/create}" method="post" class="border rounded p-3 bg-dark">
+                    <div class="mb-3">
+                        <label class="form-label">정책명</label>
+                        <input type="text" class="form-control" name="type" th:value="${policy?.type}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">버전</label>
+                        <input type="text" class="form-control" name="version" th:value="${policy?.version}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">내용</label>
+                        <textarea class="form-control" name="content" rows="6" th:text="${policy?.content}"></textarea>
+                    </div>
+                    <div class="text-end">
+                        <button class="btn btn-gold" type="submit">저장</button>
+                        <a class="btn btn-outline-secondary ms-2" data-bs-toggle="collapse" href="#policyCreateForm">취소</a>
+                    </div>
+                </form>
+              </div>
+
+              <!-- 정책 목록 (동적 출력) -->
+              <div th:each="policy, iterStat : ${policies}" class="policy-list mb-4">
+                <h5 th:text="${policy.type}" class="text-start">정책명</h5>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="text-secondary" th:text="'v' + ${policy.version} + ' / ' + ${#dates.format(policy.updatedAt, 'yyyy-MM-dd HH:mm')}"></span>
+                  <button class="btn btn-outline-gold btn-sm mt-2"
+                          data-bs-toggle="collapse"
+                          th:attr="data-bs-target='#editPolicy' + ${policy.id}">
+                    수정
+                  </button>
+                </div>
+                <pre th:text="${policy.content}" class="text-start">정책 내용</pre>
+                <div class="collapse" th:id="'editPolicy' + ${policy.id}">
+                  <form th:action="@{|/admin/PolicySetting/update/${policy.id}|}" method="post" class="policy-edit-form mt-2">
+                    <div class="mb-2">
+                      <label class="form-label">정책명</label>
+                      <input type="text" class="form-control" name="type" th:value="${policy.type}" required>
+                    </div>
+                    <div class="mb-2">
+                      <label class="form-label">버전</label>
+                      <input type="text" class="form-control" name="version" th:value="${policy.version}">
+                    </div>
+                    <div class="mb-2">
+                      <label class="form-label">내용</label>
+                      <textarea class="form-control" name="content" rows="4" th:text="${policy.content}"></textarea>
+                    </div>
+                    <button class="btn btn-gold btn-sm mt-2" type="submit">저장</button>
+                    <button class="btn btn-outline-danger btn-sm mt-2 ms-2"
+                            th:formaction="@{|/admin/PolicySetting/delete/${policy.id}|}" formmethod="post"
+                            onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+                  </form>
+                </div>
+              </div>
+
+              <!-- 환경설정 (별도 구현 필요) -->
+              <form class="mt-4 text-start">
+                <div class="setting-label fw-bold mb-2">서비스 환경설정</div>
+                <div class="setting-row d-flex align-items-center mb-2">
+                  <span class="me-3">신규 가입 허용</span>
+                  <input type="checkbox" checked>
+                </div>
+                <div class="setting-row d-flex align-items-center mb-2">
+                  <span class="me-3">커뮤니티 게시판 활성화</span>
+                  <input type="checkbox" checked>
+                </div>
+                <div class="setting-row d-flex align-items-center mb-2">
+                  <span class="me-3">음악 데이터 외부 연동</span>
+                  <input type="checkbox">
+                </div>
+                <div class="setting-row d-flex align-items-center mb-2">
+                  <span class="me-3">기본 테마</span>
+                  <select class="form-select w-auto ms-2">
+                    <option selected>다크</option>
+                    <option>라이트</option>
+                  </select>
+                </div>
+                <div class="setting-row d-flex align-items-center mb-2">
+                  <span class="me-3">공지사항</span>
+                  <input type="text" class="form-control w-50 ms-2" value="2025년 7월 업데이트 안내">
+                </div>
+                <button class="btn btn-gold mt-3" type="submit">저장</button>
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</th:block>
+</html>

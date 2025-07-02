@@ -45,4 +45,10 @@
   <select id="findByCommunity" resultMap="BoardPostResultMap">
     SELECT * FROM board_post WHERE community_id = #{communityId} ORDER BY created_at DESC
   </select>
+
+  <select id="countAll" resultType="int">
+  SELECT COUNT(*) FROM report
+  </select>
+  
+
 </mapper>

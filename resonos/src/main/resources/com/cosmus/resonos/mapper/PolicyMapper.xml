@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.PolicyMapper">
+
+  <resultMap id="PolicyResultMap" type="com.cosmus.resonos.domain.Policy">
+    <id property="id" column="id"/>
+    <result property="type" column="type"/>
+    <result property="content" column="content"/>
+    <result property="version" column="version"/>
+    <result property="updatedAt" column="updated_at"/>
+  </resultMap>
+
+  <select id="list" resultMap="PolicyResultMap">
+    SELECT * FROM policy ORDER BY updated_at DESC
+  </select>
+
+  <select id="select" resultMap="PolicyResultMap">
+    SELECT * FROM policy WHERE id = #{id}
+  </select>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO policy (type, content, version)
+    VALUES (#{type}, #{content}, #{version})
+  </insert>
+
+  <update id="update">
+    UPDATE policy
+    SET type = #{type},
+        content = #{content},
+        version = #{version}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM policy WHERE id = #{id}
+  </delete>
+
+</mapper>

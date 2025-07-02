@@ -16,4 +16,5 @@ public interface PluginMapper {
     public int update(Plugin plugin) throws Exception;
     // 삭제
     public int delete(Long id) throws Exception;
+
 }

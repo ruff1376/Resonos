@@ -21,16 +21,15 @@
   </select>
 
   <insert id="insert">
-    INSERT INTO plugin (id, name, enabled, config_json, created_at)
-    VALUES (#{id}, #{name}, #{enabled}, #{configJson}, #{createdAt})
+    INSERT INTO plugin (id, name, config_json)
+    VALUES (#{id}, #{name}, #{configJson})
   </insert>
 
   <update id="update">
     UPDATE plugin
     SET name = #{name},
-        enabled = #{enabled},
-        config_json = #{configJson},
-        created_at = #{createdAt}
+        enabled = NOT enabled,
+        config_json = #{configJson}
     WHERE id = #{id}
   </update>
 

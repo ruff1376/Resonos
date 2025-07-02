@@ -16,4 +16,6 @@ public interface BoardPostService {
     public boolean delete(Long id) throws Exception;
     // 커뮤니티
     public List<BoardPost> findByCommunity(Long communityId) throws Exception;
+    // 어드민 통계용
+    public int countAll() throws Exception;
 }

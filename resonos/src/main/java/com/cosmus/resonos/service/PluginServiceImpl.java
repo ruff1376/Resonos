@@ -36,4 +36,13 @@ public class PluginServiceImpl implements PluginService {
     public boolean delete(Long id) throws Exception {
         return pluginMapper.delete(id) > 0;
     }
+    @Override
+    public void toggleEnabled(Long id) throws Exception {
+        Plugin plugin = pluginMapper.select(id);
+        if (plugin != null) {
+            plugin.setEnabled(!plugin.getEnabled());
+            pluginMapper.update(plugin);
+        }
+    }
+
 }

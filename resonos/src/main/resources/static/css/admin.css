@@ -62,3 +62,13 @@
 .text-light-gold {
   color: #fffbe6 !important;
 }
+.api-key-input {
+  background: var(--background-color);
+  color: #fffbe6;
+  border: 1.5px solid var(--main-color);
+  border-radius: 12px;
+  padding: 10px 16px;
+  margin-bottom: 8px;
+  width: 320px;
+  display: inline-block;
+}
