@@ -48,7 +48,7 @@ public class UserController {
   }
 
   /**
-   * 수정 페이지 요청
+   * 회웑 정보 수정 페이지 요청
    * @param model
    * @return
    */
@@ -61,7 +61,7 @@ public class UserController {
   }
 
   /**
-   * 수정 요청
+   * 회원 정보 수정 요청
    * @param user
    * @return
    */
@@ -76,16 +76,70 @@ public class UserController {
     return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
   }
 
-  @GetMapping("/userFollow")
-  public String userFollow(Model model, HttpServletRequest request) {
-    String uri = request.getRequestURI();  // 예: /user/userFollow
+  /**
+   * 유저 팔로우 페이지 요청
+   * @param model
+   * @param request
+   * @return
+   */
+  @GetMapping("/follow-user")
+  public String followUsers(Model model, HttpServletRequest request) {
+    String uri = request.getRequestURI();
     String[] parts = uri.split("/");
-    String lastPath = parts[parts.length - 1];  // userFollow
+    String lastPath = parts[parts.length - 1];
     log.info("lastPath : {}", lastPath);
 
     model.addAttribute("lastPath", lastPath);
 
     return "user/follow_user";
   }
+
+  @GetMapping("/playlist")
+  public String playlist(Model model, HttpServletRequest request) {
+    String uri = request.getRequestURI();
+    String[] parts = uri.split("/");
+    String lastPath = parts[parts.length - 1];
+    log.info("lastPath : {}", lastPath);
+
+    model.addAttribute("lastPath", lastPath);
+    return "user/playlist";
+  }
+
+
+  /**
+   * 아티스트 팔로우 페이지 요청
+   * @param model
+   * @param request
+   * @return
+   */
+  @GetMapping("/follow-artist")
+  public String followArtists(Model model, HttpServletRequest request) {
+    String uri = request.getRequestURI();
+    String[] parts = uri.split("/");
+    String lastPath = parts[parts.length - 1];
+    log.info("lastPath : {}", lastPath);
+
+    model.addAttribute("lastPath", lastPath);
+    return "user/follow_artist";
+  }
+
+  /**
+   * 좋아요 한 앨범/트랙 페이지 요청
+   * @param model
+   * @param request
+   * @return
+   */
+  @GetMapping("/liked-music")
+  public String likedMusic(Model model, HttpServletRequest request) {
+    String uri = request.getRequestURI();
+    String[] parts = uri.split("/");
+    String lastPath = parts[parts.length - 1];
+    log.info("lastPath : {}", lastPath);
+
+    model.addAttribute("lastPath", lastPath);
+    return "user/liked_music";
+  }
+
+
 
 }
