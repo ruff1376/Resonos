@@ -136,7 +136,6 @@ img {
 .concert-schedule {
     flex:0 0 250px;
     justify-content: start;
-    max-width: 350px !important;
 }
 .mood-card {
     max-width: 1350px;
