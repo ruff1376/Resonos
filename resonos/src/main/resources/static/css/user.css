@@ -1,6 +1,7 @@
 /* 가로 스크롤바 전체 */
 ::-webkit-scrollbar {
   height: 10px;
+  width: 5px;
 }
 
 /* 가로 스크롤바 트랙 (배경) */
@@ -11,6 +12,19 @@
 
 /* 가로 스크롤바 핸들 */
 ::-webkit-scrollbar-thumb:horizontal {
+  background: var(--main-color);
+  border-radius: 10px;
+}
+
+
+/* 세로 스크롤바 트랙 */
+::-webkit-scrollbar-track:vertical {
+  background: #222;
+  border-radius: 5px;
+}
+
+/* 세로 스크롤바 핸들 */
+::-webkit-scrollbar-thumb:vertical {
   background: var(--main-color);
   border-radius: 10px;
 }
@@ -125,11 +139,6 @@ nav a.active,
 nav a:hover {
   color: #fffbe6;
 }
-main {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 36px 0 60px 0;
-}
 .profile-section {
   display: flex;
   align-items: center;
@@ -218,7 +227,7 @@ main {
 }
 .mypage-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 28px;
 }
 .mypage-card {
@@ -478,3 +487,165 @@ textarea.form-control {
 .bg-badge p {color: #fff;}
 #profileImage {display: none;}
 #profileBtn {cursor: pointer;}
+
+
+/* 유저간 팔로우 */
+.logo {
+  display: flex;
+  align-items: center;
+}
+.logo-img {
+  height: 38px;
+  margin-right: 13px;
+  border-radius: 6px;
+  background: #181C23;
+}
+.logo-text {
+  font-size: 1.7rem;
+  font-weight: bold;
+  color: #D4B97F;
+  letter-spacing: 2px;
+}
+nav a {
+  color: #D4B97F;
+  text-decoration: none;
+  margin: 0 16px;
+  font-size: 1.05rem;
+  transition: color 0.2s;
+}
+nav a.active,
+nav a:hover {
+  color: #fffbe6;
+}
+.mypage-tabs {
+  padding: 10px 0;
+  width: 10%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  border: 1.5px solid #D4B97F;
+  border-radius: 14px;
+  position: absolute;
+  top: 20%;
+  left: 70px;
+  gap: 18px;
+}
+.mypage-tabs .tab {
+  color: #D4B97F;
+  background: none;
+  border: none;
+  font-size: 1.11rem;
+  font-weight: bold;
+  padding: 8px 22px;
+  border-radius: 30px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.mypage-tabs .tab.active,
+.mypage-tabs .tab:hover {
+  background: #D4B97F;
+  color: #fff;
+}
+.info-section {
+  align-items: center;
+  background: rgba(24, 28, 35, 0.96);
+  border: 1.5px solid #D4B97F;
+  border-radius: 24px;
+  box-shadow: 0 2px 16px rgba(24, 28, 35, 0.13);
+  padding: 0 30px 20px;
+  width: 100%;
+  max-width: 1000px;
+  text-align: center;
+  margin-left: 20%;
+  max-height: 380px;
+  overflow-y: auto;
+  position: relative;
+}
+.info-section h2 {
+  color: #D4B97F;
+  font-size: 1.6rem;
+  font-weight: bold;
+  padding: 15px 0;
+  position: sticky;
+  top: 0;
+  background-color: inherit;
+}
+.follow-count {
+  color: #B0B6BE;
+  font-size: 1.4rem;
+  margin-left: 8px;
+}
+.follow-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.follow-item {
+  display: flex;
+  align-items: center;
+  background: #222;
+  border: 1.5px solid #D4B97F;
+  border-radius: 14px;
+  padding: 14px 22px;
+  color: #fffbe6;
+  gap: 18px;
+  transition: border-color 0.18s, box-shadow 0.18s;
+  cursor: pointer;
+}
+.follow-item + .follow-item {
+  margin-top: 14px;
+}
+.follow-item:hover {
+  border-color: #fffbe6;
+  box-shadow: 0 2px 10px rgba(212,185,127,0.10);
+}
+.follow-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid #D4B97F;
+  object-fit: cover;
+  background: #181C23;
+}
+.follow-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 110px;
+}
+.follow-nick {
+  font-weight: bold;
+  color: #D4B97F;
+  font-size: 1.08rem;
+}
+.follow-badge {
+  background: #D4B97F;
+  color: #181C23;
+  border-radius: 10px;
+  font-size: 0.93rem;
+  font-weight: bold;
+  padding: 3px 10px;
+  margin-top: 4px;
+}
+.btn-outline-gold, .btn-outline-gold.btn-sm {
+  background: none;
+  color: #D4B97F;
+  border: 1.5px solid #D4B97F;
+  border-radius: 30px;
+  font-weight: bold;
+  font-size: 0.97rem;
+  padding: 7px 18px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-outline-gold:hover {
+  background: #D4B97F;
+  color: #181C23;
+}
+.detail-box {
+
+}
+.con-follow .info-section + .info-section {margin-top: 50px;}
+.con-follow .bio {flex: 1;}
+.con-follow .btn-outline-gold {width: 15%;}
