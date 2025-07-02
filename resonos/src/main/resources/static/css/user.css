@@ -1,3 +1,20 @@
+/* 가로 스크롤바 전체 */
+::-webkit-scrollbar {
+  height: 10px;
+}
+
+/* 가로 스크롤바 트랙 (배경) */
+::-webkit-scrollbar-track:horizontal {
+  background: #222;
+  border-radius: 50%;
+}
+
+/* 가로 스크롤바 핸들 */
+::-webkit-scrollbar-thumb:horizontal {
+  background: var(--main-color);
+  border-radius: 10px;
+}
+
 /* 로그인 페이지 */
 p {margin-bottom: 0;}
 body {
@@ -459,3 +476,5 @@ textarea.form-control {
   flex: 0 0 auto;
 }
 .bg-badge p {color: #fff;}
+#profileImage {display: none;}
+#profileBtn {cursor: pointer;}
