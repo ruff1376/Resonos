@@ -1,6 +1,5 @@
 package com.cosmus.resonos.controller;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,28 +18,17 @@ public class ArtistFollowController {
     @Autowired
     private ArtistFollowService artistFollowService;
 
-    // 목록
-    @GetMapping
-    public String list(Model model) throws Exception {
-        log.info("[ArtistFollowController] 아티스트 팔로우 목록 요청");
-        List<ArtistFollow> follows = artistFollowService.list();
-        log.info("[ArtistFollowController] 팔로우 수: {}", follows.size());
-        model.addAttribute("follows", follows);
-        return "artistfollow/list"; // artistfollow/list.html
-    }
-
-    // 상세
+    /**
+     * 아티스트 팔로우 페이지 요청
+     * @param model
+     * @param request
+     * @return
+     */
     @GetMapping("/{id}")
-    public String detail(@PathVariable String id, Model model) throws Exception {
-        log.info("[ArtistFollowController] 아티스트 팔로우 상세 요청 - id: {}", id);
-        ArtistFollow follow = artistFollowService.select(id);
-        if (follow == null) {
-            log.warn("[ArtistFollowController] 팔로우 없음 - id: {}", id);
-            return "redirect:/artist-follows?error=notfound";
-        }
-        log.info("[ArtistFollowController] 팔로우 상세: {}", follow);
-        model.addAttribute("follow", follow);
-        return "artistfollow/detail"; // artistfollow/detail.html
+    public String followArtists(Model model, @PathVariable("id") long id) {
+
+        model.addAttribute("lastPath", "artist-follows");
+        return "user/follow_artist";
     }
 
     // 등록 폼

@@ -11,21 +11,21 @@
   <th:block th:replace="~{fragments/link::user}"></th:block>
 </head>
 <body>
-  <main layout:fragment="content">
+  <main class="con con-mypage" layout:fragment="content">
     <section class="profile-section">
       <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="프로필 이미지" class="profile-img">
       <div class="profile-info">
         <h2>별빛소년 <span class="badge">JAZZ LOVER</span></h2>
         <p>음악과 우주, 그리고 커뮤니티를 사랑하는 평론가입니다.</p>
         <div class="profile-actions">
-          <a th:href="@{/user/edit}" class="mybtn-gold">프로필 편집</a>
+          <a th:href="@{/users/edit}" class="mybtn-gold">프로필 편집</a>
           <button class="mybtn-outline">로그아웃</button>
         </div>
       </div>
       <div class="profile-meta">
-        <div><a href=""><b>팔로워</b><br>128</a></div>
-        <div><a href=""><b>팔로우</b><br>92</a></div>
-        <div><a href=""><b>뱃지</b><br>3</a></div>
+        <div><a th:href="@{/users/follow-user}"><b>팔로워</b><br>128</a></div>
+        <div><a th:href="@{/users/follow-user}"><b>팔로우</b><br>92</a></div>
+        <div><a><b>뱃지</b><br>3</a></div>
       </div>
     </section>
     <div class="my-middle">

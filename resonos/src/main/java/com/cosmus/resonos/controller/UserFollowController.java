@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.cosmus.resonos.domain.UserFollow;
 import com.cosmus.resonos.service.UserFollowService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -19,6 +20,23 @@ public class UserFollowController {
     @Autowired
     private UserFollowService userFollowService;
 
+    /**
+     * 유저 팔로우 페이지 요청
+     * @param model
+     * @param request
+     * @return
+     */
+    @GetMapping("/{id}")
+    public String followUsers(Model model, @PathVariable("id") long id) {
+
+        model.addAttribute("lastPath", "user-follows");
+
+        return "user/follow_user";
+    }
+
+
+
+
     // 목록
     @GetMapping
     public String list(Model model) throws Exception {
@@ -27,20 +45,6 @@ public class UserFollowController {
         log.info("[UserFollowController] 팔로우 수: {}", follows.size());
         model.addAttribute("follows", follows);
         return "userfollow/list"; // userfollow/list.html
-    }
-
-    // 상세
-    @GetMapping("/{id}")
-    public String detail(@PathVariable Long id, Model model) throws Exception {
-        log.info("[UserFollowController] 팔로우 상세 요청 - id: {}", id);
-        UserFollow follow = userFollowService.select(id);
-        if (follow == null) {
-            log.warn("[UserFollowController] 팔로우 없음 - id: {}", id);
-            return "redirect:/user-follows?error=notfound";
-        }
-        log.info("[UserFollowController] 팔로우 상세: {}", follow);
-        model.addAttribute("follow", follow);
-        return "userfollow/detail"; // userfollow/detail.html
     }
 
     // 등록 폼

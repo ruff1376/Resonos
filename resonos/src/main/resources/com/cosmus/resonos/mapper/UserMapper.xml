@@ -4,7 +4,7 @@
 
 <mapper namespace="com.cosmus.resonos.mapper.UserMapper">
 
-  <resultMap id="UserResultMap" type="com.cosmus.resonos.domain.User">
+  <resultMap id="UserResultMap" type="com.cosmus.resonos.domain.Users">
     <id property="id" column="id"/>
     <result property="username" column="username"/>
     <result property="email" column="email"/>
@@ -28,7 +28,7 @@
   </select>
 
   <insert id="insert">
-    INSERT INTO user 
+    INSERT INTO user
       (id, username, email, password, nickname, profile_image, bio, is_pro, enabled, provider, provider_id, created_at)
     VALUES
       (#{id}, #{username}, #{email}, #{password}, #{nickname}, #{profileImage}, #{bio}, #{isPro}, #{enabled}, #{provider}, #{providerId}, #{createdAt})

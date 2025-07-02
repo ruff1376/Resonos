@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 -- Active: 1751337677491@@127.0.0.1@3306@resonos
+=======
+-- Active: 1745889699154@@127.0.0.1@3306@aloha
+>>>>>>> main
 
 -- 💥 기존 테이블 모두 삭제
 DROP TABLE IF EXISTS
@@ -176,7 +180,7 @@ CREATE TABLE `playlist` (
 	`thumbnail_url`	VARCHAR(200)	NULL,
 	`is_public`	BOOLEAN	NOT NULL,
 	`created_at`	TIMESTAMP	NOT NULL	DEFAULT CURRENT_TIMESTAMP,
-	`track_id`	VARCHAR(200)	NOT NULL
+	`track_id`	VARCHAR(200) NULL
 );
 
 CREATE TABLE `album` (

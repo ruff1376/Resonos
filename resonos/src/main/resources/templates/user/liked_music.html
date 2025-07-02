@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}"
+>
+<head>
+  <meta charset="UTF-8" />
+  <title>좋아요 앨범/트랙</title>
+  <th:block th:replace="~{fragments/link::user}"></th:block>
+</head>
+<body>
+  <main class="con con-music my-5 position-relative" layout:fragment="content">
+    <!-- 왼쪽 리모컨 -->
+    <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
+    <!-- 앨범 -->
+    <section class="info-section">
+      <div class="title">
+        <div>
+          <h2 class="text-start">좋아요 한 앨범</h2>
+          <span class="count">92</span>
+        </div>
+      </div>
+      <ul class="follow-list">
+        <th:block th:each="i : ${#numbers.sequence(1,20)}">
+          <li class="follow-item">
+            <input type="hidden" value="1">
+            <img src="https://i.scdn.co/image/ab67616d0000b2738ad8f5243d6534e03b656c8b" alt="GalaxiNote" class="follow-img" />
+            <div class="follow-info">
+              <span class="name-album">앨범 명</span>
+              <span class="name-artist">아티스트 명</span>
+            </div>
+            <span class="like">♥</span>
+          </li>
+        </th:block>
+      </ul>
+    </section>
+    <!-- 트랙 -->
+    <section class="info-section">
+      <div class="title">
+        <div>
+          <h2 class="text-start">좋아요 한 트랙</h2>
+          <span class="count">92</span>
+        </div>
+      </div>
+      <ul class="follow-list">
+        <th:block th:each="i : ${#numbers.sequence(1,20)}">
+          <li class="follow-item">
+            <img src="https://i.scdn.co/image/ab67616d0000b2738ad8f5243d6534e03b656c8b" alt="GalaxiNote" class="follow-img" />
+            <div class="follow-info">
+              <span class="name-album">트랙 명</span>
+              <span class="name-artist">아티스트 명</span>
+            </div>
+            <span class="like">♥</span>
+          </li>
+        </th:block>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

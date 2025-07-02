@@ -1,43 +1,50 @@
 package com.cosmus.resonos.controller;
 
-import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.service.PlaylistService;
+import lombok.extern.slf4j.Slf4j;
 
-@RestController
+@Slf4j
 @RequestMapping("/playlists")
+@Controller
 public class PlaylistController {
 
     private final PlaylistService playlistService;
+
 
     public PlaylistController(PlaylistService playlistService) {
         this.playlistService = playlistService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Playlist>> getAllPlaylists() {
-        try {
-            List<Playlist> playlists = playlistService.list();
-            return ResponseEntity.ok(playlists);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).build();
-        }
+    /**
+     * 플레이리스트 페이지 요청
+     * @param model
+     * @param request
+     * @return
+     */
+    @GetMapping("/{id}")
+        public String playlist(Model model, @PathVariable("id") long id) {
+
+        model.addAttribute("lastPath", "playlist");
+        return "user/playlist";
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Playlist> getPlaylist(@PathVariable Long id) {
-        try {
-            Playlist playlist = playlistService.select(id);
-            if (playlist == null) {
-                return ResponseEntity.notFound().build();
-            }
-            return ResponseEntity.ok(playlist);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).build();
-        }
+    /**
+     * 플레이리스트 추가 페이지 요청
+     * @param model
+     * @param request
+     * @return
+     */
+    @GetMapping("/create")
+    public String playlistCreate(Model model) {
+
+        model.addAttribute("lastPath", "playlist");
+        return "user/create_playlist";
     }
 
     @PostMapping
