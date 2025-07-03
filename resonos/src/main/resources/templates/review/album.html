@@ -5,8 +5,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>아티스트 리뷰</title>
+    <title>앨범 리뷰</title>
+    <link rel="stylesheet" th:href="@{/css/artist.css}">
     <th:block th:replace="~{fragments/link::artist}"></th:block>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -39,7 +41,7 @@
                                 <img src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/38/cc5a526bf63046da3ed3123f55f5c1ca_res.jpeg" alt="">
                             </div>
                             <div class="album-info">
-                                <p id="subtitle">모르시나요</p>
+                                <p id="subtitle">모르시나요dd</p>
                                 <p>16 Nov 2016 </p>
                                 <p>11 tracks</p>
                             </div>
@@ -49,7 +51,7 @@
                                 <img src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/38/cc5a526bf63046da3ed3123f55f5c1ca_res.jpeg" alt="">
                             </div>
                             <div class="album-info">
-                                <p id="subtitle">모르시나요</p>
+                                <p id="subtitle">모르시나요ddddd</p>
                                 <p>16 Nov 2016 </p>
                                 <p>11 tracks</p>
                             </div>
@@ -132,7 +134,6 @@
             <!-- 분위기 끝 -->
         </div>
     </th:block>
-    <th:block th:replace="~{fragments/script::kgw}"></th:block>
 </body>
 
 </html>

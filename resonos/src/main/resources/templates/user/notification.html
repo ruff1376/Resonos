@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}"
+>
+<head>
+  <meta charset="UTF-8" />
+  <title>팔로우 아티스트</title>
+  <th:block th:replace="~{fragments/link::user}"></th:block>
+</head>
+<body>
+  <main class="con con-noti my-5 position-relative" layout:fragment="content">
+    <!-- 왼쪽 리모컨 -->
+    <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
+    <!-- 팔로워 -->
+    <section class="info-wrapper">
+      <div class="info-section">
+        <div class="title">
+          <div>
+            <h2 class="text-start">최근 알림</h2>
+          </div>
+          <div>
+            <button onclick="readAll()">전체 읽음</button>
+            <button onclick="deleteAll()">전체 삭제</button>
+          </div>
+        </div>
+        <ul class="follow-list">
+          <th:block th:each="i : ${#numbers.sequence(1,20)}">
+              <label th:for="is-read + ${i}">
+                <li class="list-item">
+                  <input class="is-read" th:id="'is-read' + ${i}" type="checkbox" th:value="'알람' + ${i} + '번'" th:checked="${i < 11}">
+                  <span class="red-circle">●</span>
+                  <p>OOO님이 회원님의 리뷰/플레이리스트를 좋아합니다.</p>
+                  <p class="date">2025.06.12 13:11:00</p>
+                </li>
+              </label>
+          </th:block>
+        </ul>
+      </div>
+    </section>
+  </main>
+  <th:block layout:fragment="pageScript">
+    <script>
+      const checks = document.querySelectorAll('.is-read')
+      checks.forEach((e) => {
+        e.addEventListener('change', (e) => {
+          // TODO: 읽음 처리 되고 DB 에도 저장
+          alert(e.target.value)
+        })
+      })
+
+      function readAll() {
+        checks.forEach((e) => {
+          // TODO: 전체 읽음 처리 되고 DB 에도 저장
+          e.checked = false
+        })
+      }
+
+      function deleteAll() {
+        const check = confirm("알림을 전부 삭제하시겠습니까?")
+        if(!check) return
+        // TODO: 전체 삭제 처리 되고 DB 에도 저장
+        document.querySelector('.follow-list').innerHTML = ''
+      }
+    </script>
+  </th:block>
+</body>
+</html>

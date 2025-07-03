@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}"
+>
+<head>
+  <meta charset="UTF-8" />
+  <title>플레이리스트 상세</title>
+  <th:block th:replace="~{fragments/link::user}"></th:block>
+</head>
+<body>
+  <main class="con con-pli-detail my-5 position-relative" layout:fragment="content">
+    <!-- 왼쪽 리모컨 -->
+    <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
+    <!-- 팔로워 -->
+    <section class="info-wrapper">
+      <div class="info-section">
+        <div class="title">
+          <div>
+            <h2 class="text-start">플레이리스트 상세123</h2>
+          </div>
+        </div>
+        <form th:action="@{/}" method="post" class="profile-edit-box" th:object="${playlistObj}">
+          <div class="d-flex align-items-center column-gap-5">
+            <label id="profileBtn" for="thumbnailUrl">
+              <img th:src="@{/img/resonosLogo.png}" alt="프로필 이미지" class="profile-img edit">
+              <input type="file" th:field="*{thumbnailUrl}">
+            </label>
+            <div class="input-area">
+              <label class="profile-edit-label" for="nickname">플레이리스트 제목</label>
+              <input type="text" class="form-control" th:field="*{title}" >
+              <label class="profile-edit-label" for="bio">플레이리스트 설명</label>
+              <textarea class="form-control" th:field="*{description}" rows="2" placeholder="자기소개를 입력하세요.">음악과 우주, 그리고 커뮤니티를 사랑합니다.</textarea>
+              <input type="radio" id="true" th:field="*{isPublic}" value="true">
+              <label class="profile-edit-label" for="true">공개</label>
+              <input type="radio" id="false" th:field="*{isPublic}" value="false">
+              <label class="profile-edit-label" for="false">비공개</label>
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="info-section">
+              <div class="title">
+                <div>
+                  <h2 class="text-start">좋아요 한 트랙</h2>
+                  <span class="count">92</span>
+                </div>
+              </div>
+              <ul class="follow-list">
+                <th:block th:each="i : ${#numbers.sequence(1,20)}">
+                  <li class="list-item">
+                    <img src="https://i.scdn.co/image/ab67616d0000b2738ad8f5243d6534e03b656c8b" alt="GalaxiNote" class="follow-img" />
+                    <div class="info">
+                      <span class="name-album">트랙 명</span>
+                      <span class="name-artist">아티스트 명</span>
+                    </div>
+                    <span class="like">♥</span>
+                  </li>
+                </th:block>
+              </ul>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <th:block layout:fragment="pageScript">
+    <script>
+      const checks = document.querySelectorAll('.is-read')
+      checks.forEach((e) => {
+        e.addEventListener('change', (e) => {
+          // TODO: 읽음 처리 되고 DB 에도 저장
+          alert(e.target.value)
+        })
+      })
+
+      function readAll() {
+        checks.forEach((e) => {
+          // TODO: 전체 읽음 처리 되고 DB 에도 저장
+          e.checked = false
+        })
+      }
+
+      function deleteAll() {
+        const check = confirm("알림을 전부 삭제하시겠습니까?")
+        if(!check) return
+        // TODO: 전체 삭제 처리 되고 DB 에도 저장
+        document.querySelector('.follow-list').innerHTML = ''
+      }
+    </script>
+  </th:block>
+</body>
+</html>

@@ -15,51 +15,34 @@
     <!-- 왼쪽 리모컨 -->
     <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
     <!-- 내 플레이리스트 -->
-    <section class="info-section">
-      <form th:action="@{/users/playlist/create}" method="post" class="profile-edit-box" th:object="${user}">
-        <label id="profileBtn" for="profileImage">
-          <img src="https://i.scdn.co/image/ab6761610000e5eba00b11c129b27a88fc72f36b" alt="프로필 이미지" class="profile-img edit">
-          <input type="file">
-        </label>
-        <p class="my-5">
-          <span class="badge">
-            현재 배지
-          </span>
-        </p>
-        <div class="input-area">
-          <label class="profile-edit-label" for="profileImage">보유 배지</label>
-          <div class="change-edge">
+    <section class="info-wrapper">
+      <div class="info-section">
+        <form th:action="@{/}" method="post" class="profile-edit-box" th:object="${playlistObj}">
+          <label id="profileBtn" for="thumbnailUrl">
+            <img th:src="@{/img/resonosLogo.png}" alt="프로필 이미지" class="profile-img edit">
+            <input type="file" th:field="*{thumbnailUrl}">
+          </label>
+          <div class="input-area">
+            <label class="profile-edit-label" for="nickname">플레이리스트 제목</label>
+            <input type="text" class="form-control" th:field="*{title}" >
+            <label class="profile-edit-label" for="bio">플레이리스트 설명</label>
+            <textarea class="form-control" th:field="*{description}" rows="2" placeholder="자기소개를 입력하세요.">음악과 우주, 그리고 커뮤니티를 사랑합니다.</textarea>
+            <input type="radio" id="true" th:field="*{isPublic}" value="true">
+            <label class="profile-edit-label" for="true">공개</label>
+            <input type="radio" id="false" th:field="*{isPublic}" value="false">
+            <label class="profile-edit-label" for="false">비공개</label>
           </div>
-          <label class="profile-edit-label" for="nickname">닉네임</label>
-          <input type="text" class="form-control" >
-          <label class="profile-edit-label" for="email">이메일</label>
-          <input type="email" class="form-control" >
-          <label class="profile-edit-label" for="bio">자기소개</label>
-          <textarea class="form-control" rows="2" placeholder="자기소개를 입력하세요.">음악과 우주, 그리고 커뮤니티를 사랑합니다.</textarea>
-        </div>
-        <div class="btn-area">
-          <button class="btn btn-gold" type="submit">정보 수정</button>
-          <button class="btn btn-outline-gold" type="button">회원 탈퇴</button>
-        </div>
-      </form>
+          <div class="btn-area">
+            <button class="btn btn-gold" type="submit">완료</button>
+            <button class="btn btn-outline-gold" type="button" onclick="history.back()">취소</button>
+          </div>
+        </form>
+      </div>
     </section>
   </main>
   <th:block layout:fragment="pageScript">
     <script>
 
-      function deletePli(e) {
-        const check = confirm("삭제하시겠습니까?")
-        if(check) {
-          alert(e.target.closest('li').querySelector('input[type="hidden"]').value + "번 플리 삭제")
-        }
-      }
-
-      const likeButton = document.querySelectorAll("button.like");
-      likeButton.forEach(button => {
-        button.addEventListener('click', (e) => {
-          alert(e.target.closest('li').querySelector('input[type="hidden"]').value + "번 플리 좋아요 취소")
-        })
-      })
     </script>
   </th:block>
 </body>

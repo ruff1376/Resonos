@@ -15,72 +15,76 @@
     <!-- 왼쪽 리모컨 -->
     <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
     <!-- 팔로워 -->
-    <section class="info-section">
-      <div class="title">
-        <div>
-          <h2 class="text-start">팔로워</h2>
-          <span class="count">92</span>
+    <section class="info-wrapper">
+      <div class="info-section">
+        <div class="title">
+          <div>
+            <h2 class="text-start">팔로워</h2>
+            <span class="count">92</span>
+          </div>
         </div>
+        <ul class="follow-list">
+          <th:block th:each="i : ${#numbers.sequence(1,20)}">
+            <li class="list-item">
+              <img src="https://randomuser.me/api/portraits/men/44.jpg" alt="GalaxiNote" class="follow-img" />
+              <div class="info">
+                <span class="follow-nick">GalaxiNote</span>
+                <span class="follow-badge">CLASSICIAN</span>
+              </div>
+              <p class="bio">
+                  자기소개 자기소개 자기소개
+              </p>
+            </li>
+            <li class="list-item">
+              <img src="https://randomuser.me/api/portraits/women/55.jpg" alt="LunaBeats" class="follow-img" />
+              <div class="info">
+                <span class="follow-nick">LunaBeats</span>
+                <span class="follow-badge">JAZZ LOVER</span>
+              </div>
+              <p class="bio">
+                  자기소개 자기소개 자기소개
+              </p>
+            </li>
+          </th:block>
+        </ul>
       </div>
-      <ul class="follow-list">
-        <th:block th:each="i : ${#numbers.sequence(1,20)}">
-          <li class="follow-item">
-            <img src="https://randomuser.me/api/portraits/men/44.jpg" alt="GalaxiNote" class="follow-img" />
-            <div class="follow-info">
-              <span class="follow-nick">GalaxiNote</span>
-              <span class="follow-badge">CLASSICIAN</span>
-            </div>
-            <p class="bio">
-                자기소개 자기소개 자기소개
-            </p>
-          </li>
-          <li class="follow-item">
-            <img src="https://randomuser.me/api/portraits/women/55.jpg" alt="LunaBeats" class="follow-img" />
-            <div class="follow-info">
-              <span class="follow-nick">LunaBeats</span>
-              <span class="follow-badge">JAZZ LOVER</span>
-            </div>
-            <p class="bio">
-                자기소개 자기소개 자기소개
-            </p>
-          </li>
-        </th:block>
-      </ul>
     </section>
     <!-- 팔로우 -->
-    <section class="info-section">
-      <div class="title">
-        <div>
-          <h2 class="text-start">팔로우</h2>
-          <span class="count">92</span>
+    <section class="info-wrapper">
+      <section class="info-section">
+        <div class="title">
+          <div>
+            <h2 class="text-start">팔로우</h2>
+            <span class="count">92</span>
+          </div>
         </div>
-      </div>
-      <ul class="follow-list">
-        <th:block th:each="i : ${#numbers.sequence(1,2)}">
-          <li class="follow-item">
-            <img src="https://randomuser.me/api/portraits/men/44.jpg" alt="GalaxiNote" class="follow-img" />
-            <div class="follow-info">
-              <span class="follow-nick">GalaxiNote</span>
-              <span class="follow-badge">CLASSICIAN</span>
-            </div>
-            <p class="bio">
-                자기소개 자기소개 자기소개
-            </p>
-            <button class="btn-outline-gold btn-sm">언팔로우</button>
-          </li>
-          <li class="follow-item">
-            <img src="https://randomuser.me/api/portraits/women/55.jpg" alt="LunaBeats" class="follow-img" />
-            <div class="follow-info">
-              <span class="follow-nick">LunaBeats</span>
-              <span class="follow-badge">JAZZ LOVER</span>
-            </div>
-            <p class="bio">
-                자기소개 자기소개 자기소개
-            </p>
-            <button class="btn-outline-gold btn-sm">언팔로우</button>
-          </li>
-        </th:block>
-      </ul>
+        <ul class="follow-list">
+          <th:block th:each="i : ${#numbers.sequence(1,2)}">
+            <li class="list-item">
+              <img src="https://randomuser.me/api/portraits/men/44.jpg" alt="GalaxiNote" class="follow-img" />
+              <div class="info">
+                <span class="follow-nick">GalaxiNote</span>
+                <span class="follow-badge">CLASSICIAN</span>
+              </div>
+              <p class="bio">
+                  자기소개 자기소개 자기소개
+              </p>
+              <button class="btn-outline-gold btn-sm">언팔로우</button>
+            </li>
+            <li class="list-item">
+              <img src="https://randomuser.me/api/portraits/women/55.jpg" alt="LunaBeats" class="follow-img" />
+              <div class="info">
+                <span class="follow-nick">LunaBeats</span>
+                <span class="follow-badge">JAZZ LOVER</span>
+              </div>
+              <p class="bio">
+                  자기소개 자기소개 자기소개
+              </p>
+              <button class="btn-outline-gold btn-sm">언팔로우</button>
+            </li>
+          </th:block>
+        </ul>
+      </section>
     </section>
   </main>
 </body>

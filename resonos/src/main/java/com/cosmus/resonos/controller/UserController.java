@@ -74,17 +74,4 @@ public class UserController {
 
     return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
   }
-
-  /**
-   * 좋아요 한 앨범/트랙 페이지 요청
-   * @param model
-   * @param request
-   * @return
-   */
-  @GetMapping("/{id}/liked-music")
-  public String likedMusic(Model model, @PathVariable("id") long id) {
-
-    model.addAttribute("lastPath", "liked-music");
-    return "user/liked_music";
-  }
 }

@@ -24,8 +24,9 @@ public class ArtistFollowController {
      * @param request
      * @return
      */
-    @GetMapping("/{id}")
-    public String followArtists(Model model, @PathVariable("id") long id) {
+    @GetMapping("")
+    // TODO: @AuthenticationPrincipal 로 출력할 리스트 나누기
+    public String followArtists(Model model) {
 
         model.addAttribute("lastPath", "artist-follows");
         return "user/follow_artist";
