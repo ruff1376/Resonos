@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}"
+>
+<head>
+  <meta charset="UTF-8">
+  <title>회원가입</title>
+  <th:block th:replace="~{fragments/link::user}"></th:block>
+</head>
+<body>
+  <th:block layout:fragment="content">
+    <div class="con con-join d-flex justify-content-center">
+      <form id="form" th:action="@{/join}" method="post" class="user-form" th:object="${users}">
+        <h2 class="text-light mb-4">회원가입</h2>
+        <div class="input-area">
+        <!-- 아이디 -->
+        <label for="" class="profile-edit-label">아이디</label>
+        <input onchange="checkField(event, 'username')" th:field="*{username}" type="text" class="form-control mb-3" placeholder="영문, 숫자 포함 6글자 이상">
+        <p class="fail-vali" id="usernameError"></p>
+        <!-- 닉네임 -->
+        <label for="" class="profile-edit-label">닉네임</label>
+        <input onchange="checkField(event, 'nickname')" th:field="*{nickname}" type="text" class="form-control mb-3" placeholder="영문, 한글, 숫자 포함 3글자 이상 (숫자로만 불가능)">
+        <p class="fail-vali" id="nicknameError"></p>
+        <!-- 이메일 -->
+        <label for="" class="profile-edit-label">이메일</label>
+        <input onchange="checkField(event, 'email')" th:field="*{email}" type="email" class="form-control mb-3" placeholder="이메일을 입력해주세요.">
+        <p class="fail-vali" id="emailError"></p>
+        <!-- 비밀번호 -->
+        <label for="" class="profile-edit-label">비밀번호</label>
+        <input onchange="checkField(event, 'password')" th:field="*{password}" type="password" class="form-control mb-3" placeholder="영문자, 숫자, 특수문자 조합으로 8 ~ 20 글자 입력해주세요.">
+        <p class="fail-vali" id="passwordError"></p>
+        <!-- 비번확인 -->
+        <label for="" class="profile-edit-label">비밀번호 확인</label>
+        <input type="password" class="form-control mb-3" placeholder="비밀번호와 같게 입력해주세요.">
+        <p class="fail-vali" id="passwordError2"></p>
+        </div>
+        <button onclick="requestJoin(event)" id="join-button" class="btn btn-gold w-100 mb-2" type="submit">회원가입</button>
+      </form>
+    </div>
+  </th:block>
+  <th:block layout:fragment="pageScript">
+    <script>
+
+      // 비동기 유효성 검사
+      async function checkField(event, field) {
+
+        let url = ''
+
+        // 필터링
+        switch (field) {
+          case 'username':
+            url = '/check-id'
+            break;
+          case 'nickname':
+            url = '/check-nickname'
+            break;
+          case 'email':
+            url = '/check-email'
+            break;
+          case 'password':
+            url = '/check-password'
+            break;
+          default:
+            return
+            break;
+        }
+
+        const errorMessage = document.getElementById(`${field}Error`)
+        errorMessage.innerText = ''
+        const input = document.getElementById(field)
+        console.log(input.value)
+        const data = {
+            [field]: input.value
+        }
+
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                const errorArray = await response.json();
+                errorArray.forEach(e => {
+                    const field = e.field;
+                    const message = e.defaultMessage;
+                    const errorElement = document.getElementById(`${field}Error`)
+                    if (errorElement) {
+                      errorElement.textContent = message
+                      errorElement.classList.remove('success')
+                    }
+                });
+                return
+            }
+            // 성공 처리
+            const result = await response.text();
+            errorMessage.classList.add('success')
+            errorMessage.innerText = result
+        } catch (error) {
+            console.error("요청 실패:", error);
+        }
+      }
+
+      // TODO: 비동기 폼 요청
+      async function requestJoin(event) {
+        event.preventDefault()
+
+        let url = '/join'
+        const errorMessage = document.getElementById(`${field}Error`)
+        errorMessage.innerText = ''
+
+        const data = {
+            'username': document.getElementById('username').value,
+            'nickname': document.getElementById('nickname').value,
+            'email': document.getElementById('email').value,
+            'password': document.getElementById('password').value,
+        }
+
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                const errorArray = await response.json();
+                errorArray.forEach(e => {
+                    const field = e.field;
+                    const message = e.defaultMessage;
+                    const errorElement = document.getElementById(`${field}Error`)
+                    if (errorElement) {
+                      errorElement.textContent = message
+                      errorElement.classList.remove('success')
+                    }
+                });
+                return
+            }
+            // 성공 처리
+            const result = await response.text();
+            errorMessage.classList.add('success')
+            errorMessage.innerText = result
+        } catch (error) {
+            console.error("요청 실패:", error);
+        }
+      }
+    </script>
+  </th:block>
+</body>
+</html>

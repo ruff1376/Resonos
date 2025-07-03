@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Validated
-public class User {
+public class Users {
     private Long no;
     @NotBlank(
         message = "아이디를 입력해주세요.",
