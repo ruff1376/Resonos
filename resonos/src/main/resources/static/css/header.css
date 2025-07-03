@@ -1,19 +1,19 @@
-.navbar {
+.header-navbar {
     background: #181C23 !important;
     border-bottom: 1px solid #D4B97F;
 }
-.navbar-brand,
-.nav-link,
-.navbar-text {
+.header-navbar .navbar-brand,
+.header-navbar .nav-link,
+.header-navbar .navbar-text {
     color: #D4B97F !important;
     font-weight: bold;
     letter-spacing: 1px;
 }
-.nav-link.active,
-.nav-link:hover {
+.header-navbar .nav-link.active,
+.header-navbar .nav-link:hover {
     color: #fffbe6 !important;
 }
-.logo-img {
+.header-logo-img {
     width: 150px;
     height: 100px;
     margin-right: 10px;
@@ -21,7 +21,7 @@
     background: #181C23;
     object-fit: contain;
 }
-.logo-img-sub {
+.header-logo-img-sub {
     width: 100px;
     height: 66px;
     border-radius: 6px;
@@ -50,7 +50,6 @@
 .search-icon {
     position: absolute;
     left: 10px;
-    top: 7px;
     font-size: 20px;
     color: #B1B1B1;
     pointer-events: none;
@@ -79,7 +78,7 @@
 }
 /* 검색창, 종, 프로필 간격 */
 .header-gap {
-    gap: 24px;
+    gap: 10px;
 }
 .dropdown-menu {
     background-color: #181C23;
