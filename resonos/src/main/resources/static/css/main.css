@@ -4,10 +4,6 @@ body {
     font-family: 'Inter', 'Segoe UI', 'Pretendard', sans-serif;
 }
 
-.main-section-bg {
-    background: var(--background-color);
-}
-
 .album-card {
     background: #222222;
     border-radius: 20px;
@@ -101,14 +97,13 @@ body {
 }
 
 .album-grid {
-    background: var(--background-color);
     border-top: 1px solid var(--main-color);
     border-bottom: 1px solid var(--main-color);
     padding: 40px 0;
 }
 
 .album-grid .card {
-    background: var(--background-color);
+    background: transparent;
     border: none;
     color: #fff;
 }
