@@ -85,6 +85,7 @@
     border-radius: 15px;
 }
 .dropdown-item {
+    font-size: 1.6rem;
     color: #B1B1B1;
 }
 .dropdown-item:hover {
