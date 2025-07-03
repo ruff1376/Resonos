@@ -11,7 +11,7 @@
   <th:block th:replace="~{fragments/link::user}"></th:block>
 </head>
 <body>
-  <main class="con con-follow-art my-5 position-relative" layout:fragment="content">
+  <main class="con con-follow-art position-relative" layout:fragment="content">
     <!-- 왼쪽 리모컨 -->
     <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
     <!-- 팔로워 -->
@@ -23,7 +23,7 @@
             <span class="count">92</span>
           </div>
         </div>
-        <ul class="follow-list">
+        <ul class="ul-list">
           <th:block th:each="i : ${#numbers.sequence(1,20)}">
             <li class="list-item">
               <img src="https://randomuser.me/api/portraits/men/44.jpg" alt="GalaxiNote" class="follow-img" />
@@ -31,9 +31,7 @@
                 <span class="follow-nick">GalaxiNote</span>
                 <span class="follow-badge">CLASSICIAN</span>
               </div>
-              <p class="bio">
-                  자기소개 자기소개 자기소개
-              </p>
+              <button class="btn-outline-gold btn-sm">언팔로우</button>
             </li>
             <li class="list-item">
               <img src="https://randomuser.me/api/portraits/women/55.jpg" alt="LunaBeats" class="follow-img" />
@@ -41,9 +39,7 @@
                 <span class="follow-nick">LunaBeats</span>
                 <span class="follow-badge">JAZZ LOVER</span>
               </div>
-              <p class="bio">
-                  자기소개 자기소개 자기소개
-              </p>
+              <button class="btn-outline-gold btn-sm">언팔로우</button>
             </li>
           </th:block>
         </ul>

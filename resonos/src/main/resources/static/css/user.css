@@ -32,7 +32,6 @@ button {background-color: inherit; border: none;}
   border-radius: 10px;
 }
 
-
 /* 로그인 페이지 */
 p {margin-bottom: 0;}
 body {
@@ -44,6 +43,7 @@ body {
   align-items: center;
   justify-content: center;
 }
+.con {margin: 120px 0;}
 .con-mypage a {color: #fff !important;}
 .content-wrap {
   display: flex;
@@ -86,7 +86,7 @@ button.social-btn:hover {
   color: #fffbe6;
   border: 1.5px solid #D4B97F;
   border-radius: 14px;
-  padding: 12px 16px !important;
+  padding: 12px 16px;
 }
 .form-control:focus {
   background-color: #222;
@@ -133,15 +133,15 @@ body {
   color: #D4B97F;
   letter-spacing: 2px;
 }
-nav a {
+.con nav a {
   color: #D4B97F;
   text-decoration: none;
   margin: 0 16px;
   font-size: 1.05rem;
   transition: color 0.2s;
 }
-nav a.active,
-nav a:hover {
+.con nav a.active,
+.con nav a:hover {
   color: #fffbe6;
 }
 .profile-section {
@@ -333,9 +333,9 @@ nav a:hover {
   background: #D4B97F;
   color: #181C23;
   border-radius: 14px;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: bold;
-  padding: 3px 12px;
+  padding: 10px 12px;
   letter-spacing: 1px;
 }
 .my-middle {
@@ -474,7 +474,7 @@ textarea.form-control {
 .con .bg-badge {
   background-color: #222;
   width: 200px;
-  height: 60px;
+  padding: 10px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -489,27 +489,29 @@ textarea.form-control {
 #profileBtn {cursor: pointer;}
 
 /* 유저 팔로우 */
+
+/* 리모컨 */
 .mypage-tabs {
-  padding: 10px 0;
-  width: 10%;
   display: flex;
   flex-direction: column;
+  gap: 5px;
+  width: 12%;
   text-align: center;
   border: 1.5px solid #D4B97F;
   border-radius: 14px;
   position: absolute;
   top: 20%;
-  left: 70px;
-  gap: 18px;
+  left: 40px;
 }
 .mypage-tabs .tab {
+  display: block;
   color: #D4B97F;
   background: none;
   border: none;
   font-size: 1.2rem;
   font-weight: bold;
-  padding: 8px 22px;
-  border-radius: 30px;
+  padding: 10px 22px;
+  border-radius: 15px;
   cursor: pointer;
   text-decoration: none;
   transition: background 0.2s, color 0.2s;
@@ -521,7 +523,7 @@ textarea.form-control {
 }
 .info-wrapper {
   overflow: hidden;
-  border-radius: 24px;
+  border-radius: 15px;
   border: 1.5px solid #D4B97F;
   box-shadow: 0 2px 16px rgba(24, 28, 35, 0.13);
   margin-left: 20%;
@@ -541,7 +543,7 @@ textarea.form-control {
   color: #D4B97F;
   font-size: 1.6rem;
   font-weight: bold;
-  padding: 15px 0;
+  padding: 25px 0;
   position: sticky;
   top: 0;
   background-color: inherit;
@@ -549,11 +551,11 @@ textarea.form-control {
 }
 .count {
   color: #B0B6BE;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: bold;
   margin-left: 8px;
 }
-.follow-list {
+.ul-list {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -620,12 +622,12 @@ textarea.form-control {
   background: #D4B97F;
   color: #181C23;
 }
-.detail-box {
-
-}
-.con-follow .info-wrapper + .info-wrapper {margin-top: 50px;}
+.con-follow .info-wrapper + .info-wrapper,
+.con-activity .info-wrapper + .info-wrapper,
+.con-badge .info-wrapper + .info-wrapper {margin-top: 50px;}
 .con-follow .bio {flex: 1;}
-.con-follow .btn-outline-gold {width: 15%;}
+.con-follow .ul-list.follower .bio {flex: auto;}
+.con-follow .btn-outline-gold, .con-follow-art .btn-outline-gold {width: 80px; margin-bottom: 0; padding: 3px 5px; margin-left: auto;}
 
 
 /* 아티스트 팔로우 */
@@ -643,6 +645,7 @@ textarea.form-control {
 
 /* 플레이리스트 */
 .name-playlist {font-size: 1.4rem; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.is-public {font-size: 1.4rem;}
 .right {display:flex; align-items: center; margin-left: auto; gap: 20px;}
 .like-area {display: flex; align-items: center; gap: 2px;}
 .like-area .count {font-size: 1.4rem;}
@@ -671,17 +674,67 @@ button.like {background-color: inherit; border: none;}
   left: 0;
 }
 .con-noti label {display: block;}
-.con-noti label + label {
-  margin-top: 14px;
-}
+.con-noti label + label {margin-top: 14px;}
 .con-noti .title button {color: var(--main-color);}
 .con-noti .title button:last-child {color: #FF8383;}
 
 /* 플레이리스트 상세 */
-.con-pli-detail > .info-wrapper > .info-section {max-height: 1000px;}
+.con-pli-detail > .info-wrapper > .info-section {max-height: 1200px;}
 .con-pli-detail .info-section .info-wrapper {margin-left: 0; margin-top: 60px;}
-.con-pli-detail .info-section .info-wrapper .info-section {max-height: 500px;}
+.con-pli-detail .info-section .info-wrapper .info-section {max-height: 650px;}
 .con-pli-detail .profile-edit-box {border: none; border-radius: 0;}
 .con-pli-detail .input-area {flex: 1; padding: 0;}
 .con-pli-detail input[type="radio"] + .profile-edit-label {display: inline-block; margin: 0 5px;}
 .con-pli-detail .like {font-size: 3rem; margin-left: auto;}
+
+/* 내 활동 */
+.con-activity .info-wrapper .info-section {height: 300px; text-align: start;}
+.text-item {color: #fff; border-bottom: 0.5px dashed var(--main-color); padding: 10px 0; transition: all 0.3s; cursor: pointer;}
+.text-item:hover {transform: scale(1.01);}
+.ul-list .text-item:last-child {border-bottom: none;}
+.text-item .sm-title {color: var(--main-color);}
+.text-item .sm-content {overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-top: 5px;}
+.text-item .like {margin-left: 5px;}
+.text-item .sm-content, .text-item .date, .text-item .like {font-size: 1.4rem;}
+.text-item .like, .text-item .date {color: #bbb;}
+.text-item .date::after {content: ''; display: inline-block; border: 1px solid #bbb; height: 10px; margin-left: 10px;}
+.text-item.post .sm-title {flex: 0.8; color: #fff; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+.text-item.post .date::after {content: none;}
+.text-item.post a {display: flex; justify-content: space-between;}
+
+/* 배지 */
+.ul-list.bl {width: 100%; flex-wrap: wrap; gap: 10px;}
+.con-badge .info-wrapper .info-section {height: 300px;}
+.con .bg-badge.cg {border-color: #706F6F;}
+.badge.cg {background-color: #706F6F;}
+
+/* 알람 설정 */
+.con-alaram .info-wrapper .info-section {height: 500px; text-align: start;}
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+}
+.toggle-switch input {opacity: 0; width: 0; height: 0;}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #ccc;
+  border-radius: 34px;
+  transition: 0.4s;
+}
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+.toggle-switch input:checked + .slider {background-color: #4cd964;}
+.toggle-switch input:checked + .slider::before {transform: translateX(22px);}

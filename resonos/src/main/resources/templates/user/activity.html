@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}"
+>
+<head>
+  <meta charset="UTF-8" />
+  <title>팔로우 유저</title>
+  <th:block th:replace="~{fragments/link::user}"></th:block>
+</head>
+<body>
+  <main class="con con-activity position-relative" layout:fragment="content">
+    <!-- 왼쪽 리모컨 -->
+    <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
+    <!-- 리뷰 -->
+    <section class="info-wrapper">
+      <div class="info-section">
+        <div class="title">
+          <div>
+            <h2 class="text-start">내가 쓴 리뷰</h2>
+            <span class="count">92</span>
+          </div>
+        </div>
+        <ul class="ul-list">
+          <th:block th:each="i : ${#numbers.sequence(1, 10)}">
+            <li class="text-item">
+              <a href="">
+                <p class="sm-title">앨범 or 트랙 명</p>
+                <p class="sm-content">내용</p>
+                <span class="date" th:text="2025.02.02">날짜</span>
+                <span class="like" th:text="|좋아요 ${10}|">좋아요</span>
+              </a>
+            </li>
+          </th:block>
+        </ul>
+      </div>
+    </section>
+    <!-- 게시글 -->
+    <section class="info-wrapper">
+      <div class="info-section">
+        <div class="title">
+          <div>
+            <h2 class="text-start">내가 쓴 게시물</h2>
+            <span class="count">92</span>
+          </div>
+        </div>
+        <ul class="ul-list">
+          <li class="text-item post">
+            <a href="">
+              <p class="sm-title">게시글 제목</p>
+              <span class="date" th:text="2025.02.02">날짜</span>
+            </a>
+          </li>
+          <li class="text-item post">
+            <a href="">
+              <p class="sm-title">게시글 제목</p>
+              <span class="date" th:text="2025.02.02">날짜</span>
+            </a>
+          </li>
+          <li class="text-item post">
+            <a href="">
+              <p class="sm-title">게시글 제목</p>
+              <span class="date" th:text="2025.02.02">날짜</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <!-- 댓글 -->
+    <section class="info-wrapper">
+      <div class="info-section">
+        <div class="title">
+          <div>
+            <h2 class="text-start">내가 쓴 댓글</h2>
+            <span class="count">92</span>
+          </div>
+        </div>
+        <ul class="ul-list">
+          <th:block th:each="i : ${#numbers.sequence(1, 10)}">
+            <li class="text-item">
+              <a href="">
+                <p class="sm-title">게시글 제목</p>
+                <p class="sm-content">내용</p>
+                <span class="date" th:text="2025.02.02">날짜</span>
+                <span class="like" th:text="|좋아요 ${10}|">좋아요</span>
+              </a>
+            </li>
+          </th:block>
+        </ul>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

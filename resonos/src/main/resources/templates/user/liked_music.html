@@ -11,7 +11,7 @@
   <th:block th:replace="~{fragments/link::user}"></th:block>
 </head>
 <body>
-  <main class="con con-music my-5 position-relative" layout:fragment="content">
+  <main class="con con-music position-relative" layout:fragment="content">
     <!-- 왼쪽 리모컨 -->
     <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
     <!-- 앨범 -->
@@ -23,7 +23,7 @@
             <span class="count">92</span>
           </div>
         </div>
-        <ul class="follow-list">
+        <ul class="ul-list">
           <th:block th:each="i : ${#numbers.sequence(1,20)}">
             <li class="list-item">
               <input type="hidden" value="1">
@@ -47,7 +47,7 @@
             <span class="count">92</span>
           </div>
         </div>
-        <ul class="follow-list">
+        <ul class="ul-list">
           <th:block th:each="i : ${#numbers.sequence(1,20)}">
             <li class="list-item">
               <img src="https://i.scdn.co/image/ab67616d0000b2738ad8f5243d6534e03b656c8b" alt="GalaxiNote" class="follow-img" />

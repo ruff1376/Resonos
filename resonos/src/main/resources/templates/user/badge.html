@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}"
+>
+<head>
+  <meta charset="UTF-8" />
+  <title>배지 목록</title>
+  <th:block th:replace="~{fragments/link::user}"></th:block>
+</head>
+<body>
+  <main class="con con-badge position-relative" layout:fragment="content">
+    <!-- 왼쪽 리모컨 -->
+    <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
+    <!-- 획득 배지 -->
+    <section class="info-wrapper">
+      <div class="info-section">
+        <div class="title">
+          <div>
+            <h2 class="text-start">획득한 배지</h2>
+          </div>
+        </div>
+        <ul class="ul-list bl d-flex">
+          <th:block th:each="i : ${#numbers.sequence(1, 10)}">
+            <li>
+              <div class="bg-badge">
+                <div class="badge">
+                  <span th:text="|배지 이름 ${i}|">배지 이름</span>
+                </div>
+                <p>획득 조건 출력</p>
+              </div>
+            </li>
+          </th:block>
+        </ul>
+      </div>
+    </section>
+    <!-- 미획득 배지 -->
+    <section class="info-wrapper">
+      <div class="info-section">
+        <div class="title">
+          <div>
+            <h2 class="text-start">미획득 배지</h2>
+          </div>
+        </div>
+        <ul class="ul-list bl d-flex">
+          <th:block th:each="i : ${#numbers.sequence(1, 10)}">
+            <li>
+              <div class="bg-badge cg">
+                <div class="badge cg">
+                  <span th:text="|배지 이름 ${i}|">배지 이름</span>
+                </div>
+                <p>획득 조건 출력</p>
+              </div>
+            </li>
+          </th:block>
+        </ul>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

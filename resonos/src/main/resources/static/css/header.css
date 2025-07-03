@@ -1,6 +1,6 @@
 .site-header .navbar {
     background: #181C23 !important;
-    border-bottom: 1px solid #D4B97F;
+    border-bottom: 1px solid var(--main-color);
 }
 .site-header .navbar-brand,
 .site-header .nav-link,
@@ -50,7 +50,6 @@
 .site-header .search-icon {
     position: absolute;
     left: 10px;
-    top: 7px;
     font-size: 20px;
     color: #B1B1B1;
     pointer-events: none;
@@ -73,13 +72,13 @@
     color: #181C23;
 }
 /* 프로필 드롭다운 화살표 색상 */
-.profile-dropdown .dropdown-toggle::after {
+.header-navbar .profile-dropdown .dropdown-toggle::after {
     color: #B1B1B1 !important;
     filter: none;
 }
 /* 검색창, 종, 프로필 간격 */
-.header-gap {
-    gap: 24px;
+.header-navbar .header-gap {
+    gap: 10px;
 }
 .site-header .dropdown-menu {
     background-color: #181C23;
@@ -90,7 +89,7 @@
 }
 .site-header .dropdown-item:hover {
     background-color: transparent;
-    color: #D4B97F;
+    color: var(--main-color);
 }
 .site-header .dropdown-divider {
     border-top: 1px solid #D4B97F !important;

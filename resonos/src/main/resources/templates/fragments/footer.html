@@ -1,23 +1,22 @@
 <th:block th:fragment="footer">
-    <link rel="stylesheet" th:href="@{/css/footer.css}">
     <footer>
         <div class="footer-container">
             <div class="d-flex flex-row align-items-start gap-3" style="height:300px;">
                 <div class="footer-logo-section d-flex flex-column justify-content-between align-items-center p-0" style="width:300px; height:300px;">
                     <div class="footer-logo-img d-flex justify-content-center align-items-center">
                         <a class="navbar-brand d-flex align-items-center" href="#">
-                            <img src="/resonos/src/main/resources/static/img/resonosPlusLogo.png" alt="Main Page Logo" class="logo-img" style="max-width:100%; max-height:100%;">
+                            <img th:src="@{/img/resonosPlusLogo.png}" alt="Main Page Logo" class="logo-img" style="max-width:100%; max-height:100%;">
                         </a>
                     </div>
-                    <div class="d-flex flex-row justify-content-between align-items-center px-4 gap-2" style="width:300px;">
+                    <div class="d-flex flex-row justify-content-between align-items-center px-4 gap-2 mb-5" style="width:300px;">
                         <a href="#" class="footer-sns-icon">
-                            <i class="bi bi-youtube" style="font-size:2rem; color:#D4B97F;"></i>
+                            <i class="bi bi-youtube" style="font-size:4rem; color:var(--main-color);"></i>
                         </a>
                         <a href="#" class="footer-sns-icon">
-                            <i class="bi bi-instagram" style="font-size:2rem; color:#D4B97F;"></i>
+                            <i class="bi bi-instagram" style="font-size:4rem; color:var(--main-color);"></i>
                         </a>
                         <a href="#" class="footer-sns-icon">
-                            <i class="bi bi-spotify" style="font-size:2rem; color:#D4B97F;"></i>
+                            <i class="bi bi-spotify" style="font-size:4rem; color:var(--main-color);"></i>
                         </a>
                     </div>
                 </div>
@@ -33,48 +32,10 @@
                 </div>
             </div>
         </div>
-        <nav class="navbar navbar-expand-lg py-0 d-flex justify-content-center align-items-center" style="height:80px;">
+        <nav class="navbar navbar-expand-lg py-0 d-flex justify-content-center align-items-center footer-navbar" style="height:80px;">
             <div class="footer-copyright w-100">
                 © 2025 Resonos, All rights reserved.
             </div>
         </nav>
-        <script>
-            function changeFooterInfo(type) {
-                // 버튼 스타일 초기화
-                document.querySelectorAll('.footer-link').forEach(btn => {
-                    btn.classList.remove('selected');
-                });
-
-                let title = '';
-                let desc = '';
-
-                if (type === 'terms') {
-                    title = '이용약관';
-                    desc = '본 사이트의 서비스 이용은 이용약관을 따릅니다. 저작권 침해, 비방, 도배, 부정이용시 서비스 이용이 제한될 수 있습니다.';
-                    document.getElementById('footer-terms-btn').classList.add('selected');
-                } else if (type === 'policy') {
-                    title = '개인정보 처리방침';
-                    desc = 'RESONOS는 회원의 개인정보를 안전하게 보호하며, 외부에 무단 제공하지 않습니다. 자세한 내용은 개인정보 처리방침을 참고하세요.';
-                    document.getElementById('footer-policy-btn').classList.add('selected');
-                } else if (type === 'qna') {
-                    title = '고객센터(Q&A)';
-                    desc = '이용 중 문의/불편 사항은&nbsp;<a href="/support" style="text-decoration:underline; font-weight:bold; color:#D4B97F;" target="_blank">고객센터</a>를 통해 남겨주세요. 빠르게 답변해드리겠습니다.';
-                    document.getElementById('footer-qna-btn').classList.add('selected');
-                } else if (type === 'intro') {
-                    title = '사이트 소개';
-                    desc = 'RESONOS는 음악 감상, 리뷰, 커뮤니티, 차트, 플레이리스트, 아티스트 정보를 제공하는 음악 커뮤니티 플랫폼입니다.\n문의: support@resonos.com';
-                    document.getElementById('footer-intro-btn').classList.add('selected');
-                }
-
-                document.getElementById('footer-info-title').innerText = title;
-
-                // Q&A는 링크 포함, 나머지는 일반 텍스트
-                if (type === 'qna') {
-                    document.getElementById('footer-info-desc').innerHTML = desc;
-                } else {
-                    document.getElementById('footer-info-desc').innerText = desc;
-                }
-            }
-        </script>
     </footer>
 </th:block>
