@@ -26,7 +26,7 @@
             <button onclick="deleteAll()">전체 삭제</button>
           </div>
         </div>
-        <ul class="follow-list">
+        <ul class="ul-list">
           <th:block th:each="i : ${#numbers.sequence(1,20)}">
               <label th:for="is-read + ${i}">
                 <li class="list-item">
@@ -62,7 +62,7 @@
         const check = confirm("알림을 전부 삭제하시겠습니까?")
         if(!check) return
         // TODO: 전체 삭제 처리 되고 DB 에도 저장
-        document.querySelector('.follow-list').innerHTML = ''
+        document.querySelector('.ul-list').innerHTML = ''
       }
     </script>
   </th:block>

@@ -54,9 +54,9 @@
     color: #B1B1B1;
     pointer-events: none;
 }
-.btn-outline-gold {
-    border: 1px solid var(--main-color);
-    color: var(--main-color);
+header .btn-outline-gold {
+    border: 1px solid #D4B97F;
+    color: #D4B97F;
     border-radius: 10px;
     background: transparent;
     font-size: 12px;
