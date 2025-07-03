@@ -1,5 +1,4 @@
 .header-navbar {
-    background: #181C23 !important;
     border-bottom: 1px solid var(--main-color);
 }
 .header-navbar .navbar-brand,
@@ -18,14 +17,12 @@
     height: 100px;
     margin-right: 10px;
     border-radius: 6px;
-    background: #181C23;
     object-fit: contain;
 }
 .header-navbar .header-logo-img-sub {
     width: 100px;
     height: 66px;
     border-radius: 6px;
-    background: #181C23;
     object-fit: contain;
 }
 .header-navbar .search-box {
@@ -81,7 +78,6 @@
     gap: 10px;
 }
 .header-navbar .dropdown-menu {
-    background-color: #181C23;
     border-radius: 15px;
 }
 .header-navbar .dropdown-item {
