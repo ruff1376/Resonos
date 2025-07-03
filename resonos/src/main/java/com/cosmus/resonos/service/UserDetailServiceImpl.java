@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.CustomUser;
-import com.cosmus.resonos.domain.User;
+import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.mapper.UserMapper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
         log.info("- 사용자 정의 인증을 위해, 사용자 정보 조회");
         log.info("- username : {} ", username);
 
-        User user = null;
+        Users user = null;
         try {
             // 👩‍💼 사용자 정보 및 권한 조회
             user = userMapper.select(username);

@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Validated
 public class Users {
-    private Long no;
+    private Long id;
     @NotBlank(
         message = "아이디를 입력해주세요.",
         groups = UsernameCheck.class

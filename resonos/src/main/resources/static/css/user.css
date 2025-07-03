@@ -130,22 +130,6 @@ body {
   background: #181C23;
   border-bottom: 1px solid #222;
 }
-.logo {
-  display: flex;
-  align-items: center;
-}
-.logo-img {
-  height: 38px;
-  margin-right: 13px;
-  border-radius: 6px;
-  background: #181C23;
-}
-.logo-text {
-  font-size: 1.7rem;
-  font-weight: bold;
-  color: #D4B97F;
-  letter-spacing: 2px;
-}
 .con nav a {
   color: #D4B97F;
   text-decoration: none;
@@ -348,7 +332,7 @@ body {
   border-radius: 14px;
   font-size: 1.4rem;
   font-weight: bold;
-  padding: 10px 12px;
+  padding: 5px 10px;
   letter-spacing: 1px;
 }
 .my-middle {

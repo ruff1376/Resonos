@@ -4,7 +4,7 @@
 
 <mapper namespace="com.cosmus.resonos.mapper.UserMapper">
 
-  <resultMap id="UserResultMap" type="User">
+  <resultMap id="UserResultMap" type="Users">
     <id property="id" column="id"/>
 
     <result property="username" column="username"/>
@@ -61,7 +61,7 @@
   <delete id="delete" >
     DELETE FROM user WHERE id = #{id}
   </delete>
-    
+
   <insert id="insertAuth">
       INSERT INTO user_auth ( username, auth )
       VALUES ( #{username}, #{auth} )
@@ -72,7 +72,7 @@
   </select>
 
   <select id="list" resultMap="UserResultMap">
-    SELECT * FROM user 
+    SELECT * FROM user
   </select>
 
   <select id="countAll" resultType="int">

@@ -21,9 +21,6 @@ import com.cosmus.resonos.validation.EmailCheck;
 import com.cosmus.resonos.validation.NicknameCheck;
 import com.cosmus.resonos.validation.PasswordCheck;
 import com.cosmus.resonos.validation.UsernameCheck;
-
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,7 +32,6 @@ public class HomeController {
   public String login() {
     return "user/login";
   }
-
 
   @Autowired private UserService userService;
 
@@ -81,10 +77,10 @@ public class HomeController {
      * 회원 가입 화면
      * @return
      */
-    @GetMapping("/join")
-    public String join() {
-        return "join";
-    }
+    // @GetMapping("/join")
+    // public String join() {
+    //     return "join";
+    // }
 
     /**
      * 회원 가입 처리
@@ -92,51 +88,51 @@ public class HomeController {
      * @return
      * @throws Exception
      */
-    @PostMapping("/join")
-    public String joinPost(Users user, HttpServletRequest request) throws Exception {
-        // 암호화 전 비밀 번호
-        String plainPassword = user.getPassword();
-        // 회원 가입 요청
-        int result = userService.join(user);
-        // 회원 가입 성공 시, 바로 로그인 ⚡🔐
-        boolean loginResult = false;
-        if( result > 0 ) {
-            // 암호화 전 비밀번호로 다시 세팅
-            user.setPassword(plainPassword);
-            loginResult = userService.login(user, request);  // ⚡🔐 바로 로그인
-        }
-        if(loginResult)
-            // 메인 화면으로 이동
-            return "redirect:/";
-        if(result > 0)
-            // 로그인 화면으로 이동
-            return "redirect:/login";
-        return "redirect:/join?error=true";
-    }
+    // @PostMapping("/join")
+    // public String joinPost(Users user, HttpServletRequest request) throws Exception {
+    //     // 암호화 전 비밀 번호
+    //     String plainPassword = user.getPassword();
+    //     // 회원 가입 요청
+    //     int result = userService.join(user);
+    //     // 회원 가입 성공 시, 바로 로그인 ⚡🔐
+    //     boolean loginResult = false;
+    //     if( result > 0 ) {
+    //         // 암호화 전 비밀번호로 다시 세팅
+    //         user.setPassword(plainPassword);
+    //         loginResult = userService.login(user, request);  // ⚡🔐 바로 로그인
+    //     }
+    //     if(loginResult)
+    //         // 메인 화면으로 이동
+    //         return "redirect:/";
+    //     if(result > 0)
+    //         // 로그인 화면으로 이동
+    //         return "redirect:/login";
+    //     return "redirect:/join?error=true";
+    // }
 
 
     /**
      * 로그인 화면
      * @return
      */
-    @GetMapping("/login")
-    public String login(
-        @CookieValue(value = "remember-id", required = false) Cookie cookie,
-        Model model
-    ) {
-        log.info(":::::::::: 로그인 페이지 ::::::::::");
-        String username = "";
-        boolean rememberId = false;
-        if( cookie != null ) {
-            log.info("CookieName : " + cookie.getName());
-            log.info("CookieValue : " + cookie.getValue());
-            username = cookie.getValue();
-            rememberId = true;
-        }
-        model.addAttribute("username", username);
-        model.addAttribute("rememberId", rememberId);
-        return "login";
-    }
+    // @GetMapping("/login")
+    // public String login(
+    //     @CookieValue(value = "remember-id", required = false) Cookie cookie,
+    //     Model model
+    // ) {
+    //     log.info(":::::::::: 로그인 페이지 ::::::::::");
+    //     String username = "";
+    //     boolean rememberId = false;
+    //     if( cookie != null ) {
+    //         log.info("CookieName : " + cookie.getName());
+    //         log.info("CookieValue : " + cookie.getValue());
+    //         username = cookie.getValue();
+    //         rememberId = true;
+    //     }
+    //     model.addAttribute("username", username);
+    //     model.addAttribute("rememberId", rememberId);
+    //     return "login";
+    // }
 
     /**
    * 회원가입 페이지 요청
