@@ -61,7 +61,7 @@
     DELETE FROM track WHERE id = #{id}
   </delete>
   
-  <select id="list" resultMap="TrackResultMap">
+  <select id="list" resultMap="Track">
     SELECT * FROM track
   </select>
 

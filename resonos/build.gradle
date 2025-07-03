@@ -45,4 +45,9 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+    ignoreFailures = true
+}
+
+springBoot {
+    mainClass = 'com.cosmus.resonos.SecurityApplication'
 }

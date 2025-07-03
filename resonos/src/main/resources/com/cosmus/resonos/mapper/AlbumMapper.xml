@@ -65,10 +65,6 @@
     DELETE FROM album WHERE id = #{id}
   </delete>
 
-  <select id="list" resultMap="AlbumResultMap">
-    SELECT * FROM album
-  </select>
-
   <select id="exists" resultType="int" parameterType="string">
     SELECT COUNT(*) FROM album WHERE id = #{id}
   </select>
