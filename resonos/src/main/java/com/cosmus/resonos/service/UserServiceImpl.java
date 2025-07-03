@@ -13,9 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cosmus.resonos.domain.User;
 import com.cosmus.resonos.domain.UserAuth;
 import com.cosmus.resonos.domain.UserRole;
+import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.mapper.UserMapper;
 import com.cosmus.resonos.mapper.UserRoleMapper;
 
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional          // 트랜잭션 처리를 설정 (회원정보, 회원권한)
-    public int join(User user) throws Exception {
+    public int join(Users user) throws Exception {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         int result = userMapper.join(user);
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean login(User user, HttpServletRequest request) {
+    public boolean login(Users user, HttpServletRequest request) {
         // 💍 토큰 생성
         String username = user.getUsername();
         String password = user.getPassword();
@@ -87,8 +87,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User select(String username) throws Exception {
-        User user = userMapper.select(username);
+    public Users select(String username) throws Exception {
+        Users user = userMapper.select(username);
         return user;
     }
 
@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean update(User user) throws Exception {
+    public boolean update(Users user) throws Exception {
         return userMapper.update(user) > 0;
     }
 
@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> list() throws Exception {
+    public List<Users> list() throws Exception {
         return userMapper.list();
     }
 
@@ -126,6 +126,7 @@ public class UserServiceImpl implements UserService {
     public int countAll() throws Exception {
         return userMapper.countAll();
     }
+
 
     // 아래 코드는 컨트롤러에서 사용해야 하므로 주석 처리
     /*
