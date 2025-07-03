@@ -7,6 +7,8 @@
 >
 <head>
   <meta charset="UTF-8">
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
   <title>회원가입</title>
   <th:block th:replace="~{fragments/link::user}"></th:block>
 </head>
@@ -14,7 +16,7 @@
   <th:block layout:fragment="content">
     <div class="con con-join d-flex justify-content-center">
       <form id="form" th:action="@{/join}" method="post" class="user-form" th:object="${users}">
-        <h2 class="text-light mb-4">회원가입</h2>
+        <h2 class="text-light mb-4">회원가입123</h2>
         <div class="input-area">
         <!-- 아이디 -->
         <label for="" class="profile-edit-label">아이디</label>
@@ -71,15 +73,18 @@
         const errorMessage = document.getElementById(`${field}Error`)
         errorMessage.innerText = ''
         const input = document.getElementById(field)
-        console.log(input.value)
         const data = {
             [field]: input.value
         }
 
         try {
+            /* Security 제공 CSRF */
+            const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
             const response = await fetch(url, {
                 method: "POST",
                 headers: {
+                    [header] : token,
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(data)
@@ -123,12 +128,18 @@
         }
 
         try {
+          /* Security 제공 CSRF */
+          const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+          const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
             const response = await fetch(url, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    [header] : token,
+                    "Content-Type" : "application/json"
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(data),
+                credentials: 'include'
             });
 
             if (!response.ok) {
