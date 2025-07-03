@@ -1,21 +1,49 @@
 <!DOCTYPE html>
-<html
-    lang="ko"
-    xmlns:th="http://www.thymeleaf.org"
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{/layouts/main_layout}"
->
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
+    <title>RESONOS</title>
+    <link rel="stylesheet" href="/css/welcome.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 </head>
-<body>
-    <h1>Spring 평가</h1>
-    <h3>ALOHA</h3>
-    <a href="/posts/list">게시판</a>
-    <th:block layout:fragment="content">
-        <h1>여기가 main_layout 의 content 로 들어감</h1>
-    </th:block>
+
+<body class="bg">
+    <main>
+        <section class="hero">
+            <h1>음악의 우주, 커뮤니티의 연결</h1>
+            <p>별처럼 빛나는 음악과 사람들의 소통 공간</p>
+            <div class="d-flex justify-content-center gap-4">
+                <a href="/login">
+                    <button class="btn-gold">로그인</button>
+                </a>
+                <a href="/join">
+                    <button class="btn-gold">회원가입</button>
+                </a>
+
+            </div>
+        </section>
+        <section class="main-cards">
+            <a href="/list/main" style="text-decoration:none; color:inherit;">
+                <div class="main-card">
+                    <img src="/img/resonosLogo.png" alt="main">
+                    <h2>자유 커뮤니티</h2>
+                    <p>좋아하는 음악, 아티스트를 주제로 이야기를 나눠보세요.</p>
+                </div>
+            </a>
+            <a href="/list/main" style="text-decoration:none; color:inherit;">
+                <div class="main-card">
+                    <img src="/img/resonosPlusLogo.png" alt="sub">
+                    <h2>리뷰 커뮤니티</h2>
+                    <p>음악에 대한 진정성있는 이야기들.</p>
+                </div>
+            </a>
+        </section>
+    </main>
+    <footer>
+        <div class="footer-copyright w-100">© 2025 Resonos, All rights reserved.</div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </body>
+
 </html>
