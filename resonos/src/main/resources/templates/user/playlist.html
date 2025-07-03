@@ -24,7 +24,7 @@
           </div>
           <a th:href="@{/playlists/create}" id="addPli">추가하기<img width="20px" height="20px" th:src="@{/img/plus_circle.png}" alt="추가버튼"></a>
         </div>
-        <ul class="follow-list">
+        <ul class="ul-list">
           <th:block th:each="i : ${#numbers.sequence(1,20)}">
             <li onclick="goToDetail(event)" class="list-item">
               <input type="hidden" th:value="${i}" name="id">
@@ -32,6 +32,7 @@
               <div class="info">
                 <span class="name-playlist">플레이리스트 명</span>
               </div>
+              <span class="is-public">공개</span>
               <div class="right">
                 <div class="like-area">
                   <span class="count">123</span>
@@ -55,7 +56,7 @@
             <span class="count">92</span>
           </div>
         </div>
-        <ul class="follow-list">
+        <ul class="ul-list">
           <th:block th:each="i : ${#numbers.sequence(1,20)}">
             <li class="list-item">
               <input type="hidden" th:value="${i}" name="id">

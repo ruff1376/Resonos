@@ -6,14 +6,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cosmus.resonos.domain.Users;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -38,6 +36,7 @@ public class UserController {
    */
   @GetMapping("/mypage")
   // security 활성화 하면
+  // TODO: PathVariable 로 접근 나누기
   // public String mypage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
   public String mypage(Model model) {
     Users user = Users.builder().email("resonos12@gmail.com").username("김조은").build();
@@ -73,5 +72,17 @@ public class UserController {
     }
 
     return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+  }
+
+  /**
+   * 내 활동 페이지 요청
+   * @return
+   */
+  @GetMapping("/activity")
+  // TODO: @AuthenticationPrincipal 로 접근 권한
+  public String activity(Model model) {
+
+    model.addAttribute("lastPath", "activity");
+    return "user/activity";
   }
 }

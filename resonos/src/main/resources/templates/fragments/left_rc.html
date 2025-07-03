@@ -1,6 +1,6 @@
 <!-- 왼쪽 리모컨 -->
 <section class="mypage-tabs" th:fragment="mypage-tabs">
-  <a href="#" class="tab">내 활동</a>
+  <a th:href="@{/users/activity}" class="tab" th:classappend="${lastPath == 'activity'} ? 'active' : ''">내 활동</a>
   <a th:href="@{/notifications}" class="tab" th:classappend="${lastPath == 'noti'} ? 'active' : ''">알림함</a>
   <a th:href="@{/playlists}" class="tab" th:classappend="${lastPath == 'playlist'} ? 'active' : ''">플레이리스트</a>
   <a th:href="@{/liked-albums}" class="tab" th:classappend="${lastPath == 'liked-music'} ? 'active' : ''">좋아요 표시한 앨범 / 트랙</a>

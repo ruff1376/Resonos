@@ -549,11 +549,11 @@ textarea.form-control {
 }
 .count {
   color: #B0B6BE;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: bold;
   margin-left: 8px;
 }
-.follow-list {
+.ul-list {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -620,12 +620,10 @@ textarea.form-control {
   background: #D4B97F;
   color: #181C23;
 }
-.detail-box {
-
-}
-.con-follow .info-wrapper + .info-wrapper {margin-top: 50px;}
+.con-follow .info-wrapper + .info-wrapper, .con-activity .info-wrapper + .info-wrapper {margin-top: 50px;}
 .con-follow .bio {flex: 1;}
-.con-follow .btn-outline-gold {width: 15%;}
+.con-follow .ul-list.follower .bio {flex: auto;}
+.con-follow .btn-outline-gold {width: 80px; margin-bottom: 0; padding: 3px 5px; margin-left: auto;}
 
 
 /* 아티스트 팔로우 */
@@ -643,6 +641,7 @@ textarea.form-control {
 
 /* 플레이리스트 */
 .name-playlist {font-size: 1.4rem; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.is-public {font-size: 1.4rem;}
 .right {display:flex; align-items: center; margin-left: auto; gap: 20px;}
 .like-area {display: flex; align-items: center; gap: 2px;}
 .like-area .count {font-size: 1.4rem;}
@@ -678,10 +677,25 @@ button.like {background-color: inherit; border: none;}
 .con-noti .title button:last-child {color: #FF8383;}
 
 /* 플레이리스트 상세 */
-.con-pli-detail > .info-wrapper > .info-section {max-height: 1000px;}
+.con-pli-detail > .info-wrapper > .info-section {max-height: 1200px;}
 .con-pli-detail .info-section .info-wrapper {margin-left: 0; margin-top: 60px;}
-.con-pli-detail .info-section .info-wrapper .info-section {max-height: 500px;}
+.con-pli-detail .info-section .info-wrapper .info-section {max-height: 650px;}
 .con-pli-detail .profile-edit-box {border: none; border-radius: 0;}
 .con-pli-detail .input-area {flex: 1; padding: 0;}
 .con-pli-detail input[type="radio"] + .profile-edit-label {display: inline-block; margin: 0 5px;}
 .con-pli-detail .like {font-size: 3rem; margin-left: auto;}
+
+/* 내 활동 */
+.con-activity .info-wrapper .info-section {height: 300px; text-align: start;}
+.text-item {color: #fff; border-bottom: 0.5px dashed var(--main-color); padding: 10px 0; transition: all 0.3s; cursor: pointer;}
+.text-item:hover {transform: scale(1.01);}
+.ul-list .text-item:last-child {border-bottom: none;}
+.text-item .sm-title {color: var(--main-color);}
+.text-item .sm-content {overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-top: 5px;}
+.text-item .like {margin-left: 5px;}
+.text-item .sm-content, .text-item .date, .text-item .like {font-size: 1.4rem;}
+.text-item .like, .text-item .date {color: #bbb;}
+.text-item .date::after {content: ''; display: inline-block; border: 1px solid #bbb; height: 10px; margin-left: 10px;}
+.text-item.post .sm-title {flex: 0.8; color: #fff; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+.text-item.post .date::after {content: none;}
+.text-item.post a {display: flex; justify-content: space-between;}
