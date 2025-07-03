@@ -7,14 +7,14 @@
 >
 <head>
   <meta charset="UTF-8" />
-  <title>팔로우 유저</title>
+  <title>배지 목록</title>
   <th:block th:replace="~{fragments/link::user}"></th:block>
 </head>
 <body>
   <main class="con con-badge position-relative" layout:fragment="content">
     <!-- 왼쪽 리모컨 -->
     <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
-    <!-- 팔로워 -->
+    <!-- 획득 배지 -->
     <section class="info-wrapper">
       <div class="info-section">
         <div class="title">
@@ -22,12 +22,12 @@
             <h2 class="text-start">획득한 배지</h2>
           </div>
         </div>
-        <ul class="ul-list d-flex column-gap-3">
+        <ul class="ul-list bl d-flex">
           <th:block th:each="i : ${#numbers.sequence(1, 10)}">
             <li>
               <div class="bg-badge">
                 <div class="badge">
-                  <span>배지 이름 3</span>
+                  <span th:text="|배지 이름 ${i}|">배지 이름</span>
                 </div>
                 <p>획득 조건 출력</p>
               </div>
@@ -36,7 +36,7 @@
         </ul>
       </div>
     </section>
-    <!-- 팔로우 -->
+    <!-- 미획득 배지 -->
     <section class="info-wrapper">
       <div class="info-section">
         <div class="title">
@@ -44,7 +44,17 @@
             <h2 class="text-start">미획득 배지</h2>
           </div>
         </div>
-        <ul class="ul-list">
+        <ul class="ul-list bl d-flex">
+          <th:block th:each="i : ${#numbers.sequence(1, 10)}">
+            <li>
+              <div class="bg-badge cg">
+                <div class="badge cg">
+                  <span th:text="|배지 이름 ${i}|">배지 이름</span>
+                </div>
+                <p>획득 조건 출력</p>
+              </div>
+            </li>
+          </th:block>
         </ul>
       </div>
     </section>

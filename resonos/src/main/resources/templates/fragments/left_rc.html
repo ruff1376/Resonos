@@ -8,5 +8,5 @@
   <a th:href="@{/user-follows}" class="tab" th:classappend="${lastPath == 'user-follows'} ? 'active' : ''">팔로워 / 팔로우</a>
   <a th:href="@{/users/badge }" class="tab" th:classappend="${lastPath == 'badge'} ? 'active' : ''">배지</a>
   <a href="#" class="tab">계정 / 보안</a>
-  <a href="#" class="tab">알림 설정</a>
+  <a th:href="@{/users/setting-alarm}" class="tab" th:classappend="${lastPath == 'setting-alarm'} ? 'active' : ''">알림 설정</a>
 </section>

@@ -94,4 +94,12 @@ public class UserController {
     model.addAttribute("lastPath", "badge");
     return "user/badge";
   }
+
+  @GetMapping("/setting-alarm")
+  public String getMethodName(Model model) {
+
+
+    model.addAttribute("lastPath", "setting-alarm");
+    return "user/setting-alarm";
+  }
 }
