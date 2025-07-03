@@ -871,3 +871,24 @@ REFERENCES `album` (
 	`id`
 );
 
+
+ALTER TABLE album DROP FOREIGN KEY FK_artist_TO_album_1;
+ALTER TABLE album
+  ADD CONSTRAINT FK_artist_TO_album_1
+  FOREIGN KEY (artist_id)
+  REFERENCES artist(id)
+  ON UPDATE CASCADE;
+
+ALTER TABLE track DROP FOREIGN KEY FK_album_TO_track_1;
+ALTER TABLE track
+  ADD CONSTRAINT FK_album_TO_track_1
+  FOREIGN KEY (album_id)
+  REFERENCES album(id)
+  ON UPDATE CASCADE;
+
+ALTER TABLE track DROP FOREIGN KEY FK_artist_TO_track_1;
+ALTER TABLE track
+  ADD CONSTRAINT FK_artist_TO_track_1
+  FOREIGN KEY (artist_id)
+  REFERENCES artist(id)
+  ON UPDATE CASCADE;
