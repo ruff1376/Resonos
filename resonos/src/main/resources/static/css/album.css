@@ -44,7 +44,7 @@ li {list-style-type: none;}
   object-fit: cover;
 }
 /* 애니메이션 끝 */
-.wrapper { width: 100%; display: flex; flex-direction: column; gap: 30px; align-items: center;}
+.wrapper { width: 100%; display: flex; flex-direction: column; gap: 30px; align-items: center; margin-bottom: 30px;}
 body {
     background-color: var(--background-color);
     color: white;
@@ -112,14 +112,126 @@ img {
     flex-direction: column;
     justify-content: space-evenly;
 }
+/* 점수 */
+.score-bar {
+  height: 24px;
+  width: 100%;
+  max-width: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+
+  /* ✅ 외곽선처럼 보이지만 실제 영역을 차지하지 않음 */
+  outline: 2px solid var(--main-color);
+  outline-offset: 2px;  /* 바깥쪽으로 떨어뜨림 */
+}
+
+.score-fill {
+  height: 100%;
+  width: 87%; /* 예시 점수 */
+  background-color: var(--main-color);
+  color: var(--background-color);
+  font-size: 14px;
+  font-weight: bolder;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  line-height: 1;
+  /* ✅ 아래 줄만 수정하거나 삭제해보세요 */
+  /* border-radius: 10px 0 0 10px; */
+}
+/* 점수 끝 */
 .review-card {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
     max-width: 1350px;
     width: 100%;
     display: flex;
     border-radius: 20px;
     border: 2px solid var(--main-color);
+    background-color: var(--background-color);
 }
-
+.review-card > p {
+    margin: 0;
+}
+.review-score {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 10px;
+}
+.review-score h1 {
+    font-size: 3.4rem !important;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.name-and-score {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.name-and-score > p:first-child {
+    font-weight: bold;
+    color: var(--main-color);
+}
+.comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.comment {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+    border-bottom: 1px solid var(--main-color);
+}
+.comment p {
+    margin: 0;
+}
+.review-util {
+    display: flex;
+    gap: 10px;
+}
+.reply {
+    display: flex;
+    height: 100px;
+    max-width: 1326px;
+    padding: 10px;
+}
+.reply form {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+}
+.reply form textarea {
+    display: flex;
+    padding: 5px;
+    resize: none;
+    max-width: 1350px;
+    flex: 1;
+    border-radius: 10px;
+    border: 2px solid var(--main-color);
+}
+.reply form .score-and-submit {
+    width: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.score-and-submit input {
+    border-radius: 5px;
+    padding-left: 5px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    border: 2px solid var(--main-color);
+}
+.reply form textarea,
+.score-and-submit input {
+    background: transparent;
+    color: white;
+}
 .iframe-card {
     display: flex;
     padding: 10px;
@@ -136,6 +248,7 @@ img {
   flex:1 1 500px;        /* 👉 grow 1 / shrink 1 / basis 500px  */
   min-width:260px;       /* 더 작아질 때의 하한선(선택사항)      */
   height:152px;          /* 고정 높이 유지                       */
+  max-width: 510px;
 }
 .spotify iframe {
   width: 100%;
@@ -148,7 +261,7 @@ img {
     display: flex;
     padding: 10px;
     padding-left: 20px;
-    padding-right: 20px;
+    padding-right: 10px;
     max-width: 1350px;
     width: 100%;
     justify-content: space-between;
@@ -158,13 +271,17 @@ img {
 }
 .info {
     padding-top: 5px;
-    padding-left: 10px;
     padding-bottom: 10px;
+    padding-right: 15px;
     display: flex;
     flex:1 1 33%;
     flex-direction: column;
     border-right: 2px solid var(--main-color);
     gap: 5px;
+}
+.top5track {
+    flex: 1 1 auto;         /* 유연하게 줄어들고 늘어남 */
+    max-width: 340px;       /* 최대 너비 제한 */
 }
 .info:last-child {
     border: none;
@@ -192,6 +309,15 @@ img {
     border-radius: 10px;
     border: 2px solid var(--main-color);
     overflow: hidden;
+    height: 315px;
+}
+.chart {
+    width: 400px;
+    height: 400px;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+    overflow: hidden;
+    padding: 10px;
 }
 .mood-card {
     max-width: 1350px;
@@ -211,21 +337,29 @@ img {
     justify-content: space-between;
     align-items: center;
 }
-.chart {
-    width: 400px;
-    height: 400px;
-    border-radius: 20px;
-    border: 2px solid var(--main-color);
-    overflow: hidden;
-    padding: 10px;
-}
 .mood-vote {
     display: flex;
     flex:1;
     flex-direction: column;
+    height: 400px;
+    align-items: center;
 }
 .moods {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    height: 100%;
+    width: 100%;
+    align-items:flex-start;
+    justify-content:flex-start;
+    align-content: flex-start;
+}
+.mood-vote button {
+    width: 100%;
+    max-width: 470px;
+    align-items: center;
+    justify-content: center;
+}
+.moods .btn{
+  flex:0 0 auto;           /* grow 0, shrink 0, basis auto */
 }

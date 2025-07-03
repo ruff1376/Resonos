@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/albums")
 public class AlbumController {
     
-    @Autowired
-    private AlbumService albumService;
+    // @Autowired
+    // private AlbumService albumService;
 
     @GetMapping({"/",""})
     public String album() {
