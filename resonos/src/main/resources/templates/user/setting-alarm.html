@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}"
+>
+<head>
+  <meta charset="UTF-8" />
+  <title>알림 설정</title>
+  <th:block th:replace="~{fragments/link::user}"></th:block>
+</head>
+<body>
+  <main class="con con-alaram position-relative" layout:fragment="content">
+    <!-- 왼쪽 리모컨 -->
+    <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
+    <!-- 팔로워 -->
+    <section class="info-wrapper">
+      <div class="info-section">
+        <div class="title">
+          <div>
+            <h2 class="text-start">알림 설정</h2>
+          </div>
+        </div>
+        <ul class="ul-list">
+          <li class="list-item" th:each="i : ${#numbers.sequence(1, 5)}">
+            <span th:text="|알람${i}|"></span>
+            <label class="toggle-switch">
+              <input type="checkbox" name="notification" checked>
+              <span class="slider"></span>
+            </label>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
