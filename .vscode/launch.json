@@ -1,14 +1,14 @@
 {
-    "configurations": [
-        {
-            "type": "java",
-            "name": "Spring Boot-ResonosApplication<resonos>",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "mainClass": "com.cosmus.resonos.ResonosApplication",
-            "projectName": "resonos",
-            "args": "",
-            "envFile": "${workspaceFolder}/.env"
-        }
-    ]
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-ResonosApplication<resonos>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.cosmus.resonos.ResonosApplication",
+      "projectName": "resonos",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
 }
