@@ -76,6 +76,7 @@ public class UserController {
 
   /**
    * 내 활동 페이지 요청
+   * @param model
    * @return
    */
   @GetMapping("/activity")
@@ -84,5 +85,13 @@ public class UserController {
 
     model.addAttribute("lastPath", "activity");
     return "user/activity";
+  }
+
+  @GetMapping("/badge")
+  // TODO: @AuthenticationPrincipal 로 접근 권한
+  public String badge(Model model) {
+
+    model.addAttribute("lastPath", "badge");
+    return "user/badge";
   }
 }

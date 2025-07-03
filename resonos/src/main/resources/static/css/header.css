@@ -13,7 +13,7 @@
 .header-navbar .nav-link:hover {
     color: #fffbe6 !important;
 }
-.header-logo-img {
+.header-navbar .header-logo-img {
     width: 150px;
     height: 100px;
     margin-right: 10px;
@@ -21,14 +21,14 @@
     background: #181C23;
     object-fit: contain;
 }
-.header-logo-img-sub {
+.header-navbar .header-logo-img-sub {
     width: 100px;
     height: 66px;
     border-radius: 6px;
     background: #181C23;
     object-fit: contain;
 }
-.search-box {
+.header-navbar .search-box {
     border: 1px solid #B1B1B1;
     border-radius: 10px;
     height: 35px;
@@ -37,24 +37,24 @@
     padding-left: 35px;
     font-size: 12px;
 }
-.search-box::placeholder {
+.header-navbar .search-box::placeholder {
     color: #B1B1B1;
     opacity: 1;
 }
-.search-box:focus {
+.header-navbar .search-box:focus {
     background: transparent !important;
     color: #B1B1B1;
     box-shadow: none;
     border-color: #B1B1B1;
 }
-.search-icon {
+.header-navbar .search-icon {
     position: absolute;
     left: 10px;
     font-size: 20px;
     color: #B1B1B1;
     pointer-events: none;
 }
-header .btn-outline-gold {
+.header-navbar .btn-outline-gold {
     border: 1px solid #D4B97F;
     color: #D4B97F;
     border-radius: 10px;
@@ -67,32 +67,32 @@ header .btn-outline-gold {
     justify-content: center;
     padding: 0;
 }
-.btn-outline-gold:hover {
+.header-navbar .btn-outline-gold:hover {
     background: var(--main-color);
     color: #181C23;
 }
 /* 프로필 드롭다운 화살표 색상 */
-.profile-dropdown .dropdown-toggle::after {
+.header-navbar .profile-dropdown .dropdown-toggle::after {
     color: #B1B1B1 !important;
     filter: none;
 }
 /* 검색창, 종, 프로필 간격 */
-.header-gap {
+.header-navbar .header-gap {
     gap: 10px;
 }
-.dropdown-menu {
+.header-navbar .dropdown-menu {
     background-color: #181C23;
     border-radius: 15px;
 }
-.dropdown-item {
+.header-navbar .dropdown-item {
     font-size: 1.6rem;
     color: #B1B1B1;
 }
-.dropdown-item:hover {
+.header-navbar .dropdown-item:hover {
     background-color: transparent;
     color: var(--main-color);
 }
-.dropdown-divider {
+.header-navbar .dropdown-divider {
     border-top: 1px solid var(--main-color) !important;
     opacity: 1;
 }
