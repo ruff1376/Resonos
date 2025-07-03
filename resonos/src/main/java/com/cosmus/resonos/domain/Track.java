@@ -14,4 +14,6 @@ public class Track {
     private String artistId;
     private int popularity;
     private int trackNo;
+    private String artistName;
+    private String coverImage;
 }

@@ -6,9 +6,9 @@
 
   <resultMap id="UserRoleResultMap" type="com.cosmus.resonos.domain.UserRole">
     <id property="id" column="id"/>
-    <result property="assignedAt" column="assigned_at"/>
     <result property="userId" column="user_id"/>
     <result property="roleId" column="role_id"/>
+    <result property="assignedAt" column="assigned_at"/>
   </resultMap>
 
   <select id="list" resultMap="UserRoleResultMap">
@@ -19,20 +19,19 @@
     SELECT * FROM user_role WHERE id = #{id}
   </select>
 
-  <insert id="insert">
-    INSERT INTO user_role (id, assigned_at, user_id, role_id)
-    VALUES (#{id}, #{assignedAt}, #{userId}, #{roleId})
+  <insert id="insert" >
+    INSERT INTO user_role (user_id, role_id)
+    VALUES (#{userId}, #{roleId})
   </insert>
 
   <update id="update">
     UPDATE user_role
-    SET assigned_at = #{assignedAt},
-        user_id = #{userId},
+    SET user_id = #{userId},
         role_id = #{roleId}
     WHERE id = #{id}
   </update>
 
-  <delete id="delete">
+  <delete id="delete" >
     DELETE FROM user_role WHERE id = #{id}
   </delete>
 

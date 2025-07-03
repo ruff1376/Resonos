@@ -6,111 +6,131 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>앨범 리뷰</title>
-    <link rel="stylesheet" th:href="@{/css/artist.css}">
-    <th:block th:replace="~{fragments/link::artist}"></th:block>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <th:block th:replace="~{fragments/link::album}"></th:block>
 </head>
 
-<body>
-    <th:block layout:fragment="content">
+<body layout:fragment="content">
         <div class="wrapper">
-            <!-- 아티스트 카드 -->
-            <div class="artist-card">
-                <div class="artist-overall">
-                    <div class="artist-img">
+            <!-- 앨범 카드 -->
+            <div class="song-card">
+                <div class="song-overall">
+                    <div class="song-img">
                         <img src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/38/cc5a526bf63046da3ed3123f55f5c1ca_res.jpeg" alt="">
-                    </div>
-                    <div class="artist-info">
-                        <p id="headline">페페</p>
-                        <p>팔로워 99,999</p>
-                        <p>앨범 30</p>
-                        <p>곡 300</p>
-                        <div>
-                            <div class="btn btn-gold">❤ 팔로우</div>
-                        </div>
+                        <span class="center-pin"></span>
                     </div>
                 </div>
-                <div class="disco-graphy">
-                    <div class="graphy-header">
-                        <p id="headline">디스코 그래피</p>
-                    </div>
-                    <div class="album-container">
-                        <!-- 반복문 구간 -->
-                         <div class="album">
-                            <div class="album-img">
-                                <img src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/38/cc5a526bf63046da3ed3123f55f5c1ca_res.jpeg" alt="">
-                            </div>
-                            <div class="album-info">
-                                <p id="subtitle">모르시나요dd</p>
-                                <p>16 Nov 2016 </p>
-                                <p>11 tracks</p>
-                            </div>
-                         </div>
-                         <div class="album">
-                            <div class="album-img">
-                                <img src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/38/cc5a526bf63046da3ed3123f55f5c1ca_res.jpeg" alt="">
-                            </div>
-                            <div class="album-info">
-                                <p id="subtitle">모르시나요ddddd</p>
-                                <p>16 Nov 2016 </p>
-                                <p>11 tracks</p>
-                            </div>
-                         </div>
+                <div class="song-info">
+                    <p id="headline">슬픈 트랄랄레로</p>
+                    <p>발매일 : 2025.05.28 장르 : Rock 레이블 : Illinaire Records</p>
+                    <p>🔮 99 (✅유저 30, 일반유저 300명)</p>
+                    <div>
+                        <div class="btn btn-gold">❤ 팔로우</div>
                     </div>
                 </div>
             </div>
-            <!-- 아티스트 카드 끝 -->
-            <!-- 인기곡 유튜브 -->
-            <div class="hottest-card">
-                <div class="songs">
-                    <p id="headline">인기곡</p>
-                    <!-- 반복문 인기곡 -->
-                    <p>1. Drowning 출시연도 곡 길이</p>
-                    <p>1. Drowning 출시연도 곡 길이</p>
-                    <p>1. Drowning 출시연도 곡 길이</p>
-                    <p>1. Drowning 출시연도 곡 길이</p>
-                </div>
-                <div class="youtube">
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/Oeda7KVkFog?si=6f3qJAZGD7iLaUsJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                </div>
-            </div>
-            <!-- 인기곡 카드 끝 -->
-            <!-- 아티스트 리뷰/일정.. -->
+            <!-- 앨범 카드 끝 -->
+            <!-- 앨범 트랙리스트 분위기 뭐뭐.. -->
             <div class="info-card">
-                <div class="info recent-review">
-                    <p id="headline">최근 앨범 리뷰</p>
-                    <p>이번 신곡 쩔었다</p>
-                    <p>동해물과 백두산이 마르고 닳도록</p>
-                    <p>동해물과 백두산이 마르고 닳도록</p>
-                    <p>동해물과 백두산이 마르고 닳도록</p>
-                    <p>동해물과 백두산이 마르고 닳도록</p>
-                    <div>
-                        <button class="btn btn-gold">앨범 전체 보기</button>
+                <div class="info top5track">
+                    <p id="headline">앨범 인기 TOP 5 트랙</p>
+                    <p>1. 나는 아름다운 트랄랄레로</p>
+                    <p>1. 나는 아름다운 트랄랄레로</p>
+                    <p>1. 나는 아름다운 트랄랄레로</p>
+                    <p>1. 나는 아름다운 트랄랄레로</p>
+                    <p>1. 나는 아름다운 트랄랄레로</p>
+                </div>
+                <div class="info album-moods">
+                    <p id="headline">앨범의 분위기</p>
+                    <div class="mood-list">
+                        <button class="btn btn-gold">동해물과</button>
+                        <button class="btn btn-gold">백두산이 마르고</button>
+                        <button class="btn btn-gold">닳도록 하느</button>
+                        <button class="btn btn-gold">닳도록 하느</button>
                     </div>
                 </div>
-                <div class="info simillar-artist">
-                    <p id="headline">와 유사한 아티스트</p>
-                    <p>1.쩔었다</p>
-                    <p>2.동해물</p>
-                    <p>3.백두산</p>
-                    <p>4.마르고</p>
-                    <p>4.마르고</p>
-                    <div>
-                        <button class="btn btn-gold">아티스트 더보기</button>
-                    </div>
-                </div>
-                <div class="info concert-schedule">
-                    <p id="headline">공연/이벤트 일정</p>
-                    <p>2025. 08.  25 - 우리집 안방</p>
-                    <p>한국(서울)</p>
-                    <p>2025. 08.  25 - 우리집 안방</p>
-                    <p>한국(서울)</p>
-                    <p>2025. 08.  25 - 우리집 안방</p>
-                    <p>한국(서울)</p>
-                    </p>
+                <div class="info pl-list">
+                    <p id="subtitle">이 트랙을 포함한 플리🎶</p>
+                    <p>오늘 헤어진 사람들은 위한 플리  ❤352</p>
+                    <p>혼자있고 싶어요,,  ❤242</p>
+                    <p>😢😢😢😢😢😢😢😢😢  ❤122</p>
+                    <p>페페사랑단 플레이리스트  ❤64</p>
                 </div>
             </div>
-            <!-- 아티스트 리뷰/일정.. -->
+            <!-- 앨범 트랙리스트 분위기 뭐뭐..끝 -->
+
+            <!-- 평점&리뷰 -->
+            <div class="review-card">
+                <p id="headline">평점 & 리뷰</p>
+                <div class="review-score">
+                    <h1 id="headline">🔮 99</h1>
+                    <div class="score-bar">
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: 99%;">99</div>
+                        </div>
+                        <!-- <div class="score-fill" th:style="'width:' + ${score} + '%'">
+                            <span th:text="${score}"></span>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="review-container">
+                <ul class="comment-list">
+                    <!-- 반복문 -->
+                    <li class="comment">
+                        <div class="name-and-score">
+                            <p id="subtitle">페페사랑단</p>
+                            <p> 🔮 100</p>
+                        </div>
+                        <div class="review-content">
+                            <p>우리 페페 많이 사랑해주세요</p>
+                        </div>
+                        <div class="review-util">
+                            <p>2025.05.21</p>
+                            <a href="#">❤ 3</a>
+                            <a href="#" id="report">신고</a>
+                        </div>
+                    </li>
+                    <li class="comment">
+                        <div class="name-and-score">
+                            <p id="subtitle">페페사랑단</p>
+                            <p> 🔮 100</p>
+                        </div>
+                        <div class="review-content">
+                            <p>우리 페페 많이 사랑해주세요</p>
+                        </div>
+                        <div class="review-util">
+                            <p>2025.05.21</p>
+                            <a href="#">❤ 3</a>
+                            <a href="#" id="report">신고</a>
+                        </div>
+                    </li>
+                    <li class="comment">
+                        <div class="name-and-score">
+                            <p id="subtitle">페페사랑단</p>
+                            <p> 🔮 100</p>
+                        </div>
+                        <div class="review-content">
+                            <p>우리 페페 많이 사랑해주세요</p>
+                        </div>
+                        <div class="review-util">
+                            <p>2025.05.21</p>
+                            <a href="#">❤ 3</a>
+                            <a href="#" id="report">신고</a>
+                        </div>
+                    </li>
+                </ul>
+                </div>
+                <!-- 페이지네이션 -->
+                 <div class="reply">
+                    <form action="">
+                        <textarea name="" id="" placeholder="리뷰를 입력해주세요"></textarea>
+                        <div class="score-and-submit">
+                            <input type="text" name="" id="" placeholder="점수를 입력해주세요">
+                            <button class="btn btn-gold">리뷰작성</button>
+                        </div>
+                    </form>
+                 </div>
+            </div>
+            <!-- 평점&리뷰 끝 -->
             <!-- 분위기 -->
             <div class="mood-card">
                 <div class="chart">
@@ -123,17 +143,34 @@
                     <div class="moods">
                         <!-- 분위기 반복문 -->
                         <div class="btn btn-gold">분위기1</div>
-                        <div class="btn btn-gold">분위기1234</div>
-                        <div class="btn btn-gold">분위기13</div>
+                        <div class="btn btn-gold">분위기1324</div>
+                        <div class="btn btn-gold">분위기133</div>
                         <div class="btn btn-gold">분위기1</div>
                         <div class="btn btn-gold">분위기144</div>
                         <div class="btn btn-gold">분위기1</div>
                     </div>
+                    <button class="btn btn-gold">분위기 투표</button>
                 </div>
             </div>
             <!-- 분위기 끝 -->
+
+            <!-- iframe -->
+            <div class="iframe-card">
+                <div class="spotify">
+                    <!-- 스포티파이 로그인 되어있지않을때 30초 미리듣기 오디오태그 -->
+                    <iframe
+                        src="https://open.spotify.com/embed/track/2GMKQPMXdOGXsQkDYBN6wF?utm_source=generator"
+                        frameborder="0" allowfullscreen
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                        loading="lazy">
+                    </iframe>
+                </div>
+                <div class="youtube">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/3XDf5Ke2Zj8?si=VLxTrYjctMpDikdc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+            </div>
+            <!-- iframe 카드 끝 -->
         </div>
-    </th:block>
 </body>
 
 </html>

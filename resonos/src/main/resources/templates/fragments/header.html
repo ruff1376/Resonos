@@ -1,8 +1,9 @@
 <!-- 프래그먼트 : 레이아웃에서 공통적으로 사용할 UI -->
 <!-- th:fragment="프래그먼트 명" -->
 <th:block th:fragment="header">
-    <header>
-        <nav class="navbar navbar-expand-lg py-0 header-navbar">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <header class="site-header">
+        <nav class="navbar navbar-expand-lg py-0">
             <div class="container-fluid" style="max-width:1440px;">
                 <div class="d-flex justify-content-start">
                     <a class="navbar-brand d-flex align-items-center" href="#">

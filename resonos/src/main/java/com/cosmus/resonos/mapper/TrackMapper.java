@@ -10,6 +10,8 @@ import com.cosmus.resonos.domain.Track;
 public interface TrackMapper {
     // 목록
     public List<Track> list() throws Exception;
+    // 메인 회면 최신 앨범 목록
+    public List<Track> mainNewList() throws Exception;
     // 조회
     public Track select(Integer no) throws Exception;
     // 삽입
@@ -18,4 +20,6 @@ public interface TrackMapper {
     public int update(Track track) throws Exception;
     // 삭제
     public int delete(String id) throws Exception;
+    // 존재 여부 확인
+    public int exists(String id) throws Exception;
 }

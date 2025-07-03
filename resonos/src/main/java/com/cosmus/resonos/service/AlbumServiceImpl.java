@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.Album;
+import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.mapper.AlbumMapper;
 
 @Service
@@ -18,6 +19,20 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public List<Album> list() throws Exception {
         return albumMapper.list();
+    }
+
+    // 메인 회면 최신 앨범 목록
+    @Override
+    public List<Album> mainNewList() throws Exception {
+        return albumMapper.mainNewList();
+    }
+
+    // 최신 앨범 목록 조회
+    @Override
+    public List<Album> newList(Pagination pagination) throws Exception {
+        long total = albumMapper.count();
+        pagination.setTotal(total);
+        return albumMapper.newList(pagination);
     }
 
     // 앨범 단건 조회
@@ -42,5 +57,11 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public boolean delete(String id) throws Exception {
         return albumMapper.delete(id) > 0;
+    }
+
+    // 앨범 존재 여부 확인
+    @Override
+    public boolean exists(String id) throws Exception {
+        return albumMapper.exists(id) > 0;
     }
 }

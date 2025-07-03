@@ -9,17 +9,29 @@
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <!-- header/footer fragment에서 각각 header.css, footer.css 포함 -->
     <!-- 페이지 전용 CSS는 각 페이지에서 직접 추가 -->
+    <style>
+        body::before {
+            content: '';
+            height: 100vh; /* 브라우저 창 높이에 딱 맞게 */
+            background-image: url('/img/main_bg.png');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: auto 100vh;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+        }
+    </style>
 </head>
-<body>
+<body id="top-body">
     <!-- header -->
     <div class="container">
         <th:block th:replace="~{fragments/header::header}"></th:block>
-
         <!-- content -->
-        <th:block layout:fragment="content">
-
-        </th:block>
-
+        <th:block layout:fragment="content"></th:block>
         <!-- footer -->
         <th:block th:replace="~{fragments/footer::footer}"></th:block>
     </div>

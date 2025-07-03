@@ -20,6 +20,12 @@ public class TrackServiceImpl implements TrackService {
         return trackMapper.list();
     }
 
+    // 메인 화면 최신 트랙 목록 조회
+    @Override
+    public List<Track> mainNewList() throws Exception {
+        return trackMapper.mainNewList();
+    }
+
     // 트랙 단건 조회
     @Override
     public Track select(Integer no) throws Exception {
@@ -42,5 +48,11 @@ public class TrackServiceImpl implements TrackService {
     @Override
     public boolean delete(String id) throws Exception {
         return trackMapper.delete(id) > 0;
+    }
+
+    // 트랙 존재 여부 확인
+    @Override
+    public boolean exists(String id) throws Exception {
+        return trackMapper.exists(id) > 0;
     }
 }

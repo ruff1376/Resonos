@@ -1,5 +1,4 @@
 .footer-container {
-    background: var(--background-color);
     width: 100%;
     max-width: 1440px;
     margin: 0 auto;
@@ -15,7 +14,6 @@
     height: 167px;
     margin: 0 auto;
     border-radius: 10px;
-    background: var(--background-color);
     object-fit: contain;
 }
 
@@ -23,7 +21,6 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background-color: var(--background-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -31,7 +28,7 @@
 
 .footer-link {
     font-family: 'Inter', sans-serif;
-    font-size: 20px;
+    font-size: 1.4rem;
     color: var(--main-color);
     background: none;
     border: none;
@@ -66,7 +63,6 @@
 }
 
 .footer-navbar {
-    background: var(--background-color) !important;
     border-top: 1px solid var(--main-color);
 }
 

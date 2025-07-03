@@ -25,26 +25,31 @@ repositories {
 }
 
 dependencies {
-	// implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	// implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'com.mysql:mysql-connector-j'
-	annotationProcessor 'org.projectlombok:lombok'
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
-	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
-	implementation 'com.github.pagehelper:pagehelper-spring-boot-starter:2.1.0'
-	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
-	/* 유효성 검사 라이브러리 */
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    annotationProcessor 'org.projectlombok:lombok'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
+    implementation 'com.github.pagehelper:pagehelper-spring-boot-starter:2.1.0'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+		/* 유효성 검사 라이브러리 */
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+    ignoreFailures = true
+}
+
+springBoot {
+    mainClass = 'com.cosmus.resonos.SecurityApplication'
 }

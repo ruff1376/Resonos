@@ -62,3 +62,33 @@ body, .resonos-bg {
 .text-secondary {
   color: #B0B6BE !important;
 }
+
+
+/* member */
+.search-bar {
+  background: #222;
+  color: #fffbe6;
+  border: 1.5px solid #D4B97F;
+  border-radius: 12px;
+  padding: 10px 16px;
+  margin-bottom: 18px;
+  width: 260px;
+  display: inline-block;
+}
+.search-bar:focus {
+  border-color: #fffbe6;
+  outline: none;
+}
+.badge {
+  font-weight: 500;
+  border-radius: 10px;
+  padding: 4px 10px;
+  font-size: 0.97rem;
+}
+.bg-gold {
+  background: #D4B97F !important;
+  color: #181C23 !important;
+}
+.text-secondary {
+  color: #B0B6BE !important;
+}

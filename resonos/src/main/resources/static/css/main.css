@@ -4,10 +4,6 @@ body {
     font-family: 'Inter', 'Segoe UI', 'Pretendard', sans-serif;
 }
 
-.main-section-bg {
-    background: var(--background-color);
-}
-
 .album-card {
     background: #222222;
     border-radius: 20px;
@@ -101,14 +97,13 @@ body {
 }
 
 .album-grid {
-    background: var(--background-color);
     border-top: 1px solid var(--main-color);
     border-bottom: 1px solid var(--main-color);
     padding: 40px 0;
 }
 
 .album-grid .card {
-    background: var(--background-color);
+    background: transparent;
     border: none;
     color: #fff;
 }
@@ -127,9 +122,27 @@ body {
     margin-bottom: 4px;
 }
 
-.album-grid .card-text {
+.album-grid .card-artist {
     font-size: 12px;
     color: #B1B1B1;
+}
+
+.album-grid .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    text-align: center; /* 텍스트 가운데 정렬 */
+}
+
+.album-grid .card-title,
+.album-grid .card-artist {
+    display: block;
+    width: 100%;
+    text-align: center; /* 여러 줄도 항상 가운데 정렬 */
+    word-break: break-all;
+    white-space: normal;
 }
 
 .album-grid .album-rating {
