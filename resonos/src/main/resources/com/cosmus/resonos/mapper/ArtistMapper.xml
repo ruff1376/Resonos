@@ -38,6 +38,7 @@
 
   <select id="list" resultMap="ArtistResultMap">
     SELECT * FROM artist
+    ORDER BY name ASC
   </select>
 
   <select id="exists" resultType="int" parameterType="string">

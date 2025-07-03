@@ -18,6 +18,7 @@
 
   <select id="list" resultMap="Album">
     SELECT * FROM album
+    ORDER BY release_date DESC
   </select>
 
   <select id="mainNewList" resultMap="Album">

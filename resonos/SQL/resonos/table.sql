@@ -1,8 +1,5 @@
-<<<<<<< HEAD
--- Active: 1751337677491@@127.0.0.1@3306@resonos
-=======
--- Active: 1745889699154@@127.0.0.1@3306@aloha
->>>>>>> main
+-- Active: 1751542958734@@127.0.0.1@3306@resonos
+
 
 -- 💥 기존 테이블 모두 삭제
 DROP TABLE IF EXISTS
@@ -286,10 +283,14 @@ CREATE TABLE `notification` (
 	`user_id`	BIGINT	NOT NULL
 );
 
-CREATE TABLE `setting` (
-	`id`	BIGINT	NOT NULL,
-	`value`	VARCHAR(100)	NULL,
-	`updated_at`	DATETIME	NULL
+
+CREATE TABLE setting (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255),
+    description VARCHAR(255),
+    value VARCHAR(255),
+    updated_at DATETIME,
+    created_at DATETIME
 );
 
 CREATE TABLE `track_mood_vote` (

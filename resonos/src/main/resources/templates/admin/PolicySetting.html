@@ -143,6 +143,24 @@
                 <button class="btn btn-gold mt-3" type="submit">저장</button>
               </form>
 
+              <!-- 환경설정 추가 폼 -->
+              <form class="mb-4" th:action="@{/admin/PolicySetting/setting/add}" method="post">
+                <div class="row g-2 align-items-center mb-2">
+                  <div class="col">
+                    <input type="text" class="form-control" name="name" placeholder="설정명" required>
+                  </div>
+                  <div class="col">
+                    <input type="text" class="form-control" name="description" placeholder="설명">
+                  </div>
+                  <div class="col">
+                    <input type="text" class="form-control" name="value" placeholder="값" required>
+                  </div>
+                  <div class="col-auto">
+                    <button class="btn btn-outline-gold" type="submit">+ 추가</button>
+                  </div>
+                </div>
+              </form>
+
               <!-- 환경설정 전체 목록 테이블 -->
               <div class="mt-4">
                 <h5 class="fw-bold mb-2">환경설정 전체 목록</h5>
@@ -150,15 +168,21 @@
                   <thead>
                     <tr>
                       <th style="width:60px;">ID</th>
+                      <th>설정명</th>
+                      <th>설명</th>
                       <th>설정값</th>
                       <th>수정일시</th>
+                      <th>생성일시</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr th:each="setting : ${settings}">
                       <td th:text="${setting.id}">1</td>
+                      <td th:text="${setting.name}">설정명</td>
+                      <td th:text="${setting.description}">설명</td>
                       <td th:text="${setting.value}">값</td>
                       <td th:text="${#dates.format(setting.updatedAt, 'yyyy-MM-dd HH:mm')}">2024-01-01 12:00</td>
+                      <td th:text="${#dates.format(setting.createdAt, 'yyyy-MM-dd HH:mm')}">2024-01-01 12:00</td>
                     </tr>
                   </tbody>
                 </table>

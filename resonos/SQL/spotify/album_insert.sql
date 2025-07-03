@@ -1,3 +1,4 @@
+-- Active: 1751542958734@@127.0.0.1@3306@resonos
 TRUNCATE TABLE album;
 
 -- 아티스트: The Weeknd
