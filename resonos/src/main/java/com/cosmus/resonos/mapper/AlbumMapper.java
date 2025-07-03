@@ -11,7 +11,7 @@ import com.cosmus.resonos.domain.Pagination;
 public interface AlbumMapper {
     // 목록
     public List<Album> list() throws Exception;
-    // 메인 회면 최신 앨범 목록
+    // 메인 화면 최신 앨범 목록
     public List<Album> mainNewList() throws Exception;
     // 최신 앨범 목록
     public List<Album> newList(Pagination pagination) throws Exception;
