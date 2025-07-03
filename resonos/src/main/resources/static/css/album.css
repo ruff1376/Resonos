@@ -1,26 +1,15 @@
 *{margin: 0; padding: 0; box-sizing: border-box;}
-.wrapper { width: 100%; display: flex; flex-direction: column; gap: 30px; align-items: center;}
-body {
-    background-color: var(--background-color);
-    color: white;
-}
-#headline {font-size: 2.4rem; font-weight: bold; color: var(--main-color);}
-#subtitle {font-size: 2rem;}
+li {list-style-type: none;}
+
 
 /* 애니메이션 */
 @keyframes spin360 {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 }
-.album:hover {          /* 카드 확대 */
-  transform: scale(1.05);
-}
 
-.album:hover .album-img img {          /* 이미지 회전 */
-  animation: spin360 6s linear infinite;
-}
 /* 컨테이너 */
-.album-img {
+.song-img {
   position: relative;          /* 안쪽 절대좌표 기준 */
   width: 250px; height: 250px; /* LP 크기 */
   border-radius: 50%;
@@ -28,17 +17,17 @@ body {
 }
 
 /* LP 이미지 */
-.album-img .disc {
+.song-img .disc {
   width: 100%; height: 100%;
   object-fit: cover;
   animation: spin360 10s linear infinite;
 }
 
 /* 심(스핀들) */
-.album-img .center-pin {
+.song-img .center-pin {
   position: absolute;
   top: 50%; left: 50%;
-  width: 25px; height: 25px;      /* 원 크기 */
+  width: 40px; height: 40px;      /* 원 크기 */
   transform: translate(-50%, -50%);
   border-radius: 50%;
   background: var(--background-color);
@@ -46,14 +35,24 @@ body {
   z-index: 2;                     /* 디스크 위로 */
   pointer-events: none;           /* 클릭 방지 */
 }
-.album-img img {
+.song-img img {
   /* 중심축(50%·50%)을 기준으로 회전 */
   transform-origin: 50% 50%;
+  /* 10초에 한 바퀴 · 선형 · 무한 반복 */
+  animation: spin360 10s linear infinite;
   /* 선택: 이미지 크기 조절 예시 */
   object-fit: cover;
-  animation: none;
 }
 /* 애니메이션 끝 */
+.wrapper { width: 100%; display: flex; flex-direction: column; gap: 30px; align-items: center;}
+body {
+    background-color: var(--background-color);
+    color: white;
+}
+#report {color: red; text-decoration: underline;}
+
+#headline {font-size: 2.4rem; font-weight: bold; color: var(--main-color);}
+#subtitle {font-size: 2rem;}
 
 .btn-gold {
   background-color: var(--main-color);
@@ -85,7 +84,7 @@ img {
     height: 100%;
     object-fit: cover;
 }
-.artist-card {
+.song-card {
     margin-top: 50px;
     display: flex;
     max-width: 1350px;
@@ -93,76 +92,58 @@ img {
     border-radius: 20px;
     border: 2px solid var(--main-color);
 }
-.artist-card .artist-overall {
+.song-card .song-overall {
     display: flex;
-    padding-left: 30px;
     width: 400px;
     height: 250px;
-    justify-content: start;
+    justify-content: center;
     align-items: center;
     gap: 20px;
 }
-.artist-card .artist-overall .artist-img {
-    width: 150px;
-    height: 150px;
-    border-radius: 10px;
+.song-card .song-overall .song-img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
     overflow: hidden;
     border: 2px solid var(--main-color);
 }
-.artist-card .artist-overall .artist-info {
+.song-card .song-info {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
 }
-.artist-card .disco-graphy {
+.review-card {
+    max-width: 1350px;
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    height: 250px;
-    flex: 1;
-}
-.disco-graphy .graphy-header {
-    padding-top: 20px;
-}
-.album-container {
-    display: flex;
-    gap: 15px;
-    padding-top: 10px;
-}
-.album {
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    border-radius: 10px;
-    border: 2px solid var(--main-color);
-    transition: transform 0.3s ease;   /* 카드 확대 전용 */
-}
-.album-img {
-    width: 100px;
-    height: 100px;
-    overflow: hidden;
-    border-radius: 50%;
+    border-radius: 20px;
     border: 2px solid var(--main-color);
 }
-.hottest-card {
+
+.iframe-card {
     display: flex;
-    gap: 20px;
     padding: 10px;
     max-width: 1350px;
     width: 100%;
+    display: flex;
     border-radius: 20px;
     border: 2px solid var(--main-color);
-    justify-content: space-between;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 10px;
 }
-.songs > p:not(:first-child) {
-    padding-left: 10px;
+.spotify{
+  flex:1 1 500px;        /* 👉 grow 1 / shrink 1 / basis 500px  */
+  min-width:260px;       /* 더 작아질 때의 하한선(선택사항)      */
+  height:152px;          /* 고정 높이 유지                       */
 }
-.youtube {
-    border-radius: 10px;
-    border: 2px solid var(--main-color);
-    overflow: hidden;
+.spotify iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 12px;
 }
+/* 공유 */
 .info-card {
     display: flex;
     padding: 10px;
@@ -182,15 +163,35 @@ img {
     display: flex;
     flex:1 1 33%;
     flex-direction: column;
+    border-right: 2px solid var(--main-color);
+    gap: 5px;
+}
+.info:last-child {
+    border: none;
+}
+.info p {
+    padding: 0;
+    margin: 0;
+}
+.pl-list p:first-child {
+    font-weight: bold;
+    font-size: 2.2rem !important;
+    color: var(--main-color);
+}
+.hottest-card {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+    max-width: 1350px;
+    width: 100%;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
     justify-content: space-between;
+}
+.youtube {
     border-radius: 10px;
     border: 2px solid var(--main-color);
-}
-.concert-schedule {
-    flex: 1 1 auto;         /* 유연하게 줄어들고 늘어남 */
-    max-width: 250px;       /* 최대 너비 제한 */
-    min-width: 100px; 
-    justify-content: start;
+    overflow: hidden;
 }
 .mood-card {
     max-width: 1350px;
@@ -201,6 +202,14 @@ img {
     border: 2px solid var(--main-color);
     gap: 30px;
     padding-left: 20px;
+}
+.mood-list {
+    display: flex;
+    height: 100%;
+    padding: 5px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
 }
 .chart {
     width: 400px;
