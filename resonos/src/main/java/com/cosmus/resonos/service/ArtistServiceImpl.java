@@ -43,4 +43,10 @@ public class ArtistServiceImpl implements ArtistService {
     public boolean delete(String id) throws Exception {
         return artistMapper.delete(id) > 0;
     }
+
+    // 아티스트 존재 여부 확인
+    @Override
+    public boolean exists(String id) throws Exception {
+        return artistMapper.exists(id) > 0;
+    }
 }

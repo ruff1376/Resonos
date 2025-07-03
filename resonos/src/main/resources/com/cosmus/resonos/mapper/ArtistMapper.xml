@@ -15,7 +15,7 @@
     SELECT * FROM artist
   </select>
 
-  <select id="selectById"  resultMap="ArtistResultMap">
+  <select id="selectById" resultMap="ArtistResultMap">
     SELECT * FROM artist WHERE id = #{id}
   </select>
 
@@ -35,5 +35,13 @@
   <delete id="delete" >
     DELETE FROM artist WHERE id = #{id}
   </delete>
+
+  <select id="list" resultMap="ArtistResultMap">
+    SELECT * FROM artist
+  </select>
+
+  <select id="exists" resultType="int" parameterType="string">
+    SELECT COUNT(*) FROM artist WHERE id = #{id}
+  </select>
 
 </mapper>

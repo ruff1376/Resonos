@@ -24,7 +24,7 @@ VALUES ( 'test', '$2a$12$TrN..KcVjciCiz.5Vj96YOBljeVTTGJ9AUKmtfbGpgc9hmC7BxQ92',
 -- 사용자 
 -- * 권한 : ROLE_USER
 INSERT INTO user_auth ( username,  auth )
-VALUES ( 'user', 'ROLE_USER' );
+VALUES ( 'user1', 'ROLE_USER' );
 
 -- 관리자
 -- * 권한 : ROLE_USER, ROLE_ADMIN

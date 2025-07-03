@@ -50,7 +50,8 @@ public class SecurityConfig {
     // 🔐 스프링 시큐리티 설정 메소드
 	@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
+        http
+        .userDetailsService(userDetailServiceImpl);
         // ✅ 인가 설정
         
         http.authorizeHttpRequests(auth -> auth
@@ -85,14 +86,13 @@ public class SecurityConfig {
 
                                 );                           
 
-        // 👩‍💼 사용자 정의 인증
-        http.userDetailsService(userDetailServiceImpl);
-
         // 🔄 자동 로그인
-        http.rememberMe(me -> me
-                .key("aloha")
-                .tokenRepository(tokenRepository())
-                .tokenValiditySeconds(60 * 60 * 24 * 7));
+        http.rememberMe(rm -> rm
+            .key("resonos-remember-me-key")
+            .tokenRepository(tokenRepository())
+            .userDetailsService(userDetailServiceImpl)
+            .tokenValiditySeconds(60 * 60 * 24 * 7)
+        );
 
         // 🔓 로그아웃 설정
         http.logout(logout -> logout

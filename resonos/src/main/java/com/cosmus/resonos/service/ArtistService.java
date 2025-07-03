@@ -15,4 +15,6 @@ public interface ArtistService {
     public boolean update(Artist artist) throws Exception;
     // 삭제
     public boolean delete(String id) throws Exception;
+    // 존재 여부 확인
+    public boolean exists(String id) throws Exception;
 }

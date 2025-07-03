@@ -26,17 +26,13 @@
   </resultMap>
 
     <resultMap id="AuthMap" type="UserAuth">
-        <result property="no" column="no" />
+        <result property="id" column="id" />
         <result property="username" column="username" />
         <result property="auth" column="auth" />
     </resultMap>
 
-  <select id="selectAll" resultMap="UserResultMap">
-    SELECT * FROM user
-  </select>
-
-  <select id="selectById"  resultMap="UserResultMap">
-    SELECT * FROM user WHERE id = #{id}
+  <select id="select" resultMap="UserResultMap">
+    SELECT * FROM user WHERE username = #{username}
   </select>
 
   <insert id="insert">
@@ -65,5 +61,22 @@
   <delete id="delete" >
     DELETE FROM user WHERE id = #{id}
   </delete>
+    
+  <insert id="insertAuth">
+      INSERT INTO user_auth ( username, auth )
+      VALUES ( #{username}, #{auth} )
+  </insert>
+
+  <select id="selectAuth"  resultMap="AuthMap">
+    SELECT * FROM user_auth WHERE username = #{username}
+  </select>
+
+  <select id="list" resultMap="UserResultMap">
+    SELECT * FROM user 
+  </select>
+
+  <select id="countAll" resultType="int">
+      SELECT COUNT(*) FROM user
+  </select>
 
 </mapper>

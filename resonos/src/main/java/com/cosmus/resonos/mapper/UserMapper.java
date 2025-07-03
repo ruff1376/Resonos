@@ -27,4 +27,8 @@ public interface UserMapper {
     public int update(User user) throws Exception;
     // 삭제
     public int delete(Long id) throws Exception;
+    // 회원 권한 조회
+    public List<UserAuth> listAuth() throws Exception;
+    // 회원 수 조회
+    public int countAll() throws Exception;
 }

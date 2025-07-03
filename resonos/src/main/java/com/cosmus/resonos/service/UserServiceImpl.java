@@ -1,5 +1,7 @@
 package com.cosmus.resonos.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -45,7 +47,7 @@ public class UserServiceImpl implements UserService {
         int result = userMapper.join(user);
         if (result > 0) {
             UserRole userRole = new UserRole();
-            userRole.setUserId(user.getNo());
+            userRole.setUserId(user.getId());
             userRole.setRoleId(2L); // 2L = ROLE_USER, 1L = ROLE_ADMIN 등
             userRoleMapper.insert(userRole);
         }
@@ -102,14 +104,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean update(User user) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        return userMapper.update(user) > 0;
     }
 
     @Override
     public boolean delete(Long id) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        return userMapper.delete(id) > 0;
+    }
+
+    @Override
+    public List<User> list() throws Exception {
+        return userMapper.list();
+    }
+
+    @Override
+    public List<UserAuth> listAuth() throws Exception {
+        return userMapper.listAuth();
+    }
+
+    @Override
+    public int countAll() throws Exception {
+        return userMapper.countAll();
     }
 
     // 아래 코드는 컨트롤러에서 사용해야 하므로 주석 처리

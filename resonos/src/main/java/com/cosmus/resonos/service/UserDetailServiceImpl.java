@@ -41,7 +41,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("사용자 정보를 찾을 수 없습니다. - " + username);
         }
         // 🔐 Users ➡ CustomUser ➡ UserDetails
-        CustomUser customUser = new CustomUser(user);
-        return customUser;
+        return new CustomUser(user);
     }
 }

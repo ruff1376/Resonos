@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/admin_layout}"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>어드민 메인</title>
+    <th:block th:replace="~{fragments/link::admin}"></th:block>
+</head>
+<th:block layout:fragment="content">
+<body class="bg-dark text-light">
+
+  <main class="resonos-bg py-5">
+    <div class="container" style="max-width: 1100px;">
+      <h2 class="mb-4" style="color:#fffbe6;">회원 관리</h2>
+      <form class="mb-3 d-flex gap-2">
+        <input type="text" class="search-bar" placeholder="닉네임, 이메일 검색">
+        <button class="btn btn-gold btn-sm" type="submit">검색</button>
+      </form>
+      <div class="resonos-card p-4">
+        <table class="table table-dark table-hover align-middle resonos-table">
+          <thead>
+            <tr>
+              <th>번호</th>
+              <th>프로필</th>
+              <th>닉네임</th>
+              <th>이메일</th>
+              <th>가입일</th>
+              <th>상태</th>
+              <th>권한</th>
+              <th>활동 로그</th>
+              <th>관리</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="member, iterStat : ${members}">
+              <td th:text="${iterStat.count}">1</td>
+              <td>
+                <img th:src="${member.profileImage != null ? member.profileImage : '@{/img/default-profile.png}'}"
+                     alt="프로필"
+                     style="width:38px;height:38px;border-radius:50%;border:1.5px solid #D4B97F;object-fit:cover;background:#181C23;">
+              </td>
+              <td th:text="${member.nickname}">닉네임</td>
+              <td th:text="${member.email}">이메일</td>
+              <td th:text="${#dates.format(member.createdAt, 'yyyy-MM-dd')}">가입일</td>
+              <td>
+                <span class="badge" th:classappend="${member.enabled} ? 'bg-gold' : 'bg-secondary'"
+                      th:text="${member.enabled} ? '정상' : '휴면'">상태</span>
+              </td>
+              <td>
+                <span class="badge" th:each="auth : ${member.authList}"
+                      th:classappend="${auth.auth == 'ROLE_ADMIN' ? 'bg-gold' : 'bg-secondary'}"
+                      th:text="${auth.auth == 'ROLE_ADMIN' ? '운영자' : '일반'}">권한</span>
+              </td>
+              <td><a href="#" class="btn btn-outline-gold btn-sm">보기</a></td>
+              <td>
+                <button class="btn btn-outline-gold btn-sm">상세</button>
+                <button class="btn btn-outline-gold btn-sm" th:text="${member.enabled} ? '제재' : '해제'">제재</button>
+              </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(members)}">
+              <td colspan="9" class="text-center text-secondary">등록된 회원이 없습니다.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+  </body>
+</th:block>
+
+
+
+
+</html>

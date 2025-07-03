@@ -18,4 +18,6 @@ public interface ArtistMapper {
     public int update(Artist artist) throws Exception;
     // 삭제
     public int delete(String id) throws Exception;
+    // 존재 여부 확인
+    public int exists(String id) throws Exception;
 }

@@ -49,5 +49,13 @@
   <delete id="delete" >
     DELETE FROM track WHERE id = #{id}
   </delete>
+  
+  <select id="list" resultMap="TrackResultMap">
+    SELECT * FROM track
+  </select>
+
+  <select id="exists" resultType="int" parameterType="string">
+    SELECT COUNT(*) FROM track WHERE id = #{id}
+  </select>
 
 </mapper>
