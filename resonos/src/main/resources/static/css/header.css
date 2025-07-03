@@ -1,11 +1,11 @@
 .header-navbar {
     background: #181C23 !important;
-    border-bottom: 1px solid #D4B97F;
+    border-bottom: 1px solid var(--main-color);
 }
 .header-navbar .navbar-brand,
 .header-navbar .nav-link,
 .header-navbar .navbar-text {
-    color: #D4B97F !important;
+    color: var(--main-color) !important;
     font-weight: bold;
     letter-spacing: 1px;
 }
@@ -55,8 +55,8 @@
     pointer-events: none;
 }
 .btn-outline-gold {
-    border: 1px solid #D4B97F;
-    color: #D4B97F;
+    border: 1px solid var(--main-color);
+    color: var(--main-color);
     border-radius: 10px;
     background: transparent;
     font-size: 12px;
@@ -68,7 +68,7 @@
     padding: 0;
 }
 .btn-outline-gold:hover {
-    background: #D4B97F;
+    background: var(--main-color);
     color: #181C23;
 }
 /* 프로필 드롭다운 화살표 색상 */
@@ -89,9 +89,9 @@
 }
 .dropdown-item:hover {
     background-color: transparent;
-    color: #D4B97F;
+    color: var(--main-color);
 }
 .dropdown-divider {
-    border-top: 1px solid #D4B97F !important;
+    border-top: 1px solid var(--main-color) !important;
     opacity: 1;
 }
