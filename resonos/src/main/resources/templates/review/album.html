@@ -22,6 +22,7 @@
                 <div class="song-info">
                     <p id="headline">슬픈 트랄랄레로</p>
                     <p>발매일 : 2025.05.28 장르 : Rock 레이블 : Illinaire Records</p>
+                    <p>🔮 99 (✅유저 30, 일반유저 300명)</p>
                     <div>
                         <div class="btn btn-gold">❤ 팔로우</div>
                     </div>
@@ -30,7 +31,7 @@
             <!-- 앨범 카드 끝 -->
             <!-- 앨범 트랙리스트 분위기 뭐뭐.. -->
             <div class="info-card">
-                <div class="info">
+                <div class="info top5track">
                     <p id="headline">앨범 인기 TOP 5 트랙</p>
                     <p>1. 나는 아름다운 트랄랄레로</p>
                     <p>1. 나는 아름다운 트랄랄레로</p>
@@ -61,12 +62,48 @@
             <div class="review-card">
                 <p id="headline">평점 & 리뷰</p>
                 <div class="review-score">
-                    <h1 id="headline">🔮 99</h1> <div class="score-bar"></div>
+                    <h1 id="headline">🔮 99</h1>
+                    <div class="score-bar">
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: 99%;">99</div>
+                        </div>
+                        <!-- <div class="score-fill" th:style="'width:' + ${score} + '%'">
+                            <span th:text="${score}"></span>
+                        </div> -->
+                    </div>
                 </div>
                 <div class="review-container">
                 <ul class="comment-list">
                     <!-- 반복문 -->
-                    <li>
+                    <li class="comment">
+                        <div class="name-and-score">
+                            <p id="subtitle">페페사랑단</p>
+                            <p> 🔮 100</p>
+                        </div>
+                        <div class="review-content">
+                            <p>우리 페페 많이 사랑해주세요</p>
+                        </div>
+                        <div class="review-util">
+                            <p>2025.05.21</p>
+                            <a href="#">❤ 3</a>
+                            <a href="#" id="report">신고</a>
+                        </div>
+                    </li>
+                    <li class="comment">
+                        <div class="name-and-score">
+                            <p id="subtitle">페페사랑단</p>
+                            <p> 🔮 100</p>
+                        </div>
+                        <div class="review-content">
+                            <p>우리 페페 많이 사랑해주세요</p>
+                        </div>
+                        <div class="review-util">
+                            <p>2025.05.21</p>
+                            <a href="#">❤ 3</a>
+                            <a href="#" id="report">신고</a>
+                        </div>
+                    </li>
+                    <li class="comment">
                         <div class="name-and-score">
                             <p id="subtitle">페페사랑단</p>
                             <p> 🔮 100</p>
@@ -83,9 +120,14 @@
                 </ul>
                 </div>
                 <!-- 페이지네이션 -->
-                 <div class="comment">
-                    <textarea name="" id="" placeholder="리뷰를 입력해주세요"></textarea>
-                    <div class="btn btn-gold">리뷰작성</div>
+                 <div class="reply">
+                    <form action="">
+                        <textarea name="" id="" placeholder="리뷰를 입력해주세요"></textarea>
+                        <div class="score-and-submit">
+                            <input type="text" name="" id="" placeholder="점수를 입력해주세요">
+                            <button class="btn btn-gold">리뷰작성</button>
+                        </div>
+                    </form>
                  </div>
             </div>
             <!-- 평점&리뷰 끝 -->
@@ -101,12 +143,13 @@
                     <div class="moods">
                         <!-- 분위기 반복문 -->
                         <div class="btn btn-gold">분위기1</div>
-                        <div class="btn btn-gold">분위기1234</div>
-                        <div class="btn btn-gold">분위기13</div>
+                        <div class="btn btn-gold">분위기1324</div>
+                        <div class="btn btn-gold">분위기133</div>
                         <div class="btn btn-gold">분위기1</div>
                         <div class="btn btn-gold">분위기144</div>
                         <div class="btn btn-gold">분위기1</div>
                     </div>
+                    <button class="btn btn-gold">분위기 투표</button>
                 </div>
             </div>
             <!-- 분위기 끝 -->
