@@ -19,16 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/albums")
 public class AlbumController {
-
+    
+    @Autowired
+    private AlbumService albumService;
 
     @GetMapping({"/",""})
     public String album() {
         return "review/album";
     }
     
-
-    // @Autowired
-    // private AlbumService albumService;
 
     // // 앨범 목록 화면
     // @GetMapping
