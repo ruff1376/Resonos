@@ -17,4 +17,5 @@ public class Album {
     private String label;
     private String description;
     private String artistId;
+    private String artistName;
 }

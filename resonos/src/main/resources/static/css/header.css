@@ -1,5 +1,4 @@
-.site-header .navbar {
-    background: #181C23 !important;
+.header-navbar {
     border-bottom: 1px solid var(--main-color);
 }
 .site-header .navbar-brand,
@@ -18,14 +17,12 @@
     height: 100px;
     margin-right: 10px;
     border-radius: 6px;
-    background: #181C23;
     object-fit: contain;
 }
 .site-header .logo-img-sub {
     width: 100px;
     height: 66px;
     border-radius: 6px;
-    background: #181C23;
     object-fit: contain;
 }
 .site-header .search-box {
@@ -80,8 +77,7 @@
 .header-navbar .header-gap {
     gap: 10px;
 }
-.site-header .dropdown-menu {
-    background-color: #181C23;
+.header-navbar .dropdown-menu {
     border-radius: 15px;
 }
 .site-header .dropdown-item {

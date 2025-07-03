@@ -9,8 +9,7 @@
     <th:block th:replace="~{fragments/link::album}"></th:block>
 </head>
 
-<body>
-    <th:block layout:fragment="content">
+<body layout:fragment="content">
         <div class="wrapper">
             <!-- 앨범 카드 -->
             <div class="song-card">
@@ -57,7 +56,7 @@
                 </div>
             </div>
             <!-- 앨범 트랙리스트 분위기 뭐뭐..끝 -->
-            
+
             <!-- 평점&리뷰 -->
             <div class="review-card">
                 <p id="headline">평점 & 리뷰</p>
@@ -111,7 +110,7 @@
                 </div>
             </div>
             <!-- 분위기 끝 -->
-            
+
             <!-- iframe -->
             <div class="iframe-card">
                 <div class="spotify">
@@ -129,7 +128,6 @@
             </div>
             <!-- iframe 카드 끝 -->
         </div>
-    </th:block>
 </body>
 
 </html>

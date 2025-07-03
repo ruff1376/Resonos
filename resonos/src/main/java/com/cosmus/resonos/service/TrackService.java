@@ -6,6 +6,8 @@ import com.cosmus.resonos.domain.Track;
 public interface TrackService {
     // 목록
     public List<Track> list() throws Exception;
+    // 메인 화면 최신 트랙 목록
+    public List<Track> mainNewList() throws Exception;
     // 조회
     public Track select(Integer no) throws Exception;
     // 삽입
