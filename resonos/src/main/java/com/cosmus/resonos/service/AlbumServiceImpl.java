@@ -58,4 +58,10 @@ public class AlbumServiceImpl implements AlbumService {
     public boolean delete(String id) throws Exception {
         return albumMapper.delete(id) > 0;
     }
+
+    // 앨범 존재 여부 확인
+    @Override
+    public boolean exists(String id) throws Exception {
+        return albumMapper.exists(id) > 0;
+    }
 }

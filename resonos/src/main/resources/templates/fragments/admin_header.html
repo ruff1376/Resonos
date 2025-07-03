@@ -7,13 +7,13 @@
         <span>   Admin</span>
       </a>
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="#">대시보드</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">회원관리</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">게시글/신고</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">음악데이터</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">공연/이벤트</a></li>
-        <li class="nav-item"><a class="nav-link active" href="#">오픈API</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">설정</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/admin}">대시보드</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/admin/members}">회원관리</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/admin/posts}">게시글/신고</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/admin/music}">음악데이터</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/admin/events}">공연/이벤트</a></li>
+        <li class="nav-item"><a class="nav-link active" th:href="@{/admin/openapi}">오픈API</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/admin/settings}">설정</a></li>
       </ul>
     </div>
   </nav>

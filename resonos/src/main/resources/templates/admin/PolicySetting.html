@@ -12,7 +12,7 @@
     <th:block th:replace="~{fragments/link::admin}"></th:block>
 </head>
 <th:block layout:fragment="content">
-<body class="bg-dark text-light">
+    <!-- 여기부터 본문 내용만! <body> 태그 없이! -->
 
     <!-- 관리자 헤더 -->
     <nav class="navbar navbar-expand-lg border-bottom">
@@ -119,26 +119,26 @@
               <form class="mb-4" th:action="@{/admin/PolicySetting/setting/save}" method="post">
                 <div class="setting-row d-flex align-items-center mb-2">
                   <span class="me-3">신규 가입 허용</span>
-                  <input type="checkbox" name="allowSignUp" th:checked="${settings[0]?.value == 'Y'}">
+                  <input type="checkbox" name="allowSignUp" th:checked="${settings.size() > 0 and settings[0].value == 'Y'}">
                 </div>
                 <div class="setting-row d-flex align-items-center mb-2">
                   <span class="me-3">커뮤니티 게시판 활성화</span>
-                  <input type="checkbox" name="enableCommunity" th:checked="${settings[1]?.value == 'Y'}">
+                  <input type="checkbox" name="enableCommunity" th:checked="${settings.size() > 1 and settings[1].value == 'Y'}">
                 </div>
                 <div class="setting-row d-flex align-items-center mb-2">
                   <span class="me-3">음악 데이터 외부 연동</span>
-                  <input type="checkbox" name="externalMusicApi" th:checked="${settings[2]?.value == 'Y'}">
+                  <input type="checkbox" name="externalMusicApi" th:checked="${settings.size() > 2 and settings[2].value == 'Y'}">
                 </div>
                 <div class="setting-row d-flex align-items-center mb-2">
                   <span class="me-3">기본 테마</span>
                   <select class="form-select w-auto ms-2" name="theme">
-                    <option th:selected="${settings[3]?.value == 'dark'}" value="dark">다크</option>
-                    <option th:selected="${settings[3]?.value == 'light'}" value="light">라이트</option>
+                    <option th:selected="${settings.size() > 3 and settings[3].value == 'dark'}" value="dark">다크</option>
+                    <option th:selected="${settings.size() > 3 and settings[3].value == 'light'}" value="light">라이트</option>
                   </select>
                 </div>
                 <div class="setting-row d-flex align-items-center mb-2">
                   <span class="me-3">공지사항</span>
-                  <input type="text" class="form-control w-50 ms-2" name="notice" th:value="${settings[4]?.value}">
+                  <input type="text" class="form-control w-50 ms-2" name="notice" th:value="${settings.size() > 4 ? settings[4].value : ''}">
                 </div>
                 <button class="btn btn-gold mt-3" type="submit">저장</button>
               </form>
@@ -168,6 +168,5 @@
         </div>
       </div>
     </main>
-  </body>
 </th:block>
 </html>

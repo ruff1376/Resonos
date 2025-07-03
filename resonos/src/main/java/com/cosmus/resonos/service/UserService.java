@@ -1,33 +1,34 @@
-// package com.cosmus.resonos.service;
+package com.cosmus.resonos.service;
 
 
-// import java.util.List;
+import java.util.List;
 
-// import com.cosmus.resonos.domain.User;
-// import com.cosmus.resonos.domain.UserAuth;
+import com.cosmus.resonos.domain.User;
+import com.cosmus.resonos.domain.UserAuth;
 
-// import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
-// public interface UserService {
+public interface UserService {
 
-//     // 회원 가입
-//     public int join(User user) throws Exception;
+    // 회원 가입
+    public int join(User user) throws Exception;
+    // 회원 권한 등록
+    public int insertAuth(UserAuth userAuth) throws Exception;
+    // 🔐 로그인
+    public boolean login(User user, HttpServletRequest request);
+    // 회원 조회
+    public User select(String username) throws Exception;
+    // 👮‍♂️ 관리자 체크
+    public boolean isAdmin() throws Exception;
+    // 수정
+    public boolean update(User user) throws Exception;
+    // 삭제
+    public boolean delete(Long id) throws Exception;
+    // 전체 조회 
+    public List<User> list() throws Exception;
+    // 회원 권한 조회
+    public List<UserAuth> listAuth() throws Exception;
+    // 회원 수 조회
+    public int countAll() throws Exception;
 
-//     // 회원 권한 등록
-//     public int insertAuth(UserAuth userAuth) throws Exception;
-
-//     // 🔐 로그인
-//     public boolean login(User user, HttpServletRequest request);
-
-//     // 회원 조회
-//     public User select(String username) throws Exception;
-
-//     // 👮‍♂️ 관리자 체크
-//     public boolean isAdmin() throws Exception;
-
-//     // 수정
-//     public boolean update(User user) throws Exception;
-//     // 삭제
-//     public boolean delete(Long id) throws Exception;
-
-// }
+}

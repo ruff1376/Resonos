@@ -49,4 +49,10 @@ public class TrackServiceImpl implements TrackService {
     public boolean delete(String id) throws Exception {
         return trackMapper.delete(id) > 0;
     }
+
+    // 트랙 존재 여부 확인
+    @Override
+    public boolean exists(String id) throws Exception {
+        return trackMapper.exists(id) > 0;
+    }
 }
