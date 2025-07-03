@@ -4,7 +4,7 @@
 
 <mapper namespace="com.cosmus.resonos.mapper.AlbumMapper">
 
-  <resultMap id="AlbumResultMap" type="com.cosmus.resonos.domain.Album">
+  <resultMap id="Album" type="com.cosmus.resonos.domain.Album">
     <id property="id" column="id"/>
     <result property="title" column="title"/>
     <result property="coverImage" column="cover_image"/>
@@ -13,13 +13,34 @@
     <result property="label" column="label"/>
     <result property="description" column="description"/>
     <result property="artistId" column="artist_id"/>
+    <result property="artistName" column="artist_name"/>
   </resultMap>
 
-  <select id="selectAll" resultMap="AlbumResultMap">
+  <select id="list" resultMap="Album">
     SELECT * FROM album
   </select>
 
-  <select id="selectById" resultMap="AlbumResultMap">
+  <select id="mainNewList" resultMap="Album">
+    SELECT a.*, ar.name AS artist_name
+    FROM album a
+    LEFT JOIN artist ar ON a.artist_id = ar.id
+    ORDER BY a.release_date DESC
+    LIMIT 12
+  </select>
+
+  <select id="newList" resultMap="Album">
+    SELECT *
+    FROM album
+    ORDER BY release_date DESC
+    LIMIT #{index}, #{size}
+  </select>
+
+  <select id="count" resultType="long">
+    SELECT COUNT(*)
+    FROM album
+  </select>
+
+  <select id="select" resultMap="Album">
     SELECT * FROM album WHERE id = #{id}
   </select>
 

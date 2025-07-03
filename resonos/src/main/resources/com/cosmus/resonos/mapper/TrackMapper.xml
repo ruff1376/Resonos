@@ -4,7 +4,7 @@
 
 <mapper namespace="com.cosmus.resonos.mapper.TrackMapper">
 
-  <resultMap id="TrackResultMap" type="com.cosmus.resonos.domain.Track">
+  <resultMap id="Track" type="com.cosmus.resonos.domain.Track">
     <id property="id" column="id"/>
     <result property="title" column="title"/>
     <result property="duration" column="duration"/>
@@ -15,13 +15,24 @@
     <result property="artistId" column="artist_id"/>
     <result property="popularity" column="popularity"/>
     <result property="trackNo" column="track_no"/>
+    <result property="artistName" column="artist_name"/>
+    <result property="coverImage" column="cover_image"/>
   </resultMap>
 
-  <select id="selectAll" resultMap="TrackResultMap">
+  <select id="selectAll" resultMap="Track">
     SELECT * FROM track
   </select>
 
-  <select id="selectById"  resultMap="TrackResultMap">
+  <select id="mainNewList" resultMap="Track">
+    SELECT t.*, ar.name AS artist_name, al.cover_image
+    FROM track t
+    LEFT JOIN artist ar ON t.artist_id = ar.id
+    LEFT JOIN album al ON t.album_id = al.id
+    ORDER BY t.id DESC
+    LIMIT 12
+  </select>
+
+  <select id="selectById"  resultMap="Track">
     SELECT * FROM track WHERE id = #{id}
   </select>
 

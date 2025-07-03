@@ -10,6 +10,8 @@ import com.cosmus.resonos.domain.Track;
 public interface TrackMapper {
     // 목록
     public List<Track> list() throws Exception;
+    // 메인 회면 최신 앨범 목록
+    public List<Track> mainNewList() throws Exception;
     // 조회
     public Track select(Integer no) throws Exception;
     // 삽입
