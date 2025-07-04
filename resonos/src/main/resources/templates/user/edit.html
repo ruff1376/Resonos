@@ -20,21 +20,24 @@
           <input type="file" th:field="*{profileImage}">
         </label>
         <p class="my-5">
-          <span class="badge">
+          <span class="current badge">
             현재 배지
           </span>
+          <input type="hidden" id="submitBadge" value="">
         </p>
         <div class="input-area">
           <label class="profile-edit-label" for="profileImage">보유 배지</label>
           <div class="change-edge">
-            <th:block th:each="i : ${#numbers.sequence(1, 10)}">
-              <div class="bg-badge">
-                <div class="badge">
-                  <span th:text="|배지 이름 ${i}|"></span>
+            <div>
+              <th:block th:each="i : ${#numbers.sequence(1, 10)}">
+                <div class="bg-badge">
+                    <div class="badge">
+                      <span th:text="|배지 이름 ${i}|"></span>
+                    </div>
+                  <p>획득 조건 출력</p>
                 </div>
-                <p>획득 조건 출력</p>
-              </div>
-            </th:block>
+              </th:block>
+            </div>
           </div>
           <label class="profile-edit-label" for="nickname">닉네임</label>
           <input type="text" class="form-control" th:field="*{nickname}">
@@ -53,19 +56,28 @@
   <th:block layout:fragment="pageScript">
     <script>
       document.getElementById('profileImage').addEventListener('change', function (event) {
-      const file = event.target.files[0];
-      const preview = document.querySelector('.profile-img.edit');
+        const file = event.target.files[0];
+        const preview = document.querySelector('.profile-img.edit');
 
-      if (file) {
-        const reader = new FileReader()
-        reader.onload = function (e) {
-          preview.src = e.target.result
-        };
-        reader.readAsDataURL(file);
-      } else {
-        preview.src = ''
-      }
-    });
+        if (file) {
+          const reader = new FileReader()
+          reader.onload = function (e) {
+            preview.src = e.target.result
+          };
+          reader.readAsDataURL(file);
+        } else {
+          preview.src = ''
+        }
+      });
+
+      const badges = document.querySelectorAll('.bg-badge')
+      badges.forEach(e => {
+        e.addEventListener('click', function() {
+        const badge = this.querySelector('.badge span').textContent
+        document.querySelector('.current.badge').textContent = badge
+        document.getElementById('submitBadge').value = badge
+        })
+      })
     </script>
   </th:block>
 </body>

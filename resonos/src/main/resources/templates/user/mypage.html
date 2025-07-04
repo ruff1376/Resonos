@@ -48,7 +48,7 @@
         </div>
       </a>
       <div class="chart-area">
-        차트영역
+        <canvas id="doughnut" height="200"></canvas>
       </div>
     </div>
     <section class="mypage-grid">
@@ -167,5 +167,59 @@
       </a>
     </section>
   </main>
+  <th:block layout:fragment="pageScript">
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('doughnut').getContext('2d');
+        const myChart = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+              labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+              datasets: [{
+                  label: '  ',
+                  data: [10, 20, 30, 10, 20, 10],
+                  backgroundColor: [
+                    '#82B8FF',
+                    '#FF9F82',
+                    '#82FFB8',
+                    '#FF82D1',
+                    '#FFD682',
+                    '#8C82FF'
+                  ],
+                  borderWidth: 1
+              }]
+          },
+          options: {
+            layout: {
+              padding: {
+                right: -10
+              }
+            },
+            responsive: false,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                labels: {
+                  boxWidth: 15,
+                  boxHeight: 15,
+                },
+                position: 'right'
+              },
+              title: {
+                display: true,
+                text: '장르 선호 차트',
+                color: '#D4B97F',
+                padding: {
+                },
+                font: {
+                  size: 18
+                }
+              }
+            }
+          }
+        });
+      })
+    </script>
+  </th:block>
 </body>
 </html>

@@ -5,6 +5,8 @@ body {font-size: 1.6rem;}
 :root {
   /* 메인 컬러 */
   --main-color: #D4B97F;
+  /* 실버 컬러 */
+  --silver-color: #fffbe6;
   /* 백그라운드 컬러 */
   --background-color : #181C23;
   /* 컨테이너 크기 */
