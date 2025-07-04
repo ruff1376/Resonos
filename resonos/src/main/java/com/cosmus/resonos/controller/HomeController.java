@@ -157,7 +157,7 @@ public class HomeController {
 
     log.info("회원가입 시도 유저 정보 : {}", user);
 
-    /* 유효성 검사 */
+    // 유효성 검사
     boolean checkUsername = userService.findByUsername(user.getUsername());
     boolean checkNickname = userService.findByNickname(user.getNickname());
     if (br.hasErrors() || checkUsername || checkNickname) {
