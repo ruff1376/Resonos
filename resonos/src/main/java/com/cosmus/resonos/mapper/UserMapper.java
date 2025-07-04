@@ -54,4 +54,10 @@ public interface UserMapper {
     public String findByUsername(String username) throws Exception;
     // 아이디 중복 조회
     public String findByNickname(String nickname) throws Exception;
+
+    // 회원 활성/비활성 상태 변경
+    public int updateEnabled(@Param("id") Long id, @Param("enabled") boolean enabled) throws Exception;
+    // 회원 제재/해제 상태 변경
+    public int updateBan(@Param("id") Long id, @Param("ban") boolean ban) throws Exception;
+    
 }

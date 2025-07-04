@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/layouts/admin_layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 활동 로그</title>
+    <th:block th:replace="~{fragments/link::admin}"></th:block>
+</head>
+<th:block layout:fragment="content">
+<body class="bg-dark text-light">
+  <main class="resonos-bg py-5">
+    <div class="container" style="max-width: 900px;">
+      <h2 class="mb-4" style="color:#fffbe6;">회원 활동 로그</h2>
+      <div class="resonos-card p-4">
+        <table class="table table-dark table-hover align-middle resonos-table">
+          <thead>
+            <tr>
+              <th>일시</th>
+              <th>행동</th>
+              <th>상세 내용</th>
+              <th>IP</th>
+              <th>유형</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="log, stat : ${logs}">
+              <td th:text="${#dates.format(log.createdAt, 'yyyy-MM-dd HH:mm')}">2025-07-04 12:00</td>
+              <td th:text="${log.action}">행동</td>
+              <td th:text="${log.detail}">상세 내용</td>
+              <td th:text="${log.ipAddress}">IP</td>
+              <td th:text="${log.targetType}">유형</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(logs)}">
+              <td colspan="5" class="text-center text-secondary">활동 로그가 없습니다.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <a th:href="@{/admin/members}" class="btn btn-outline-gold mt-3">회원 목록으로</a>
+    </div>
+  </main>
+</body>
+</th:block>
+</html>

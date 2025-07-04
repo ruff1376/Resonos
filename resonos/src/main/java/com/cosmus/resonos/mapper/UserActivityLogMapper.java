@@ -16,4 +16,9 @@ public interface UserActivityLogMapper {
     public int update(UserActivityLog log) throws Exception;
     // 삭제
     public int delete(Long id) throws Exception;
+    
+    // 활동 로그 기록
+    public List<UserActivityLog> getRecentLogsByUserId(Long userId, int limit);
+    // 사용자 ID로 로그 조회
+    public List<UserActivityLog> getLogsByUserId(Long userId);
 }

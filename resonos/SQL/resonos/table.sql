@@ -88,6 +88,7 @@ CREATE TABLE `track` (
 	`track_no`	INT	NOT NULL
 );
 
+
 CREATE TABLE `user` (
 	`id`	BIGINT	NOT NULL,
 	`username`	VARCHAR(100)	NOT NULL,
@@ -101,6 +102,8 @@ CREATE TABLE `user` (
 	`provider`	VARCHAR(200)	NULL,
 	`provider_id`	VARCHAR(200)	NULL,
 	`created_at`	TIMESTAMP	NULL	DEFAULT CURRENT_TIMESTAMP
+	`ban` BOOLEAN NULL DEFAULT FALSE, -- 회원 제재 여부(0: 정상, 1: 제재)
+	`logs` JSON NULL, -- 활동 로그
 );
 
 

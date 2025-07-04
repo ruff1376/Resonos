@@ -14,4 +14,11 @@ public interface UserActivityLogService {
     public boolean update(UserActivityLog log) throws Exception;
     // 삭제
     public boolean delete(Long id) throws Exception;
+
+    // 활동 로그 기록
+    public boolean logActivity(UserActivityLog log) throws Exception;
+    // getRecentLogsByUserId
+    public List<UserActivityLog> getRecentLogsByUserId(Long userId, int limit) throws Exception;
+    // getLogsByUserId
+    public List<UserActivityLog> getLogsByUserId(Long userId) throws Exception;
 }

@@ -109,4 +109,15 @@
   <select id="findByNickname" resultType="String">
     SELECT nickname FROM user WHERE nickname = #{nickname}
   </select>
+
+  <!-- 회원 활성/비활성 상태 변경 -->
+  <update id="updateEnabled">
+    UPDATE user SET enabled = #{enabled} WHERE id = #{id}
+  </update>
+  <!-- 회원 제재/해제 상태 변경 -->
+  <update id="updateBan">
+    UPDATE user SET ban = #{ban} WHERE id = #{id}
+  </update>
+
+  
 </mapper>

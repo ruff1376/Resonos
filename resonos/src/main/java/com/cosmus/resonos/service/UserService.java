@@ -47,4 +47,9 @@ public interface UserService {
     public boolean findByUsername(String username) throws Exception;
     // 닉네임 중복 조회
     public boolean findByNickname(String nickname) throws Exception;
+
+    // 회원 활성/비활성 상태 변경
+    public boolean enableUser(Long id, boolean enabled) throws Exception;
+    // 회원 제재/해제 상태 변경
+    public boolean banUser(Long id, boolean ban) throws Exception;
 }

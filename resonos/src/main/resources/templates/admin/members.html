@@ -34,6 +34,7 @@
               <th>권한</th>
               <th>활동 로그</th>
               <th>관리</th>
+
             </tr>
           </thead>
           <tbody>
@@ -50,17 +51,40 @@
               <td>
                 <span class="badge" th:classappend="${member.enabled} ? 'bg-gold' : 'bg-secondary'"
                       th:text="${member.enabled} ? '정상' : '휴면'">상태</span>
+                <span class="badge" th:if="${member.ban}" style="background:#d9534f;">제재</span>
               </td>
               <td>
                 <span class="badge" th:each="auth : ${member.authList}"
                       th:classappend="${auth.auth == 'ROLE_ADMIN' ? 'bg-gold' : 'bg-secondary'}"
                       th:text="${auth.auth == 'ROLE_ADMIN' ? '운영자' : '일반'}">권한</span>
               </td>
-              <td><a href="#" class="btn btn-outline-gold btn-sm">보기</a></td>
               <td>
-                <button class="btn btn-outline-gold btn-sm">상세</button>
-                <button class="btn btn-outline-gold btn-sm" th:text="${member.enabled} ? '제재' : '해제'">제재</button>
+                <div>
+                  <span th:each="log, stat : ${member.logs}" style="display:block; font-size:12px; color:#ccc;">
+                    <span th:text="${#dates.format(log.createdAt, 'MM-dd HH:mm')}"></span>
+                    <span th:text="${log.action}"></span>
+                    <span th:text="${log.detail}"></span>
+                  </span>
+                  <a th:href="@{/admin/members/logs(userId=${member.id})}" class="btn btn-outline-gold btn-sm mt-1">전체보기</a>
+                </div>
               </td>
+              <td>
+              <!-- 활성/비활성 토글 버튼 -->
+              <form th:action="@{/admin/members/enable}" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${member.id}" />
+                <input type="hidden" name="enabled" th:value="${member.enabled == null or !member.enabled}" />
+                <input type="hidden" name="keyword" th:value="${keyword}" />
+                <button type="submit" class="btn btn-outline-gold btn-sm" th:text="${member.enabled} ? '비활성' : '활성'">활성/비활성</button>
+              </form>
+              <!-- 제재/해제 토글 버튼 -->
+              <form th:action="@{/admin/members/ban}" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${member.id}" />
+                <input type="hidden" name="ban" th:value="${member.ban == null or !member.ban}" />
+                <input type="hidden" name="keyword" th:value="${keyword}" />
+                <button type="submit" class="btn btn-outline-danger btn-sm"
+                        th:text="${member.ban != null and member.ban} ? '제재 해제' : '제재'">제재/해제</button>
+              </form>
+            </td>
             </tr>
             <tr th:if="${#lists.isEmpty(members)}">
               <td colspan="9" class="text-center text-secondary">등록된 회원이 없습니다.</td>
