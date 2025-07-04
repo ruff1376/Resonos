@@ -44,4 +44,17 @@
     SELECT COUNT(*) FROM artist WHERE id = #{id}
   </select>
 
+  <!-- 해당아티스트의 인기 1위 뮤비url 을 반환 -->
+  <select id="selectTopMvUrlByArtist"
+        parameterType="string"
+        resultType="string">
+    SELECT
+        IFNULL(NULLIF(mv_url, ''), 'empty_mv_url') AS mv_url
+    FROM track
+    WHERE artist_id = #{artistId}
+    ORDER BY popularity DESC
+    LIMIT 1
+</select>
+
+
 </mapper>

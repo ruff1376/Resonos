@@ -20,4 +20,6 @@ public interface ArtistMapper {
     public int delete(String id) throws Exception;
     // 존재 여부 확인
     public int exists(String id) throws Exception;
+    // 해당 아티스트의 인기1위 mv url을 반환
+    public String selectTopMvUrlByArtist(String id) throws Exception;
 }

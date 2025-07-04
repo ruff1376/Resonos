@@ -49,4 +49,9 @@ public class ArtistServiceImpl implements ArtistService {
     public boolean exists(String id) throws Exception {
         return artistMapper.exists(id) > 0;
     }
+
+    @Override
+    public String selectTopMvUrlByArtist(String id) throws Exception {
+        return artistMapper.selectTopMvUrlByArtist(id);
+    }
 }

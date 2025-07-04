@@ -59,10 +59,12 @@ public class ArtistController {
     int albumCount = albumService.countAlbumsByArtist(id);
     int trackCount = trackService.countTracksByArtist(id);
     List<Track> top7List = trackService.selectTop7TracksByArtist(id);
+    String mv_url = artistService.selectTopMvUrlByArtist(id);
     if (artist == null) {
         return "redirect:/artists?error=notfound";
     }
     model.addAttribute("artist", artist);
+    model.addAttribute("mv", mv_url);
     model.addAttribute("albums", albums);
     model.addAttribute("albumCount", albumCount);
     model.addAttribute("TOP7", top7List);
