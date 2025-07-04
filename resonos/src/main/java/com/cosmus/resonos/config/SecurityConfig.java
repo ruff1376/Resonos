@@ -68,13 +68,12 @@ public class SecurityConfig {
 
         // ✅ 커스텀 로그인 페이지
         http.formLogin(login -> login
-                                     //.usernameParameter("id")       // 아이디 파라미터
-                                     //.passwordParameter("pw")       // 비밀번호 파라미터
-                                     .loginPage("/login")                   // 로그인 페이지 경로
-                                     .loginProcessingUrl("/login") // 로그인 요청 경로
-                                     // .defaultSuccessUrl("/?=true") // 로그인 성공 경로
-                                     .successHandler(loginSuccessHandler)      // 로그인 성공 핸들러 설정
-                                     .failureHandler(loginFailureHandler)      // 로그인 실패 핸들러 설정
+                                    .usernameParameter("username")
+                                    .passwordParameter("password")
+                                    .loginPage("/login")                   // 로그인 페이지 경로
+                                    .loginProcessingUrl("/login") // 로그인 요청 경로
+                                    .successHandler(loginSuccessHandler)      // 로그인 성공 핸들러 설정
+                                    .failureHandler(loginFailureHandler)      // 로그인 실패 핸들러 설정
 
                         );
         // 🔐 인증 요청 경로 설정
@@ -182,7 +181,7 @@ public class SecurityConfig {
                                     AuthenticationConfiguration authenticationConfiguration ) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-    
+
 
 
 }

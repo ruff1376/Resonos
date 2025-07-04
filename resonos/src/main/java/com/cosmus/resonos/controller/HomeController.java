@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ import com.cosmus.resonos.validation.NicknameCheck;
 import com.cosmus.resonos.validation.PasswordCheck;
 import com.cosmus.resonos.validation.UsernameCheck;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,12 +33,28 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class HomeController {
 
-  @GetMapping("/login")
-  public String login() {
-    return "user/login";
-  }
-
   @Autowired private UserService userService;
+
+  /**
+   * 로그인 화면
+   * @return
+   */
+  @GetMapping("/login")
+  public String login(
+      @CookieValue(value = "remember-id", required = false) Cookie cookie, Model model) {
+      log.info(":::::::::: 로그인 페이지 ::::::::::");
+      String username = "";
+      boolean rememberId = false;
+      if( cookie != null ) {
+          log.info("CookieName : " + cookie.getName());
+          log.info("CookieValue : " + cookie.getValue());
+          username = cookie.getValue();
+          rememberId = true;
+      }
+      model.addAttribute("username", username);
+      model.addAttribute("rememberId", rememberId);
+      return "/login";
+    }
 
     @GetMapping("")
     // public String home(Principal principal, Model model) throws Exception {
@@ -74,75 +92,14 @@ public class HomeController {
         return "index";
     }
 
-    /**
-     * 회원 가입 화면
-     * @return
-     */
-    // @GetMapping("/join")
-    // public String join() {
-    //     return "join";
-    // }
-
-    /**
-     * 회원 가입 처리
-     * @param user
-     * @return
-     * @throws Exception
-     */
-    // @PostMapping("/join")
-    // public String joinPost(Users user, HttpServletRequest request) throws Exception {
-    //     // 암호화 전 비밀 번호
-    //     String plainPassword = user.getPassword();
-    //     // 회원 가입 요청
-    //     int result = userService.join(user);
-    //     // 회원 가입 성공 시, 바로 로그인 ⚡🔐
-    //     boolean loginResult = false;
-    //     if( result > 0 ) {
-    //         // 암호화 전 비밀번호로 다시 세팅
-    //         user.setPassword(plainPassword);
-    //         loginResult = userService.login(user, request);  // ⚡🔐 바로 로그인
-    //     }
-    //     if(loginResult)
-    //         // 메인 화면으로 이동
-    //         return "redirect:/";
-    //     if(result > 0)
-    //         // 로그인 화면으로 이동
-    //         return "redirect:/login";
-    //     return "redirect:/join?error=true";
-    // }
-
-
-    /**
-     * 로그인 화면
-     * @return
-     */
-    // @GetMapping("/login")
-    // public String login(
-    //     @CookieValue(value = "remember-id", required = false) Cookie cookie,
-    //     Model model
-    // ) {
-    //     log.info(":::::::::: 로그인 페이지 ::::::::::");
-    //     String username = "";
-    //     boolean rememberId = false;
-    //     if( cookie != null ) {
-    //         log.info("CookieName : " + cookie.getName());
-    //         log.info("CookieValue : " + cookie.getValue());
-    //         username = cookie.getValue();
-    //         rememberId = true;
-    //     }
-    //     model.addAttribute("username", username);
-    //     model.addAttribute("rememberId", rememberId);
-    //     return "login";
-    // }
-
-    /**
+  /**
    * 회원가입 페이지 요청
    * @return
    */
   @GetMapping("/join")
   public String join(@ModelAttribute Users user) {
 
-    return "user/join";
+    return "/join";
   }
 
   /**
@@ -157,12 +114,12 @@ public class HomeController {
 
     log.info("회원가입 시도 유저 정보 : {}", user);
 
-    /* 유효성 검사 */
+    // 유효성 검사
     boolean checkUsername = userService.findByUsername(user.getUsername());
     boolean checkNickname = userService.findByNickname(user.getNickname());
     if (br.hasErrors() || checkUsername || checkNickname) {
       log.info("유효성 검사 실패");
-      return "user/join";
+      return "/join";
     }
 
     /* 회원가입 */
@@ -182,7 +139,7 @@ public class HomeController {
     if(result) return "redirect:/login";
 
     // 회원가입 실패
-    return "redirect:/user/join?error=true";
+    return "redirect:/join?error=true";
   }
 
   /**

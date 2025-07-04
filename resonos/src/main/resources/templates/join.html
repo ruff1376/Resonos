@@ -19,28 +19,28 @@
         <h2 class="text-light mb-4">회원가입</h2>
         <div class="input-area">
         <!-- 아이디 -->
-        <label for="" class="profile-edit-label">아이디</label>
+        <label for="username" class="profile-edit-label">아이디</label>
         <input onchange="checkField(event, 'username')" th:field="*{username}" type="text" class="form-control mb-3" placeholder="영문, 숫자 포함 6글자 이상">
         <p class="fail-vali" id="usernameError"></p>
         <p class="fail-vali th" th:errors="*{username}"></p>
         <!-- 닉네임 -->
-        <label for="" class="profile-edit-label">닉네임</label>
+        <label for="nickname" class="profile-edit-label">닉네임</label>
         <input onchange="checkField(event, 'nickname')" th:field="*{nickname}" type="text" class="form-control mb-3" placeholder="영문 + 숫자, 한글 + 숫자, 영문, 숫자 조합 2글자 이상 10글자 이하">
         <p class="fail-vali" id="nicknameError"></p>
         <p class="fail-vali th" th:errors="*{nickname}"></p>
         <!-- 이메일 -->
-        <label for="" class="profile-edit-label">이메일</label>
+        <label for="email" class="profile-edit-label">이메일</label>
         <input onchange="checkField(event, 'email')" th:field="*{email}" type="email" class="form-control mb-3" placeholder="이메일을 입력해주세요.">
         <p class="fail-vali" id="emailError"></p>
         <p class="fail-vali th" th:errors="*{email}"></p>
         <!-- 비밀번호 -->
-        <label for="" class="profile-edit-label">비밀번호</label>
+        <label for="password" class="profile-edit-label">비밀번호</label>
         <input onchange="checkField(event, 'password')" th:field="*{password}" type="password" class="form-control mb-3" placeholder="영문자, 숫자, 특수문자 조합으로 8 ~ 20 글자 입력해주세요.">
         <p class="fail-vali" id="passwordError"></p>
         <p class="fail-vali th" th:errors="*{password}"></p>
         <!-- 비번확인 -->
         <label for="password2" class="profile-edit-label">비밀번호 확인</label>
-        <input id="password2" onchange="checkPw2(event)" type="password" class="form-control mb-3" placeholder="비밀번호와 같게 입력해주세요.">
+        <input id="password2" onchange="checkPw2()" type="password" class="form-control mb-3" placeholder="비밀번호와 같게 입력해주세요.">
         <p class="fail-vali" id="passwordError2"></p>
         </div>
         <button onclick="formCheck(event)" id="join-button" class="btn btn-gold w-100 mb-2" type="submit">회원가입</button>
@@ -56,6 +56,10 @@
 
       // 비동기 유효성 검사
       async function checkField(event, field) {
+
+        if(field === 'password') {
+          checkPw2()
+        }
 
         let url = ''
 
@@ -139,9 +143,10 @@
         }
       }
 
-      function checkPw2(e) {
+      function checkPw2() {
+        let input = document.getElementById('password2')
         let pw2 = document.getElementById('passwordError2')
-        if(e.target.value === document.getElementById('password').value) {
+        if(input.value === document.getElementById('password').value) {
           pw2.classList.add('success')
           pw2.textContent = '비밀번호가 일치합니다.'
           samePw = true

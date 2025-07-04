@@ -38,9 +38,9 @@
   <!-- 회원가입 -->
   <insert id="join" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO user
-      (id, username, email, password, nickname, profile_image, bio, is_pro, enabled, provider, provider_id, created_at)
+      (id, username, email, password, nickname)
     VALUES
-      (#{id}, #{username}, #{email}, #{password}, #{nickname}, #{profileImage}, #{bio}, #{isPro}, #{enabled}, #{provider}, #{providerId}, #{createdAt})
+      (#{id}, #{username}, #{email}, #{password}, #{nickname})
   </insert>
 
   <update id="update">

@@ -27,4 +27,8 @@ public interface AlbumMapper {
     public int delete(String id) throws Exception;
     // 존재 여부 확인
     public int exists(String id) throws Exception;
+    // 아티스트아이디로 앨범 전체조회
+    public List<Album> findAlbumsByArtistId(String id) throws Exception;
+    // 아티스트 아이디로 앨범 개수 확인
+    public int countAlbumsByArtist(String id) throws Exception;
 }

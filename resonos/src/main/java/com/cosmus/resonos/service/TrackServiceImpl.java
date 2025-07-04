@@ -30,8 +30,8 @@ public class TrackServiceImpl implements TrackService {
 
     // 트랙 단건 조회
     @Override
-    public Track select(Integer no) throws Exception {
-        return trackMapper.select(no);
+    public Track selectById(String id) throws Exception {
+        return trackMapper.selectById(id);
     }
 
     // 트랙 등록
@@ -80,4 +80,13 @@ public class TrackServiceImpl implements TrackService {
         }
     }
 
+    @Override
+    public List<Track> selectTop7TracksByArtist(String id) throws Exception {
+        return trackMapper.selectTop7TracksByArtist(id);
+    }
+
+    @Override
+    public int countTracksByArtist(String id) throws Exception {
+        return trackMapper.countTracksByArtist(id);
+    }
 }

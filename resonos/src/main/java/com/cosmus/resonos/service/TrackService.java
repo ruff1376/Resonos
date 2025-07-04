@@ -9,7 +9,7 @@ public interface TrackService {
     // 메인 화면 최신 트랙 목록
     public List<Track> mainNewList() throws Exception;
     // 조회
-    public Track select(Integer no) throws Exception;
+    public Track selectById(String id) throws Exception;
     // 삽입
     public boolean insert(Track artist) throws Exception;
     // 수정
@@ -21,4 +21,8 @@ public interface TrackService {
     
     // 동기화: Spotify에서 트랙 정보를 가져와서 데이터베이스에 저장
     public void syncTrackFromSpotify(String spotifyTrackId);
+    // 아티스트별 상위7개 인기곡
+    public List<Track> selectTop7TracksByArtist(String id) throws Exception;
+    // 아티스트아이디당 트랙갯수
+    public int countTracksByArtist(String id) throws Exception;
 }

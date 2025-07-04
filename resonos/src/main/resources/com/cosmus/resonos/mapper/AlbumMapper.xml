@@ -30,9 +30,10 @@
   </select>
 
   <select id="newList" resultMap="Album">
-    SELECT *
-    FROM album
-    ORDER BY release_date DESC
+    SELECT a.*, ar.name AS artist_name
+    FROM album a
+    LEFT JOIN artist ar ON a.artist_id = ar.id
+    ORDER BY a.release_date DESC
     LIMIT #{index}, #{size}
   </select>
 
@@ -69,5 +70,30 @@
   <select id="exists" resultType="int" parameterType="string">
     SELECT COUNT(*) FROM album WHERE id = #{id}
   </select>
+
+  <!-- 모든 앨범을 아티스트 ID로 조회 -->
+  <!-- id 자료형에 맞게 string·long 등으로 -->
+  <select id="findAlbumsByArtistId"
+          parameterType="string"      
+          resultMap="Album">
+    SELECT a.*,
+          ar.name AS artist_name
+    FROM   album  a
+    JOIN   artist ar ON a.artist_id = ar.id
+    WHERE  a.artist_id = #{artistId}
+    ORDER BY a.release_date DESC
+  </select>
+
+  <!-- artistId -->
+  <!-- 아티스트의 앨범 수 -->
+  <select id="countAlbumsByArtist"
+          parameterType="string"
+          resultType="int">
+      SELECT
+          COUNT(*) 
+      FROM album
+      WHERE artist_id = #{artistId}
+  </select>
+
 
 </mapper>

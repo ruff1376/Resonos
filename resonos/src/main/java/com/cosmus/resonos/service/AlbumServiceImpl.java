@@ -64,4 +64,16 @@ public class AlbumServiceImpl implements AlbumService {
     public boolean exists(String id) throws Exception {
         return albumMapper.exists(id) > 0;
     }
+
+    @Override
+    public List<Album> findAlbumsByArtistId(String id) throws Exception {
+        return albumMapper.findAlbumsByArtistId(id);
+    }
+
+    @Override
+    public int countAlbumsByArtist(String id) throws Exception {
+        return albumMapper.countAlbumsByArtist(id);
+    }
+
+    
 }

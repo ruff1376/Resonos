@@ -21,8 +21,8 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
      */
     @Override
     public void onAuthenticationFailure(HttpServletRequest request
-                                     , HttpServletResponse response
-                                     , AuthenticationException exception) throws IOException, ServletException {
+                                    , HttpServletResponse response
+                                    , AuthenticationException exception) throws IOException, ServletException {
         log.info("로그인 실패!");
 
         // 로그인 페이지로 에러 포함 전달

@@ -19,7 +19,9 @@
         <p>음악과 우주, 그리고 커뮤니티를 사랑하는 평론가입니다.</p>
         <div class="profile-actions">
           <a th:href="@{/users/edit}" class="mybtn-gold">프로필 편집</a>
-          <button class="mybtn-outline">로그아웃</button>
+          <form th:action="@{/logout}" method="post">
+            <button class="mybtn-outline d-flex justify-content-center" type="submit">로그아웃</button>
+          </form>
         </div>
       </div>
       <div class="profile-meta">
@@ -120,7 +122,7 @@
               <p>10</p>
             </li>
             <li>
-              <span>댓글</span>
+              <sp1M1fDf9pNSThwDdXByP121an>댓글</sp1M1fDf9pNSThwDdXByP121an>
               <p>25</p>
             </li>
             <li>
@@ -131,7 +133,7 @@
         </div>
       </a>
       <!-- 배지 -->
-      <a href="">
+      <a th:href="@{/users/badge}">
         <div class="mypage-card badge-area">
           <h3>배지<p>></p></h3>
           <ul>

@@ -12,9 +12,8 @@
                     <a class="navbar-brand d-flex align-items-center" href="#">
                         <img th:src="@{/img/resonosLogo.png}" alt="Sub Page Logo" class="header-logo-img-sub">
                     </a>
-
                 </div>
-                
+
                 <div class="collapse navbar-collapse d-flex justify-content-end align-items-center header-gap mt-4 mb-4" id="mainNav">
                     <form class="position-relative d-flex align-items-center mb-0" style="width:300px;">
                         <i class="bi bi-search search-icon position-absolute"></i>
@@ -22,37 +21,40 @@
                     </form>
                     <div class="navbar-nav d-flex flex-row justify-content-end align-items-center header-gap">
                         <!-- 비로그인 -->
-                        <li class="nav-item ms-lg-2">
-                            <a href="#" class="btn btn-outline-gold">로그인</a>
-                        </li>
-                        <li class="nav-item ms-2">
-                            <a href="#" class="btn btn-outline-gold">회원가입</a>
-                        </li>
-
+                        <th:block th:if="${not #authorization.expression('isAuthenticated()')}">
+                            <li class="nav-item ms-lg-2">
+                                <a href="#" class="btn btn-outline-gold">로그인</a>
+                            </li>
+                            <li class="nav-item ms-2">
+                                <a href="#" class="btn btn-outline-gold">회원가입</a>
+                            </li>
+                        </th:block>
                         <!-- 로그인 -->
-                        <!-- <div class="dropdown">
-                            <a href="#" class="nav-link p-0" data-bs-toggle="dropdown" aria-expanded="false" style="line-height:0;">
-                                <i class="bi bi-bell-fill" style="font-size: 24px; color: #B1B1B1;"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#">알림1</a></li>
-                                <li><a class="dropdown-item" href="#">알림2</a></li>
-                                <li><a class="dropdown-item" href="#">알림3</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">전체 알림 보기</a></li>
-                            </ul>
-                        </div>
-                        <div class="flex-shrink-0 dropdown profile-dropdown">
-                            <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
-                            </a>
-                            <ul class="dropdown-menu text-small shadow">
-                                <li><a class="dropdown-item" href="#">마이페이지</a></li>
-                                <li><a class="dropdown-item" href="#">환경설정</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">로그아웃</a></li>
-                            </ul>
-                        </div> -->
+                        <th:block th:if="${#authorization.expression('isAuthenticated()')}">
+                            <div class="dropdown">
+                                <a href="#" class="nav-link p-0" data-bs-toggle="dropdown" aria-expanded="false" style="line-height:0;">
+                                    <i class="bi bi-bell-fill" style="font-size: 24px; color: #B1B1B1;"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="#">알림1</a></li>
+                                    <li><a class="dropdown-item" href="#">알림2</a></li>
+                                    <li><a class="dropdown-item" href="#">알림3</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#">전체 알림 보기</a></li>
+                                </ul>
+                            </div>
+                            <div class="flex-shrink-0 dropdown profile-dropdown">
+                                <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                                </a>
+                                <ul class="dropdown-menu text-small shadow">
+                                    <li><a class="dropdown-item" href="#">마이페이지</a></li>
+                                    <li><a class="dropdown-item" href="#">환경설정</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#">로그아웃</a></li>
+                                </ul>
+                            </div>
+                        </th:block>
                     </div>
                 </div>
 
