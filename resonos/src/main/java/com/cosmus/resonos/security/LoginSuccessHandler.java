@@ -49,7 +49,8 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
             response.addCookie(cookie);
         }
 
-        super.onAuthenticationSuccess(request, response, authentication);
+        // super.onAuthenticationSuccess(request, response, authentication);
+        getRedirectStrategy().sendRedirect(request, response, "/");
     }
 
 
