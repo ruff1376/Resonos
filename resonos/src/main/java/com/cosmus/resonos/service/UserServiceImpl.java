@@ -166,4 +166,9 @@ public class UserServiceImpl implements UserService {
     public int deleteAuthByUsername(String username) throws Exception {
         return userMapper.deleteAuthByUsername(username);
     }
+
+    @Override
+    public List<Users> searchByKeyword(String keyword) throws Exception {
+        return userMapper.searchByKeyword(keyword);
+    }
 }

@@ -137,7 +137,7 @@
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>설정명</th>
+                      <!-- <th>설정명</th> -->
                       <th>설명</th>
                       <th>설정값</th>
                       <th>수정일시</th>
@@ -147,7 +147,7 @@
                   <tbody>
                     <tr th:each="entry : ${settings}">
                       <td th:text="${entry.value.id}">1</td>
-                      <td th:text="${entry.value.name}">allowSignUp</td>
+                      <!-- <td th:text="${entry.value.name}">allowSignUp</td> -->
                       <td th:text="${entry.value.description}">신규 가입 허용 여부</td>
                       <td th:text="${entry.value.value}">Y</td>
                       <td th:text="${#dates.format(entry.value.updatedAt, 'yyyy-MM-dd HH:mm')}">2024-01-01 12:00</td>

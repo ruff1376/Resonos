@@ -49,4 +49,7 @@ public interface UserMapper {
     // 회원 권한 등록
     public int insertAuth(UserAuth userAuth) throws Exception;
 
+    // 키워드로 회원 검색
+    public List<Users> searchByKeyword(@Param("keyword") String keyword) throws Exception;
+
 }

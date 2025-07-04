@@ -40,5 +40,7 @@ public interface UserService {
     // 회원 권한 삭제
     public int deleteAuthByUsername(String username) throws Exception;
 
+    // 키워드(닉네임, 이메일)로 회원 검색
+    public List<Users> searchByKeyword(String keyword) throws Exception;
 
 }

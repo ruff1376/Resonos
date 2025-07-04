@@ -51,15 +51,15 @@ public class SecurityConfig {
 	@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.userDetailsService(userDetailServiceImpl);
-        // ✅ 인가 설정
+        // http.userDetailsService(userDetailServiceImpl);
+        // // ✅ 인가 설정
 
-        http.authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/admin", "/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/user", "/user/**").hasAnyRole("USER","ADMIN")
-                                .requestMatchers("/**").permitAll()
-                                .anyRequest().permitAll()
-                                );
+        // http.authorizeHttpRequests(auth -> auth
+        //                         .requestMatchers("/admin", "/admin/**").hasRole("ADMIN")
+        //                         .requestMatchers("/user", "/user/**").hasAnyRole("USER","ADMIN")
+        //                         .requestMatchers("/**").permitAll()
+        //                         .anyRequest().permitAll()
+        //                         );
 
 
 
@@ -77,7 +77,7 @@ public class SecurityConfig {
                                      .failureHandler(loginFailureHandler)      // 로그인 실패 핸들러 설정
 
                         );
-
+        // 🔐 인증 요청 경로 설정
         http.exceptionHandling( exception -> exception
                                             // 예외 처리 페이지 설정
                                             // .accessDeniedPage("/exception")
