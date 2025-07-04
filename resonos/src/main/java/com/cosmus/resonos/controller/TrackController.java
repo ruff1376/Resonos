@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import com.cosmus.resonos.domain.Album;
+import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.domain.Track;
 import com.cosmus.resonos.service.TrackService;
 
@@ -17,11 +19,34 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/tracks")
 public class TrackController {
 
-    @GetMapping({"/",""})
-    public String track() {
-        return "review/track";
-    }
+
+    @Autowired
+    private TrackService trackService;
+    // @GetMapping({"/",""})
+    // public String track() {
+    //     return "review/track";
+    // }
     
+    // 트랙 화면
+    @GetMapping
+    public String trackInfo(@RequestParam("id") String id, Model model) throws Exception {
+        Track track = trackService.selectById(id);
+    // List<Album> albums = albumService.findAlbumsByArtistId(id);
+    // int albumCount = albumService.countAlbumsByArtist(id);
+    // int trackCount = trackService.countTracksByArtist(id);
+    // List<Track> top7List = trackService.selectTop7TracksByArtist(id);
+    // String mv_url = artistService.selectTopMvUrlByArtist(id);
+    // if (track == null) {
+    //     return "redirect:/artists?error=notfound";
+    // }
+    model.addAttribute("track", track);
+    // model.addAttribute("mv", mv_url);
+    // model.addAttribute("albums", albums);
+    // model.addAttribute("albumCount", albumCount);
+    // model.addAttribute("TOP7", top7List);
+    // model.addAttribute("trackCount", trackCount);
+    return "review/track";  // templates/artists/detail.html 뷰 렌더링
+    }
 
     // @Autowired
     // private TrackService trackService;

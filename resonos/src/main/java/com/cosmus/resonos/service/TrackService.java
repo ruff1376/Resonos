@@ -9,7 +9,7 @@ public interface TrackService {
     // 메인 화면 최신 트랙 목록
     public List<Track> mainNewList() throws Exception;
     // 조회
-    public Track select(Integer no) throws Exception;
+    public Track selectById(String id) throws Exception;
     // 삽입
     public boolean insert(Track artist) throws Exception;
     // 수정

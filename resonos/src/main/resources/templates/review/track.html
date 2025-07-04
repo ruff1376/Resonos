@@ -20,10 +20,10 @@
                     </div>
                 </div>
                 <div class="song-info">
-                    <p id="headline">슬픈 트랄랄레로</p>
-                    <p>아티스트 : 페페</p>
-                    <p>발매일 : 2025.05.28</p>
-                    <p>레이블 : Illinaire Records</p>
+                    <p id="headline" th:text="${track.title}">트랙명</p>
+                    <p th:text="${track.artistId}">아티스트</p>
+                    <p>발매일</p>
+                    <p th:text="${track.trackNo}">어디앨범의 몇번째곡</p>
                     <p>🔮 99 (✅유저 30, 일반유저 300명)</p>
                     <div>
                         <div class="btn btn-gold">공유🚀</div>
@@ -37,7 +37,7 @@
                 <div class="spotify">
                     <!-- 스포티파이 로그인 되어있지않을때 30초 미리듣기 오디오태그 -->
                     <iframe
-                        src="https://open.spotify.com/embed/track/2GMKQPMXdOGXsQkDYBN6wF?utm_source=generator"
+                        th:src="|https://open.spotify.com/embed/track/${track.id}?utm_source=generator|"
                         frameborder="0" allowfullscreen
                         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                         loading="lazy">
