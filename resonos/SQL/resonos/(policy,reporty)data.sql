@@ -10,22 +10,6 @@ INSERT INTO `policy` (`id`, `type`, `content`, `version`, `updated_at`) VALUES
   (9, 'ads', '광고 정책', 'v1.0', '2025-06-10 08:00:00'),
   (10, 'third_party', '3자 제공 정책', 'v1.0', '2025-06-25 17:00:00');
 
-INSERT INTO `role` (`id`, `name`, `description`) VALUES
-  (1, 'USER', '일반 사용자'),
-  (2, 'ADMIN', '관리자'),
-  (3, 'MODERATOR', '신고 및 커뮤니티 관리 담당자');
-
-INSERT INTO `user_role` (`user_id`, `role_id`, `assigned_at`) VALUES
-  (1, 2, NOW()),
-  (2, 1, NOW()),
-  (3, 1, NOW()),
-  (4, 1, NOW()),
-  (5, 3, NOW()),
-  (6, 1, NOW()),
-  (7, 1, NOW()),
-  (8, 1, NOW()),
-  (9, 1, NOW()),
-  (10, 1, NOW());
 
 INSERT INTO `report` (`id`, `reporter_id`, `target_id`, `target_type`, `reason`, `status`, `created_at`) VALUES
 (1, 2, 3, 'user', '부적절한 언행', 'PENDING', '2025-06-10 11:00:00'),

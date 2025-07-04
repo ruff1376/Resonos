@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layouts/admin_layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>권한/역할 관리</title>
+    <th:block th:replace="~{fragments/link::admin}"></th:block>
+</head>
+<th:block layout:fragment="content">
+<body class="bg-dark text-light">
+<main class="py-5 bg-resonos-dark">
+  <div class="container" style="max-width: 1100px;">
+    <h2 class="mb-4 text-light-gold">권한/역할 관리</h2>
+    <div class="resonos-card p-4">
+      <table class="table table-dark table-hover align-middle resonos-table">
+        <thead>
+          <tr>
+            <th>번호</th>
+            <th>닉네임</th>
+            <th>이메일</th>
+            <th>현재 권한</th>
+            <th>변경</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="member, iterStat : ${members}">
+            <td th:text="${iterStat.count}">1</td>
+            <td th:text="${member.nickname}">닉네임</td>
+            <td th:text="${member.email}">이메일</td>
+            <td>
+              <span class="badge" th:each="auth : ${member.authList}"
+                    th:classappend="${auth.auth == 'ROLE_ADMIN' ? 'bg-gold' : 'bg-secondary'}"
+                    th:text="${auth.auth == 'ROLE_ADMIN' ? '운영자' : '일반'}">권한</span>
+            </td>
+            <td>
+              <form th:action="@{/admin/role/auth/update}" method="post" style="display:inline;">
+                <input type="hidden" name="username" th:value="${member.username}" />
+                <select name="auth" class="form-select form-select-sm d-inline w-auto">
+                  <option value="ROLE_USER" th:selected="${#lists.contains(member.authList.?[auth=='ROLE_USER'], member)}">일반</option>
+                  <option value="ROLE_ADMIN" th:selected="${#lists.contains(member.authList.?[auth=='ROLE_ADMIN'], member)}">운영자</option>
+                </select>
+                <button class="btn btn-gold btn-sm" type="submit">변경</button>
+              </form>
+            </td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(members)}">
+            <td colspan="5" class="text-center text-secondary">등록된 회원이 없습니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+</body>
+</th:block>
+</html>

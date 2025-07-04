@@ -9,14 +9,14 @@ import com.cosmus.resonos.domain.UserAuth;
 import com.cosmus.resonos.domain.Users;
 
 
+
 @Mapper
 public interface UserMapper {
 
+    // 유저
+
     // 회원 가입
     public int join(Users user) throws Exception;
-
-    // 회원 권한 등록
-    public int insertAuth(UserAuth userAuth) throws Exception;
 
     // 회원 조회
     public Users select(@Param("username") String username) throws Exception;
@@ -31,4 +31,22 @@ public interface UserMapper {
     public List<UserAuth> listAuth() throws Exception;
     // 회원 수 조회
     public int countAll() throws Exception;
+
+
+
+
+    //  권한 
+
+    // 회원 권한 조회
+    public List<UserAuth> selectAuthByUsername(@Param("username") String username) throws Exception;
+
+    // 회원 권한 수정
+    public int updateAuth(UserAuth userAuth) throws Exception;
+
+    // 회원 권한 삭제
+    public int deleteAuthByUsername(@Param("username") String username) throws Exception;
+
+    // 회원 권한 등록
+    public int insertAuth(UserAuth userAuth) throws Exception;
+
 }
