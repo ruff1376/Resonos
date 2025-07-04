@@ -25,7 +25,7 @@ public class AdminMemberController {
     private UserService userService;
 
     // 루트 페이지 이동 + 회원 목록 출력
-    @getMapping
+    @GetMapping
     public String members(@RequestParam(value = "keyword", required = false) String keyword, Model model) throws Exception {
     List<Users> members;
     if (keyword != null && !keyword.isBlank()) {

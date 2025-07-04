@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
             UserAuth userAuth = new UserAuth();
             userAuth.setUsername(encodedPassword);
             userAuth.setAuth("ROLE_USER"); // 2L = ROLE_USER, 1L = ROLE_ADMIN 등
-            userAuthMapper.insert(userAuth);
+            .insert(userAuth);
         }
         return result;
     }
