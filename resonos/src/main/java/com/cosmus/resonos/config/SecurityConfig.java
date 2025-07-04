@@ -31,35 +31,35 @@ public class SecurityConfig {
     @Autowired
     private DataSource dataSource;
 
-    // @Autowired 
+    // @Autowired
     // private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserDetailServiceImpl userDetailServiceImpl;
 
-    @Autowired 
+    @Autowired
     private LoginSuccessHandler loginSuccessHandler;
 
-    @Autowired 
+    @Autowired
     private LoginFailureHandler loginFailureHandler;
 
-    @Autowired 
+    @Autowired
     private CustomAccessDeniedHandler customAccessDeniedHandler;
 
 
     // 🔐 스프링 시큐리티 설정 메소드
 	@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-        .userDetailsService(userDetailServiceImpl);
-        // ✅ 인가 설정
-        
-        http.authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/admin", "/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/user", "/user/**").hasAnyRole("USER","ADMIN")
-                                .requestMatchers("/**").permitAll()
-                                .anyRequest().permitAll()
-                                );
+
+        // http.userDetailsService(userDetailServiceImpl);
+        // // ✅ 인가 설정
+
+        // http.authorizeHttpRequests(auth -> auth
+        //                         .requestMatchers("/admin", "/admin/**").hasRole("ADMIN")
+        //                         .requestMatchers("/user", "/user/**").hasAnyRole("USER","ADMIN")
+        //                         .requestMatchers("/**").permitAll()
+        //                         .anyRequest().permitAll()
+        //                         );
 
 
 
@@ -75,16 +75,16 @@ public class SecurityConfig {
                                      // .defaultSuccessUrl("/?=true") // 로그인 성공 경로
                                      .successHandler(loginSuccessHandler)      // 로그인 성공 핸들러 설정
                                      .failureHandler(loginFailureHandler)      // 로그인 실패 핸들러 설정
-        
-                        );
 
+                        );
+        // 🔐 인증 요청 경로 설정
         http.exceptionHandling( exception -> exception
                                             // 예외 처리 페이지 설정
                                             // .accessDeniedPage("/exception")
                                             // 접근 거부 핸들러 설정
                                             .accessDeniedHandler(customAccessDeniedHandler)
 
-                                );                           
+                                );
 
         // 🔄 자동 로그인
         http.rememberMe(rm -> rm
@@ -110,7 +110,7 @@ public class SecurityConfig {
     @Bean
     public PersistentTokenRepository tokenRepository() {
         // JdbcTokenRepositoryImpl : 토큰 저장 데이터 베이스를 등록하는 객체
-        JdbcTokenRepositoryImpl repositoryImpl = new JdbcTokenRepositoryImpl(); 
+        JdbcTokenRepositoryImpl repositoryImpl = new JdbcTokenRepositoryImpl();
         // 토큰 저장소를 사용하는 데이터 소스 지정
         repositoryImpl.setDataSource(dataSource);
         // persistent_logins 테이블 자동 생성
@@ -152,7 +152,7 @@ public class SecurityConfig {
      */
     // @Bean
     // public UserDetailsService userDetailsService() {
-    //     JdbcUserDetailsManager userDetailsManager 
+    //     JdbcUserDetailsManager userDetailsManager
     //             = new JdbcUserDetailsManager(dataSource);
 
     //     // 사용자 인증 쿼리
@@ -178,10 +178,11 @@ public class SecurityConfig {
      * @throws Exception
     */
     @Bean
-    public AuthenticationManager authenticationManager( 
+    public AuthenticationManager authenticationManager(
                                     AuthenticationConfiguration authenticationConfiguration ) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
     
+
+
 }

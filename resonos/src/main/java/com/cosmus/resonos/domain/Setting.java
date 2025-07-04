@@ -12,3 +12,4 @@ public class Setting {
     private Date updatedAt;
     private Date createdAt;
 }
+

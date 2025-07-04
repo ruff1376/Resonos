@@ -1,79 +1,217 @@
 <!DOCTYPE html>
-<html
-    lang="ko"
-    xmlns:th="http://www.thymeleaf.org"
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{/layouts/admin_layout}"
->
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layouts/admin_layout}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>어드민 메인</title>
+    <title>회원 관리</title>
     <th:block th:replace="~{fragments/link::admin}"></th:block>
+    <style>
+      .detail-form label { min-width: 90px; }
+      .list-group-item .btn { min-width: 60px; }
+      .detail-row {
+        background: #23272f;
+        transition: max-height 0.35s cubic-bezier(.4,0,.2,1), opacity 0.35s;
+        overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+      }
+      .detail-row.show {
+        max-height: 800px; /* 충분히 크게 */
+        opacity: 1;
+      }
+    </style>
 </head>
 <th:block layout:fragment="content">
 <body class="bg-dark text-light">
-
-  <main class="resonos-bg py-5">
-    <div class="container" style="max-width: 1100px;">
-      <h2 class="mb-4" style="color:#fffbe6;">회원 관리</h2>
-      <form class="mb-3 d-flex gap-2">
-        <input type="text" class="search-bar" placeholder="닉네임, 이메일 검색">
-        <button class="btn btn-gold btn-sm" type="submit">검색</button>
-      </form>
-      <div class="resonos-card p-4">
-        <table class="table table-dark table-hover align-middle resonos-table">
-          <thead>
-            <tr>
-              <th>번호</th>
-              <th>프로필</th>
-              <th>닉네임</th>
-              <th>이메일</th>
-              <th>가입일</th>
-              <th>상태</th>
-              <th>권한</th>
-              <th>활동 로그</th>
-              <th>관리</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr th:each="member, iterStat : ${members}">
-              <td th:text="${iterStat.count}">1</td>
-              <td>
-                <img th:src="${member.profileImage != null ? member.profileImage : '@{/img/default-profile.png}'}"
-                     alt="프로필"
-                     style="width:38px;height:38px;border-radius:50%;border:1.5px solid #D4B97F;object-fit:cover;background:#181C23;">
-              </td>
-              <td th:text="${member.nickname}">닉네임</td>
-              <td th:text="${member.email}">이메일</td>
-              <td th:text="${#dates.format(member.createdAt, 'yyyy-MM-dd')}">가입일</td>
-              <td>
-                <span class="badge" th:classappend="${member.enabled} ? 'bg-gold' : 'bg-secondary'"
-                      th:text="${member.enabled} ? '정상' : '휴면'">상태</span>
-              </td>
-              <td>
-                <span class="badge" th:each="auth : ${member.authList}"
-                      th:classappend="${auth.auth == 'ROLE_ADMIN' ? 'bg-gold' : 'bg-secondary'}"
-                      th:text="${auth.auth == 'ROLE_ADMIN' ? '운영자' : '일반'}">권한</span>
-              </td>
-              <td><a href="#" class="btn btn-outline-gold btn-sm">보기</a></td>
-              <td>
-                <button class="btn btn-outline-gold btn-sm">상세</button>
-                <button class="btn btn-outline-gold btn-sm" th:text="${member.enabled} ? '제재' : '해제'">제재</button>
-              </td>
-            </tr>
-            <tr th:if="${#lists.isEmpty(members)}">
-              <td colspan="9" class="text-center text-secondary">등록된 회원이 없습니다.</td>
-            </tr>
-          </tbody>
-        </table>
+<main class="py-5 bg-resonos-dark">
+  <div class="container" style="max-width: 1200px;">
+    <h2 class="mb-4 text-light-gold">회원 관리</h2>
+    <form class="mb-3 d-flex gap-2" th:action="@{/admin/members}" method="get">
+      <input type="text" class="search-bar" name="keyword" placeholder="닉네임, 이메일 검색" th:value="${keyword}">
+      <button class="btn btn-gold btn-sm" type="submit">검색</button>
+    </form>
+    <div class="resonos-card p-4">
+      <!-- 컬럼 헤더 -->
+      <div class="list-group-item bg-secondary text-dark fw-bold d-flex flex-nowrap align-items-center text-center justify-content-center" style="border-radius:8px 8px 0 0;">
+        <div style="flex-basis:5%;min-width:40px;">번호</div>
+        <div style="flex-basis:8%;min-width:60px;">프로필</div>
+        <div style="flex-basis:12%;min-width:80px;">닉네임</div>
+        <div style="flex-basis:18%;min-width:120px;">이메일</div>
+        <div style="flex-basis:10%;min-width:80px;">가입일</div>
+        <div style="flex-basis:8%;min-width:60px;">상태</div>
+        <div style="flex-basis:8%;min-width:60px;">권한</div>
+        <div style="flex-basis:14%;min-width:120px;">활동 로그</div>
+        <div style="flex-basis:9%;min-width:80px;">관리</div>
+        <div style="flex-basis:8%;min-width:60px;">상세</div>
+      </div>
+      <div class="list-group">
+        <th:block th:each="member, iterStat : ${members}">
+          <!-- 회원 한 줄 -->
+          <div class="list-group-item bg-dark text-light border-secondary mb-2 rounded-0 d-flex flex-nowrap align-items-center text-center justify-content-center" th:id="'row-' + ${member.id}">
+            <div style="flex-basis:5%;min-width:40px;" th:text="${iterStat.count}">1</div>
+            <div style="flex-basis:8%;min-width:60px;">
+              <img th:src="${member.profileImage != null ? member.profileImage : '@{/img/default-profile.png}'}"
+                   alt="프로필"
+                   style="width:38px;height:38px;border-radius:50%;border:1.5px solid #D4B97F;object-fit:cover;background:#181C23;">
+            </div>
+            <div style="flex-basis:12%;min-width:80px;" th:text="${member.nickname}">닉네임</div>
+            <div style="flex-basis:18%;min-width:120px;" th:text="${member.email}">이메일</div>
+            <div style="flex-basis:10%;min-width:80px;" th:text="${#dates.format(member.createdAt, 'yyyy-MM-dd')}">가입일</div>
+            <div style="flex-basis:8%;min-width:60px;">
+              <span class="badge" th:classappend="${member.enabled} ? 'bg-gold' : 'bg-secondary'"
+                    th:text="${member.enabled} ? '정상' : '휴면'">상태</span>
+              <span class="badge" th:if="${member.ban}" style="background:#d9534f;">제재</span>
+            </div>
+            <div style="flex-basis:8%;min-width:60px;">
+              <span class="badge" th:each="auth : ${member.authList}"
+                    th:classappend="${auth.auth == 'ROLE_ADMIN' ? 'bg-gold' : 'bg-secondary'}"
+                    th:text="${auth.auth == 'ROLE_ADMIN' ? '운영자' : '일반'}">권한</span>
+            </div>
+            <div style="flex-basis:14%;min-width:120px;">
+              <span th:each="log, stat : ${member.logs}" style="display:block; font-size:12px; color:#ccc;">
+                <span th:text="${#dates.format(log.createdAt, 'MM-dd HH:mm')}"></span>
+                <span th:text="${log.action}"></span>
+                <span th:text="${log.detail}"></span>
+              </span>
+              <a th:href="@{/admin/members/logs(userId=${member.id})}" class="btn btn-outline-gold btn-sm mt-1">전체보기</a>
+            </div>
+            <div style="flex-basis:9%;min-width:80px;">
+              <form th:action="@{/admin/members/enable}" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${member.id}" />
+                <input type="hidden" name="enabled" th:value="${member.enabled == null or !member.enabled}" />
+                <input type="hidden" name="keyword" th:value="${keyword}" />
+                <button type="submit" class="btn btn-outline-gold btn-sm" th:text="${member.enabled} ? '비활성' : '활성'">활성/비활성</button>
+              </form>
+              <form th:action="@{/admin/members/ban}" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${member.id}" />
+                <input type="hidden" name="ban" th:value="${member.ban == null or !member.ban}" />
+                <input type="hidden" name="keyword" th:value="${keyword}" />
+                <button type="submit" class="btn btn-outline-danger btn-sm"
+                        th:text="${member.ban != null and member.ban} ? '제재 해제' : '제재'">제재/해제</button>
+              </form>
+            </div>
+            <div style="flex-basis:8%;min-width:60px;">
+              <button type="button"
+                      class="btn btn-outline-gold btn-sm detail-btn"
+                      th:attr="data-member-id=${member.id}">
+                상세
+              </button>
+            </div>
+          </div>
+          <!-- 상세/수정 폼이 동적으로 들어갈 자리 (각 회원 row 바로 아래에 위치) -->
+          <div class="detail-row">
+            <div style="padding:0;" class="w-100" id="detail-area"></div>
+          </div>
+        </th:block>
+        <div th:if="${#lists.isEmpty(members)}" class="list-group-item text-center text-secondary bg-dark">등록된 회원이 없습니다.</div>
       </div>
     </div>
-  </main>
-  </body>
+  </div>
+</main>
+<script>
+  document.querySelectorAll('.detail-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var memberRow = btn.closest('.list-group-item');
+      var detailRow = memberRow.nextElementSibling;
+
+      // 토글: 이미 열려 있으면 닫기
+      if (detailRow.classList.contains('show')) {
+        detailRow.classList.remove('show');
+        detailRow.querySelector('#detail-area').innerHTML = '';
+        return;
+      }
+
+      // 다른 폼 닫기
+      document.querySelectorAll('.detail-row.show').forEach(function(row) {
+        row.classList.remove('show');
+        row.querySelector('#detail-area').innerHTML = '';
+      });
+
+      var id = btn.getAttribute('data-member-id');
+      fetch('/admin/members/' + id + '/detail-json')
+        .then(res => {
+          if (!res.ok) {
+            alert('회원 정보를 찾을 수 없습니다.');
+            return Promise.reject();
+          }
+          return res.json();
+        })
+        .then(member => {
+          detailRow.classList.add('show');
+          let authOptions = `
+            <option value="ROLE_USER" ${member.authList.includes('ROLE_USER') ? 'selected' : ''}>일반</option>
+            <option value="ROLE_ADMIN" ${member.authList.includes('ROLE_ADMIN') ? 'selected' : ''}>운영자</option>
+          `;
+          detailRow.querySelector('#detail-area').innerHTML = `
+<form action="/admin/members/update" method="post" class="resonos-card detail-form p-3 bg-resonos-dark rounded-3" onsubmit="return submitDetailForm(event, this)">
+  <input type="hidden" name="id" value="${member.id}" />
+  <div class="mb-3 text-start">
+    <label class="form-label">닉네임</label>
+    <input type="text" class="form-control" name="nickname" value="${member.nickname}" required>
+  </div>
+  <div class="mb-3 text-start">
+    <label class="form-label">이메일</label>
+    <input type="email" class="form-control" name="email" value="${member.email}" required>
+  </div>
+  <div class="mb-3 text-start">
+    <label class="form-label">상태</label>
+    <select name="enabled" class="form-select">
+      <option value="true" ${member.enabled ? 'selected' : ''}>정상</option>
+      <option value="false" ${!member.enabled ? 'selected' : ''}>휴면</option>
+    </select>
+  </div>
+  <div class="mb-3 text-start">
+    <label class="form-label">권한</label>
+    <select name="auth" class="form-select">
+      ${authOptions}
+    </select>
+  </div>
+  <div class="mb-3 text-start">
+    <label class="form-label">프로필 이미지 URL</label>
+    <input type="text" class="form-control" name="profileImage" value="${member.profileImage || ''}">
+  </div>
+  <div class="text-end">
+    <button type="submit" class="btn btn-gold btn-sm">저장</button>
+    <button type="button" class="btn btn-outline-gold btn-sm cancel-detail-btn">취소</button>
+  </div>
+</form>
+
+          `;
+          var cancelBtn = detailRow.querySelector('.cancel-detail-btn');
+          if (cancelBtn) {
+            cancelBtn.onclick = function() {
+              detailRow.classList.remove('show');
+              detailRow.querySelector('#detail-area').innerHTML = '';
+            }
+          }
+          setTimeout(function() {
+            detailRow.scrollIntoView({behavior: "smooth", block: "center"});
+          }, 100);
+        });
+    });
+  });
+
+  // 저장(AJAX, 필요시 location.reload() 등)
+  function submitDetailForm(e, form) {
+    e.preventDefault();
+    const formData = new FormData(form);
+    fetch(form.action, {
+      method: "POST",
+      body: formData
+    }).then(res => {
+      if(res.ok) {
+        alert("저장되었습니다!");
+        location.reload();
+      } else {
+        alert("저장 실패");
+      }
+    });
+    return false;
+  }
+</script>
+</body>
 </th:block>
-
-
-
-
 </html>

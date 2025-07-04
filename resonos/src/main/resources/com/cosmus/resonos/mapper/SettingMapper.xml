@@ -14,15 +14,11 @@
   </resultMap>
 
   <select id="list" resultMap="SettingResultMap">
-    SELECT id, name, description, value, updated_at, created_at
-    FROM setting
-    ORDER BY updated_at DESC
+    SELECT id, name, description, value, updated_at, created_at FROM setting ORDER BY id 
   </select>
 
   <select id="select" resultMap="SettingResultMap">
-    SELECT id, name, description, value, updated_at, created_at
-    FROM setting
-    WHERE id = #{id}
+    SELECT id, name, description, value, updated_at, created_at FROM setting WHERE id = #{id}
   </select>
 
   <insert id="insert">
@@ -32,8 +28,7 @@
 
   <update id="update">
     UPDATE setting
-    SET name = #{name},
-        description = #{description},
+    SET description = #{description},
         value = #{value},
         updated_at = #{updatedAt}
     WHERE id = #{id}

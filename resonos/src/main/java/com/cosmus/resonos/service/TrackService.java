@@ -18,4 +18,7 @@ public interface TrackService {
     public boolean delete(String id) throws Exception;
     // 존재 여부 확인
     public boolean exists(String id) throws Exception;
+    
+    // 동기화: Spotify에서 트랙 정보를 가져와서 데이터베이스에 저장
+    public void syncTrackFromSpotify(String spotifyTrackId);
 }

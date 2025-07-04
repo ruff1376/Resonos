@@ -1,6 +1,7 @@
 package com.cosmus.resonos.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,9 +36,11 @@ public class PolicyController {
     public String list(Model model) throws Exception {
         List<Policy> policies = policyService.list();
         List<Setting> settings = settingService.list();
+        Map<String, Setting> settingMap = settings.stream()
+            .collect(java.util.stream.Collectors.toMap(Setting::getName, java.util.function.Function.identity()));
         model.addAttribute("policies", policies);
-        model.addAttribute("settings", settings);
-        return "/admin/PolicySetting"; // policy/list.html
+        model.addAttribute("settings", settingMap);
+        return "/admin/PolicySetting";
     }
 
     // 상세

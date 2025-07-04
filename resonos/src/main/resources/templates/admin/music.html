@@ -275,6 +275,19 @@
     </div>
     <!-- 트랙/앨범/아티스트 등록/수정 모달 (폼은 필요에 따라 구현) -->
     <!-- ...모달 폼 생략(추후 구현)... -->
+    <!-- api 아티스트 검색 기능 추가중  -->
+     <form method="post" th:action="@{/admin/music/sync-artist}">
+  <select name="spotifyArtistId" class="form-select" required>
+    <option value="">아티스트 선택</option>
+    <!-- 예시: 서버에서 전달받은 아티스트 목록을 반복 -->
+    <option th:each="artist : ${spotifyArtists}" th:value="${artist.id}" th:text="${artist.name}"></option>
+  </select>
+  <button type="submit" class="btn btn-gold btn-sm">아티스트 동기화</button>
+</form>
+
+
+
+
   </div>
 </main>
 </body>

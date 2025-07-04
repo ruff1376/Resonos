@@ -12,10 +12,10 @@ import lombok.Getter;
 
 @Getter
 public class CustomUser implements UserDetails {
-    private final User user;
+    private final Users user;
     private final List<UserAuth> authList;
 
-    public CustomUser(User user) {
+    public CustomUser(Users user) {
         this.user = user;
         this.authList = user.getAuthList();
     }

@@ -3,32 +3,62 @@ package com.cosmus.resonos.service;
 
 import java.util.List;
 
-import com.cosmus.resonos.domain.User;
 import com.cosmus.resonos.domain.UserAuth;
+import com.cosmus.resonos.domain.Users;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 public interface UserService {
 
     // 회원 가입
-    public int join(User user) throws Exception;
+    public boolean join(Users user) throws Exception;
     // 회원 권한 등록
     public int insertAuth(UserAuth userAuth) throws Exception;
     // 🔐 로그인
-    public boolean login(User user, HttpServletRequest request);
+    public boolean login(Users user, HttpServletRequest request);
     // 회원 조회
-    public User select(String username) throws Exception;
+    public Users select(String username) throws Exception;
     // 👮‍♂️ 관리자 체크
     public boolean isAdmin() throws Exception;
     // 수정
-    public boolean update(User user) throws Exception;
+    public boolean update(Users user) throws Exception;
     // 삭제
     public boolean delete(Long id) throws Exception;
-    // 전체 조회 
-    public List<User> list() throws Exception;
+    // 전체 조회
+    public List<Users> list() throws Exception;
     // 회원 권한 조회
     public List<UserAuth> listAuth() throws Exception;
     // 회원 수 조회
     public int countAll() throws Exception;
+
+    // 회원 권한 조회
+    public List<UserAuth> selectAuthByUsername(String username) throws Exception;
+
+    // 회원 권한 수정
+    public int updateAuth(UserAuth userAuth) throws Exception;
+
+    // 회원 권한 삭제
+    public int deleteAuthByUsername(String username) throws Exception;
+
+    // 키워드(닉네임, 이메일)로 회원 검색
+    public List<Users> searchByKeyword(String keyword) throws Exception;
+
+    // 아이디 중복 조회
+    public boolean findByUsername(String username) throws Exception;
+    // 닉네임 중복 조회
+    public boolean findByNickname(String nickname) throws Exception;
+
+    // 회원 활성/비활성 상태 변경
+    public boolean enableUser(Long id, boolean enabled) throws Exception;
+    // 회원 제재/해제 상태 변경
+    public boolean banUser(Long id, boolean ban) throws Exception;
+    // 특정 권한만 삭제
+    public void deleteSpecificAuth(String username, String auth) throws Exception;
+
+    // 권한 중복 조회
+    public boolean hasAuth(String username, String auth) throws Exception;
+
+    // selectById
+    public Users selectById(Long id) throws Exception;
 
 }

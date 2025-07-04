@@ -1,13 +1,19 @@
 package com.cosmus.resonos.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.cosmus.resonos.domain.CustomUser;
-import com.cosmus.resonos.domain.User;
+import com.cosmus.resonos.domain.UserAuth;
+import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.mapper.UserMapper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +35,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
         log.info("- 사용자 정의 인증을 위해, 사용자 정보 조회");
         log.info("- username : {} ", username);
 
-        User user = null;
+        Users user = null;
         try {
             // 👩‍💼 사용자 정보 및 권한 조회
             user = userMapper.select(username);
@@ -43,4 +49,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
         // 🔐 Users ➡ CustomUser ➡ UserDetails
         return new CustomUser(user);
     }
+
+
 }

@@ -4,7 +4,7 @@
 
 <mapper namespace="com.cosmus.resonos.mapper.UserMapper">
 
-  <resultMap id="UserResultMap" type="User">
+  <resultMap id="UserResultMap" type="Users">
     <id property="id" column="id"/>
 
     <result property="username" column="username"/>
@@ -35,7 +35,8 @@
     SELECT * FROM user WHERE username = #{username}
   </select>
 
-  <insert id="insert">
+  <!-- 회원가입 -->
+  <insert id="join" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO user
       (id, username, email, password, nickname, profile_image, bio, is_pro, enabled, provider, provider_id, created_at)
     VALUES
@@ -61,7 +62,7 @@
   <delete id="delete" >
     DELETE FROM user WHERE id = #{id}
   </delete>
-    
+
   <insert id="insertAuth">
       INSERT INTO user_auth ( username, auth )
       VALUES ( #{username}, #{auth} )
@@ -72,11 +73,62 @@
   </select>
 
   <select id="list" resultMap="UserResultMap">
-    SELECT * FROM user 
+    SELECT * FROM user
   </select>
 
   <select id="countAll" resultType="int">
       SELECT COUNT(*) FROM user
+  </select>
+
+  <!-- 권한 삭제 -->
+  <delete id="deleteAuthByUsername">
+  DELETE FROM user_auth WHERE username = #{username}
+  </delete>
+  <!-- 권한 수정 -->
+  <update id="updateAuth">
+      UPDATE user_auth
+      SET auth = #{auth}
+      WHERE username = #{username} AND id = #{id}
+  </update>
+  <!-- 권한 조회 -->
+  <select id="selectAuthByUsername" resultMap="AuthMap">
+      SELECT * FROM user_auth WHERE username = #{username}
+  </select>
+  <!-- 키워드로 회원 검색 -->
+  <select id="searchByKeyword" resultMap="UserResultMap">
+      SELECT * FROM user WHERE nickname LIKE CONCAT('%', #{keyword}, '%')
+         OR email LIKE CONCAT('%', #{keyword}, '%')
+  </select>
+
+  <!-- 아이디 중복 -->
+  <select id="findByUsername" resultType="String">
+    SELECT username FROM user WHERE username = #{username}
+  </select>
+
+  <!-- 닉네임 중복 -->
+  <select id="findByNickname" resultType="String">
+    SELECT nickname FROM user WHERE nickname = #{nickname}
+  </select>
+
+  <!-- 회원 활성/비활성 상태 변경 -->
+  <update id="updateEnabled">
+    UPDATE user SET enabled = #{enabled} WHERE id = #{id}
+  </update>
+  <!-- 회원 제재/해제 상태 변경 -->
+  <update id="updateBan">
+    UPDATE user SET ban = #{ban} WHERE id = #{id}
+  </update>
+  <!-- 특정 권한만 삭제 -->
+  <delete id="deleteSpecificAuth">
+    DELETE FROM user_auth WHERE username = #{username} AND auth = #{auth}
+  </delete>
+  <!-- 권한 중복 조회 -->
+  <select id="hasAuth" resultType="int">
+      SELECT COUNT(*) FROM user_auth WHERE username = #{username} AND auth = #{auth}
+  </select>
+  <!-- selectById -->
+  <select id="selectById" resultMap="UserResultMap">
+    SELECT * FROM user WHERE id = #{id}
   </select>
 
 </mapper>

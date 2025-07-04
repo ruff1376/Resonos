@@ -1,6 +1,6 @@
-INSERT INTO user (id, username, email, password, nickname, is_pro, enabled, created_at) VALUES (1, 'user1', 'user1@mail.com', 'pass1', '닉네임1', 1, 1, '2025-06-10 05:46:11');
-INSERT INTO user (id, username, email, password, nickname, is_pro, enabled, created_at) VALUES (2, 'user2', 'user2@mail.com', 'pass2', '닉네임2', 0, 1, '2025-06-06 05:46:11');
-INSERT INTO user (id, username, email, password, nickname, is_pro, enabled, created_at) VALUES (3, 'user3', 'user3@mail.com', 'pass3', '닉네임3', 1, 1, '2025-06-27 05:46:11');
+-- INSERT INTO user (id, username, email, password, nickname, is_pro, enabled, created_at) VALUES (1, 'user1', 'user1@mail.com', 'pass1', '닉네임1', 1, 1, '2025-06-10 05:46:11');
+-- INSERT INTO user (id, username, email, password, nickname, is_pro, enabled, created_at) VALUES (2, 'user2', 'user2@mail.com', 'pass2', '닉네임2', 0, 1, '2025-06-06 05:46:11');
+-- INSERT INTO user (id, username, email, password, nickname, is_pro, enabled, created_at) VALUES (3, 'user3', 'user3@mail.com', 'pass3', '닉네임3', 1, 1, '2025-06-27 05:46:11');
 INSERT INTO user (id, username, email, password, nickname, is_pro, enabled, created_at) VALUES (4, 'user4', 'user4@mail.com', 'pass4', '닉네임4', 0, 1, '2025-06-29 05:46:11');
 INSERT INTO user (id, username, email, password, nickname, is_pro, enabled, created_at) VALUES (5, 'user5', 'user5@mail.com', 'pass5', '닉네임5', 1, 1, '2025-06-09 05:46:11');
 INSERT INTO user (id, username, email, password, nickname, is_pro, enabled, created_at) VALUES (6, 'user6', 'user6@mail.com', 'pass6', '닉네임6', 0, 1, '2025-06-02 05:46:11');
@@ -179,8 +179,3 @@ INSERT INTO user_activity_log (id, user_id, action, created_at) VALUES (7, 8, 'L
 INSERT INTO user_activity_log (id, user_id, action, created_at) VALUES (8, 9, 'LOGIN', '2025-06-25 05:46:11');
 INSERT INTO user_activity_log (id, user_id, action, created_at) VALUES (9, 10, 'LOGIN', '2025-06-05 05:46:11');
 INSERT INTO user_activity_log (id, user_id, action, created_at) VALUES (10, 11, 'LOGIN', '2025-06-21 05:46:11');
-INSERT INTO setting (id, value, updated_at) VALUES (1, '설정값1', '2025-07-01 05:46:11');
-INSERT INTO setting (id, value, updated_at) VALUES (2, '설정값2', '2025-06-27 05:46:11');
-INSERT INTO setting (id, value, updated_at) VALUES (3, '설정값3', '2025-06-30 05:46:11');
-INSERT INTO setting (id, value, updated_at) VALUES (4, '설정값4', '2025-06-14 05:46:11');
-INSERT INTO setting (id, value, updated_at) VALUES (5, '설정값5', '2025-06-27 05:46:11');

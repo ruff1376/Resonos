@@ -1,5 +1,6 @@
 package com.cosmus.resonos.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cosmus.resonos.domain.User;
+import com.cosmus.resonos.domain.UserActivityLog;
 import com.cosmus.resonos.domain.UserAuth;
-import com.cosmus.resonos.domain.UserRole;
+import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.mapper.UserMapper;
 import com.cosmus.resonos.mapper.UserRoleMapper;
 
@@ -33,6 +34,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired AuthenticationManager authenticationManager;
 
+    @Autowired UserActivityLogService userActivityLogService;
+
     /**
      * 회원가입
      * 1. 비밀번호를 암호화
@@ -41,15 +44,15 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional          // 트랜잭션 처리를 설정 (회원정보, 회원권한)
-    public int join(User user) throws Exception {
+    public boolean join(Users user) throws Exception {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-        int result = userMapper.join(user);
-        if (result > 0) {
-            UserRole userRole = new UserRole();
-            userRole.setUserId(user.getId());
-            userRole.setRoleId(2L); // 2L = ROLE_USER, 1L = ROLE_ADMIN 등
-            userRoleMapper.insert(userRole);
+        boolean result = userMapper.join(user) > 0 ? true : false;
+        if (result) {
+            UserAuth userAuth = new UserAuth();
+            userAuth.setUsername(user.getUsername());
+            userAuth.setAuth("ROLE_USER"); // 2L = ROLE_USER, 1L = ROLE_ADMIN 등
+            userMapper.insertAuth(userAuth);
         }
         return result;
     }
@@ -61,7 +64,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean login(User user, HttpServletRequest request) {
+    public boolean login(Users user, HttpServletRequest request) {
         // 💍 토큰 생성
         String username = user.getUsername();
         String password = user.getPassword();
@@ -82,13 +85,27 @@ public class UserServiceImpl implements UserService {
             // 세션 인증 정보 설정 (세션이 없으면 새로 생성)
             HttpSession session = request.getSession(true); // 세션이 없으면 생성
             session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
+
+            // 활동 로그 기록
+            UserActivityLog log = new UserActivityLog();
+            log.setUserId(user.getId());
+            log.setAction("로그인");
+            log.setDetail("성공");
+            log.setIpAddress(request.getRemoteAddr());
+            log.setUserAgent(request.getHeader("User-Agent"));
+            log.setCreatedAt(new Date());
+            try {
+                userActivityLogService.logActivity(log);
+            } catch (Exception e) {
+                // 예외를 로깅하거나 무시할 수 있습니다. 여기서는 무시합니다.
+            }
         }
         return result;
     }
 
     @Override
-    public User select(String username) throws Exception {
-        User user = userMapper.select(username);
+    public Users select(String username) throws Exception {
+        Users user = userMapper.select(username);
         return user;
     }
 
@@ -103,7 +120,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean update(User user) throws Exception {
+    public boolean update(Users user) throws Exception {
         return userMapper.update(user) > 0;
     }
 
@@ -113,7 +130,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> list() throws Exception {
+    public List<Users> list() throws Exception {
         return userMapper.list();
     }
 
@@ -126,6 +143,17 @@ public class UserServiceImpl implements UserService {
     public int countAll() throws Exception {
         return userMapper.countAll();
     }
+
+    @Override
+    public boolean findByUsername(String username) throws Exception {
+        return userMapper.findByUsername(username) != null ? true : false;
+    }
+
+    @Override
+    public boolean findByNickname(String nickname) throws Exception {
+        return userMapper.findByNickname(nickname) != null ? true : false;
+    }
+
 
     // 아래 코드는 컨트롤러에서 사용해야 하므로 주석 처리
     /*
@@ -149,4 +177,49 @@ public class UserServiceImpl implements UserService {
     //     return "admin/only";
     // }
     */
+
+
+    @Override
+    public List<UserAuth> selectAuthByUsername(String username) throws Exception {
+        return userMapper.selectAuthByUsername(username);
+    }
+
+    @Override
+    public int updateAuth(UserAuth userAuth) throws Exception {
+        return userMapper.updateAuth(userAuth);
+    }
+
+    @Override
+    public int deleteAuthByUsername(String username) throws Exception {
+        return userMapper.deleteAuthByUsername(username);
+    }
+
+    @Override
+    public List<Users> searchByKeyword(String keyword) throws Exception {
+        return userMapper.searchByKeyword(keyword);
+    }
+    
+    @Override
+    public boolean enableUser(Long id, boolean enabled) throws Exception {
+        return userMapper.updateEnabled(id, enabled) > 0;
+    }
+
+    @Override
+    public boolean banUser(Long id, boolean ban) throws Exception {
+        return userMapper.updateBan(id, ban) > 0;
+    }
+
+    @Override
+    public void deleteSpecificAuth(String username, String auth) throws Exception {
+        userMapper.deleteSpecificAuth(username, auth);
+    }
+    @Override
+    public boolean hasAuth(String username, String auth) throws Exception {
+        return userMapper.hasAuth(username, auth) > 0;
+    }
+    @Override
+    public Users selectById(Long id) throws Exception {
+        return userMapper.selectById(id);
+    }   
+
 }

@@ -49,8 +49,8 @@ body {
   display: flex;
   justify-content: center;
 }
-.login-box {
-  background-color: rgba(24,28,35,0.96);
+.user-form {
+  background-color: var(--background-color);
   border: 1.5px solid #D4B97F;
   border-radius: 24px;
   padding: 48px 36px 32px 36px;
@@ -102,6 +102,19 @@ button.social-btn:hover {
   color: #fffbe6;
 }
 
+/* 회원가입 페이지 */
+.con-join .user-form {
+  max-width: 1000px;
+  min-height: 600px;
+  width: 100%;
+  text-align: start;
+}
+.con-join .user-form h2 {text-align: center;}
+.con-join .form-control::placeholder {color: #bbb;}
+#join-button {margin-top: 80px;}
+.fail-vali {color: #FF3B3B; font-size: 1.2rem;}
+.success {color: rgb(3, 212, 3) !important;}
+
 /* 마이페이지 */
 body {
   background: #181C23;
@@ -116,22 +129,6 @@ body {
   padding: 22px 48px 10px 48px;
   background: #181C23;
   border-bottom: 1px solid #222;
-}
-.logo {
-  display: flex;
-  align-items: center;
-}
-.logo-img {
-  height: 38px;
-  margin-right: 13px;
-  border-radius: 6px;
-  background: #181C23;
-}
-.logo-text {
-  font-size: 1.7rem;
-  font-weight: bold;
-  color: #D4B97F;
-  letter-spacing: 2px;
 }
 .con nav a {
   color: #D4B97F;
@@ -335,7 +332,7 @@ body {
   border-radius: 14px;
   font-size: 1.4rem;
   font-weight: bold;
-  padding: 10px 12px;
+  padding: 5px 10px;
   letter-spacing: 1px;
 }
 .my-middle {
@@ -502,6 +499,7 @@ textarea.form-control {
   position: absolute;
   top: 20%;
   left: 40px;
+  padding: 3px;
 }
 .mypage-tabs .tab {
   display: block;
