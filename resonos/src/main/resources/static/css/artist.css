@@ -118,6 +118,7 @@ img {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    min-width: 150px;
 }
 .artist-card .disco-graphy {
     display: flex;
@@ -259,4 +260,65 @@ img {
 }
 .moods .btn{
   flex:0 0 auto;           /* grow 0, shrink 0, basis auto */
+}
+
+/* 드래그 슬라이드 css */
+/* ───── [A] 슬라이드·스냅·3장 노출 ───── */
+.album-container{
+    overflow-x:hidden;                 /* 스크롤바 감춤 (자동 슬라이드용)  */
+    position:relative;                 /* JS에서 폭 계산용 */
+}
+
+.album-track{                          /* ➜ 트랙용 래퍼를 JS가 생성 */
+    display:flex;
+    gap:15px;
+    scroll-snap-type:x mandatory;
+    scroll-behavior:smooth;
+    -webkit-overflow-scrolling:touch;
+}
+
+.album{
+    flex:0 0 calc((100% - 30px)/3);    /* gap 15*2 = 30 → 카드 3장 */
+    scroll-snap-align:start;
+    flex-shrink:0;
+}
+
+/* ───── [B] 말줄임 처리 (길이 상관없이 3장 유지) ───── */
+.album-info p{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+/* ───── [C] 드래그 중 커서 변경 ───── */
+.album-container.grabbing,.album{cursor:grabbing;}
+
+.album-container {
+    padding-bottom: 30px;
+  display: flex;
+  gap: 15px;
+  padding-top: 10px;
+  overflow-x: auto;
+  max-width: calc(330px * 3 + 15px * 2); /* 3장 보여주기 */
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.album-container .album {
+  flex: 0 0 330px;  /* flex-grow:0, flex-shrink:0, flex-basis:330px */
+  scroll-snap-align: start;
+  flex-shrink: 0;   /* 명확하게 줄어들지 않게 */
+}
+/* 글자가 넘칠 때 ... 으로 대체 */
+.album-info p {
+    min-width: 180px;
+    max-width: 200px;
+  white-space: nowrap;         /* 줄 바꿈 안 함 */
+  overflow: hidden;            /* 넘치는 부분 숨김 */
+  text-overflow: ellipsis !important;     /* ... 표시 */
+  user-select: text;           /* 글자 선택 가능 (필요 시) */
+}
+.album-container::-webkit-scrollbar {
+  display: none;          /* 크롬, 사파리, 오페라용 스크롤바 숨기기 */
 }
