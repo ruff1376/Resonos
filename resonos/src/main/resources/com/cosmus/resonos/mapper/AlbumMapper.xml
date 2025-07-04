@@ -83,6 +83,16 @@
     ORDER BY a.release_date DESC
   </select>
 
+  <!-- trackId 앨범 객체 -->
+  <select id="findAlbumByTrackId"
+          parameterType="string"
+          resultType="Album">
+    SELECT a.*
+    FROM   album  a
+    JOIN   track  t ON t.album_id = a.id
+    WHERE  t.id = #{trackId}
+  </select>
+  
   <!-- artistId -->
   <!-- 아티스트의 앨범 수 -->
   <select id="countAlbumsByArtist"

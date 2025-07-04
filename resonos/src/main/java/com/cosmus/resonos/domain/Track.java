@@ -16,4 +16,10 @@ public class Track {
     private int trackNo;
     private String artistName;
     private String coverImage;
+    
+    public String getFormattedDuration() {
+        int minutes = duration / 60;
+        int seconds = duration % 60;
+        return String.format("%d:%02d", minutes, seconds);
+    }
 }

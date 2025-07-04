@@ -31,4 +31,6 @@ public interface AlbumMapper {
     public List<Album> findAlbumsByArtistId(String id) throws Exception;
     // 아티스트 아이디로 앨범 개수 확인
     public int countAlbumsByArtist(String id) throws Exception;
+    // 트랙 아이디로 앨범 객체
+    public Album findAlbumByTrackId(String id) throws Exception;
 }

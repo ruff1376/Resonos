@@ -75,5 +75,10 @@ public class AlbumServiceImpl implements AlbumService {
         return albumMapper.countAlbumsByArtist(id);
     }
 
+    @Override
+    public Album findAlbumByTrackId(String id) throws Exception {
+        return albumMapper.findAlbumByTrackId(id);
+    }
+
     
 }
