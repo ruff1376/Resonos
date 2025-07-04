@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cosmus.resonos.domain.UserAuth;
-import com.cosmus.resonos.domain.UserRole;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.mapper.UserMapper;
 import com.cosmus.resonos.mapper.UserRoleMapper;
@@ -47,9 +46,9 @@ public class UserServiceImpl implements UserService {
         boolean result = userMapper.join(user) > 0 ? true : false;
         if (result) {
             UserAuth userAuth = new UserAuth();
-            userAuth.setUsername(encodedPassword);
+            userAuth.setUsername(user.getUsername());
             userAuth.setAuth("ROLE_USER"); // 2L = ROLE_USER, 1L = ROLE_ADMIN 등
-            userAuthMapper.insert(userAuth);
+            userMapper.insertAuth(userAuth);
         }
         return result;
     }

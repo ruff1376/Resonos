@@ -1,4 +1,3 @@
-TRUNCATE TABLE artist;
 
 -- 아티스트: The Weeknd
 INSERT INTO artist (id, name, profile_image, genres) VALUES ('1Xyo4u8uXC1ZmMpatF05PJ', 'The Weeknd', 'https://i.scdn.co/image/ab6761610000e5eb9e528993a2820267b97f6aae', '');
@@ -64,3 +63,66 @@ INSERT INTO artist (id, name, profile_image, genres) VALUES ('6RHTUrRF63xao58xh9
 INSERT INTO artist (id, name, profile_image, genres) VALUES ('7dGJo4pcD2V6oG8kP0tJRR', 'Eminem', 'https://i.scdn.co/image/ab6761610000e5eba00b11c129b27a88fc72f36b', 'rap, hip hop');
 
 -- ==============================================
+
+-- 아티스트: aespa
+INSERT INTO artist (id, name, profile_image, genres) VALUES ('6YVMFz59CuY7ngCxTxjpxE', 'aespa', 'https://i.scdn.co/image/ab6761610000e5eb927f1260251e32135287e032', 'k-pop');
+
+-- ==============================================
+
+
+-- 아티스트: PSY
+INSERT INTO artist (id, name, profile_image, genres) VALUES ('2dd5mrQZvg6SmahdgVKDzh', 'PSY', 'https://i.scdn.co/image/ab6761610000e5eb24b5185226d5b7c6aa91db5a', 'k-pop');
+
+-- ==============================================
+
+
+-- 아티스트: TWICE
+INSERT INTO artist (id, name, profile_image, genres) VALUES ('7n2Ycct7Beij7Dj7meI4X0', 'TWICE', 'https://i.scdn.co/image/ab6761610000e5ebfcef64d7657da13955bbdb7f', 'k-pop');
+
+-- ==============================================
+
+
+-- 아티스트: Red Velvet
+INSERT INTO artist (id, name, profile_image, genres) VALUES ('1z4g3DjTBBZKhvAroFlhOM', 'Red Velvet', 'https://i.scdn.co/image/ab6761610000e5eb02a562ea6b1dc718394010ac', 'k-pop');
+
+-- ==============================================
+
+
+-- 아티스트: i-dle
+INSERT INTO artist (id, name, profile_image, genres) VALUES ('2AfmfGFbe0A0WsTYm0SDTx', 'i-dle', 'https://i.scdn.co/image/ab6761610000e5eb732a090e736faef27779d24e', 'k-pop');
+
+-- ==============================================
+
+
+-- 아티스트: Car, the garden
+INSERT INTO artist (id, name, profile_image, genres) VALUES ('7c1HgFDe8ogy5NOZ1ANCJQ', 'Car, the garden', 'https://i.scdn.co/image/ab6761610000e5eb60207000aebdb42a66f6880e', 'k-ballad');
+
+-- ==============================================
+
+
+-- 아티스트: Girls'' Generation
+INSERT INTO artist (id, name, profile_image, genres) VALUES ('0Sadg1vgvaPqGTOjxu0N6c', 'Girls'' Generation', 'https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa', 'k-pop');
+
+-- ==============================================
+
+
+-- 아티스트: LE SSERAFIM
+INSERT INTO artist (id, name, profile_image, genres) VALUES ('4SpbR6yFEvexJuaBpgAU5p', 'LE SSERAFIM', 'https://i.scdn.co/image/ab6761610000e5eb593f35db6f6837e1047a5e33', 'k-pop');
+
+-- ==============================================
+
+
+-- 아티스트: KISS OF LIFE
+INSERT INTO artist (id, name, profile_image, genres) VALUES ('4TEK9tIkcoxib4GxT3O4ky', 'KISS OF LIFE', 'https://i.scdn.co/image/ab6761610000e5eb5227c0582a86838a0942d9f3', 'k-pop');
+
+-- ==============================================
+
+
+-- 아티스트: CHANGMO
+INSERT INTO artist (id, name, profile_image, genres) VALUES ('3hvinNZRzTLoREmqFiKr1b', 'CHANGMO', 'https://i.scdn.co/image/ab6761610000e5eb53b0804552178db3b27d8a6b', 'k-rap');
+
+-- ==============================================
+
+
+-- 아티스트: Younha
+INSERT INTO artist (id, name, profile_image, genres) VALUES ('6GwM5CHqhWXzG3l5kzRSAS', 'Younha', 'https://i.scdn.co/image/ab6761610000e5ebf5e315e40a6d4ffd36c10d94', 'k-ballad');
