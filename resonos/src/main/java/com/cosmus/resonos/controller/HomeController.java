@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +20,7 @@ import com.cosmus.resonos.validation.EmailCheck;
 import com.cosmus.resonos.validation.NicknameCheck;
 import com.cosmus.resonos.validation.PasswordCheck;
 import com.cosmus.resonos.validation.UsernameCheck;
-import jakarta.validation.Valid;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -150,18 +149,18 @@ public class HomeController {
    * @return
    */
   @PostMapping("/join")
-  public ResponseEntity<?> joinPost(@Valid @ModelAttribute Users user, BindingResult br) {
+  public String joinPost(@Validated({UsernameCheck.class, EmailCheck.class, PasswordCheck.class, NicknameCheck.class})
+  @ModelAttribute Users user, BindingResult br) {
+
+    log.info("user : {}", user);
 
     if (br.hasErrors()) {
       log.info("유효성 검사 실패");
-      br.getFieldErrors().forEach(fe ->
-        log.info("Field: {}, Message: {}", fe.getField(), fe.getDefaultMessage())
-      );
-      return ResponseEntity.badRequest().body(br.getFieldErrors());
+      return "user/join";
     }
 
     log.info("user : {}", user);
-    return new ResponseEntity<>("SUCCESS", HttpStatus.CREATED);
+    return "redirect:/";
   }
 
   /**
