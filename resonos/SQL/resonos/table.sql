@@ -5,6 +5,7 @@
 >>>>>>> main
 
 -- 💥 기존 테이블 모두 삭제
+
 DROP TABLE IF EXISTS
     user_activity_log, admin_log, user_role, role, user_sanction,
     plugin, liked_album, album_review, user_follow, user_badge,
