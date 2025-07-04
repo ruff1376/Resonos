@@ -17,10 +17,10 @@ public interface UserMapper {
 
     // 회원 가입
     public int join(Users user) throws Exception;
-
+    // 회원 권한 등록
+    public int insertAuth(UserAuth userAuth) throws Exception;
     // 회원 조회
     public Users select(@Param("username") String username) throws Exception;
-
     // 전체 조회
     public List<Users> list() throws Exception;
     // 수정
@@ -46,10 +46,12 @@ public interface UserMapper {
     // 회원 권한 삭제
     public int deleteAuthByUsername(@Param("username") String username) throws Exception;
 
-    // 회원 권한 등록
-    public int insertAuth(UserAuth userAuth) throws Exception;
 
     // 키워드로 회원 검색
     public List<Users> searchByKeyword(@Param("keyword") String keyword) throws Exception;
 
+    // 아이디 중복 조회
+    public String findByUsername(String username) throws Exception;
+    // 아이디 중복 조회
+    public String findByNickname(String nickname) throws Exception;
 }

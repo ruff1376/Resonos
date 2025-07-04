@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public interface UserService {
 
     // 회원 가입
-    public int join(Users user) throws Exception;
+    public boolean join(Users user) throws Exception;
     // 회원 권한 등록
     public int insertAuth(UserAuth userAuth) throws Exception;
     // 🔐 로그인
@@ -43,4 +43,8 @@ public interface UserService {
     // 키워드(닉네임, 이메일)로 회원 검색
     public List<Users> searchByKeyword(String keyword) throws Exception;
 
+    // 아이디 중복 조회
+    public boolean findByUsername(String username) throws Exception;
+    // 닉네임 중복 조회
+    public boolean findByNickname(String nickname) throws Exception;
 }

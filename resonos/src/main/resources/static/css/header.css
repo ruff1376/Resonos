@@ -1,4 +1,4 @@
-.header-navbar {
+.site-header .navbar {
     border-bottom: 1px solid var(--main-color);
 }
 .site-header .navbar-brand,
@@ -12,14 +12,14 @@
 .site-header .nav-link:hover {
     color: #fffbe6 !important;
 }
-.site-header .logo-img {
+.site-header .header-logo-img {
     width: 150px;
     height: 100px;
     margin-right: 10px;
     border-radius: 6px;
     object-fit: contain;
 }
-.site-header .logo-img-sub {
+.site-header .header-logo-img-sub {
     width: 100px;
     height: 66px;
     border-radius: 6px;

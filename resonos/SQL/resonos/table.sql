@@ -1,10 +1,5 @@
-<<<<<<< HEAD
--- Active: 1751337677491@@127.0.0.1@3306@resonos
-=======
--- Active: 1745889699154@@127.0.0.1@3306@aloha
->>>>>>> main
-
 -- 💥 기존 테이블 모두 삭제
+
 DROP TABLE IF EXISTS
     user_activity_log, admin_log, user_role, role, user_sanction,
     plugin, liked_album, album_review, user_follow, user_badge,
@@ -101,8 +96,8 @@ CREATE TABLE `user` (
 	`nickname`	VARCHAR(100)	NOT NULL,
 	`profile_image`	VARCHAR(200)	NULL,
 	`bio`	TEXT	NULL,
-	`is_pro`	BOOLEAN	NOT NULL,
-	`enabled`	BOOLEAN	NOT NULL,
+	`is_pro`	BOOLEAN	NOT NULL DEFAULT FALSE,
+	`enabled`	BOOLEAN	NOT NULL DEFAULT TRUE,
 	`provider`	VARCHAR(200)	NULL,
 	`provider_id`	VARCHAR(200)	NULL,
 	`created_at`	TIMESTAMP	NULL	DEFAULT CURRENT_TIMESTAMP
