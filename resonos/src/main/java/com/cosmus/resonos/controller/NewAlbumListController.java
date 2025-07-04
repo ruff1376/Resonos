@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.cosmus.resonos.domain.Album;
@@ -24,9 +25,10 @@ public class NewAlbumListController {
     private AlbumService albumService;
 
     @GetMapping("/new-albums")
-    public String newList(Model model, Pagination pagination) throws Exception {
+    public String newList(Model model, @RequestParam(value = "size", defaultValue = "30") int size, Pagination pagination) throws Exception {
+        pagination.setSize(size);
         List<Album> newList = albumService.newList(pagination);
-        model.addAttribute("papagination", pagination);
+        model.addAttribute("pagination", pagination);
         model.addAttribute("newList", newList);
         String pageUri = UriComponentsBuilder.fromPath("/list/new-albums")
                                             .queryParam("size", pagination.getSize())
@@ -34,6 +36,6 @@ public class NewAlbumListController {
                                             .build()
                                             .toUriString();
         model.addAttribute("pageUri", pageUri);
-        return "list/new-albums";
+        return "list/new_album";
     }
 }
