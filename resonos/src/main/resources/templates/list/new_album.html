@@ -16,8 +16,8 @@
             <div class="d-flex flex-row align-items-center px-4 mb-3" style="height:50px;">
                 <div class="section-title flex-grow-1">최신 앨범</div>
             </div>
-            <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-4 justify-content-start">
-                <th:block th:each="newAlbum : ${newAlbumList}">
+            <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-4 mb-5 justify-content-start">
+                <th:block th:each="newAlbum : ${newList}">
                     <!-- 앨범 카드 -->
                     <div class="col d-flex">
                         <div class="card align-items-center p-3" style="width:228px; height:320px;">
@@ -33,7 +33,7 @@
                     </div>
                 </th:block>
             </div>
-            <div th:replace="fragments/pagination :: pagination"></div>
+            <div th:replace="~{fragments/pagination :: pagination}"></div>
         </section>
     </th:block>
 </body>

@@ -29,9 +29,10 @@
   </select>
 
   <select id="newList" resultMap="Album">
-    SELECT *
-    FROM album
-    ORDER BY release_date DESC
+    SELECT a.*, ar.name AS artist_name
+    FROM album a
+    LEFT JOIN artist ar ON a.artist_id = ar.id
+    ORDER BY a.release_date DESC
     LIMIT #{index}, #{size}
   </select>
 
