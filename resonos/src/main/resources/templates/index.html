@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko"
+        xmlns:th="http://www.thymeleaf.org"
+>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,13 +16,14 @@
             <h1>음악의 우주, 커뮤니티의 연결</h1>
             <p>별처럼 빛나는 음악과 사람들의 소통 공간</p>
             <div class="d-flex justify-content-center gap-4">
-                <a href="/login">
-                    <button class="btn-gold">로그인</button>
-                </a>
-                <a href="/join">
-                    <button class="btn-gold">회원가입</button>
-                </a>
-
+                <th:block th:if="${not #authorization.expression('isAuthenticated()')}">
+                    <a href="/login">
+                        <button class="btn-gold">로그인</button>
+                    </a>
+                    <a href="/join">
+                        <button class="btn-gold">회원가입</button>
+                    </a>
+                </th:block>
             </div>
         </section>
         <section class="main-cards">
