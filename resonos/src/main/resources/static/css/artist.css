@@ -45,6 +45,7 @@ body {
   box-shadow: 0 0 4px rgba(0,0,0,.3);
   z-index: 2;                     /* 디스크 위로 */
   pointer-events: none;           /* 클릭 방지 */
+  opacity: 0.95;
 }
 .album-img img {
   /* 중심축(50%·50%)을 기준으로 회전 */

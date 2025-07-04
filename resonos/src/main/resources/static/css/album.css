@@ -25,15 +25,16 @@ li {list-style-type: none;}
 
 /* 심(스핀들) */
 .song-img .center-pin {
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 40px; height: 40px;      /* 원 크기 */
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: var(--background-color);
-  box-shadow: 0 0 4px rgba(0,0,0,.3);
-  z-index: 2;                     /* 디스크 위로 */
-  pointer-events: none;           /* 클릭 방지 */
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 40px; height: 40px;      /* 원 크기 */
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: var(--background-color);
+    box-shadow: 0 0 4px rgba(0,0,0,.3);
+    z-index: 2;                     /* 디스크 위로 */
+    pointer-events: none;           /* 클릭 방지 */
+    opacity: 0.95;
 }
 .song-img img {
   /* 중심축(50%·50%)을 기준으로 회전 */

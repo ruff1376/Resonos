@@ -57,7 +57,7 @@
                     <p id="headline" th:text="|${artist.name}'s 🔥 TOP7|"></p>
                     <!-- 반복문 인기곡 -->
                     <th:block th:each="tops, stat : ${TOP7}">
-                        <p th:text="|${stat.count}. ${tops.title}|"></p>
+                        <p th:text="|${stat.count}. ${tops.title}  ${tops.formattedDuration}|"></p>
                     </th:block>
                 </div>
                 <th:block th:if="${mv != null and mv != 'empty_mv_url'}">

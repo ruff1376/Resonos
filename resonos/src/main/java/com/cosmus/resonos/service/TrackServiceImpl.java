@@ -65,4 +65,14 @@ public class TrackServiceImpl implements TrackService {
     public int countTracksByArtist(String id) throws Exception {
         return trackMapper.countTracksByArtist(id);
     }
+
+    @Override
+    public List<Track> findTop5TracksInSameAlbum(String id) throws Exception {
+        return trackMapper.findTop5TracksInSameAlbum(id);
+    }
+
+    @Override
+    public String findArtistNameByTrackId(String id) throws Exception {
+        return trackMapper.findArtistNameByTrackId(id);
+    }
 }
