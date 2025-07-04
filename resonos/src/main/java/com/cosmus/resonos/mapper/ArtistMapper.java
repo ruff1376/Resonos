@@ -10,8 +10,8 @@ import com.cosmus.resonos.domain.Artist;
 public interface ArtistMapper {
     // 목록
     public List<Artist> list() throws Exception;
-    // 조회
-    public Artist select(Integer no) throws Exception;
+    // 단건 조회
+    public Artist selectById(String id) throws Exception;
     // 삽입
     public int insert(Artist artist) throws Exception;
     // 수정

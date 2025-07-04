@@ -22,4 +22,8 @@ public interface TrackMapper {
     public int delete(String id) throws Exception;
     // 존재 여부 확인
     public int exists(String id) throws Exception;
+    // 아티스트별 상위7개 인기곡
+public List<Track> selectTop7TracksByArtist(String id) throws Exception;
+    // 아티스트별 곡 갯수
+    public int countTracksByArtist(String id) throws Exception;
 }

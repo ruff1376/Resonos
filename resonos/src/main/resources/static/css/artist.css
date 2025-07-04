@@ -92,15 +92,20 @@ img {
     width: 100%;
     border-radius: 20px;
     border: 2px solid var(--main-color);
+    overflow: hidden;
+    gap: 20px;
 }
 .artist-card .artist-overall {
     display: flex;
     padding-left: 30px;
-    width: 400px;
     height: 250px;
     justify-content: start;
     align-items: center;
     gap: 20px;
+    width: fit-content;
+}
+.artist-card .artist-overall p {
+    white-space: nowrap;
 }
 .artist-card .artist-overall .artist-img {
     width: 150px;
@@ -137,6 +142,17 @@ img {
     border-radius: 10px;
     border: 2px solid var(--main-color);
     transition: transform 0.3s ease;   /* 카드 확대 전용 */
+    max-height: 150px;
+    min-width: 220px;
+}
+.album-info {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+}
+.album-info p {
+    margin: 0;
+    white-space: nowrap;
 }
 .album-img {
     width: 100px;

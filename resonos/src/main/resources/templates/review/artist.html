@@ -16,13 +16,13 @@
             <div class="artist-card">
                 <div class="artist-overall">
                     <div class="artist-img">
-                        <img src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/38/cc5a526bf63046da3ed3123f55f5c1ca_res.jpeg" alt="">
+                        <img th:src="@{${artist.profileImage}}" alt="">
                     </div>
                     <div class="artist-info">
-                        <p id="headline">페페</p>
+                        <p id="headline" th:text="${artist.name}"></p>
                         <p>팔로워 99,999</p>
-                        <p>앨범 30</p>
-                        <p>곡 300</p>
+                        <p th:text="|💽앨범 : ${albumCount}|">앨범 30</p>
+                        <p th:text="|🎶곡 : ${trackCount}|">곡 300</p>
                         <div>
                             <div class="btn btn-gold">❤ 팔로우</div>
                         </div>
@@ -34,28 +34,19 @@
                     </div>
                     <div class="album-container">
                         <!-- 반복문 구간 -->
-                         <div class="album">
-                            <div class="album-img">
-                                <img src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/38/cc5a526bf63046da3ed3123f55f5c1ca_res.jpeg" alt="">
-                                <span class="center-pin"></span>
+                        <th:block th:each="album : ${albums}">
+                            <div class="album">
+                               <div class="album-img">
+                                   <img th:src="@{${album.coverImage}}" alt="">
+                                   <span class="center-pin"></span>
+                               </div>
+                               <div class="album-info">
+                                   <p id="subtitle" th:text="${album.title}">앨범명</p>
+                                   <p th:text="${#dates.format(album.releaseDate, 'yyyy-MM-dd')}">출시일</p>
+                                   <p th:text="${album.label}">레이블</p>
+                               </div>
                             </div>
-                            <div class="album-info">
-                                <p id="subtitle">모르시나요</p>
-                                <p>16 Nov 2016 </p>
-                                <p>11 tracks</p>
-                            </div>
-                         </div>
-                         <div class="album">
-                            <div class="album-img">
-                                <img src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/38/cc5a526bf63046da3ed3123f55f5c1ca_res.jpeg" alt="">
-                                <span class="center-pin"></span>
-                            </div>
-                            <div class="album-info">
-                                <p id="subtitle">모르시나요</p>
-                                <p>16 Nov 2016 </p>
-                                <p>11 tracks</p>
-                            </div>
-                         </div>
+                        </th:block>
                     </div>
                 </div>
             </div>
@@ -63,12 +54,11 @@
             <!-- 인기곡 유튜브 -->
             <div class="hottest-card">
                 <div class="songs">
-                    <p id="headline">인기곡</p>
+                    <p id="headline" th:text="|${artist.name}'s 인기곡|"></p>
                     <!-- 반복문 인기곡 -->
-                    <p>1. Drowning 출시연도 곡 길이</p>
-                    <p>1. Drowning 출시연도 곡 길이</p>
-                    <p>1. Drowning 출시연도 곡 길이</p>
-                    <p>1. Drowning 출시연도 곡 길이</p>
+                    <th:block th:each="tops, stat : ${TOP7}">
+                        <p th:text="|${stat.count}. ${tops.title}|"></p>
+                    </th:block>
                 </div>
                 <div class="youtube">
                     <iframe width="560" height="315" src="https://www.youtube.com/embed/Oeda7KVkFog?si=6f3qJAZGD7iLaUsJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -78,7 +68,7 @@
             <!-- 아티스트 리뷰/일정.. -->
             <div class="info-card">
                 <div class="info recent-review">
-                    <p id="headline">최근 앨범 리뷰</p>
+                    <p id="headline" th:text="|${artist.name} 최근 앨범 리뷰|"></p>
                     <p>이번 신곡 쩔었다</p>
                     <p>동해물과 백두산이 마르고 닳도록</p>
                     <p>동해물과 백두산이 마르고 닳도록</p>
@@ -89,7 +79,7 @@
                     </div>
                 </div>
                 <div class="info simillar-artist">
-                    <p id="headline">와 유사한 아티스트</p>
+                    <p id="headline" th:text="|${artist.name}와 유사한 아티스트|"></p>
                     <p>1.쩔었다</p>
                     <p>2.동해물</p>
                     <p>3.백두산</p>

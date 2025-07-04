@@ -55,4 +55,14 @@ public class TrackServiceImpl implements TrackService {
     public boolean exists(String id) throws Exception {
         return trackMapper.exists(id) > 0;
     }
+
+    @Override
+    public List<Track> selectTop7TracksByArtist(String id) throws Exception {
+        return trackMapper.selectTop7TracksByArtist(id);
+    }
+
+    @Override
+    public int countTracksByArtist(String id) throws Exception {
+        return trackMapper.countTracksByArtist(id);
+    }
 }
