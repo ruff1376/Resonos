@@ -20,7 +20,7 @@
             height="167px"
             alt="RESONOS Logo" class="img-fluid rounded mb-3">
         <h2 class="text-light mb-4">로그인</h2>
-        <input name="username" type="text" class="form-control mb-3" placeholder="아이디" required>
+        <input th:value="${username}" name="username" type="text" class="form-control mb-3" placeholder="아이디" required>
         <input name="password" type="password" class="form-control mb-3" placeholder="비밀번호" required>
         <div class="form-check text-start my-5 d-flex justify-content-evenly">
           <div class="item">

@@ -122,6 +122,13 @@ body {
   margin: 0;
   min-height: 100vh;
 }
+.profile-actions a:first-child:hover {color: var(--main-color) !important;}
+.profile-actions a:last-child {
+  color: var(--main-color) !important;
+}
+.profile-actions a:last-child:hover {
+  color: #fff !important;
+}
 .header {
   display: flex;
   justify-content: space-between;
