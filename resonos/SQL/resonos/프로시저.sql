@@ -10,7 +10,7 @@ BEGIN
     -- 기존 테이블 모두 삭제 (순서 중요: 외래 키 제약 조건이 있는 경우 역순으로 삭제)
     -- 안전하게 삭제하기 위해 IF EXISTS를 사용합니다.
     DROP TABLE IF EXISTS
-        liked_album, album_review, user_follow, user_badge,
+        user_auth, liked_album, album_review, user_follow, user_badge,
         track_review, notification, chart_entry,
         board_post, playlist_detail, artist_follow, album,
         playlist, comment, chart_element, album_mood_vote, report,
@@ -100,14 +100,14 @@ BEGIN
 
     CREATE TABLE IF NOT EXISTS `user` (
         `id` BIGINT NOT NULL,
-        `username` VARCHAR(100) NOT NULL,
+        `username` VARCHAR(100) NOT NULL UNIQUE,
         `email` VARCHAR(100) NOT NULL,
         `password` VARCHAR(100) NOT NULL,
         `nickname` VARCHAR(100) NOT NULL,
         `profile_image` VARCHAR(200) NULL,
         `bio` TEXT NULL,
-        `is_pro` BOOLEAN NOT NULL,
-        `enabled` BOOLEAN NOT NULL,
+        `is_pro` BOOLEAN NOT NULL DEFAULT FALSE,
+        `enabled` BOOLEAN NOT NULL DEFAULT TRUE,
         `provider` VARCHAR(200) NULL,
         `provider_id` VARCHAR(200) NULL,
         `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP
@@ -361,6 +361,13 @@ BEGIN
         `album_id` VARCHAR(200) NOT NULL
     );
 
+    CREATE TABLE IF NOT EXISTS `user_auth` (
+        no bigint NOT NULL AUTO_INCREMENT          -- 권한번호
+        , username varchar(100) NOT NULL             -- 아이디
+        , auth varchar(100) NOT NULL                 -- 권한 (ROLE_USER, ROLE_ADMIN, ...)
+        , PRIMARY KEY(no)
+    );
+
     -- PRIMARY KEY 추가
     -- 이 부분은 그대로 두시면 됩니다.
     ALTER TABLE `notice` ADD CONSTRAINT `PK_NOTICE` PRIMARY KEY (`id`);
@@ -487,6 +494,7 @@ BEGIN
     ALTER TABLE `album_review` ADD CONSTRAINT `FK_album_TO_album_review_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`);
     ALTER TABLE `liked_album` ADD CONSTRAINT `FK_user_TO_liked_album_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
     ALTER TABLE `liked_album` ADD CONSTRAINT `FK_album_TO_liked_album_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`);
+    ALTER TABLE `user_auth` ADD CONSTRAINT `FK_user_TO_user_auth` FOREIGN KEY (`username`) REFERENCES `user` (`username`);
 
     -- 외래 키 제약 조건 다시 활성화
     SET FOREIGN_KEY_CHECKS = 1;
