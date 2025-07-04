@@ -14,13 +14,10 @@ public interface UserMapper {
 
     // 회원 가입
     public int join(Users user) throws Exception;
-
     // 회원 권한 등록
     public int insertAuth(UserAuth userAuth) throws Exception;
-
     // 회원 조회
     public Users select(@Param("username") String username) throws Exception;
-
     // 전체 조회
     public List<Users> list() throws Exception;
     // 수정
@@ -31,4 +28,8 @@ public interface UserMapper {
     public List<UserAuth> listAuth() throws Exception;
     // 회원 수 조회
     public int countAll() throws Exception;
+    // 아이디 중복 조회
+    public String findByUsername(String username) throws Exception;
+    // 아이디 중복 조회
+    public String findByNickname(String nickname) throws Exception;
 }

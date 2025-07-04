@@ -35,7 +35,8 @@
     SELECT * FROM user WHERE username = #{username}
   </select>
 
-  <insert id="insert">
+  <!-- 회원가입 -->
+  <insert id="join" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO user
       (id, username, email, password, nickname, profile_image, bio, is_pro, enabled, provider, provider_id, created_at)
     VALUES
@@ -79,4 +80,13 @@
       SELECT COUNT(*) FROM user
   </select>
 
+  <!-- 아이디 중복 -->
+  <select id="findByUsername" resultType="String">
+    SELECT username FROM user WHERE username = #{username}
+  </select>
+
+  <!-- 닉네임 중복 -->
+  <select id="findByNickname" resultType="String">
+    SELECT nickname FROM user WHERE nickname = #{nickname}
+  </select>
 </mapper>

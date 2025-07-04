@@ -62,8 +62,8 @@ public class Users {
         groups = NicknameCheck.class
     )
     @Pattern(
-        regexp = "^(?=.{3,})([a-zA-Z]+|[가-힣]+|(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]+|(?=.*[가-힣])(?=.*[0-9])[가-힣0-9]+|(?=.*[a-zA-Z])(?=.*[가-힣])[a-zA-Z가-힣]+)$",
-        message = "영문, 숫자, 한글을 포함한 2글자 이상이어야 합니다.",
+        regexp = "^(?=.{2,10}$)([a-zA-Z]+[0-9]+|[0-9]+[a-zA-Z]+|[가-힣]+[0-9]+|[0-9]+[가-힣]+|[a-zA-Z]{2,10}|[가-힣]{2,10})$",
+        message = "영문 + 숫자, 한글 + 숫자, 한글, 영문 조합 2글자 이상, 10글자 이하여야 합니다.",
         groups = NicknameCheck.class
     )
     private String nickname;
@@ -72,7 +72,7 @@ public class Users {
     private boolean isPro;
     private boolean enabled;
     private String provider;
-    private String provider_id;
+    private String providerId;
     private Date createdAt;
 
     private List<UserAuth> authList;

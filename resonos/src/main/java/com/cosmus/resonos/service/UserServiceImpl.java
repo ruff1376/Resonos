@@ -41,15 +41,15 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional          // 트랜잭션 처리를 설정 (회원정보, 회원권한)
-    public int join(Users user) throws Exception {
+    public boolean join(Users user) throws Exception {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-        int result = userMapper.join(user);
-        if (result > 0) {
-            UserRole userRole = new UserRole();
-            userRole.setUserId(user.getId());
-            userRole.setRoleId(2L); // 2L = ROLE_USER, 1L = ROLE_ADMIN 등
-            userRoleMapper.insert(userRole);
+        boolean result = userMapper.join(user) > 0 ? true : false;
+        if (result) {
+            UserAuth userAuth = new UserAuth();
+            userAuth.setUsername(encodedPassword);
+            userAuth.setAuth("ROLE_USER"); // 2L = ROLE_USER, 1L = ROLE_ADMIN 등
+            userAuthMapper.insert(userAuth);
         }
         return result;
     }
@@ -125,6 +125,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public int countAll() throws Exception {
         return userMapper.countAll();
+    }
+
+    @Override
+    public boolean findByUsername(String username) throws Exception {
+        return userMapper.findByUsername(username) != null ? true : false;
+    }
+
+    @Override
+    public boolean findByNickname(String nickname) throws Exception {
+        return userMapper.findByNickname(nickname) != null ? true : false;
     }
 
 
