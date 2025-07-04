@@ -69,4 +69,28 @@
     SELECT COUNT(*) FROM track WHERE id = #{id}
   </select>
 
+  <!-- artistId -->
+  <!-- 아티스트 별 TOP 7 인기 트랙 -->
+  <select id="selectTop7TracksByArtist"
+          parameterType="string"
+          resultType="Track">
+      SELECT
+          title,
+          duration
+      FROM track
+      WHERE artist_id = #{artistId}
+      ORDER BY popularity DESC
+      LIMIT 7
+  </select>
+
+  <!-- 아티스트별 곡수 -->
+  <select id="countTracksByArtist"
+          parameterType="string"
+          resultType="int">
+      SELECT COUNT(*)
+      FROM track
+      WHERE artist_id = #{artistId}
+  </select>
+
+
 </mapper>

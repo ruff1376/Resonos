@@ -22,8 +22,8 @@ public class ArtistServiceImpl implements ArtistService {
 
     // 아티스트 단건 조회
     @Override
-    public Artist select(Integer no) throws Exception {
-        return artistMapper.select(no);
+    public Artist selectById(String id) throws Exception {
+        return artistMapper.selectById(id);
     }
 
     // 아티스트 등록

@@ -7,8 +7,8 @@ import com.cosmus.resonos.domain.Artist;
 public interface ArtistService {
     // 목록
     public List<Artist> list() throws Exception;
-    // 조회
-    public Artist select(Integer no) throws Exception;
+    // 아티스트 단건 조회
+    public Artist selectById(String id) throws Exception;
     // 삽입
     public boolean insert(Artist artist) throws Exception;
     // 수정
