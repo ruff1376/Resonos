@@ -17,8 +17,8 @@
   <main class="resonos-bg py-5">
     <div class="container" style="max-width: 1100px;">
       <h2 class="mb-4" style="color:#fffbe6;">회원 관리</h2>
-      <form class="mb-3 d-flex gap-2">
-        <input type="text" class="search-bar" placeholder="닉네임, 이메일 검색">
+      <form class="mb-3 d-flex gap-2" th:action="@{/admin/members}" method="get">
+        <input type="text" class="search-bar" name="keyword" placeholder="닉네임, 이메일 검색" th:value="${keyword}">
         <button class="btn btn-gold btn-sm" type="submit">검색</button>
       </form>
       <div class="resonos-card p-4">

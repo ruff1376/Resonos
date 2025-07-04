@@ -77,7 +77,7 @@ public class SecurityConfig {
                                      .failureHandler(loginFailureHandler)      // 로그인 실패 핸들러 설정
 
                         );
-
+        // 🔐 인증 요청 경로 설정
         http.exceptionHandling( exception -> exception
                                             // 예외 처리 페이지 설정
                                             // .accessDeniedPage("/exception")
@@ -182,6 +182,7 @@ public class SecurityConfig {
                                     AuthenticationConfiguration authenticationConfiguration ) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+    
 
 
 }

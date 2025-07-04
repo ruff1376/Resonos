@@ -12,25 +12,6 @@
     <th:block th:replace="~{fragments/link::admin}"></th:block>
 </head>
 <th:block layout:fragment="content">
-    <!-- 여기부터 본문 내용만! <body> 태그 없이! -->
-
-    <!-- 관리자 헤더 -->
-    <nav class="navbar navbar-expand-lg border-bottom">
-      <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="#">
-          <img th:src="@{/img/resonosLogo.png}" alt="RESONOS Logo" class="rounded" >
-          <span class="fw-bold text-main">RESONOS Admin</span>
-        </a>
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link nav-text" href="#">대시보드</a></li>
-          <li class="nav-item"><a class="nav-link nav-text" href="#">회원관리</a></li>
-          <li class="nav-item"><a class="nav-link nav-text" href="#">게시글/신고</a></li>
-          <li class="nav-item"><a class="nav-link nav-text" href="#">음악데이터</a></li>
-          <li class="nav-item"><a class="nav-link nav-text" href="#">공연/이벤트</a></li>
-          <li class="nav-item"><a class="nav-link nav-text active" href="#">정책/환경설정</a></li>
-        </ul>
-      </div>
-    </nav>
 
     <!-- 관리자 대시보드 -->
     <main class="py-5 bg-resonos-dark">
@@ -116,30 +97,36 @@
               <h3 class="mb-3 text-light-gold">서비스 환경설정</h3>
 
               <!-- 환경설정 저장 폼 -->
-              <form class="mb-4" th:action="@{/admin/PolicySetting/setting/save}" method="post">
+              <form class="mb-4" th:action="@{/admin/PolicySetting/setting/update}" method="post">
                 <div class="setting-row d-flex align-items-center mb-2">
                   <span class="me-3">신규 가입 허용</span>
-                  <input type="checkbox" name="allowSignUp" th:checked="${settings.size() > 0 and settings[0].value == 'Y'}">
+                  <input type="checkbox" name="allow_registration"
+                        th:checked="${settings['allow_registration'] != null and settings['allow_registration'].value == 'yes'}">
                 </div>
+
                 <div class="setting-row d-flex align-items-center mb-2">
                   <span class="me-3">커뮤니티 게시판 활성화</span>
-                  <input type="checkbox" name="enableCommunity" th:checked="${settings.size() > 1 and settings[1].value == 'Y'}">
+                  <input type="checkbox" name="community_board_enabled"
+                        th:checked="${settings['community_board_enabled'] != null and settings['community_board_enabled'].value == 'yes'}">
                 </div>
+
                 <div class="setting-row d-flex align-items-center mb-2">
                   <span class="me-3">음악 데이터 외부 연동</span>
-                  <input type="checkbox" name="externalMusicApi" th:checked="${settings.size() > 2 and settings[2].value == 'Y'}">
+                  <input type="checkbox" name="external_music_data_sync"
+                        th:checked="${settings['external_music_data_sync'] != null and settings['external_music_data_sync'].value == 'yes'}">
                 </div>
+
                 <div class="setting-row d-flex align-items-center mb-2">
                   <span class="me-3">기본 테마</span>
-                  <select class="form-select w-auto ms-2" name="theme">
-                    <option th:selected="${settings.size() > 3 and settings[3].value == 'dark'}" value="dark">다크</option>
-                    <option th:selected="${settings.size() > 3 and settings[3].value == 'light'}" value="light">라이트</option>
+                  <select class="form-select w-auto ms-2" name="default_theme">
+                    <option value="dark"
+                            th:selected="${settings['default_theme'] != null and settings['default_theme'].value == 'dark'}">다크</option>
+                    <option value="light"
+                            th:selected="${settings['default_theme'] != null and settings['default_theme'].value == 'light'}">라이트</option>
                   </select>
                 </div>
-                <div class="setting-row d-flex align-items-center mb-2">
-                  <span class="me-3">공지사항</span>
-                  <input type="text" class="form-control w-50 ms-2" name="notice" th:value="${settings.size() > 4 ? settings[4].value : ''}">
-                </div>
+
+
                 <button class="btn btn-gold mt-3" type="submit">저장</button>
               </form>
 
@@ -149,20 +136,28 @@
                 <table class="table table-dark table-bordered align-middle">
                   <thead>
                     <tr>
-                      <th style="width:60px;">ID</th>
+                      <th>ID</th>
+                      <!-- <th>설정명</th> -->
+                      <th>설명</th>
                       <th>설정값</th>
                       <th>수정일시</th>
+                      <th>생성일시</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr th:each="setting : ${settings}">
-                      <td th:text="${setting.id}">1</td>
-                      <td th:text="${setting.value}">값</td>
-                      <td th:text="${#dates.format(setting.updatedAt, 'yyyy-MM-dd HH:mm')}">2024-01-01 12:00</td>
+                    <tr th:each="entry : ${settings}">
+                      <td th:text="${entry.value.id}">1</td>
+                      <!-- <td th:text="${entry.value.name}">allowSignUp</td> -->
+                      <td th:text="${entry.value.description}">신규 가입 허용 여부</td>
+                      <td th:text="${entry.value.value}">Y</td>
+                      <td th:text="${#dates.format(entry.value.updatedAt, 'yyyy-MM-dd HH:mm')}">2024-01-01 12:00</td>
+                      <td th:text="${#dates.format(entry.value.createdAt, 'yyyy-MM-dd HH:mm')}">2024-01-01 12:00</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
+
+
             </div>
           </div>
         </div>

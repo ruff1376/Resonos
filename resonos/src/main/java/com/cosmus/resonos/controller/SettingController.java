@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/settings")
 public class SettingController {
-
+    
     @Autowired
     private SettingService settingService;
 
@@ -49,6 +49,7 @@ public class SettingController {
         log.info("[SettingController] 설정 등록 폼 요청");
         model.addAttribute("setting", new Setting());
         return "setting/form"; // setting/form.html
+
     }
 
     // 등록 처리

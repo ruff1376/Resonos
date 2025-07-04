@@ -281,10 +281,15 @@ CREATE TABLE `notification` (
 	`user_id`	BIGINT	NOT NULL
 );
 
+DROP TABLE IF EXISTS `setting`;
+
 CREATE TABLE `setting` (
-	`id`	BIGINT	NOT NULL,
+	`id`	BIGINT	NOT NULL AUTO_INCREMENT  PRIMARY KEY,
+	`name`	VARCHAR(100)	NOT NULL,
+	`description`	TEXT	NULL,
 	`value`	VARCHAR(100)	NULL,
-	`updated_at`	DATETIME	NULL
+	`updated_at`	DATETIME	NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+	`created_at`	DATETIME	NOT NULL	DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE `track_mood_vote` (

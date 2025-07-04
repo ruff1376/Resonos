@@ -80,6 +80,26 @@
       SELECT COUNT(*) FROM user
   </select>
 
+  <!-- 권한 삭제 -->
+  <delete id="deleteAuthByUsername">
+  DELETE FROM user_auth WHERE username = #{username}
+  </delete>
+  <!-- 권한 수정 -->
+  <update id="updateAuth">
+      UPDATE user_auth
+      SET auth = #{auth}
+      WHERE username = #{username} AND id = #{id}
+  </update>
+  <!-- 권한 조회 -->
+  <select id="selectAuthByUsername" resultMap="AuthMap">
+      SELECT * FROM user_auth WHERE username = #{username}
+  </select>
+  <!-- 키워드로 회원 검색 -->
+  <select id="searchByKeyword" resultMap="UserResultMap">
+      SELECT * FROM user WHERE nickname LIKE CONCAT('%', #{keyword}, '%')
+         OR email LIKE CONCAT('%', #{keyword}, '%')
+  </select>
+
   <!-- 아이디 중복 -->
   <select id="findByUsername" resultType="String">
     SELECT username FROM user WHERE username = #{username}

@@ -160,4 +160,25 @@ public class UserServiceImpl implements UserService {
     //     return "admin/only";
     // }
     */
+
+
+    @Override
+    public List<UserAuth> selectAuthByUsername(String username) throws Exception {
+        return userMapper.selectAuthByUsername(username);
+    }
+
+    @Override
+    public int updateAuth(UserAuth userAuth) throws Exception {
+        return userMapper.updateAuth(userAuth);
+    }
+
+    @Override
+    public int deleteAuthByUsername(String username) throws Exception {
+        return userMapper.deleteAuthByUsername(username);
+    }
+
+    @Override
+    public List<Users> searchByKeyword(String keyword) throws Exception {
+        return userMapper.searchByKeyword(keyword);
+    }
 }
