@@ -1,3 +1,8 @@
+<!--
+    페이지네이션 추가 : <div th:replace="~{fragments/pagination :: pagination}"></div>
+    size 지정 : Controller 메소드 파라미터에 '@RequestParam(value = "size", defaultValue = "(지정할 size 크기)") int size' 추가하고 'pagination.setSize(size);'
+-->
+
 <!-- 페이지 번호 -->
 <nav aria-label="Page navigation" th:object="${pagination}" th:fragment="pagination">
     <link rel="stylesheet" th:href="@{/css/pagination.css}">
