@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService {
     public boolean join(Users user) throws Exception {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
+        user.setEnabled(true);
         boolean result = userMapper.join(user) > 0 ? true : false;
         if (result) {
             UserAuth userAuth = new UserAuth();
