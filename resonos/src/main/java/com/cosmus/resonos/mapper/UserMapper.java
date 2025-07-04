@@ -59,5 +59,10 @@ public interface UserMapper {
     public int updateEnabled(@Param("id") Long id, @Param("enabled") boolean enabled) throws Exception;
     // 회원 제재/해제 상태 변경
     public int updateBan(@Param("id") Long id, @Param("ban") boolean ban) throws Exception;
-    
+    // 특정 권한만 삭제
+    public int deleteSpecificAuth(@Param("username") String username, @Param("auth") String auth) throws Exception;
+    // 권한 중복 조회
+    public int hasAuth(@Param("username") String username, @Param("auth") String auth) throws Exception;    
+    // selectById
+    public Users selectById(@Param("id") Long id) throws Exception;
 }

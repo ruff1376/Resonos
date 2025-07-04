@@ -1,11 +1,13 @@
 package com.cosmus.resonos.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.Track;
+import com.cosmus.resonos.external.SpotifyApiClient;
 import com.cosmus.resonos.mapper.TrackMapper;
 
 @Service
@@ -55,4 +57,27 @@ public class TrackServiceImpl implements TrackService {
     public boolean exists(String id) throws Exception {
         return trackMapper.exists(id) > 0;
     }
+
+    // 스포티파이 동기화 서비스
+    @Autowired
+    private SpotifyApiClient spotifyApiClient;
+
+    public void syncTrackFromSpotify(String spotifyTrackId) throws Exception {
+        String token = spotifyApiClient.getAccessToken();
+        Map<String, Object> trackData = spotifyApiClient.getTrack(spotifyTrackId, token);
+
+        // 1.2.1. trackData → Track 도메인 변환
+        Track track = new Track();
+        track.setId((String) trackData.get("id"));
+        track.setTitle((String) trackData.get("name"));
+        // ... 기타 필드 매핑
+
+        // 1.2.2. 이미 존재하면 update, 없으면 insert
+        if (this.exists(track.getId())) {
+            this.update(track);
+        } else {
+            this.insert(track);
+        }
+    }
+
 }

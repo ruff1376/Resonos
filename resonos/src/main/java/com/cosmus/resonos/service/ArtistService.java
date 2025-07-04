@@ -17,4 +17,10 @@ public interface ArtistService {
     public boolean delete(String id) throws Exception;
     // 존재 여부 확인
     public boolean exists(String id) throws Exception;
+
+    // 1. spotify에서 api에서 아티스트 정보를 가져오기
+    public Artist getArtistFromSpotify(String artistId) throws Exception;
+
+    // 2. artist 도메인으로 변환 후 DB에 저장/업데이트
+    public Artist saveOrUpdateArtist(Artist artist) throws Exception;
 }

@@ -3,19 +3,27 @@ package com.cosmus.resonos.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.server.ResponseStatusException;
 
 import groovy.util.logging.Slf4j;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.ui.Model;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.UserService;
 import com.cosmus.resonos.domain.UserActivityLog;
+import com.cosmus.resonos.domain.UserAuth;
 import com.cosmus.resonos.service.UserActivityLogService;
 
 @Slf4j
@@ -73,5 +81,25 @@ public class AdminMemberController {
         model.addAttribute("logs", logs);
         return "admin/member_log";
     }
+    // 회원 상세 정보 페이지
+    @GetMapping("/{id}/detail-json")
+    @ResponseBody
+    public Map<String, Object> memberDetailJson(@PathVariable Long id) throws Exception {
+        Users member = userService.selectById(id);
+        if (member == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "회원 정보를 찾을 수 없습니다.");
+        }
+        Map<String, Object> result = new HashMap<>();
+        result.put("id", member.getId());
+        result.put("nickname", member.getNickname());
+        result.put("email", member.getEmail());
+        result.put("enabled", member.isEnabled());
+        result.put("profileImage", member.getProfileImage());
+        result.put("authList", member.getAuthList().stream().map(UserAuth::getAuth).collect(Collectors.toList()));
+        return result;
+    }
 
 }
+
+
+

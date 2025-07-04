@@ -118,6 +118,17 @@
   <update id="updateBan">
     UPDATE user SET ban = #{ban} WHERE id = #{id}
   </update>
+  <!-- 특정 권한만 삭제 -->
+  <delete id="deleteSpecificAuth">
+    DELETE FROM user_auth WHERE username = #{username} AND auth = #{auth}
+  </delete>
+  <!-- 권한 중복 조회 -->
+  <select id="hasAuth" resultType="int">
+      SELECT COUNT(*) FROM user_auth WHERE username = #{username} AND auth = #{auth}
+  </select>
+  <!-- selectById -->
+  <select id="selectById" resultMap="UserResultMap">
+    SELECT * FROM user WHERE id = #{id}
+  </select>
 
-  
 </mapper>

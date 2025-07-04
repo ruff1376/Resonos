@@ -209,4 +209,17 @@ public class UserServiceImpl implements UserService {
         return userMapper.updateBan(id, ban) > 0;
     }
 
+    @Override
+    public void deleteSpecificAuth(String username, String auth) throws Exception {
+        userMapper.deleteSpecificAuth(username, auth);
+    }
+    @Override
+    public boolean hasAuth(String username, String auth) throws Exception {
+        return userMapper.hasAuth(username, auth) > 0;
+    }
+    @Override
+    public Users selectById(Long id) throws Exception {
+        return userMapper.selectById(id);
+    }   
+
 }

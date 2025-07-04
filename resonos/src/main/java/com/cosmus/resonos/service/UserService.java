@@ -52,4 +52,13 @@ public interface UserService {
     public boolean enableUser(Long id, boolean enabled) throws Exception;
     // 회원 제재/해제 상태 변경
     public boolean banUser(Long id, boolean ban) throws Exception;
+    // 특정 권한만 삭제
+    public void deleteSpecificAuth(String username, String auth) throws Exception;
+
+    // 권한 중복 조회
+    public boolean hasAuth(String username, String auth) throws Exception;
+
+    // selectById
+    public Users selectById(Long id) throws Exception;
+
 }

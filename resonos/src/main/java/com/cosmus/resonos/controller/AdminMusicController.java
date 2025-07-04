@@ -95,4 +95,25 @@ public class AdminMusicController {
         artistService.delete(id);
         return "redirect:/admin/music";
     }
+
+    // 동기화
+    @PostMapping("/track/sync")
+    public String syncTrack(@RequestParam String spotifyTrackId) throws Exception {
+        trackService.syncTrackFromSpotify(spotifyTrackId);
+        return "redirect:/admin/music";
+    }
+
+    // 아티스트 동기화
+    @PostMapping("/sync-artist")
+    public String syncArtist(@RequestParam String spotifyArtistId, Model model) throws Exception {
+    // 1. 아티스트 정보 동기화
+    artistService.syncFromSpotify(spotifyArtistId);
+    // 2. 해당 아티스트의 앨범/트랙 동기화
+    albumService.syncFromSpotifyByArtist(spotifyArtistId);
+    trackService.syncFromSpotifyByArtist(spotifyArtistId);
+    model.addAttribute("syncMessage", "아티스트 및 관련 앨범/트랙 동기화 완료!");
+    return "redirect:/admin/music";
+    }
+
+
 }
