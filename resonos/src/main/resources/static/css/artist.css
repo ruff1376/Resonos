@@ -176,6 +176,7 @@ img {
     padding-left: 10px;
 }
 .youtube {
+    display: flex;
     border-radius: 10px;
     border: 2px solid var(--main-color);
     overflow: hidden;

@@ -54,7 +54,7 @@
             <!-- 인기곡 유튜브 -->
             <div class="hottest-card">
                 <div class="songs">
-                    <p id="headline" th:text="|${artist.name}'s 인기곡|"></p>
+                    <p id="headline" th:text="|${artist.name}'s 🔥 TOP7|"></p>
                     <!-- 반복문 인기곡 -->
                     <th:block th:each="tops, stat : ${TOP7}">
                         <p th:text="|${stat.count}. ${tops.title}|"></p>
@@ -86,7 +86,7 @@
             <!-- 아티스트 리뷰/일정.. -->
             <div class="info-card">
                 <div class="info recent-review">
-                    <p id="headline" th:text="|${artist.name} 최근 앨범 리뷰|"></p>
+                    <p id="headline" th:text="|${artist.name} 최근 리뷰|"></p>
                     <p>이번 신곡 쩔었다</p>
                     <p>동해물과 백두산이 마르고 닳도록</p>
                     <p>동해물과 백두산이 마르고 닳도록</p>
@@ -97,7 +97,7 @@
                     </div>
                 </div>
                 <div class="info simillar-artist">
-                    <p id="headline" th:text="|${artist.name}와 유사한 아티스트|"></p>
+                    <p id="headline" th:text="|${artist.name}🎙와 유사한 아티스트|"></p>
                     <p>1.쩔었다</p>
                     <p>2.동해물</p>
                     <p>3.백두산</p>

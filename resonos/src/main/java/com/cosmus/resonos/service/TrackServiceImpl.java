@@ -28,8 +28,8 @@ public class TrackServiceImpl implements TrackService {
 
     // 트랙 단건 조회
     @Override
-    public Track select(Integer no) throws Exception {
-        return trackMapper.select(no);
+    public Track selectById(String id) throws Exception {
+        return trackMapper.selectById(id);
     }
 
     // 트랙 등록
