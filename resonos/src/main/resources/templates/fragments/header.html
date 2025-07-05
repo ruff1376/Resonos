@@ -6,10 +6,10 @@
         <nav class="navbar navbar-expand-lg py-0">
             <div class="container-fluid" style="max-width:1440px;">
                 <div class="d-flex justify-content-start">
-                    <a class="navbar-brand d-flex align-items-center" href="#">
+                    <a class="navbar-brand d-flex align-items-center" href="/list/main">
                         <img th:src="@{/img/resonosPlusLogo.png}" alt="Main Page Logo" class="header-logo-img">
                     </a>
-                    <a class="navbar-brand d-flex align-items-center" href="#">
+                    <a class="navbar-brand d-flex align-items-center" href="/list/main">
                         <img th:src="@{/img/resonosLogo.png}" alt="Sub Page Logo" class="header-logo-img-sub">
                     </a>
                 </div>
@@ -23,10 +23,10 @@
                         <!-- 비로그인 -->
                         <th:block th:if="${not #authorization.expression('isAuthenticated()')}">
                             <li class="nav-item ms-lg-2">
-                                <a href="#" class="btn btn-outline-gold">로그인</a>
+                                <a href="/login" class="btn btn-outline-gold">로그인</a>
                             </li>
                             <li class="nav-item ms-2">
-                                <a href="#" class="btn btn-outline-gold">회원가입</a>
+                                <a href="/join" class="btn btn-outline-gold">회원가입</a>
                             </li>
                         </th:block>
                         <!-- 로그인 -->
