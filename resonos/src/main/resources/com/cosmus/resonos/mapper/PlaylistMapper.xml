@@ -47,4 +47,15 @@
     DELETE FROM playlist WHERE id = #{id}
   </delete>
 
+  <select id="usersPlaylist" resultType="Playlist">
+    SELECT p.*, IFNULL(sub.like_count, 0) AS like_count
+    FROM playlist p
+    LEFT JOIN (
+      SELECT playlist_id, COUNT(*) AS like_count
+      FROM liked_playlist
+      GROUP BY playlist_id
+    ) sub ON p.id = sub.playlist_id
+    WHERE p.user_id = #{userId}
+  </select>
+
 </mapper>

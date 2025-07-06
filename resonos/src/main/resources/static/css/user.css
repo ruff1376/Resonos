@@ -116,7 +116,8 @@ button.social-btn:hover {
 .success {color: rgb(3, 212, 3) !important;}
 
 /* 마이페이지 */
-
+.like-count {display: flex; align-items: center;}
+.profile-info .badge {margin-left: 10px;}
 .profile-actions a:first-child:hover {color: var(--main-color) !important;}
 .profile-actions a:last-child {
   color: var(--main-color) !important;
@@ -351,7 +352,7 @@ button.social-btn:hover {
   display: flex;
   justify-content: center;
 }
-#doughnut {width: 60%;}
+#doughnut {width: 70%;}
 a:hover > .mypage-card {
   transform: translateY(-1px) scale(1.01);
   border-color: #fffbe6;

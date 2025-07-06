@@ -15,7 +15,10 @@
     <section class="profile-section">
       <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="프로필 이미지" class="profile-img">
       <div class="profile-info">
-        <h2>별빛소년 <span class="badge">JAZZ LOVER</span></h2>
+        <h2>
+          <th:block th:text="${loginUser.nickname}"></th:block>
+          <span class="badge">JAZZ LOVER</span>
+        </h2>
         <p>음악과 우주, 그리고 커뮤니티를 사랑하는 평론가입니다.</p>
         <div class="profile-actions">
           <a th:href="@{/users/edit}" class="mybtn-gold">프로필 편집</a>
@@ -36,10 +39,11 @@
         <div class="mypage-card playlist">
           <h3>내 플레이리스트</h3>
           <ul>
-            <th:block th:each="i : ${#numbers.sequence(1, 3)}">
-              <li>🌌 내 플레이스트 <th:block th:text="${i}"></th:block>
-                <div>
-                  <span th:text="${like_count}">123</span>
+            <th:block th:each="pl : ${playlist}">
+              <li>
+                <th:block th:text="${pl.title}"></th:block>
+                <div class="like-count">
+                  <span th:text="${pl.likeCount}">123</span>
                   <span class="like">♥</span>
                 </div>
               </li>
@@ -160,7 +164,7 @@
         <div class="mypage-card security">
           <h3>계정 / 보안<p>></p></h3>
           <ul>
-            <li>이메일: <th:block th:text="${user.email}"></th:block></li>
+            <li>이메일: <th:block th:text="${loginUser.email}"></th:block></li>
             <li class="impor"><span>비밀번호 변경</span>&nbsp;/&nbsp;<span>탈퇴</span></li>
           </ul>
         </div>
@@ -210,6 +214,8 @@
                 text: '장르 선호 차트',
                 color: '#D4B97F',
                 padding: {
+                  bottom: 15,
+                  right: 30
                 },
                 font: {
                   size: 18

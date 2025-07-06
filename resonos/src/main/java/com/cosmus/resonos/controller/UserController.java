@@ -1,7 +1,11 @@
 package com.cosmus.resonos.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +13,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.cosmus.resonos.domain.CustomUser;
+import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.Users;
+import com.cosmus.resonos.service.PlaylistService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,12 +26,13 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/users")
 public class UserController {
 
+  @Autowired PlaylistService playlistService;
+
   /**
    * 로그인 페이지 요청
    * @param param
    * @return
    */
-
   @PostMapping("/login")
   public String login(@RequestParam String param) {
       return new String();
@@ -33,15 +42,15 @@ public class UserController {
    * 마이페이지 요청
    * @param model
    * @return
+   * @throws Exception
    */
   @GetMapping("/mypage")
-  // security 활성화 하면
-  // TODO: PathVariable 로 접근 나누기
-  // public String mypage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-  public String mypage(Model model) {
-    Users user = Users.builder().email("resonos12@gmail.com").username("김조은").build();
+  public String mypage(Model model ,@AuthenticationPrincipal CustomUser loginUser) throws Exception {
 
-    model.addAttribute("user", user);
+    List<Playlist> playlist = playlistService.usersPlaylist(loginUser.getUser().getId());
+
+    model.addAttribute("playlist", playlist);
+    model.addAttribute("loginUser", loginUser.getUser());
     return "user/mypage";
   }
 
