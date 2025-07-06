@@ -38,10 +38,19 @@
       <a th:href="@{/playlists}">
         <div class="mypage-card playlist">
           <h3>내 플레이리스트</h3>
+          <th:block th:if="${#lists.isEmpty(playlists)}">
+            <div class="empty-text">
+              <p>플레이리스트가 없습니다.</p>
+              <p>만들러 가기 ➡️</p>
+            </div>
+          </th:block>
           <ul>
-            <th:block th:each="pl : ${playlist}">
+            <th:block th:each="pl : ${playlists}">
               <li>
-                <th:block th:text="${pl.title}"></th:block>
+                <div>
+                  <img class="cover-img" width="50px" height="50px" src="https://i.scdn.co/image/ab67616d0000b27340735818c3f8f04ba30e47c2" alt="커버이미지">
+                  <th:block th:text="${pl.title}">플레이리스트 이름</th:block>
+                </div>
                 <div class="like-count">
                   <span th:text="${pl.likeCount}">123</span>
                   <span class="like">♥</span>

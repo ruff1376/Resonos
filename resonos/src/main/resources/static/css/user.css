@@ -43,7 +43,7 @@ body {
   align-items: center;
   justify-content: center;
 }
-.con {margin: 120px 0;}
+.con {margin: 120px 0; padding: 0 10px;}
 .con-mypage a {color: #fff !important;}
 .content-wrap {
   display: flex;
@@ -116,8 +116,7 @@ button.social-btn:hover {
 .success {color: rgb(3, 212, 3) !important;}
 
 /* 마이페이지 */
-.like-count {display: flex; align-items: center;}
-.profile-info .badge {margin-left: 10px;}
+
 .profile-actions a:first-child:hover {color: var(--main-color) !important;}
 .profile-actions a:last-child {
   color: var(--main-color) !important;
@@ -265,6 +264,9 @@ button.social-btn:hover {
   padding: 0;
   margin: 0 0 7px 0;
 }
+.mypage-card.playlist {
+  min-height: 200px;
+}
 .mypage-card.playlist li {
   display: flex;
   justify-content: space-between;
@@ -358,10 +360,11 @@ a:hover > .mypage-card {
   border-color: #fffbe6;
   box-shadow: 0 8px 32px rgba(212, 185, 127, 0.18);
 }
-
 .con .title {display: flex; align-items: center; justify-content: space-between;}
 .con .title > div {display: flex; align-items: center; gap: 10px;}
-.con .title h2 {margin-bottom: 0;}
+.cover-img {margin-right: 20px;}
+.like-count {display: flex; align-items: center;}
+.profile-info .badge {margin-left: 10px;}.con .title h2 {margin-bottom: 0;}
 
 /* 회원정보수정 */
 .profile-edit-box {
@@ -661,8 +664,9 @@ textarea.form-control {
 .con-music .like {font-size: 3rem; margin-left: auto;}
 
 /* 플레이리스트 */
+.con-music .info-section {height: 400px;}
 .name-playlist {font-size: 1.4rem; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-.is-public {font-size: 1.4rem;}
+.is-public {font-size: 1.4rem; color: var(--main-color);}
 .right {display:flex; align-items: center; margin-left: auto; gap: 20px;}
 .like-area {display: flex; align-items: center; gap: 2px;}
 .like-area .count {font-size: 1.4rem;}
@@ -755,3 +759,16 @@ button.like {background-color: inherit; border: none;}
 }
 .toggle-switch input:checked + .slider {background-color: #4cd964;}
 .toggle-switch input:checked + .slider::before {transform: translateX(22px);}
+
+/* 비어 있는 경우 */
+.empty-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 120px;
+  gap: 20px;
+  color: #bbb;
+}
+
+.con-music .empty-text {height: 280px;}

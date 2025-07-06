@@ -16,7 +16,8 @@ public class Track {
     private int trackNo;
     private String artistName;
     private String coverImage;
-    
+    private int orderNo;
+
     public String getFormattedDuration() {
         int minutes = duration / 60;
         int seconds = duration % 60;

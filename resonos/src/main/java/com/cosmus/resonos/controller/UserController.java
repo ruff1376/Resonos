@@ -47,9 +47,9 @@ public class UserController {
   @GetMapping("/mypage")
   public String mypage(Model model ,@AuthenticationPrincipal CustomUser loginUser) throws Exception {
 
-    List<Playlist> playlist = playlistService.usersPlaylist(loginUser.getUser().getId());
+    List<Playlist> playlists = playlistService.usersPlaylist3(loginUser.getUser().getId());
 
-    model.addAttribute("playlist", playlist);
+    model.addAttribute("playlists", playlists);
     model.addAttribute("loginUser", loginUser.getUser());
     return "user/mypage";
   }
