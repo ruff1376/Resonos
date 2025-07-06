@@ -16,6 +16,26 @@
     <result property="trackId" column="track_id"/>
   </resultMap>
 
+  <!-- 플레이리스트 + 트랙  -->
+  <resultMap id="trackOfPlaylistMap" type="PlaylistDTO">
+    <id column="id" property="id"/>
+    <result column="title" property="title"/>
+    <result column="user_id" property="userId"/>
+    <result column="description" property="description"/>
+    <result column="thumbnail_url" property="thumbnailUrl"/>
+    <result column="is_public" property="isPublic"/>
+    <result column="created_at" property="createdAt"/>
+    <result column="likeCount" property="likeCount"/>
+
+    <collection property="trackList" ofType="Track">
+      <id column="trackId" property="id"/>
+      <result column="trackTitle" property="title"/>
+      <result column="cover_image" property="coverImage"/>
+      <result column="order_no" property="orderNo"/>
+      <result column="artistName" property="artistName"/>
+    </collection>
+  </resultMap>
+
   <select id="list" resultMap="PlaylistResultMap">
     SELECT * FROM playlist ORDER BY created_at DESC
   </select>
@@ -47,15 +67,50 @@
     DELETE FROM playlist WHERE id = #{id}
   </delete>
 
-  <select id="usersPlaylist" resultType="Playlist">
+  <!-- 마이페이지 플레이리스트 (3개) -->
+  <select id="usersPlaylist3" resultType="Playlist">
     SELECT p.*, IFNULL(sub.like_count, 0) AS like_count
     FROM playlist p
-    LEFT JOIN (
-      SELECT playlist_id, COUNT(*) AS like_count
-      FROM liked_playlist
-      GROUP BY playlist_id
-    ) sub ON p.id = sub.playlist_id
+      LEFT JOIN (
+        SELECT playlist_id, COUNT(*) AS like_count
+        FROM liked_playlist
+        GROUP BY playlist_id
+      ) sub ON p.id = sub.playlist_id
+    WHERE p.user_id = #{userId}
+    ORDER BY created_at DESC
+    LIMIT 3
+  </select>
+
+  <!-- 마이페이지 플레이리스트 (전체) -->
+  <select id="usersPlaylist" resultType="Playlist">
+    SELECT p.*, IFNULL(sub.like_count, 0) AS likeCount
+    FROM playlist p
+      LEFT JOIN (
+        SELECT playlist_id, COUNT(*) AS like_count
+        FROM liked_playlist
+        GROUP BY playlist_id
+      ) sub ON p.id = sub.playlist_id
     WHERE p.user_id = #{userId}
   </select>
 
+  <!-- 좋아요 한 플레이리스트 -->
+  <select id="likedPlaylist" resultType="Playlist">
+    SELECT p.*
+    FROM playlist p
+      INNER JOIN liked_playlist lp ON p.id = lp.playlist_id
+    WHERE lp.user_id = #{userId}
+    ORDER BY lp.created_at DESC
+  </select>
+
+  <!-- 플레이리스트's 트랙 -->
+  <select id="trackOfPlaylist" resultMap="trackOfPlaylistMap">
+    SELECT p.*, pd.order_no, t.id AS trackId, t.title as trackTitle, a.cover_image, art.name AS artistName
+    FROM playlist p
+      INNER JOIN playlist_detail pd ON p.id = pd.playlist_id
+      INNER JOIN track t ON pd.track_id = t.id
+      INNER JOIN album a ON t.album_id = a.id
+      INNER JOIN artist art ON t.artist_id = art.id
+    WHERE p.id = #{id}
+    ORDER BY pd.order_no;
+  </select>
 </mapper>
