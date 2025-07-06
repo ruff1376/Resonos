@@ -19,4 +19,5 @@ public class Playlist {
     private Boolean isPublic;
     private Date createdAt;
     private String trackId;
+    private int likeCount;
 }

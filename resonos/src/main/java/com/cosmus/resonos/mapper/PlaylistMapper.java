@@ -16,4 +16,6 @@ public interface PlaylistMapper {
     public int update(Playlist playlist) throws Exception;
     // 삭제
     public int delete(Long id) throws Exception;
+    // 특정 유저의 플레이리스트 조회
+    public List<Playlist> usersPlaylist(Long userId) throws Exception;
 }
