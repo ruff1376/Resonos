@@ -35,17 +35,19 @@
                     <div class="album-container">
                         <!-- 반복문 구간 -->
                         <th:block th:each="album : ${albums}">
-                            <div class="album">
-                               <div class="album-img">
-                                   <img th:src="@{${album.coverImage}}" alt="">
-                                   <span class="center-pin"></span>
-                               </div>
-                               <div class="album-info">
-                                   <p id="subtitle" th:text="${album.title}">앨범명</p>
-                                   <p th:text="${#dates.format(album.releaseDate, 'yyyy-MM-dd')}">출시일</p>
-                                   <p th:text="${album.label}">레이블</p>
-                               </div>
-                            </div>
+                            <a th:href="@{albums(id=${album.id})}">
+                                <div class="album">
+                                   <div class="album-img">
+                                       <img th:src="@{${album.coverImage}}" alt="">
+                                       <span class="center-pin"></span>
+                                   </div>
+                                   <div class="album-info">
+                                       <p id="subtitle" th:text="${album.title}">앨범명</p>
+                                       <p th:text="${#dates.format(album.releaseDate, 'yyyy-MM-dd')}">출시일</p>
+                                       <p th:text="${album.label}">레이블</p>
+                                   </div>
+                                </div>
+                            </a>
                         </th:block>
                     </div>
                 </div>
