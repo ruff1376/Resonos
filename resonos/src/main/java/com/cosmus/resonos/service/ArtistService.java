@@ -23,7 +23,8 @@ public interface ArtistService {
 
     // 2. artist 도메인으로 변환 후 DB에 저장/업데이트
     public Artist saveOrUpdateArtist(Artist artist) throws Exception;
-}
+
     // 해당 아티스트의 인기1위 mv url을 반환
     public String selectTopMvUrlByArtist(String id) throws Exception;
+
 }

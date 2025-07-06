@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>문의글 작성</title></head>
+<body>
+<h1 th:text="${qna.id != null ? '문의글 수정' : '문의글 작성'}"></h1>
+<form th:action="@{${qna.id != null} ? '/counseling/qna/' + ${qna.id} : '/counseling/qna'}"
+      th:object="${qna}" method="post">
+  <label>제목: <input type="text" th:field="*{title}"/></label><br/>
+  <label>내용: <textarea th:field="*{content}"></textarea></label><br/>
+  <button type="submit" th:text="${qna.id != null ? '수정' : '등록'}"></button>
+</form>
+</body>
+</html>

@@ -54,4 +54,16 @@ public class ArtistServiceImpl implements ArtistService {
     public String selectTopMvUrlByArtist(String id) throws Exception {
         return artistMapper.selectTopMvUrlByArtist(id);
     }
+
+    @Override
+    public Artist getArtistFromSpotify(String artistId) throws Exception {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getArtistFromSpotify'");
+    }
+
+    @Override
+    public Artist saveOrUpdateArtist(Artist artist) throws Exception {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'saveOrUpdateArtist'");
+    }
 }

@@ -1,6 +1,6 @@
 package com.cosmus.resonos.controller;
 
-import com.cosmus.resonos.domain.User;
+import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.domain.UserAuth;
 import com.cosmus.resonos.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +21,10 @@ public class AdminPermissionController {
     // 권한/역할 관리 페이지
     @GetMapping("/admin/permission")
     public String permissionPage(Model model) throws Exception {
-        List<User> userList = userService.list();
+        List<Users> userList = userService.list();
         List<UserAuth> authList = userService.listAuth();
         // 각 User에 권한 매핑
-        for (User user : userList) {
+        for (Users user : userList) {
             user.setAuthList(authList.stream().filter(a -> a.getUsername().equals(user.getUsername())).toList());
         }
         model.addAttribute("users", userList);
@@ -35,7 +35,7 @@ public class AdminPermissionController {
     @PostMapping("/admin/permission/change")
     public String changePermission(@RequestParam Long userId, @RequestParam String auth) throws Exception {
         // username 조회
-        User user = userService.list().stream().filter(u -> u.getId().equals(userId)).findFirst().orElse(null);
+        Users user = userService.list().stream().filter(u -> u.getId().equals(userId)).findFirst().orElse(null);
         if (user != null) {
             UserAuth userAuth = new UserAuth();
             userAuth.setUsername(user.getUsername());
