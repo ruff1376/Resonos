@@ -76,7 +76,8 @@
           resultType="Track">
       SELECT
           title,
-          duration
+          duration,
+          id
       FROM track
       WHERE artist_id = #{artistId}
       ORDER BY popularity DESC
