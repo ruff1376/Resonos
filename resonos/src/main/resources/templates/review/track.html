@@ -21,9 +21,11 @@
                 </div>
                 <div class="song-info">
                     <p id="headline" th:text="${track.title}">트랙명</p>
-                    <p th:text="${artistName}">아티스트</p>
+                    <a th:href="@{artists(id=${artist.id})}">
+                        <p th:text="${artist.name}">아티스트</p>
+                    </a>
                     <p th:text="${#dates.format(album.releaseDate, 'yyyy-MM-dd')}">발매일</p>
-                    <p th:text="|${album.title}💿의 ${track.trackNo} 번째곡|">어디앨범의 몇번째곡</p>
+                    <p th:text="|${album.title}💿의 ${track.trackNo}th track|">어디앨범의 몇번째곡</p>
                     <p>🔮 99 (✅유저 30, 일반유저 300명)</p>
                     <div>
                         <div class="btn btn-gold">공유🚀</div>
@@ -45,7 +47,6 @@
                 </div>
                 <div class="youtube">
                     <th:block th:if="${mv != null and mv != 'empty_mv_url'}">
-                    <div class="youtube">
                         <iframe width="560" height="315"
                                 th:src="'https://www.youtube.com/embed/' + ${mv}"
                                 title="YouTube video player"
@@ -54,16 +55,13 @@
                                 referrerpolicy="strict-origin-when-cross-origin"
                                 allowfullscreen>
                         </iframe>
-                    </div>
                     </th:block>
                     <!-- ② MV URL이 없을 때 → 준비중 이미지 -->
                     <th:block th:if="${mv == null or mv == 'empty_mv_url'}">
-                        <div class="youtube">
                             <img th:src="@{/img/wait_plz.png}"
                                 alt="뮤직비디오 준비중"
                                 width="560" height="315"
                                 style="object-fit:cover;">
-                        </div>
                     </th:block>
                 </div>
             </div>
@@ -92,7 +90,7 @@
                             <p> 🔮 100</p>
                         </div>
                         <div class="review-content">
-                            <p>우리 페페 많이 사랑해주세요</p>
+                            <p>우리 페페 많이 사랑해주세요2</p>
                         </div>
                         <div class="review-util">
                             <p>2025.05.21</p>
@@ -169,13 +167,15 @@
             <!-- 앨범 트랙리스트 분위기 뭐뭐.. -->
             <div class="info-card">
                 <div class="info top5track">
-                    <p id="headline" th:text="|${album.title}💿 🔥TOP 5 트랙|"></p>
+                    <p id="headline" th:text="|${album.title}💿 🔥TOP ${#lists.size(top5List)}트랙|"></p>
                     <th:block th:each="tops, stat : ${top5List}">
-                        <p th:text="|${stat.count}. ${tops.title}  ${tops.formattedDuration}|"></p>
+                        <a th:href="@{/tracks(id=${tops.id})}">
+                            <p th:text="|${stat.count}. ${tops.title}  ${tops.formattedDuration}|"></p>
+                        </a>
                     </th:block>   
                 </div>
                 <div class="info album-moods">
-                    <p id="headline">앨범의 분위기</p>
+                    <p id="headline">트랙의 분위기</p>
                     <div class="mood-list">
                         <button class="btn btn-gold">동해물과</button>
                         <button class="btn btn-gold">백두산이 마르고</button>

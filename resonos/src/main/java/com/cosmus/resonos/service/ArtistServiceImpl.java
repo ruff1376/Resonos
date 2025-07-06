@@ -54,4 +54,9 @@ public class ArtistServiceImpl implements ArtistService {
     public String selectTopMvUrlByArtist(String id) throws Exception {
         return artistMapper.selectTopMvUrlByArtist(id);
     }
+
+    @Override
+    public Artist selectArtistByTrackId(String id) throws Exception {
+        return artistMapper.selectArtistByTrackId(id);
+    }
 }

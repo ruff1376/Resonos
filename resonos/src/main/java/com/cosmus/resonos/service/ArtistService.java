@@ -19,4 +19,6 @@ public interface ArtistService {
     public boolean exists(String id) throws Exception;
     // 해당 아티스트의 인기1위 mv url을 반환
     public String selectTopMvUrlByArtist(String id) throws Exception;
+    // 트랙 아이디로 아티스트 객체 반환
+    public Artist selectArtistByTrackId(String id) throws Exception;
 }

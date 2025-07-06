@@ -1,5 +1,5 @@
 *{margin: 0; padding: 0; box-sizing: border-box;}
-.wrapper { width: 100%; display: flex; flex-direction: column; gap: 30px; align-items: center;}
+.wrapper { width: 100%; display: flex; flex-direction: column; gap: 30px; align-items: center; margin-bottom: 30px;}
 body {
     background-color: var(--background-color);
     color: white;
@@ -171,7 +171,7 @@ img {
     width: 100%;
     border-radius: 20px;
     border: 2px solid var(--main-color);
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 .songs > p:not(:first-child) {
     padding-left: 10px;

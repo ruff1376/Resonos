@@ -54,10 +54,12 @@
             <!-- 인기곡 유튜브 -->
             <div class="hottest-card">
                 <div class="songs">
-                    <p id="headline" th:text="|${artist.name}'s 🔥 TOP7|"></p>
+                    <p id="headline" th:text="|${artist.name}'s 🔥TOP ${#lists.size(TOP7)}|"></p>
                     <!-- 반복문 인기곡 -->
                     <th:block th:each="tops, stat : ${TOP7}">
-                        <p th:text="|${stat.count}. ${tops.title}  ${tops.formattedDuration}|"></p>
+                        <a th:href="@{/tracks(id=${tops.id})}">
+                            <p th:text="|${stat.count}. ${tops.title}  ${tops.formattedDuration}|"></p>
+                        </a>
                     </th:block>
                 </div>
                 <th:block th:if="${mv != null and mv != 'empty_mv_url'}">

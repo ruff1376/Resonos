@@ -8,8 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.cosmus.resonos.domain.Album;
+import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.domain.Track;
 import com.cosmus.resonos.service.AlbumService;
+import com.cosmus.resonos.service.ArtistService;
 import com.cosmus.resonos.service.TrackService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,8 @@ public class TrackController {
     private TrackService trackService;
     @Autowired
     private AlbumService albumService;
+    @Autowired
+    private ArtistService artistService;
     // @GetMapping({"/",""})
     // public String track() {
     //     return "review/track";
@@ -35,14 +39,15 @@ public class TrackController {
         Track track = trackService.selectById(id);
         Album album = albumService.findAlbumByTrackId(id);
         List<Track> top5List = trackService.findTop5TracksInSameAlbum(id);
-        String artistName = trackService.findArtistNameByTrackId(id);
+        // String artistName = trackService.findArtistNameByTrackId(id);
+        Artist artist = artistService.selectArtistByTrackId(id);
     if (track == null) {
         return "redirect:/artists?error=notfound";
     }
     model.addAttribute("track", track);
     model.addAttribute("album", album);
     model.addAttribute("top5List", top5List);
-    model.addAttribute("artistName", artistName);
+    model.addAttribute("artist", artist);
     return "review/track";
     }
 
