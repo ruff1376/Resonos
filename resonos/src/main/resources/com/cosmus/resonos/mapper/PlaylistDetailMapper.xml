@@ -21,11 +21,6 @@
     SELECT * FROM playlist_detail WHERE id = #{id}
   </select>
 
-  <insert id="insert">
-    INSERT INTO playlist_detail (id, track_id, playlist_id, order_no, Field)
-    VALUES (#{id}, #{trackId}, #{playlistId}, #{orderNo}, #{field})
-  </insert>
-
   <update id="update">
     UPDATE playlist_detail
     SET track_id = #{trackId},
@@ -40,11 +35,18 @@
   </delete>
 
   <!-- 플레이리스트 트랙 추가 -->
-  <insert id="insertTracks" parameterType="list">
-    INSERT INTO playlist_track (playlist_id, track_id)
+  <insert id="insert" parameterType="map">
+    INSERT INTO playlist_detail (playlist_id, track_id, order_no)
     VALUES
-    <foreach collection="list" item="trackId" separator=",">
-      (#{playlistId}, #{trackId})
+    <foreach collection="list" item="item" separator=",">
+      (#{item.playlistId}, #{item.trackId}, #{item.orderNo})
     </foreach>
   </insert>
+
+  <!-- MAX 값 조회 -->
+  <select id="getMaxOrderNo" resultType="int">
+    SELECT COALESCE(MAX(order_no), 0)
+    FROM playlist_detail
+    WHERE playlist_id = #{playlistId}
+  </select>
 </mapper>

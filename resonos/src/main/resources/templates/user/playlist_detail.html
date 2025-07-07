@@ -66,8 +66,9 @@
                   </div>
                 </th:block>
                 <th:block th:each="track : ${playlist.trackList}">
-                  <li th:attr="data-orderId=${track.orderNo}" class="list-item" th:object="${track}">
+                  <li class="list-item" th:object="${track}">
                     <input type="hidden" th:value="${track.id}">
+                    <p class="order-no" th:text="*{orderNo}">순서</p>
                     <img th:src="*{coverImage}" class="follow-img" />
                     <div class="info">
                       <span class="name-album" th:text="*{title}">트랙 명</span>
@@ -89,23 +90,11 @@
     <!-- 모달 -->
     <section class="modal-track">
       <div class="modal-contents">
-        <div class="text-center">
+        <div class="text-center position-relative">
+          <i class="bi bi-search search-icon position-absolute"></i>
           <input onchange="getTracks(event)" type="text" class="modal-input" name="keyword" placeholder="키워드를 입력하세요.">
         </div>
         <ul class="ul-list modall">
-          <th:block th:each="track : ${playlist.trackList}">
-            <li th:attr="data-orderId=${track.orderNo}" class="list-item" th:object="${track}">
-              <input type="hidden" th:value="${track.id}">
-              <img th:src="*{coverImage}" class="follow-img" />
-              <div class="info">
-                <span class="name-album" th:text="*{title}">트랙 명</span>
-                <span class="name-artist" th:text="*{artistName}">아티스트 명</span>
-              </div>
-              <div class="right">
-                <span class="like">♥</span>
-              </div>
-            </li>
-          </th:block>
         </ul>
         <div class="text-center btn-area">
           <button id="btn-modal" type="text" class="btn btn-gold">추가하기</button>
@@ -251,7 +240,9 @@
           list : list
         }
 
-        let url = `/tracks`
+        const pathSegments = window.location.pathname.split('/')
+        const playlistId = pathSegments[pathSegments.length - 1]
+        let url = `/playlist-details/${playlistId}`
 
         try {
             /* Security 제공 CSRF */
@@ -268,11 +259,31 @@
 
           if (!response.ok) {
               const result = await response.text()
-              console.log(result)
+              alert(result)
               return
           }
           const result = await response.json()
-          renderTracks(result)
+          const ul = document.querySelector('.ul-list')
+          ul.innerHTML = ''
+          result.trackList.forEach(track => {
+            const li = document.createElement('li')
+            li.classList.add('list-item')
+            li.innerHTML = `
+                    <input type="hidden" value="${track.id}">
+                    <img src="${track.coverImage}" class="follow-img">
+                    <div class="info">
+                      <span class="name-album">${track.title}</span>
+                      <span class="name-artist">${track.artistName}</span>
+                    </div>
+                    <div class="right">
+                      <span class="like">♥</span>
+                      <button type="button" class="btn btn-danger">삭제</button>
+                    </div>
+              `
+              ul.appendChild(li)
+          })
+          document.querySelector('.count').textContent = result.trackList.length
+          alert("트랙이 추가되었습니다.")
         } catch (error) {
             console.error("요청 실패:", error)
           }
@@ -307,7 +318,7 @@
 
       document.getElementById('btn-modal').addEventListener('click', () => {
         const items = document.querySelectorAll('.ul-list.modall .list-item.select')
-        const check = confirm(`선택한 ${items.length}개의 트랙을 추가하시겠습니까?`)
+        const check = confirm(`선택한 ${items.length}개의 트랙을 추가합니다.`)
         if(!check) return
         else {
           let list = []

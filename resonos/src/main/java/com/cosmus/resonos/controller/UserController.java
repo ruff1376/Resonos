@@ -33,10 +33,10 @@ public class UserController {
    * @param param
    * @return
    */
-  @PostMapping("/login")
-  public String login(@RequestParam String param) {
-      return new String();
-  }
+  // @PostMapping("/login")
+  // public String login(@RequestParam String param) {
+  //     return new String();
+  // }
 
   /**
    * 마이페이지 요청

@@ -122,7 +122,7 @@ public class PlaylistController {
     }
 
     @PostMapping("/{id}")
-    public String updatePlaylist(@PathVariable Long id, @ModelAttribute Playlist playlist, @AuthenticationPrincipal CustomUser loginUser) throws Exception {
+    public String updatePlaylist(@PathVariable("id") Long id, @ModelAttribute Playlist playlist, @AuthenticationPrincipal CustomUser loginUser) throws Exception {
         Playlist currentPlaylist = playlistService.select(id);
         if(!currentPlaylist.getUserId().equals(loginUser.getUser().getId()))
             return "redirect:/playlists/" + id + "?owner=false";
