@@ -421,7 +421,9 @@ img {
   object-fit: cover;
   animation: spin360 10s linear infinite;
 }
-
+.track-header {
+    padding-left: 10px;
+}
 /* 심(스핀들) */
 .track-img .center-pin {
   position: absolute;

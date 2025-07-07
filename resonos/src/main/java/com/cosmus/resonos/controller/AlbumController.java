@@ -39,6 +39,7 @@ public class AlbumController {
         Album album = albumService.select(id);
         List<Track> top5List = trackService.findTop5TracksByAlbumId(id);
         List<Track> tracks = trackService.findTracksByAlbumId(id);
+        Artist artist = artistService.findArtistByAlbumId(id);
         
     if (album == null) {
         return "redirect:/artists?error=notfound";
@@ -47,6 +48,7 @@ public class AlbumController {
     model.addAttribute("album", album);
     model.addAttribute("top5List", top5List);
     model.addAttribute("tracks", tracks);
+    model.addAttribute("artist", artist);
     return "review/album";
     }
     
