@@ -156,6 +156,14 @@
       ORDER BY popularity DESC
       LIMIT 1
     ]]>
+    
+  <select id="searchList" resultMap="Track" parameterType="string">
+    SELECT t.*, ar.name AS artist_name, al.cover_image
+    FROM track t
+    LEFT JOIN artist ar ON t.artist_id = ar.id
+    LEFT JOIN album al ON t.album_id = al.id
+    WHERE t.title LIKE CONCAT('%', #{keyword}, '%')
+    LIMIT 12
   </select>
 
 </mapper>

@@ -105,5 +105,12 @@
       WHERE artist_id = #{artistId}
   </select>
 
+  <select id="searchList" resultMap="Album" parameterType="string">
+    SELECT a.*, ar.name AS artist_name
+    FROM album a
+    LEFT JOIN artist ar ON a.artist_id = ar.id
+    WHERE title LIKE CONCAT('%', #{keyword}, '%')
+    LIMIT 12
+  </select>
 
 </mapper>

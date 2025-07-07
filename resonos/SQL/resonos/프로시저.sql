@@ -1,6 +1,8 @@
 DELIMITER //
 DROP PROCEDURE IF EXISTS create_tables;
 
+CALL create_tables(); -- 밑에 정의된 프로시저 호출
+
 -- 모든 테이블을 생성하고 제약 조건을 설정하는 프로시저
 CREATE PROCEDURE create_tables()
 BEGIN
@@ -111,6 +113,8 @@ BEGIN
         `provider` VARCHAR(200) NULL,
         `provider_id` VARCHAR(200) NULL,
         `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP
+        `updated_at`	TIMESTAMP	NOT NULL	DEFAULT CURRENT_TIMESTAMP
+                                            ON UPDATE CURRENT_TIMESTAMP
     );
 
     CREATE TABLE IF NOT EXISTS `external_api_config` (
@@ -182,7 +186,6 @@ BEGIN
         `thumbnail_url` VARCHAR(200) NULL,
         `is_public` BOOLEAN NOT NULL,
         `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        `track_id` VARCHAR(200) NULL
     );
 
     CREATE TABLE IF NOT EXISTS `album` (
@@ -233,7 +236,6 @@ BEGIN
         `track_id` VARCHAR(200) NOT NULL,
         `playlist_id` BIGINT NOT NULL,
         `order_no` INT NOT NULL,
-        `Field` VARCHAR(255) NULL
     );
 
     CREATE TABLE IF NOT EXISTS `policy` (

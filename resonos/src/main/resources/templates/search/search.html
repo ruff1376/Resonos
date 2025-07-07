@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESONOS</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <th:block th:replace="~{fragments/link::main}"></th:block>
+</head>
+<body>
+    <th:block layout:fragment="content">
+        <div class="container-fluid d-flex flex-column align-items-center px-0" style="max-width:1440px; height:2800px; padding-top:150px; gap:50px;">
+            <!-- 검색 결과 : "OOO" -->
+            <div class="d-flex flex-row mb-5 w-100" style="max-width:1440px; margin:10px auto; gap:10px;">
+                <h1 style="color: white; margin-left: 3rem;">검색 결과 : "<span th:text="${keyword}">검색어</span>"</h1>
+            </div>
+    
+            <!-- 아티스트 -->
+            <section class="main-section-bg w-100 py-4 mb-5">
+                <div class="d-flex flex-row align-items-center px-4 mb-3" style="height:50px;">
+                    <div class="section-title flex-grow-1">아티스트</div>
+                </div>
+                <th:block th:if="${ artistSearchList == null || artistSearchList.isEmpty() }">
+                    <div style="border-top: 1px solid #D4B97F; border-bottom: 1px solid #D4B97F; padding: 40px 0;">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <h3 style="color: #B1B1B1;">검색된 아티스트가 없습니다.</h3>
+                        </div>
+                    </div>
+                </th:block>
+                <th:block th:if="${artistSearchList != null and !artistSearchList.isEmpty()}">
+                    <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-0 m-0 justify-content-start">
+                        <th:block th:each="artist : ${artistSearchList}">
+                            <!-- 아티스트 카드 -->
+                            <div class="col d-flex">
+                                <div class="card align-items-center p-3" style="width:228px; height:220px;">
+                                    <img th:src="${artist.profileImage}" class="card-img-top rounded-circle" alt="아티스트 이미지">
+                                    <div class="card-body">
+                                        <div class="card-title" th:text="${artist.name}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                </th:block>
+                <div class="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style="height:50px;">
+                    <a href="/list/new-albums" class="more-link">더 보기 &gt;</a>
+                </div>
+            </section>
+            
+            <!-- 앨범 -->
+            <section class="main-section-bg w-100 py-4 mb-5">
+                <div class="d-flex flex-row align-items-center px-4 mb-3" style="height:50px;">
+                    <div class="section-title flex-grow-1">앨범</div>
+                </div>
+                <th:block th:if="${ albumSearchList == null || albumSearchList.isEmpty() }">
+                    <div style="border-top: 1px solid #D4B97F; border-bottom: 1px solid #D4B97F; padding: 40px 0;">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <h3 style="color: #B1B1B1;">검색된 앨범이 없습니다.</h3>
+                        </div>
+                    </div>
+                </th:block>
+                <th:block th:if="${albumSearchList != null and !albumSearchList.isEmpty()}">
+                    <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-0 m-0 justify-content-start">
+                        <th:block th:each="album : ${albumSearchList}">
+                            <!-- 앨범 카드 -->
+                            <div class="col d-flex">
+                                <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                                    <img th:src="${album.coverImage}" class="card-img-top" alt="앨범커버">
+                                    <div class="card-body d-flex flex-column align-items-center p-2">
+                                        <div class="card-title" th:text="${album.title}"></div>
+                                        <div class="card-artist" th:text="${album.artistName}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                </th:block>
+                <div class="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style="height:50px;">
+                    <a href="/list/new-albums" class="more-link">더 보기 &gt;</a>
+                </div>
+            </section>
+    
+            <!-- 트랙 -->
+            <section class="main-section-bg w-100 py-4 mb-5">
+                <div class="d-flex flex-row align-items-center px-4 mb-3" style="height:50px;">
+                    <div class="section-title flex-grow-1">트랙</div>
+                </div>
+                <th:block th:if="${ trackSearchList == null || trackSearchList.isEmpty() }">
+                    <div style="border-top: 1px solid #D4B97F; border-bottom: 1px solid #D4B97F; padding: 40px 0;">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <h3 style="color: #B1B1B1;">검색된 트랙이 없습니다.</h3>
+                        </div>
+                    </div>
+                </th:block>
+                <th:block th:if="${trackSearchList != null and !trackSearchList.isEmpty()}">
+                    <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-0 m-0 justify-content-start">
+                        <th:block th:each="track : ${trackSearchList}">
+                            <!-- 트랙 카드 -->
+                            <div class="col d-flex">
+                                <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                                    <img th:src="${track.coverImage}" class="card-img-top" alt="앨범커버">
+                                    <div class="card-body d-flex flex-column align-items-center p-2">
+                                        <div class="card-title" th:text="${track.title}"></div>
+                                        <div class="card-artist" th:text="${track.artistName}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                </th:block>
+                <div class="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style="height:50px;">
+                    <a href="/list/new-albums" class="more-link">더 보기 &gt;</a>
+                </div>
+            </section>
+        </div>
+    </th:block>
+</body>
+</html>

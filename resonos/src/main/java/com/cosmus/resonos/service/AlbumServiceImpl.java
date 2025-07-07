@@ -80,5 +80,15 @@ public class AlbumServiceImpl implements AlbumService {
         return albumMapper.findAlbumByTrackId(id);
     }
 
+    @Override
+    public List<Album> searchList(String keyword) throws Exception {
+        return albumMapper.searchList(keyword);
+    }
+
+    @Override
+    public List<Album> allSearchList(String keyword) throws Exception {
+        return albumMapper.allSearchList(keyword);
+    }
+
     
 }

@@ -120,5 +120,13 @@ public class TrackServiceImpl implements TrackService {
     @Override
     public Track findTopTrackByAlbumId(String id) throws Exception {
         return trackMapper.findTopTrackByAlbumId(id);
+
+    public List<Track> searchList(String keyword) throws Exception {
+        return trackMapper.searchList(keyword);
+    }
+
+    @Override
+    public List<Track> allSearchList(String keyword) throws Exception {
+        return trackMapper.allSearchList(keyword);
     }
 }
