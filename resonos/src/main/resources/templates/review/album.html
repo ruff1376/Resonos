@@ -67,7 +67,7 @@
                 </iframe>
             </div>
             <div class="youtube">
-                <th:block th:if="${track.mvUrl != null and track.mvUrl != 'empty_mv_url'}">
+                <th:block th:if="${!#strings.isEmpty(track.mvUrl)}">
                     <iframe width="560" height="315" th:src="|https://www.youtube.com/embed/${track.mvUrl}|"
                         title="YouTube video player" frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -75,7 +75,7 @@
                     </iframe>
                 </th:block>
                 <!-- ② MV URL이 없을 때 → 준비중 이미지 -->
-                <th:block th:if="${track.mvUrl == null or track.mvUrl == 'empty_mv_url'}">
+                <th:block th:if="${#strings.isEmpty(track.mvUrl)}">
                     <img th:src="@{/img/wait_plz.png}" alt="뮤직비디오 준비중" width="560" height="315"
                         style="object-fit:cover;">
                 </th:block>
