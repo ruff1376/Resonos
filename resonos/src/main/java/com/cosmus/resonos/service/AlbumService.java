@@ -29,4 +29,8 @@ public interface AlbumService {
     public int countAlbumsByArtist(String id) throws Exception;
     // 트랙 아이디로 앨범 객체
     public Album findAlbumByTrackId(String id) throws Exception;
+    // 검색 결과 목록
+    public List<Album> searchList(String keyword) throws Exception;
+    // 검색 결과 전체 목록
+    public List<Album> allSearchList(String keyword) throws Exception;
 }
