@@ -542,7 +542,7 @@ CREATE TABLE `persistent_logins` (
 --
 
 /*!40000 ALTER TABLE `persistent_logins` DISABLE KEYS */;
-INSERT INTO `persistent_logins` VALUES ('user1004','EpkX6gybXnamcOTUCk4vow==','jvi0qOVk0CG/GkMypDoYvw==','2025-07-06 13:34:09');
+INSERT INTO `persistent_logins` VALUES ('user1004','Ci4r07fuZpsp0M0Q5dotKw==','rX69VDiv6lR9L+0MZyn0wA==','2025-07-07 14:49:27');
 /*!40000 ALTER TABLE `persistent_logins` ENABLE KEYS */;
 
 --
@@ -560,8 +560,6 @@ CREATE TABLE `playlist` (
   `thumbnail_url` varchar(200) DEFAULT NULL,
   `is_public` tinyint(1) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `track_id` varchar(200) DEFAULT NULL,
-  `like_count` int DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `FK_user_TO_playlist_1` (`user_id`),
   CONSTRAINT `FK_user_TO_playlist_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
@@ -573,7 +571,7 @@ CREATE TABLE `playlist` (
 --
 
 /*!40000 ALTER TABLE `playlist` DISABLE KEYS */;
-INSERT INTO `playlist` VALUES (1,1,'user1004 의 플레이리스트','안녕하세요','abc',1,'2025-07-06 09:51:11',NULL,0),(2,1,'user1004 의 플레이리스트','안녕하세요2','abc',1,'2025-07-06 09:52:12',NULL,0),(3,1,'user1004 의 플레이리스트','안녕하세요3','abc',1,'2025-07-06 09:52:18',NULL,0),(4,1,'user1004 의 플레이리스트','안녕하세요4','abc',1,'2025-07-06 12:46:17',NULL,0);
+INSERT INTO `playlist` VALUES (1,1,'user1004 의 플레이리스트','안녕하세요123','',1,'2025-07-06 09:51:11'),(2,1,'user1004 의 플레이리스트','안녕하세요2','abc',1,'2025-07-06 09:52:12'),(3,1,'user1004 의 플레이리스트','안녕하세요3','abc',1,'2025-07-06 09:52:18'),(4,1,'user1004 의 플레이리스트','안녕하세요4','abc',0,'2025-07-06 12:46:17');
 /*!40000 ALTER TABLE `playlist` ENABLE KEYS */;
 
 --
@@ -588,13 +586,12 @@ CREATE TABLE `playlist_detail` (
   `track_id` varchar(200) NOT NULL,
   `playlist_id` bigint NOT NULL,
   `order_no` int NOT NULL,
-  `Field` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK_track_TO_playlist_detail_1` (`track_id`),
+  UNIQUE KEY `UK_track_playlist` (`track_id`,`playlist_id`) /*!80000 INVISIBLE */,
   KEY `FK_playlist_TO_playlist_detail_1` (`playlist_id`),
   CONSTRAINT `FK_playlist_TO_playlist_detail_1` FOREIGN KEY (`playlist_id`) REFERENCES `playlist` (`id`),
   CONSTRAINT `FK_track_TO_playlist_detail_1` FOREIGN KEY (`track_id`) REFERENCES `track` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -602,6 +599,7 @@ CREATE TABLE `playlist_detail` (
 --
 
 /*!40000 ALTER TABLE `playlist_detail` DISABLE KEYS */;
+INSERT INTO `playlist_detail` VALUES (26,'00aqkszH1FdUiJJWvX6iEl',1,1),(35,'00Blm7zeNqgYLPtW6zg8cj',1,2),(36,'00NAQYOP4AmWR549nnYJZu',1,3),(37,'010ZkIVv6Ay5vqqHVCCiKB',1,4),(38,'02w1rM6spvEcbFxd63xCl2',1,5),(39,'02YlAvsmptN8LisZqrWBIb',1,6),(40,'03H6iCycyxfB2mZzIOEeKJ',1,7),(41,'03j354P848KtNU2FVSwkDG',1,8),(42,'09mBPwUMt1TXNtneqvmZZ5',1,9),(43,'09mEdoA6zrmBPgTEN5qXmN',1,10),(44,'3Tz5B0wTyLdz4jE8LgYA3J',1,11);
 /*!40000 ALTER TABLE `playlist_detail` ENABLE KEYS */;
 
 --
@@ -1658,4 +1656,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-06 22:36:03
+-- Dump completed on 2025-07-07 23:50:54

@@ -25,11 +25,6 @@ public class PlaylistDetailServiceImpl implements PlaylistDetailService {
     }
 
     @Override
-    public boolean insert(PlaylistDetail detail) throws Exception {
-        return playlistDetailMapper.insert(detail) > 0;
-    }
-
-    @Override
     public boolean update(PlaylistDetail detail) throws Exception {
         return playlistDetailMapper.update(detail) > 0;
     }
@@ -37,5 +32,15 @@ public class PlaylistDetailServiceImpl implements PlaylistDetailService {
     @Override
     public boolean delete(Long id) throws Exception {
         return playlistDetailMapper.delete(id) > 0;
+    }
+
+    @Override
+    public boolean insert(List<PlaylistDetail> playlistDetail) throws Exception {
+        return playlistDetailMapper.insert(playlistDetail) > 0 ? true : false;
+    }
+
+    @Override
+    public int getMaxOrderNo(Long playlistId) throws Exception {
+        return playlistDetailMapper.getMaxOrderNo(playlistId);
     }
 }

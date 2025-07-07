@@ -27,6 +27,7 @@ import com.cosmus.resonos.domain.TrackScore;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.ArtistService;
+import com.cosmus.resonos.service.PlaylistDetailService;
 import com.cosmus.resonos.service.TrackReviewService;
 import com.cosmus.resonos.service.TrackService;
 
@@ -47,13 +48,15 @@ public class TrackController {
     private ArtistService artistService;
     @Autowired
     private TrackReviewService trackReviewService;
+    @Autowired
+    private PlaylistDetailService playlistDetailService;
 
     // 트랙 화면
     @GetMapping
     public String trackInfo(@RequestParam("id") String id, Model model,
                             @AuthenticationPrincipal CustomUser principal
                             ) throws Exception {
-        
+
         Users loginUser = null;
         if (principal != null) {
             loginUser = principal.getUser();
@@ -87,27 +90,12 @@ public class TrackController {
     @PostMapping(value = "/from-playlists", consumes = "application/json")
     public ResponseEntity<?> getAjaxTracks(@RequestBody Map<String, String> data) throws Exception {
         List<Track> trackList = trackService.addTrackList(data.get("keyword"));
-        log.info("trackList : {}", trackList);
 
         if(trackList != null)
             return new ResponseEntity<>(trackList, HttpStatus.OK);
 
         return new ResponseEntity<>("리스트 요청 실패.", HttpStatus.BAD_REQUEST);
     }
-
-    /**
-     * 플레이리스트에 추가할 트랙 리스트 요청
-     * @param entity
-     * @return
-     * @throws Exception
-     */
-    @PostMapping(value = "/", consumes = "application/json")
-    public ResponseEntity<?> insertAjaxTracks(@RequestBody Map<String, List<String>> data) throws Exception {
-
-
-        return new ResponseEntity<>("리스트 요청 실패.", HttpStatus.BAD_REQUEST);
-    }
-
 
     // @Autowired
 
