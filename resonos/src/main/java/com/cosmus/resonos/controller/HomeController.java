@@ -258,19 +258,23 @@ public class HomeController {
    * @throws Exception
    */
   @PostMapping(value = "/send-pw", consumes = "application/json")
-  public ResponseEntity<?> sendEmailPw(@RequestBody Users user) throws Exception {
+  public ResponseEntity<?> sendEmailPw(@RequestBody Users user) {
     //TODO: 이메일 전송 API
 
-    Users checkUser = userService.select(user.getUsername());
-    String randomPassword = RandomPassword.generateRandomPassword(10);
+    try {
+      Users checkUser = userService.select(user.getUsername());
+      String randomPassword = RandomPassword.generateRandomPassword(10);
 
-    checkUser.setPassword(randomPassword);
+      checkUser.setPassword(randomPassword);
 
-    boolean result = userService.update(checkUser);
+      boolean result = userService.update(checkUser);
 
-    if(result) {
-      log.info("임시 비밀번호 : {}", randomPassword);
-      return new ResponseEntity<>("이메일이 발송되었습니다.", HttpStatus.OK);
+      if(result) {
+        log.info("임시 비밀번호 : {}", randomPassword);
+        return new ResponseEntity<>("이메일이 발송되었습니다.", HttpStatus.OK);
+      }
+    } catch(Exception e) {
+      e.printStackTrace();
     }
 
     return new ResponseEntity<>("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);

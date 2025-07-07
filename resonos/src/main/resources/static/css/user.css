@@ -573,7 +573,6 @@ textarea.form-control {
   color: #B0B6BE;
   font-size: 1.6rem;
   font-weight: bold;
-  margin-left: 8px;
 }
 .ul-list {
   list-style: none;
@@ -707,6 +706,7 @@ button.like {background-color: inherit; border: none;}
 .con-pli-detail .input-area {flex: 1; padding: 0;}
 .con-pli-detail input[type="radio"] + .profile-edit-label {display: inline-block; margin: 0 5px;}
 .con-pli-detail .like {font-size: 3rem; margin-left: auto;}
+.con-pli-detail .follow-img {border-radius: 10px; width: 60px; height: 60px; border: none;}
 
 /* 내 활동 */
 .con-activity .info-wrapper .info-section {height: 300px; text-align: start;}

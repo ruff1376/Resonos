@@ -69,7 +69,7 @@
 
   <!-- 마이페이지 플레이리스트 (3개) -->
   <select id="usersPlaylist3" resultType="Playlist">
-    SELECT p.*, IFNULL(sub.like_count, 0) AS like_count
+    SELECT p.*, IFNULL(sub.like_count, 0) AS likeCount
     FROM playlist p
       LEFT JOIN (
         SELECT playlist_id, COUNT(*) AS like_count
@@ -113,4 +113,13 @@
     WHERE p.id = #{id}
     ORDER BY pd.order_no;
   </select>
+
+  <update id="changeOrderNo" parameterType="map">
+    <foreach collection="orderList" item="item" separator=";">
+      UPDATE playlist_detail
+      SET order_no = #{item.orderNo}
+      WHERE playlist_id = #{playlistId}
+        AND track_id = #{item.trackId}
+    </foreach>
+  </update>
 </mapper>

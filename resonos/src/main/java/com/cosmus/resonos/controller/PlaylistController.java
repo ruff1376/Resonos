@@ -1,6 +1,7 @@
 package com.cosmus.resonos.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -77,7 +78,6 @@ public class PlaylistController {
     @GetMapping("/{id}")
     public String playlistDetail(Model model, @PathVariable("id") long id) throws Exception {
         PlaylistDTO playlist = playlistService.trackOfPlaylist(id);
-        log.info("플레이리스트 상세 : {}", playlist);
 
         if(playlist == null) {
             model.addAttribute("playlist", playlistService.select(id));
@@ -88,6 +88,13 @@ public class PlaylistController {
         model.addAttribute("playlistObj", new Playlist());
         return "user/playlist_detail";
     }
+
+    @PutMapping("/change-orderNo")
+    public String postMethodName(@RequestBody List<Map<String, Integer>> orderList) {
+
+        return null;
+    }
+
 
 
     @PostMapping
