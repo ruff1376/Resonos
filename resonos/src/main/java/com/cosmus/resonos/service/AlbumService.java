@@ -16,7 +16,7 @@ public interface AlbumService {
     // 최신 앨범 전체 목록
     public List<Album> newList(Pagination pagination) throws Exception;
     // 조회
-    public Album select(Integer no) throws Exception;
+    public Album select(String id) throws Exception;
     // 삽입
     public boolean insert(Album track) throws Exception;
     // 수정
