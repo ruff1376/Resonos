@@ -84,4 +84,9 @@ public class ArtistServiceImpl implements ArtistService {
     public List<Artist> allSearchList(String keyword) throws Exception {
         return artistMapper.allSearchList(keyword);
     }
+
+    @Override
+    public Artist findArtistByAlbumId(String id) throws Exception {
+        return artistMapper.findArtistByAlbumId(id);
+    }
 }

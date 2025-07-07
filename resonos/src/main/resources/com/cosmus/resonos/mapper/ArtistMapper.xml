@@ -79,4 +79,14 @@
     LIMIT 6
   </select>
 
+  <!-- 앨범id로 아티스트 객체 -->
+  <select id="findArtistByAlbumId"
+        parameterType="string"
+        resultMap="ArtistResultMap">
+  SELECT ar.*
+  FROM album a
+  JOIN artist ar ON a.artist_id = ar.id
+  WHERE a.id = #{albumId}
+  </select>
+
 </mapper>
