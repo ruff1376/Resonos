@@ -71,4 +71,9 @@ public class ArtistServiceImpl implements ArtistService {
     public Artist selectArtistByTrackId(String id) throws Exception {
         return artistMapper.selectArtistByTrackId(id);
     }
+
+    @Override
+    public List<Artist> listPaging(int offset, int size) throws Exception {
+        return artistMapper.listPaging(offset, size);
+    }
 }
