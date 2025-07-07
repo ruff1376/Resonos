@@ -73,6 +73,9 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
+    public List<Artist> listPaging(int offset, int size) throws Exception {
+        return artistMapper.listPaging(offset, size);
+    }
     public List<Artist> searchList(String keyword) throws Exception {
         return artistMapper.searchList(keyword);
     }

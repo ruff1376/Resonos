@@ -1,7 +1,15 @@
-DELIMITER //
+-- Active: 1751337677491@@127.0.0.1@3306@resonos
+
+-- 실행 순서 
+-- 1. 테이블 삭제 DROP PROCEDURE IF EXISTS create_tables;
+-- 2. 테이블 생성 CREATE PROCEDURE create_tables()
+-- 3. 프로시저 호출 CALL create_tables();
+
 DROP PROCEDURE IF EXISTS create_tables;
 
 CALL create_tables(); -- 밑에 정의된 프로시저 호출
+
+DELIMITER //
 
 -- 모든 테이블을 생성하고 제약 조건을 설정하는 프로시저
 CREATE PROCEDURE create_tables()
@@ -28,8 +36,8 @@ BEGIN
         `id` BIGINT NOT NULL,
         `title` VARCHAR(200) NOT NULL,
         `content` TEXT NOT NULL,
-        `created_at` DATETIME NOT NULL,
-        `updated_at` DATETIME NULL,
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         `is_active` BOOLEAN NOT NULL,
         `start_at` DATETIME NULL,
         `end_at` DATETIME NULL,
@@ -112,7 +120,7 @@ BEGIN
         `enabled` BOOLEAN NOT NULL DEFAULT TRUE,
         `provider` VARCHAR(200) NULL,
         `provider_id` VARCHAR(200) NULL,
-        `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP
+        `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
         `updated_at`	TIMESTAMP	NOT NULL	DEFAULT CURRENT_TIMESTAMP
                                             ON UPDATE CURRENT_TIMESTAMP
     );
@@ -185,7 +193,7 @@ BEGIN
         `description` TEXT NULL,
         `thumbnail_url` VARCHAR(200) NULL,
         `is_public` BOOLEAN NOT NULL,
-        `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
 
     CREATE TABLE IF NOT EXISTS `album` (
@@ -235,7 +243,7 @@ BEGIN
         `id` BIGINT NOT NULL,
         `track_id` VARCHAR(200) NOT NULL,
         `playlist_id` BIGINT NOT NULL,
-        `order_no` INT NOT NULL,
+        `order_no` INT NOT NULL
     );
 
     CREATE TABLE IF NOT EXISTS `policy` (
@@ -369,9 +377,8 @@ BEGIN
         , auth varchar(100) NOT NULL                 -- 권한 (ROLE_USER, ROLE_ADMIN, ...)
         , PRIMARY KEY(no)
     );
-
+        
     -- PRIMARY KEY 추가
-    -- 이 부분은 그대로 두시면 됩니다.
     ALTER TABLE `notice` ADD CONSTRAINT `PK_NOTICE` PRIMARY KEY (`id`);
     ALTER TABLE `qna_answer` ADD CONSTRAINT `PK_QNA_ANSWER` PRIMARY KEY (`id`);
     ALTER TABLE `role` ADD CONSTRAINT `PK_ROLE` PRIMARY KEY (`id`);
@@ -446,8 +453,7 @@ BEGIN
     ALTER TABLE user_activity_log MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
     ALTER TABLE notice MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
 
-
-    -- FOREIGN KEY 추가
+    -- FOREIGN KEY 추가 (album/artist 관련만 ON DELETE CASCADE)
     ALTER TABLE `notice` ADD CONSTRAINT `FK_user_TO_notice_1` FOREIGN KEY (`author_id`) REFERENCES `user` (`id`);
     ALTER TABLE `qna_answer` ADD CONSTRAINT `FK_qna_TO_qna_answer_1` FOREIGN KEY (`qna_id`) REFERENCES `qna` (`id`);
     ALTER TABLE `qna_answer` ADD CONSTRAINT `FK_user_TO_qna_answer_1` FOREIGN KEY (`admin_id`) REFERENCES `user` (`id`);
@@ -455,25 +461,25 @@ BEGIN
     ALTER TABLE `qna` ADD CONSTRAINT `FK_user_TO_qna_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
     ALTER TABLE `liked_track` ADD CONSTRAINT `FK_user_TO_liked_track_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
     ALTER TABLE `liked_track` ADD CONSTRAINT `FK_track_TO_liked_track_1` FOREIGN KEY (`track_id`) REFERENCES `track` (`id`);
-    ALTER TABLE `track` ADD CONSTRAINT `FK_album_TO_track_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`);
-    ALTER TABLE `track` ADD CONSTRAINT `FK_artist_TO_track_1` FOREIGN KEY (`artist_id`) REFERENCES `artist` (`id`);
+    ALTER TABLE `track` ADD CONSTRAINT `FK_album_TO_track_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`) ON DELETE CASCADE;
+    ALTER TABLE `track` ADD CONSTRAINT `FK_artist_TO_track_1` FOREIGN KEY (`artist_id`) REFERENCES `artist` (`id`) ON DELETE CASCADE;
     ALTER TABLE `liked_playlist` ADD CONSTRAINT `FK_user_TO_liked_playlist_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
     ALTER TABLE `liked_playlist` ADD CONSTRAINT `FK_playlist_TO_liked_playlist_1` FOREIGN KEY (`playlist_id`) REFERENCES `playlist` (`id`);
     ALTER TABLE `report` ADD CONSTRAINT `FK_user_TO_report_1` FOREIGN KEY (`reporter_id`) REFERENCES `user` (`id`);
     ALTER TABLE `report` ADD CONSTRAINT `FK_user_TO_report_2` FOREIGN KEY (`target_id`) REFERENCES `user` (`id`);
     ALTER TABLE `album_mood_vote` ADD CONSTRAINT `FK_user_TO_album_mood_vote_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `album_mood_vote` ADD CONSTRAINT `FK_album_TO_album_mood_vote_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`);
+    ALTER TABLE `album_mood_vote` ADD CONSTRAINT `FK_album_TO_album_mood_vote_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`) ON DELETE CASCADE;
     ALTER TABLE `album_mood_vote` ADD CONSTRAINT `FK_tag_TO_album_mood_vote_1` FOREIGN KEY (`mood`) REFERENCES `tag` (`id`);
-    ALTER TABLE `chart_element` ADD CONSTRAINT `FK_album_TO_chart_element_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`);
+    ALTER TABLE `chart_element` ADD CONSTRAINT `FK_album_TO_chart_element_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`) ON DELETE CASCADE;
     ALTER TABLE `comment` ADD CONSTRAINT `FK_user_TO_comment_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
     ALTER TABLE `playlist` ADD CONSTRAINT `FK_user_TO_playlist_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `album` ADD CONSTRAINT `FK_artist_TO_album_1` FOREIGN KEY (`artist_id`) REFERENCES `artist` (`id`);
+    ALTER TABLE `album` ADD CONSTRAINT `FK_artist_TO_album_1` FOREIGN KEY (`artist_id`) REFERENCES `artist` (`id`) ON DELETE CASCADE;
     ALTER TABLE `user_sanction` ADD CONSTRAINT `FK_user_TO_user_sanction_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
     ALTER TABLE `user_sanction` ADD CONSTRAINT `FK_user_TO_user_sanction_2` FOREIGN KEY (`admin_id`) REFERENCES `user` (`id`);
     ALTER TABLE `admin_log` ADD CONSTRAINT `FK_user_TO_admin_log_1` FOREIGN KEY (`actor_id`) REFERENCES `user` (`id`);
     ALTER TABLE `admin_log` ADD CONSTRAINT `FK_user_TO_admin_log_2` FOREIGN KEY (`target_id`) REFERENCES `user` (`id`);
     ALTER TABLE `artist_follow` ADD CONSTRAINT `FK_user_TO_artist_follow_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `artist_follow` ADD CONSTRAINT `FK_artist_TO_artist_follow_1` FOREIGN KEY (`artist_id`) REFERENCES `artist` (`id`);
+    ALTER TABLE `artist_follow` ADD CONSTRAINT `FK_artist_TO_artist_follow_1` FOREIGN KEY (`artist_id`) REFERENCES `artist` (`id`) ON DELETE CASCADE;
     ALTER TABLE `playlist_detail` ADD CONSTRAINT `FK_track_TO_playlist_detail_1` FOREIGN KEY (`track_id`) REFERENCES `track` (`id`);
     ALTER TABLE `playlist_detail` ADD CONSTRAINT `FK_playlist_TO_playlist_detail_1` FOREIGN KEY (`playlist_id`) REFERENCES `playlist` (`id`);
     ALTER TABLE `board_post` ADD CONSTRAINT `FK_community_TO_board_post_1` FOREIGN KEY (`community_id`) REFERENCES `community` (`id`);
@@ -493,9 +499,9 @@ BEGIN
     ALTER TABLE `user_follow` ADD CONSTRAINT `FK_user_TO_user_follow_1` FOREIGN KEY (`follower_id`) REFERENCES `user` (`id`);
     ALTER TABLE `user_follow` ADD CONSTRAINT `FK_user_TO_user_follow_2` FOREIGN KEY (`following_id`) REFERENCES `user` (`id`);
     ALTER TABLE `album_review` ADD CONSTRAINT `FK_user_TO_album_review_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `album_review` ADD CONSTRAINT `FK_album_TO_album_review_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`);
+    ALTER TABLE `album_review` ADD CONSTRAINT `FK_album_TO_album_review_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`) ON DELETE CASCADE;
     ALTER TABLE `liked_album` ADD CONSTRAINT `FK_user_TO_liked_album_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `liked_album` ADD CONSTRAINT `FK_album_TO_liked_album_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`);
+    ALTER TABLE `liked_album` ADD CONSTRAINT `FK_album_TO_liked_album_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`) ON DELETE CASCADE;
     ALTER TABLE `user_auth` ADD CONSTRAINT `FK_user_TO_user_auth` FOREIGN KEY (`username`) REFERENCES `user` (`username`);
 
     -- 외래 키 제약 조건 다시 활성화

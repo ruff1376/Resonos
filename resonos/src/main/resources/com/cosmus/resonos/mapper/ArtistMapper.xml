@@ -66,6 +66,13 @@
     WHERE  t.id = #{trackId}
   </select>
 
+  <select id="listPaging" resultMap="ArtistResultMap">
+  SELECT * FROM artist
+  ORDER BY name ASC
+  LIMIT #{offset}, #{size}
+  </select>
+
+
   <select id="searchList" resultMap="ArtistResultMap" parameterType="string">
     SELECT * FROM artist
     WHERE name LIKE CONCAT('%', #{keyword}, '%')

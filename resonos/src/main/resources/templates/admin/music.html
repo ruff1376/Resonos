@@ -4,11 +4,13 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/layouts/admin_layout}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>음악 데이터 관리</title>
-    <th:block th:replace="~{fragments/link::admin}"></th:block>
+  <meta charset="UTF-8">
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <title>음악 데이터 관리</title>
+  <th:block th:replace="~{fragments/link::admin}"></th:block>
 </head>
+
 <th:block layout:fragment="content">
 <body class="bg-dark text-light">
 <main class="py-5 bg-resonos-dark">
@@ -207,12 +209,12 @@
         </div>
         <div class="resonos-card p-3">
           <!-- 컬럼 헤더 -->
-<div class="list-group-item bg-secondary text-dark fw-bold d-flex flex-nowrap align-items-center text-center justify-content-between" style="border-radius:8px 8px 0 0;">
-  <div style="flex-basis:12%;min-width:80px;">ID</div>
-  <div style="flex-basis:32%;min-width:160px;">이름</div>
-  <div style="flex-basis:16%;min-width:80px;">프로필</div>
-  <div style="flex-basis:14%;min-width:80px;">관리</div>
-</div>
+        <div class="list-group-item bg-secondary text-dark fw-bold d-flex flex-nowrap align-items-center text-center justify-content-between" style="border-radius:8px 8px 0 0;">
+          <div style="flex-basis:12%;min-width:80px;">ID</div>
+          <div style="flex-basis:32%;min-width:160px;">이름</div>
+          <div style="flex-basis:16%;min-width:80px;">프로필</div>
+          <div style="flex-basis:14%;min-width:80px;">관리</div>
+        </div>
 
           <div class="list-group">
             <!-- 상위 10개만 보여주기 (추후 변경 가능) -->
@@ -243,7 +245,6 @@
               <!-- collapse 폼: row 아래에 위치 -->
               <div class="collapse w-100" th:id="'editArtist' + ${artist.id}">
                 <form th:action="@{/admin/music/artist/save}" method="post" class="border rounded p-3 bg-dark">
-                  <input type="hidden" name="id" th:value="${artist.id}" />
                   <div class="d-flex flex-nowrap align-items-center w-100 mb-2 text-center">
                     <div style="flex-basis:12%;min-width:80px;" class="me-2">
                       <input type="text" class="form-control" name="id" th:value="${artist.id}" readonly>
@@ -261,6 +262,7 @@
                   </div>
                 </form>
               </div>
+
             </div>
             <!-- 전체 목록은 추후 변경 가능 (아래 주석 참고) -->
             <!--
@@ -276,19 +278,154 @@
     <!-- 트랙/앨범/아티스트 등록/수정 모달 (폼은 필요에 따라 구현) -->
     <!-- ...모달 폼 생략(추후 구현)... -->
     <!-- api 아티스트 검색 기능 추가중  -->
-     <form method="post" th:action="@{/admin/music/sync-artist}">
-  <select name="spotifyArtistId" class="form-select" required>
-    <option value="">아티스트 선택</option>
-    <!-- 예시: 서버에서 전달받은 아티스트 목록을 반복 -->
-    <option th:each="artist : ${spotifyArtists}" th:value="${artist.id}" th:text="${artist.name}"></option>
-  </select>
-  <button type="submit" class="btn btn-gold btn-sm">아티스트 동기화</button>
-</form>
+    <form method="post" th:action="@{/admin/music/sync-artist}" id="syncArtistForm">
+      <div class="input-group mb-3" style="max-width:400px;">
+        <input type="text" name="spotifyArtistId" class="form-control" placeholder="Spotify 아티스트 ID 또는 이름 입력" required>
+        <button type="submit" class="btn btn-gold btn-sm">아티스트 동기화</button>
+      </div>
+    </form>
+    <!-- 결과/상태 표시 영역 -->
+    <div id="syncArtistResult" class="alert mt-2 d-none"></div>
+    <!-- 동기화 결과 메시지 표시 -->
+    <div th:if="${syncMessage}" class="alert alert-info mt-3" th:text="${syncMessage}"></div>
+    
+    <!-- 아티스트 검색 폼 -->
+    <form id="searchArtistForm" class="mb-3" autocomplete="off">
+      <div class="input-group" style="max-width:400px;">
+        <input type="text" id="searchArtistInput" name="query" class="form-control" placeholder="Spotify 아티스트 이름 검색" required>
+        <button type="submit" class="btn btn-outline-gold btn-sm">검색</button>
+      </div>
+    </form>
+    <!-- 검색 결과 표시 영역 -->
+    <div id="searchArtistResults" class="list-group mb-3"></div>
+    <div id="syncArtistResult" class="alert mt-2 d-none"></div>
+    <div id="artistList" class="list-group"></div>
+    <button id="loadMoreBtn" class="btn btn-outline-gold btn-sm mt-2">더보기</button>
 
 
 
 
   </div>
+  <script th:inline="javascript">
+    // CSRF 토큰 준비
+    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    // 아티스트 검색 AJAX
+    document.getElementById("searchArtistForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const query = document.getElementById("searchArtistInput").value.trim();
+      const resultsDiv = document.getElementById("searchArtistResults");
+      resultsDiv.innerHTML = "검색 중...";
+
+      fetch("/admin/music/search-artist?query=" + encodeURIComponent(query), {
+        method: "GET",
+        headers: {
+          [csrfHeader]: csrfToken
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        resultsDiv.innerHTML = "";
+        if (data.success && data.artists.length > 0) {
+          data.artists.forEach(artist => {
+            const artistItem = document.createElement("div");
+            artistItem.className = "list-group-item d-flex align-items-center";
+            artistItem.innerHTML = `
+              <img src="${artist.image || ''}" alt="" style="width:32px;height:32px;object-fit:cover;border-radius:50%;margin-right:8px;">
+              <div style="flex:1;">
+                <b>${artist.name}</b>
+                <span class="text-muted small ms-2">${artist.id}</span>
+                <span class="text-muted small ms-2">${artist.genres || ''}</span>
+              </div>
+              <button class="btn btn-gold btn-sm ms-2" data-artist-id="${artist.id}">동기화</button>
+            `;
+            artistItem.querySelector("button").onclick = function() {
+              syncArtistById(artist.id);
+            };
+            resultsDiv.appendChild(artistItem);
+          });
+        } else {
+          resultsDiv.innerHTML = "<div class='text-danger'>검색 결과가 없습니다.</div>";
+        }
+      })
+      .catch(() => {
+        resultsDiv.innerHTML = "<div class='text-danger'>검색 중 오류 발생</div>";
+      });
+    });
+
+    // 아티스트 동기화 AJAX
+    function syncArtistById(artistId) {
+      const resultDiv = document.getElementById("syncArtistResult");
+      resultDiv.classList.remove("d-none", "alert-success", "alert-danger");
+      resultDiv.innerHTML = "동기화 중...";
+
+      const formData = new FormData();
+      formData.append("spotifyArtistId", artistId);
+
+      fetch("/admin/music/sync-artist", {
+        method: "POST",
+        headers: {
+          [csrfHeader]: csrfToken
+        },
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          resultDiv.classList.add("alert-success");
+          resultDiv.innerHTML = "아티스트 동기화 성공: " + data.message;
+        } else {
+          resultDiv.classList.add("alert-danger");
+          resultDiv.innerHTML = "아티스트 동기화 실패: " + data.message;
+        }
+      })
+      .catch(() => {
+        resultDiv.classList.add("alert-danger");
+        resultDiv.innerHTML = "아티스트 동기화 중 오류 발생";
+      });
+    }
+
+    // 더보기 버튼 클릭 이벤트
+    let offset = 0;
+    const size = 5;
+
+    function loadArtists() {
+      fetch(`/admin/music/artist/list?offset=${offset}&size=${size}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            data.artists.forEach(artist => {
+              const item = document.createElement("div");
+              item.className = "list-group-item";
+              item.innerHTML = `
+                <b>${artist.name}</b>
+                <span class="text-muted small ms-2">${artist.id}</span>
+                ${artist.profileImage ? `<img src="${artist.profileImage}" style="height:32px;width:32px;border-radius:50%;margin-left:8px;">` : ""}
+              `;
+              document.getElementById("artistList").appendChild(item);
+            });
+            offset += size;
+            if (data.artists.length < size) {
+              document.getElementById("loadMoreBtn").style.display = "none"; // 더 이상 없음
+            }
+          }
+        });
+    }
+
+    // 최초 5명 로드
+    loadArtists();
+
+    document.getElementById("loadMoreBtn").addEventListener("click", loadArtists);
+
+
+
+
+  </script>
+
+
+
+
 </main>
 </body>
 </th:block>
