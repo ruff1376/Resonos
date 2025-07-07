@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>앨범 리뷰</title>
+    <title th:text="|${album.title} 리뷰|">앨범 리뷰</title>
     <th:block th:replace="~{fragments/link::album}"></th:block>
 </head>
 

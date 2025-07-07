@@ -3,15 +3,21 @@ package com.cosmus.resonos.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.Artist;
+import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Track;
+import com.cosmus.resonos.domain.TrackReview;
+import com.cosmus.resonos.domain.TrackScore;
+import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.ArtistService;
+import com.cosmus.resonos.service.TrackReviewService;
 import com.cosmus.resonos.service.TrackService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,27 +34,38 @@ public class TrackController {
     private AlbumService albumService;
     @Autowired
     private ArtistService artistService;
+    @Autowired
+    private TrackReviewService trackReviewService;
 
     // 트랙 화면
     @GetMapping
-    public String trackInfo(@RequestParam("id") String id, Model model) throws Exception {
+    public String trackInfo(@RequestParam("id") String id, Model model,
+                            @AuthenticationPrincipal CustomUser principal
+                            ) throws Exception {
+        
+        Users loginUser = null;
+        if (principal != null) {
+            loginUser = principal.getUser();
+            model.addAttribute("loginUser", loginUser);
+        }
         Track track = trackService.selectById(id);
         Album album = albumService.findAlbumByTrackId(id);
         List<Track> top5List = trackService.findTop5TracksInSameAlbum(id);
         // String artistName = trackService.findArtistNameByTrackId(id);
         Artist artist = artistService.selectArtistByTrackId(id);
-    if (track == null) {
-        return "redirect:/artists?error=notfound";
-    }
-    model.addAttribute("track", track);
-    model.addAttribute("album", album);
-    model.addAttribute("top5List", top5List);
-    model.addAttribute("artist", artist);
-    return "review/track";
+        TrackScore score = trackReviewService.getTrackScore(id);
+        if (track == null) {
+            return "redirect:/artists?error=notfound";
+        }
+        model.addAttribute("track", track);
+        model.addAttribute("album", album);
+        model.addAttribute("top5List", top5List);
+        model.addAttribute("artist", artist);
+        model.addAttribute("score", score);
+        return "review/track";
     }
 
     // @Autowired
-    // private TrackService trackService;
 
     // // 트랙 목록 화면
     // @GetMapping

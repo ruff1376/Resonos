@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>트랙 리뷰</title>
+    <title th:text="|${track.title} 리뷰|">트랙 리뷰</title>
     <th:block th:replace="~{fragments/link::album}"></th:block>
 </head>
 
@@ -28,7 +28,8 @@
                 <a th:href="@{/albums(id=${album.id})}">
                     <p th:text="|${album.title}💿의 ${track.trackNo}th track|">어디앨범의 몇번째곡</p>
                 </a>
-                <p>🔮 99 (✅유저 30, 일반유저 300명)</p>
+                <!-- th:if 로 널값이면 처음투표하세요 어쩌고 쓰기 -->
+                <!-- <p th:text="${|🔮 ${score.averageScore} (✅유저 30, 일반유저 300명)|}"></p> -->
                 <div>
                     <div class="btn btn-gold">공유🚀</div>
                     <div class="btn btn-gold">저장 💾</div>
@@ -81,11 +82,11 @@
                     <!-- 반복문 -->
                     <li class="comment">
                         <div class="name-and-score">
-                            <p id="subtitle">페페사랑단</p>
+                            <p id="subtitle">페페사랑단12</p>
                             <p> 🔮 100</p>
                         </div>
                         <div class="review-content">
-                            <p>우리 페페 많이 사랑해주세요2</p>
+                            <p>우리 페페 많이 사랑해주세요222</p>
                         </div>
                         <div class="review-util">
                             <p>2025.05.21</p>
