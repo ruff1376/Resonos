@@ -37,8 +37,8 @@ public class AlbumServiceImpl implements AlbumService {
 
     // 앨범 단건 조회
     @Override
-    public Album select(Integer no) throws Exception {
-        return albumMapper.select(no);
+    public Album select(String id) throws Exception {
+        return albumMapper.select(id);
     }
 
     // 앨범 등록

@@ -25,7 +25,9 @@
                         <p th:text="${artist.name}">아티스트</p>
                     </a>
                     <p th:text="${#dates.format(album.releaseDate, 'yyyy-MM-dd')}">발매일</p>
-                    <p th:text="|${album.title}💿의 ${track.trackNo}th track|">어디앨범의 몇번째곡</p>
+                    <a th:href="@{/albums(id=${album.id})}">
+                        <p th:text="|${album.title}💿의 ${track.trackNo}th track|">어디앨범의 몇번째곡</p>
+                    </a>
                     <p>🔮 99 (✅유저 30, 일반유저 300명)</p>
                     <div>
                         <div class="btn btn-gold">공유🚀</div>
@@ -167,7 +169,7 @@
             <!-- 앨범 트랙리스트 분위기 뭐뭐.. -->
             <div class="info-card">
                 <div class="info top5track">
-                    <p id="headline" th:text="|${album.title}💿 🔥TOP ${#lists.size(top5List)}트랙|"></p>
+                    <p id="headline" th:text="|${album.title}💿 🔥TOP ${#lists.size(top5List)}|"></p>
                     <th:block th:each="tops, stat : ${top5List}">
                         <a th:href="@{/tracks(id=${tops.id})}">
                             <p th:text="|${stat.count}. ${tops.title}  ${tops.formattedDuration}|"></p>

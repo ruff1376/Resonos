@@ -18,7 +18,7 @@ public interface AlbumMapper {
     // 데이터 수
     public long count() throws Exception;
     // 조회
-    public Album select(Integer no) throws Exception;
+    public Album select(String id) throws Exception;
     // 삽입
     public int insert(Album album) throws Exception;
     // 수정

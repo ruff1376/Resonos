@@ -97,7 +97,8 @@ img {
 }
 .song-card .song-overall {
     display: flex;
-    width: 400px;
+    max-width: 400px;
+    min-width: 350px;
     height: 250px;
     justify-content: center;
     align-items: center;
@@ -285,6 +286,7 @@ img {
 .top5track {
     flex: 1 1 auto;         /* 유연하게 줄어들고 늘어남 */
     max-width: 400px;       /* 최대 너비 제한 */
+    min-width: 350px;
 }
 .top5track > p:first-child,
 .mood-vote p ,
@@ -389,3 +391,91 @@ img {
 .moods .btn{
   flex:0 0 auto;           /* grow 0, shrink 0, basis auto */
 }
+
+/* 애니메이션 */
+@keyframes spin360 {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.track:hover {          /* 카드 확대 */
+  transform: scale(1.05);
+}
+
+.track:hover .track-img img {          /* 이미지 회전 */
+  animation: spin360 6s linear infinite;
+}
+/* 컨테이너 */
+.track-img {
+  position: relative;          /* 안쪽 절대좌표 기준 */
+  width: 100px; height: 100px; /* LP 크기 */
+  border-radius: 50%;
+  border: 2px solid var(--main-color);
+  overflow: hidden;            /* 이미지 둥글게 자르기 */
+}
+
+/* LP 이미지 */
+.track-img .disc {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  animation: spin360 10s linear infinite;
+}
+
+/* 심(스핀들) */
+.track-img .center-pin {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 25px; height: 25px;      /* 원 크기 */
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--background-color);
+  box-shadow: 0 0 4px rgba(0,0,0,.3);
+  z-index: 2;                     /* 디스크 위로 */
+  pointer-events: none;           /* 클릭 방지 */
+  opacity: 0.95;
+}
+.track-img img {
+  /* 중심축(50%·50%)을 기준으로 회전 */
+  transform-origin: 50% 50%;
+  /* 선택: 이미지 크기 조절 예시 */
+  object-fit: cover;
+  animation: none;
+}
+.track-graphy {
+    overflow: hidden;
+    padding: 10px;
+}
+.track-container a {
+    display: inline-block;
+    width: 270px;
+}
+.track-container::-webkit-scrollbar {
+  display: none;          /* 크롬, 사파리, 오페라용 스크롤바 숨기기 */
+}
+.track-container {
+    display: flex;
+    padding: 10px;
+    gap: 20px;
+    max-width: 600px;
+    overflow-x: auto;
+}
+.track {
+    display: flex;
+    border: 2px solid var(--main-color);
+    border-radius: 10px;
+    padding: 10px;
+    gap: 20px;
+    transition: transform 0.3s ease;
+}
+.track-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+.track-info p {
+    width: 130px;
+    white-space: nowrap;         /* 줄 바꿈 안 함 */
+    overflow: hidden;            /* 넘치는 부분 숨김 */
+    text-overflow: ellipsis !important;     /* ... 표시 */
+    margin: 0;
+}
+/* 애니메이션 끝 */
