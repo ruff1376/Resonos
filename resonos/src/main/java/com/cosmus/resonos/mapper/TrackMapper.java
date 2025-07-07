@@ -3,6 +3,7 @@ package com.cosmus.resonos.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Track;
@@ -45,5 +46,7 @@ public interface TrackMapper {
     public List<Track> searchList(String keyword) throws Exception;
     // 검색 결과 전체 목록
     public List<Track> allSearchList(String keyword) throws Exception;
+    // 플레이리스트에 추가할 트랙 목록 검색
+    public List<Track> addTrackList(@Param("keyword") String keyword) throws Exception;
 
 }
