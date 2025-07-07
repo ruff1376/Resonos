@@ -715,6 +715,14 @@ button.like {background-color: inherit; border: none;}
   transition: all 0.2s;
 }
 #addTrack:hover {transform: scale(1.1);}
+.order-no {min-width: 20px; color: #bbb;}
+.search-icon {
+  position: absolute;
+  left: 10px;
+  font-size: 20px;
+  color: #B1B1B1;
+  pointer-events: none;
+}
 
 /* 내 활동 */
 .con-activity .info-wrapper .info-section {height: 300px; text-align: start;}
@@ -838,7 +846,7 @@ button.like {background-color: inherit; border: none;}
 .modal-track.action {
   visibility: visible;
   opacity: 1;
-  transform: translate(-50%, -55%);
+  transform: translate(-50%, -50%);
 }
 .modal-track .modal-contents {
   width: 100%;

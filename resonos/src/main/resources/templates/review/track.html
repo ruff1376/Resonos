@@ -28,10 +28,18 @@
                 <a th:href="@{/albums(id=${album.id})}">
                     <p th:text="|${album.title}💿의 ${track.trackNo}th track|">어디앨범의 몇번째곡</p>
                 </a>
-                <!-- th:if 로 널값이면 처음투표하세요 어쩌고 쓰기 -->
-                <!-- <p th:text="${|🔮 ${score.averageScore} (✅유저 30, 일반유저 300명)|}"></p> -->
+                <th:block th:if="${score == null or score.averageScore == null}">
+                    <p>아직 리뷰가 없어요 😅</p>
+                </th:block>
+                <th:block th:if="${score != null and score.averageScore != null}">
+                    <p th:text="|🔮 ${score.averageScore}점 (✅유저 ${score.criticCount}명, 일반유저 ${score.userCount}명)|"></p>
+                </th:block>
                 <div>
-                    <div class="btn btn-gold">공유🚀</div>
+                    <th:block th:each="review : ${reviews}">
+    <pre th:text="${review}">리뷰 안 보임</pre>
+</th:block>
+                    <p th:text="${review}">리뷰 목록 없음</p>
+                    <div class="btn btn-gold">좋아요 ❤️</div>
                     <div class="btn btn-gold">저장 💾</div>
                 </div>
             </div>
@@ -67,20 +75,52 @@
         <div class="review-card">
             <p id="headline">평점 & 리뷰</p>
             <div class="review-score">
-                <h1 id="headline">🔮 99</h1>
-                <div class="score-bar">
+                <th:block th:if="${score == null or score.averageScore == null}">
+                    <h1 id="headline">첫 리뷰를 작성해보세요 🤩</h1>
+                </th:block>
+                <th:block th:if="${score != null and score.averageScore != null}">
+                    <h1 id="headline" th:text="|🔮 ${score.averageScore}|"></h1>
+                </th:block>
+                <th:block th:if="${score != null and score.averageScore != null}">
                     <div class="score-bar">
-                        <div class="score-fill" style="width: 99%;">99</div>
+                        <div class="score-fill" th:style="'width:' + ${score.averageScore} + '%'">
+                            <span th:text="${score.averageScore}"></span>
+                        </div>
                     </div>
-                    <!-- <div class="score-fill" th:style="'width:' + ${score} + '%'">
-                            <span th:text="${score}"></span>
-                        </div> -->
-                </div>
+                </th:block>
             </div>
             <div class="review-container">
                 <ul class="comment-list">
                     <!-- 반복문 -->
-                    <li class="comment">
+                    <th:block th:each="review : ${review}">
+                        <li class="comment">
+                            <!-- 작성자 + 평점 -->
+                            <div class="name-and-score">
+                                <!-- ① id → class 로 (반복문에서 id 중복 방지) -->
+                                <p id="subtitle" th:text="${review.reviewer.nickname}">작성자 이름</p>
+                                <!-- ② boolean 프로퍼티: Lombok 의 isPro() → 'pro' 로 접근 -->
+                                <th:block th:if="${review.reviewer != null and review.reviewer.pro}">
+                                    <p>✅</p>
+                                </th:block>
+                                <p th:text="|🔮 ${review.rating}|">🔮 100</p>
+                            </div>
+                            <!-- ③ 리뷰 본문 -->
+                            <div class="review-content">
+                                <p th:text="${review.content}">리뷰 내용</p>
+                            </div>
+                            <!-- ④ 유틸 영역 -->
+                            <div class="review-util">
+                                <!-- 날짜 포맷 -->
+                                <p th:text="${#temporals.format(review.createdAt, 'yyyy.MM.dd')}">2025.05.21</p>
+                                <!-- 좋아요: review.likes (s 붙음) -->
+                                <a href="#">
+                                    <p th:text="|❤️ ${review.likes}|">❤️ 0</p>
+                                </a>
+                                <a href="#" class="report">신고</a>
+                            </div>
+                        </li>
+                    </th:block>
+                    <!-- <li class="comment">
                         <div class="name-and-score">
                             <p id="subtitle">페페사랑단12</p>
                             <p> 🔮 100</p>
@@ -93,35 +133,7 @@
                             <a href="#">❤ 3</a>
                             <a href="#" id="report">신고</a>
                         </div>
-                    </li>
-                    <li class="comment">
-                        <div class="name-and-score">
-                            <p id="subtitle">페페사랑단</p>
-                            <p> 🔮 100</p>
-                        </div>
-                        <div class="review-content">
-                            <p>우리 페페 많이 사랑해주세요</p>
-                        </div>
-                        <div class="review-util">
-                            <p>2025.05.21</p>
-                            <a href="#">❤ 3</a>
-                            <a href="#" id="report">신고</a>
-                        </div>
-                    </li>
-                    <li class="comment">
-                        <div class="name-and-score">
-                            <p id="subtitle">페페사랑단</p>
-                            <p> 🔮 100</p>
-                        </div>
-                        <div class="review-content">
-                            <p>우리 페페 많이 사랑해주세요</p>
-                        </div>
-                        <div class="review-util">
-                            <p>2025.05.21</p>
-                            <a href="#">❤ 3</a>
-                            <a href="#" id="report">신고</a>
-                        </div>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
             <!-- 페이지네이션 -->

@@ -1,7 +1,12 @@
 package com.cosmus.resonos.domain;
 
-import lombok.*;
 import java.time.LocalDateTime;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -45,4 +50,6 @@ public class TrackReview {
      * 트랙 FK (Spotify ID 등 문자열)
      */
     private String trackId;
+
+    private Reviewer reviewer;  // 연관된 Reviewer 정보 포함
 }

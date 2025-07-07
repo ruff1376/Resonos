@@ -62,4 +62,9 @@ public class TrackReviewServiceImpl implements TrackReviewService {
     public void dislike(Long id) {
         mapper.incrementDislikes(id);
     }
+
+    @Override
+    public List<TrackReview> reviewWithReviewerByTrackId(String trackId) {
+        return mapper.reviewWithReviewerByTrackId(trackId);
+    }
 }
