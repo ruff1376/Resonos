@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Track;
 // import com.cosmus.resonos.external.SpotifyApiClient;
 import com.cosmus.resonos.mapper.TrackMapper;
@@ -26,6 +27,13 @@ public class TrackServiceImpl implements TrackService {
     @Override
     public List<Track> mainNewList() throws Exception {
         return trackMapper.mainNewList();
+    }
+    
+    @Override
+    public List<Track> newList(Pagination pagination) throws Exception {
+        long total = trackMapper.count();
+        pagination.setTotal(total);
+        return trackMapper.newList(pagination);
     }
 
     // 트랙 단건 조회
@@ -130,4 +138,5 @@ public class TrackServiceImpl implements TrackService {
     public List<Track> allSearchList(String keyword) throws Exception {
         return trackMapper.allSearchList(keyword);
     }
+
 }

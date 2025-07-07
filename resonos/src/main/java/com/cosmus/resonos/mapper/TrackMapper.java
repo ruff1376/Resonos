@@ -4,15 +4,19 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.cosmus.resonos.domain.Album;
+import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Track;
 
 @Mapper
 public interface TrackMapper {
     // 목록
     public List<Track> list() throws Exception;
-    // 메인 회면 최신 앨범 목록
+    // 메인 화면 최신 트랙 목록
     public List<Track> mainNewList() throws Exception;
+    // 최신 트랙 목록
+    public List<Track> newList(Pagination pagination) throws Exception;
+    // 데이터 수
+    public long count() throws Exception;
     // 조회
     public Track selectById(String id) throws Exception;
     // 삽입
