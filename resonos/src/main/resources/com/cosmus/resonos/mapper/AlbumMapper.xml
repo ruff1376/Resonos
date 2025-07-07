@@ -59,7 +59,8 @@
         genre = #{genre},
         label = #{label},
         description = #{description},
-        artist_id = #{artistId}
+        artist_id = #{artistId},
+        release_date = #{releaseDate}
     WHERE id = #{id}
   </update>
 

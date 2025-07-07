@@ -209,12 +209,12 @@
         </div>
         <div class="resonos-card p-3">
           <!-- 컬럼 헤더 -->
-<div class="list-group-item bg-secondary text-dark fw-bold d-flex flex-nowrap align-items-center text-center justify-content-between" style="border-radius:8px 8px 0 0;">
-  <div style="flex-basis:12%;min-width:80px;">ID</div>
-  <div style="flex-basis:32%;min-width:160px;">이름</div>
-  <div style="flex-basis:16%;min-width:80px;">프로필</div>
-  <div style="flex-basis:14%;min-width:80px;">관리</div>
-</div>
+        <div class="list-group-item bg-secondary text-dark fw-bold d-flex flex-nowrap align-items-center text-center justify-content-between" style="border-radius:8px 8px 0 0;">
+          <div style="flex-basis:12%;min-width:80px;">ID</div>
+          <div style="flex-basis:32%;min-width:160px;">이름</div>
+          <div style="flex-basis:16%;min-width:80px;">프로필</div>
+          <div style="flex-basis:14%;min-width:80px;">관리</div>
+        </div>
 
           <div class="list-group">
             <!-- 상위 10개만 보여주기 (추후 변경 가능) -->
@@ -288,6 +288,7 @@
     <div id="syncArtistResult" class="alert mt-2 d-none"></div>
     <!-- 동기화 결과 메시지 표시 -->
     <div th:if="${syncMessage}" class="alert alert-info mt-3" th:text="${syncMessage}"></div>
+    
     <!-- 아티스트 검색 폼 -->
     <form id="searchArtistForm" class="mb-3" autocomplete="off">
       <div class="input-group" style="max-width:400px;">
