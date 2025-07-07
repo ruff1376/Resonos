@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>아티스트 리뷰</title>
+    <title th:text="${artist.name}">아티스트 정보</title>
     <th:block th:replace="~{fragments/link::artist}"></th:block>
 </head>
 

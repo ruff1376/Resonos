@@ -33,4 +33,8 @@ public interface ArtistMapper {
     public List<Artist> allSearchList(Map<String, Object> paramMap) throws Exception;
     // 검색 데이터 수
     public long searchCount(String keyword) throws Exception;
+    // 전체 수
+    public long count() throws Exception;
+    // 앨범아이디로 아티스트객체
+    public Artist findArtistByAlbumId(String id) throws Exception;
 }

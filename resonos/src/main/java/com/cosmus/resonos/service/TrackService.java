@@ -22,7 +22,7 @@ public interface TrackService {
     public boolean delete(String id) throws Exception;
     // 존재 여부 확인
     public boolean exists(String id) throws Exception;
-    
+
     // 동기화: Spotify에서 트랙 정보를 가져와서 데이터베이스에 저장
     public void syncTrackFromSpotify(String spotifyTrackId);
     // 아티스트별 상위7개 인기곡
@@ -45,4 +45,7 @@ public interface TrackService {
     public List<Track> searchList(String keyword) throws Exception;
     // 검색 결과 전체 목록
     public List<Track> allSearchList(Map<String, Object> paramMap) throws Exception;
+
+    // 플레이리스트에 추가할 트랙 목록 검색
+    public List<Track> addTrackList(String keyword) throws Exception;
 }

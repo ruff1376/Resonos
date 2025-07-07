@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>앨범 리뷰</title>
+    <title th:text="|${album.title} 리뷰|">앨범 리뷰</title>
     <th:block th:replace="~{fragments/link::album}"></th:block>
 </head>
 
@@ -21,6 +21,9 @@
             </div>
             <div class="song-info">
                 <p id="headline" th:text="${album.title}">앨범제목</p>
+                <a th:href="@{artists(id=${artist.id})}">
+                    <p th:text="${artist.name}">아티스트 이름</p>
+                </a>
                 <p th:text="${#dates.format(album.releaseDate, 'yyyy-MM-dd')}">발매일</p>
                 <p th:text="${album.label}">레이블</p>
                 <p>🔮 99 (✅유저 30, 일반유저 300명)</p>
@@ -30,7 +33,7 @@
             </div>
             <div class="track-graphy">
                 <div class="track-header">
-                    <p id="headline">디스코 그래피</p>
+                    <p id="headline" th:text="|${album.title}💿 Tracks|">수록곡</p>
                 </div>
                 <div class="track-container">
                     <!-- 반복문 구간 -->
@@ -44,7 +47,7 @@
                                 <div class="track-info">
                                     <p id="subtitle" th:text="${track.title}">트랙명</p>
                                     <p th:text="|${track.formattedDuration}|">곡길이</p>
-                                    <p th:text="|${track.trackNo}'th Track|">번째곡</p>
+                                    <p th:text="|${track.trackNo}th Track|">번째곡</p>
                                 </div>
                             </div>
                         </a>
@@ -53,10 +56,37 @@
             </div>
         </div>
         <!-- 앨범 카드 끝 -->
+
+        <!-- iframe -->
+        <div class="iframe-card">
+            <div class="spotify">
+                <!-- 스포티파이 로그인 되어있지않을때 30초 미리듣기 오디오태그 -->
+                <iframe th:src="|https://open.spotify.com/embed/track/${track.id}?utm_source=generator|" frameborder="0"
+                    allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy">
+                </iframe>
+            </div>
+            <div class="youtube">
+                <th:block th:if="${!#strings.isEmpty(track.mvUrl)}">
+                    <iframe width="560" height="315" th:src="|https://www.youtube.com/embed/${track.mvUrl}|"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                    </iframe>
+                </th:block>
+                <!-- ② MV URL이 없을 때 → 준비중 이미지 -->
+                <th:block th:if="${#strings.isEmpty(track.mvUrl)}">
+                    <img th:src="@{/img/wait_plz.png}" alt="뮤직비디오 준비중" width="560" height="315"
+                        style="object-fit:cover;">
+                </th:block>
+            </div>
+        </div>
+        <!-- iframe 카드 끝 -->
+
         <!-- 앨범 트랙리스트 분위기 뭐뭐.. -->
         <div class="info-card">
             <div class="info top5track">
-                <p id="headline">앨범 인기 TOP 5 트랙</p>
+                <p id="headline" th:text="|${album.title}💿 TOP${#lists.size(top5List)}🔥|">앨범 인기 TOP 5 트랙</p>
                 <th:block th:each="tops, stat : ${top5List}">
                     <a th:href="@{tracks(id=${tops.id})}">
                         <p th:text="|${stat.count}. ${tops.title} ${track.formattedDuration}|"></p>
@@ -64,7 +94,7 @@
                 </th:block>
             </div>
             <div class="info album-moods">
-                <p id="headline">앨범의 분위기</p>
+                <p id="headline" th:text="|${album.title}💿의 분위기|">앨범의 분위기</p>
                 <div class="mood-list">
                     <button class="btn btn-gold">동해물과</button>
                     <button class="btn btn-gold">백두산이 마르고</button>
@@ -73,7 +103,7 @@
                 </div>
             </div>
             <div class="info pl-list">
-                <p id="subtitle">이 트랙을 포함한 플리🎶</p>
+                <p id="subtitle" th:text="|${album.title}의 트랙이 포함된 플리🎶|">이 트랙을 포함한 플리🎶</p>
                 <p>오늘 헤어진 사람들은 위한 플리 ❤352</p>
                 <p>혼자있고 싶어요,, ❤242</p>
                 <p>😢😢😢😢😢😢😢😢😢 ❤122</p>
@@ -178,31 +208,7 @@
         </div>
         <!-- 분위기 끝 -->
 
-        <!-- iframe -->
-        <div class="iframe-card">
-            <div class="spotify">
-                <!-- 스포티파이 로그인 되어있지않을때 30초 미리듣기 오디오태그 -->
-                <iframe th:src="|https://open.spotify.com/embed/track/${track.id}?utm_source=generator|" frameborder="0"
-                    allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                    loading="lazy">
-                </iframe>
-            </div>
-            <div class="youtube">
-                <th:block th:if="${track.mvUrl != null and track.mvUrl != 'empty_mv_url'}">
-                    <iframe width="560" height="315" th:src="|https://www.youtube.com/embed/${track.mvUrl}|"
-                        title="YouTube video player" frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-                    </iframe>
-                </th:block>
-                <!-- ② MV URL이 없을 때 → 준비중 이미지 -->
-                <th:block th:if="${track.mvUrl == null or track.mvUrl == 'empty_mv_url'}">
-                    <img th:src="@{/img/wait_plz.png}" alt="뮤직비디오 준비중" width="560" height="315"
-                        style="object-fit:cover;">
-                </th:block>
-            </div>
-        </div>
-        <!-- iframe 카드 끝 -->
+        
     </div>
     <th:block th:replace="~{fragments/script::artist}"></th:block>
 </body>

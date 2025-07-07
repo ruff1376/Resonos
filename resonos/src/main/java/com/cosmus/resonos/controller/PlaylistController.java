@@ -3,17 +3,20 @@ package com.cosmus.resonos.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Playlist;
@@ -76,7 +79,7 @@ public class PlaylistController {
      * @throws Exception
      */
     @GetMapping("/{id}")
-    public String playlistDetail(Model model, @PathVariable("id") long id) throws Exception {
+    public String playlistDetail(Model model, @PathVariable("id") long id, @RequestParam(value = "success", required = false) String success) throws Exception {
         PlaylistDTO playlist = playlistService.trackOfPlaylist(id);
 
         if(playlist == null) {
@@ -84,18 +87,26 @@ public class PlaylistController {
         } else {
             model.addAttribute("playlist", playlist);
         }
+        model.addAttribute("success", success);
         model.addAttribute("lastPath", "playlist");
         model.addAttribute("playlistObj", new Playlist());
         return "user/playlist_detail";
     }
 
-    @PutMapping("/change-orderNo")
-    public String postMethodName(@RequestBody List<Map<String, Integer>> orderList) {
+    /**
+     * 트랙 순서 바꾸기 요청
+     * @param playlistId
+     * @param orderList
+     * @return
+     * @throws Exception
+     */
+    @PutMapping("/{playlistId}/tracks/order")
+    public ResponseEntity<?> postMethodName(@PathVariable("playlistId") String playlistId, @RequestBody List<Map<String, Object>> orderList) throws Exception {
+        boolean result = playlistService.updateTrackOrder(playlistId, orderList);
+        if(result) return new ResponseEntity<>("정렬 완료.", HttpStatus.OK);
 
-        return null;
+        return new ResponseEntity<>("정렬 실패.", HttpStatus.BAD_REQUEST);
     }
-
-
 
     @PostMapping
     public ResponseEntity<String> createPlaylist(@RequestBody Playlist playlist) {
@@ -110,18 +121,21 @@ public class PlaylistController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updatePlaylist(@PathVariable Long id, @RequestBody Playlist playlist) {
-        try {
+    @PostMapping("/{id}")
+    public String updatePlaylist(@PathVariable Long id, @ModelAttribute Playlist playlist, @AuthenticationPrincipal CustomUser loginUser) throws Exception {
+        Playlist currentPlaylist = playlistService.select(id);
+        if(!currentPlaylist.getUserId().equals(loginUser.getUser().getId()))
+            return "redirect:/playlists/" + id + "?owner=false";
+        else {
             playlist.setId(id);
+            playlist.setUserId(loginUser.getUser().getId());
             boolean success = playlistService.update(playlist);
-            if (success) {
-                return ResponseEntity.ok("Playlist updated");
+            if (success)  {
+                log.info("updatePlaylist : 플레이리스트 업데이트 성공");
+                return "redirect:/playlists/" + id + "?success=true";
             }
-            return ResponseEntity.status(500).body("Failed to update playlist");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to update playlist: " + e.getMessage());
         }
+        return "redirect:/playlists/" + id + "?success=false";
     }
 
     @DeleteMapping("/{id}")

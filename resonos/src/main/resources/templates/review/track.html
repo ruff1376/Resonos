@@ -5,94 +5,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>트랙 리뷰</title>
+    <title th:text="|${track.title} 리뷰|">트랙 리뷰</title>
     <th:block th:replace="~{fragments/link::album}"></th:block>
 </head>
 
 <body layout:fragment="content">
-        <div class="wrapper">
-            <!-- 트랙 카드 -->
-            <div class="song-card">
-                <div class="song-overall">
-                    <div class="song-img">
-                        <img th:src="@{${album.coverImage}}" alt="">
-                        <span class="center-pin"></span>
-                    </div>
-                </div>
-                <div class="song-info">
-                    <p id="headline" th:text="${track.title}">트랙명</p>
-                    <a th:href="@{artists(id=${artist.id})}">
-                        <p th:text="${artist.name}">아티스트</p>
-                    </a>
-                    <p th:text="${#dates.format(album.releaseDate, 'yyyy-MM-dd')}">발매일</p>
-                    <a th:href="@{/albums(id=${album.id})}">
-                        <p th:text="|${album.title}💿의 ${track.trackNo}th track|">어디앨범의 몇번째곡</p>
-                    </a>
-                    <p>🔮 99 (✅유저 30, 일반유저 300명)</p>
-                    <div>
-                        <div class="btn btn-gold">공유🚀</div>
-                        <div class="btn btn-gold">저장 💾</div>
-                    </div>
+    <div class="wrapper">
+        <!-- 트랙 카드 -->
+        <div class="song-card">
+            <div class="song-overall">
+                <div class="song-img">
+                    <img th:src="@{${album.coverImage}}" alt="">
+                    <span class="center-pin"></span>
                 </div>
             </div>
-            <!-- 트랙 카드 끝 -->
-            <!-- iframe -->
-            <div class="iframe-card">
-                <div class="spotify">
-                    <!-- 스포티파이 로그인 되어있지않을때 30초 미리듣기 오디오태그 -->
-                    <iframe
-                        th:src="|https://open.spotify.com/embed/track/${track.id}?utm_source=generator|"
-                        frameborder="0" allowfullscreen
-                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                        loading="lazy">
+            <div class="song-info">
+                <p id="headline" th:text="${track.title}">트랙명</p>
+                <a th:href="@{artists(id=${artist.id})}">
+                    <p th:text="${artist.name}">아티스트</p>
+                </a>
+                <p th:text="${#dates.format(album.releaseDate, 'yyyy-MM-dd')}">발매일</p>
+                <a th:href="@{/albums(id=${album.id})}">
+                    <p th:text="|${album.title}💿의 ${track.trackNo}th track|">어디앨범의 몇번째곡</p>
+                </a>
+                <!-- th:if 로 널값이면 처음투표하세요 어쩌고 쓰기 -->
+                <!-- <p th:text="${|🔮 ${score.averageScore} (✅유저 30, 일반유저 300명)|}"></p> -->
+                <div>
+                    <div class="btn btn-gold">공유🚀</div>
+                    <div class="btn btn-gold">저장 💾</div>
+                </div>
+            </div>
+        </div>
+        <!-- 트랙 카드 끝 -->
+        <!-- iframe -->
+        <div class="iframe-card">
+            <div class="spotify">
+                <!-- 스포티파이 로그인 되어있지않을때 30초 미리듣기 오디오태그 -->
+                <iframe th:src="|https://open.spotify.com/embed/track/${track.id}?utm_source=generator|" frameborder="0"
+                    allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy">
+                </iframe>
+            </div>
+            <div class="youtube">
+                <th:block th:if="${!#strings.isEmpty(track.mvUrl)}">
+                    <iframe width="560" height="315" th:src="|https://www.youtube.com/embed/${track.mvUrl}|"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
                     </iframe>
-                </div>
-                <div class="youtube">
-                    <th:block th:if="${mv != null and mv != 'empty_mv_url'}">
-                        <iframe width="560" height="315"
-                                th:src="'https://www.youtube.com/embed/' + ${mv}"
-                                title="YouTube video player"
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                referrerpolicy="strict-origin-when-cross-origin"
-                                allowfullscreen>
-                        </iframe>
-                    </th:block>
-                    <!-- ② MV URL이 없을 때 → 준비중 이미지 -->
-                    <th:block th:if="${mv == null or mv == 'empty_mv_url'}">
-                            <img th:src="@{/img/wait_plz.png}"
-                                alt="뮤직비디오 준비중"
-                                width="560" height="315"
-                                style="object-fit:cover;">
-                    </th:block>
-                </div>
+                </th:block>
+                <!-- ② MV URL이 없을 때 → 준비중 이미지 -->
+                <th:block th:if="${#strings.isEmpty(track.mvUrl)}">
+                    <img th:src="@{/img/wait_plz.png}" alt="뮤직비디오 준비중" width="560" height="315"
+                        style="object-fit:cover;">
+                </th:block>
             </div>
-            <!-- iframe 카드 끝 -->
+        </div>
+        <!-- iframe 카드 끝 -->
 
-            <!-- 평점&리뷰 -->
-            <div class="review-card">
-                <p id="headline">평점 & 리뷰</p>
-                <div class="review-score">
-                    <h1 id="headline">🔮 99</h1>
+        <!-- 평점&리뷰 -->
+        <div class="review-card">
+            <p id="headline">평점 & 리뷰</p>
+            <div class="review-score">
+                <h1 id="headline">🔮 99</h1>
+                <div class="score-bar">
                     <div class="score-bar">
-                        <div class="score-bar">
-                            <div class="score-fill" style="width: 99%;">99</div>
-                        </div>
-                        <!-- <div class="score-fill" th:style="'width:' + ${score} + '%'">
+                        <div class="score-fill" style="width: 99%;">99</div>
+                    </div>
+                    <!-- <div class="score-fill" th:style="'width:' + ${score} + '%'">
                             <span th:text="${score}"></span>
                         </div> -->
-                    </div>
                 </div>
-                <div class="review-container">
+            </div>
+            <div class="review-container">
                 <ul class="comment-list">
                     <!-- 반복문 -->
                     <li class="comment">
                         <div class="name-and-score">
-                            <p id="subtitle">페페사랑단</p>
+                            <p id="subtitle">페페사랑단12</p>
                             <p> 🔮 100</p>
                         </div>
                         <div class="review-content">
-                            <p>우리 페페 많이 사랑해주세요2</p>
+                            <p>우리 페페 많이 사랑해주세요222</p>
                         </div>
                         <div class="review-util">
                             <p>2025.05.21</p>
@@ -129,73 +123,73 @@
                         </div>
                     </li>
                 </ul>
-                </div>
-                <!-- 페이지네이션 -->
-                <div class="reply">
-                    <form action="">
-                        <textarea name="" id="" placeholder="리뷰를 입력해주세요"></textarea>
-                        <div class="score-and-submit">
-                            <input type="text" name="" id="" placeholder="점수를 입력해주세요">
-                            <button class="btn btn-gold">리뷰작성</button>
-                        </div>
-                    </form>
-                </div>
             </div>
-            <!-- 평점&리뷰 끝 -->
-            
-            <!-- 분위기 -->
-            <div class="mood-card">
-                <div class="chart">
-                    <canvas id="hexRadarChart"></canvas>
-                </div>
-                <div class="mood-vote">
-                    <div class="vote-header">
-                        <p id="headline">Mood Tag</p>
+            <!-- 페이지네이션 -->
+            <div class="reply">
+                <form action="">
+                    <textarea name="" id="" placeholder="리뷰를 입력해주세요"></textarea>
+                    <div class="score-and-submit">
+                        <input type="text" name="" id="" placeholder="점수를 입력해주세요">
+                        <button class="btn btn-gold">리뷰작성</button>
                     </div>
-                    <div class="moods">
-                        <!-- 분위기 반복문 -->
-                        <div class="btn btn-gold">분위기1</div>
-                        <div class="btn btn-gold">분위기1324</div>
-                        <div class="btn btn-gold">분위기133</div>
-                        <div class="btn btn-gold">분위기1</div>
-                        <div class="btn btn-gold">분위기144</div>
-                        <div class="btn btn-gold">분위기1</div>
-                    </div>
-                    <button class="btn btn-gold">분위기 투표</button>
-                </div>
+                </form>
             </div>
-            <!-- 분위기 끝 -->
-
-            <!-- 앨범 트랙리스트 분위기 뭐뭐.. -->
-            <div class="info-card">
-                <div class="info top5track">
-                    <p id="headline" th:text="|${album.title}💿 🔥TOP ${#lists.size(top5List)}|"></p>
-                    <th:block th:each="tops, stat : ${top5List}">
-                        <a th:href="@{/tracks(id=${tops.id})}">
-                            <p th:text="|${stat.count}. ${tops.title}  ${tops.formattedDuration}|"></p>
-                        </a>
-                    </th:block>   
-                </div>
-                <div class="info album-moods">
-                    <p id="headline">트랙의 분위기</p>
-                    <div class="mood-list">
-                        <button class="btn btn-gold">동해물과</button>
-                        <button class="btn btn-gold">백두산이 마르고</button>
-                        <button class="btn btn-gold">닳도록 하느</button>
-                        <button class="btn btn-gold">닳도록 하느</button>
-                    </div>
-                </div>
-                <div class="info pl-list">
-                    <p id="subtitle">이 트랙을 포함한 플리🎶</p>
-                    <p>오늘 헤어진 사람들은 위한 플리  ❤352</p>
-                    <p>혼자있고 싶어요,,  ❤242</p>
-                    <p>😢😢😢😢😢😢😢😢😢  ❤122</p>
-                    <p>페페사랑단 플레이리스트  ❤64</p>
-                </div>
-            </div>
-            <!-- 앨범 트랙리스트 분위기 뭐뭐..끝 -->
-            
         </div>
+        <!-- 평점&리뷰 끝 -->
+
+        <!-- 분위기 -->
+        <div class="mood-card">
+            <div class="chart">
+                <canvas id="hexRadarChart"></canvas>
+            </div>
+            <div class="mood-vote">
+                <div class="vote-header">
+                    <p id="headline">Mood Tag</p>
+                </div>
+                <div class="moods">
+                    <!-- 분위기 반복문 -->
+                    <div class="btn btn-gold">분위기1</div>
+                    <div class="btn btn-gold">분위기1324</div>
+                    <div class="btn btn-gold">분위기133</div>
+                    <div class="btn btn-gold">분위기1</div>
+                    <div class="btn btn-gold">분위기144</div>
+                    <div class="btn btn-gold">분위기1</div>
+                </div>
+                <button class="btn btn-gold">분위기 투표</button>
+            </div>
+        </div>
+        <!-- 분위기 끝 -->
+
+        <!-- 앨범 트랙리스트 분위기 뭐뭐.. -->
+        <div class="info-card">
+            <div class="info top5track">
+                <p id="headline" th:text="|${album.title}💿 🔥TOP ${#lists.size(top5List)}|"></p>
+                <th:block th:each="tops, stat : ${top5List}">
+                    <a th:href="@{/tracks(id=${tops.id})}">
+                        <p th:text="|${stat.count}. ${tops.title}  ${tops.formattedDuration}|"></p>
+                    </a>
+                </th:block>
+            </div>
+            <div class="info album-moods">
+                <p id="headline">트랙의 분위기</p>
+                <div class="mood-list">
+                    <button class="btn btn-gold">동해물과</button>
+                    <button class="btn btn-gold">백두산이 마르고</button>
+                    <button class="btn btn-gold">닳도록 하느</button>
+                    <button class="btn btn-gold">닳도록 하느</button>
+                </div>
+            </div>
+            <div class="info pl-list">
+                <p id="subtitle">이 트랙을 포함한 플리🎶</p>
+                <p>오늘 헤어진 사람들은 위한 플리 ❤352</p>
+                <p>혼자있고 싶어요,, ❤242</p>
+                <p>😢😢😢😢😢😢😢😢😢 ❤122</p>
+                <p>페페사랑단 플레이리스트 ❤64</p>
+            </div>
+        </div>
+        <!-- 앨범 트랙리스트 분위기 뭐뭐..끝 -->
+
+    </div>
 </body>
 
 </html>

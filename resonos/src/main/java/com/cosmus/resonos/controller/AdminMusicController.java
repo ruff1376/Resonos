@@ -1,5 +1,7 @@
 package com.cosmus.resonos.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.Artist;
+import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Track;
 import com.cosmus.resonos.external.SpotifyApiClient;
 import com.cosmus.resonos.service.AlbumService;
@@ -24,6 +27,10 @@ import com.cosmus.resonos.service.ArtistService;
 import com.cosmus.resonos.service.SpotifySyncService;
 import com.cosmus.resonos.service.TrackService;
 
+import lombok.extern.slf4j.Slf4j;
+
+
+@Slf4j
 @Controller
 @RequestMapping("/admin/music")
 public class AdminMusicController {
@@ -39,25 +46,57 @@ public class AdminMusicController {
     @Autowired
     private SpotifySyncService spotifySyncService; // Spotify 동기화 서비스
 
-    public AdminMusicController(TrackService trackService, AlbumService albumService, ArtistService artistService) {
-        this.trackService = trackService;
-        this.albumService = albumService;
-        this.artistService = artistService;
-    }
+
+
+
 
     @GetMapping("")
-    public String musicAdminPage(Model model) throws Exception {
-        List<Track> tracks = trackService.list();
-        List<Album> albums = albumService.list();
-        List<Artist> artists = artistService.list();
-        model.addAttribute("tracks", tracks);
+    public String musicAdminPage(
+        @RequestParam(value = "tab", defaultValue = "track") String tab,
+        @RequestParam(value = "page", defaultValue = "1") int page,
+        @RequestParam(value = "size", defaultValue = "10") int size,
+        Model model
+    ) throws Exception {
+        // 각 탭별 페이지 번호 (기본 1)
+        int albumPage = 1, trackPage = 1, artistPage = 1;
+        if ("album".equals(tab)) albumPage = page;
+        else if ("artist".equals(tab)) artistPage = page;
+        else trackPage = page; // 기본이 track
+
+        // Pagination 객체 생성
+        Pagination albumPagination = new Pagination(albumPage, size, 10, 0);
+        Pagination trackPagination = new Pagination(trackPage, size, 10, 0);
+        Pagination artistPagination = new Pagination(artistPage, size, 10, 0);
+
+        // 전체 아티스트 수 세팅
+        long artistTotal = artistService.count();
+        artistPagination.setTotal(artistTotal);
+
+        // 목록 조회
+        List<Album> albums = albumService.newList(albumPagination);
+        List<Track> tracks = trackService.newList(trackPagination);
+        List<Artist> artists = artistService.listPaging(
+            (int) artistPagination.getIndex(), (int) artistPagination.getSize());
+
+        // 모델에 담기 (pageUri에는 page 파라미터만 사용)
         model.addAttribute("albums", albums);
+        model.addAttribute("albumPagination", albumPagination);
+        model.addAttribute("albumPageUri", "/admin/music?tab=album&size=" + size);
+
+        model.addAttribute("tracks", tracks);
+        model.addAttribute("trackPagination", trackPagination);
+        model.addAttribute("trackPageUri", "/admin/music?tab=track&size=" + size);
+
         model.addAttribute("artists", artists);
-        model.addAttribute("trackForm", new Track());
-        model.addAttribute("albumForm", new Album());
-        model.addAttribute("artistForm", new Artist());
+        model.addAttribute("artistPagination", artistPagination);
+        model.addAttribute("artistPageUri", "/admin/music?tab=artist&size=" + size);
+
+        // 현재 탭 정보도 뷰에 전달 (활성화 표시용)
+        model.addAttribute("tab", tab);
+        model.addAttribute("size", size); // 탭 이동 시 size 유지
         return "admin/music";
     }
+
 
     // 트랙 저장(등록/수정)
     
@@ -158,7 +197,7 @@ public class AdminMusicController {
         return result;
     }
 
-    // 아티스트 검색
+    // spotify 아티스트 검색
     @GetMapping("/search-artist")
     @ResponseBody
     public Map<String, Object> searchArtist(@RequestParam String query) {
@@ -190,23 +229,105 @@ public class AdminMusicController {
         return result;
     }
 
-    // 아티스트 목록 조회 (페이징 처리)
-    // offset: 시작 인덱스, size: 페이지 크기
+    // DB 아티스트 검색
     @GetMapping("/artist/list")
     @ResponseBody
-    public Map<String, Object> getArtistList(@RequestParam int offset, @RequestParam int size) {
+    public Map<String, Object> searchArtistList(
+        @RequestParam(defaultValue = "") String keyword
+    ) {
         Map<String, Object> result = new HashMap<>();
         try {
-            List<Artist> artists = artistService.listPaging(offset, size);
+            List<Artist> items = artistService.searchList(keyword); // 페이징 없는 검색
+            List<Map<String, Object>> artists = new ArrayList<>();
+            for (Artist item : items) {
+                Map<String, Object> artist = new HashMap<>();
+                artist.put("id", item.getId());
+                artist.put("name", item.getName());
+                artist.put("genres", item.getGenres());
+                artist.put("image", item.getProfileImage());
+                artists.add(artist);
+            }
             result.put("success", true);
             result.put("artists", artists);
         } catch (Exception e) {
             result.put("success", false);
-            result.put("artists", java.util.Collections.emptyList());
+            result.put("artists", Collections.emptyList());
             result.put("message", e.getMessage());
         }
         return result;
-}
+    }
+
+    // DB 앨범 검색
+    @GetMapping("/album/list")
+    @ResponseBody
+    public Map<String, Object> searchAlbumList(
+        @RequestParam(defaultValue = "") String keyword
+    ) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            // 페이징 없는 전체 검색 (서비스 계층에서 구현 필요)
+            List<Album> items = albumService.searchList(keyword);
+            List<Map<String, Object>> albums = new ArrayList<>();
+            for (Album item : items) {
+                Map<String, Object> album = new HashMap<>();
+                album.put("id", item.getId());
+                album.put("title", item.getTitle());
+                album.put("coverImage", item.getCoverImage());
+                album.put("releaseDate", item.getReleaseDate());
+                album.put("genre", item.getGenre());
+                album.put("label", item.getLabel());
+                album.put("description", item.getDescription());
+                album.put("artistId", item.getArtistId());
+                albums.add(album);
+            }
+            result.put("success", true);
+            result.put("albums", albums);
+        } catch (Exception e) {
+            result.put("success", false);
+            result.put("albums", Collections.emptyList());
+            result.put("message", e.getMessage());
+        }
+        return result;
+    }
+
+    // DB 트랙 검색
+    @GetMapping("/track/list")
+    @ResponseBody
+    public Map<String, Object> searchTrackList(
+        @RequestParam(defaultValue = "") String keyword
+    ) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            // 페이징 없는 전체 검색 (서비스 계층에서 구현 필요)
+            List<Track> items = trackService.searchList(keyword);
+            List<Map<String, Object>> tracks = new ArrayList<>();
+            for (Track item : items) {
+                Map<String, Object> track = new HashMap<>();
+                track.put("id", item.getId());
+                track.put("title", item.getTitle());
+                track.put("genre", item.getGenre());
+                track.put("albumId", item.getAlbumId());
+                track.put("artistId", item.getArtistId());
+                track.put("duration", item.getDuration());
+                track.put("popularity", item.getPopularity());
+                track.put("trackNo", item.getTrackNo());
+                tracks.add(track);
+            }
+            result.put("success", true);
+            result.put("tracks", tracks);
+        } catch (Exception e) {
+            result.put("success", false);
+            result.put("tracks", Collections.emptyList());
+            result.put("message", e.getMessage());
+        }
+        return result;
+    }
+
+
+
+
+
+
 
 
 

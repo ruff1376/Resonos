@@ -29,7 +29,7 @@ public class TrackServiceImpl implements TrackService {
     public List<Track> mainNewList() throws Exception {
         return trackMapper.mainNewList();
     }
-    
+
     @Override
     public List<Track> newList(Pagination pagination) throws Exception {
         long total = trackMapper.count();
@@ -148,6 +148,11 @@ public class TrackServiceImpl implements TrackService {
         queryMap.put("index", pagination.getIndex());
         queryMap.put("size", pagination.getSize());
         return trackMapper.allSearchList(queryMap);
+    }
+
+    @Override
+    public List<Track> addTrackList(String keyword) throws Exception {
+        return trackMapper.addTrackList(keyword);
     }
 
 }

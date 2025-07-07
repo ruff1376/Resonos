@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cosmus.resonos.mapper.TrackReviewMapper">
+
+    <!-- ─────────────────────── TrackReview → 도메인 매핑 -->
+    <resultMap id="TrackReview" type="com.cosmus.resonos.domain.TrackReview">
+        <id     property="id"        column="id"/>
+        <result property="rating"    column="rating"/>
+        <result property="content"   column="content"/>
+        <result property="blinded"   column="blinded"/>
+        <result property="likes"     column="likes"/>
+        <result property="dislikes"  column="dislikes"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="critic"    column="critic"/>
+        <result property="userId"    column="user_id"/>
+        <result property="trackId"   column="track_id"/>
+    </resultMap>
+
+    <!-- ─────────────────────── TrackScore → 집계 매핑 -->
+    <resultMap id="TrackScore" type="com.cosmus.resonos.domain.TrackScore">
+        <id property="trackId"      column="track_id"/>
+        <result property="averageScore" column="avg_score"/>
+        <result property="criticCount"  column="critic_count"/>
+        <result property="userCount"    column="user_count"/>
+    </resultMap>
+
+    <!-- insert -->
+    <insert id="insert" parameterType="com.cosmus.resonos.domain.TrackReview" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO track_review(
+            rating, content, blinded, likes, dislikes, created_at, critic, user_id, track_id)
+        VALUES (#{rating}, #{content}, #{blinded}, #{likes}, #{dislikes}, #{createdAt}, #{critic}, #{userId}, #{trackId})
+    </insert>
+
+    <!-- find by id -->
+    <select id="findById" parameterType="long" resultMap="TrackReview">
+        SELECT * FROM track_review WHERE id = #{id}
+    </select>
+
+    <!-- find reviews for track (blinded 제외) -->
+    <select id="findByTrackId" parameterType="string" resultMap="TrackReview">
+        SELECT *
+        FROM track_review
+        WHERE track_id = #{trackId}
+          AND blinded = 0
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- update blind status -->
+    <update id="updateBlindStatus">
+        UPDATE track_review SET blinded = #{blinded} WHERE id = #{id}
+    </update>
+
+    <!-- like / dislike -->
+    <update id="incrementLikes">
+        UPDATE track_review SET likes = likes + 1 WHERE id = #{id}
+    </update>
+
+    <update id="incrementDislikes">
+        UPDATE track_review SET dislikes = dislikes + 1 WHERE id = #{id}
+    </update>
+
+    <!-- ───────── TrackScore Aggregation -->
+    <select id="findScoreByTrackId" parameterType="string" resultMap="TrackScore">
+        <![CDATA[
+        SELECT  track_id,
+                FLOOR(AVG(rating))                        AS avg_score,
+                SUM(CASE WHEN critic = 1 THEN 1 ELSE 0 END) AS critic_count,
+                SUM(CASE WHEN critic = 0 THEN 1 ELSE 0 END) AS user_count
+        FROM    track_review
+        WHERE   track_id = #{trackId}
+          AND   blinded = 0
+        GROUP BY track_id
+        ]]>
+    </select>
+</mapper>

@@ -79,7 +79,7 @@ public class ArtistServiceImpl implements ArtistService {
     public List<Artist> listPaging(int offset, int size) throws Exception {
         return artistMapper.listPaging(offset, size);
     }
-
+  
     @Override
     public List<Artist> searchList(String keyword) throws Exception {
         return artistMapper.searchList(keyword);
@@ -98,5 +98,14 @@ public class ArtistServiceImpl implements ArtistService {
         queryMap.put("index", pagination.getIndex());
         queryMap.put("size", pagination.getSize());
         return artistMapper.allSearchList(queryMap);
+    }
+    @Override
+    public long count() throws Exception {
+        return artistMapper.count();
+    }
+
+    @Override
+    public Artist findArtistByAlbumId(String id) throws Exception {
+        return artistMapper.findArtistByAlbumId(id);
     }
 }
