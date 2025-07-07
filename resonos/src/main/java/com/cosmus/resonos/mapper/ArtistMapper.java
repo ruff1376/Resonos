@@ -24,4 +24,8 @@ public interface ArtistMapper {
     public String selectTopMvUrlByArtist(String id) throws Exception;
     // 트랙 아이디로 아티스트 객체 반환
     public Artist selectArtistByTrackId(String id) throws Exception;
+    // 검색 결과 목록
+    public List<Artist> searchList(String keyword) throws Exception;
+    // 검색 결과 전체 목록
+    public List<Artist> allSearchList(String keyword) throws Exception;
 }

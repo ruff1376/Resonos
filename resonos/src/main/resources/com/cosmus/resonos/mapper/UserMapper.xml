@@ -110,6 +110,11 @@
     SELECT nickname FROM user WHERE nickname = #{nickname}
   </select>
 
+  <!-- 이메일로 아이디 조회(아이디, 비번 찾기) -->
+  <select id="findId" resultType="String">
+    SELECT username FROM user WHERE email = #{email}
+  </select>
+
   <!-- 회원 활성/비활성 상태 변경 -->
   <update id="updateEnabled">
     UPDATE user SET enabled = #{enabled} WHERE id = #{id}

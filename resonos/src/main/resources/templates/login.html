@@ -33,7 +33,10 @@
           </div>
         </div>
         <button class="btn btn-gold w-100 mb-2" type="submit">로그인</button>
-        <a href="#" class="login-link d-block mt-2">비밀번호를 잊으셨나요?</a>
+        <div class="d-flex justify-content-center column-gap-4">
+          <a th:href="@{/find-id}" class="login-link d-block mt-2">아이디 찾기</a>
+          <a th:href="@{/find-pw}" class="login-link d-block mt-2">비밀번호 찾기</a>
+        </div>
         <div class="text-secondary my-3">또는</div>
         <button class="btn social-btn w-100 mb-2" type="button">Google로 로그인</button>
         <button class="btn social-btn w-100 mb-2" type="button">Kakao로 로그인</button>

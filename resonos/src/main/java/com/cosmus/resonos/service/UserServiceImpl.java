@@ -120,8 +120,12 @@ public class UserServiceImpl implements UserService {
                                     .anyMatch(role -> role.equals("ROLE_ADMIN"));
     }
 
+    /* 회원 정보 수정 */
     @Override
     public boolean update(Users user) throws Exception {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+
         return userMapper.update(user) > 0;
     }
 
@@ -199,7 +203,7 @@ public class UserServiceImpl implements UserService {
     public List<Users> searchByKeyword(String keyword) throws Exception {
         return userMapper.searchByKeyword(keyword);
     }
-    
+
     @Override
     public boolean enableUser(Long id, boolean enabled) throws Exception {
         return userMapper.updateEnabled(id, enabled) > 0;
@@ -221,6 +225,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public Users selectById(Long id) throws Exception {
         return userMapper.selectById(id);
-    }   
+    }
+
+    /**
+     * 아이디 찾기
+     */
+    @Override
+    public String findId(String email) throws Exception {
+        return userMapper.findId(email);
+    }
 
 }

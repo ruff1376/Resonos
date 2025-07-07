@@ -103,14 +103,14 @@ button.social-btn:hover {
 }
 
 /* 회원가입 페이지 */
-.con-join .user-form {
+.con-join .user-form, .con-find-id .user-form {
   max-width: 1000px;
   min-height: 600px;
   width: 100%;
   text-align: start;
 }
 .con-join .user-form h2 {text-align: center;}
-.con-join .form-control::placeholder {color: #bbb;}
+.con-join .form-control::placeholder, .con-find-id .form-control::placeholder {color: #bbb;}
 #join-button {margin-top: 80px;}
 .fail-vali {color: #FF3B3B; font-size: 1.2rem;}
 .success {color: rgb(3, 212, 3) !important;}
@@ -770,5 +770,28 @@ button.like {background-color: inherit; border: none;}
   gap: 20px;
   color: #bbb;
 }
-
 .con-music .empty-text {height: 280px;}
+.hide {display: none;}
+
+
+/* 아이디 찾기 */
+.con-find-id .user-form {
+  max-width: 1000px;
+  min-height: 400px;
+  width: 100%;
+  text-align: start;
+}
+#certi-button {
+  position: absolute;
+  width: 80px;
+  top: 33px;
+  right: 10px;
+  transition: all 0.3s;
+}
+.non-event {
+  pointer-events: none;
+  background-color: #bbb !important;
+  color: #fff !important;
+}
+.mt-10 {margin-top: 100px;}
+.con-find-id .input-area {margin-top: 30px;}
