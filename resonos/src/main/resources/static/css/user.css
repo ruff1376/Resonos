@@ -43,7 +43,7 @@ body {
   align-items: center;
   justify-content: center;
 }
-.con {margin: 120px 0;}
+.con {margin: 120px 0; padding: 0 10px;}
 .con-mypage a {color: #fff !important;}
 .content-wrap {
   display: flex;
@@ -116,12 +116,7 @@ button.social-btn:hover {
 .success {color: rgb(3, 212, 3) !important;}
 
 /* 마이페이지 */
-body {
-  background: #181C23;
-  color: #D4B97F;
-  margin: 0;
-  min-height: 100vh;
-}
+
 .profile-actions a:first-child:hover {color: var(--main-color) !important;}
 .profile-actions a:last-child {
   color: var(--main-color) !important;
@@ -247,6 +242,7 @@ body {
   border-radius: 17px;
   border: 1.5px solid #D4B97F;
   box-shadow: 0 2px 12px rgba(24,28,35,0.10);
+  transition: all 0.3s;
 }
 .mypage-card.badge-area li {
   display: block;
@@ -267,6 +263,9 @@ body {
   list-style: none;
   padding: 0;
   margin: 0 0 7px 0;
+}
+.mypage-card.playlist {
+  min-height: 200px;
 }
 .mypage-card.playlist li {
   display: flex;
@@ -312,7 +311,7 @@ body {
   color: var(--main-color);
 }
 .like {
-  font-size: 1.6rem;
+  font-size: 2.5rem;
   color: #D4B97F;
   margin-left: 8px;
   cursor: pointer;
@@ -339,7 +338,7 @@ body {
   border-radius: 14px;
   font-size: 1.4rem;
   font-weight: bold;
-  padding: 5px 10px;
+  padding: 3px 7px;
   letter-spacing: 1px;
 }
 .my-middle {
@@ -350,17 +349,22 @@ body {
   flex: 0.6;
 }
 .chart-area {
+  height: 200px;
   flex: 0.4;
-  background-color: cornflowerblue;
+  display: flex;
+  justify-content: center;
 }
+#doughnut {width: 70%;}
 a:hover > .mypage-card {
-  transform: scale(1.01);
-  transition: all 0.3s;
+  transform: translateY(-1px) scale(1.01);
+  border-color: #fffbe6;
+  box-shadow: 0 8px 32px rgba(212, 185, 127, 0.18);
 }
-
 .con .title {display: flex; align-items: center; justify-content: space-between;}
 .con .title > div {display: flex; align-items: center; gap: 10px;}
-.con .title h2 {margin-bottom: 0;}
+.cover-img {margin-right: 20px;}
+.like-count {display: flex; align-items: center;}
+.profile-info .badge {margin-left: 10px;}.con .title h2 {margin-bottom: 0;}
 
 /* 회원정보수정 */
 .profile-edit-box {
@@ -432,10 +436,11 @@ a:hover > .mypage-card {
   padding: 10px 0;
   width: 100%;
   margin-bottom: 10px;
-  transition: background 0.2s, color 0.2s;
+  transition: all 0.3s;
 }
 .con .btn-outline-gold:hover, .btn-outline-gold:focus {
   background: #D4B97F;
+  border-color: var(--silver-color);
   color: #181C23;
 }
 .con .profile-edit-label {
@@ -453,16 +458,19 @@ a:hover > .mypage-card {
   display: block;
 }
 .change-edge {
-  display: flex;
-  align-items: center;
-  overflow-y: auto;
-  gap: 20px;
-  height: 150px;
   background: rgba(24,28,35,0.82);
   border-radius: 17px;
   border: 1.5px solid #D4B97F;
   box-shadow: 0 2px 12px rgba(24,28,35,0.10);
-  padding: 0 15px;
+  overflow: hidden;
+}
+.change-edge > div {
+  overflow-x: auto;
+  display: flex;
+  align-items: center;
+  height: 150px;
+  gap: 20px;
+  padding: 0 10px;
 }
 .input-area {
   padding: 0 100px;
@@ -476,6 +484,7 @@ textarea.form-control {
   height: 100px;
 }
 .con .bg-badge {
+  transition: all 0.3s;
   background-color: #222;
   width: 200px;
   padding: 10px 0;
@@ -487,6 +496,12 @@ textarea.form-control {
   border-radius: 15px;
   gap: 10px;
   flex: 0 0 auto;
+  cursor: pointer;
+}
+.con .bg-badge:hover {
+  transform: translateY(-1px) scale(1.04);
+  border-color: #fffbe6;
+  box-shadow: 0 8px 32px rgba(212, 185, 127, 0.18);
 }
 .con .bg-badge p {color: #fff;}
 #profileImage, #thumbnailUrl {display: none;}
@@ -649,8 +664,9 @@ textarea.form-control {
 .con-music .like {font-size: 3rem; margin-left: auto;}
 
 /* 플레이리스트 */
+.con-music .info-section {height: 400px;}
 .name-playlist {font-size: 1.4rem; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-.is-public {font-size: 1.4rem;}
+.is-public {font-size: 1.4rem; color: var(--main-color);}
 .right {display:flex; align-items: center; margin-left: auto; gap: 20px;}
 .like-area {display: flex; align-items: center; gap: 2px;}
 .like-area .count {font-size: 1.4rem;}
@@ -743,3 +759,16 @@ button.like {background-color: inherit; border: none;}
 }
 .toggle-switch input:checked + .slider {background-color: #4cd964;}
 .toggle-switch input:checked + .slider::before {transform: translateX(22px);}
+
+/* 비어 있는 경우 */
+.empty-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 120px;
+  gap: 20px;
+  color: #bbb;
+}
+
+.con-music .empty-text {height: 280px;}

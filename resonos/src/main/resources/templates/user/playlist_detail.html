@@ -22,7 +22,7 @@
             <h2 class="text-start">플레이리스트 상세</h2>
           </div>
         </div>
-        <form th:action="@{/}" method="post" class="profile-edit-box" th:object="${playlistObj}">
+        <form th:action="@{/}" method="post" class="profile-edit-box" th:object="${playlist}">
           <div class="d-flex align-items-center column-gap-5">
             <label id="profileBtn" for="thumbnailUrl">
               <img th:src="@{/img/resonosLogo.png}" alt="프로필 이미지" class="profile-img edit">
@@ -35,27 +35,35 @@
               <textarea class="form-control" th:field="*{description}" rows="2" placeholder="자기소개를 입력하세요.">음악과 우주, 그리고 커뮤니티를 사랑합니다.</textarea>
             </div>
           </div>
-          <input type="radio" id="true" th:field="*{isPublic}" value="true">
+          <input th:checked="*{isPublic == true}" type="radio" id="true" th:field="*{isPublic}" value="true">
           <label class="profile-edit-label" for="true">공개</label>
-          <input type="radio" id="false" th:field="*{isPublic}" value="false">
+          <input th:checked="*{isPublic == false}" type="radio" id="false" th:field="*{isPublic}" value="false">
           <label class="profile-edit-label" for="false">비공개</label>
           <div class="info-wrapper">
             <div class="info-section">
               <div class="title">
                 <div>
                   <h2 class="text-start">트랙 목록</h2>
-                  <span class="count">92</span>
+                    <span class="count" th:text="${playlist.trackList != null ? #lists.size(playlist.trackList) : 0}">트랙 수</span>
                 </div>
               </div>
               <ul class="ul-list">
-                <th:block th:each="i : ${#numbers.sequence(1,20)}">
-                  <li th:attr="data-orderId=${i}" class="list-item">
-                    <img src="https://i.scdn.co/image/ab67616d0000b2738ad8f5243d6534e03b656c8b" alt="GalaxiNote" class="follow-img" />
+                <th:block th:if="${playlist.trackList == null}">
+                  <div class="empty-text">
+                    추가한 트랙이 없습니다.
+                  </div>
+                </th:block>
+                <th:block th:each="track : ${playlist.trackList}">
+                  <li th:attr="data-orderId=${track.orderNo}" class="list-item" th:object="${track}">
+                    <img th:src="*{coverImage}" class="follow-img" />
                     <div class="info">
-                      <span class="name-album" th:text="${'트랙명' + i}">트랙 명</span>
-                      <span class="name-artist">아티스트 명</span>
+                      <span class="name-album" th:text="*{title}">트랙 명</span>
+                      <span class="name-artist" th:text="*{artistName}">아티스트 명</span>
                     </div>
-                    <span class="like">♥</span>
+                    <div class="right">
+                      <span class="like">♥</span>
+                      <button type="button" class="btn btn-danger">삭제</button>
+                    </div>
                   </li>
                 </th:block>
               </ul>

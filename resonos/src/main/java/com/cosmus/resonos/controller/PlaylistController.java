@@ -1,6 +1,9 @@
 package com.cosmus.resonos.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,11 +14,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Playlist;
+import com.cosmus.resonos.domain.PlaylistDTO;
 import com.cosmus.resonos.service.PlaylistService;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Slf4j
@@ -34,10 +38,17 @@ public class PlaylistController {
      * 플레이리스트 페이지 요청
      * @param model
      * @return
+     * @throws Exception
      */
     @GetMapping("")
-    // TODO: @AuthenticationPrincipal 로 출력할 리스트 나누기
-    public String playlist(Model model) {
+    public String playlist(@AuthenticationPrincipal CustomUser loginUser, Model model) throws Exception {
+
+        List<Playlist> myPlaylists = playlistService.usersPlaylist(loginUser.getUser().getId());
+        List<Playlist> likedPlaylists = playlistService.likedPlaylist(loginUser.getUser().getId());
+
+        model.addAttribute("loginUser", loginUser.getUser());
+        model.addAttribute("myPlaylists", myPlaylists);
+        model.addAttribute("likedPlaylists", likedPlaylists);
         model.addAttribute("lastPath", "playlist");
         return "user/playlist";
     }
@@ -61,11 +72,18 @@ public class PlaylistController {
      * @param model
      * @param id
      * @return
+     * @throws Exception
      */
     @GetMapping("/{id}")
-    public String playlistDetail(Model model, @PathVariable("id") long id) {
-        // TODO: 플레이리스트 DB 조회
+    public String playlistDetail(Model model, @PathVariable("id") long id) throws Exception {
+        PlaylistDTO playlist = playlistService.trackOfPlaylist(id);
+        log.info("플레이리스트 상세 : {}", playlist);
 
+        if(playlist == null) {
+            model.addAttribute("playlist", playlistService.select(id));
+        } else {
+            model.addAttribute("playlist", playlist);
+        }
         model.addAttribute("lastPath", "playlist");
         model.addAttribute("playlistObj", new Playlist());
         return "user/playlist_detail";

@@ -20,22 +20,27 @@
         <div class="title">
           <div>
             <h2 class="text-start">내 플레이리스트</h2>
-            <span class="count">92</span>
+            <span class="count" th:text="${myPlaylists.size()}">내 플레이리스트 수</span>
           </div>
           <a th:href="@{/playlists/create}" id="addPli">추가하기<img width="20px" height="20px" th:src="@{/img/plus_circle.png}" alt="추가버튼"></a>
         </div>
+        <th:block th:if="${#lists.isEmpty(myPlaylists)}">
+          <div class="empty-text">
+            <p>내 플레이리스트가 없습니다.</p>
+          </div>
+        </th:block>
         <ul class="ul-list">
-          <th:block th:each="i : ${#numbers.sequence(1,20)}">
-            <li onclick="goToDetail(event)" class="list-item">
-              <input type="hidden" th:value="${i}" name="id">
+          <th:block th:each="mpl : ${myPlaylists}">
+            <li class="list-item">
+              <input type="hidden" th:value="${mpl.id}" name="id">
               <img src="https://i.scdn.co/image/ab67616d0000b2738ad8f5243d6534e03b656c8b" alt="GalaxiNote" class="follow-img" />
               <div class="info">
-                <span class="name-playlist">플레이리스트 명</span>
+                <span class="name-playlist" th:text="${mpl.title}">플레이리스트 명</span>
               </div>
-              <span class="is-public">공개</span>
+              <span class="is-public" th:text="${mpl.isPublic} ? '공개' : '비공개' ">공개</span>
               <div class="right">
                 <div class="like-area">
-                  <span class="count">123</span>
+                  <span class="count" th:text="${mpl.likeCount}">123</span>
                   <span class="like">♥</span>
                 </div>
                 <button onclick="deletePli(event)" class="btn btn-danger">
@@ -53,16 +58,21 @@
         <div class="title">
           <div>
             <h2 class="text-start">좋아요 한 플레이리스트</h2>
-            <span class="count">92</span>
+            <span class="count" th:text="${likedPlaylists.size()}">좋아요 한 플레이리스트 수</span>
           </div>
         </div>
+        <th:block th:if="${#lists.isEmpty(likedPlaylists)}">
+          <div class="empty-text">
+            <p>좋아요 한 플레이리스트가 없습니다.</p>
+          </div>
+        </th:block>
         <ul class="ul-list">
-          <th:block th:each="i : ${#numbers.sequence(1,20)}">
+          <th:block th:each="lpl : ${likedPlaylists}">
             <li class="list-item">
-              <input type="hidden" th:value="${i}" name="id">
+              <input type="hidden" th:value="${lpl.id}" name="id">
               <img src="https://i.scdn.co/image/ab67616d0000b2738ad8f5243d6534e03b656c8b" alt="GalaxiNote" class="follow-img" />
               <div class="info">
-                <span class="name-album">좋아요 한 플레이리스트 명</span>
+                <span class="name-album" th:text="${lpl.title}">좋아요 한 플레이리스트 명</span>
               </div>
               <button class="like">♥</button>
             </li>
@@ -88,10 +98,15 @@
         })
       })
 
-      function goToDetail(e) {
-        const id = e.target.querySelector('input[type="hidden"]').value
-        location.href = `playlists/${id}`
-      }
+      const items = document.querySelectorAll('.list-item')
+      items.forEach(e => {
+        e.addEventListener('click', (event) => {
+          if (event.target.tagName.toLowerCase() === 'button') return
+          const id = e.querySelector('input[type="hidden"]').value
+          location.href = `playlists/${id}`
+        })
+      })
+
     </script>
   </th:block>
 </body>

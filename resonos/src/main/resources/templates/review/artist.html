@@ -35,17 +35,19 @@
                     <div class="album-container">
                         <!-- 반복문 구간 -->
                         <th:block th:each="album : ${albums}">
-                            <div class="album">
-                               <div class="album-img">
-                                   <img th:src="@{${album.coverImage}}" alt="">
-                                   <span class="center-pin"></span>
-                               </div>
-                               <div class="album-info">
-                                   <p id="subtitle" th:text="${album.title}">앨범명</p>
-                                   <p th:text="${#dates.format(album.releaseDate, 'yyyy-MM-dd')}">출시일</p>
-                                   <p th:text="${album.label}">레이블</p>
-                               </div>
-                            </div>
+                            <a th:href="@{albums(id=${album.id})}">
+                                <div class="album">
+                                   <div class="album-img">
+                                       <img th:src="@{${album.coverImage}}" alt="">
+                                       <span class="center-pin"></span>
+                                   </div>
+                                   <div class="album-info">
+                                       <p id="subtitle" th:text="${album.title}">앨범명</p>
+                                       <p th:text="${#dates.format(album.releaseDate, 'yyyy-MM-dd')}">출시일</p>
+                                       <p th:text="${album.label}">레이블</p>
+                                   </div>
+                                </div>
+                            </a>
                         </th:block>
                     </div>
                 </div>
@@ -54,10 +56,12 @@
             <!-- 인기곡 유튜브 -->
             <div class="hottest-card">
                 <div class="songs">
-                    <p id="headline" th:text="|${artist.name}'s 🔥 TOP7|"></p>
+                    <p id="headline" th:text="|${artist.name}'s 🔥TOP ${#lists.size(TOP7)}|"></p>
                     <!-- 반복문 인기곡 -->
                     <th:block th:each="tops, stat : ${TOP7}">
-                        <p th:text="|${stat.count}. ${tops.title}|"></p>
+                        <a th:href="@{/tracks(id=${tops.id})}">
+                            <p th:text="|${stat.count}. ${tops.title}  ${tops.formattedDuration}|"></p>
+                        </a>
                     </th:block>
                 </div>
                 <th:block th:if="${mv != null and mv != 'empty_mv_url'}">

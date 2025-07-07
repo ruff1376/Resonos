@@ -25,4 +25,8 @@ public interface TrackService {
     public List<Track> selectTop7TracksByArtist(String id) throws Exception;
     // 아티스트아이디당 트랙갯수
     public int countTracksByArtist(String id) throws Exception;
+    // 트랙아이디로 같은앨범 상위5곡
+    public List<Track> findTop5TracksInSameAlbum(String id) throws Exception;
+    // 트랙아이디로 아티스트이름
+    public String findArtistNameByTrackId(String id) throws Exception;
 }

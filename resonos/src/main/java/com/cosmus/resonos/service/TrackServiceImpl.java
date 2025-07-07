@@ -97,4 +97,13 @@ public class TrackServiceImpl implements TrackService {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'syncTrackFromSpotify'");
     }
+    @Override
+    public List<Track> findTop5TracksInSameAlbum(String id) throws Exception {
+        return trackMapper.findTop5TracksInSameAlbum(id);
+    }
+
+    @Override
+    public String findArtistNameByTrackId(String id) throws Exception {
+        return trackMapper.findArtistNameByTrackId(id);
+    }
 }

@@ -66,4 +66,9 @@ public class ArtistServiceImpl implements ArtistService {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'saveOrUpdateArtist'");
     }
+
+    @Override
+    public Artist selectArtistByTrackId(String id) throws Exception {
+        return artistMapper.selectArtistByTrackId(id);
+    }
 }

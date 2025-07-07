@@ -1,8 +1,11 @@
 package com.cosmus.resonos.service;
 
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+
 import com.cosmus.resonos.domain.Playlist;
+import com.cosmus.resonos.domain.PlaylistDTO;
 import com.cosmus.resonos.mapper.PlaylistMapper;
 
 @Service
@@ -37,5 +40,25 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     public boolean delete(Long id) throws Exception {
         return playlistMapper.delete(id) > 0;
+    }
+
+    @Override
+    public List<Playlist> usersPlaylist(Long userId) throws Exception {
+        return playlistMapper.usersPlaylist(userId);
+    }
+
+    @Override
+    public List<Playlist> usersPlaylist3(Long userId) throws Exception {
+        return playlistMapper.usersPlaylist3(userId);
+    }
+
+    @Override
+    public List<Playlist> likedPlaylist(Long userId) throws Exception {
+        return playlistMapper.likedPlaylist(userId);
+    }
+
+    @Override
+    public PlaylistDTO trackOfPlaylist(Long playlistId) throws Exception {
+        return playlistMapper.trackOfPlaylist(playlistId);
     }
 }

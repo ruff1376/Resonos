@@ -1,0 +1,3 @@
+INSERT INTO `resonos`.`playlist` (`id`, `user_id`, `title`, `description`, `thumbnail_url`, `is_public`, `created_at`) VALUES ('1', '1', 'user1004 의 플레이리스트', '안녕하세요1', 'abc', '1', CURRENT_TIMESTAMP());
+INSERT INTO `resonos`.`playlist` (`id`, `user_id`, `title`, `description`, `thumbnail_url`, `is_public`, `created_at`) VALUES ('2', '1', 'user1004 의 플레이리스트', '안녕하세요2', 'abc', '1', CURRENT_TIMESTAMP());
+INSERT INTO `resonos`.`playlist` (`id`, `user_id`, `title`, `description`, `thumbnail_url`, `is_public`, `created_at`) VALUES ('3', '1', 'user1004 의 플레이리스트', '안녕하세요3', 'abc', '1', CURRENT_TIMESTAMP());

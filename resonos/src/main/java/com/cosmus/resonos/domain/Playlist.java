@@ -1,6 +1,7 @@
 package com.cosmus.resonos.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,4 +20,7 @@ public class Playlist {
     private Boolean isPublic;
     private Date createdAt;
     private String trackId;
+    private int likeCount;
+
+    List<Track> trackList;
 }

@@ -55,7 +55,15 @@
     WHERE artist_id = #{artistId}
     ORDER BY popularity DESC
     LIMIT 1
-</select>
+  </select>
 
+  <select id="selectArtistByTrackId"
+    parameterType="string"
+    resultMap="ArtistResultMap">
+    SELECT a.*
+    FROM   artist a
+    JOIN   track  t ON a.id = t.artist_id
+    WHERE  t.id = #{trackId}
+  </select>
 
 </mapper>

@@ -77,7 +77,8 @@
           resultType="Track">
       SELECT
           title,
-          duration
+          duration,
+          id
       FROM track
       WHERE artist_id = #{artistId}
       ORDER BY popularity DESC
@@ -93,5 +94,31 @@
       WHERE artist_id = #{artistId}
   </select>
 
+  <!-- trackId 같은 앨범 내 인기순 Top-5 트랙 -->
+  <!-- (선택) 자기 자신 제외 -->
+  <select id="findTop5TracksInSameAlbum"
+          parameterType="string"
+          resultType="Track">
+    <![CDATA[
+    SELECT t.*
+    FROM   track t
+    JOIN   track base ON base.id = #{trackId}
+    WHERE  t.album_id = base.album_id
+      AND  t.id <> #{trackId}
+    ORDER BY t.popularity DESC
+    LIMIT 5
+    ]]>
+  </select>
+
+  <!-- trackId → 아티스트 이름 한 건 -->
+  <select id="findArtistNameByTrackId"
+          parameterType="string"
+          resultType="string">
+    SELECT ar.name
+    FROM   artist ar
+    JOIN   track  t ON t.artist_id = ar.id
+    WHERE  t.id = #{trackId}
+    LIMIT 1
+  </select>
 
 </mapper>
