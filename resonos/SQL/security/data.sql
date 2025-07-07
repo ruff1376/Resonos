@@ -6,16 +6,16 @@ TRUNCATE TABLE `user_auth`;
 
 -- BCryptPasswordEncoder - 암호화 시
 -- 사용자
-INSERT INTO user ( username, password, name, email )
+INSERT INTO user ( username, password, nickname, email )
 VALUES ( 'user', '$2a$12$TrN..KcVjciCiz.5Vj96YOBljeVTTGJ9AUKmtfbGpgc9hmC7BxQ92', '사용자', 'user@mail.com' );
 
 -- 관리자
-INSERT INTO user ( username, password, name, email )
+INSERT INTO user ( username, password, nickname, email )
 VALUES ( 'admin', '$2a$12$TrN..KcVjciCiz.5Vj96YOBljeVTTGJ9AUKmtfbGpgc9hmC7BxQ92', '관리자', 'admin@mail.com' );
 
 
 -- 테스트
-INSERT INTO user ( username, password, name, email )
+INSERT INTO user ( username, password, nickname, email )
 VALUES ( 'test', '$2a$12$TrN..KcVjciCiz.5Vj96YOBljeVTTGJ9AUKmtfbGpgc9hmC7BxQ92', '테스트', 'test@mail.com' );
 
 
