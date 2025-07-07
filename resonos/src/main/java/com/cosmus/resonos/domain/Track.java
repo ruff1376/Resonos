@@ -1,5 +1,7 @@
 package com.cosmus.resonos.domain;
 
+import java.util.Date;
+
 import lombok.Data;
 
 @Data
@@ -17,6 +19,7 @@ public class Track {
     private String artistName;
     private String coverImage;
     private int orderNo;
+    private Date releaseDate;
 
     public String getFormattedDuration() {
         int minutes = duration / 60;
