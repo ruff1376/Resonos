@@ -1,5 +1,6 @@
 package com.cosmus.resonos.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cosmus.resonos.domain.UserActivityLog;
 import com.cosmus.resonos.domain.UserAuth;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.mapper.UserMapper;
@@ -31,6 +33,8 @@ public class UserServiceImpl implements UserService {
     @Autowired PasswordEncoder passwordEncoder;
 
     @Autowired AuthenticationManager authenticationManager;
+
+    @Autowired UserActivityLogService userActivityLogService;
 
     /**
      * 회원가입
@@ -82,6 +86,20 @@ public class UserServiceImpl implements UserService {
             // 세션 인증 정보 설정 (세션이 없으면 새로 생성)
             HttpSession session = request.getSession(true); // 세션이 없으면 생성
             session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
+
+            // 활동 로그 기록
+            UserActivityLog log = new UserActivityLog();
+            log.setUserId(user.getId());
+            log.setAction("로그인");
+            log.setDetail("성공");
+            log.setIpAddress(request.getRemoteAddr());
+            log.setUserAgent(request.getHeader("User-Agent"));
+            log.setCreatedAt(new Date());
+            try {
+                userActivityLogService.logActivity(log);
+            } catch (Exception e) {
+                // 예외를 로깅하거나 무시할 수 있습니다. 여기서는 무시합니다.
+            }
         }
         return result;
     }
@@ -181,4 +199,28 @@ public class UserServiceImpl implements UserService {
     public List<Users> searchByKeyword(String keyword) throws Exception {
         return userMapper.searchByKeyword(keyword);
     }
+    
+    @Override
+    public boolean enableUser(Long id, boolean enabled) throws Exception {
+        return userMapper.updateEnabled(id, enabled) > 0;
+    }
+
+    @Override
+    public boolean banUser(Long id, boolean ban) throws Exception {
+        return userMapper.updateBan(id, ban) > 0;
+    }
+
+    @Override
+    public void deleteSpecificAuth(String username, String auth) throws Exception {
+        userMapper.deleteSpecificAuth(username, auth);
+    }
+    @Override
+    public boolean hasAuth(String username, String auth) throws Exception {
+        return userMapper.hasAuth(username, auth) > 0;
+    }
+    @Override
+    public Users selectById(Long id) throws Exception {
+        return userMapper.selectById(id);
+    }   
+
 }

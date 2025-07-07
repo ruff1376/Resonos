@@ -56,6 +56,18 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
+    public Artist getArtistFromSpotify(String artistId) throws Exception {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getArtistFromSpotify'");
+    }
+
+    @Override
+    public Artist saveOrUpdateArtist(Artist artist) throws Exception {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'saveOrUpdateArtist'");
+    }
+
+    @Override
     public Artist selectArtistByTrackId(String id) throws Exception {
         return artistMapper.selectArtistByTrackId(id);
     }

@@ -63,6 +63,7 @@
   
   <select id="list" resultMap="Track">
     SELECT * FROM track
+    ORDER BY id DESC
   </select>
 
   <select id="exists" resultType="int" parameterType="string">

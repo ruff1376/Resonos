@@ -8,13 +8,20 @@ import com.cosmus.resonos.domain.Qna;
 import com.cosmus.resonos.service.QnaService;
 
 @RestController
-@RequestMapping("/qna")
+@RequestMapping("/counseling")
 public class QnaController {
 
     private final QnaService qnaService;
 
     public QnaController(QnaService qnaService) {
         this.qnaService = qnaService;
+    }
+
+
+    // 화면 연결 community/qna
+    @GetMapping("/qna")   
+    public String qnaPage() {
+        return "community/qna"; // 해당 경로에 JSP 파일이 있어야 합니다.
     }
 
     @GetMapping

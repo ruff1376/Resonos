@@ -1,3 +1,6 @@
+-- Active: 1751542958734@@127.0.0.1@3306@resonos
+
+
 -- 💥 기존 테이블 모두 삭제
 
 DROP TABLE IF EXISTS
@@ -88,6 +91,7 @@ CREATE TABLE `track` (
 	`track_no`	INT	NOT NULL
 );
 
+
 CREATE TABLE `user` (
 	`id`	BIGINT	NOT NULL,
 	`username`	VARCHAR(100)	NOT NULL,
@@ -100,6 +104,8 @@ CREATE TABLE `user` (
 	`enabled`	BOOLEAN	NOT NULL DEFAULT TRUE,
 	`provider`	VARCHAR(200)	NULL,
 	`provider_id`	VARCHAR(200)	NULL,
+	`ban` BOOLEAN NULL DEFAULT FALSE, -- 회원 제재 여부(0: 정상, 1: 제재)
+	`logs` JSON NULL, -- 활동 로그
 	`created_at`	TIMESTAMP	NOT NULL	DEFAULT CURRENT_TIMESTAMP,
 	`updated_at`	TIMESTAMP	NOT NULL	DEFAULT CURRENT_TIMESTAMP
 																		ON UPDATE CURRENT_TIMESTAMP
@@ -283,15 +289,14 @@ CREATE TABLE `notification` (
 	`user_id`	BIGINT	NOT NULL
 );
 
-DROP TABLE IF EXISTS `setting`;
 
-CREATE TABLE `setting` (
-	`id`	BIGINT	NOT NULL AUTO_INCREMENT  PRIMARY KEY,
-	`name`	VARCHAR(100)	NOT NULL,
-	`description`	TEXT	NULL,
-	`value`	VARCHAR(100)	NULL,
-	`updated_at`	DATETIME	NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-	`created_at`	DATETIME	NOT NULL	DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE setting (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255),
+    description VARCHAR(255),
+    value VARCHAR(255),
+    updated_at DATETIME,
+    created_at DATETIME
 );
 
 CREATE TABLE `track_mood_vote` (

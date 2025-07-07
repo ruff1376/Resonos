@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>문의글 상세</title></head>
+<body>
+<h1 th:text="${qna.title}"></h1>
+<p th:text="${qna.content}"></p>
+<p>작성일: <span th:text="${#dates.format(qna.createdAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+<p>상태: <span th:text="${qna.status ? '답변완료' : '대기중'}"></span></p>
+<!-- 답변 영역 -->
+<div th:if="${answers != null}">
+  <h2>답변</h2>
+  <div th:each="answer : ${answers}">
+    <p th:text="${answer.content}"></p>
+    <p>답변일: <span th:text="${#dates.format(answer.answeredAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+  </div>
+</div>
+</body>
+</html>

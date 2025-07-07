@@ -38,3 +38,4 @@ VALUES ( 'admin', 'ROLE_ADMIN' );
 -- * 권한 : ROLE_USER
 INSERT INTO user_auth ( username,  auth )
 VALUES ( 'test', 'ROLE_USER' );
+

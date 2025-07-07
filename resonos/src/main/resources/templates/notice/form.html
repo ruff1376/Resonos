@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>공지 등록/수정</title></head>
+<body>
+<h1 th:text="${notice.id != null ? '공지 수정' : '공지 등록'}"></h1>
+<form th:action="@{${notice.id != null} ? '/notices/' + ${notice.id} + '/edit' : '/notices'}"
+      th:object="${notice}" method="post">
+  <label>제목: <input type="text" th:field="*{title}"/></label><br/>
+  <label>내용: <textarea th:field="*{content}"></textarea></label><br/>
+  <button type="submit" th:text="${notice.id != null ? '수정' : '등록'}"></button>
+</form>
+</body>
+</html>

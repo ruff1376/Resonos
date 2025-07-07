@@ -45,4 +45,19 @@ public class UserActivityLogServiceImpl implements UserActivityLogService {
     public boolean delete(Long id) throws Exception {
         return userActivityLogMapper.delete(id) > 0;
     }
+
+    @Override
+    public boolean logActivity(UserActivityLog log) throws Exception {
+        return userActivityLogMapper.insert(log) > 0;
+    }
+
+    @Override
+    public List<UserActivityLog> getRecentLogsByUserId(Long userId, int limit) throws Exception {
+        return userActivityLogMapper.getRecentLogsByUserId(userId, limit);
+    }
+
+    @Override
+    public List<UserActivityLog> getLogsByUserId(Long userId) throws Exception {
+        return userActivityLogMapper.getLogsByUserId(userId);
+    }
 }
