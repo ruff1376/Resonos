@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.UserService;
+import com.cosmus.resonos.util.RandomPassword;
 import com.cosmus.resonos.validation.EmailCheck;
 import com.cosmus.resonos.validation.NicknameCheck;
 import com.cosmus.resonos.validation.PasswordCheck;
@@ -28,6 +29,7 @@ import com.cosmus.resonos.validation.UsernameCheck;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+
 
 @Slf4j
 @Controller
@@ -215,6 +217,66 @@ public class HomeController {
   }
 
   /**
+   * 아이디 찾기
+   * @param user
+   * @param br
+   * @return
+   * @throws Exception
+   */
+  @PostMapping(value = "/find-id", consumes = "application/json")
+  public ResponseEntity<?> findIdPost(@RequestBody Users user) throws Exception {
+    String username = userService.findId(user.getEmail());
+
+    if(username != null) return new ResponseEntity<>(Map.of("username", username), HttpStatus.OK);
+
+    log.info("findIdPost : 존재하지 않는 이메일");
+    return new ResponseEntity<>("존재하지 않는 이메일입니다.", HttpStatus.BAD_REQUEST);
+  }
+
+  /**
+   * 비밀번호 찾기 (아이디 검증)
+   * @param user
+   * @param br
+   * @return
+   * @throws Exception
+   */
+  @PostMapping(value = "/find-pw", consumes = "application/json")
+  public ResponseEntity<?> findPwPost(@RequestBody Users user) throws Exception {
+    Users checkUser = userService.select(user.getUsername());
+
+    if(checkUser != null) return new ResponseEntity<>(Map.of("email", checkUser.getEmail()), HttpStatus.OK);
+
+    log.info("findPwPost : 존재하지 않는 아이디");
+    return new ResponseEntity<>("존재하지 않는 아이디입니다.", HttpStatus.BAD_REQUEST);
+  }
+
+  /**
+   * 비밀번호 변경, 이메일 보내기
+   * @param user
+   * @param br
+   * @return
+   * @throws Exception
+   */
+  @PostMapping(value = "/send-pw", consumes = "application/json")
+  public ResponseEntity<?> sendEmailPw(@RequestBody Users user) throws Exception {
+    //TODO: 이메일 전송 API
+
+    Users checkUser = userService.select(user.getUsername());
+    String randomPassword = RandomPassword.generateRandomPassword(10);
+
+    checkUser.setPassword(randomPassword);
+
+    boolean result = userService.update(checkUser);
+
+    if(result) {
+      log.info("임시 비밀번호 : {}", randomPassword);
+      return new ResponseEntity<>("이메일이 발송되었습니다.", HttpStatus.OK);
+    }
+
+    return new ResponseEntity<>("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
+  }
+
+  /**
    * 비번 유효성 검사
    * @param user
    * @param br
@@ -234,5 +296,26 @@ public class HomeController {
 
     return new ResponseEntity<>("유효한 비밀번호입니다.", HttpStatus.OK);
   }
+
+  /**
+   * 아이디 찾기 페이지 요청
+   * @return
+   */
+  @GetMapping("/find-id")
+  public String findId() {
+
+    return "find_id";
+  }
+
+  /**
+   * 비밀번호 찾기 페이지 요청
+   * @return
+   */
+  @GetMapping("/find-pw")
+  public String findPw() {
+
+    return "find_pw";
+  }
+
 
 }

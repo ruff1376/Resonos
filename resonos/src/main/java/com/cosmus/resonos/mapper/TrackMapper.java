@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.Track;
 
 @Mapper
@@ -30,4 +31,8 @@ public interface TrackMapper {
     public List<Track> findTop5TracksInSameAlbum(String id) throws Exception;
     // 트랙아이디로 아티스트이름
     public String findArtistNameByTrackId(String id) throws Exception;
+    // 검색 결과 목록
+    public List<Track> searchList(String keyword) throws Exception;
+    // 검색 결과 전체 목록
+    public List<Track> allSearchList(String keyword) throws Exception;
 }

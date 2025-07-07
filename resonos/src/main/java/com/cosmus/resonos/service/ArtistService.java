@@ -34,4 +34,8 @@ public interface ArtistService {
     public List<Artist> listPaging(int offset, int size) throws Exception;
 
 
+    // 검색 결과 목록
+    public List<Artist> searchList(String keyword) throws Exception;
+    // 검색 결과 전체 목록
+    public List<Artist> allSearchList(String keyword) throws Exception;
 }

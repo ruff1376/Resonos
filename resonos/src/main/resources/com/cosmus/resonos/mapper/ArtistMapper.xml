@@ -73,4 +73,10 @@
   </select>
 
 
+  <select id="searchList" resultMap="ArtistResultMap" parameterType="string">
+    SELECT * FROM artist
+    WHERE name LIKE CONCAT('%', #{keyword}, '%')
+    LIMIT 6
+  </select>
+
 </mapper>

@@ -106,4 +106,14 @@ public class TrackServiceImpl implements TrackService {
     public String findArtistNameByTrackId(String id) throws Exception {
         return trackMapper.findArtistNameByTrackId(id);
     }
+
+    @Override
+    public List<Track> searchList(String keyword) throws Exception {
+        return trackMapper.searchList(keyword);
+    }
+
+    @Override
+    public List<Track> allSearchList(String keyword) throws Exception {
+        return trackMapper.allSearchList(keyword);
+    }
 }
