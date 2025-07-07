@@ -41,13 +41,13 @@
     ORDER BY name ASC
   </select>
 
-  <select id="exists" resultType="int" parameterType="string">
+  <select id="exists" resultType="int">
     SELECT COUNT(*) FROM artist WHERE id = #{id}
   </select>
 
   <!-- 해당아티스트의 인기 1위 뮤비url 을 반환 -->
   <select id="selectTopMvUrlByArtist"
-        parameterType="string"
+       
         resultType="string">
     SELECT
         IFNULL(NULLIF(mv_url, ''), 'empty_mv_url') AS mv_url
@@ -58,7 +58,7 @@
   </select>
 
   <select id="selectArtistByTrackId"
-    parameterType="string"
+   
     resultMap="ArtistResultMap">
     SELECT a.*
     FROM   artist a
@@ -73,21 +73,21 @@
   </select>
 
 
-  <select id="searchList" resultMap="ArtistResultMap" parameterType="string">
+  <select id="searchList" resultMap="ArtistResultMap">
     SELECT *
     FROM artist
     WHERE name LIKE CONCAT('%', #{keyword}, '%')
     LIMIT 6
   </select>
 
-  <select id="allSearchList" resultMap="ArtistResultMap" parameterType="map">
+  <select id="allSearchList" resultMap="ArtistResultMap">
     SELECT *
     FROM artist
     WHERE name LIKE CONCAT('%', #{keyword}, '%')
     LIMIT #{index}, #{size}
   </select>
 
-  <select id="searchCount" resultType="long" parameterType="string">
+  <select id="searchCount" resultType="long">
     SELECT COUNT(*)
     FROM artist
     WHERE name LIKE CONCAT('%', #{keyword}, '%')
@@ -101,7 +101,7 @@
 
   <!-- 앨범id로 아티스트 객체 -->
   <select id="findArtistByAlbumId"
-        parameterType="string"
+       
         resultMap="ArtistResultMap">
   SELECT ar.*
   FROM album a

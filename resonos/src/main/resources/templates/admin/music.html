@@ -34,6 +34,14 @@
             <h4>트랙 목록</h4>
             <a class="btn btn-gold btn-sm" data-bs-toggle="collapse" href="#trackCreateForm" role="button" aria-expanded="false" aria-controls="trackCreateForm">+ 트랙 추가</a>
           </div>
+          <!-- Spotify 트랙 검색 -->
+          <form id="searchTrackForm" class="d-flex align-items-center mb-2" autocomplete="off">
+            <input id="searchTrackInput" type="text" class="form-control me-2" placeholder="Spotify 트랙명 또는 ID로 검색" required style="max-width:300px;">
+            <button class="btn btn-outline-gold btn-sm" type="submit">검색</button>
+          </form>
+          <div id="searchTrackResults" class="list-group mb-2"></div>
+          <div id="syncTrackResult" class="alert d-none p-2"></div>
+
           <!-- 검색 -->
           <div class="mb-3">
             <form id="trackSearchForm" class="d-flex align-items-center" autocomplete="off">
@@ -139,6 +147,15 @@
             <h4>앨범 목록</h4>
             <a class="btn btn-gold btn-sm" data-bs-toggle="collapse" href="#albumCreateForm" role="button" aria-expanded="false" aria-controls="albumCreateForm">+ 앨범 추가</a>
           </div>
+          <!-- Spotify 앨범 검색 -->
+          <form id="searchAlbumForm" class="d-flex align-items-center mb-2" autocomplete="off">
+            <input id="searchAlbumInput" type="text" class="form-control me-2" placeholder="Spotify 앨범명 또는 ID로 검색" required style="max-width:300px;">
+            <button class="btn btn-outline-gold btn-sm" type="submit">검색</button>
+          </form>
+          <div id="searchAlbumResults" class="list-group mb-2"></div>
+          <div id="syncAlbumResult" class="alert d-none p-2"></div>
+
+          <!-- DB 검색 -->
           <div class="mb-3">
             <form id="albumSearchForm" class="d-flex align-items-center" autocomplete="off">
               <input id="albumSearchInput"
@@ -414,6 +431,151 @@
     });
   }
 
+  // [2] Spotify 트랙 검색 폼
+document.getElementById("searchTrackForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+  const query = document.getElementById("searchTrackInput").value.trim();
+  const resultsDiv = document.getElementById("searchTrackResults");
+  resultsDiv.innerHTML = "검색 중...";
+
+  fetch("/admin/music/search-track?query=" + encodeURIComponent(query), {
+    method: "GET",
+    headers: csrfHeader ? { [csrfHeader]: csrfToken } : {}
+  })
+  .then(response => response.json())
+  .then(data => {
+    resultsDiv.innerHTML = "";
+    if (data.success && data.tracks.length > 0) {
+      data.tracks.forEach(track => {
+        const trackItem = document.createElement("div");
+        trackItem.className = "list-group-item d-flex align-items-center";
+        trackItem.innerHTML = `
+          <div style="flex:1;">
+            <b>${track.title}</b>
+            <span class="text-muted small ms-2">${track.id}</span>
+            <span class="text-muted small ms-2">${track.artistId || ''}</span>
+            <span class="text-muted small ms-2">${track.albumId || ''}</span>
+          </div>
+          <button class="btn btn-gold btn-sm ms-2" data-track-id="${track.id}">동기화</button>
+        `;
+        trackItem.querySelector("button").onclick = function() {
+          syncTrackById(track.id);
+        };
+        resultsDiv.appendChild(trackItem);
+      });
+    } else {
+      resultsDiv.innerHTML = "<div class='text-danger'>검색 결과가 없습니다.</div>";
+    }
+  })
+  .catch(() => {
+    resultsDiv.innerHTML = "<div class='text-danger'>검색 중 오류 발생</div>";
+  });
+});
+
+// [2-2] Spotify 트랙 동기화
+function syncTrackById(trackId) {
+  const resultDiv = document.getElementById("syncTrackResult");
+  resultDiv.classList.remove("d-none", "alert-success", "alert-danger");
+  resultDiv.innerHTML = "동기화 중...";
+
+  const formData = new FormData();
+  formData.append("spotifyTrackId", trackId);
+
+  fetch("/admin/music/sync-track", {
+    method: "POST",
+    headers: csrfHeader ? { [csrfHeader]: csrfToken } : {},
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      resultDiv.classList.add("alert-success");
+      resultDiv.innerHTML = "트랙 동기화 성공: " + data.message;
+    } else {
+      resultDiv.classList.add("alert-danger");
+      resultDiv.innerHTML = "트랙 동기화 실패: " + data.message;
+    }
+  })
+  .catch(() => {
+    resultDiv.classList.add("alert-danger");
+    resultDiv.innerHTML = "트랙 동기화 중 오류 발생";
+  });
+}
+// [3] Spotify 앨범 검색 폼
+document.getElementById("searchAlbumForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+  const query = document.getElementById("searchAlbumInput").value.trim();
+  const resultsDiv = document.getElementById("searchAlbumResults");
+  resultsDiv.innerHTML = "검색 중...";
+
+  fetch("/admin/music/search-album?query=" + encodeURIComponent(query), {
+    method: "GET",
+    headers: csrfHeader ? { [csrfHeader]: csrfToken } : {}
+  })
+  .then(response => response.json())
+  .then(data => {
+    resultsDiv.innerHTML = "";
+    if (data.success && data.albums.length > 0) {
+      data.albums.forEach(album => {
+        const albumItem = document.createElement("div");
+        albumItem.className = "list-group-item d-flex align-items-center";
+        albumItem.innerHTML = `
+          <img src="${album.coverImage || ''}" alt="" style="width:32px;height:32px;object-fit:cover;border-radius:4px;margin-right:8px;">
+          <div style="flex:1;">
+            <b>${album.title}</b>
+            <span class="text-muted small ms-2">${album.id}</span>
+            <span class="text-muted small ms-2">${album.artistId || ''}</span>
+            <span class="text-muted small ms-2">${album.genre || ''}</span>
+          </div>
+          <button class="btn btn-gold btn-sm ms-2" data-album-id="${album.id}">동기화</button>
+        `;
+        albumItem.querySelector("button").onclick = function() {
+          syncAlbumById(album.id);
+        };
+        resultsDiv.appendChild(albumItem);
+      });
+    } else {
+      resultsDiv.innerHTML = "<div class='text-danger'>검색 결과가 없습니다.</div>";
+    }
+  })
+  .catch(() => {
+    resultsDiv.innerHTML = "<div class='text-danger'>검색 중 오류 발생</div>";
+  });
+});
+
+// [3-2] Spotify 앨범 동기화
+function syncAlbumById(albumId) {
+  const resultDiv = document.getElementById("syncAlbumResult");
+  resultDiv.classList.remove("d-none", "alert-success", "alert-danger");
+  resultDiv.innerHTML = "동기화 중...";
+
+  const formData = new FormData();
+  formData.append("spotifyAlbumId", albumId);
+
+  fetch("/admin/music/sync-album", {
+    method: "POST",
+    headers: csrfHeader ? { [csrfHeader]: csrfToken } : {},
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      resultDiv.classList.add("alert-success");
+      resultDiv.innerHTML = "앨범 동기화 성공: " + data.message;
+    } else {
+      resultDiv.classList.add("alert-danger");
+      resultDiv.innerHTML = "앨범 동기화 실패: " + data.message;
+    }
+  })
+  .catch(() => {
+    resultDiv.classList.add("alert-danger");
+    resultDiv.innerHTML = "앨범 동기화 중 오류 발생";
+  });
+}
+
+
+
+
   // [2] 내부 DB 아티스트 검색 결과를 SSR 테이블에 렌더링
   function renderArtistTable(artists) {
     const table = document.getElementById("artistTableList");
@@ -567,6 +729,6 @@
 </script>
 
 
-</script>
+
 </th:block>
 </html>

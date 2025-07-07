@@ -40,7 +40,7 @@
   </delete>
 
   <!-- 플레이리스트 트랙 추가 -->
-  <insert id="insertTracks" parameterType="list">
+  <insert id="insertTracks" >
     INSERT INTO playlist_track (playlist_id, track_id)
     VALUES
     <foreach collection="list" item="trackId" separator=",">
