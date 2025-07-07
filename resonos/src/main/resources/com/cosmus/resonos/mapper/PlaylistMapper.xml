@@ -53,13 +53,11 @@
 
   <update id="update" >
     UPDATE playlist
-    SET user_id = #{userId},
+    SET
         title = #{title},
         description = #{description},
         thumbnail_url = #{thumbnailUrl},
-        is_public = #{isPublic},
-        created_at = #{createdAt},
-        track_id = #{trackId}
+        is_public = #{isPublic}
     WHERE id = #{id}
   </update>
 
@@ -114,12 +112,29 @@
     ORDER BY pd.order_no;
   </select>
 
-  <update id="changeOrderNo" parameterType="map">
+  <!-- 플레이리스트의 트랙 순서 바꾸기 -->
+  <!-- <update id="updateTrackOrder" parameterType="map">
     <foreach collection="orderList" item="item" separator=";">
       UPDATE playlist_detail
       SET order_no = #{item.orderNo}
       WHERE playlist_id = #{playlistId}
         AND track_id = #{item.trackId}
     </foreach>
+  </update> -->
+  <update id="updateTrackOrder">
+    UPDATE playlist_detail
+    SET order_no =
+    <trim prefix="CASE" suffix="END">
+      <foreach collection="orderList" item="item">
+        WHEN track_id = #{item.trackId} THEN #{item.orderNo}
+      </foreach>
+    </trim>
+    WHERE playlist_id = #{playlistId}
+      AND track_id IN
+      <foreach collection="orderList" item="item" open="(" separator="," close=")">
+        #{item.trackId}
+      </foreach>
   </update>
+
+
 </mapper>

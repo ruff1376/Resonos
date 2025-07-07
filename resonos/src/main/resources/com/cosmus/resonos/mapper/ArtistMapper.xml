@@ -79,14 +79,12 @@
     LIMIT 6
   </select>
 
-<<<<<<< HEAD
   <!-- 전체 아티스트 수 조회 -->
   <select id="count" resultType="long">
   SELECT COUNT(*) FROM artist
   </select>
 
 
-=======
   <!-- 앨범id로 아티스트 객체 -->
   <select id="findArtistByAlbumId"
         parameterType="string"
@@ -97,5 +95,4 @@
   WHERE a.id = #{albumId}
   </select>
 
->>>>>>> 47db840545b0b189ecabde33086371b37b2a7109
 </mapper>

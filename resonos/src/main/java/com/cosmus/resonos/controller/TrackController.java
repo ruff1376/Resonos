@@ -1,11 +1,18 @@
 package com.cosmus.resonos.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.Artist;
@@ -15,6 +22,7 @@ import com.cosmus.resonos.service.ArtistService;
 import com.cosmus.resonos.service.TrackService;
 
 import lombok.extern.slf4j.Slf4j;
+
 
 @Slf4j
 @Controller
@@ -46,6 +54,37 @@ public class TrackController {
     model.addAttribute("artist", artist);
     return "review/track";
     }
+
+    /**
+     * 플레이리스트에 추가할 트랙 리스트 요청
+     * @param entity
+     * @return
+     * @throws Exception
+     */
+    @PostMapping(value = "/from-playlists", consumes = "application/json")
+    public ResponseEntity<?> getAjaxTracks(@RequestBody Map<String, String> data) throws Exception {
+        List<Track> trackList = trackService.addTrackList(data.get("keyword"));
+        log.info("trackList : {}", trackList);
+
+        if(trackList != null)
+            return new ResponseEntity<>(trackList, HttpStatus.OK);
+
+        return new ResponseEntity<>("리스트 요청 실패.", HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * 플레이리스트에 추가할 트랙 리스트 요청
+     * @param entity
+     * @return
+     * @throws Exception
+     */
+    @PostMapping(value = "/", consumes = "application/json")
+    public ResponseEntity<?> insertAjaxTracks(@RequestBody Map<String, List<String>> data) throws Exception {
+
+
+        return new ResponseEntity<>("리스트 요청 실패.", HttpStatus.BAD_REQUEST);
+    }
+
 
     // @Autowired
     // private TrackService trackService;

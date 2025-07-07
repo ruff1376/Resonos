@@ -39,11 +39,8 @@ public interface ArtistService {
     // 검색 결과 전체 목록
     public List<Artist> allSearchList(String keyword) throws Exception;
 
-<<<<<<< HEAD
     // 전체 수
     public long count() throws Exception;
-=======
     // 앨범아이디로 아티스트객체
     public Artist findArtistByAlbumId(String id) throws Exception;
->>>>>>> 47db840545b0b189ecabde33086371b37b2a7109
 }
