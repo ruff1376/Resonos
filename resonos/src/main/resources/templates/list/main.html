@@ -131,10 +131,14 @@
                         <!-- 앨범 카드 -->
                         <div class="col d-flex">
                             <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                                <img th:src="${newAlbum.coverImage}" class="card-img-top" alt="앨범커버">
+                                <a th:href="@{'/albums?id=' + ${newAlbum.id}}">
+                                    <img th:src="${newAlbum.coverImage}" class="card-img-top" alt="앨범커버">
+                                </a>
                                 <div class="card-body d-flex flex-column align-items-center p-2">
-                                    <div class="card-title" th:text="${newAlbum.title}"></div>
-                                    <div class="card-artist" th:text="${newAlbum.artistName}"></div>
+                                    <!-- 앨범 제목 클릭 시 이동 -->
+                                    <a th:href="@{'/albums?id=' + ${newAlbum.id}}" class="card-title" th:text="${newAlbum.title}"></a>
+                                    <!-- 아티스트 이름 클릭 시 이동 -->
+                                    <a th:href="@{'/artists?id=' + ${newAlbum.artistId}}" class="card-artist" th:text="${newAlbum.artistName}"></a>
                                 </div>
                                 <div class="d-flex justify-content-center align-items-center" style="height:75px;">
                                     <img src="캡처.png" alt="rating" class="album-rating">
@@ -160,10 +164,12 @@
                         <!-- 트랙 카드 -->
                         <div class="col d-flex">
                             <div class="card align-items-center p-3" style="width:228px; height:320px;">
-                                <img th:src="${newTrack.coverImage}" class="card-img-top" alt="앨범커버">
+                                <a th:href="@{'/tracks?id=' + ${newTrack.id}}">
+                                    <img th:src="${newTrack.coverImage}" class="card-img-top" alt="앨범커버">
+                                </a>
                                 <div class="card-body d-flex flex-column align-items-center p-2">
-                                    <div class="card-title" th:text="${newTrack.title}"></div>
-                                    <div class="card-artist" th:text="${newTrack.artistName}"></div>
+                                    <a th:href="@{'/tracks?id=' + ${newTrack.id}}" class="card-title" th:text="${newTrack.title}"></a>
+                                    <a th:href="@{'/artists?id=' + ${newTrack.artistId}}" class="card-artist" th:text="${newTrack.artistName}"></a>
                                 </div>
                                 <div class="d-flex justify-content-center align-items-center" style="height:75px;">
                                     <img src="캡처.png" alt="rating" class="album-rating">
@@ -173,7 +179,7 @@
                     </th:block>
                 </div>
                 <div class="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style="height:50px;">
-                    <a href="#" class="more-link">더 보기 &gt;</a>
+                    <a href="/list/new-tracks" class="more-link">더 보기 &gt;</a>
                 </div>
             </section>
     

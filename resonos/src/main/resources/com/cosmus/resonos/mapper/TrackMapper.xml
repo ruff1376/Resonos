@@ -17,6 +17,7 @@
     <result property="trackNo" column="track_no"/>
     <result property="artistName" column="artist_name"/>
     <result property="coverImage" column="cover_image"/>
+    <result property="releaseDate" column="release_date"/>
   </resultMap>
 
   <select id="selectAll" resultMap="Track">
@@ -30,6 +31,20 @@
     LEFT JOIN album al ON t.album_id = al.id
     ORDER BY t.id DESC
     LIMIT 12
+  </select>
+
+  <select id="newList" resultMap="Track">
+    SELECT t.*, ar.name AS artist_name, al.cover_image, al.release_date
+    FROM track t
+    LEFT JOIN artist ar ON t.artist_id = ar.id
+    LEFT JOIN album al ON t.album_id = al.id
+    ORDER BY al.release_date DESC
+    LIMIT #{index}, #{size}
+  </select>
+
+  <select id="count" resultType="long">
+    SELECT COUNT(*)
+    FROM track
   </select>
 
   <select id="selectById"  resultMap="Track">
