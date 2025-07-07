@@ -38,4 +38,7 @@ public interface ArtistService {
     public List<Artist> searchList(String keyword) throws Exception;
     // 검색 결과 전체 목록
     public List<Artist> allSearchList(String keyword) throws Exception;
+
+    // 전체 수
+    public long count() throws Exception;
 }

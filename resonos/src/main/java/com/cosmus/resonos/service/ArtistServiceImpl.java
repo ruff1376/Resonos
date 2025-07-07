@@ -76,6 +76,7 @@ public class ArtistServiceImpl implements ArtistService {
     public List<Artist> listPaging(int offset, int size) throws Exception {
         return artistMapper.listPaging(offset, size);
     }
+    @Override
     public List<Artist> searchList(String keyword) throws Exception {
         return artistMapper.searchList(keyword);
     }
@@ -83,5 +84,9 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public List<Artist> allSearchList(String keyword) throws Exception {
         return artistMapper.allSearchList(keyword);
+    }
+    @Override
+    public long count() throws Exception {
+        return artistMapper.count();
     }
 }

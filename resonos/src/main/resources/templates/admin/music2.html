@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layouts/admin_layout}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <title>음악 데이터 관리</title>
+  <th:block th:replace="~{fragments/link::admin}"></th:block>
+</head>
+
+<th:block layout:fragment="content">
+<body class="bg-dark text-light">
+<main class="py-5 bg-resonos-dark">
+  <div class="container" style="max-width: 1200px;">
+    <h2 class="mb-4 text-light-gold">음악 데이터 관리</h2>
+    <ul class="nav nav-tabs mb-4" id="musicTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="track-tab" data-bs-toggle="tab" data-bs-target="#track" type="button" role="tab">트랙</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="album-tab" data-bs-toggle="tab" data-bs-target="#album" type="button" role="tab">앨범</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="artist-tab" data-bs-toggle="tab" data-bs-target="#artist" type="button" role="tab">아티스트</button>
+      </li>
+    </ul>
+    <div class="tab-content" id="musicTabContent">
+      <!-- 트랙 관리 -->
+      <div class="tab-pane fade show active" id="track" role="tabpanel" aria-labelledby="track-tab">
+        <div class="d-flex justify-content-between mb-2">
+          <h4>트랙 목록</h4>
+          <a class="btn btn-gold btn-sm" data-bs-toggle="collapse" href="#trackCreateForm" role="button" aria-expanded="false" aria-controls="trackCreateForm">+ 트랙 추가</a>
+        </div>
+        <div class="collapse mb-4" id="trackCreateForm">
+          <form th:action="@{/admin/music/track/save}" method="post" class="border rounded p-3 bg-dark">
+            <div class="row g-2">
+              <div class="col-md-3"><input type="text" class="form-control" name="id" placeholder="ID" required></div>
+              <div class="col-md-3"><input type="text" class="form-control" name="title" placeholder="제목" required></div>
+              <div class="col-md-2"><input type="text" class="form-control" name="genre" placeholder="장르"></div>
+              <div class="col-md-2"><input type="text" class="form-control" name="albumId" placeholder="앨범ID"></div>
+              <div class="col-md-2"><input type="text" class="form-control" name="artistId" placeholder="아티스트ID"></div>
+              <div class="col-md-1"><input type="number" class="form-control" name="duration" placeholder="재생시간"></div>
+              <div class="col-md-1"><input type="number" class="form-control" name="popularity" placeholder="인기"></div>
+              <div class="col-md-1"><input type="number" class="form-control" name="trackNo" placeholder="트랙번호"></div>
+            </div>
+            <div class="text-end mt-2">
+              <button class="btn btn-gold btn-sm" type="submit">저장</button>
+              <a class="btn btn-outline-secondary btn-sm ms-2" data-bs-toggle="collapse" href="#trackCreateForm">취소</a>
+            </div>
+          </form>
+        </div>
+        <div class="resonos-card p-3">
+          <!-- 컬럼 헤더 -->
+          <div class="list-group-item bg-secondary text-dark fw-bold d-flex flex-nowrap align-items-center text-center justify-content-center" style="border-radius:8px 8px 0 0;">
+            <div style="flex-basis:8%;min-width:60px;">ID</div>
+            <div style="flex-basis:24%;min-width:120px;">제목</div>
+            <div style="flex-basis:10%;min-width:70px;">장르</div>
+            <div style="flex-basis:14%;min-width:90px;">앨범</div>
+            <div style="flex-basis:14%;min-width:90px;">아티스트</div>
+            <div style="flex-basis:8%;min-width:50px;">재생</div>
+            <div style="flex-basis:8%;min-width:50px;">인기</div>
+            <div style="flex-basis:14%;min-width:80px;">관리</div>
+          </div>
+          <div class="list-group">
+            <!-- 상위 10개만 보여주기 (추후 변경 가능) -->
+            <div th:each="track, iterStat : ${tracks}" th:if="${iterStat.index} < 10">
+              <div class="list-group-item bg-dark text-light border-secondary mb-2 rounded-0 d-flex flex-nowrap align-items-center text-center justify-content-center">
+                <div style="flex-basis:8%;min-width:60px;" class="text-truncate"><span th:text="${track.id}">id</span></div>
+                <div style="flex-basis:24%;min-width:120px;" class="text-truncate" title="[[${track.title}]]"><span th:text="${track.title}">제목</span></div>
+                <div style="flex-basis:10%;min-width:70px;" class="text-truncate" title="[[${track.genre}]]"><span th:text="${track.genre}">장르</span></div>
+                <div style="flex-basis:14%;min-width:90px;" class="text-truncate" title="[[${track.albumId}]]"><span th:text="${track.albumId}">앨범</span></div>
+                <div style="flex-basis:14%;min-width:90px;" class="text-truncate" title="[[${track.artistId}]]"><span th:text="${track.artistId}">아티스트</span></div>
+                <div style="flex-basis:8%;min-width:50px;" class="text-truncate"><span th:text="${track.duration}">0</span></div>
+                <div style="flex-basis:8%;min-width:50px;" class="text-truncate"><span th:text="${track.popularity}">0</span></div>
+                <div style="flex-basis:14%;min-width:80px;">
+                  <button class="btn btn-outline-gold btn-sm" type="button" data-bs-toggle="collapse" th:attr="data-bs-target='#editTrack' + ${track.id}" aria-expanded="false" th:aria-controls="'editTrack' + ${track.id}">수정</button>
+                  <form th:action="@{/admin/music/track/delete}" method="post" style="display:inline;">
+                    <input type="hidden" name="id" th:value="${track.id}" />
+                    <button class="btn btn-outline-gold btn-sm" type="submit" onclick="return confirm('삭제하시겠습니까?')">삭제</button>
+                  </form>
+                </div>
+              </div>
+              <div class="collapse w-100" th:id="'editTrack' + ${track.id}">
+                <form th:action="@{/admin/music/track/save}" method="post" class="border rounded p-3 bg-dark">
+                  <input type="hidden" name="id" th:value="${track.id}" />
+                  <div class="d-flex flex-nowrap align-items-center w-100 mb-2 text-center">
+                    <div style="flex-basis:8%;min-width:60px;" class="me-2"><input type="text" class="form-control" name="id" th:value="${track.id}" readonly></div>
+                    <div style="flex-basis:24%;min-width:120px;" class="me-2"><input type="text" class="form-control" name="title" th:value="${track.title}" required></div>
+                    <div style="flex-basis:10%;min-width:70px;" class="me-2"><input type="text" class="form-control" name="genre" th:value="${track.genre}"></div>
+                    <div style="flex-basis:14%;min-width:90px;" class="me-2"><input type="text" class="form-control" name="albumId" th:value="${track.albumId}"></div>
+                    <div style="flex-basis:14%;min-width:90px;" class="me-2"><input type="text" class="form-control" name="artistId" th:value="${track.artistId}"></div>
+                    <div style="flex-basis:8%;min-width:50px;" class="me-2"><input type="number" class="form-control" name="duration" th:value="${track.duration}"></div>
+                    <div style="flex-basis:8%;min-width:50px;" class="me-2"><input type="number" class="form-control" name="popularity" th:value="${track.popularity}"></div>
+                  </div>
+                  <div class="text-end mt-2">
+                    <button class="btn btn-gold btn-sm" type="submit">저장</button>
+                    <button class="btn btn-outline-secondary btn-sm ms-2" type="button" data-bs-toggle="collapse" th:attr="data-bs-target='#editTrack' + ${track.id}">취소</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div th:if="${#lists.isEmpty(tracks)}" class="list-group-item text-center text-secondary bg-dark">등록된 트랙이 없습니다.</div>
+          </div>
+        </div>
+      </div>
+      <!-- 앨범 관리 -->
+      <div class="tab-pane fade" id="album" role="tabpanel" aria-labelledby="album-tab">
+        <div class="d-flex justify-content-between mb-2">
+          <h4>앨범 목록</h4>
+          <a class="btn btn-gold btn-sm" data-bs-toggle="collapse" href="#albumCreateForm" role="button" aria-expanded="false" aria-controls="albumCreateForm">+ 앨범 추가</a>
+        </div>
+        <div class="collapse mb-4" id="albumCreateForm">
+          <form th:action="@{/admin/music/album/save}" method="post" class="border rounded p-3 bg-dark">
+            <div class="row g-2">
+              <div class="col-md-3"><input type="text" class="form-control" name="id" placeholder="ID" required></div>
+              <div class="col-md-3"><input type="text" class="form-control" name="title" placeholder="제목" required></div>
+              <div class="col-md-2"><input type="text" class="form-control" name="coverImage" placeholder="커버 이미지 URL"></div>
+              <div class="col-md-2"><input type="date" class="form-control" name="releaseDate" placeholder="발매일"></div>
+              <div class="col-md-2"><input type="text" class="form-control" name="genre" placeholder="장르"></div>
+              <div class="col-md-2"><input type="text" class="form-control" name="label" placeholder="레이블"></div>
+              <div class="col-md-2"><input type="text" class="form-control" name="description" placeholder="설명"></div>
+              <div class="col-md-2"><input type="text" class="form-control" name="artistId" placeholder="아티스트ID"></div>
+            </div>
+            <div class="text-end mt-2">
+              <button class="btn btn-gold btn-sm" type="submit">저장</button>
+              <a class="btn btn-outline-secondary btn-sm ms-2" data-bs-toggle="collapse" href="#albumCreateForm">취소</a>
+            </div>
+          </form>
+        </div>
+        <div class="resonos-card p-3">
+          <!-- 컬럼 헤더 -->
+          <div class="list-group-item bg-secondary text-dark fw-bold d-flex flex-nowrap align-items-center text-center justify-content-center" style="border-radius:8px 8px 0 0;">
+            <div style="flex-basis:10%;min-width:80px;">ID</div>
+            <div style="flex-basis:16%;min-width:120px;">제목</div>
+            <div style="flex-basis:8%;min-width:60px;">커버</div>
+            <div style="flex-basis:13%;min-width:90px;">발매일</div>
+            <div style="flex-basis:10%;min-width:70px;">장르</div>
+            <div style="flex-basis:10%;min-width:70px;">레이블</div>
+            <div style="flex-basis:13%;min-width:90px;">설명</div>
+            <div style="flex-basis:10%;min-width:80px;">아티스트</div>
+            <div style="flex-basis:10%;min-width:80px;">관리</div>
+          </div>
+          <div class="list-group">
+            <!-- 상위 10개만 보여주기 (추후 변경 가능) -->
+            <div th:each="album, iterStat : ${albums}" th:if="${iterStat.index} < 10">
+              <div class="list-group-item bg-dark text-light border-secondary mb-2 rounded-0 d-flex flex-nowrap align-items-center text-center justify-content-center">
+                <div style="flex-basis:10%;min-width:80px;" class="text-truncate"><span th:text="${album.id}">id</span></div>
+                <div style="flex-basis:16%;min-width:120px;" class="text-truncate"><span th:text="${album.title}">제목</span></div>
+                <div style="flex-basis:8%;min-width:60px;" class="text-truncate"><img th:src="${album.coverImage}" alt="cover" class="img-fluid rounded" style="max-height:32px;max-width:60px;"></div>
+                <div style="flex-basis:13%;min-width:90px;" class="text-truncate"><span th:text="${album.releaseDate}">발매일</span></div>
+                <div style="flex-basis:10%;min-width:70px;" class="text-truncate"><span th:text="${album.genre}">장르</span></div>
+                <div style="flex-basis:10%;min-width:70px;" class="text-truncate"><span th:text="${album.label}">레이블</span></div>
+                <div style="flex-basis:13%;min-width:90px;" class="text-truncate"><span th:text="${album.description}">설명</span></div>
+                <div style="flex-basis:10%;min-width:80px;" class="text-truncate"><span th:text="${album.artistId}">아티스트</span></div>
+                <div style="flex-basis:10%;min-width:80px;">
+                  <button class="btn btn-outline-gold btn-sm" type="button" data-bs-toggle="collapse" th:attr="data-bs-target='#editAlbum' + ${album.id}" aria-expanded="false" th:aria-controls="'editAlbum' + ${album.id}">수정</button>
+                  <form th:action="@{/admin/music/album/delete}" method="post" style="display:inline;">
+                    <input type="hidden" name="id" th:value="${album.id}" />
+                    <button class="btn btn-outline-gold btn-sm" type="submit" onclick="return confirm('삭제하시겠습니까?')">삭제</button>
+                  </form>
+                </div>
+              </div>
+              <div class="collapse w-100" th:id="'editAlbum' + ${album.id}">
+                <form th:action="@{/admin/music/album/save}" method="post" class="border rounded p-3 bg-dark">
+                  <input type="hidden" name="id" th:value="${album.id}" />
+                  <div class="d-flex flex-nowrap align-items-center w-100 mb-2 text-center">
+                    <div style="flex-basis:10%;min-width:80px;" class="me-2"><input type="text" class="form-control" name="id" th:value="${album.id}" readonly></div>
+                    <div style="flex-basis:16%;min-width:120px;" class="me-2"><input type="text" class="form-control" name="title" th:value="${album.title}" required></div>
+                    <div style="flex-basis:8%;min-width:60px;" class="me-2"><input type="text" class="form-control" name="coverImage" th:value="${album.coverImage}"></div>
+                    <div style="flex-basis:13%;min-width:90px;" class="me-2"><input type="date" class="form-control" name="releaseDate" th:value="${album.releaseDate}"></div>
+                    <div style="flex-basis:10%;min-width:70px;" class="me-2"><input type="text" class="form-control" name="genre" th:value="${album.genre}"></div>
+                    <div style="flex-basis:10%;min-width:70px;" class="me-2"><input type="text" class="form-control" name="label" th:value="${album.label}"></div>
+                    <div style="flex-basis:13%;min-width:90px;" class="me-2"><input type="text" class="form-control" name="description" th:value="${album.description}"></div>
+                    <div style="flex-basis:10%;min-width:80px;" class="me-2"><input type="text" class="form-control" name="artistId" th:value="${album.artistId}"></div>
+                  </div>
+                  <div class="text-end mt-2">
+                    <button class="btn btn-gold btn-sm" type="submit">저장</button>
+                    <button class="btn btn-outline-secondary btn-sm ms-2" type="button" data-bs-toggle="collapse" th:attr="data-bs-target='#editAlbum' + ${album.id}">취소</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div th:if="${#lists.isEmpty(albums)}" class="list-group-item text-center text-secondary bg-dark">등록된 앨범이 없습니다.</div>
+          </div>
+        </div>
+      </div>
+      <!-- 아티스트 관리 -->
+      <div class="tab-pane fade" id="artist" role="tabpanel" aria-labelledby="artist-tab">
+        <div class="d-flex justify-content-between mb-2">
+          <h4>아티스트 목록</h4>
+          <a class="btn btn-gold btn-sm" data-bs-toggle="collapse" href="#artistCreateForm" role="button" aria-expanded="false" aria-controls="artistCreateForm">+ 아티스트 추가</a>
+        </div>
+        <div class="collapse mb-4" id="artistCreateForm">
+          <form th:action="@{/admin/music/artist/save}" method="post" class="border rounded p-3 bg-dark">
+            <div class="row g-2">
+              <div class="col-md-3"><input type="text" class="form-control" name="id" placeholder="ID" required></div>
+              <div class="col-md-3"><input type="text" class="form-control" name="name" placeholder="이름" required></div>
+              <div class="col-md-2"><input type="text" class="form-control" name="profileImage" placeholder="프로필 이미지 URL"></div>
+              <div class="col-md-2"><input type="text" class="form-control" name="genre" placeholder="장르"></div>
+            </div>
+            <div class="text-end mt-2">
+              <button class="btn btn-gold btn-sm" type="submit">저장</button>
+              <a class="btn btn-outline-secondary btn-sm ms-2" data-bs-toggle="collapse" href="#artistCreateForm">취소</a>
+            </div>
+          </form>
+        </div>
+        <div class="resonos-card p-3">
+          <!-- 컬럼 헤더 -->
+        <div class="list-group-item bg-secondary text-dark fw-bold d-flex flex-nowrap align-items-center text-center justify-content-between" style="border-radius:8px 8px 0 0;">
+          <div style="flex-basis:12%;min-width:80px;">ID</div>
+          <div style="flex-basis:32%;min-width:160px;">이름</div>
+          <div style="flex-basis:16%;min-width:80px;">프로필</div>
+          <div style="flex-basis:14%;min-width:80px;">관리</div>
+        </div>
+
+          <div class="list-group">
+            <!-- 상위 10개만 보여주기 (추후 변경 가능) -->
+            <div th:each="artist, iterStat : ${artists}" th:if="${iterStat.index} < 10">
+              <!-- 아티스트 한 줄 (flex row) -->
+              <div class="list-group-item bg-dark text-light border-secondary mb-2 rounded-0 d-flex flex-nowrap align-items-center text-center justify-content-between">
+                <div style="flex-basis:12%;min-width:80px;" class="text-truncate">
+                  <span th:text="${artist.id}">id</span>
+                </div>
+                <div style="flex-basis:32%;min-width:160px;" class="text-truncate" title="[[${artist.name}]]">
+                  <span th:text="${artist.name}">이름</span>
+                </div>
+                <div style="flex-basis:16%;min-width:80px;" class="text-truncate">
+                  <img th:src="${artist.profileImage}" alt="profile" class="img-fluid rounded" style="max-height:32px;max-width:60px;">
+                </div>
+                <div style="flex-basis:14%;min-width:80px;">
+                  <button class="btn btn-outline-gold btn-sm" type="button"
+                    data-bs-toggle="collapse"
+                    th:attr="data-bs-target='#editArtist' + ${artist.id}"
+                    aria-expanded="false"
+                    th:aria-controls="'editArtist' + ${artist.id}">수정</button>
+                  <form th:action="@{/admin/music/artist/delete}" method="post" style="display:inline;">
+                    <input type="hidden" name="id" th:value="${artist.id}" />
+                    <button class="btn btn-outline-gold btn-sm" type="submit" onclick="return confirm('삭제하시겠습니까?')">삭제</button>
+                  </form>
+                </div>
+              </div>
+              <!-- collapse 폼: row 아래에 위치 -->
+              <div class="collapse w-100" th:id="'editArtist' + ${artist.id}">
+                <form th:action="@{/admin/music/artist/save}" method="post" class="border rounded p-3 bg-dark">
+                  <div class="d-flex flex-nowrap align-items-center w-100 mb-2 text-center">
+                    <div style="flex-basis:12%;min-width:80px;" class="me-2">
+                      <input type="text" class="form-control" name="id" th:value="${artist.id}" readonly>
+                    </div>
+                    <div style="flex-basis:32%;min-width:160px;" class="me-2">
+                      <input type="text" class="form-control" name="name" th:value="${artist.name}" required>
+                    </div>
+                    <div style="flex-basis:16%;min-width:80px;" class="me-2">
+                      <input type="text" class="form-control" name="profileImage" th:value="${artist.profileImage}">
+                    </div>
+                  </div>
+                  <div class="text-end mt-2">
+                    <button class="btn btn-gold btn-sm" type="submit">저장</button>
+                    <button class="btn btn-outline-secondary btn-sm ms-2" type="button" data-bs-toggle="collapse" th:attr="data-bs-target='#editArtist' + ${artist.id}">취소</button>
+                  </div>
+                </form>
+              </div>
+
+            </div>
+            <!-- 전체 목록은 추후 변경 가능 (아래 주석 참고) -->
+            <!--
+            <div class="list-group-item bg-dark text-light border-secondary mb-2 rounded-0" th:each="artist : ${artists}">
+              ...기존 전체 목록 코드...
+            </div>
+            -->
+            <div th:if="${#lists.isEmpty(artists)}" class="list-group-item text-center text-secondary bg-dark">등록된 아티스트가 없습니다.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 트랙/앨범/아티스트 등록/수정 모달 (폼은 필요에 따라 구현) -->
+    <!-- ...모달 폼 생략(추후 구현)... -->
+    <!-- api 아티스트 검색 기능 추가중  -->
+    <form method="post" th:action="@{/admin/music/sync-artist}" id="syncArtistForm">
+      <div class="input-group mb-3" style="max-width:400px;">
+        <input type="text" name="spotifyArtistId" class="form-control" placeholder="Spotify 아티스트 ID 또는 이름 입력" required>
+        <button type="submit" class="btn btn-gold btn-sm">아티스트 동기화</button>
+      </div>
+    </form>
+    <!-- 결과/상태 표시 영역 -->
+    <div id="syncArtistResult" class="alert mt-2 d-none"></div>
+    <!-- 동기화 결과 메시지 표시 -->
+    <div th:if="${syncMessage}" class="alert alert-info mt-3" th:text="${syncMessage}"></div>
+    
+    <!-- 아티스트 검색 폼 -->
+    <form id="searchArtistForm" class="mb-3" autocomplete="off">
+      <div class="input-group" style="max-width:400px;">
+        <input type="text" id="searchArtistInput" name="query" class="form-control" placeholder="Spotify 아티스트 이름 검색" required>
+        <button type="submit" class="btn btn-outline-gold btn-sm">검색</button>
+      </div>
+    </form>
+    <!-- 검색 결과 표시 영역 -->
+    <div id="searchArtistResults" class="list-group mb-3"></div>
+    <div id="syncArtistResult" class="alert mt-2 d-none"></div>
+    <div id="artistList" class="list-group"></div>
+    <button id="loadMoreBtn" class="btn btn-outline-gold btn-sm mt-2">더보기</button>
+
+
+
+
+  </div>
+  <script th:inline="javascript">
+    // CSRF 토큰 준비
+    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    // 아티스트 검색 AJAX
+    document.getElementById("searchArtistForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const query = document.getElementById("searchArtistInput").value.trim();
+      const resultsDiv = document.getElementById("searchArtistResults");
+      resultsDiv.innerHTML = "검색 중...";
+
+      fetch("/admin/music/search-artist?query=" + encodeURIComponent(query), {
+        method: "GET",
+        headers: {
+          [csrfHeader]: csrfToken
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        resultsDiv.innerHTML = "";
+        if (data.success && data.artists.length > 0) {
+          data.artists.forEach(artist => {
+            const artistItem = document.createElement("div");
+            artistItem.className = "list-group-item d-flex align-items-center";
+            artistItem.innerHTML = `
+              <img src="${artist.image || ''}" alt="" style="width:32px;height:32px;object-fit:cover;border-radius:50%;margin-right:8px;">
+              <div style="flex:1;">
+                <b>${artist.name}</b>
+                <span class="text-muted small ms-2">${artist.id}</span>
+                <span class="text-muted small ms-2">${artist.genres || ''}</span>
+              </div>
+              <button class="btn btn-gold btn-sm ms-2" data-artist-id="${artist.id}">동기화</button>
+            `;
+            artistItem.querySelector("button").onclick = function() {
+              syncArtistById(artist.id);
+            };
+            resultsDiv.appendChild(artistItem);
+          });
+        } else {
+          resultsDiv.innerHTML = "<div class='text-danger'>검색 결과가 없습니다.</div>";
+        }
+      })
+      .catch(() => {
+        resultsDiv.innerHTML = "<div class='text-danger'>검색 중 오류 발생</div>";
+      });
+    });
+
+    // 아티스트 동기화 AJAX
+    function syncArtistById(artistId) {
+      const resultDiv = document.getElementById("syncArtistResult");
+      resultDiv.classList.remove("d-none", "alert-success", "alert-danger");
+      resultDiv.innerHTML = "동기화 중...";
+
+      const formData = new FormData();
+      formData.append("spotifyArtistId", artistId);
+
+      fetch("/admin/music/sync-artist", {
+        method: "POST",
+        headers: {
+          [csrfHeader]: csrfToken
+        },
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          resultDiv.classList.add("alert-success");
+          resultDiv.innerHTML = "아티스트 동기화 성공: " + data.message;
+        } else {
+          resultDiv.classList.add("alert-danger");
+          resultDiv.innerHTML = "아티스트 동기화 실패: " + data.message;
+        }
+      })
+      .catch(() => {
+        resultDiv.classList.add("alert-danger");
+        resultDiv.innerHTML = "아티스트 동기화 중 오류 발생";
+      });
+    }
+
+    // 더보기 버튼 클릭 이벤트
+    let offset = 0;
+    const size = 5;
+
+    function loadArtists() {
+      fetch(`/admin/music/artist/list?offset=${offset}&size=${size}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            data.artists.forEach(artist => {
+              const item = document.createElement("div");
+              item.className = "list-group-item";
+              item.innerHTML = `
+                <b>${artist.name}</b>
+                <span class="text-muted small ms-2">${artist.id}</span>
+                ${artist.profileImage ? `<img src="${artist.profileImage}" style="height:32px;width:32px;border-radius:50%;margin-left:8px;">` : ""}
+              `;
+              document.getElementById("artistList").appendChild(item);
+            });
+            offset += size;
+            if (data.artists.length < size) {
+              document.getElementById("loadMoreBtn").style.display = "none"; // 더 이상 없음
+            }
+          }
+        });
+    }
+
+    // 최초 5명 로드
+    loadArtists();
+
+    document.getElementById("loadMoreBtn").addEventListener("click", loadArtists);
+
+
+
+
+  </script>
+
+
+
+
+</main>
+</body>
+</th:block>
+</html>

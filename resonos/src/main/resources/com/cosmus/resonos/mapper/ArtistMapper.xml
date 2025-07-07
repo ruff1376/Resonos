@@ -79,4 +79,10 @@
     LIMIT 6
   </select>
 
+  <!-- 전체 아티스트 수 조회 -->
+  <select id="count" resultType="long">
+  SELECT COUNT(*) FROM artist
+  </select>
+
+
 </mapper>
