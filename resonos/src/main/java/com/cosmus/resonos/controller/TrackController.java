@@ -28,7 +28,7 @@ public class TrackController {
     private AlbumService albumService;
     @Autowired
     private ArtistService artistService;
-    
+
     // 트랙 화면
     @GetMapping
     public String trackInfo(@RequestParam("id") String id, Model model) throws Exception {
