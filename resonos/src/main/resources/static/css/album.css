@@ -249,7 +249,7 @@ img {
     gap: 10px;
 }
 .spotify{
-  flex:1 1 500px;        /* 👉 grow 1 / shrink 1 / basis 500px  */
+  flex:1 1 auto;        /* 👉 grow 1 / shrink 1 / basis 500px  */
   min-width:260px;       /* 더 작아질 때의 하한선(선택사항)      */
   height:152px;          /* 고정 높이 유지                       */
   max-width: 510px;
@@ -287,6 +287,7 @@ img {
     flex: 1 1 auto;         /* 유연하게 줄어들고 늘어남 */
     max-width: 400px;       /* 최대 너비 제한 */
     min-width: 350px;
+    gap: 10px;
 }
 .top5track > p:first-child,
 .mood-vote p ,
@@ -333,6 +334,7 @@ img {
     border: 2px solid var(--main-color);
     overflow: hidden;
     height: 315px;
+    width: 560px;
 }
 .chart {
     width: 400px;
@@ -479,3 +481,8 @@ img {
     margin: 0;
 }
 /* 애니메이션 끝 */
+@media (max-width: 960px) {
+  .track-graphy {
+    display: none !important;
+  }
+}

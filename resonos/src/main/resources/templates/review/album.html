@@ -57,11 +57,11 @@
         <div class="info-card">
             <div class="info top5track">
                 <p id="headline">앨범 인기 TOP 5 트랙</p>
-                <p>1. 나는 아름다운 트랄랄레로</p>
-                <p>1. 나는 아름다운 트랄랄레로</p>
-                <p>1. 나는 아름다운 트랄랄레로</p>
-                <p>1. 나는 아름다운 트랄랄레로</p>
-                <p>1. 나는 아름다운 트랄랄레로</p>
+                <th:block th:each="tops, stat : ${top5List}">
+                    <a th:href="@{tracks(id=${tops.id})}">
+                        <p th:text="|${stat.count}. ${tops.title} ${track.formattedDuration}|"></p>
+                    </a>
+                </th:block>
             </div>
             <div class="info album-moods">
                 <p id="headline">앨범의 분위기</p>
@@ -182,16 +182,24 @@
         <div class="iframe-card">
             <div class="spotify">
                 <!-- 스포티파이 로그인 되어있지않을때 30초 미리듣기 오디오태그 -->
-                <iframe src="https://open.spotify.com/embed/track/2GMKQPMXdOGXsQkDYBN6wF?utm_source=generator"
-                    frameborder="0" allowfullscreen
-                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+                <iframe th:src="|https://open.spotify.com/embed/track/${track.id}?utm_source=generator|" frameborder="0"
+                    allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy">
                 </iframe>
             </div>
             <div class="youtube">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/3XDf5Ke2Zj8?si=VLxTrYjctMpDikdc"
-                    title="YouTube video player" frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <th:block th:if="${track.mvUrl != null and track.mvUrl != 'empty_mv_url'}">
+                    <iframe width="560" height="315" th:src="|https://www.youtube.com/embed/${track.mvUrl}|"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                    </iframe>
+                </th:block>
+                <!-- ② MV URL이 없을 때 → 준비중 이미지 -->
+                <th:block th:if="${track.mvUrl == null or track.mvUrl == 'empty_mv_url'}">
+                    <img th:src="@{/img/wait_plz.png}" alt="뮤직비디오 준비중" width="560" height="315"
+                        style="object-fit:cover;">
+                </th:block>
             </div>
         </div>
         <!-- iframe 카드 끝 -->
