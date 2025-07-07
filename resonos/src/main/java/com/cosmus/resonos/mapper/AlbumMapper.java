@@ -1,11 +1,11 @@
 package com.cosmus.resonos.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.cosmus.resonos.domain.Album;
-import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.domain.Pagination;
 
 @Mapper
@@ -37,5 +37,7 @@ public interface AlbumMapper {
     // 검색 결과 목록
     public List<Album> searchList(String keyword) throws Exception;
     // 검색 결과 전체 목록
-    public List<Album> allSearchList(String keyword) throws Exception;
+    public List<Album> allSearchList(Map<String, Object> paramMap) throws Exception;
+    // 검색 데이터 수
+    public long searchCount(String keyword) throws Exception;
 }

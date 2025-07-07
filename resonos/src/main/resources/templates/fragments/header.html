@@ -14,12 +14,12 @@
                     </a>
                 </div>
 
-                <div class="collapse navbar-collapse d-flex justify-content-end align-items-center header-gap mt-4 mb-4" id="mainNav">
-                    <form class="position-relative d-flex align-items-center mb-0" style="width:300px;" th:action="@{/search}" method="get">
+                <div class="collapse navbar-collapse d-flex justify-content-end align-items-center header-gap mt-4 mb-4 gap-4" id="mainNav">
+                    <form class="position-relative d-flex align-items-center mb-0" style="width:300px;" th:action="@{/search}" method="get" onsubmit="return validateSearch()">
                         <i class="bi bi-search search-icon position-absolute"></i>
-                        <input type="search" name="q" class="form-control search-box" placeholder="앨범, 트랙, 아티스트">
+                        <input type="search" name="q" id="searchInput" class="form-control search-box" placeholder="앨범, 트랙, 아티스트">
                     </form>
-                    <div class="navbar-nav d-flex flex-row justify-content-end align-items-center header-gap">
+                    <div class="navbar-nav d-flex flex-row justify-content-end align-items-center header-gap gap-3">
                         <!-- 비로그인 -->
                         <th:block th:if="${not #authorization.expression('isAuthenticated()')}">
                             <li class="nav-item ms-lg-2">
@@ -35,23 +35,29 @@
                                 <a href="#" class="nav-link p-0" data-bs-toggle="dropdown" aria-expanded="false" style="line-height:0;">
                                     <i class="bi bi-bell-fill" style="font-size: 24px; color: #B1B1B1;"></i>
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-end">
+                                <ul class="dropdown-menu dropdown-menu-end" style="background: #181C23;">
                                     <li><a class="dropdown-item" href="#">알림1</a></li>
                                     <li><a class="dropdown-item" href="#">알림2</a></li>
                                     <li><a class="dropdown-item" href="#">알림3</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">전체 알림 보기</a></li>
+                                    <li><a class="dropdown-item" href="/notifications">전체 알림 보기</a></li>
                                 </ul>
                             </div>
                             <div class="flex-shrink-0 dropdown profile-dropdown">
                                 <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                     <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
                                 </a>
-                                <ul class="dropdown-menu text-small shadow">
-                                    <li><a class="dropdown-item" href="#">마이페이지</a></li>
-                                    <li><a class="dropdown-item" href="#">환경설정</a></li>
+                                <ul class="dropdown-menu text-small shadow" style="background: #181C23;">
+                                    <li><a class="dropdown-item" href="/users/mypage">마이페이지</a></li>
+                                    <li><a class="dropdown-item" href="/users/setting-alarm">환경설정</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">로그아웃</a></li>
+                                    <li>
+                                        <form th:action="@{/logout}" method="post">
+                                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                            <button type="submit" class="dropdown-item">로그아웃</button>
+                                        </form>
+                                    </li>
+
                                 </ul>
                             </div>
                         </th:block>
@@ -61,4 +67,18 @@
             </div>
         </nav>
     </header>
+    <script>
+        function validateSearch() {
+            const input = document.getElementById("searchInput");
+            const trimmed = input.value.trim(); // 앞뒤 공백 제거
+
+            if (trimmed.length === 0) {
+                alert("검색어를 입력하세요.");
+                return false; // 검색 중단
+            }
+
+            input.value = trimmed; // 입력값을 trim된 값으로 바꿈
+            return true; // 검색 진행
+        }
+    </script>
 </th:block>

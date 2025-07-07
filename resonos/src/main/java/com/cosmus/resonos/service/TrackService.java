@@ -1,6 +1,7 @@
 package com.cosmus.resonos.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Track;
@@ -43,7 +44,7 @@ public interface TrackService {
     // 검색 결과 목록
     public List<Track> searchList(String keyword) throws Exception;
     // 검색 결과 전체 목록
-    public List<Track> allSearchList(String keyword) throws Exception;
+    public List<Track> allSearchList(Map<String, Object> paramMap) throws Exception;
 
     // 플레이리스트에 추가할 트랙 목록 검색
     public List<Track> addTrackList(String keyword) throws Exception;

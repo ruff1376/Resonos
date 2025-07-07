@@ -1,11 +1,14 @@
 package com.cosmus.resonos.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.Artist;
+import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.mapper.ArtistMapper;
 
 @Service
@@ -76,14 +79,25 @@ public class ArtistServiceImpl implements ArtistService {
     public List<Artist> listPaging(int offset, int size) throws Exception {
         return artistMapper.listPaging(offset, size);
     }
+  
     @Override
     public List<Artist> searchList(String keyword) throws Exception {
         return artistMapper.searchList(keyword);
     }
 
     @Override
-    public List<Artist> allSearchList(String keyword) throws Exception {
-        return artistMapper.allSearchList(keyword);
+    public List<Artist> allSearchList(Map<String, Object> paramMap) throws Exception {
+        String keyword = (String) paramMap.get("keyword");
+        Pagination pagination = (Pagination) paramMap.get("pagination");
+        long total = artistMapper.searchCount(keyword);
+        if (pagination != null) {
+            pagination.setTotal(total);
+        }
+        Map<String, Object> queryMap = new HashMap<>();
+        queryMap.put("keyword", keyword);
+        queryMap.put("index", pagination.getIndex());
+        queryMap.put("size", pagination.getSize());
+        return artistMapper.allSearchList(queryMap);
     }
     @Override
     public long count() throws Exception {

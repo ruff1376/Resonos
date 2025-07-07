@@ -81,6 +81,8 @@
     border-radius: 15px;
 }
 .site-header .dropdown-item {
+    font-size: 1.6rem;
+    text-align: center;
     color: #B1B1B1;
 }
 .site-header .dropdown-item:hover {
