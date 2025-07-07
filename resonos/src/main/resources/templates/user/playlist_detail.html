@@ -38,7 +38,8 @@
           <input th:checked="*{isPublic == true}" type="radio" id="true" th:field="*{isPublic}" value="true">
           <label class="profile-edit-label" for="true">공개</label>
           <input th:checked="*{isPublic == false}" type="radio" id="false" th:field="*{isPublic}" value="false">
-          <label class="profile-edit-label" for="false">비공개</label>
+          <label class="ㅁprofile-edit-label" for="false">비공개</label>
+          <!-- 트랙 목록 -->
           <div class="info-wrapper">
             <div class="info-section">
               <div class="title">
@@ -55,6 +56,7 @@
                 </th:block>
                 <th:block th:each="track : ${playlist.trackList}">
                   <li th:attr="data-orderId=${track.orderNo}" class="list-item" th:object="${track}">
+                    <input type="hidden" th:value="${track.id}">
                     <img th:src="*{coverImage}" class="follow-img" />
                     <div class="info">
                       <span class="name-album" th:text="*{title}">트랙 명</span>
@@ -69,6 +71,7 @@
               </ul>
             </div>
           </div>
+          <button type="submit" class="btn btn-gold mt-5">수정하기</button>
         </form>
       </div>
     </section>
@@ -101,10 +104,41 @@
         scrollSpeed: 20,
         forceFallback: true,
         onEnd: (evt) => {
-        const newOrder = [...dragList.children].map(li => li.dataset.orderid)
-        console.log('변경된 순서:', newOrder)
+          const newOrder = [...dragList.children].map((li, index) => ({
+            trackId: li.querySelector('input[type="hidden"]').value,
+            orderNo: index + 1
+          }))
+          changeOrder(newOrder)
         },
       })
+
+      // 비동기 유효성 검사
+      async function changeOrder(orderData) {
+
+        let url = ''
+
+        const data = orderData
+
+        try {
+            /* Security 제공 CSRF */
+            const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    [header] : token,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+          if (!response.ok) {
+              return
+          }
+        } catch (error) {
+            console.error("요청 실패:", error);
+          }
+      }
     </script>
   </th:block>
 </body>

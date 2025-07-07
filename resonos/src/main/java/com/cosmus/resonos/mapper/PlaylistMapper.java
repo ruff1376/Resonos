@@ -29,5 +29,6 @@ public interface PlaylistMapper {
     public List<Playlist> likedPlaylist(Long userId) throws Exception;
     // 플레이리스트 상세 조회
     public PlaylistDTO trackOfPlaylist(Long playlistId) throws Exception;
+    // 플레이리스트 트랙 변경
 }
 

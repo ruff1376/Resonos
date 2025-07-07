@@ -37,7 +37,7 @@
   </select>
 
   <insert id="insert" >
-    INSERT INTO track 
+    INSERT INTO track
       (id, title, duration, genre, streaming_url, mv_url, album_id, artist_id, popularity, track_no)
     VALUES
       (#{id}, #{title}, #{duration}, #{genre}, #{streamingUrl}, #{mvUrl}, #{albumId}, #{artistId}, #{popularity}, #{trackNo})
@@ -60,7 +60,7 @@
   <delete id="delete" >
     DELETE FROM track WHERE id = #{id}
   </delete>
-  
+
   <select id="list" resultMap="Track">
     SELECT * FROM track
     ORDER BY id DESC
@@ -119,6 +119,43 @@
     JOIN   track  t ON t.artist_id = ar.id
     WHERE  t.id = #{trackId}
     LIMIT 1
+  </select>
+
+  <!-- 앨범아이디로 모든트랙 -->
+  <select id="findTracksByAlbumId"
+          parameterType="string"
+          resultMap="Track">
+    <![CDATA[
+      SELECT *
+      FROM   track
+      WHERE  album_id = #{albumId}
+      ORDER BY track_no ASC
+    ]]>
+  </select>
+  <!-- 앨범아이디로 트랙중 인기 5 (리스트) -->
+  <select id="findTop5TracksByAlbumId"
+          parameterType="string"
+          resultMap="Track">
+    <![CDATA[
+      SELECT *
+      FROM   track
+      WHERE  album_id = #{albumId}
+      ORDER BY popularity DESC
+      LIMIT 5
+    ]]>
+  </select>
+
+  <!-- 앨범아이디로 트랙중 인기 1 (객체) -->
+  <select id="findTopTrackByAlbumId"
+          parameterType="string"
+          resultMap="Track">
+    <![CDATA[
+      SELECT *
+      FROM   track
+      WHERE  album_id = #{albumId}
+      ORDER BY popularity DESC
+      LIMIT 1
+    ]]>
   </select>
 
   <select id="searchList" resultMap="Track" parameterType="string">

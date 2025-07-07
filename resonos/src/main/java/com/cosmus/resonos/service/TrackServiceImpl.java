@@ -58,7 +58,7 @@ public class TrackServiceImpl implements TrackService {
         return trackMapper.exists(id) > 0;
     }
 
-    // 구현 예정 
+    // 구현 예정
 
     // // 스포티파이 동기화 서비스
     // @Autowired
@@ -108,6 +108,20 @@ public class TrackServiceImpl implements TrackService {
     }
 
     @Override
+    public List<Track> findTracksByAlbumId(String id) throws Exception {
+        return trackMapper.findTracksByAlbumId(id);
+    }
+
+    @Override
+    public List<Track> findTop5TracksByAlbumId(String id) throws Exception {
+        return trackMapper.findTop5TracksByAlbumId(id);
+    }
+
+    @Override
+    public Track findTopTrackByAlbumId(String id) throws Exception {
+        return trackMapper.findTopTrackByAlbumId(id);
+
+    }
     public List<Track> searchList(String keyword) throws Exception {
         return trackMapper.searchList(keyword);
     }

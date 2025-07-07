@@ -31,8 +31,15 @@ public interface TrackMapper {
     public List<Track> findTop5TracksInSameAlbum(String id) throws Exception;
     // 트랙아이디로 아티스트이름
     public String findArtistNameByTrackId(String id) throws Exception;
+    // 앨범아이디로 앨범의 모든트랙
+    public List<Track> findTracksByAlbumId(String id) throws Exception;
+    // 앨범아이디로 앨범의 탑5트랙
+    public List<Track> findTop5TracksByAlbumId(String id) throws Exception;
+    // 앨범아이디로 앨범의 탑1트랙
+    public Track findTopTrackByAlbumId(String id) throws Exception;
     // 검색 결과 목록
     public List<Track> searchList(String keyword) throws Exception;
     // 검색 결과 전체 목록
     public List<Track> allSearchList(String keyword) throws Exception;
+
 }
