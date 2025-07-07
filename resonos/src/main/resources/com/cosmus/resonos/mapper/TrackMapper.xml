@@ -182,4 +182,13 @@
     LIMIT 12
   </select>
 
+  <!-- 플레이 리스트 추가 -->
+  <select id="addTrackList" resultMap="Track" parameterType="string">
+    SELECT t.*, ar.name AS artist_name, al.cover_image
+    FROM track t
+      LEFT JOIN artist ar ON t.artist_id = ar.id
+      LEFT JOIN album al ON t.album_id = al.id
+    WHERE t.title LIKE CONCAT('%', #{keyword}, '%')
+  </select>
+
 </mapper>

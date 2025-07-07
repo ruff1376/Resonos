@@ -1,6 +1,7 @@
 package com.cosmus.resonos.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -60,5 +61,10 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     public PlaylistDTO trackOfPlaylist(Long playlistId) throws Exception {
         return playlistMapper.trackOfPlaylist(playlistId);
+    }
+
+    @Override
+    public boolean updateTrackOrder(String playlistId, List<Map<String, Object>> orderList) throws Exception {
+        return playlistMapper.updateTrackOrder(playlistId, orderList) > 0 ? true : false;
     }
 }

@@ -1,8 +1,10 @@
 package com.cosmus.resonos.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.PlaylistDTO;
@@ -30,5 +32,5 @@ public interface PlaylistMapper {
     // 플레이리스트 상세 조회
     public PlaylistDTO trackOfPlaylist(Long playlistId) throws Exception;
     // 플레이리스트 트랙 변경
+    public int updateTrackOrder(@Param("playlistId") String playlistId, @Param("orderList") List<Map<String, Object>> orderList) throws Exception;
 }
-

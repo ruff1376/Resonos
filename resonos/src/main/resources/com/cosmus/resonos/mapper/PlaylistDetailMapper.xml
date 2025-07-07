@@ -39,4 +39,12 @@
     DELETE FROM playlist_detail WHERE id = #{id}
   </delete>
 
+  <!-- 플레이리스트 트랙 추가 -->
+  <insert id="insertTracks" parameterType="list">
+    INSERT INTO playlist_track (playlist_id, track_id)
+    VALUES
+    <foreach collection="list" item="trackId" separator=",">
+      (#{playlistId}, #{trackId})
+    </foreach>
+  </insert>
 </mapper>
