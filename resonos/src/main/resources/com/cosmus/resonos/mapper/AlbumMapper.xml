@@ -114,4 +114,18 @@
     LIMIT 12
   </select>
 
+  <select id="allSearchList" resultMap="Album" parameterType="map">
+    SELECT a.*, ar.name AS artist_name
+    FROM album a
+    LEFT JOIN artist ar ON a.artist_id = ar.id
+    WHERE title LIKE CONCAT('%', #{keyword}, '%')
+    LIMIT #{index}, #{size}
+  </select>
+
+  <select id="searchCount" resultType="long" parameterType="string">
+    SELECT COUNT(*)
+    FROM album
+    WHERE title LIKE CONCAT('%', #{keyword}, '%')
+  </select>
+
 </mapper>

@@ -1,6 +1,7 @@
 package com.cosmus.resonos.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.cosmus.resonos.domain.Artist;
 
@@ -37,5 +38,5 @@ public interface ArtistService {
     // 검색 결과 목록
     public List<Artist> searchList(String keyword) throws Exception;
     // 검색 결과 전체 목록
-    public List<Artist> allSearchList(String keyword) throws Exception;
+    public List<Artist> allSearchList(Map<String, Object> paramMap) throws Exception;
 }

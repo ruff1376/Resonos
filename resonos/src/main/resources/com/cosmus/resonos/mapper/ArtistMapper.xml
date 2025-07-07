@@ -74,9 +74,23 @@
 
 
   <select id="searchList" resultMap="ArtistResultMap" parameterType="string">
-    SELECT * FROM artist
+    SELECT *
+    FROM artist
     WHERE name LIKE CONCAT('%', #{keyword}, '%')
     LIMIT 6
+  </select>
+
+  <select id="allSearchList" resultMap="ArtistResultMap" parameterType="map">
+    SELECT *
+    FROM artist
+    WHERE name LIKE CONCAT('%', #{keyword}, '%')
+    LIMIT #{index}, #{size}
+  </select>
+
+  <select id="searchCount" resultType="long" parameterType="string">
+    SELECT COUNT(*)
+    FROM artist
+    WHERE name LIKE CONCAT('%', #{keyword}, '%')
   </select>
 
 </mapper>

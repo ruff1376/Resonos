@@ -10,7 +10,6 @@ body {
     border: 2px solid var(--main-color);
     color: #fff;
     min-width: 320px;
-    max-width: 480px;
     margin-bottom: 16px;
     height: 70px;
     /* 높이 축소 */

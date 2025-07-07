@@ -1,6 +1,7 @@
 package com.cosmus.resonos.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.Pagination;
@@ -32,5 +33,5 @@ public interface AlbumService {
     // 검색 결과 목록
     public List<Album> searchList(String keyword) throws Exception;
     // 검색 결과 전체 목록
-    public List<Album> allSearchList(String keyword) throws Exception;
+    public List<Album> allSearchList(Map<String, Object> paramMap) throws Exception;
 }
