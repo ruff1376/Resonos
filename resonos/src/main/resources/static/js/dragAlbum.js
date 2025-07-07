@@ -2,63 +2,71 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.querySelector('.track-container');
   if (!container) return;
 
-  /* 카드 폭 + gap (270 + 20) */
-  const STEP = 290;          // 스냅 단위
-  const THRESHOLD = 5;       // 5px 이하면 클릭, 초과면 드래그
+  /* 카드 하나 + gap = 270 + 20 */
+  const STEP       = 290;
+  const THRESHOLD  = 5;    // 클릭·드래그 구분
+  const INTERVAL   = 3000; // 자동 슬라이드 간격(ms)
 
-  let isDown = false;
-  let startX = 0;
-  let scrollStart = 0;
-  let moved = 0;
+  /* ─── 자동 슬라이드 ─── */
+  let autoId = null;
+  const startAuto = () => {
+    clearInterval(autoId);
+    autoId = setInterval(() => {
+      const max = container.scrollWidth - container.clientWidth;
+      const atEnd = Math.ceil(container.scrollLeft) >= max;
+      container.scrollTo({ left: atEnd ? 0 : container.scrollLeft + STEP, behavior:'smooth' });
+    }, INTERVAL);
+  };
+  const stopAuto  = () => clearInterval(autoId);
 
-  /* ── 드래그 시작 ── */
-  const dragStart = pageX => {
-    isDown      = true;
-    moved       = 0;
-    startX      = pageX - container.offsetLeft;
-    scrollStart = container.scrollLeft;
+  /* ─── 드래그 변수 ─── */
+  let down = false, startX = 0, startScroll = 0, moved = 0;
+
+  const dragStart = x => {
+    down = true; moved = 0;
+    startX = x - container.offsetLeft;
+    startScroll = container.scrollLeft;
     container.classList.add('grabbing');
+    stopAuto();
   };
-
-  /* ── 드래그 진행 ── */
-  const dragMove = pageX => {
-    if (!isDown) return;
-    const x     = pageX - container.offsetLeft;
-    const walk  = x - startX;               // (+ → 오른쪽으로 끌기)
-    moved       = Math.max(moved, Math.abs(walk));
-    container.scrollLeft = scrollStart - walk;
+  const dragMove = x => {
+    if (!down) return;
+    const delta = (x - container.offsetLeft) - startX;
+    moved = Math.max(moved, Math.abs(delta));
+    container.scrollLeft = startScroll - delta;
   };
-
-  /* ── 드래그 끝 ── */
   const dragEnd = () => {
-    if (!isDown) return;
-    isDown = false;
-    container.classList.remove('grabbing');
+    if (!down) return;
+    down = false; container.classList.remove('grabbing');
 
-    /* 스냅: 가장 가까운 카드 경계로 맞춤 */
-    const remainder = container.scrollLeft % STEP;
-    const target = remainder > STEP / 2
-                   ? container.scrollLeft + (STEP - remainder)
-                   : container.scrollLeft - remainder;
-    container.scrollTo({ left: target, behavior: 'smooth' });
+    /* 스냅 위치 보정 */
+    const rest   = container.scrollLeft % STEP;
+    const target = rest > STEP/2
+                 ? container.scrollLeft + (STEP - rest)
+                 : container.scrollLeft - rest;
+    container.scrollTo({ left: target, behavior:'smooth' });
+    startAuto();
   };
 
-  /* ── 이벤트 바인딩 ── */
+  /* ─── 이벤트 ─── */
   // 마우스
   container.addEventListener('mousedown', e => { dragStart(e.pageX); e.preventDefault(); });
-  window.addEventListener('mousemove', e => dragMove(e.pageX));
-  window.addEventListener('mouseup',   dragEnd);
+  window.addEventListener('mousemove',  e => dragMove(e.pageX));
+  window.addEventListener('mouseup',    dragEnd);
 
   // 터치
-  container.addEventListener('touchstart', e => dragStart(e.touches[0].pageX), { passive: true });
-  container.addEventListener('touchmove',  e => dragMove(e.touches[0].pageX),  { passive: false });
+  container.addEventListener('touchstart', e => dragStart(e.touches[0].pageX), { passive:true });
+  container.addEventListener('touchmove',  e => dragMove(e.touches[0].pageX),  { passive:false });
   container.addEventListener('touchend',   dragEnd);
 
-  /* 클릭 vs 드래그 구분 */
+  // 클릭 vs 드래그
   container.addEventListener('click', e => {
-    if (moved > THRESHOLD) {
-      e.preventDefault();
-      e.stopPropagation();   // 하이퍼링크 이동 차단
-    }
+    if (moved > THRESHOLD){ e.preventDefault(); e.stopPropagation(); }
   });
+
+  // 호버 시 자동 슬라이드 일시 정지 (PC)
+  container.addEventListener('mouseenter', stopAuto);
+  container.addEventListener('mouseleave', startAuto);
+
+  startAuto();      // 최초 실행
 });
