@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}"
+>
+<head>
+  <meta charset="UTF-8">
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <title>비밀번호 찾기</title>
+  <th:block th:replace="~{fragments/link::user}"></th:block>
+</head>
+<body>
+  <th:block layout:fragment="content">
+    <div class="con con-find-id d-flex justify-content-center">
+      <form id="form" th:action="@{/join}" method="post" class="user-form">
+        <h2 class="text-light mb-4">비밀번호 찾기</h2>
+        <div class="input-area">
+          <!-- 아이디 -->
+          <div class="id position-relative">
+            <label for="username" class="profile-edit-label">아이디</label>
+            <input id="username" type="text" class="form-control mb-3" placeholder="회원님의 이메일로 임시 비밀번호가 발송됩니다.">
+            <p class="fail-vali" id="usernameError"></p>
+            <button onclick="changePwAndSendEmail()" id="certi-button" class="btn btn-gold non-event" type="button">메일 전송</button>
+          </div>
+        </div>
+        <div class="mt-10">
+          <a th:href="@{/login}" class="btn btn-gold w-100 mb-2">로그인 화면</a>
+          <a th:href="@{/find-id}" class="btn btn-outline-gold w-100 mb-2">아이디 찾기</a>
+        </div>
+      </form>
+    </div>
+  </th:block>
+  <th:block layout:fragment="pageScript">
+    <script>
+
+      const usernameError = document.getElementById('usernameError')
+
+      document.getElementById('username').addEventListener('change', async function() {
+        const certiButton = document.getElementById('certi-button')
+        await checkField()
+        if(usernameError.classList.contains('success')) certiButton.classList.remove('non-event')
+        else certiButton.classList.add('non-event')
+      })
+
+      // 인증번호 전송
+      document.getElementById('certi-button').addEventListener('click', () => {
+        if(!usernameError.classList.contains('success')) return false
+
+        certiNum = Math.floor(100000 + Math.random() * 900000);
+        alert("TODO: 메일 전송 API")
+
+        hideCerti.classList.remove('hide')
+      })
+
+      // 아이디 찾기 검증
+      async function checkField() {
+
+        let url = '/find-pw'
+
+        const errorMessage = document.getElementById(`usernameError`)
+        errorMessage.innerText = ''
+
+
+
+        const data = {
+            username : document.getElementById('username').value
+        }
+
+        try {
+            /* Security 제공 CSRF */
+            const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    [header] : token,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                const text = await response.text()
+                errorMessage.textContent = text
+                return
+            }
+            const result = await response.json();
+            errorMessage.classList.add('success')
+            errorMessage.textContent = '아이디가 확인되었습니다.'
+            username = result.username
+        } catch (error) {
+            console.error("요청 실패:", error);
+        }
+      }
+
+      // 임시비번 이메일 발송
+      async function changePwAndSendEmail() {
+        let url = '/send-pw'
+        const data = {
+            username : document.getElementById('username').value
+        }
+
+        try {
+            /* Security 제공 CSRF */
+            const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    [header] : token,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                const text = await response.text()
+                alert(text)
+            }
+            const result = await response.text();
+            alert(result)
+        } catch (error) {
+            console.error("요청 실패:", error);
+        }
+      }
+
+    </script>
+  </th:block>
+</body>
+</html>
