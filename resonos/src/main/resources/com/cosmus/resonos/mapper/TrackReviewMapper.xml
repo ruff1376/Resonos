@@ -16,6 +16,12 @@
         <result property="critic"    column="critic"/>
         <result property="userId"    column="user_id"/>
         <result property="trackId"   column="track_id"/>
+            <association property="reviewer" javaType="com.cosmus.resonos.domain.Reviewer">
+                <id property="id" column="reviewer_id"/>
+                <result property="nickname" column="reviewer_nickname"/>
+                <result property="profileImage" column="reviewer_profile_image"/>
+                <result property="pro" column="reviewer_is_pro"/>
+            </association>
     </resultMap>
 
     <!-- ─────────────────────── TrackScore → 집계 매핑 -->
@@ -45,6 +51,23 @@
         WHERE track_id = #{trackId}
           AND blinded = 0
         ORDER BY created_at DESC
+    </select>
+    
+    <select id="reviewWithReviewerByTrackId" parameterType="string" resultMap="TrackReview">
+        <![CDATA[
+            SELECT tr.*,
+                u.id            AS reviewer_id,
+                u.nickname      AS reviewer_nickname,
+                u.profile_image AS reviewer_profile_image,
+                u.is_pro        AS reviewer_is_pro
+            FROM   track_review tr
+                JOIN user u ON u.id = tr.user_id
+            WHERE  tr.track_id = #{trackId}
+            AND  tr.blinded = 0
+            ORDER  BY u.is_pro DESC,
+                    tr.likes DESC,
+                    tr.created_at DESC
+        ]]>
     </select>
 
     <!-- update blind status -->
