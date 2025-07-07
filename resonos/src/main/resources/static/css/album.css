@@ -141,8 +141,6 @@ img {
   align-items: center;
   justify-content: flex-end;
   line-height: 1;
-  /* ✅ 아래 줄만 수정하거나 삭제해보세요 */
-  /* border-radius: 10px 0 0 10px; */
 }
 /* 점수 끝 */
 .review-card {

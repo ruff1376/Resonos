@@ -65,6 +65,7 @@ public class TrackController {
         // String artistName = trackService.findArtistNameByTrackId(id);
         Artist artist = artistService.selectArtistByTrackId(id);
         TrackScore score = trackReviewService.getTrackScore(id);
+        List<TrackReview> reviews = trackReviewService.reviewWithReviewerByTrackId(id);
         if (track == null) {
             return "redirect:/artists?error=notfound";
         }
@@ -73,6 +74,7 @@ public class TrackController {
         model.addAttribute("top5List", top5List);
         model.addAttribute("artist", artist);
         model.addAttribute("score", score);
+        model.addAttribute("review", reviews);
         return "review/track";
     }
 

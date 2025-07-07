@@ -17,7 +17,10 @@ public interface TrackReviewMapper {
     int updateBlindStatus(@Param("id") Long id,@Param("blinded") boolean blinded);
     int incrementLikes(@Param("id") Long id);
     int incrementDislikes(@Param("id") Long id);
-
+    
     // ───────── Aggregation ─────────
     TrackScore findScoreByTrackId(@Param("trackId") String trackId);
+    
+    // 리뷰 + 리뷰어
+    List<TrackReview> reviewWithReviewerByTrackId(@Param("trackId") String trackId);
 }
