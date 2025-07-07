@@ -31,11 +31,13 @@ public interface UserMapper {
     public List<UserAuth> listAuth() throws Exception;
     // 회원 수 조회
     public int countAll() throws Exception;
+    // 아이디 찾기
+    public String findId(String email) throws Exception;
 
 
 
 
-    //  권한 
+    //  권한
 
     // 회원 권한 조회
     public List<UserAuth> selectAuthByUsername(@Param("username") String username) throws Exception;
@@ -62,7 +64,7 @@ public interface UserMapper {
     // 특정 권한만 삭제
     public int deleteSpecificAuth(@Param("username") String username, @Param("auth") String auth) throws Exception;
     // 권한 중복 조회
-    public int hasAuth(@Param("username") String username, @Param("auth") String auth) throws Exception;    
+    public int hasAuth(@Param("username") String username, @Param("auth") String auth) throws Exception;
     // selectById
     public Users selectById(@Param("id") Long id) throws Exception;
 }

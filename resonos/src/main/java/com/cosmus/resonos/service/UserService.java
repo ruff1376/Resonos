@@ -12,6 +12,8 @@ public interface UserService {
 
     // 회원 가입
     public boolean join(Users user) throws Exception;
+    // 아이디 찾기
+    public String findId(String email) throws Exception;
     // 회원 권한 등록
     public int insertAuth(UserAuth userAuth) throws Exception;
     // 🔐 로그인

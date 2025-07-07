@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}"
+>
+<head>
+  <meta charset="UTF-8">
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <title>아이디 찾기</title>
+  <th:block th:replace="~{fragments/link::user}"></th:block>
+</head>
+<body>
+  <th:block layout:fragment="content">
+    <div class="con con-find-id d-flex justify-content-center">
+      <form id="form" th:action="@{/join}" method="post" class="user-form">
+        <h2 class="text-light mb-4">아이디 찾기</h2>
+        <div class="input-area">
+          <!-- 이메일 -->
+          <div class="email-area position-relative">
+            <label for="email" class="profile-edit-label">이메일</label>
+            <input id="email" type="email" class="form-control mb-3" placeholder="이메일을 입력해주세요.">
+            <button id="certi-button" class="btn btn-gold non-event" type="button">인증번호 전송</button>
+            <p class="fail-vali" id="emailError"></p>
+          </div>
+          <!-- 인증번호 입력 -->
+          <div class="hide certi">
+            <label for="certi-input" class="profile-edit-label">인증번호</label>
+            <input id="certi-input" type="text" class="form-control mb-3">
+            <p id="certiError" class="fail-vali"></p>
+          </div>
+          <!-- 아이디 -->
+          <div class="hide id">
+            <label for="username" class="profile-edit-label">회원님의 아이디</label>
+            <input id="username" type="text" class="form-control mb-3" readonly>
+          </div>
+        </div>
+        <div class="mt-10">
+          <a th:href="@{/login}" class="btn btn-gold w-100 mb-2">로그인 화면</a>
+          <a th:href="@{/find-pw}" class="btn btn-outline-gold w-100 mb-2">비밀번호 찾기</a>
+        </div>
+      </form>
+    </div>
+  </th:block>
+  <th:block layout:fragment="pageScript">
+    <script>
+
+      let certiNum;
+      const hideCerti = document.querySelector('.hide.certi')
+      const certiInput = document.getElementById('certi-input')
+      const hideId = document.querySelector('.hide.id')
+      const emailInput = document.getElementById('email')
+      const emailError = document.getElementById(`emailError`)
+      const idInput = document.getElementById('username')
+      let username = ''
+
+      emailInput.addEventListener('change', async function() {
+        const certiButton = document.getElementById('certi-button')
+        await checkField()
+        if(emailError.classList.contains('success')) certiButton.classList.remove('non-event')
+        else certiButton.classList.add('non-event')
+      })
+
+      // 인증번호 전송
+      document.getElementById('certi-button').addEventListener('click', () => {
+        if(!emailError.classList.contains('success')) return false
+
+        certiNum = Math.floor(100000 + Math.random() * 900000);
+        alert("TODO: 메일 전송 API, 임시 인증 : " + certiNum)
+
+        hideCerti.classList.remove('hide')
+      })
+
+      // 인증번호 입력
+      certiInput.addEventListener('change', function() {
+        const certiError = document.getElementById('certiError')
+        if(this.value == certiNum) {
+          idInput.value = username
+          hideId.classList.remove('hide')
+          certiError.classList.add('success')
+          certiError.textContent = '인증이 완료되었습니다.'
+        } else {
+          idInput.value = ''
+          hideId.classList.add('hide')
+          certiError.classList.remove('success')
+          certiError.textContent = '인증번호가 다릅니다.'
+        }
+      })
+
+      // 아이디 찾기(이메일 검증)
+      async function checkField() {
+
+        let url = '/find-id'
+
+        const errorMessage = document.getElementById(`emailError`)
+        errorMessage.innerText = ''
+
+
+
+        const data = {
+            email: document.getElementById('email').value
+        }
+
+        try {
+            /* Security 제공 CSRF */
+            const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    [header] : token,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                const text = await response.text()
+                errorMessage.textContent = text
+                return
+            }
+            const result = await response.json();
+            errorMessage.classList.add('success')
+            errorMessage.textContent = '이메일이 확인되었습니다.'
+            username = result.username
+        } catch (error) {
+            console.error("요청 실패:", error);
+        }
+      }
+    </script>
+  </th:block>
+</body>
+</html>
