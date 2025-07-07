@@ -269,6 +269,7 @@
             const li = document.createElement('li')
             li.classList.add('list-item')
             li.innerHTML = `
+                    <p class="order-no">${track.orderNo}</p>
                     <input type="hidden" value="${track.id}">
                     <img src="${track.coverImage}" class="follow-img">
                     <div class="info">
