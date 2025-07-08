@@ -19,6 +19,8 @@ public class UploadImage {
           folder.mkdirs(); // 폴더 없으면 생성
       }
 
+      System.out.println(System.getProperty("user.dir"));
+
       // 파일 이름 중복 방지용
       String originalFilename = file.getOriginalFilename();
       String extension = originalFilename.substring(originalFilename.lastIndexOf("."));

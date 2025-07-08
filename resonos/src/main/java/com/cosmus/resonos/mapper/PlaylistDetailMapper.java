@@ -3,10 +3,7 @@ package com.cosmus.resonos.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
 import com.cosmus.resonos.domain.PlaylistDetail;
-import com.cosmus.resonos.domain.Track;
 
 @Mapper
 public interface PlaylistDetailMapper {
@@ -20,8 +17,4 @@ public interface PlaylistDetailMapper {
     public int update(PlaylistDetail detail) throws Exception;
     // 삭제
     public int delete(Long id) throws Exception;
-    // oreder_no MAX 조회
-    public int getMaxOrderNo(@Param("playlistId") Long playlistId) throws Exception;
-    // order_no 재정렬
-    public int updateTrackOrderNo(@Param("playlistId") Long playlistId, @Param("list") List<Track> trackList) throws Exception;
 }

@@ -86,7 +86,7 @@
     LEFT JOIN album al ON t.album_id = al.id
     WHERE al.release_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
   </select>
-  </select>
+
 
   <select id="hotCount" resultType="long">
     SELECT COUNT(DISTINCT t.id)
@@ -137,7 +137,7 @@
   <!-- artistId -->
   <!-- 아티스트 별 TOP 7 인기 트랙 -->
   <select id="selectTop7TracksByArtist"
-          
+
           resultType="Track">
       SELECT
           title,
@@ -151,7 +151,7 @@
 
   <!-- 아티스트별 곡수 -->
   <select id="countTracksByArtist"
-          
+
           resultType="int">
       SELECT COUNT(*)
       FROM track
@@ -161,7 +161,7 @@
   <!-- trackId 같은 앨범 내 인기순 Top-5 트랙 -->
   <!-- (선택) 자기 자신 제외 -->
   <select id="findTop5TracksInSameAlbum"
-          
+
           resultType="Track">
     <![CDATA[
     SELECT t.*
@@ -176,7 +176,7 @@
 
   <!-- trackId → 아티스트 이름 한 건 -->
   <select id="findArtistNameByTrackId"
-          
+
           resultType="string">
     SELECT ar.name
     FROM   artist ar
@@ -187,7 +187,7 @@
 
   <!-- 앨범아이디로 모든트랙 -->
   <select id="findTracksByAlbumId"
-          
+
           resultMap="Track">
     <![CDATA[
       SELECT *
@@ -198,7 +198,7 @@
   </select>
   <!-- 앨범아이디로 트랙중 인기 5 (리스트) -->
   <select id="findTop5TracksByAlbumId"
-          
+
           resultMap="Track">
     <![CDATA[
       SELECT *
@@ -211,7 +211,7 @@
 
   <!-- 앨범아이디로 트랙중 인기 1 (객체) -->
   <select id="findTopTrackByAlbumId"
-          
+
           resultMap="Track">
     <![CDATA[
       SELECT *
@@ -284,7 +284,7 @@
     LEFT JOIN artist ar ON t.artist_id = ar.id
     WHERE t.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
   </select>
-  
+
   <!-- 플레이 리스트 추가 -->
   <select id="addTrackList" resultMap="Track" >
     SELECT t.*, ar.name AS artist_name, al.cover_image

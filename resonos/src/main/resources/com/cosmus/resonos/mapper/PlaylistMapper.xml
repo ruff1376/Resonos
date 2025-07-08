@@ -62,6 +62,7 @@
     WHERE id = #{id}
   </update>
 
+  <!-- 플레이리스트 삭제 -->
   <delete id="delete">
     DELETE FROM playlist WHERE id = #{id}
   </delete>
@@ -138,12 +139,37 @@
       </foreach>
   </update>
 
+  <!-- 플레이리스트 트랙 추가 -->
+  <insert id="insertTracks" >
+    INSERT INTO playlist_detail (playlist_id, track_id, order_no)
+    VALUES
+    <foreach collection="list" item="item" separator=",">
+      (#{item.playlistId}, #{item.trackId}, #{item.orderNo})
+    </foreach>
+  </insert>
+
   <!-- 플레이리스트 트랙 삭제 -->
   <delete id="deleteTracks">
     DELETE FROM playlist_detail
     WHERE playlist_id = #{playlistId}
     AND order_no = #{orderNo}
   </delete>
+
+  <!-- MAX 값 조회 -->
+  <select id="getMaxOrderNo" resultType="int">
+    SELECT COALESCE(MAX(order_no), 0)
+    FROM playlist_detail
+    WHERE playlist_id = #{playlistId}
+  </select>
+
+  <!-- 순서 재정렬 -->
+  <update id="updateTrackOrderNo" parameterType="map">
+    <foreach collection="list" item="track" separator=";">
+      UPDATE playlist_detail
+      SET order_no = #{track.orderNo}
+      WHERE playlist_id = #{playlistId} AND track_id = #{track.id}
+    </foreach>
+  </update>
 
 
 </mapper>

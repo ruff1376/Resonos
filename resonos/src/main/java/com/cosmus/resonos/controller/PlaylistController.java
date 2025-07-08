@@ -1,6 +1,7 @@
 package com.cosmus.resonos.controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.tags.EscapeBodyTag;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.PlaylistDTO;
+import com.cosmus.resonos.domain.PlaylistDetail;
 import com.cosmus.resonos.domain.Track;
 import com.cosmus.resonos.service.PlaylistDetailService;
 import com.cosmus.resonos.service.PlaylistService;
@@ -41,11 +43,6 @@ public class PlaylistController {
 
     @Autowired
     private PlaylistService playlistService;
-
-    @Autowired
-    private PlaylistDetailService playlistDetailService;
-
-
 
     /**
      * 플레이리스트 페이지 요청
@@ -119,7 +116,7 @@ public class PlaylistController {
     @GetMapping("/{id}")
     public String playlistDetail(
         Model model,
-        @PathVariable("id") long id,
+        @PathVariable("id") Long id,
         @RequestParam(value = "success", required = false) String success
     ) throws Exception {
         PlaylistDTO playlist = playlistService.trackOfPlaylist(id);
@@ -151,6 +148,42 @@ public class PlaylistController {
     }
 
     /**
+     * 플레이리스트 트랙 추가
+     * @param data
+     * @param playlistId
+     * @return
+     */
+    @PostMapping(value = "/{playlistId}/tracks", consumes = "application/json")
+    public ResponseEntity<?> insertAjaxTracks(@RequestBody Map<String, List<String>> data, @PathVariable("playlistId") Long playlistId) {
+        try {
+            List<String> trackIdList = data.get("list");
+            int maxOrderNo = playlistService.getMaxOrderNo(playlistId);
+
+            if(trackIdList != null) {
+                List<PlaylistDetail> trackList = new ArrayList<>();
+                for (int i = 0; i < trackIdList.size(); i++) {
+                    PlaylistDetail pd = new PlaylistDetail();
+                    pd.setPlaylistId(playlistId);
+                    pd.setTrackId(trackIdList.get(i));
+                    pd.setOrderNo(maxOrderNo + i + 1);
+                    trackList.add(pd);
+                }
+                boolean result = playlistService.insertTracks(trackList);
+                if(result) {
+                    PlaylistDTO playlistDto = playlistService.trackOfPlaylist(playlistId);
+
+                    return new ResponseEntity<>(playlistDto, HttpStatus.OK);
+                }
+            }
+            return new ResponseEntity<>("리스트 요청 실패.", HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("이미 플레이리스트에 있는 트랙입니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
      * 플레이리스트 트랙 삭제
      * @param playlistId
      * @param orderNo
@@ -167,7 +200,7 @@ public class PlaylistController {
                 for(int i = 1; i <= trackList.size(); i++) {
                     trackList.get(i-1).setOrderNo(i);
                 }
-                playlistDetailService.updateTrackOrderNo(playlistId, trackList);
+                playlistService.updateTrackOrderNo(playlistId, trackList);
             }
 
             return new ResponseEntity<>(playlistDto, HttpStatus.OK);
@@ -235,7 +268,10 @@ public class PlaylistController {
             return new ResponseEntity<>("권한이 없습니다.", HttpStatus.BAD_REQUEST);
 
         boolean result = playlistService.delete(id);
-        if(result) return new ResponseEntity<>("삭제되었습니다.", HttpStatus.OK);
+        if(result) {
+            List<Playlist> playlists = playlistService.usersPlaylist(loginUser.getUser().getId());
+            return new ResponseEntity<>(playlists, HttpStatus.OK);
+        }
 
         return new ResponseEntity<>("삭제 실패하였습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
     }

@@ -521,7 +521,6 @@ textarea.form-control {
   border: 1.5px solid #D4B97F;
   border-radius: 14px;
   position: absolute;
-  top: 20%;
   left: 40px;
   padding: 3px;
 }
@@ -731,6 +730,8 @@ button.like {background-color: inherit; border: none;}
   color: #B1B1B1;
   pointer-events: none;
 }
+.profile-edit-label.radio {cursor: pointer;}
+
 
 /* 내 활동 */
 .con-activity .info-wrapper .info-section {height: 300px; text-align: start;}
@@ -901,6 +902,14 @@ button.like {background-color: inherit; border: none;}
   align-items: center;
 }
 .select {border-color: #4cd964 !important;}
+#close-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: var(--main-color);
+  font-size: 1.6rem;
+}
+#close-modal i {font-size: 2.5rem;}
 
 h2 + #bio {
   max-width: 350px;
