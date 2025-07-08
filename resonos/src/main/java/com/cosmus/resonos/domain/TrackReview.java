@@ -14,12 +14,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TrackReview {
+    // 리뷰 아이디
     private Long id;
-
     /**
      * 평점 ‑ 0 ~ 100 (백분율)
      */
-    private Float rating;
+    private Integer rating;
 
     /**
      * 리뷰 본문

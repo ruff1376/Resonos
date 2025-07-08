@@ -110,6 +110,14 @@
     opacity: 1;
 }
 
+#head-profile {
+    width: 32px;
+    height: 32px;
+}
+#head-profile img {
+    display: inline;
+
+
 .menu-wrapper {
     position: relative;
 }
@@ -155,4 +163,5 @@
 /* 메뉴 hover 시 해당 하단 메뉴만 보이기 */
 .menu-wrapper:hover .submenu-container {
     display: block;
+
 }
