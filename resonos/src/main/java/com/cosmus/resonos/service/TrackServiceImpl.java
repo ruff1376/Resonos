@@ -37,6 +37,11 @@ public class TrackServiceImpl implements TrackService {
         return trackMapper.newList(pagination);
     }
 
+    @Override
+    public long count() throws Exception {
+        return trackMapper.count();
+    }
+
     // 트랙 단건 조회
     @Override
     public Track selectById(String id) throws Exception {
@@ -154,5 +159,12 @@ public class TrackServiceImpl implements TrackService {
     public List<Track> addTrackList(String keyword) throws Exception {
         return trackMapper.addTrackList(keyword);
     }
+
+    @Override
+    public long searchCount(String keyword) throws Exception {
+        return trackMapper.searchCount(keyword);
+    }
+
+    
 
 }

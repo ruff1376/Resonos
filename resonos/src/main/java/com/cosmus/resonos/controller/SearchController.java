@@ -45,10 +45,19 @@ public class SearchController {
         List<Artist> artistSearchList = artistService.searchList(keyword);
         List<Album> albumSearchList = albumService.searchList(keyword);
         List<Track> trackSearchList = trackService.searchList(keyword);
+
+        long artistSearchCount = artistService.searchCount(keyword);
+        long albumSearchCount = albumService.searchCount(keyword);
+        long trackSearchCount = trackService.searchCount(keyword);
+        
         model.addAttribute("keyword", keyword);
         model.addAttribute("artistSearchList", artistSearchList);
         model.addAttribute("albumSearchList", albumSearchList);
         model.addAttribute("trackSearchList", trackSearchList);
+        model.addAttribute("artistSearchCount", artistSearchCount);
+        model.addAttribute("albumSearchCount", albumSearchCount);
+        model.addAttribute("trackSearchCount", trackSearchCount);
+        
         return "search/search";
     }
 

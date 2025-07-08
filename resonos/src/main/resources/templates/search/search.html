@@ -46,7 +46,9 @@
                     </div>
                 </th:block>
                 <div class="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style="height:50px;">
-                    <a th:href="@{'/search/artists?q=' + ${keyword}}" class="more-link">더 보기 &gt;</a>
+                    <th:block th:if="${ artistSearchCount > 6 }">
+                        <a th:href="@{'/search/artists?q=' + ${keyword}}" class="more-link">더 보기 &gt;</a>
+                    </th:block>
                 </div>
             </section>
             
@@ -81,7 +83,9 @@
                     </div>
                 </th:block>
                 <div class="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style="height:50px;">
-                    <a th:href="@{'/search/albums?q=' + ${keyword}}" class="more-link">더 보기 &gt;</a>
+                    <th:block th:if="${ albumSearchCount > 12 }">
+                        <a th:href="@{'/search/albums?q=' + ${keyword}}" class="more-link">더 보기 &gt;</a>
+                    </th:block>
                 </div>
             </section>
     
@@ -117,7 +121,9 @@
                     </div>
                 </th:block>
                 <div class="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style="height:50px;">
-                    <a th:href="@{'/search/tracks?q=' + ${keyword}}" class="more-link">더 보기 &gt;</a>
+                    <th:block th:if="${ trackSearchCount > 12 }">
+                        <a th:href="@{'/search/tracks?q=' + ${keyword}}" class="more-link">더 보기 &gt;</a>
+                    </th:block>
                 </div>
             </section>
         </div>
