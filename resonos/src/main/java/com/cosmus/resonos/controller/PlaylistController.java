@@ -1,7 +1,9 @@
 package com.cosmus.resonos.controller;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Playlist;
@@ -151,8 +154,54 @@ public class PlaylistController {
         }
     }
 
+    /**
+     * 플레이리스트 수정
+     * @param id
+     * @param playlist
+     * @param loginUser
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/{id}")
-    public String updatePlaylist(@PathVariable("id") Long id, @ModelAttribute Playlist playlist, @AuthenticationPrincipal CustomUser loginUser) throws Exception {
+    public String updatePlaylist(
+        @PathVariable("id") Long id,
+        @ModelAttribute Playlist playlist,
+        @AuthenticationPrincipal CustomUser loginUser,
+        @RequestParam("thumbnail") MultipartFile file
+    ) throws Exception {
+
+        // 이미지 파일 저장
+        if (!file.isEmpty()) {
+            try {
+            String uploadDir = System.getProperty("user.dir") + "/resonos/uploads/thumbnail";
+
+            log.info("업로드 경로 : {}", uploadDir);
+
+            File folder = new File(uploadDir);
+            if (!folder.exists()) {
+                folder.mkdirs(); // 폴더 없으면 생성
+            }
+
+            // 파일 이름 중복 방지용
+            String originalFilename = file.getOriginalFilename();
+            String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            String savedFilename = UUID.randomUUID() + extension;
+
+            // static/thumbnail 경로 (resources는 컴파일 시 target/classes로 복사됨)
+            String savePath = new File(uploadDir, savedFilename).getAbsolutePath();
+
+            // 저장
+            file.transferTo(new File(savePath));
+
+            // DB에 상대경로 저장하는 경우
+            playlist.setThumbnailUrl("/thumbnail/" + savedFilename);
+
+            log.info("이미지 저장됨");
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         Playlist currentPlaylist = playlistService.select(id);
         if(!currentPlaylist.getUserId().equals(loginUser.getUser().getId()))
             return "redirect:/playlists/" + id + "?owner=false";

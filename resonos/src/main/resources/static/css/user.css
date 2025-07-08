@@ -504,7 +504,7 @@ textarea.form-control {
   box-shadow: 0 8px 32px rgba(212, 185, 127, 0.18);
 }
 .con .bg-badge p {color: #fff;}
-#profileImage, #thumbnailUrl {display: none;}
+#profileImage, #thumbnail {display: none;}
 #profileBtn {cursor: pointer;}
 
 /* 유저 팔로우 */
