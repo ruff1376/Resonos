@@ -14,7 +14,7 @@ public interface PlaylistMapper {
     // 전체 조회
     public List<Playlist> list() throws Exception;
     // 조회
-    public Playlist select(Long id) throws Exception;
+    public Playlist select(@Param("id") Long id) throws Exception;
     // 삽입
     public int insert(Playlist playlist) throws Exception;
     // 수정
