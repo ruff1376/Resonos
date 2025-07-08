@@ -3,6 +3,7 @@ package com.cosmus.resonos.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.PlaylistDTO;
+import com.cosmus.resonos.domain.Track;
+import com.cosmus.resonos.service.PlaylistDetailService;
 import com.cosmus.resonos.service.PlaylistService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,12 +34,13 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class PlaylistController {
 
-    private final PlaylistService playlistService;
+    @Autowired
+    private PlaylistService playlistService;
+
+    @Autowired
+    private PlaylistDetailService playlistDetailService;
 
 
-    public PlaylistController(PlaylistService playlistService) {
-        this.playlistService = playlistService;
-    }
 
     /**
      * 플레이리스트 페이지 요청
@@ -101,11 +105,37 @@ public class PlaylistController {
      * @throws Exception
      */
     @PutMapping("/{playlistId}/tracks/order")
-    public ResponseEntity<?> postMethodName(@PathVariable("playlistId") String playlistId, @RequestBody List<Map<String, Object>> orderList) throws Exception {
+    public ResponseEntity<?> changeOrderNo(@PathVariable("playlistId") Long playlistId, @RequestBody List<Map<String, Object>> orderList) throws Exception {
         boolean result = playlistService.updateTrackOrder(playlistId, orderList);
         if(result) return new ResponseEntity<>("정렬 완료.", HttpStatus.OK);
 
         return new ResponseEntity<>("정렬 실패.", HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * 플레이리스트 트랙 삭제
+     * @param playlistId
+     * @param orderNo
+     * @return
+     * @throws Exception
+     */
+    @DeleteMapping("/{playlistId}/tracks/{orderNo}")
+    public ResponseEntity<?> deleteByOrderNo(@PathVariable("playlistId") Long playlistId, @PathVariable("orderNo") int orderNo) throws Exception {
+        boolean result = playlistService.deleteTracks(playlistId, orderNo);
+        if(result) {
+            PlaylistDTO playlistDto = playlistService.trackOfPlaylist(playlistId);
+            if(playlistDto != null) {
+                List<Track> trackList = playlistDto.getTrackList();
+                for(int i = 1; i <= trackList.size(); i++) {
+                    trackList.get(i-1).setOrderNo(i);
+                }
+                playlistDetailService.updateTrackOrderNo(playlistId, trackList);
+            }
+
+            return new ResponseEntity<>(playlistDto, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>("트랙 삭제 실패.", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping

@@ -1,6 +1,6 @@
 -- Active: 1751625569683@@127.0.0.1@3306@resonos
 
--- 실행 순서 
+-- 실행 순서
 -- 1. 테이블 삭제 DROP PROCEDURE IF EXISTS create_tables;
 -- 2. 테이블 생성 CREATE PROCEDURE create_tables()
 -- 3. 프로시저 호출 CALL create_tables();
@@ -254,6 +254,7 @@ BEGIN
         `playlist_id` BIGINT NOT NULL,
         `order_no` INT NOT NULL
     );
+    ADD CONSTRAINT uk_playlist_track UNIQUE (playlist_id, track_id);
 
     CREATE TABLE IF NOT EXISTS `policy` (
         `id` BIGINT NOT NULL,
@@ -386,7 +387,7 @@ BEGIN
         , auth varchar(100) NOT NULL                 -- 권한 (ROLE_USER, ROLE_ADMIN, ...)
         , PRIMARY KEY(no)
     );
-        
+
     -- PRIMARY KEY 추가
     ALTER TABLE `notice` ADD CONSTRAINT `PK_NOTICE` PRIMARY KEY (`id`);
     ALTER TABLE `qna_answer` ADD CONSTRAINT `PK_QNA_ANSWER` PRIMARY KEY (`id`);

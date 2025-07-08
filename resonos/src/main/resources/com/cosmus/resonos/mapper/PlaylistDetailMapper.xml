@@ -49,4 +49,13 @@
     FROM playlist_detail
     WHERE playlist_id = #{playlistId}
   </select>
+
+  <!-- 순서 재정렬 -->
+  <update id="updateTrackOrderNo" parameterType="map">
+    <foreach collection="list" item="track" separator=";">
+      UPDATE playlist_detail
+      SET order_no = #{track.orderNo}
+      WHERE playlist_id = #{playlistId} AND track_id = #{track.id}
+    </foreach>
+  </update>
 </mapper>
