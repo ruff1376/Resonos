@@ -5,8 +5,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="_csrf" th:content="${_csrf.token}">
-    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title th:text="|${track.title} 리뷰|">트랙 리뷰</title>
     <th:block th:replace="~{fragments/link::album}"></th:block>
 </head>
@@ -95,26 +93,39 @@
                     <th:block th:each="rv : ${review}">
                         <li class="comment" th:id="|rv-${rv.id}|" th:data-review-id="${rv.id}"
                             th:data-track-id="${track.id}">
-                            <!-- 작성자 + 프로·점수 -->
                             <div class="name-and-score">
                                 <p th:text="${rv.reviewer.nickname}">닉네임</p>
-                                <span th:if="${rv.reviewer.pro}">✅</span>
+                                <span th:if="${rv.critic == true }">✅</span>
                                 <span>🔮 <span th:text="${rv.rating}">0</span></span>
                             </div>
+                            <div class="review-content">
+                                <p class="content-text" th:text="${rv.content}">내용</p>
+                            </div>
 
-                            <div class="review-content" th:text="${rv.content}">내용</div>
-
+                            <!-- 👇 수정 폼은 기본으로 숨김 -->
+                            <form class="edit-form" style="display: none;">
+                                <div class="reply">
+                                    <textarea class="edit-content" required></textarea>
+                                    <div class="score-and-submit">
+                                        <input type="number" class="edit-rating" min="0" max="100" required>
+                                        <div class="button-box">
+                                            <button type="submit" class="btn btn-gold">수정 완료</button>
+                                            <button type="button" class="btn btn-danger">취소</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                             <div class="review-util">
                                 <time th:text="${#temporals.format(rv.createdAt,'yyyy.MM.dd')}">날짜</time>
-                                <a href="#" class="like-btn" th:data-id="${rv.id}">❤️ <span
+                                <a href="#" class="like-btn" th:data-id="${rv.id}">👍 <span
                                         th:text="${rv.likes}">0</span></a>
-
                                 <!-- 수정/삭제 버튼: 작성자 or ADMIN -->
                                 <span
                                     th:if="${(isAdmin != null and isAdmin) or (loginUser != null and rv != null and loginUser.id == rv.userId)}">
                                     <a href="#" class="edit-btn" th:data-id="${rv.id}">수정</a>
                                     <a href="#" class="del-btn" th:data-id="${rv.id}">삭제</a>
                                 </span>
+                                <a href="#">신고</a>
                             </div>
                         </li>
                     </th:block>
@@ -201,97 +212,125 @@
         <!-- 앨범 트랙리스트 분위기 뭐뭐..끝 -->
 
     </div>
+    <th:block th:replace="~{fragments/script::album}"></th:block>
     <script>
-        const csrfToken = document.querySelector("meta[name=_csrf]").content;
-        const csrfHeader = document.querySelector("meta[name=_csrf_header]").content;
+        $(document).ready(function () {
+            const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+            const csrfToken = $('meta[name="_csrf"]').attr('content');
 
-        /* ── ① 등록 ───────────────────────────────── */
-        document.getElementById("reviewForm")?.addEventListener("submit", async e => {
-            e.preventDefault();
-            const trackId = document.getElementById("trackId").value;
-            const rating = +document.getElementById("rating").value;
-            const content = document.getElementById("content").value.trim();
-            if (rating < 0 || rating > 100) { alert("0~100점 입력"); return; }
-
-            const res = await fetch(`/tracks/${trackId}/reviews`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json", [csrfHeader]: csrfToken },
-                body: JSON.stringify({ rating, content })
+            $.ajaxSetup({
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(csrfHeader, csrfToken);
+                }
             });
-            if (!res.ok) { alert("등록 실패"); return; }
-            const rv = await res.json();
-            prependReview(rv);                      // 새 리뷰 DOM 삽입 (함수는 밑에)
-            e.target.reset();
+
+            /** ① 등록 */
+            $('#reviewForm').on('submit', function (e) {
+                e.preventDefault();
+
+                const trackId = $('#trackId').val();
+                const content = $('#content').val().trim();
+                const rating = $('#rating').val();
+
+                if (content === '' || rating === '') {
+                    alert("내용과 점수를 모두 입력해주세요.");
+                    return;
+                }
+
+                $.ajax({
+                    url: `/tracks?id=${trackId}`,
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ content, rating }),
+                    success: function () {
+                        alert('리뷰 등록 성공!');
+                        location.reload(); // 또는 append로 동적으로 갱신
+                    },
+                    error: function (xhr) {
+                        console.error(xhr.responseText);
+                        alert('등록 실패: ' + xhr.responseText);
+                    }
+                });
+            });
+
+            /** ② 수정 버튼 → 폼 표시 + 기존 내용 세팅 */
+            $(document).on('click', '.edit-btn', function (e) {
+                e.preventDefault();
+
+                const li = $(this).closest('li');
+                const content = li.find('.review-content').text().trim();
+                const rating = li.find('.name-and-score span span').text().trim();
+
+                li.find('.edit-form').slideDown();
+                li.find('.edit-content').val(content);
+                li.find('.edit-rating').val(rating);
+            });
+
+            /** ③ 수정 완료 */
+            $(document).on('submit', '.edit-form', function (e) {
+                e.preventDefault();
+
+                const form = $(this);
+                const li = form.closest('li');
+                const reviewId = li.data('review-id');
+                const trackId = li.data('track-id');
+                const content = form.find('.edit-content').val().trim();
+                const rating = form.find('.edit-rating').val();
+
+                if (content === '' || rating === '') {
+                    alert("내용과 점수를 입력해주세요.");
+                    return;
+                }
+
+                $.ajax({
+                    url: `/tracks/${trackId}/review/${reviewId}`,
+                    method: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ content, rating }),
+                    success: function (updated) {
+                        li.find('.review-content').text(updated.content);
+                        li.find('.name-and-score span span').text(updated.rating);
+                        form.slideUp();
+                    },
+                    error: function (xhr) {
+                        console.error(xhr.responseText);
+                        alert('수정 실패: ' + xhr.responseText);
+                    }
+                });
+            });
+
+            /** ④ 수정 취소 */
+            $(document).on('click', '.btn-danger', function () {
+                $(this).closest('.edit-form').slideUp();
+            });
+
+            /** ⑤ 삭제 */
+            $(document).on('click', '.del-btn', function (e) {
+                e.preventDefault();
+
+                if (!confirm('정말 삭제하시겠습니까?')) return;
+
+                const li = $(this).closest('li');
+                const reviewId = li.data('review-id');
+                const trackId = li.data('track-id');
+
+                $.ajax({
+                    url: `/tracks/${trackId}/review/${reviewId}`,
+                    method: 'DELETE',
+                    success: function () {
+                        li.slideUp(() => li.remove());
+                    },
+                    error: function (xhr) {
+                        console.error(xhr.responseText);
+                        alert('삭제 실패: ' + xhr.responseText);
+                    }
+                });
+            });
         });
-
-        /* ── ② 수정·삭제·좋아요: 이벤트 위임 ─────────── */
-        document.querySelector(".review-list")?.addEventListener("click", async e => {
-            const btn = e.target.closest(".edit-btn,.del-btn,.like-btn");
-            if (!btn) return; e.preventDefault();
-
-            const li = btn.closest("li.comment");
-            const reviewId = btn.dataset.id || li.dataset.reviewId;
-            const trackId = li.dataset.trackId;
-
-            /* 삭제 */
-            if (btn.matches(".del-btn")) {
-                if (!confirm("삭제할까요?")) return;
-                const res = await fetch(`/tracks/${trackId}/reviews/${reviewId}`, {
-                    method: "DELETE", headers: { [csrfHeader]: csrfToken }
-                });
-                if (res.ok) li.remove(); else alert("삭제 실패");
-            }
-
-            /* 수정 */
-            if (btn.matches(".edit-btn")) {
-                const old = li.querySelector(".review-content").innerText;
-                const nu = prompt("수정할 내용", old);
-                if (nu == null || nu === old) return;
-                const nr = prompt("점수(0~100)", li.querySelector(".rating")?.innerText || "");
-                if (nr == null) return;
-
-                const res = await fetch(`/tracks/${trackId}/reviews/${reviewId}`, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json", [csrfHeader]: csrfToken },
-                    body: JSON.stringify({ rating: +nr, content: nu })
-                });
-                if (!res.ok) { alert("수정 실패"); return; }
-                const rv = await res.json();
-                li.querySelector(".review-content").innerText = rv.content;
-                li.querySelector(".rating")?.replaceChildren(`🔮 ${rv.rating}`);
-            }
-
-            /* 좋아요 */
-            if (btn.matches(".like-btn")) {
-                const res = await fetch(`/tracks/${trackId}/reviews/${reviewId}/like`, {
-                    method: "POST", headers: { [csrfHeader]: csrfToken }
-                });
-                if (res.ok) { const { likes } = await res.json(); btn.querySelector("span").innerText = likes; }
-            }
-        });
-
-        /* 새 리뷰 DOM 삽입 헬퍼 */
-        function prependReview(rv) {
-            const ul = document.querySelector(".review-list");
-            const li = document.createElement("li");
-            li.className = "comment";
-            li.dataset.reviewId = rv.id; li.dataset.trackId = rv.trackId;
-            li.innerHTML = `
-                <div class="name-and-score">
-                    <p>${rv.reviewer.nickname}</p>${rv.reviewer.pro ? '✅' : ''}
-                    <span class="rating">🔮 ${rv.rating}</span>
-                </div>
-                <div class="review-content">${rv.content}</div>
-                <div class="review-util">
-                    <time>${rv.createdAt.slice(0, 10).replace(/-/g, '.')}</time>
-                    <a href="#" class="like-btn" data-id="${rv.id}">❤️ <span>${rv.likes}</span></a>
-                    <span><a href="#" class="edit-btn" data-id="${rv.id}">수정</a>
-                        <a href="#" class="del-btn"  data-id="${rv.id}">삭제</a></span>
-                </div>`;
-            ul.prepend(li);
-        }
 
     </script>
+
+
 </body>
 
 </html>

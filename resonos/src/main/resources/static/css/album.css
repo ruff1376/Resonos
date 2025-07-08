@@ -222,6 +222,11 @@ img {
     flex-direction: column;
     justify-content: space-between;
 }
+.score-and-submit {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
 .score-and-submit input {
     border-radius: 5px;
     padding-left: 5px;
@@ -234,6 +239,39 @@ img {
     background: transparent;
     color: white;
 }
+.button-box .btn-danger {
+    font-weight: bold;
+    min-width: 100px;
+    font-size: 2rem;
+}
+.edit-form {
+    width: 100%;
+}
+.edit-form .reply {
+    display: flex;
+    height: 100px;
+    max-width: 1326px;
+    padding: 10px;
+    gap: 10px;
+}
+.edit-form textarea.edit-content {
+    flex: 1;
+    padding: 5px;
+    resize: none;
+    max-width: 1300px;
+    border-radius: 10px;
+    border: 2px solid var(--main-color);
+    background: transparent;
+    color: white;
+}
+.edit-form .edit-rating {
+    border-radius: 5px;
+    padding: 5px;
+    border: 2px solid var(--main-color);
+    background: transparent;
+    color: white;
+}
+
 .iframe-card {
     display: flex;
     padding: 10px;
@@ -356,6 +394,7 @@ img {
     display: flex;
     height: 100%;
     padding: 5px;
+    gap: 5px;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;

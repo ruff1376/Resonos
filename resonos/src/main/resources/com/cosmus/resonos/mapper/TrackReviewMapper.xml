@@ -64,9 +64,9 @@
                 JOIN user u ON u.id = tr.user_id
             WHERE  tr.track_id = #{trackId}
             AND  tr.blinded = 0
-            ORDER  BY u.is_pro DESC,
+            ORDER BY tr.critic DESC,
                     tr.likes DESC,
-                    tr.created_at DESC
+                    tr.created_at ASC
         ]]>
     </select>
 

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.Artist;
@@ -107,6 +108,7 @@ public class TrackController {
 
     /* ── ① 등록 ────────────────────────────── */
     @PostMapping
+    @ResponseBody
     public TrackReview create(@RequestParam("id") String trackId,
                               @RequestBody ReviewForm form,
                               @AuthenticationPrincipal CustomUser user) {
@@ -114,19 +116,19 @@ public class TrackController {
     }
 
     /* ── ② 수정 ────────────────────────────── */
-    @PutMapping("/{reviewId}")
+    @PutMapping("/{id}/review/{reviewId}")
     @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#reviewId, authentication)")
-    public TrackReview update(@PathVariable String trackId,
-                              @PathVariable Long reviewId,
+    public TrackReview update(@PathVariable("id") String trackId,
+                              @PathVariable("reviewId") Long reviewId,
                               @RequestBody ReviewForm form) {
         return trackReviewService.update(reviewId, form);
     }
 
     /* ── ③ 삭제 ────────────────────────────── */
-    @DeleteMapping("/{reviewId}")
+    @DeleteMapping("/{id}/review/{reviewId}")
     @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#reviewId, authentication)")
-    public void delete(@PathVariable String trackId,
-                       @PathVariable Long reviewId) {
+    public void delete(@PathVariable("id") String trackId,
+                       @PathVariable("reviewId") Long reviewId) {
         trackReviewService.delete(reviewId);
     }
 
