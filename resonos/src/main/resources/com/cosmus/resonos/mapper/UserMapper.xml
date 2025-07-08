@@ -59,6 +59,16 @@
     WHERE id = #{id}
   </update>
 
+  <!-- 유저가 프로필 업데이트 -->
+  <update id="updateFromUser">
+    UPDATE user
+    SET email = #{email},
+        nickname = #{nickname},
+        profile_image = #{profileImage},
+        bio = #{bio}
+    WHERE id = #{id}
+  </update>
+
   <delete id="delete" >
     DELETE FROM user WHERE id = #{id}
   </delete>
