@@ -30,19 +30,19 @@
             <h2 class="text-start">플레이리스트 상세</h2>
           </div>
         </div>
-        <form th:action="@{/playlists/{id}(id=${playlist.id})}" method="post" class="profile-edit-box" th:object="${playlist}">
+        <form th:action="@{/playlists/{id}(id=${playlist.id})}" method="post" class="profile-edit-box" enctype="multipart/form-data" th:object="${playlist}">
           <!-- CSRF TOKEN -->
           <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
           <div class="d-flex align-items-center column-gap-5">
-            <label id="profileBtn" for="thumbnailUrl">
-              <img th:src="@{/img/resonosLogo.png}" alt="프로필 이미지" class="profile-img edit">
-              <input type="file" th:field="*{thumbnailUrl}">
+            <label id="profileBtn" for="thumbnail">
+              <img th:src="@{${playlist.thumbnailUrl}}" alt="프로필 이미지" class="profile-img edit">
+              <input type="file" name="thumbnail" id="thumbnail"/>
             </label>
             <div class="input-area">
-              <label class="profile-edit-label" for="nickname">플레이리스트 제목</label>
+              <label class="profile-edit-label" for="title">플레이리스트 제목</label>
               <input type="text" class="form-control" th:field="*{title}" >
-              <label class="profile-edit-label" for="bio">플레이리스트 설명</label>
-              <textarea class="form-control" th:field="*{description}" rows="2" placeholder="자기소개를 입력하세요.">음악과 우주, 그리고 커뮤니티를 사랑합니다.</textarea>
+              <label class="profile-edit-label" for="description">플레이리스트 설명</label>
+              <textarea class="form-control" th:field="*{description}" rows="2"></textarea>
             </div>
           </div>
           <input th:checked="*{isPublic == true}" type="radio" id="true" th:field="*{isPublic}" value="true">
@@ -106,7 +106,7 @@
   <th:block layout:fragment="pageScript">
     <script>
       /* 썸네일 바로보기 */
-      document.getElementById('thumbnailUrl').addEventListener('change', function (event) {
+      document.getElementById('thumbnail').addEventListener('change', function (event) {
         const file = event.target.files[0]
         const preview = document.querySelector('.profile-img.edit')
 
