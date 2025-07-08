@@ -66,6 +66,37 @@
 
             </div>
         </nav>
+        <div class="container-fluid" style="max-width:1440px;">
+            <div class="menu-group d-flex gap-5 position-relative">
+
+                <!-- 앨범 메뉴 + 하단 메뉴 -->
+                <div class="menu-wrapper position-relative">
+                    <div class="d-flex justify-content-center align-items-center" style="width: 200px; height: 75px;">
+                        <a href="/albums" class="submenu-item" style="font-size: 2rem; color: white;">앨범</a>
+                    </div>
+                    <div class="submenu-container">
+                        <ul class="submenu d-flex flex-column justify-content-center">
+                            <li><a href="/list/new-albums">최신 앨범</a></li>
+                            <li><a href="/list/new-albums">인기 앨범</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 트랙 메뉴 + 하단 메뉴 -->
+                <div class="menu-wrapper position-relative">
+                    <div class="d-flex justify-content-center align-items-center" style="width: 200px; height: 75px;">
+                        <a href="/tracks" class="submenu-item" style="font-size: 2rem; color: white;">트랙</a>
+                    </div>
+                    <div class="submenu-container w-100">
+                        <ul class="submenu d-flex flex-column justify-content-center">
+                            <li><a href="/list/new-tracks">최신 트랙</a></li>
+                            <li><a href="/list/new-tracks">인기 트랙</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </header>
     <script>
         function validateSearch() {

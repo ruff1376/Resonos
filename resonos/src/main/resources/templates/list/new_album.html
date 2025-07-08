@@ -21,7 +21,7 @@
                     <th:block th:each="newAlbum : ${newAlbumList}">
                         <!-- 앨범 카드 -->
                         <div class="col d-flex">
-                            <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <div class="card align-items-center p-3" style="width:228px; height:360px;">
                                 <a th:href="@{'/albums?id=' + ${newAlbum.id}}">
                                     <img th:src="${newAlbum.coverImage}" class="card-img-top" alt="앨범커버">
                                 </a>
@@ -29,8 +29,8 @@
                                     <a th:href="@{'/albums?id=' + ${newAlbum.id}}" class="card-title" th:text="${newAlbum.title}"></a>
                                     <a th:href="@{'/artists?id=' + ${newAlbum.artistId}}" class="card-artist" th:text="${newAlbum.artistName}"></a>
                                 </div>
-                                <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                                    <img src="캡처.png" alt="rating" class="album-rating">
+                                <div class="position-absolute bottom-0 start-50 translate-middle-x mb-5">
+                                    <canvas class="doughnut-canvas" width="50" height="50"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -39,5 +39,61 @@
                 <div th:replace="~{fragments/pagination :: pagination}"></div>
             </section>
         </div>
+    </th:block>
+    <th:block layout:fragment="pageScript">
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('.doughnut-canvas').forEach((canvas) => {
+                    const value = 40; // 예시용 값 — 이 부분은 실제 데이터로 바꿔도 됩니다
+
+                    // 색상 조건
+                    let color;
+                    if (value >= 70) {
+                        color = '#4CAF50'; // 초록
+                    } else if (value >= 50) {
+                        color = '#FFC107'; // 노랑
+                    } else {
+                        color = '#F44336'; // 빨강
+                    }
+
+                    const ctx = canvas.getContext('2d');
+
+                    // 중앙 텍스트 플러그인
+                    const centerTextPlugin = {
+                        id: 'centerText',
+                        afterDraw(chart) {
+                            const { ctx, chartArea: { width, height } } = chart;
+                            ctx.save();
+                            ctx.font = 'bold 14px sans-serif';
+                            ctx.fillStyle = color;
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            ctx.fillText(value, width / 2, height / 2);
+                            ctx.restore();
+                        }
+                    };
+
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            datasets: [{
+                                data: [value, 100 - value],
+                                backgroundColor: [color, 'white'],
+                                borderWidth: 0
+                            }]
+                        },
+                        options: {
+                            responsive: false,
+                            cutout: '70%',
+                            plugins: {
+                                tooltip: { enabled: false },
+                                legend: { display: false }
+                            }
+                        },
+                        plugins: [centerTextPlugin]
+                    });
+                });
+            });
+        </script>
     </th:block>
 </body>
