@@ -1,15 +1,22 @@
 package com.cosmus.resonos.controller;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.UserFollow;
+import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.UserFollowService;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -25,11 +32,20 @@ public class UserFollowController {
      * @param model
      * @param request
      * @return
+     * @throws Exception
      */
     @GetMapping("")
-    // TODO: @AuthenticationPrincipal 로 출력할 리스트 나누기
-    public String followUsers(Model model) {
+    public String followUsers(
+        Model model,
+        @AuthenticationPrincipal CustomUser loginUser
+    ) throws Exception {
+        // 내 팔로워
+        List<Users> myFollower = userFollowService.myFollower(loginUser.getUser().getId());
+        // 내가 팔로우 한 유저
+        List<Users> myFollow = userFollowService.myFollow(loginUser.getUser().getId());
 
+        model.addAttribute("myFollower", myFollower);
+        model.addAttribute("myFollow", myFollow);
         model.addAttribute("lastPath", "user-follows");
         return "user/follow_user";
     }

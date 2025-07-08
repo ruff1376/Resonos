@@ -20,23 +20,19 @@
         <div class="title">
           <div>
             <h2 class="text-start">팔로워</h2>
-            <span class="count">92</span>
+            <span class="count" th:text="${myFollower.size()}">팔로워 수</span>
           </div>
         </div>
         <ul class="ul-list follower">
-          <th:block th:each="i : ${#numbers.sequence(1,20)}">
+          <th:block th:if="${#lists.isEmpty(myFollower)}">
+            <p class="empty-text">팔로워가 없습니다.</p>
+          </th:block>
+          <th:block th:each="follower : ${myFollower}">
             <li class="list-item">
-              <img src="https://randomuser.me/api/portraits/men/44.jpg" alt="GalaxiNote" class="follow-img" />
+              <img th:src="@{${follower.profileImage}}" alt="프로필 이미지" class="follow-img" />
               <div class="info">
-                <span class="follow-nick">GalaxiNote</span>
-                <span class="follow-badge">CLASSICIAN</span>
-              </div>
-            </li>
-            <li class="list-item">
-              <img src="https://randomuser.me/api/portraits/women/55.jpg" alt="LunaBeats" class="follow-img" />
-              <div class="info">
-                <span class="follow-nick">LunaBeats</span>
-                <span class="follow-badge">JAZZ LOVER</span>
+                <span class="follow-nick" th:text="${follower.nickname}">닉네임</span>
+                <span class="follow-badge">배지</span>
               </div>
             </li>
           </th:block>
@@ -49,24 +45,19 @@
         <div class="title">
           <div>
             <h2 class="text-start">팔로우</h2>
-            <span class="count">92</span>
+            <span class="count" th:text="${myFollow.size()}">팔로우 수</span>
           </div>
         </div>
         <ul class="ul-list">
-          <th:block th:each="i : ${#numbers.sequence(1,2)}">
+          <th:block th:if="${#lists.isEmpty(myFollow)}">
+            <p class="empty-text">팔로우한 회원이 없습니다.</p>
+          </th:block>
+          <th:block th:each="follow : ${myFollow}">
             <li class="list-item">
-              <img src="https://randomuser.me/api/portraits/men/44.jpg" alt="GalaxiNote" class="follow-img" />
+              <img th:src="@{${follow.profileImage}}" alt="프로필 이미지" class="follow-img" />
               <div class="info">
-                <span class="follow-nick">GalaxiNote</span>
-                <span class="follow-badge">CLASSICIAN</span>
-              </div>
-              <button class="btn-outline-gold btn-sm">언팔로우</button>
-            </li>
-            <li class="list-item">
-              <img src="https://randomuser.me/api/portraits/women/55.jpg" alt="LunaBeats" class="follow-img" />
-              <div class="info">
-                <span class="follow-nick">LunaBeats</span>
-                <span class="follow-badge">JAZZ LOVER</span>
+                <span class="follow-nick" th:text="${follow.nickname}">닉네임</span>
+                <span class="follow-badge">배지</span>
               </div>
               <button class="btn-outline-gold btn-sm">언팔로우</button>
             </li>

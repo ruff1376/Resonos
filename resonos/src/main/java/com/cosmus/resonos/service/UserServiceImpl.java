@@ -235,4 +235,12 @@ public class UserServiceImpl implements UserService {
         return userMapper.findId(email);
     }
 
+    /**
+     * 회원이 수정
+     */
+    @Override
+    public boolean updateFromUser(Users user) throws Exception {
+        return userMapper.updateFromUser(user) > 0 ? true : false;
+    }
+
 }

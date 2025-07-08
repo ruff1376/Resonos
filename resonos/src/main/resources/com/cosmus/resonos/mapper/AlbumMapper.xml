@@ -83,7 +83,7 @@
   <!-- 모든 앨범을 아티스트 ID로 조회 -->
   <!-- id 자료형에 맞게 string·long 등으로 -->
   <select id="findAlbumsByArtistId"
-                
+
           resultMap="Album">
     SELECT a.*,
           ar.name AS artist_name
@@ -95,21 +95,21 @@
 
   <!-- trackId 앨범 객체 -->
   <select id="findAlbumByTrackId"
-          
+
           resultType="Album">
     SELECT a.*
     FROM   album  a
     JOIN   track  t ON t.album_id = a.id
     WHERE  t.id = #{trackId}
   </select>
-  
+
   <!-- artistId -->
   <!-- 아티스트의 앨범 수 -->
   <select id="countAlbumsByArtist"
-          
+
           resultType="int">
       SELECT
-          COUNT(*) 
+          COUNT(*)
       FROM album
       WHERE artist_id = #{artistId}
   </select>
@@ -136,4 +136,5 @@
     WHERE title LIKE CONCAT('%', #{keyword}, '%')
   </select>
 
+  <!-- 마이페이지: 좋아요 표시한 앨범 -->
 </mapper>

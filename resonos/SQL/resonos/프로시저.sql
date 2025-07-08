@@ -123,12 +123,13 @@ BEGIN
         `email` VARCHAR(100) NOT NULL,
         `password` VARCHAR(100) NOT NULL,
         `nickname` VARCHAR(100) NOT NULL,
-        `profile_image` VARCHAR(200) NULL,
+        `profile_image` VARCHAR(200) '/img/resonosLogo.png',
         `bio` TEXT NULL,
         `is_pro` BOOLEAN NOT NULL DEFAULT FALSE,
         `enabled` BOOLEAN NOT NULL DEFAULT TRUE,
         `provider` VARCHAR(200) NULL,
         `provider_id` VARCHAR(200) NULL,
+        `current_badge` BIGINT NULL,
         `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
         `updated_at`	TIMESTAMP	NOT NULL	DEFAULT CURRENT_TIMESTAMP
                                             ON UPDATE CURRENT_TIMESTAMP

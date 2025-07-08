@@ -25,6 +25,8 @@ public interface UserMapper {
     public List<Users> list() throws Exception;
     // 수정
     public int update(Users user) throws Exception;
+    // 회원이 수정
+    public int updateFromUser(Users user) throws Exception;
     // 삭제
     public int delete(Long id) throws Exception;
     // 회원 권한 조회

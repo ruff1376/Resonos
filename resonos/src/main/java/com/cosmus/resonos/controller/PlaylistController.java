@@ -65,17 +65,31 @@ public class PlaylistController {
     }
 
     /**
-     * 플레이리스트 추가 페이지 요청
+     * 플레이리스트 생성 페이지 요청
      * @param model
      * @return
      */
     @GetMapping("/create")
     public String playlistCreate(Model model) {
-
-        model.addAttribute("playlistObj", Playlist.builder().isPublic(true).build());
+        model.addAttribute("playlist", Playlist.builder().isPublic(true).build());
         model.addAttribute("lastPath", "playlist");
 
         return "user/create_playlist";
+    }
+
+    /**
+     * 플레이리스트 생성 요청
+     * @param playlist
+     * @return
+     */
+    @PostMapping
+    public String createPlaylist(
+        @RequestBody Playlist playlist,
+        @AuthenticationPrincipal CustomUser loginUser
+    ) {
+        playlist.setUserId(loginUser.getUser().getId());
+
+        return "redirect:/playlists/create?fail=true";
     }
 
     /**
@@ -86,7 +100,11 @@ public class PlaylistController {
      * @throws Exception
      */
     @GetMapping("/{id}")
-    public String playlistDetail(Model model, @PathVariable("id") long id, @RequestParam(value = "success", required = false) String success) throws Exception {
+    public String playlistDetail(
+        Model model,
+        @PathVariable("id") long id,
+        @RequestParam(value = "success", required = false) String success
+    ) throws Exception {
         PlaylistDTO playlist = playlistService.trackOfPlaylist(id);
 
         if(playlist == null) {
@@ -141,18 +159,7 @@ public class PlaylistController {
         return new ResponseEntity<>("트랙 삭제 실패.", HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping
-    public ResponseEntity<String> createPlaylist(@RequestBody Playlist playlist) {
-        try {
-            boolean success = playlistService.insert(playlist);
-            if (success) {
-                return ResponseEntity.ok("Playlist created");
-            }
-            return ResponseEntity.status(500).body("Failed to create playlist");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to create playlist: " + e.getMessage());
-        }
-    }
+
 
     /**
      * 플레이리스트 수정
@@ -214,7 +221,7 @@ public class PlaylistController {
                 return "redirect:/playlists/" + id + "?success=true";
             }
         }
-        return "redirect:/playlists/" + id + "?success=false";
+        return "redirect:/playlists/" + id + "?fail=true";
     }
 
     @DeleteMapping("/{id}")

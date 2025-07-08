@@ -10,9 +10,12 @@ public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         String projectPath = System.getProperty("user.dir").replace("\\", "/");
-        String uploadPath = "file:///" + projectPath + "/resonos/uploads/thumbnail/";
+        String uploadPath1 = "file:///" + projectPath + "/resonos/uploads/thumbnail/";
+        String uploadPath2 = "file:///" + projectPath + "/resonos/uploads/profile_img/";
         registry.addResourceHandler("/thumbnail/**")
-                .addResourceLocations(uploadPath);
+                .addResourceLocations(uploadPath1);
+        registry.addResourceHandler("/profile_img/**")
+                .addResourceLocations(uploadPath2);
     }
 }
 

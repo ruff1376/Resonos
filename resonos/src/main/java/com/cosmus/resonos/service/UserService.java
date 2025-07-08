@@ -24,6 +24,8 @@ public interface UserService {
     public boolean isAdmin() throws Exception;
     // 수정
     public boolean update(Users user) throws Exception;
+    // 회원이 수정
+    public boolean updateFromUser(Users user) throws Exception;
     // 삭제
     public boolean delete(Long id) throws Exception;
     // 전체 조회

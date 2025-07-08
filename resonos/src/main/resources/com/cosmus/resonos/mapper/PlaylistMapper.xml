@@ -44,11 +44,12 @@
     SELECT * FROM playlist WHERE id = #{id}
   </select>
 
+  <!-- 플레이리스트 생성 -->
   <insert id="insert" >
     INSERT INTO playlist
-      (id, user_id, title, description, thumbnail_url, is_public, created_at, track_id)
+      (user_id, title, description, thumbnail_url, is_public)
     VALUES
-      (#{id}, #{userId}, #{title}, #{description}, #{thumbnailUrl}, #{isPublic}, #{createdAt}, #{trackId})
+      (#{userId}, #{title}, #{description}, #{thumbnailUrl}, #{isPublic})
   </insert>
 
   <update id="update" >
@@ -89,6 +90,7 @@
         GROUP BY playlist_id
       ) sub ON p.id = sub.playlist_id
     WHERE p.user_id = #{userId}
+    ORDER BY created_at DESC
   </select>
 
   <!-- 좋아요 한 플레이리스트 -->
