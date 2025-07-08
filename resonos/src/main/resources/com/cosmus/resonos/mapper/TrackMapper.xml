@@ -81,14 +81,14 @@
     ORDER BY id DESC
   </select>
 
-  <select id="exists" resultType="int" parameterType="string">
+  <select id="exists" resultType="int" >
     SELECT COUNT(*) FROM track WHERE id = #{id}
   </select>
 
   <!-- artistId -->
   <!-- 아티스트 별 TOP 7 인기 트랙 -->
   <select id="selectTop7TracksByArtist"
-          parameterType="string"
+          
           resultType="Track">
       SELECT
           title,
@@ -102,7 +102,7 @@
 
   <!-- 아티스트별 곡수 -->
   <select id="countTracksByArtist"
-          parameterType="string"
+          
           resultType="int">
       SELECT COUNT(*)
       FROM track
@@ -112,7 +112,7 @@
   <!-- trackId 같은 앨범 내 인기순 Top-5 트랙 -->
   <!-- (선택) 자기 자신 제외 -->
   <select id="findTop5TracksInSameAlbum"
-          parameterType="string"
+          
           resultType="Track">
     <![CDATA[
     SELECT t.*
@@ -127,7 +127,7 @@
 
   <!-- trackId → 아티스트 이름 한 건 -->
   <select id="findArtistNameByTrackId"
-          parameterType="string"
+          
           resultType="string">
     SELECT ar.name
     FROM   artist ar
@@ -138,7 +138,7 @@
 
   <!-- 앨범아이디로 모든트랙 -->
   <select id="findTracksByAlbumId"
-          parameterType="string"
+          
           resultMap="Track">
     <![CDATA[
       SELECT *
@@ -149,7 +149,7 @@
   </select>
   <!-- 앨범아이디로 트랙중 인기 5 (리스트) -->
   <select id="findTop5TracksByAlbumId"
-          parameterType="string"
+          
           resultMap="Track">
     <![CDATA[
       SELECT *
@@ -162,7 +162,7 @@
 
   <!-- 앨범아이디로 트랙중 인기 1 (객체) -->
   <select id="findTopTrackByAlbumId"
-          parameterType="string"
+          
           resultMap="Track">
     <![CDATA[
       SELECT *
@@ -173,7 +173,7 @@
     ]]>
   </select>
 
-  <select id="searchList" resultMap="Track" parameterType="string">
+  <select id="searchList" resultMap="Track" >
     SELECT t.*, ar.name AS artist_name, al.cover_image
     FROM track t
     LEFT JOIN artist ar ON t.artist_id = ar.id
@@ -182,7 +182,7 @@
     LIMIT 12
   </select>
 
-  <select id="allSearchList" resultMap="Track" parameterType="map">
+  <select id="allSearchList" resultMap="Track" >
     SELECT t.*, ar.name AS artist_name, al.cover_image
     FROM track t
     LEFT JOIN artist ar ON t.artist_id = ar.id
@@ -191,14 +191,14 @@
     LIMIT #{index}, #{size}
   </select>
 
-  <select id="searchCount" resultType="long" parameterType="string">
+  <select id="searchCount" resultType="long" >
     SELECT COUNT(*)
     FROM track
     WHERE title LIKE CONCAT('%', #{keyword}, '%')
   </select>
   
   <!-- 플레이 리스트 추가 -->
-  <select id="addTrackList" resultMap="Track" parameterType="string">
+  <select id="addTrackList" resultMap="Track" >
     SELECT t.*, ar.name AS artist_name, al.cover_image
     FROM track t
       LEFT JOIN artist ar ON t.artist_id = ar.id

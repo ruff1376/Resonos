@@ -35,7 +35,7 @@
   </delete>
 
   <!-- 플레이리스트 트랙 추가 -->
-  <insert id="insert" parameterType="map">
+  <insert id="insert" >
     INSERT INTO playlist_detail (playlist_id, track_id, order_no)
     VALUES
     <foreach collection="list" item="item" separator=",">

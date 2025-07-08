@@ -68,14 +68,14 @@
     DELETE FROM album WHERE id = #{id}
   </delete>
 
-  <select id="exists" resultType="int" parameterType="string">
+  <select id="exists" resultType="int" >
     SELECT COUNT(*) FROM album WHERE id = #{id}
   </select>
 
   <!-- 모든 앨범을 아티스트 ID로 조회 -->
   <!-- id 자료형에 맞게 string·long 등으로 -->
   <select id="findAlbumsByArtistId"
-          parameterType="string"      
+                
           resultMap="Album">
     SELECT a.*,
           ar.name AS artist_name
@@ -87,7 +87,7 @@
 
   <!-- trackId 앨범 객체 -->
   <select id="findAlbumByTrackId"
-          parameterType="string"
+          
           resultType="Album">
     SELECT a.*
     FROM   album  a
@@ -98,7 +98,7 @@
   <!-- artistId -->
   <!-- 아티스트의 앨범 수 -->
   <select id="countAlbumsByArtist"
-          parameterType="string"
+          
           resultType="int">
       SELECT
           COUNT(*) 
@@ -106,7 +106,7 @@
       WHERE artist_id = #{artistId}
   </select>
 
-  <select id="searchList" resultMap="Album" parameterType="string">
+  <select id="searchList" resultMap="Album" >
     SELECT a.*, ar.name AS artist_name
     FROM album a
     LEFT JOIN artist ar ON a.artist_id = ar.id
@@ -114,7 +114,7 @@
     LIMIT 12
   </select>
 
-  <select id="allSearchList" resultMap="Album" parameterType="map">
+  <select id="allSearchList" resultMap="Album" >
     SELECT a.*, ar.name AS artist_name
     FROM album a
     LEFT JOIN artist ar ON a.artist_id = ar.id
@@ -122,7 +122,7 @@
     LIMIT #{index}, #{size}
   </select>
 
-  <select id="searchCount" resultType="long" parameterType="string">
+  <select id="searchCount" resultType="long" >
     SELECT COUNT(*)
     FROM album
     WHERE title LIKE CONCAT('%', #{keyword}, '%')

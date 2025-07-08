@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원 관리</title>
     <th:block th:replace="~{fragments/link::admin}"></th:block>
-    <style>
+    <!-- <style>
       .detail-form label { min-width: 90px; }
       .list-group-item .btn { min-width: 60px; }
       .detail-row {
@@ -22,7 +22,9 @@
         max-height: 800px; /* 충분히 크게 */
         opacity: 1;
       }
-    </style>
+    </style> -->
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <th:block layout:fragment="content">
 <body class="bg-dark text-light">
@@ -90,8 +92,9 @@
                 <input type="hidden" name="ban" th:value="${member.ban == null or !member.ban}" />
                 <input type="hidden" name="keyword" th:value="${keyword}" />
                 <button type="submit" class="btn btn-outline-danger btn-sm"
-                        th:text="${member.ban != null and member.ban} ? '제재 해제' : '제재'">제재/해제</button>
+                th:text="${member.ban != null and member.ban} ? '제재 해제' : '제재'">제재/해제</button>
               </form>
+
             </div>
             <div style="flex-basis:8%;min-width:60px;">
               <button type="button"
@@ -111,107 +114,141 @@
     </div>
   </div>
 </main>
-<script>
-  document.querySelectorAll('.detail-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var memberRow = btn.closest('.list-group-item');
-      var detailRow = memberRow.nextElementSibling;
+<script th:inline="javascript">
+  const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+  const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-      // 토글: 이미 열려 있으면 닫기
-      if (detailRow.classList.contains('show')) {
-        detailRow.classList.remove('show');
-        detailRow.querySelector('#detail-area').innerHTML = '';
-        return;
-      }
+// 상세 버튼 클릭 시 상세/수정 폼 표시 및 삭제 버튼 포함
+document.querySelectorAll('.detail-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var memberRow = btn.closest('.list-group-item');
+    var detailRow = memberRow.nextElementSibling;
 
-      // 다른 폼 닫기
-      document.querySelectorAll('.detail-row.show').forEach(function(row) {
-        row.classList.remove('show');
-        row.querySelector('#detail-area').innerHTML = '';
+    // 토글: 이미 열려 있으면 닫기
+    if (detailRow.classList.contains('show')) {
+      detailRow.classList.remove('show');
+      detailRow.querySelector('#detail-area').innerHTML = '';
+      return;
+    }
+
+    // 다른 폼 닫기
+    document.querySelectorAll('.detail-row.show').forEach(function(row) {
+      row.classList.remove('show');
+      row.querySelector('#detail-area').innerHTML = '';
+    });
+
+    var id = btn.getAttribute('data-member-id');
+    fetch('/admin/members/' + id + '/detail-json')
+      .then(res => {
+        if (!res.ok) {
+          alert('회원 정보를 찾을 수 없습니다.');
+          return Promise.reject();
+        }
+        return res.json();
+      })
+      .then(member => {
+        detailRow.classList.add('show');
+        let authOptions = `
+          <option value="ROLE_USER" ${member.authList.includes('ROLE_USER') ? 'selected' : ''}>일반</option>
+          <option value="ROLE_ADMIN" ${member.authList.includes('ROLE_ADMIN') ? 'selected' : ''}>운영자</option>
+        `;
+        detailRow.querySelector('#detail-area').innerHTML = `
+          <form action="/admin/members/update" method="post" class="resonos-card detail-form p-3 bg-resonos-dark rounded-3" onsubmit="return submitDetailForm(event, this)">
+            <input type="hidden" name="id" value="${member.id}" />
+            <div class="mb-3 text-start">
+              <label class="form-label">닉네임</label>
+              <input type="text" class="form-control" name="nickname" value="${member.nickname}" required>
+            </div>
+            <div class="mb-3 text-start">
+              <label class="form-label">이메일</label>
+              <input type="email" class="form-control" name="email" value="${member.email}" required>
+            </div>
+            <div class="mb-3 text-start">
+              <label class="form-label">상태</label>
+              <select name="enabled" class="form-select">
+                <option value="true" ${member.enabled ? 'selected' : ''}>정상</option>
+                <option value="false" ${!member.enabled ? 'selected' : ''}>휴면</option>
+              </select>
+            </div>
+            <div class="mb-3 text-start">
+              <label class="form-label">권한</label>
+              <select name="auth" class="form-select">
+                ${authOptions}
+              </select>
+            </div>
+            <div class="mb-3 text-start">
+              <label class="form-label">프로필 이미지 URL</label>
+              <input type="text" class="form-control" name="profileImage" value="${member.profileImage || ''}">
+            </div>
+            <div class="text-end">
+              <button type="submit" class="btn btn-gold btn-sm">저장</button>
+              <button type="button" class="btn btn-outline-gold btn-sm cancel-detail-btn">취소</button>
+              <button type="button" class="btn btn-outline-danger btn-sm ms-2" onclick="deleteMember(${member.id})">삭제</button>
+            </div>
+          </form>
+        `;
+        // 취소 버튼 동작
+        var cancelBtn = detailRow.querySelector('.cancel-detail-btn');
+        if (cancelBtn) {
+          cancelBtn.onclick = function() {
+            detailRow.classList.remove('show');
+            detailRow.querySelector('#detail-area').innerHTML = '';
+          }
+        }
+        setTimeout(function() {
+          detailRow.scrollIntoView({behavior: "smooth", block: "center"});
+        }, 100);
       });
-
-      var id = btn.getAttribute('data-member-id');
-      fetch('/admin/members/' + id + '/detail-json')
-        .then(res => {
-          if (!res.ok) {
-            alert('회원 정보를 찾을 수 없습니다.');
-            return Promise.reject();
-          }
-          return res.json();
-        })
-        .then(member => {
-          detailRow.classList.add('show');
-          let authOptions = `
-            <option value="ROLE_USER" ${member.authList.includes('ROLE_USER') ? 'selected' : ''}>일반</option>
-            <option value="ROLE_ADMIN" ${member.authList.includes('ROLE_ADMIN') ? 'selected' : ''}>운영자</option>
-          `;
-          detailRow.querySelector('#detail-area').innerHTML = `
-<form action="/admin/members/update" method="post" class="resonos-card detail-form p-3 bg-resonos-dark rounded-3" onsubmit="return submitDetailForm(event, this)">
-  <input type="hidden" name="id" value="${member.id}" />
-  <div class="mb-3 text-start">
-    <label class="form-label">닉네임</label>
-    <input type="text" class="form-control" name="nickname" value="${member.nickname}" required>
-  </div>
-  <div class="mb-3 text-start">
-    <label class="form-label">이메일</label>
-    <input type="email" class="form-control" name="email" value="${member.email}" required>
-  </div>
-  <div class="mb-3 text-start">
-    <label class="form-label">상태</label>
-    <select name="enabled" class="form-select">
-      <option value="true" ${member.enabled ? 'selected' : ''}>정상</option>
-      <option value="false" ${!member.enabled ? 'selected' : ''}>휴면</option>
-    </select>
-  </div>
-  <div class="mb-3 text-start">
-    <label class="form-label">권한</label>
-    <select name="auth" class="form-select">
-      ${authOptions}
-    </select>
-  </div>
-  <div class="mb-3 text-start">
-    <label class="form-label">프로필 이미지 URL</label>
-    <input type="text" class="form-control" name="profileImage" value="${member.profileImage || ''}">
-  </div>
-  <div class="text-end">
-    <button type="submit" class="btn btn-gold btn-sm">저장</button>
-    <button type="button" class="btn btn-outline-gold btn-sm cancel-detail-btn">취소</button>
-  </div>
-</form>
-
-          `;
-          var cancelBtn = detailRow.querySelector('.cancel-detail-btn');
-          if (cancelBtn) {
-            cancelBtn.onclick = function() {
-              detailRow.classList.remove('show');
-              detailRow.querySelector('#detail-area').innerHTML = '';
-            }
-          }
-          setTimeout(function() {
-            detailRow.scrollIntoView({behavior: "smooth", block: "center"});
-          }, 100);
-        });
-    });
   });
+});
 
-  // 저장(AJAX, 필요시 location.reload() 등)
-  function submitDetailForm(e, form) {
-    e.preventDefault();
-    const formData = new FormData(form);
-    fetch(form.action, {
-      method: "POST",
-      body: formData
-    }).then(res => {
-      if(res.ok) {
-        alert("저장되었습니다!");
-        location.reload();
-      } else {
-        alert("저장 실패");
-      }
-    });
-    return false;
-  }
+// 저장(AJAX, CSRF 적용)
+function submitDetailForm(e, form) {
+  e.preventDefault();
+  const formData = new FormData(form);
+  fetch(form.action, {
+    method: "POST",
+    headers: {
+      [csrfHeader]: csrfToken
+    },
+    body: formData
+  }).then(res => {
+    if(res.ok) {
+      alert("저장되었습니다!");
+      location.reload();
+    } else {
+      alert("저장 실패");
+    }
+  });
+  return false;
+}
+
+// 회원 삭제 함수 (AJAX, CSRF 적용)
+function deleteMember(id) {
+  if (!confirm("정말 삭제하시겠습니까?")) return;
+  fetch('/admin/members/delete', {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      [csrfHeader]: csrfToken
+    },
+    body: "id=" + encodeURIComponent(id)
+  }).then(res => {
+    if (res.ok) {
+      alert("삭제되었습니다!");
+      location.reload();
+    } else {
+      alert("삭제 실패");
+    }
+  });
+}
 </script>
+
+
+
+
+
+
 </body>
 </th:block>
 </html>

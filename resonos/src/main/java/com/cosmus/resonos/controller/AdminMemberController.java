@@ -6,10 +6,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 
-import groovy.util.logging.Slf4j;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
 
 import java.util.HashMap;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.UserService;
@@ -84,7 +87,7 @@ public class AdminMemberController {
     // 회원 상세 정보 페이지
     @GetMapping("/{id}/detail-json")
     @ResponseBody
-    public Map<String, Object> memberDetailJson(@PathVariable Long id) throws Exception {
+    public Map<String, Object> memberDetailJson(@PathVariable("id") Long id) throws Exception {
         Users member = userService.selectById(id);
         if (member == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "회원 정보를 찾을 수 없습니다.");
@@ -98,6 +101,40 @@ public class AdminMemberController {
         result.put("authList", member.getAuthList().stream().map(UserAuth::getAuth).collect(Collectors.toList()));
         return result;
     }
+
+
+    // 회원 정보 수정 (업데이트)
+    @PostMapping("/update")
+    @ResponseBody // AJAX라면 ResponseBody, 아니면 redirect 등 처리
+    public ResponseEntity<?> updateMember(@ModelAttribute Users user) {
+        log.info("Updating user: {}", user.getId());
+        try {
+            userService.update(user); // 실제 수정 로직
+            return ResponseEntity.ok("success");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("업데이트 실패: " + e.getMessage());
+        }
+    }
+
+    // 회원 삭제 
+    @PostMapping("/delete")
+    @ResponseBody
+    public ResponseEntity<?> deleteMember(@RequestParam("id") Long id) {
+        log.info("Deleting user: {}", id);
+        try {
+            userService.delete(id); // 실제 삭제 로직
+            return ResponseEntity.ok("success");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("삭제 실패: " + e.getMessage());
+        }
+    }
+
+
+
+
+
+
+
 
 }
 

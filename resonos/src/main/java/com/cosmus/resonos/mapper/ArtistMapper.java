@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.cosmus.resonos.domain.Artist;
 
@@ -26,7 +27,7 @@ public interface ArtistMapper {
     // 트랙 아이디로 아티스트 객체 반환
     public Artist selectArtistByTrackId(String id) throws Exception;
     // 페이징 처리된 아티스트 목록 조회
-    public List<Artist> listPaging(int offset, int size) throws Exception;
+    public List<Artist> listPaging(@Param("offset") int offset, @Param("size") int size); 
     // 검색 결과 목록
     public List<Artist> searchList(String keyword) throws Exception;
     // 검색 결과 전체 목록
