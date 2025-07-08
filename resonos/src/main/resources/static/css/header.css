@@ -93,3 +93,10 @@
     border-top: 1px solid #D4B97F !important;
     opacity: 1;
 }
+#head-profile {
+    width: 32px;
+    height: 32px;
+}
+#head-profile img {
+    display: inline;
+}
