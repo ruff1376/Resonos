@@ -108,4 +108,10 @@ public class ArtistServiceImpl implements ArtistService {
     public Artist findArtistByAlbumId(String id) throws Exception {
         return artistMapper.findArtistByAlbumId(id);
     }
+
+    @Override
+    public long searchCount(String keyword) throws Exception {
+        return artistMapper.searchCount(keyword);
+    }
+
 }

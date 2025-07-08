@@ -37,6 +37,12 @@ public class AlbumServiceImpl implements AlbumService {
         return albumMapper.newList(pagination);
     }
 
+    // 데이터 수
+    @Override
+    public long count() throws Exception {
+        return albumMapper.count();
+    }
+
     // 앨범 단건 조회
     @Override
     public Album select(String id) throws Exception {
@@ -101,6 +107,13 @@ public class AlbumServiceImpl implements AlbumService {
         queryMap.put("size", pagination.getSize());
         return albumMapper.allSearchList(queryMap);
     }
+
+    @Override
+    public long searchCount(String keyword) throws Exception {
+        return albumMapper.searchCount(keyword);
+    }
+
+    
 
     
 }
