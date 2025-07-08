@@ -54,10 +54,15 @@
         is_pro = #{isPro},
         enabled = #{enabled},
         provider = #{provider},
-        provider_id = #{providerId},
-        created_at = #{createdAt}
+        provider_id = #{providerId}
     WHERE id = #{id}
   </update>
+
+  <!-- selectPasswordById -->
+  <select id="selectPasswordById" resultType="string" parameterType="long">
+    SELECT password FROM user WHERE id = #{id}
+  </select>
+
 
   <delete id="delete" >
     DELETE FROM user WHERE id = #{id}
@@ -131,9 +136,14 @@
   <select id="hasAuth" resultType="int">
       SELECT COUNT(*) FROM user_auth WHERE username = #{username} AND auth = #{auth}
   </select>
-  <!-- selectById -->
+  <!-- 비밀번호 초기화 -->
+  <update id="updatePassword">
+  UPDATE user SET password = #{password} WHERE id = #{id}
+  </update>
+  <!-- 회원 아이디로 조회 -->
   <select id="selectById" resultMap="UserResultMap">
     SELECT * FROM user WHERE id = #{id}
   </select>
+
 
 </mapper>

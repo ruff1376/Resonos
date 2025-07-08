@@ -29,6 +29,9 @@ import com.cosmus.resonos.domain.UserActivityLog;
 import com.cosmus.resonos.domain.UserAuth;
 import com.cosmus.resonos.service.UserActivityLogService;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
+
 @Slf4j
 @Controller
 @RequestMapping("/admin/members")
@@ -105,16 +108,35 @@ public class AdminMemberController {
 
     // 회원 정보 수정 (업데이트)
     @PostMapping("/update")
-    @ResponseBody // AJAX라면 ResponseBody, 아니면 redirect 등 처리
+    @ResponseBody
     public ResponseEntity<?> updateMember(@ModelAttribute Users user) {
-        log.info("Updating user: {}", user.getId());
+        log.info("수정 요청: {}", user); // Users 객체 모든 값 로그로 확인
         try {
-            userService.update(user); // 실제 수정 로직
+            userService.update(user);
             return ResponseEntity.ok("success");
         } catch (Exception e) {
+            log.error("회원 수정 오류", e);
             return ResponseEntity.status(500).body("업데이트 실패: " + e.getMessage());
         }
     }
+    // 회원 비밀번호 랜덤 초기화
+    @PostMapping("/reset-password")
+    @ResponseBody
+    public Map<String, Object> resetPassword(@RequestParam Long id) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            String randomPw = RandomStringUtils.randomAlphanumeric(10); // org.apache.commons.lang3
+            userService.updatePassword(id, randomPw); // 비밀번호 암호화 후 저장
+            result.put("success", true);
+            result.put("password", randomPw);
+        } catch (Exception e) {
+            result.put("success", false);
+            result.put("message", e.getMessage());
+        }
+        return result;
+    }
+
+
 
     // 회원 삭제 
     @PostMapping("/delete")
@@ -126,6 +148,19 @@ public class AdminMemberController {
             return ResponseEntity.ok("success");
         } catch (Exception e) {
             return ResponseEntity.status(500).body("삭제 실패: " + e.getMessage());
+        }
+    }
+
+
+    // 회원 추가 
+    @PostMapping("/create")
+    @ResponseBody
+    public ResponseEntity<?> createMember(@ModelAttribute Users user) throws Exception {
+        try {
+            userService.join(user); // auth(권한)도 저장
+            return ResponseEntity.ok("success");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("회원 등록 실패: " + e.getMessage());
         }
     }
 
