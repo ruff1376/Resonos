@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.UserActivityLog;
 import com.cosmus.resonos.domain.UserAuth;
 import com.cosmus.resonos.domain.Users;
@@ -256,6 +257,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean updateFromUser(Users user) throws Exception {
         return userMapper.updateFromUser(user) > 0 ? true : false;
+    }
+
+    @Override
+    public PublicUserDto publicSelectById(Long id) throws Exception {
+        return userMapper.publicSelectById(id);
     }
 
 }

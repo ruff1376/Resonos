@@ -9,6 +9,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,14 +24,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.tags.EscapeBodyTag;
 
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.PlaylistDTO;
 import com.cosmus.resonos.domain.PlaylistDetail;
 import com.cosmus.resonos.domain.Track;
-import com.cosmus.resonos.service.PlaylistDetailService;
 import com.cosmus.resonos.service.PlaylistService;
 import com.cosmus.resonos.util.UploadImage;
 
@@ -39,6 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequestMapping("/playlists")
 @Controller
+@EnableMethodSecurity
 public class PlaylistController {
 
     @Autowired
@@ -153,9 +154,19 @@ public class PlaylistController {
      * @param playlistId
      * @return
      */
+    @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/{playlistId}/tracks", consumes = "application/json")
-    public ResponseEntity<?> insertAjaxTracks(@RequestBody Map<String, List<String>> data, @PathVariable("playlistId") Long playlistId) {
+    public ResponseEntity<?> insertAjaxTracks(
+        @RequestBody Map<String, List<String>> data,
+        @PathVariable("playlistId") Long playlistId,
+        @AuthenticationPrincipal CustomUser loginUser
+    ) {
         try {
+            // 권한 체크
+            Playlist playlist = playlistService.select(playlistId);
+            if(!playlist.getUserId().equals(loginUser.getUser().getId()))
+                return new ResponseEntity<>("권한이 없습니다.", HttpStatus.BAD_REQUEST);
+
             List<String> trackIdList = data.get("list");
             int maxOrderNo = playlistService.getMaxOrderNo(playlistId);
 
@@ -190,6 +201,7 @@ public class PlaylistController {
      * @return
      * @throws Exception
      */
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{playlistId}/tracks/{orderNo}")
     public ResponseEntity<?> deleteByOrderNo(@PathVariable("playlistId") Long playlistId, @PathVariable("orderNo") int orderNo) throws Exception {
         boolean result = playlistService.deleteTracks(playlistId, orderNo);
@@ -217,6 +229,7 @@ public class PlaylistController {
      * @return
      * @throws Exception
      */
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}")
     public String updatePlaylist(
         @PathVariable("id") Long id,
@@ -251,6 +264,7 @@ public class PlaylistController {
      * @return
      * @throws Exception
      */
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePlaylist(
         @PathVariable("id") Long id,

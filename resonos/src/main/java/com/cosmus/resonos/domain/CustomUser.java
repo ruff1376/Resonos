@@ -26,6 +26,7 @@ public class CustomUser implements UserDetails {
                 .map(auth -> new SimpleGrantedAuthority(auth.getAuth()))
                 .collect(Collectors.toList());
     }
+    public Long getId() { return user.getId(); }
     @Override public String getPassword() { return user.getPassword(); }
     @Override public String getUsername() { return user.getUsername(); }
     @Override public boolean isAccountNonExpired() { return true; }
