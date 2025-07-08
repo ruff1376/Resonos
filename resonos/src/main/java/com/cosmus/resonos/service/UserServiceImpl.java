@@ -250,4 +250,12 @@ public class UserServiceImpl implements UserService {
         return userMapper.selectById(id);
     }
 
+    /**
+     * 회원이 수정
+     */
+    @Override
+    public boolean updateFromUser(Users user) throws Exception {
+        return userMapper.updateFromUser(user) > 0 ? true : false;
+    }
+
 }

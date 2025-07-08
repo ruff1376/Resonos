@@ -16,8 +16,16 @@ public interface AlbumMapper {
     public List<Album> mainNewList() throws Exception;
     // 최신 앨범 목록
     public List<Album> newList(Pagination pagination) throws Exception;
+    // 메인 화면 인기 앨범 목록
+    public List<Album> mainHotList() throws Exception;
+    // 인기 앨범 목록
+    public List<Album> hotList(Pagination pagination) throws Exception;
     // 데이터 수
     public long count() throws Exception;
+    // 최신 데이터 수
+    public long newCount() throws Exception;
+    // 인기 데이터 수
+    public long hotCount() throws Exception;
     // 조회
     public Album select(String id) throws Exception;
     // 삽입

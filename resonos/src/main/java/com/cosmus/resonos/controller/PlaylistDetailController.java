@@ -34,24 +34,30 @@ public class PlaylistDetailController {
     private PlaylistService playlistService;
 
 
-    @PostMapping(value = "/{id}", consumes = "application/json")
-    public ResponseEntity<?> insertAjaxTracks(@RequestBody Map<String, List<String>> data, @PathVariable("id") Long id) {
+    /**
+     * 플레이리스트 트랙 추가
+     * @param data
+     * @param playlistId
+     * @return
+     */
+    @PostMapping(value = "/{playlistId}", consumes = "application/json")
+    public ResponseEntity<?> insertAjaxTracks(@RequestBody Map<String, List<String>> data, @PathVariable("playlistId") Long playlistId) {
         try {
             List<String> trackIdList = data.get("list");
-            int maxOrderNo = playlistDetailService.getMaxOrderNo(id);
+            int maxOrderNo = playlistDetailService.getMaxOrderNo(playlistId);
 
             if(trackIdList != null) {
                 List<PlaylistDetail> trackList = new ArrayList<>();
                 for (int i = 0; i < trackIdList.size(); i++) {
                     PlaylistDetail pd = new PlaylistDetail();
-                    pd.setPlaylistId(id);
+                    pd.setPlaylistId(playlistId);
                     pd.setTrackId(trackIdList.get(i));
                     pd.setOrderNo(maxOrderNo + i + 1);
                     trackList.add(pd);
                 }
                 boolean result = playlistDetailService.insert(trackList);
                 if(result) {
-                    PlaylistDTO playlistDto = playlistService.trackOfPlaylist(id);
+                    PlaylistDTO playlistDto = playlistService.trackOfPlaylist(playlistId);
 
                     return new ResponseEntity<>(playlistDto, HttpStatus.OK);
                 }

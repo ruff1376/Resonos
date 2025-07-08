@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RESONOS</title>
+    <title>최신 앨범</title>
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <th:block th:replace="~{fragments/link::main}"></th:block>
 </head>
@@ -21,7 +21,7 @@
                     <th:block th:each="newAlbum : ${newAlbumList}">
                         <!-- 앨범 카드 -->
                         <div class="col d-flex">
-                            <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <div class="card align-items-center p-3" style="width:228px; height:360px;">
                                 <a th:href="@{'/albums?id=' + ${newAlbum.id}}">
                                     <img th:src="${newAlbum.coverImage}" class="card-img-top" alt="앨범커버">
                                 </a>
@@ -29,8 +29,8 @@
                                     <a th:href="@{'/albums?id=' + ${newAlbum.id}}" class="card-title" th:text="${newAlbum.title}"></a>
                                     <a th:href="@{'/artists?id=' + ${newAlbum.artistId}}" class="card-artist" th:text="${newAlbum.artistName}"></a>
                                 </div>
-                                <div class="d-flex justify-content-center align-items-center" style="height:75px;">
-                                    <img src="캡처.png" alt="rating" class="album-rating">
+                                <div class="position-absolute bottom-0 start-50 translate-middle-x mb-5">
+                                    <canvas class="doughnut-canvas" width="50" height="50"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -39,5 +39,8 @@
                 <div th:replace="~{fragments/pagination :: pagination}"></div>
             </section>
         </div>
+    </th:block>
+    <th:block layout:fragment="pageScript">
+        <script th:src="@{/js/rating_chart.js}"></script>
     </th:block>
 </body>

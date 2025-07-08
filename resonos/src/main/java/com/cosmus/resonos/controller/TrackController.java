@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import org.springframework.http.HttpStatus;
@@ -12,11 +12,15 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.Artist;
@@ -30,6 +34,7 @@ import com.cosmus.resonos.service.ArtistService;
 import com.cosmus.resonos.service.PlaylistDetailService;
 import com.cosmus.resonos.service.TrackReviewService;
 import com.cosmus.resonos.service.TrackService;
+import com.cosmus.resonos.validation.ReviewForm;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -59,8 +64,12 @@ public class TrackController {
 
         Users loginUser = null;
         if (principal != null) {
-            loginUser = principal.getUser();
-            model.addAttribute("loginUser", loginUser);
+        loginUser = principal.getUser();
+        model.addAttribute("loginUser", loginUser);
+        boolean isAdmin = principal.getAuthorities()
+        .stream()
+        .anyMatch(a -> a.getAuthority().equals("ADMIN"));
+        model.addAttribute("isAdmin", isAdmin);
         }
         Track track = trackService.selectById(id);
         Album album = albumService.findAlbumByTrackId(id);
@@ -89,96 +98,46 @@ public class TrackController {
      */
     @PostMapping(value = "/from-playlists", consumes = "application/json")
     public ResponseEntity<?> getAjaxTracks(@RequestBody Map<String, String> data) throws Exception {
-        List<Track> trackList = trackService.addTrackList(data.get("keyword"));
 
+        log.info("트랙 요청 들어옴.");
+        List<Track> trackList = trackService.addTrackList(data.get("keyword"));
         if(trackList != null)
             return new ResponseEntity<>(trackList, HttpStatus.OK);
 
         return new ResponseEntity<>("리스트 요청 실패.", HttpStatus.BAD_REQUEST);
     }
 
-    // @Autowired
+    /* ── ① 등록 ────────────────────────────── */
+    @PostMapping
+    @ResponseBody
+    public TrackReview create(@RequestParam("id") String trackId,
+                              @RequestBody ReviewForm form,
+                              @AuthenticationPrincipal CustomUser user) {
+        return trackReviewService.write(trackId, form, user.getUser());
+    }
 
-    // // 트랙 목록 화면
-    // @GetMapping
-    // public String list(Model model) throws Exception {
-    //     log.info("[TrackController] 트랙 목록 요청");
-    //     List<Track> tracks = trackService.list();
-    //     log.info("[TrackController] 트랙 수: {}", tracks.size());
-    //     model.addAttribute("tracks", tracks);
-    //     return "track/list"; // track/list.html
-    // }
+    /* ── ② 수정 ────────────────────────────── */
+    @PutMapping("/{id}/review/{reviewId}")
+    @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#reviewId, authentication)")
+    public TrackReview update(@PathVariable("id") String trackId,
+                              @PathVariable("reviewId") Long reviewId,
+                              @RequestBody ReviewForm form) {
+        return trackReviewService.update(reviewId, form);
+    }
 
-    // // 트랙 상세 화면
-    // @GetMapping("/{id}")
-    // public String detail(@PathVariable String id, Model model) throws Exception {
-    //     log.info("[TrackController] 트랙 상세 요청 - id: {}", id);
-    //     Track track = trackService.select(Integer.valueOf(id));
-    //     if (track == null) {
-    //         log.warn("[TrackController] 트랙 없음 - id: {}", id);
-    //         return "redirect:/tracks?error=notfound";
-    //     }
-    //     log.info("[TrackController] 트랙 상세: {}", track);
-    //     model.addAttribute("track", track);
-    //     return "track/detail"; // track/detail.html
-    // }
+    /* ── ③ 삭제 ────────────────────────────── */
+    @DeleteMapping("/{id}/review/{reviewId}")
+    @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#reviewId, authentication)")
+    public void delete(@PathVariable("id") String trackId,
+                       @PathVariable("reviewId") Long reviewId) {
+        trackReviewService.delete(reviewId);
+    }
 
-    // // 트랙 등록 폼
-    // @GetMapping("/new")
-    // public String create(Model model) {
-    //     log.info("[TrackController] 트랙 등록 폼 요청");
-    //     model.addAttribute("track", new Track());
-    //     return "track/form"; // track/form.html
+    // /* ── ④ 좋아요 (선택) ───────────────────── */
+    // @PostMapping("/{reviewId}/like")
+    // public LikesDto like(@PathVariable Long reviewId,
+    //                      @AuthenticationPrincipal CustomUser user){
+    //     return trackReviewService.like(reviewId, user.getUser().getId());
     // }
-
-    // // 트랙 등록 처리
-    // @PostMapping
-    // public String createPost(@ModelAttribute Track track, Model model) throws Exception {
-    //     log.info("[TrackController] 트랙 등록 시도: {}", track);
-    //     boolean success = trackService.insert(track);
-    //     if (success) {
-    //         log.info("[TrackController] 트랙 등록 성공: {}", track);
-    //         return "redirect:/tracks";
-    //     }
-    //     log.warn("[TrackController] 트랙 등록 실패: {}", track);
-    //     model.addAttribute("error", "등록 실패");
-    //     return "track/form";
-    // }
-
-    // // 트랙 수정 폼
-    // @GetMapping("/{id}/edit")
-    // public String update(@PathVariable String id, Model model) throws Exception {
-    //     log.info("[TrackController] 트랙 수정 폼 요청 - id: {}", id);
-    //     Track track = trackService.select(Integer.valueOf(id));
-    //     if (track == null) {
-    //         log.warn("[TrackController] 수정할 트랙 없음 - id: {}", id);
-    //         return "redirect:/tracks?error=notfound";
-    //     }
-    //     model.addAttribute("track", track);
-    //     return "track/form";
-    // }
-
-    // // 트랙 수정 처리
-    // @PostMapping("/{id}/edit")
-    // public String updatePost(@PathVariable String id, @ModelAttribute Track track, Model model) throws Exception {
-    //     log.info("[TrackController] 트랙 수정 시도 - id: {}, track: {}", id, track);
-    //     track.setId(id);
-    //     boolean success = trackService.update(track);
-    //     if (success) {
-    //         log.info("[TrackController] 트랙 수정 성공 - id: {}", id);
-    //         return "redirect:/tracks/" + id;
-    //     }
-    //     log.warn("[TrackController] 트랙 수정 실패 - id: {}", id);
-    //     model.addAttribute("error", "수정 실패");
-    //     return "track/form";
-    // }
-
-    // // 트랙 삭제 처리
-    // @PostMapping("/{id}/delete")
-    // public String delete(@PathVariable String id) throws Exception {
-    //     log.info("[TrackController] 트랙 삭제 시도 - id: {}", id);
-    //     trackService.delete(id);
-    //     log.info("[TrackController] 트랙 삭제 완료 - id: {}", id);
-    //     return "redirect:/tracks";
-    // }
+    
 }

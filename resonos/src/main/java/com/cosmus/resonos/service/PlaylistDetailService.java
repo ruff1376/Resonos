@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.cosmus.resonos.domain.PlaylistDetail;
+import com.cosmus.resonos.domain.Track;
 
 public interface PlaylistDetailService {
     // 전체 조회
@@ -19,4 +20,6 @@ public interface PlaylistDetailService {
     public boolean delete(Long id) throws Exception;
     // oreder_no MAX 조회
     public int getMaxOrderNo(@Param("playlistId") Long playlistId) throws Exception;
+    // order_no 재정렬
+    public boolean updateTrackOrderNo(Long playlistId, List<Track> trackList) throws Exception;
 }

@@ -16,6 +16,10 @@ public interface AlbumService {
     public List<Album> findAlbumsByArtistId(String id) throws Exception;
     // 최신 앨범 전체 목록
     public List<Album> newList(Pagination pagination) throws Exception;
+    // 데이터 수
+    public long count() throws Exception;
+    // 최신 데이터 수
+    public long newCount() throws Exception;
     // 조회
     public Album select(String id) throws Exception;
     // 삽입
@@ -34,4 +38,6 @@ public interface AlbumService {
     public List<Album> searchList(String keyword) throws Exception;
     // 검색 결과 전체 목록
     public List<Album> allSearchList(Map<String, Object> paramMap) throws Exception;
+    // 검색 데이터 수
+    public long searchCount(String keyword) throws Exception;
 }

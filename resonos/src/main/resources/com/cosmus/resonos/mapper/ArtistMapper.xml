@@ -9,6 +9,7 @@
     <result property="name" column="name"/>
     <result property="profileImage" column="profile_image"/>
     <result property="genres" column="genres"/>
+    <result property="followerCount" column="follower_count"/>
   </resultMap>
 
   <select id="selectAll" resultMap="ArtistResultMap">
@@ -74,23 +75,44 @@
 
 
   <select id="searchList" resultMap="ArtistResultMap">
-    SELECT *
-    FROM artist
-    WHERE name LIKE CONCAT('%', #{keyword}, '%')
-    LIMIT 6
+      SELECT a.*, COUNT(af.id) AS follower_count,
+            CASE
+                WHEN a.name = #{keyword} THEN 1
+                WHEN a.name LIKE CONCAT(#{keyword}, '%') THEN 2
+                WHEN a.name LIKE CONCAT('%', #{keyword}, '%') THEN 3
+                ELSE 4
+            END AS sort_order
+      FROM artist a
+      LEFT JOIN artist_follow af ON a.id = af.artist_id
+      WHERE a.name LIKE CONCAT('%', #{keyword}, '%')
+      GROUP BY a.id
+      ORDER BY sort_order, follower_count DESC, a.name ASC
+      LIMIT 0, 6
   </select>
+
 
   <select id="allSearchList" resultMap="ArtistResultMap">
-    SELECT *
-    FROM artist
-    WHERE name LIKE CONCAT('%', #{keyword}, '%')
-    LIMIT #{index}, #{size}
+      SELECT a.*, COUNT(af.id) AS follower_count,
+            CASE
+                WHEN a.name = #{keyword} THEN 1
+                WHEN a.name LIKE CONCAT(#{keyword}, '%') THEN 2
+                WHEN a.name LIKE CONCAT('%', #{keyword}, '%') THEN 3
+                ELSE 4
+            END AS sort_order
+      FROM artist a
+      LEFT JOIN artist_follow af ON a.id = af.artist_id
+      WHERE a.name LIKE CONCAT('%', #{keyword}, '%')
+      GROUP BY a.id
+      ORDER BY sort_order, follower_count DESC, a.name ASC
+      LIMIT #{index}, #{size}
   </select>
 
+
   <select id="searchCount" resultType="long">
-    SELECT COUNT(*)
-    FROM artist
-    WHERE name LIKE CONCAT('%', #{keyword}, '%')
+    SELECT IFNULL(COUNT(DISTINCT a.id), 0)
+    FROM artist a
+    LEFT JOIN artist_follow af ON a.id = af.artist_id
+    WHERE a.name LIKE CONCAT('%', #{keyword}, '%')
   </select>
   
   <!-- 전체 아티스트 수 조회 -->

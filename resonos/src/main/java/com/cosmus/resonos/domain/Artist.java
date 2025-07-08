@@ -8,4 +8,5 @@ public class Artist {
     private String name;
     private String profileImage;
     private String genres;
+    private int followerCount;
 }

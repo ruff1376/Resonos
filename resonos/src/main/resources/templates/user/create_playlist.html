@@ -17,16 +17,17 @@
     <!-- 내 플레이리스트 -->
     <section class="info-wrapper">
       <div class="info-section">
-        <form th:action="@{/}" method="post" class="profile-edit-box" th:object="${playlistObj}">
+        <form th:action="@{/}" method="post" class="profile-edit-box" th:object="${playlist}">
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
           <label id="profileBtn" for="thumbnailUrl">
             <img th:src="@{/img/resonosLogo.png}" alt="프로필 이미지" class="profile-img edit">
-            <input type="file" th:field="*{thumbnailUrl}">
+            <input type="file" name="thumbnail" id="thumbnail">
           </label>
           <div class="input-area">
             <label class="profile-edit-label" for="nickname">플레이리스트 제목</label>
             <input type="text" class="form-control" th:field="*{title}" >
             <label class="profile-edit-label" for="bio">플레이리스트 설명</label>
-            <textarea class="form-control" th:field="*{description}" rows="2" placeholder="자기소개를 입력하세요.">음악과 우주, 그리고 커뮤니티를 사랑합니다.</textarea>
+            <textarea class="form-control" th:field="*{description}" rows="2" placeholder="플레이리스트에 대한 설명을 적어주세요."></textarea>
             <input type="radio" id="true" th:field="*{isPublic}" value="true">
             <label class="profile-edit-label" for="true">공개</label>
             <input type="radio" id="false" th:field="*{isPublic}" value="false">
@@ -42,7 +43,21 @@
   </main>
   <th:block layout:fragment="pageScript">
     <script>
+      /* 썸네일 바로보기 */
+      document.getElementById('thumbnail').addEventListener('change', function (event) {
+        const file = event.target.files[0]
+        const preview = document.querySelector('.profile-img.edit')
 
+        if (file) {
+          const reader = new FileReader()
+          reader.onload = function (e) {
+            preview.src = e.target.result
+          }
+          reader.readAsDataURL(file)
+        } else {
+          preview.src = ''
+        }
+      })
     </script>
   </th:block>
 </body>

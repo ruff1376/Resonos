@@ -369,14 +369,16 @@ a:hover > .mypage-card {
 /* 회원정보수정 */
 .profile-edit-box {
   align-items: center;
-  background: rgba(24,28,35,0.96);
+  background: rgba(24, 28, 35, 0.96);
   border: 1.5px solid #D4B97F;
   border-radius: 24px;
-  box-shadow: 0 2px 16px rgba(24,28,35,0.13);
+  box-shadow: 0 2px 16px rgba(24, 28, 35, 0.13);
   padding: 44px 36px 32px 36px;
   width: 100%;
   max-width: 1000px;
   text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 .profile-edit-box label {
   font-size: 1.6rem;
@@ -504,7 +506,7 @@ textarea.form-control {
   box-shadow: 0 8px 32px rgba(212, 185, 127, 0.18);
 }
 .con .bg-badge p {color: #fff;}
-#profileImage, #thumbnailUrl {display: none;}
+#profileImg, #thumbnail {display: none;}
 #profileBtn {cursor: pointer;}
 
 /* 유저 팔로우 */
@@ -557,7 +559,7 @@ textarea.form-control {
   overflow-y: auto;
   position: relative;
   width: 100%;
-  max-height: 500px;
+  height: 450px;
 }
 .info-section .title {
   color: #D4B97F;
@@ -664,7 +666,14 @@ textarea.form-control {
 
 /* 플레이리스트 */
 .con-music .info-section {height: 400px;}
-.name-playlist {font-size: 1.4rem; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.name-playlist {
+  text-align: start;
+  font-size: 1.4rem;
+  width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .is-public {font-size: 1.4rem; color: var(--main-color);}
 .right {display:flex; align-items: center; margin-left: auto; gap: 20px;}
 .like-area {display: flex; align-items: center; gap: 2px;}
@@ -701,7 +710,7 @@ button.like {background-color: inherit; border: none;}
 /* 플레이리스트 상세 */
 .con-pli-detail > .info-wrapper > .info-section {max-height: 1200px;}
 .con-pli-detail .info-section .info-wrapper {margin-left: 0; margin-top: 60px;}
-.con-pli-detail .info-section .info-wrapper .info-section {max-height: 650px;}
+.con-pli-detail .info-section .info-wrapper .info-section {height: 500px;}
 .con-pli-detail .profile-edit-box {border: none; border-radius: 0;}
 .con-pli-detail .input-area {flex: 1; padding: 0;}
 .con-pli-detail input[type="radio"] + .profile-edit-label {display: inline-block; margin: 0 5px;}
@@ -719,7 +728,7 @@ button.like {background-color: inherit; border: none;}
 .search-icon {
   position: absolute;
   left: 10px;
-  font-size: 20px;
+  font-size: 29px;
   color: #B1B1B1;
   pointer-events: none;
 }
@@ -788,7 +797,8 @@ button.like {background-color: inherit; border: none;}
 }
 .con-music .empty-text {height: 280px;}
 .hide {display: none;}
-
+.con-pli-detail .empty-text {height: 400px;}
+.con-follow .empty-text {height: 300px;}
 
 /* 아이디 찾기 */
 .con-find-id .user-form {
@@ -819,6 +829,15 @@ button.like {background-color: inherit; border: none;}
   padding: 10px 0;
   margin: 0 -30px;
   border-radius: 15px 15px 0 0;
+  position: absolute;
+  width: 100%;
+  left: 30px;
+  top: 0;
+}
+.success-fail.middle {
+  border-radius: 0;
+  top: 60px;
+  z-index: 99;
 }
 .success-fail.error {
   background-color: #FF3B3B;
@@ -859,11 +878,11 @@ button.like {background-color: inherit; border: none;}
 .modal-input {
     border: 1px solid #B1B1B1;
     border-radius: 10px;
-    height: 35px;
+    height: 45px;
     background: transparent;
     color: #B1B1B1;
-    padding-left: 35px;
-    font-size: 12px;
+    padding-left: 45px;
+    font-size: 1.6rem;
     width: 100%;
 }
 .ul-list.modall {overflow: auto;}
@@ -883,3 +902,10 @@ button.like {background-color: inherit; border: none;}
   align-items: center;
 }
 .select {border-color: #4cd964 !important;}
+
+h2 + #bio {
+  max-width: 350px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

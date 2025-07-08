@@ -32,13 +32,11 @@
                     <p>아직 리뷰가 없어요 😅</p>
                 </th:block>
                 <th:block th:if="${score != null and score.averageScore != null}">
-                    <p th:text="|🔮 ${score.averageScore}점 (✅유저 ${score.criticCount}명, 일반유저 ${score.userCount}명)|"></p>
+                    <p
+                        th:text="|🔮 ${#numbers.formatDecimal(score.averageScore, 0, 0)}점 (✅리뷰 ${score.criticCount}개, 일반리뷰 ${score.userCount}개)|">
+                    </p>
                 </th:block>
                 <div>
-                    <th:block th:each="review : ${reviews}">
-    <pre th:text="${review}">리뷰 안 보임</pre>
-</th:block>
-                    <p th:text="${review}">리뷰 목록 없음</p>
                     <div class="btn btn-gold">좋아요 ❤️</div>
                     <div class="btn btn-gold">저장 💾</div>
                 </div>
@@ -79,44 +77,55 @@
                     <h1 id="headline">첫 리뷰를 작성해보세요 🤩</h1>
                 </th:block>
                 <th:block th:if="${score != null and score.averageScore != null}">
-                    <h1 id="headline" th:text="|🔮 ${score.averageScore}|"></h1>
+                    <h1 id="headline" th:text="|🔮 ${#numbers.formatDecimal(score.averageScore, 0, 0)}|"></h1>
                 </th:block>
                 <th:block th:if="${score != null and score.averageScore != null}">
                     <div class="score-bar">
-                        <div class="score-fill" th:style="'width:' + ${score.averageScore} + '%'">
-                            <span th:text="${score.averageScore}"></span>
+                        <div class="score-fill"
+                            th:style="'width:' + ${#numbers.formatDecimal(score.averageScore, 1, 1)} + '%'">
+                            <span th:text="${#numbers.formatDecimal(score.averageScore, 0, 0)}"></span>
                         </div>
                     </div>
                 </th:block>
             </div>
             <div class="review-container">
-                <ul class="comment-list">
-                    <!-- 반복문 -->
-                    <th:block th:each="review : ${review}">
-                        <li class="comment">
-                            <!-- 작성자 + 평점 -->
+                <ul class="review-list">
+                    <th:block th:each="rv : ${review}">
+                        <li class="comment" th:id="|rv-${rv.id}|" th:data-review-id="${rv.id}"
+                            th:data-track-id="${track.id}">
                             <div class="name-and-score">
-                                <!-- ① id → class 로 (반복문에서 id 중복 방지) -->
-                                <p id="subtitle" th:text="${review.reviewer.nickname}">작성자 이름</p>
-                                <!-- ② boolean 프로퍼티: Lombok 의 isPro() → 'pro' 로 접근 -->
-                                <th:block th:if="${review.reviewer != null and review.reviewer.pro}">
-                                    <p>✅</p>
-                                </th:block>
-                                <p th:text="|🔮 ${review.rating}|">🔮 100</p>
+                                <p th:text="${rv.reviewer.nickname}">닉네임</p>
+                                <span th:if="${rv.critic == true }">✅</span>
+                                <span>🔮 <span th:text="${rv.rating}">0</span></span>
                             </div>
-                            <!-- ③ 리뷰 본문 -->
                             <div class="review-content">
-                                <p th:text="${review.content}">리뷰 내용</p>
+                                <p class="content-text" th:text="${rv.content}">내용</p>
                             </div>
-                            <!-- ④ 유틸 영역 -->
+
+                            <!-- 👇 수정 폼은 기본으로 숨김 -->
+                            <form class="edit-form" style="display: none;">
+                                <div class="reply">
+                                    <textarea class="edit-content" required></textarea>
+                                    <div class="score-and-submit">
+                                        <input type="number" class="edit-rating" min="0" max="100" required>
+                                        <div class="button-box">
+                                            <button type="submit" class="btn btn-gold">수정 완료</button>
+                                            <button type="button" class="btn btn-danger">취소</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                             <div class="review-util">
-                                <!-- 날짜 포맷 -->
-                                <p th:text="${#temporals.format(review.createdAt, 'yyyy.MM.dd')}">2025.05.21</p>
-                                <!-- 좋아요: review.likes (s 붙음) -->
-                                <a href="#">
-                                    <p th:text="|❤️ ${review.likes}|">❤️ 0</p>
-                                </a>
-                                <a href="#" class="report">신고</a>
+                                <time th:text="${#temporals.format(rv.createdAt,'yyyy.MM.dd')}">날짜</time>
+                                <a href="#" class="like-btn" th:data-id="${rv.id}">👍 <span
+                                        th:text="${rv.likes}">0</span></a>
+                                <!-- 수정/삭제 버튼: 작성자 or ADMIN -->
+                                <span
+                                    th:if="${(isAdmin != null and isAdmin) or (loginUser != null and rv != null and loginUser.id == rv.userId)}">
+                                    <a href="#" class="edit-btn" th:data-id="${rv.id}">수정</a>
+                                    <a href="#" class="del-btn" th:data-id="${rv.id}">삭제</a>
+                                </span>
+                                <a href="#">신고</a>
                             </div>
                         </li>
                     </th:block>
@@ -137,12 +146,13 @@
                 </ul>
             </div>
             <!-- 페이지네이션 -->
-            <div class="reply">
-                <form action="">
-                    <textarea name="" id="" placeholder="리뷰를 입력해주세요"></textarea>
+            <div th:if="${loginUser != null}" class="reply">
+                <form id="reviewForm">
+                    <input type="hidden" id="trackId" th:value="${track.id}">
+                    <textarea id="content" placeholder="리뷰를 입력해주세요" required></textarea>
                     <div class="score-and-submit">
-                        <input type="text" name="" id="" placeholder="점수를 입력해주세요">
-                        <button class="btn btn-gold">리뷰작성</button>
+                        <input type="number" id="rating" min="0" max="100" placeholder="0~100점" required>
+                        <button type="submit" class="btn btn-gold">리뷰작성</button>
                     </div>
                 </form>
             </div>
@@ -202,6 +212,125 @@
         <!-- 앨범 트랙리스트 분위기 뭐뭐..끝 -->
 
     </div>
+    <th:block th:replace="~{fragments/script::album}"></th:block>
+    <script>
+        $(document).ready(function () {
+            const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+            const csrfToken = $('meta[name="_csrf"]').attr('content');
+
+            $.ajaxSetup({
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(csrfHeader, csrfToken);
+                }
+            });
+
+            /** ① 등록 */
+            $('#reviewForm').on('submit', function (e) {
+                e.preventDefault();
+
+                const trackId = $('#trackId').val();
+                const content = $('#content').val().trim();
+                const rating = $('#rating').val();
+
+                if (content === '' || rating === '') {
+                    alert("내용과 점수를 모두 입력해주세요.");
+                    return;
+                }
+
+                $.ajax({
+                    url: `/tracks?id=${trackId}`,
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ content, rating }),
+                    success: function () {
+                        alert('리뷰 등록 성공!');
+                        location.reload(); // 또는 append로 동적으로 갱신
+                    },
+                    error: function (xhr) {
+                        console.error(xhr.responseText);
+                        alert('등록 실패: ' + xhr.responseText);
+                    }
+                });
+            });
+
+            /** ② 수정 버튼 → 폼 표시 + 기존 내용 세팅 */
+            $(document).on('click', '.edit-btn', function (e) {
+                e.preventDefault();
+
+                const li = $(this).closest('li');
+                const content = li.find('.review-content').text().trim();
+                const rating = li.find('.name-and-score span span').text().trim();
+
+                li.find('.edit-form').slideDown();
+                li.find('.edit-content').val(content);
+                li.find('.edit-rating').val(rating);
+            });
+
+            /** ③ 수정 완료 */
+            $(document).on('submit', '.edit-form', function (e) {
+                e.preventDefault();
+
+                const form = $(this);
+                const li = form.closest('li');
+                const reviewId = li.data('review-id');
+                const trackId = li.data('track-id');
+                const content = form.find('.edit-content').val().trim();
+                const rating = form.find('.edit-rating').val();
+
+                if (content === '' || rating === '') {
+                    alert("내용과 점수를 입력해주세요.");
+                    return;
+                }
+
+                $.ajax({
+                    url: `/tracks/${trackId}/review/${reviewId}`,
+                    method: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ content, rating }),
+                    success: function (updated) {
+                        li.find('.review-content').text(updated.content);
+                        li.find('.name-and-score span span').text(updated.rating);
+                        form.slideUp();
+                    },
+                    error: function (xhr) {
+                        console.error(xhr.responseText);
+                        alert('수정 실패: ' + xhr.responseText);
+                    }
+                });
+            });
+
+            /** ④ 수정 취소 */
+            $(document).on('click', '.btn-danger', function () {
+                $(this).closest('.edit-form').slideUp();
+            });
+
+            /** ⑤ 삭제 */
+            $(document).on('click', '.del-btn', function (e) {
+                e.preventDefault();
+
+                if (!confirm('정말 삭제하시겠습니까?')) return;
+
+                const li = $(this).closest('li');
+                const reviewId = li.data('review-id');
+                const trackId = li.data('track-id');
+
+                $.ajax({
+                    url: `/tracks/${trackId}/review/${reviewId}`,
+                    method: 'DELETE',
+                    success: function () {
+                        li.slideUp(() => li.remove());
+                    },
+                    error: function (xhr) {
+                        console.error(xhr.responseText);
+                        alert('삭제 실패: ' + xhr.responseText);
+                    }
+                });
+            });
+        });
+
+    </script>
+
+
 </body>
 
 </html>

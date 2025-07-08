@@ -1,6 +1,6 @@
 -- Active: 1751337677491@@127.0.0.1@3306@resonos
 
--- 실행 순서 
+-- 실행 순서
 -- 1. 테이블 삭제 DROP PROCEDURE IF EXISTS create_tables;
 -- 2. 테이블 생성 CREATE PROCEDURE create_tables()
 -- 3. 프로시저 호출 CALL create_tables();
@@ -123,12 +123,13 @@ BEGIN
         `email` VARCHAR(100) NOT NULL,
         `password` VARCHAR(100) NOT NULL,
         `nickname` VARCHAR(100) NOT NULL,
-        `profile_image` VARCHAR(200) NULL,
+        `profile_image` VARCHAR(200) '/img/resonosLogo.png',
         `bio` TEXT NULL,
         `is_pro` BOOLEAN NOT NULL DEFAULT FALSE,
         `enabled` BOOLEAN NOT NULL DEFAULT TRUE,
         `provider` VARCHAR(200) NULL,
         `provider_id` VARCHAR(200) NULL,
+        `current_badge` BIGINT NULL,
         `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
         `updated_at`	TIMESTAMP	NOT NULL	DEFAULT CURRENT_TIMESTAMP
                                             ON UPDATE CURRENT_TIMESTAMP
@@ -200,7 +201,7 @@ BEGIN
         `user_id` BIGINT NOT NULL,
         `title` VARCHAR(200) NOT NULL,
         `description` TEXT NULL,
-        `thumbnail_url` VARCHAR(200) NULL,
+        `thumbnail_url` VARCHAR(200) '/img/resonosLogo.png',
         `is_public` BOOLEAN NOT NULL,
         `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
@@ -254,6 +255,7 @@ BEGIN
         `playlist_id` BIGINT NOT NULL,
         `order_no` INT NOT NULL
     );
+    ADD CONSTRAINT uk_playlist_track UNIQUE (playlist_id, track_id);
 
     CREATE TABLE IF NOT EXISTS `policy` (
         `id` BIGINT NOT NULL,
@@ -403,7 +405,7 @@ BEGIN
         , auth varchar(100) NOT NULL                 -- 권한 (ROLE_USER, ROLE_ADMIN, ...)
         , PRIMARY KEY(no)
     );
-        
+
     -- PRIMARY KEY 추가
     ALTER TABLE `notice` ADD CONSTRAINT `PK_NOTICE` PRIMARY KEY (`id`);
     ALTER TABLE `qna_answer` ADD CONSTRAINT `PK_QNA_ANSWER` PRIMARY KEY (`id`);

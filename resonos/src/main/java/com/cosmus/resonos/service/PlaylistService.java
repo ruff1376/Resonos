@@ -30,6 +30,8 @@ public interface PlaylistService {
     public List<Playlist> likedPlaylist(Long userId) throws Exception;
     // 플레이리스트 상세 조회
     public PlaylistDTO trackOfPlaylist(Long playlistId) throws Exception;
-    // 플레이리스트 트랙 변경
-    public boolean updateTrackOrder(String playlistId, List<Map<String, Object>> orderList) throws Exception;
+    // 플레이리스트 트랙 순서 변경
+    public boolean updateTrackOrder(Long playlistId, List<Map<String, Object>> orderList) throws Exception;
+    // 플레이리스트 트랙 삭제
+    public boolean deleteTracks(@Param("playlistId") Long playlistId, @Param("orderNo") int orderNo) throws Exception;
 }

@@ -13,13 +13,13 @@
 <body>
   <main class="con con-mypage" layout:fragment="content">
     <section class="profile-section">
-      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="프로필 이미지" class="profile-img">
+      <img th:src="@{${user.profileImage}}" alt="프로필 이미지" class="profile-img">
       <div class="profile-info">
         <h2>
-          <th:block th:text="${loginUser.nickname}"></th:block>
+          <th:block th:text="${user.nickname}"></th:block>
           <span class="badge">JAZZ LOVER</span>
         </h2>
-        <p>음악과 우주, 그리고 커뮤니티를 사랑하는 평론가입니다.</p>
+        <p id="bio" th:text="${user.bio}">음악과 우주, 그리고 커뮤니티를 사랑하는 평론가입니다.</p>
         <div class="profile-actions">
           <a th:href="@{/users/edit}" class="mybtn-gold">프로필 편집</a>
           <form th:action="@{/logout}" method="post">
@@ -28,8 +28,8 @@
         </div>
       </div>
       <div class="profile-meta">
-        <div><a th:href="@{/user-follows}"><b>팔로워</b><br>128</a></div>
-        <div><a th:href="@{/user-follows}"><b>팔로우</b><br>92</a></div>
+        <div><a th:href="@{/user-follows}"><b>팔로워</b><br><th:block th:text="${followCount}">수</th:block></a></div>
+        <div><a th:href="@{/user-follows}"><b>팔로우</b><br><th:block th:text="${followerCount}">수</th:block></a></div>
         <div><a><b>뱃지</b><br>3</a></div>
       </div>
     </section>
@@ -48,7 +48,7 @@
             <th:block th:each="pl : ${playlists}">
               <li>
                 <div>
-                  <img class="cover-img" width="50px" height="50px" src="https://i.scdn.co/image/ab67616d0000b27340735818c3f8f04ba30e47c2" alt="커버이미지">
+                  <img class="cover-img" width="50px" height="50px" th:src="@{${pl.thumbnailUrl}}" alt="커버이미지">
                   <th:block th:text="${pl.title}">플레이리스트 이름</th:block>
                 </div>
                 <div class="like-count">
@@ -173,7 +173,7 @@
         <div class="mypage-card security">
           <h3>계정 / 보안<p>></p></h3>
           <ul>
-            <li>이메일: <th:block th:text="${loginUser.email}"></th:block></li>
+            <li>이메일: <th:block th:text="${user.email}"></th:block></li>
             <li class="impor"><span>비밀번호 변경</span>&nbsp;/&nbsp;<span>탈퇴</span></li>
           </ul>
         </div>

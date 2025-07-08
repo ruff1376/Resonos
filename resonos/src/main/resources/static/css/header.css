@@ -1,6 +1,7 @@
 .site-header .navbar {
     border-bottom: 1px solid var(--main-color);
 }
+
 .site-header .navbar-brand,
 .site-header .nav-link,
 .site-header .navbar-text {
@@ -8,10 +9,12 @@
     font-weight: bold;
     letter-spacing: 1px;
 }
+
 .site-header .nav-link.active,
 .site-header .nav-link:hover {
     color: #fffbe6 !important;
 }
+
 .site-header .header-logo-img {
     width: 150px;
     height: 100px;
@@ -19,12 +22,14 @@
     border-radius: 6px;
     object-fit: contain;
 }
+
 .site-header .header-logo-img-sub {
     width: 100px;
     height: 66px;
     border-radius: 6px;
     object-fit: contain;
 }
+
 .site-header .search-box {
     border: 1px solid #B1B1B1;
     border-radius: 10px;
@@ -34,16 +39,19 @@
     padding-left: 35px;
     font-size: 12px;
 }
+
 .site-header .search-box::placeholder {
     color: #B1B1B1;
     opacity: 1;
 }
+
 .site-header .search-box:focus {
     background: transparent !important;
     color: #B1B1B1;
     box-shadow: none;
     border-color: #B1B1B1;
 }
+
 .site-header .search-icon {
     position: absolute;
     left: 10px;
@@ -51,6 +59,7 @@
     color: #B1B1B1;
     pointer-events: none;
 }
+
 .site-header .btn-outline-gold {
     border: 1px solid #D4B97F;
     color: #D4B97F;
@@ -64,32 +73,95 @@
     justify-content: center;
     padding: 0;
 }
+
 .site-header .btn-outline-gold:hover {
     background: #D4B97F;
     color: #181C23;
 }
+
 /* 프로필 드롭다운 화살표 색상 */
 .header-navbar .profile-dropdown .dropdown-toggle::after {
     color: #B1B1B1 !important;
     filter: none;
 }
+
 /* 검색창, 종, 프로필 간격 */
 .header-navbar .header-gap {
     gap: 10px;
 }
+
 .header-navbar .dropdown-menu {
     border-radius: 15px;
 }
+
 .site-header .dropdown-item {
     font-size: 1.6rem;
     text-align: center;
     color: #B1B1B1;
 }
+
 .site-header .dropdown-item:hover {
     background-color: transparent;
     color: var(--main-color);
 }
+
 .site-header .dropdown-divider {
     border-top: 1px solid #D4B97F !important;
     opacity: 1;
+}
+
+#head-profile {
+    width: 32px;
+    height: 32px;
+}
+#head-profile img {
+    display: inline;
+
+
+.menu-wrapper {
+    position: relative;
+}
+
+.submenu-container {
+    position: absolute;
+    top: 75px;
+    /* 상단 메뉴 높이만큼 내려옴 */
+    left: 0;
+    background-color: var(--background-color);
+    padding: 10px 20px;
+    display: none;
+    white-space: nowrap;
+    z-index: 1000;
+    border-radius: 1.5rem;
+    box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.3);
+    width: 200px; /* 너비 지정 */
+    text-align: center; /* 전체 내부 텍스트 가운데 정렬 */
+}
+
+.submenu {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.submenu li {
+    list-style: none;
+}
+
+.submenu li a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    font-size: 1.6rem;
+    padding: 8px 0;
+}
+
+.submenu li a:hover {
+    color: #D4B97F;
+}
+
+/* 메뉴 hover 시 해당 하단 메뉴만 보이기 */
+.menu-wrapper:hover .submenu-container {
+    display: block;
+
 }

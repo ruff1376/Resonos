@@ -64,9 +64,9 @@
                 JOIN user u ON u.id = tr.user_id
             WHERE  tr.track_id = #{trackId}
             AND  tr.blinded = 0
-            ORDER  BY u.is_pro DESC,
+            ORDER BY tr.critic DESC,
                     tr.likes DESC,
-                    tr.created_at DESC
+                    tr.created_at ASC
         ]]>
     </select>
 
@@ -88,13 +88,25 @@
     <select id="findScoreByTrackId"  resultMap="TrackScore">
         <![CDATA[
         SELECT  track_id,
-                FLOOR(AVG(rating))                        AS avg_score,
-                SUM(CASE WHEN critic = 1 THEN 1 ELSE 0 END) AS critic_count,
-                SUM(CASE WHEN critic = 0 THEN 1 ELSE 0 END) AS user_count
+                ROUND(AVG(rating))                         AS avg_score,
+                SUM(CASE WHEN critic = 1 THEN 1 ELSE 0 END)   AS critic_count,
+                SUM(CASE WHEN critic = 0 THEN 1 ELSE 0 END)   AS user_count
         FROM    track_review
         WHERE   track_id = #{trackId}
-          AND   blinded = 0
+        AND   blinded = 0
         GROUP BY track_id
         ]]>
     </select>
+
+    <update id="update">
+        UPDATE track_review
+        SET rating  = #{rating},
+            content = #{content}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM track_review WHERE id = #{id}
+    </delete>
+
 </mapper>
