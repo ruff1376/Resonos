@@ -16,6 +16,7 @@ import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.UserFollow;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.UserFollowService;
+import com.cosmus.resonos.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,6 +27,8 @@ public class UserFollowController {
 
     @Autowired
     private UserFollowService userFollowService;
+    @Autowired
+    private UserService userService;
 
     /**
      * 유저 팔로우 페이지 요청
@@ -39,11 +42,14 @@ public class UserFollowController {
         Model model,
         @AuthenticationPrincipal CustomUser loginUser
     ) throws Exception {
+        // 유저 정보
+        Users user = userService.select(loginUser.getUsername());
         // 내 팔로워
         List<Users> myFollower = userFollowService.myFollower(loginUser.getUser().getId());
         // 내가 팔로우 한 유저
         List<Users> myFollow = userFollowService.myFollow(loginUser.getUser().getId());
 
+        model.addAttribute("user", user);
         model.addAttribute("myFollower", myFollower);
         model.addAttribute("myFollow", myFollow);
         model.addAttribute("lastPath", "user-follows");

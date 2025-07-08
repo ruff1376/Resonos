@@ -17,9 +17,9 @@
     <!-- 내 플레이리스트 -->
     <section class="info-wrapper">
       <div class="info-section">
-        <form th:action="@{/}" method="post" class="profile-edit-box" th:object="${playlist}">
+        <form th:action="@{/playlists}" method="post" class="profile-edit-box" th:object="${playlist}" enctype="multipart/form-data">
           <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-          <label id="profileBtn" for="thumbnailUrl">
+          <label id="profileBtn" for="thumbnail">
             <img th:src="@{/img/resonosLogo.png}" alt="프로필 이미지" class="profile-img edit">
             <input type="file" name="thumbnail" id="thumbnail">
           </label>

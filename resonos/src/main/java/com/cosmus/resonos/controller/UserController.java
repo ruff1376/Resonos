@@ -21,6 +21,7 @@ import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.PlaylistService;
 import com.cosmus.resonos.service.UserFollowService;
 import com.cosmus.resonos.service.UserService;
+import com.cosmus.resonos.util.UploadImage;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -110,34 +111,7 @@ public class UserController {
 
     // 이미지 파일 저장
     if (!file.isEmpty()) {
-      try {
-        String uploadDir = System.getProperty("user.dir") + "/resonos/uploads/profile_img";
-
-        log.info("업로드 경로 : {}", uploadDir);
-
-        File folder = new File(uploadDir);
-        if (!folder.exists()) {
-            folder.mkdirs(); // 폴더 없으면 생성
-        }
-
-        // 파일 이름 중복 방지용
-        String originalFilename = file.getOriginalFilename();
-        String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
-        String savedFilename = UUID.randomUUID() + extension;
-
-        // static/thumbnail 경로 (resources는 컴파일 시 target/classes로 복사됨)
-        String savePath = new File(uploadDir, savedFilename).getAbsolutePath();
-
-        // 저장
-        file.transferTo(new File(savePath));
-
-        // DB에 상대경로 저장하는 경우
-        user.setProfileImage("/profile_img/" + savedFilename);
-
-        log.info("이미지 저장됨");
-      } catch(Exception e) {
-            e.printStackTrace();
-        }
+      UploadImage.uploadProfileImage(file, user);
     }
 
     boolean result = userService.updateFromUser(user);

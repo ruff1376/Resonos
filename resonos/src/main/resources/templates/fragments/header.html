@@ -44,8 +44,8 @@
                                 </ul>
                             </div>
                             <div class="flex-shrink-0 dropdown profile-dropdown">
-                                <a href="#" id="head-profile" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                                <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img th:src="${user.profileImage}" alt="mdo" width="32" height="32" class="rounded-circle">
                                 </a>
                                 <ul class="dropdown-menu text-small shadow" style="background: #181C23;">
                                     <li><a class="dropdown-item" href="/users/mypage">마이페이지</a></li>
