@@ -35,10 +35,6 @@
                     <p th:text="|🔮 ${score.averageScore}점 (✅유저 ${score.criticCount}명, 일반유저 ${score.userCount}명)|"></p>
                 </th:block>
                 <div>
-                    <th:block th:each="review : ${reviews}">
-    <pre th:text="${review}">리뷰 안 보임</pre>
-</th:block>
-                    <p th:text="${review}">리뷰 목록 없음</p>
                     <div class="btn btn-gold">좋아요 ❤️</div>
                     <div class="btn btn-gold">저장 💾</div>
                 </div>
