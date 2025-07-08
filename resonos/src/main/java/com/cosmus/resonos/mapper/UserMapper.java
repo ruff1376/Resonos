@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.UserAuth;
 import com.cosmus.resonos.domain.Users;
 
@@ -19,7 +20,7 @@ public interface UserMapper {
     public int join(Users user) throws Exception;
     // 회원 권한 등록
     public int insertAuth(UserAuth userAuth) throws Exception;
-    // 회원 조회
+    // 회원 조회(username)
     public Users select(@Param("username") String username) throws Exception;
     // 전체 조회
     public List<Users> list() throws Exception;
@@ -73,4 +74,6 @@ public interface UserMapper {
     public int updatePassword(@Param("id") Long id, @Param("password") String password) throws Exception;
     // 회원 아이디로 조회
     public Users selectById(Long id) throws Exception;
+    // 회원 아이디로 공개 정보 조회
+    public PublicUserDto publicSelectById(Long id) throws Exception;
 }

@@ -13,7 +13,7 @@
 <body>
   <main class="con con-mypage" layout:fragment="content">
     <section class="profile-section">
-      <img th:src="@{${user.profileImage}}" alt="프로필 이미지" class="profile-img">
+      <img th:src="${user.profileImage}" alt="프로필 이미지" class="profile-img">
       <div class="profile-info">
         <h2>
           <th:block th:text="${user.nickname}"></th:block>
@@ -28,8 +28,8 @@
         </div>
       </div>
       <div class="profile-meta">
-        <div><a th:href="@{/user-follows}"><b>팔로워</b><br><th:block th:text="${followCount}">수</th:block></a></div>
-        <div><a th:href="@{/user-follows}"><b>팔로우</b><br><th:block th:text="${followerCount}">수</th:block></a></div>
+        <div><a th:href="@{/user-follows}"><b>팔로워</b><br><th:block th:text="${followerCount}">수</th:block></a></div>
+        <div><a th:href="@{/user-follows}"><b>팔로우</b><br><th:block th:text="${followCount}">수</th:block></a></div>
         <div><a><b>뱃지</b><br>3</a></div>
       </div>
     </section>
@@ -48,7 +48,7 @@
             <th:block th:each="pl : ${playlists}">
               <li>
                 <div>
-                  <img class="cover-img" width="50px" height="50px" th:src="@{${pl.thumbnailUrl}}" alt="커버이미지">
+                  <img class="cover-img" width="50px" height="50px" th:src="${pl.thumbnailUrl}" alt="커버이미지">
                   <th:block th:text="${pl.title}">플레이리스트 이름</th:block>
                 </div>
                 <div class="like-count">
@@ -126,6 +126,7 @@
         </div>
       </a>
       <!-- 내 활동 -->
+      <th:block th:if="${isOwner}">
       <a href="#">
         <div class="mypage-card activate">
           <h3>내 활동</h3>
@@ -145,7 +146,9 @@
           </ul>
         </div>
       </a>
+      </th:block>
       <!-- 배지 -->
+      <th:block th:if="${isOwner}">
       <a th:href="@{/users/badge}">
         <div class="mypage-card badge-area">
           <h3>배지<p>></p></h3>
@@ -159,7 +162,9 @@
           </ul>
         </div>
       </a>
+      </th:block>
       <!-- 알림 설정 -->
+      <th:block th:if="${isOwner}">
       <a href="">
         <div class="mypage-card alarm">
           <h3>알림 설정<p>></p></h3>
@@ -168,7 +173,9 @@
           </ul>
         </div>
       </a>
+      </th:block>
       <!-- 계정 / 보안 -->
+      <th:block th:if="${isOwner}">
       <a href="">
         <div class="mypage-card security">
           <h3>계정 / 보안<p>></p></h3>
@@ -178,6 +185,7 @@
           </ul>
         </div>
       </a>
+      </th:block>
     </section>
   </main>
   <th:block layout:fragment="pageScript">

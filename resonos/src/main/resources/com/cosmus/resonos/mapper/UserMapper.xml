@@ -154,5 +154,10 @@
     SELECT * FROM user WHERE id = #{id}
   </select>
 
+  <!-- 회원 아이디로 공개 정보 조회 -->
+  <select id="publicSelectById" resultType="PublicUserDto">
+    SELECT * FROM user WHERE id = #{id}
+  </select>
+
 
 </mapper>

@@ -3,6 +3,7 @@ package com.cosmus.resonos.service;
 
 import java.util.List;
 
+import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.UserAuth;
 import com.cosmus.resonos.domain.Users;
 
@@ -65,5 +66,7 @@ public interface UserService {
     public boolean updatePassword(Long id, String password) throws Exception;
     // 아이디 찾기
     public Users selectById(Long id) throws Exception;
+    // 회원 아이디로 공개 정보 조회
+    public PublicUserDto publicSelectById(Long id) throws Exception;
 
 }
