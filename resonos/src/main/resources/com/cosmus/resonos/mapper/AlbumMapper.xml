@@ -25,7 +25,8 @@
     SELECT a.*, ar.name AS artist_name
     FROM album a
     LEFT JOIN artist ar ON a.artist_id = ar.id
-    ORDER BY a.release_date DESC
+    WHERE a.release_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+    ORDER BY a.release_date DESC, artist_name
     LIMIT 12
   </select>
 
@@ -33,13 +34,20 @@
     SELECT a.*, ar.name AS artist_name
     FROM album a
     LEFT JOIN artist ar ON a.artist_id = ar.id
-    ORDER BY a.release_date DESC
+    WHERE a.release_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+    ORDER BY a.release_date DESC, artist_name
     LIMIT #{index}, #{size}
   </select>
 
   <select id="count" resultType="long">
     SELECT COUNT(*)
     FROM album
+  </select>
+
+  <select id="newCount" resultType="long">
+    SELECT COUNT(*)
+    FROM album
+    WHERE release_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
   </select>
 
   <select id="select" resultMap="Album">

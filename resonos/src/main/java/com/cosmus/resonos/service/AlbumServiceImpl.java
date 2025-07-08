@@ -32,7 +32,7 @@ public class AlbumServiceImpl implements AlbumService {
     // 최신 앨범 목록 조회
     @Override
     public List<Album> newList(Pagination pagination) throws Exception {
-        long total = albumMapper.count();
+        long total = albumMapper.newCount();
         pagination.setTotal(total);
         return albumMapper.newList(pagination);
     }
@@ -41,6 +41,11 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public long count() throws Exception {
         return albumMapper.count();
+    }
+
+    @Override
+    public long newCount() throws Exception {
+        return albumMapper.newCount();
     }
 
     // 앨범 단건 조회
@@ -112,6 +117,8 @@ public class AlbumServiceImpl implements AlbumService {
     public long searchCount(String keyword) throws Exception {
         return albumMapper.searchCount(keyword);
     }
+
+    
 
     
 

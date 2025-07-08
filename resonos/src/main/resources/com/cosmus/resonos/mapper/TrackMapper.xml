@@ -29,7 +29,8 @@
     FROM track t
     LEFT JOIN artist ar ON t.artist_id = ar.id
     LEFT JOIN album al ON t.album_id = al.id
-    ORDER BY t.id DESC
+    WHERE al.release_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+    ORDER BY al.release_date DESC, artist_name
     LIMIT 12
   </select>
 
@@ -38,13 +39,21 @@
     FROM track t
     LEFT JOIN artist ar ON t.artist_id = ar.id
     LEFT JOIN album al ON t.album_id = al.id
-    ORDER BY al.release_date DESC
+    WHERE al.release_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+    ORDER BY al.release_date DESC, artist_name
     LIMIT #{index}, #{size}
   </select>
 
   <select id="count" resultType="long">
     SELECT COUNT(*)
     FROM track
+  </select>
+
+  <select id="newCount" resultType="long">
+    SELECT COUNT(*)
+    FROM track t
+    LEFT JOIN album al ON t.album_id = al.id
+    WHERE al.release_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
   </select>
 
   <select id="selectById"  resultMap="Track">

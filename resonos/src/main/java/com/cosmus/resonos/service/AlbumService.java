@@ -18,6 +18,8 @@ public interface AlbumService {
     public List<Album> newList(Pagination pagination) throws Exception;
     // 데이터 수
     public long count() throws Exception;
+    // 최신 데이터 수
+    public long newCount() throws Exception;
     // 조회
     public Album select(String id) throws Exception;
     // 삽입

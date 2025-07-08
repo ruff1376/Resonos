@@ -14,6 +14,8 @@ public interface TrackService {
     public List<Track> newList(Pagination pagination) throws Exception;
     // 데이터 수
     public long count() throws Exception;
+    // 최신 데이터 수
+    public long newCount() throws Exception;
     // 조회
     public Track selectById(String id) throws Exception;
     // 삽입

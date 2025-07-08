@@ -41,14 +41,17 @@ public class ListController {
         List<Album> newAlbumList = albumService.mainNewList();
         List<Track> newTrackList = trackService.mainNewList();
 
-        long newAlbumCount = albumService.count();
-        long newTrackCount = trackService.count();
+        long newAlbumCount = albumService.newCount();
+        long newTrackCount = trackService.newCount();
 
         model.addAttribute("newAlbumList", newAlbumList);
         model.addAttribute("newTrackList", newTrackList);
 
         model.addAttribute("newAlbumCount", newAlbumCount);
         model.addAttribute("newTrackCount", newTrackCount);
+
+        System.out.println("newAlbumCount : " + newAlbumCount);
+        System.out.println("newTrackCount : " + newTrackCount);
 
         return "list/main";
     }
