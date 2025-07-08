@@ -31,10 +31,88 @@
 <main class="py-5 bg-resonos-dark">
   <div class="container" style="max-width: 1200px;">
     <h2 class="mb-4 text-light-gold">회원 관리</h2>
+    <!-- 검색 -->
     <form class="mb-3 d-flex gap-2" th:action="@{/admin/members}" method="get">
       <input type="text" class="search-bar" name="keyword" placeholder="닉네임, 이메일 검색" th:value="${keyword}">
       <button class="btn btn-gold btn-sm" type="submit">검색</button>
     </form>
+    <!-- 회원 추가 -->
+     <div class="mb-3 text-end">
+      <button type="button" class="btn btn-gold btn-sm" id="add-member-btn">+ 회원 추가</button>
+    </div>
+    <!-- 회원 추가 폼 (처음엔 숨김) -->
+    <div id="add-member-form-area" style="display:none;">
+      <form id="add-member-form" class="resonos-card p-3 bg-resonos-dark rounded-3 mb-4">
+        <div class="row mb-3">
+          <div class="col-md-6 text-start">
+            <label class="form-label">아이디(Username)</label>
+            <input type="text" class="form-control" name="username" required>
+          </div>
+          <div class="col-md-6 text-start">
+            <label class="form-label">닉네임</label>
+            <input type="text" class="form-control" name="nickname" required>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 text-start">
+            <label class="form-label">이메일</label>
+            <input type="email" class="form-control" name="email" required>
+          </div>
+          <div class="col-md-6 text-start">
+            <label class="form-label">비밀번호</label>
+            <input type="password" class="form-control" name="password" required>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 text-start">
+            <label class="form-label">프로필 이미지 URL</label>
+            <input type="text" class="form-control" name="profileImage">
+          </div>
+          <div class="col-md-6 text-start">
+            <label class="form-label">소개(Bio)</label>
+            <input type="text" class="form-control" name="bio">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-4 text-start">
+            <label class="form-label">전문가 여부(isPro)</label>
+            <select name="isPro" class="form-select">
+              <option value="false">아니오</option>
+              <option value="true">예</option>
+            </select>
+          </div>
+          <div class="col-md-4 text-start">
+            <label class="form-label">상태</label>
+            <select name="enabled" class="form-select">
+              <option value="true">정상</option>
+              <option value="false">휴면</option>
+            </select>
+          </div>
+          <div class="col-md-4 text-start">
+            <label class="form-label">권한</label>
+            <select name="auth" class="form-select">
+              <option value="ROLE_USER">일반</option>
+              <option value="ROLE_ADMIN">운영자</option>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 text-start">
+            <label class="form-label">Provider</label>
+            <input type="text" class="form-control" name="provider">
+          </div>
+          <div class="col-md-6 text-start">
+            <label class="form-label">Provider ID</label>
+            <input type="text" class="form-control" name="providerId">
+          </div>
+        </div>
+        <div class="text-end">
+          <button type="submit" class="btn btn-gold btn-sm">회원 등록</button>
+          <button type="button" class="btn btn-outline-gold btn-sm" id="cancel-add-member-btn">취소</button>
+        </div>
+      </form>
+    </div>
+
     <div class="resonos-card p-4">
       <!-- 컬럼 헤더 -->
       <div class="list-group-item bg-secondary text-dark fw-bold d-flex flex-nowrap align-items-center text-center justify-content-center" style="border-radius:8px 8px 0 0;">
@@ -115,8 +193,8 @@
   </div>
 </main>
 <script th:inline="javascript">
-  const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-  const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
 // 상세 버튼 클릭 시 상세/수정 폼 표시 및 삭제 버튼 포함
 document.querySelectorAll('.detail-btn').forEach(function(btn) {
@@ -153,32 +231,74 @@ document.querySelectorAll('.detail-btn').forEach(function(btn) {
           <option value="ROLE_ADMIN" ${member.authList.includes('ROLE_ADMIN') ? 'selected' : ''}>운영자</option>
         `;
         detailRow.querySelector('#detail-area').innerHTML = `
-          <form action="/admin/members/update" method="post" class="resonos-card detail-form p-3 bg-resonos-dark rounded-3" onsubmit="return submitDetailForm(event, this)">
+          <form action="/admin/members/update" method="post" 
+                class="resonos-card detail-form p-3 bg-resonos-dark rounded-3" 
+                onsubmit="return submitDetailForm(event, this)">
             <input type="hidden" name="id" value="${member.id}" />
-            <div class="mb-3 text-start">
-              <label class="form-label">닉네임</label>
-              <input type="text" class="form-control" name="nickname" value="${member.nickname}" required>
+            <div class="row mb-3">
+              <div class="col-md-6 text-start">
+                <label class="form-label">아이디(Username)</label>
+                <input type="text" class="form-control" name="username" value="${member.username || ''}" required>
+              </div>
+              <div class="col-md-6 text-start">
+                <label class="form-label">닉네임</label>
+                <input type="text" class="form-control" name="nickname" value="${member.nickname || ''}" required>
+              </div>
             </div>
-            <div class="mb-3 text-start">
-              <label class="form-label">이메일</label>
-              <input type="email" class="form-control" name="email" value="${member.email}" required>
+            <div class="row mb-3">
+              <div class="col-md-6 text-start">
+                <label class="form-label">이메일</label>
+                <input type="email" class="form-control" name="email" value="${member.email || ''}" required>
+              </div>
+              <div class="col-md-6 text-start">
+                <label class="form-label">비밀번호</label>
+                <input type="password" class="form-control" name="password" value="" placeholder="변경시만 입력">
+                <button type="button" class="btn btn-outline-gold btn-sm mt-2"
+                        onclick="resetPassword('${member.id}', this)">비밀번호 랜덤 초기화</button>
+              </div>
             </div>
-            <div class="mb-3 text-start">
-              <label class="form-label">상태</label>
-              <select name="enabled" class="form-select">
-                <option value="true" ${member.enabled ? 'selected' : ''}>정상</option>
-                <option value="false" ${!member.enabled ? 'selected' : ''}>휴면</option>
-              </select>
+
+            <div class="row mb-3">
+              <div class="col-md-6 text-start">
+                <label class="form-label">프로필 이미지 URL</label>
+                <input type="text" class="form-control" name="profileImage" value="${member.profileImage || ''}">
+              </div>
+              <div class="col-md-6 text-start">
+                <label class="form-label">소개(Bio)</label>
+                <input type="text" class="form-control" name="bio" value="${member.bio || ''}">
+              </div>
             </div>
-            <div class="mb-3 text-start">
-              <label class="form-label">권한</label>
-              <select name="auth" class="form-select">
-                ${authOptions}
-              </select>
+            <div class="row mb-3">
+              <div class="col-md-4 text-start">
+                <label class="form-label">전문가 여부(isPro)</label>
+                <select name="isPro" class="form-select">
+                  <option value="true" ${member.isPro ? 'selected' : ''}>예</option>
+                  <option value="false" ${!member.isPro ? 'selected' : ''}>아니오</option>
+                </select>
+              </div>
+              <div class="col-md-4 text-start">
+                <label class="form-label">상태</label>
+                <select name="enabled" class="form-select">
+                  <option value="true" ${member.enabled ? 'selected' : ''}>정상</option>
+                  <option value="false" ${!member.enabled ? 'selected' : ''}>휴면</option>
+                </select>
+              </div>
+              <div class="col-md-4 text-start">
+                <label class="form-label">권한</label>
+                <select name="auth" class="form-select">
+                  ${authOptions}
+                </select>
+              </div>
             </div>
-            <div class="mb-3 text-start">
-              <label class="form-label">프로필 이미지 URL</label>
-              <input type="text" class="form-control" name="profileImage" value="${member.profileImage || ''}">
+            <div class="row mb-3">
+              <div class="col-md-6 text-start">
+                <label class="form-label">Provider</label>
+                <input type="text" class="form-control" name="provider" value="${member.provider || ''}">
+              </div>
+              <div class="col-md-6 text-start">
+                <label class="form-label">Provider ID</label>
+                <input type="text" class="form-control" name="providerId" value="${member.providerId || ''}">
+              </div>
             </div>
             <div class="text-end">
               <button type="submit" class="btn btn-gold btn-sm">저장</button>
@@ -187,6 +307,7 @@ document.querySelectorAll('.detail-btn').forEach(function(btn) {
             </div>
           </form>
         `;
+
         // 취소 버튼 동작
         var cancelBtn = detailRow.querySelector('.cancel-detail-btn');
         if (cancelBtn) {
@@ -205,15 +326,19 @@ document.querySelectorAll('.detail-btn').forEach(function(btn) {
 // 저장(AJAX, CSRF 적용)
 function submitDetailForm(e, form) {
   e.preventDefault();
-  const formData = new FormData(form);
+
+  // FormData 대신 URLSearchParams로 직렬화
+  const formData = new URLSearchParams(new FormData(form)).toString();
+
   fetch(form.action, {
     method: "POST",
     headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
       [csrfHeader]: csrfToken
     },
     body: formData
   }).then(res => {
-    if(res.ok) {
+    if (res.ok) {
       alert("저장되었습니다!");
       location.reload();
     } else {
@@ -242,7 +367,63 @@ function deleteMember(id) {
     }
   });
 }
+// 회원 추가 폼 열기/닫기
+document.getElementById('add-member-btn').onclick = function() {
+  document.getElementById('add-member-form-area').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+document.getElementById('cancel-add-member-btn').onclick = function() {
+  document.getElementById('add-member-form-area').style.display = 'none';
+  document.getElementById('add-member-form').reset();
+};
+
+// 회원 추가 폼 전송 (AJAX)
+document.getElementById('add-member-form').onsubmit = function(e) {
+  e.preventDefault();
+  const form = e.target;
+  const formData = new URLSearchParams(new FormData(form)).toString();
+  fetch('/admin/members/create', {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      [csrfHeader]: csrfToken
+    },
+    body: formData
+  }).then(res => {
+    if (res.ok) {
+      alert("회원이 등록되었습니다!");
+      location.reload();
+    } else {
+      res.text().then(msg => alert("등록 실패: " + msg));
+    }
+  });
+};
+
+// 비밀번호 랜덤 초기화 함수
+function resetPassword(userId, btn) {
+  if (!confirm("정말 이 회원의 비밀번호를 랜덤값으로 초기화하시겠습니까?")) return;
+  fetch('/admin/members/reset-password', {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      [csrfHeader]: csrfToken
+    },
+    body: "id=" + encodeURIComponent(userId)
+  }).then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert("새 비밀번호: " + data.password + "\n(복사해두세요!)");
+      } else {
+        alert("초기화 실패: " + (data.message || ""));
+      }
+    });
+}
+
+
+
+
 </script>
+
 
 
 

@@ -1,9 +1,12 @@
 package com.cosmus.resonos.service;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.cosmus.resonos.domain.UserBadge;
+import com.cosmus.resonos.mapper.BoardPostMapper;
 import com.cosmus.resonos.mapper.UserBadgeMapper;
 
 @Service
@@ -36,4 +39,13 @@ public class UserBadgeServiceImpl implements UserBadgeService {
     public boolean delete(Long id) throws Exception {
         return userBadgeMapper.delete(id) > 0;
     }
+
+    @Autowired
+    private BadgeConditionService badgeConditionService;
+
+    @Autowired
+    private BoardPostMapper boardPostMapper; // 게시글 수 체크를 위한 Mapper
+    
+
+
 }

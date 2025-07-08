@@ -61,8 +61,9 @@ public interface UserService {
 
     // 권한 중복 조회
     public boolean hasAuth(String username, String auth) throws Exception;
-
-    // selectById
+    // 비밀번호 초기화
+    public boolean updatePassword(Long id, String password) throws Exception;
+    // 아이디 찾기
     public Users selectById(Long id) throws Exception;
 
 }

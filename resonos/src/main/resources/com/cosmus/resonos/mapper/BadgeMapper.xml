@@ -21,9 +21,9 @@
     SELECT * FROM badge WHERE id = #{id}
   </select>
 
-  <insert id="insert">
-    INSERT INTO badge (id, name, description, icon_url, criteria, created_at)
-    VALUES (#{id}, #{name}, #{description}, #{iconUrl}, #{criteria}, #{createdAt})
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO badge (name, description, icon_url, criteria, created_at)
+    VALUES ( #{name}, #{description}, #{iconUrl}, #{criteria}, #{createdAt})
   </insert>
 
   <update id="update">

@@ -1,8 +1,11 @@
 package com.cosmus.resonos.service;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+
 import com.cosmus.resonos.domain.Badge;
 import com.cosmus.resonos.mapper.BadgeMapper;
 
@@ -11,6 +14,10 @@ public class BadgeServiceImpl implements BadgeService {
 
     @Autowired
     private BadgeMapper badgeMapper;
+
+    @Autowired
+    private BadgeConditionService badgeConditionService;
+
 
     @Override
     public List<Badge> list() throws Exception {
@@ -33,7 +40,13 @@ public class BadgeServiceImpl implements BadgeService {
     }
 
     @Override
+    @Transactional
     public boolean delete(Long id) throws Exception {
-        return badgeMapper.delete(id) > 0;
+        // 1. 이 뱃지를 참조하는 모든 조건을 먼저 삭제
+        badgeConditionService.deleteConditionsByBadgeId(id);
+        
+        // 2. 뱃지 삭제
+        int affectedRows = badgeMapper.delete(id);
+        return affectedRows > 0;
     }
 }

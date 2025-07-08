@@ -35,6 +35,8 @@ public interface UserMapper {
     public int countAll() throws Exception;
     // 아이디 찾기
     public String findId(String email) throws Exception;
+    // selectPasswordById
+    public String selectPasswordById(Long id) throws Exception;
 
 
 
@@ -67,6 +69,8 @@ public interface UserMapper {
     public int deleteSpecificAuth(@Param("username") String username, @Param("auth") String auth) throws Exception;
     // 권한 중복 조회
     public int hasAuth(@Param("username") String username, @Param("auth") String auth) throws Exception;
-    // selectById
-    public Users selectById(@Param("id") Long id) throws Exception;
+    // 비밀번호 초기화
+    public int updatePassword(@Param("id") Long id, @Param("password") String password) throws Exception;
+    // 회원 아이디로 조회
+    public Users selectById(Long id) throws Exception;
 }

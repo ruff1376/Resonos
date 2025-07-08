@@ -123,11 +123,18 @@ public class UserServiceImpl implements UserService {
     /* 회원 정보 수정 */
     @Override
     public boolean update(Users user) throws Exception {
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-
+        // 비밀번호 입력값이 있을 때만 변경
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            String encodedPassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encodedPassword);
+        } else {
+            // 기존 비밀번호 유지: DB에서 조회해서 set
+            String currentPassword = userMapper.selectPasswordById(user.getId());
+            user.setPassword(currentPassword);
+        }
         return userMapper.update(user) > 0;
     }
+
 
     @Override
     public boolean delete(Long id) throws Exception {
@@ -222,10 +229,6 @@ public class UserServiceImpl implements UserService {
     public boolean hasAuth(String username, String auth) throws Exception {
         return userMapper.hasAuth(username, auth) > 0;
     }
-    @Override
-    public Users selectById(Long id) throws Exception {
-        return userMapper.selectById(id);
-    }
 
     /**
      * 아이디 찾기
@@ -233,6 +236,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public String findId(String email) throws Exception {
         return userMapper.findId(email);
+    }
+    /**
+     * 비밀번호 초기화
+     */
+    @Override
+    public boolean updatePassword(Long id, String password) throws Exception {
+        String encodedPassword = passwordEncoder.encode(password);
+        return userMapper.updatePassword(id, encodedPassword) > 0;
+    }
+    @Override
+    public Users selectById(Long id) throws Exception {
+        return userMapper.selectById(id);
     }
 
     /**

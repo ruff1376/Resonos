@@ -2,6 +2,8 @@ package com.cosmus.resonos.mapper;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
 import com.cosmus.resonos.domain.Comment;
 
 @Mapper
@@ -18,4 +20,6 @@ public interface CommentMapper {
     public int delete(Long id) throws Exception;
     // 대댓글
     public List<Comment> findByTarget(String type, Long targetId) throws Exception;
+    // 댓글 수 구하기
+    public  int countByUserId(@Param("userId") Long userId);
 }
