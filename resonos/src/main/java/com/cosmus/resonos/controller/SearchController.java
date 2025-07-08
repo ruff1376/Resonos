@@ -20,7 +20,7 @@ import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.ArtistService;
 import com.cosmus.resonos.service.TrackService;
 
-import groovy.util.logging.Slf4j;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
@@ -42,6 +42,8 @@ public class SearchController {
         @RequestParam("q") String keyword,
         Model model
     ) throws Exception {
+        keyword = keyword.trim();
+
         List<Artist> artistSearchList = artistService.searchList(keyword);
         List<Album> albumSearchList = albumService.searchList(keyword);
         List<Track> trackSearchList = trackService.searchList(keyword);
@@ -51,12 +53,18 @@ public class SearchController {
         long trackSearchCount = trackService.searchCount(keyword);
         
         model.addAttribute("keyword", keyword);
+
         model.addAttribute("artistSearchList", artistSearchList);
         model.addAttribute("albumSearchList", albumSearchList);
         model.addAttribute("trackSearchList", trackSearchList);
+
         model.addAttribute("artistSearchCount", artistSearchCount);
         model.addAttribute("albumSearchCount", albumSearchCount);
         model.addAttribute("trackSearchCount", trackSearchCount);
+
+        log.info("artistSearchCount : " + artistSearchCount);
+        log.info("albumSearchCount : " + albumSearchCount);
+        log.info("trackSearchCount : " + trackSearchCount);
         
         return "search/search";
     }
@@ -74,6 +82,7 @@ public class SearchController {
         pagination.setCount(10);
 
         Map<String, Object> paramMap = new HashMap<>();
+        keyword = keyword.trim();
         paramMap.put("keyword", keyword);
         paramMap.put("index", pagination.getIndex());
         paramMap.put("size", pagination.getSize());
@@ -108,6 +117,7 @@ public class SearchController {
         pagination.setCount(10);
 
         Map<String, Object> paramMap = new HashMap<>();
+        keyword = keyword.trim();
         paramMap.put("keyword", keyword);
         paramMap.put("index", pagination.getIndex());
         paramMap.put("size", pagination.getSize());
@@ -142,6 +152,7 @@ public class SearchController {
         pagination.setCount(10);
 
         Map<String, Object> paramMap = new HashMap<>();
+        keyword = keyword.trim();
         paramMap.put("keyword", keyword);
         paramMap.put("index", pagination.getIndex());
         paramMap.put("size", pagination.getSize());

@@ -14,6 +14,8 @@
     <result property="description" column="description"/>
     <result property="artistId" column="artist_id"/>
     <result property="artistName" column="artist_name"/>
+    <result property="likeCount" column="like_count"/>
+    <result property="followerCount" column="follower_count"/>
   </resultMap>
 
   <select id="list" resultMap="Album">
@@ -114,26 +116,65 @@
       WHERE artist_id = #{artistId}
   </select>
 
-  <select id="searchList" resultMap="Album" >
-    SELECT a.*, ar.name AS artist_name
+  <select id="searchList" resultMap="Album">
+    SELECT a.*, ar.name AS artist_name,
+          COUNT(DISTINCT la.id) AS like_count,
+          COUNT(DISTINCT af.id) AS follower_count
     FROM album a
     LEFT JOIN artist ar ON a.artist_id = ar.id
-    WHERE title LIKE CONCAT('%', #{keyword}, '%')
+    LEFT JOIN liked_album la ON a.id = la.album_id
+    LEFT JOIN artist_follow af ON ar.id = af.artist_id
+    WHERE a.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
+    GROUP BY a.id
+    ORDER BY
+      CASE
+        WHEN a.title = #{keyword} THEN 1
+        WHEN ar.name = #{keyword} THEN 2
+        WHEN a.title LIKE CONCAT(#{keyword}, '%') THEN 3
+        WHEN ar.name LIKE CONCAT(#{keyword}, '%') THEN 4
+        WHEN a.title LIKE CONCAT('%', #{keyword}, '%') THEN 5
+        WHEN ar.name LIKE CONCAT('%', #{keyword}, '%') THEN 6
+        ELSE 7
+      END,
+      like_count DESC,
+      follower_count DESC,
+      a.title ASC,
+      ar.name ASC
     LIMIT 12
   </select>
 
-  <select id="allSearchList" resultMap="Album" >
-    SELECT a.*, ar.name AS artist_name
+  <select id="allSearchList" resultMap="Album">
+    SELECT a.*, ar.name AS artist_name,
+          COUNT(DISTINCT la.id) AS like_count,
+          COUNT(DISTINCT af.id) AS follower_count
     FROM album a
     LEFT JOIN artist ar ON a.artist_id = ar.id
-    WHERE title LIKE CONCAT('%', #{keyword}, '%')
+    LEFT JOIN liked_album la ON a.id = la.album_id
+    LEFT JOIN artist_follow af ON ar.id = af.artist_id
+    WHERE a.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
+    GROUP BY a.id
+    ORDER BY
+      CASE
+        WHEN a.title = #{keyword} THEN 1
+        WHEN ar.name = #{keyword} THEN 2
+        WHEN a.title LIKE CONCAT(#{keyword}, '%') THEN 3
+        WHEN ar.name LIKE CONCAT(#{keyword}, '%') THEN 4
+        WHEN a.title LIKE CONCAT('%', #{keyword}, '%') THEN 5
+        WHEN ar.name LIKE CONCAT('%', #{keyword}, '%') THEN 6
+        ELSE 7
+      END,
+      like_count DESC,
+      follower_count DESC,
+      a.title ASC,
+      ar.name ASC
     LIMIT #{index}, #{size}
   </select>
 
-  <select id="searchCount" resultType="long" >
-    SELECT COUNT(*)
-    FROM album
-    WHERE title LIKE CONCAT('%', #{keyword}, '%')
+  <select id="searchCount" resultType="long">
+    SELECT COUNT(DISTINCT a.id)
+    FROM album a
+    LEFT JOIN artist ar ON a.artist_id = ar.id
+    WHERE a.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
   </select>
 
 </mapper>

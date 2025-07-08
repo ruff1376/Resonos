@@ -20,6 +20,8 @@ public class Track {
     private String coverImage;
     private int orderNo;
     private Date releaseDate;
+    private int likeCount;
+    private int followerCount;
 
     public String getFormattedDuration() {
         int minutes = duration / 60;
