@@ -14,6 +14,9 @@
     <result property="description" column="description"/>
     <result property="artistId" column="artist_id"/>
     <result property="artistName" column="artist_name"/>
+    <result property="likeCount" column="like_count"/>
+    <result property="followerCount" column="follower_count"/>
+    <result property="popularityScore" column="popularity_score"/>
   </resultMap>
 
   <select id="list" resultMap="Album">
@@ -25,7 +28,8 @@
     SELECT a.*, ar.name AS artist_name
     FROM album a
     LEFT JOIN artist ar ON a.artist_id = ar.id
-    ORDER BY a.release_date DESC
+    WHERE a.release_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+    ORDER BY a.release_date DESC, artist_name
     LIMIT 12
   </select>
 
@@ -33,13 +37,49 @@
     SELECT a.*, ar.name AS artist_name
     FROM album a
     LEFT JOIN artist ar ON a.artist_id = ar.id
-    ORDER BY a.release_date DESC
+    WHERE a.release_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+    ORDER BY a.release_date DESC, artist_name
+    LIMIT #{index}, #{size}
+  </select>
+
+  <select id="mainHotList" resultMap="Album">
+    SELECT a.*,
+          (COUNT(DISTINCT ar.id) * 3 + COUNT(DISTINCT la.id)) AS popularity_score
+    FROM album a
+    LEFT JOIN album_review ar ON a.id = ar.album_id
+    LEFT JOIN liked_album la ON a.id = la.album_id
+    GROUP BY a.id
+    ORDER BY popularity_score DESC
+    LIMIT 12
+  </select>
+
+  <select id="hotList" resultMap="Album">
+    SELECT a.*,
+          (COUNT(DISTINCT ar.id) * 3 + COUNT(DISTINCT la.id)) AS popularity_score
+    FROM album a
+    LEFT JOIN album_review ar ON a.id = ar.album_id
+    LEFT JOIN liked_album la ON a.id = la.album_id
+    GROUP BY a.id
+    ORDER BY popularity_score DESC
     LIMIT #{index}, #{size}
   </select>
 
   <select id="count" resultType="long">
     SELECT COUNT(*)
     FROM album
+  </select>
+
+  <select id="newCount" resultType="long">
+    SELECT COUNT(*)
+    FROM album
+    WHERE release_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+  </select>
+
+  <select id="hotCount" resultType="long">
+    SELECT COUNT(DISTINCT a.id)
+    FROM album a
+    LEFT JOIN album_review ar ON a.id = ar.album_id
+    LEFT JOIN liked_album la ON a.id = la.album_id
   </select>
 
   <select id="select" resultMap="Album">
@@ -68,14 +108,14 @@
     DELETE FROM album WHERE id = #{id}
   </delete>
 
-  <select id="exists" resultType="int" parameterType="string">
+  <select id="exists" resultType="int" >
     SELECT COUNT(*) FROM album WHERE id = #{id}
   </select>
 
   <!-- 모든 앨범을 아티스트 ID로 조회 -->
   <!-- id 자료형에 맞게 string·long 등으로 -->
   <select id="findAlbumsByArtistId"
-          parameterType="string"      
+
           resultMap="Album">
     SELECT a.*,
           ar.name AS artist_name
@@ -87,45 +127,85 @@
 
   <!-- trackId 앨범 객체 -->
   <select id="findAlbumByTrackId"
-          parameterType="string"
+
           resultType="Album">
     SELECT a.*
     FROM   album  a
     JOIN   track  t ON t.album_id = a.id
     WHERE  t.id = #{trackId}
   </select>
-  
+
   <!-- artistId -->
   <!-- 아티스트의 앨범 수 -->
   <select id="countAlbumsByArtist"
-          parameterType="string"
+
           resultType="int">
       SELECT
-          COUNT(*) 
+          COUNT(*)
       FROM album
       WHERE artist_id = #{artistId}
   </select>
 
-  <select id="searchList" resultMap="Album" parameterType="string">
-    SELECT a.*, ar.name AS artist_name
+  <select id="searchList" resultMap="Album">
+    SELECT a.*, ar.name AS artist_name,
+          COUNT(DISTINCT la.id) AS like_count,
+          COUNT(DISTINCT af.id) AS follower_count
     FROM album a
     LEFT JOIN artist ar ON a.artist_id = ar.id
-    WHERE title LIKE CONCAT('%', #{keyword}, '%')
+    LEFT JOIN liked_album la ON a.id = la.album_id
+    LEFT JOIN artist_follow af ON ar.id = af.artist_id
+    WHERE a.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
+    GROUP BY a.id
+    ORDER BY
+      CASE
+        WHEN a.title = #{keyword} THEN 1
+        WHEN ar.name = #{keyword} THEN 2
+        WHEN a.title LIKE CONCAT(#{keyword}, '%') THEN 3
+        WHEN ar.name LIKE CONCAT(#{keyword}, '%') THEN 4
+        WHEN a.title LIKE CONCAT('%', #{keyword}, '%') THEN 5
+        WHEN ar.name LIKE CONCAT('%', #{keyword}, '%') THEN 6
+        ELSE 7
+      END,
+      like_count DESC,
+      follower_count DESC,
+      a.title ASC,
+      ar.name ASC
     LIMIT 12
   </select>
 
-  <select id="allSearchList" resultMap="Album" parameterType="map">
-    SELECT a.*, ar.name AS artist_name
+  <select id="allSearchList" resultMap="Album">
+    SELECT a.*, ar.name AS artist_name,
+          COUNT(DISTINCT la.id) AS like_count,
+          COUNT(DISTINCT af.id) AS follower_count
     FROM album a
     LEFT JOIN artist ar ON a.artist_id = ar.id
-    WHERE title LIKE CONCAT('%', #{keyword}, '%')
+    LEFT JOIN liked_album la ON a.id = la.album_id
+    LEFT JOIN artist_follow af ON ar.id = af.artist_id
+    WHERE a.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
+    GROUP BY a.id
+    ORDER BY
+      CASE
+        WHEN a.title = #{keyword} THEN 1
+        WHEN ar.name = #{keyword} THEN 2
+        WHEN a.title LIKE CONCAT(#{keyword}, '%') THEN 3
+        WHEN ar.name LIKE CONCAT(#{keyword}, '%') THEN 4
+        WHEN a.title LIKE CONCAT('%', #{keyword}, '%') THEN 5
+        WHEN ar.name LIKE CONCAT('%', #{keyword}, '%') THEN 6
+        ELSE 7
+      END,
+      like_count DESC,
+      follower_count DESC,
+      a.title ASC,
+      ar.name ASC
     LIMIT #{index}, #{size}
   </select>
 
-  <select id="searchCount" resultType="long" parameterType="string">
-    SELECT COUNT(*)
-    FROM album
-    WHERE title LIKE CONCAT('%', #{keyword}, '%')
+  <select id="searchCount" resultType="long">
+    SELECT COUNT(DISTINCT a.id)
+    FROM album a
+    LEFT JOIN artist ar ON a.artist_id = ar.id
+    WHERE a.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
   </select>
 
+  <!-- 마이페이지: 좋아요 표시한 앨범 -->
 </mapper>

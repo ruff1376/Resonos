@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RESONOS</title>
+    <title th:text="'검색 결과 : ' + ${keyword}"></title>
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <th:block th:replace="~{fragments/link::main}"></th:block>
 </head>
 <body>
     <th:block layout:fragment="content">
-        <div class="container-fluid d-flex flex-column align-items-center px-0" style="max-width:1440px; height:2800px; padding-top:150px; gap:50px;">
+        <div class="container-fluid d-flex flex-column align-items-center px-0" style="max-width:1440px; height:3000px; padding-top:150px; gap:50px;">
             <!-- 검색 결과 : "OOO" -->
             <div class="d-flex flex-row mb-5 w-100" style="max-width:1440px; margin:10px auto; gap:10px;">
                 <h1 style="color: white; margin-left: 3rem;">검색 결과 : "<span th:text="${keyword}">검색어</span>"</h1>
@@ -46,7 +46,9 @@
                     </div>
                 </th:block>
                 <div class="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style="height:50px;">
-                    <a th:href="@{'/search/artists?q=' + ${keyword}}" class="more-link">더 보기 &gt;</a>
+                    <th:block th:if="${ artistSearchCount > 6 }">
+                        <a th:href="@{'/search/artists?q=' + ${keyword}}" class="more-link">더 보기 &gt;</a>
+                    </th:block>
                 </div>
             </section>
             
@@ -67,7 +69,7 @@
                         <th:block th:each="album : ${albumSearchList}">
                             <!-- 앨범 카드 -->
                             <div class="col d-flex">
-                                <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                                <div class="card align-items-center p-3" style="width:228px; height:360px;">
                                     <a th:href="@{'/albums?id=' + ${album.id}}">
                                         <img th:src="${album.coverImage}" class="card-img-top" alt="앨범커버">
                                     </a>
@@ -75,13 +77,18 @@
                                         <a th:href="@{'/albums?id=' + ${album.id}}" class="card-title" th:text="${album.title}"></a>
                                         <a th:href="@{'/artists?id=' + ${album.artistId}}" class="card-artist" th:text="${album.artistName}"></a>
                                     </div>
+                                    <div class="position-absolute bottom-0 start-50 translate-middle-x mb-5">
+                                        <canvas class="doughnut-canvas" width="50" height="50"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </th:block>
                     </div>
                 </th:block>
                 <div class="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style="height:50px;">
-                    <a th:href="@{'/search/albums?q=' + ${keyword}}" class="more-link">더 보기 &gt;</a>
+                    <th:block th:if="${ albumSearchCount > 12 }">
+                        <a th:href="@{'/search/albums?q=' + ${keyword}}" class="more-link">더 보기 &gt;</a>
+                    </th:block>
                 </div>
             </section>
     
@@ -102,14 +109,16 @@
                         <th:block th:each="track : ${trackSearchList}">
                             <!-- 트랙 카드 -->
                             <div class="col d-flex">
-                                <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                                <div class="card align-items-center p-3" style="width:228px; height:360px;">
                                     <a th:href="@{'/tracks?id=' + ${track.id}}">
                                         <img th:src="${track.coverImage}" class="card-img-top" alt="앨범커버">
-
                                     </a>
                                     <div class="card-body d-flex flex-column align-items-center p-2">
                                         <a th:href="@{'/tracks?id=' + ${track.id}}" class="card-title" th:text="${track.title}"></a>
                                         <a th:href="@{'/artists?id=' + ${track.artistId}}" class="card-artist" th:text="${track.artistName}"></a>
+                                    </div>
+                                    <div class="position-absolute bottom-0 start-50 translate-middle-x mb-5">
+                                        <canvas class="doughnut-canvas" width="50" height="50"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -117,10 +126,15 @@
                     </div>
                 </th:block>
                 <div class="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style="height:50px;">
-                    <a th:href="@{'/search/tracks?q=' + ${keyword}}" class="more-link">더 보기 &gt;</a>
+                    <th:block th:if="${ trackSearchCount > 12 }">
+                        <a th:href="@{'/search/tracks?q=' + ${keyword}}" class="more-link">더 보기 &gt;</a>
+                    </th:block>
                 </div>
             </section>
         </div>
+    </th:block>
+    <th:block layout:fragment="pageScript">
+        <script th:src="@{/js/rating_chart.js}"></script>
     </th:block>
 </body>
 </html>

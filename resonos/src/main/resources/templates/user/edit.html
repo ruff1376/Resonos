@@ -13,11 +13,17 @@
 <body>
   <th:block layout:fragment="content">
     <div class="con edit d-flex justify-content-center">
-      <form th:action="@{/users/edit}" method="post" class="profile-edit-box" th:object="${user}">
+      <form th:action="@{/users/edit}" method="post" enctype="multipart/form-data" class="profile-edit-box" th:object="${user}">
+        <th:block th:if="${success}">
+          <p class="success-fail"
+            th:classappend="${success == 'false' ? ' error' : ''}"
+            th:text="${success == 'false' ? '업데이트 실패하였습니다.' : '업데이트 완료되었습니다.'}">
+          </p>
+        </th:block>
         <h3>프로필 편집</h3>
-        <label id="profileBtn" for="profileImage">
-          <img src="https://i.scdn.co/image/ab6761610000e5eba00b11c129b27a88fc72f36b" alt="프로필 이미지" class="profile-img edit">
-          <input type="file" th:field="*{profileImage}">
+        <label id="profileBtn" for="profileImg">
+          <img th:src="@{${user.profileImage}}" alt="프로필 이미지" class="profile-img edit">
+          <input type="file" name="profileImg" id="profileImg">
         </label>
         <p class="my-5">
           <span class="current badge">
@@ -26,7 +32,7 @@
           <input type="hidden" id="submitBadge" value="">
         </p>
         <div class="input-area">
-          <label class="profile-edit-label" for="profileImage">보유 배지</label>
+          <label class="profile-edit-label" for="">보유 배지</label>
           <div class="change-edge">
             <div>
               <th:block th:each="i : ${#numbers.sequence(1, 10)}">
@@ -51,11 +57,11 @@
           <button class="btn btn-outline-gold" type="button">회원 탈퇴</button>
         </div>
       </form>
-    </div>
+  </div>
   </th:block>
   <th:block layout:fragment="pageScript">
     <script>
-      document.getElementById('profileImage').addEventListener('change', function (event) {
+      document.getElementById('profileImg').addEventListener('change', function (event) {
         const file = event.target.files[0];
         const preview = document.querySelector('.profile-img.edit');
 

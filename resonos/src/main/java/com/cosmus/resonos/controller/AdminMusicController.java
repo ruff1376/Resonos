@@ -163,7 +163,6 @@ public class AdminMusicController {
         return "redirect:/admin/music";
     }
 
-    // 구현 예정 
     // AJAX 방식으로 아티스트 동기화
     // 입력된 아티스트 ID가 22자 영숫자가 아니면 이름으로 검색 후 ID 추출
     // 성공 시 아티스트 및 관련 앨범/트랙 동기화
@@ -200,7 +199,7 @@ public class AdminMusicController {
     // spotify 아티스트 검색
     @GetMapping("/search-artist")
     @ResponseBody
-    public Map<String, Object> searchArtist(@RequestParam String query) {
+    public Map<String, Object> searchArtist(@RequestParam("query") String query) {
         Map<String, Object> result = new HashMap<>();
         try {
             String accessToken = spotifyApiClient.getAccessToken();
@@ -229,11 +228,91 @@ public class AdminMusicController {
         return result;
     }
 
+    // spotify 앨범 검색
+    @GetMapping("/search-album")
+    @ResponseBody
+    public Map<String, Object> searchAlbum(@RequestParam("query") String query) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            String accessToken = spotifyApiClient.getAccessToken();
+            List<Map<String, Object>> items = spotifyApiClient.searchAlbum(query, accessToken);
+            List<Map<String, Object>> albums = new ArrayList<>();
+            for (Map<String, Object> item : items) {
+                Map<String, Object> album = new HashMap<>();
+                album.put("id", item.get("id"));
+                album.put("title", item.get("name"));
+                album.put("coverImage", ((List<Map<String, String>>)item.get("images")).get(0).get("url"));
+                album.put("releaseDate", item.get("release_date"));
+                album.put("genre", item.get("genres") != null ? String.join(",", (List<String>)item.get("genres")) : "");
+                album.put("label", item.get("label"));
+                album.put("description", item.get("description"));
+                // 아티스트 ID는 첫 번째 아티스트만 사용
+                if (item.get("artists") instanceof List && !((List<?>)item.get("artists")).isEmpty()) {
+                    Map<?, ?> firstArtist = (Map<?, ?>)((List<?>)item.get("artists")).get(0);
+                    album.put("artistId", firstArtist.get("id"));
+                } else {
+                    album.put("artistId", "");
+                }
+                albums.add(album);
+            }
+            result.put("success", true);
+            result.put("albums", albums);
+        } catch (Exception e) {
+            result.put("success", false);
+            result.put("albums", Collections.emptyList());
+            result.put("message", e.getMessage());
+        }
+        return result;
+    }
+
+    // spotify 트랙 검색
+    @GetMapping("/search-track")
+    @ResponseBody
+    public Map<String, Object> searchTrack(@RequestParam("query") String query) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            String accessToken = spotifyApiClient.getAccessToken();
+            List<Map<String, Object>> items = spotifyApiClient.searchTrack(query, accessToken);
+            List<Map<String, Object>> tracks = new ArrayList<>();
+            for (Map<String, Object> item : items) {
+                Map<String, Object> track = new HashMap<>();
+                track.put("id", item.get("id"));
+                track.put("title", item.get("name"));
+                track.put("genre", item.get("genre") != null ? String.join(",", (List<String>)item.get("genre")) : "");
+                // 앨범 ID는 첫 번째 앨범만 사용
+                if (item.get("album") instanceof Map) {
+                    Map<?, ?> album = (Map<?, ?>)item.get("album");
+                    track.put("albumId", album.get("id"));
+                } else {
+                    track.put("albumId", "");
+                }
+                // 아티스트 ID는 첫 번째 아티스트만 사용
+                if (item.get("artists") instanceof List && !((List<?>)item.get("artists")).isEmpty()) {
+                    Map<?, ?> firstArtist = (Map<?, ?>)((List<?>)item.get("artists")).get(0);
+                    track.put("artistId", firstArtist.get("id"));
+                } else {
+                    track.put("artistId", "");
+                }
+                track.put("duration", item.get("duration_ms"));
+                track.put("popularity", item.get("popularity"));
+                track.put("trackNo", item.get("track_number"));
+                tracks.add(track);
+            }
+            result.put("success", true);
+            result.put("tracks", tracks);
+        } catch (Exception e) {
+            result.put("success", false);
+            result.put("tracks", Collections.emptyList());
+            result.put("message", e.getMessage());
+        }
+        return result;
+    }
+
     // DB 아티스트 검색
     @GetMapping("/artist/list")
     @ResponseBody
     public Map<String, Object> searchArtistList(
-        @RequestParam(defaultValue = "") String keyword
+        @RequestParam(name = "keyword", defaultValue = "") String keyword
     ) {
         Map<String, Object> result = new HashMap<>();
         try {
@@ -261,7 +340,7 @@ public class AdminMusicController {
     @GetMapping("/album/list")
     @ResponseBody
     public Map<String, Object> searchAlbumList(
-        @RequestParam(defaultValue = "") String keyword
+        @RequestParam(name = "keyword", defaultValue = "") String keyword
     ) {
         Map<String, Object> result = new HashMap<>();
         try {
@@ -294,7 +373,7 @@ public class AdminMusicController {
     @GetMapping("/track/list")
     @ResponseBody
     public Map<String, Object> searchTrackList(
-        @RequestParam(defaultValue = "") String keyword
+        @RequestParam(name = "keyword", defaultValue = "") String keyword
     ) {
         Map<String, Object> result = new HashMap<>();
         try {

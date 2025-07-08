@@ -32,5 +32,7 @@ public interface PlaylistMapper {
     // 플레이리스트 상세 조회
     public PlaylistDTO trackOfPlaylist(Long playlistId) throws Exception;
     // 플레이리스트 트랙 변경
-    public int updateTrackOrder(@Param("playlistId") String playlistId, @Param("orderList") List<Map<String, Object>> orderList) throws Exception;
+    public int updateTrackOrder(@Param("playlistId") Long playlistId, @Param("orderList") List<Map<String, Object>> orderList) throws Exception;
+    // 플레이리스트 트랙 삭제
+    public int deleteTracks(@Param("playlistId") Long playlistId, @Param("orderNo") int orderNo) throws Exception;
 }

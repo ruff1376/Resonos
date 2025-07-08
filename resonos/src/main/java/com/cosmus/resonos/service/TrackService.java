@@ -12,6 +12,10 @@ public interface TrackService {
     public List<Track> mainNewList() throws Exception;
     // 최신 트랙 목록
     public List<Track> newList(Pagination pagination) throws Exception;
+    // 데이터 수
+    public long count() throws Exception;
+    // 최신 데이터 수
+    public long newCount() throws Exception;
     // 조회
     public Track selectById(String id) throws Exception;
     // 삽입
@@ -45,6 +49,8 @@ public interface TrackService {
     public List<Track> searchList(String keyword) throws Exception;
     // 검색 결과 전체 목록
     public List<Track> allSearchList(Map<String, Object> paramMap) throws Exception;
+    // 검색 데이터 수
+    public long searchCount(String keyword) throws Exception;
 
     // 플레이리스트에 추가할 트랙 목록 검색
     public List<Track> addTrackList(String keyword) throws Exception;

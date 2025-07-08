@@ -19,6 +19,32 @@
     SELECT * FROM user_follow WHERE id = #{id}
   </select>
 
+  <!-- 마이페이지: 팔로워 수 조회 -->
+  <select id="myFollowerCount" resultType="int">
+    SELECT COUNT(*) FROM user_follow WHERE following_id = #{id}
+  </select>
+
+  <!-- 마이페이지: 팔로우 수 조회 -->
+  <select id="myFollowCount" resultType="int">
+    SELECT COUNT(*) FROM user_follow WHERE follower_id = #{id}
+  </select>
+
+  <!-- 마이페이지: 팔로워 조회 -->
+  <select id="myFollower" resultType="Users">
+    SELECT u.id, u.nickname, u.profile_image
+    FROM user_follow uf
+      INNER JOIN user u ON uf.follower_id = u.id
+    WHERE following_id = #{id}
+  </select>
+
+  <!-- 마이페이지: 팔로우 조회 -->
+  <select id="myFollow" resultType="Users">
+    SELECT u.id, u.nickname, u.profile_image
+    FROM user_follow uf
+      INNER JOIN user u ON uf.following_id = u.id
+    WHERE follower_id = #{id}
+  </select>
+
   <insert id="insert">
     INSERT INTO user_follow (id, created_at, follower_id, following_id)
     VALUES (#{id}, #{createdAt}, #{followerId}, #{followingId})

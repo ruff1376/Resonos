@@ -18,6 +18,9 @@
     <result property="artistName" column="artist_name"/>
     <result property="coverImage" column="cover_image"/>
     <result property="releaseDate" column="release_date"/>
+    <result property="likeCount" column="like_count"/>
+    <result property="followerCount" column="follower_count"/>
+    <result property="popularityScore" column="popularity_score"/>
   </resultMap>
 
   <select id="selectAll" resultMap="Track">
@@ -29,7 +32,8 @@
     FROM track t
     LEFT JOIN artist ar ON t.artist_id = ar.id
     LEFT JOIN album al ON t.album_id = al.id
-    ORDER BY t.id DESC
+    WHERE al.release_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+    ORDER BY al.release_date DESC, artist_name
     LIMIT 12
   </select>
 
@@ -38,13 +42,58 @@
     FROM track t
     LEFT JOIN artist ar ON t.artist_id = ar.id
     LEFT JOIN album al ON t.album_id = al.id
-    ORDER BY al.release_date DESC
+    WHERE al.release_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+    ORDER BY al.release_date DESC, artist_name
+    LIMIT #{index}, #{size}
+  </select>
+
+  <select id="mainHotList" resultMap="Track">
+    SELECT t.*,
+          (COUNT(DISTINCT tr.id) * 3 +
+            COUNT(DISTINCT lt.id) +
+            COUNT(DISTINCT pd.id)) AS popularity_score
+    FROM track t
+    LEFT JOIN track_review tr ON t.id = tr.track_id
+    LEFT JOIN liked_track lt ON t.id = lt.track_id
+    LEFT JOIN playlist_detail pd ON t.id = pd.track_id
+    GROUP BY t.id
+    ORDER BY popularity_score DESC
+    LIMIT 12
+  </select>
+
+  <select id="hotList" resultMap="Track">
+    SELECT t.*,
+          (COUNT(DISTINCT tr.id) * 3 +
+            COUNT(DISTINCT lt.id) +
+            COUNT(DISTINCT pd.id)) AS popularity_score
+    FROM track t
+    LEFT JOIN track_review tr ON t.id = tr.track_id
+    LEFT JOIN liked_track lt ON t.id = lt.track_id
+    LEFT JOIN playlist_detail pd ON t.id = pd.track_id
+    GROUP BY t.id
+    ORDER BY popularity_score DESC
     LIMIT #{index}, #{size}
   </select>
 
   <select id="count" resultType="long">
     SELECT COUNT(*)
     FROM track
+  </select>
+
+  <select id="newCount" resultType="long">
+    SELECT COUNT(*)
+    FROM track t
+    LEFT JOIN album al ON t.album_id = al.id
+    WHERE al.release_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+  </select>
+  </select>
+
+  <select id="hotCount" resultType="long">
+    SELECT COUNT(DISTINCT t.id)
+    FROM track t
+    LEFT JOIN track_review tr ON t.id = tr.track_id
+    LEFT JOIN liked_track lt ON t.id = lt.track_id
+    LEFT JOIN playlist_detail pd ON t.id = pd.track_id
   </select>
 
   <select id="selectById"  resultMap="Track">
@@ -81,14 +130,14 @@
     ORDER BY id DESC
   </select>
 
-  <select id="exists" resultType="int" parameterType="string">
+  <select id="exists" resultType="int" >
     SELECT COUNT(*) FROM track WHERE id = #{id}
   </select>
 
   <!-- artistId -->
   <!-- 아티스트 별 TOP 7 인기 트랙 -->
   <select id="selectTop7TracksByArtist"
-          parameterType="string"
+          
           resultType="Track">
       SELECT
           title,
@@ -102,7 +151,7 @@
 
   <!-- 아티스트별 곡수 -->
   <select id="countTracksByArtist"
-          parameterType="string"
+          
           resultType="int">
       SELECT COUNT(*)
       FROM track
@@ -112,7 +161,7 @@
   <!-- trackId 같은 앨범 내 인기순 Top-5 트랙 -->
   <!-- (선택) 자기 자신 제외 -->
   <select id="findTop5TracksInSameAlbum"
-          parameterType="string"
+          
           resultType="Track">
     <![CDATA[
     SELECT t.*
@@ -127,7 +176,7 @@
 
   <!-- trackId → 아티스트 이름 한 건 -->
   <select id="findArtistNameByTrackId"
-          parameterType="string"
+          
           resultType="string">
     SELECT ar.name
     FROM   artist ar
@@ -138,7 +187,7 @@
 
   <!-- 앨범아이디로 모든트랙 -->
   <select id="findTracksByAlbumId"
-          parameterType="string"
+          
           resultMap="Track">
     <![CDATA[
       SELECT *
@@ -149,7 +198,7 @@
   </select>
   <!-- 앨범아이디로 트랙중 인기 5 (리스트) -->
   <select id="findTop5TracksByAlbumId"
-          parameterType="string"
+          
           resultMap="Track">
     <![CDATA[
       SELECT *
@@ -162,7 +211,7 @@
 
   <!-- 앨범아이디로 트랙중 인기 1 (객체) -->
   <select id="findTopTrackByAlbumId"
-          parameterType="string"
+          
           resultMap="Track">
     <![CDATA[
       SELECT *
@@ -173,32 +222,71 @@
     ]]>
   </select>
 
-  <select id="searchList" resultMap="Track" parameterType="string">
-    SELECT t.*, ar.name AS artist_name, al.cover_image
+  <select id="searchList" resultMap="Track">
+    SELECT t.*, ar.name AS artist_name, al.cover_image,
+          COUNT(DISTINCT lt.id) AS like_count,
+          COUNT(DISTINCT af.id) AS follower_count
     FROM track t
     LEFT JOIN artist ar ON t.artist_id = ar.id
     LEFT JOIN album al ON t.album_id = al.id
-    WHERE t.title LIKE CONCAT('%', #{keyword}, '%')
+    LEFT JOIN liked_track lt ON t.id = lt.track_id
+    LEFT JOIN artist_follow af ON ar.id = af.artist_id
+    WHERE t.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
+    GROUP BY t.id
+    ORDER BY
+      CASE
+        WHEN t.title = #{keyword} THEN 1
+        WHEN ar.name = #{keyword} THEN 2
+        WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 3
+        WHEN ar.name LIKE CONCAT(#{keyword}, '%') THEN 4
+        WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 5
+        WHEN ar.name LIKE CONCAT('%', #{keyword}, '%') THEN 6
+        ELSE 7
+      END,
+      like_count DESC,
+      follower_count DESC,
+      t.title ASC,
+      ar.name ASC
     LIMIT 12
   </select>
 
-  <select id="allSearchList" resultMap="Track" parameterType="map">
-    SELECT t.*, ar.name AS artist_name, al.cover_image
+  <select id="allSearchList" resultMap="Track">
+    SELECT t.*, ar.name AS artist_name, al.cover_image,
+          COUNT(DISTINCT lt.id) AS like_count,
+          COUNT(DISTINCT af.id) AS follower_count
     FROM track t
     LEFT JOIN artist ar ON t.artist_id = ar.id
     LEFT JOIN album al ON t.album_id = al.id
-    WHERE t.title LIKE CONCAT('%', #{keyword}, '%')
+    LEFT JOIN liked_track lt ON t.id = lt.track_id
+    LEFT JOIN artist_follow af ON ar.id = af.artist_id
+    WHERE t.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
+    GROUP BY t.id
+    ORDER BY
+      CASE
+        WHEN t.title = #{keyword} THEN 1
+        WHEN ar.name = #{keyword} THEN 2
+        WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 3
+        WHEN ar.name LIKE CONCAT(#{keyword}, '%') THEN 4
+        WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 5
+        WHEN ar.name LIKE CONCAT('%', #{keyword}, '%') THEN 6
+        ELSE 7
+      END,
+      like_count DESC,
+      follower_count DESC,
+      t.title ASC,
+      ar.name ASC
     LIMIT #{index}, #{size}
   </select>
 
-  <select id="searchCount" resultType="long" parameterType="string">
-    SELECT COUNT(*)
-    FROM track
-    WHERE title LIKE CONCAT('%', #{keyword}, '%')
+  <select id="searchCount" resultType="long">
+    SELECT COUNT(DISTINCT t.id)
+    FROM track t
+    LEFT JOIN artist ar ON t.artist_id = ar.id
+    WHERE t.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
   </select>
   
   <!-- 플레이 리스트 추가 -->
-  <select id="addTrackList" resultMap="Track" parameterType="string">
+  <select id="addTrackList" resultMap="Track" >
     SELECT t.*, ar.name AS artist_name, al.cover_image
     FROM track t
       LEFT JOIN artist ar ON t.artist_id = ar.id

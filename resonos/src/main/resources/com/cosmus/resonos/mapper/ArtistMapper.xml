@@ -9,6 +9,7 @@
     <result property="name" column="name"/>
     <result property="profileImage" column="profile_image"/>
     <result property="genres" column="genres"/>
+    <result property="followerCount" column="follower_count"/>
   </resultMap>
 
   <select id="selectAll" resultMap="ArtistResultMap">
@@ -41,13 +42,13 @@
     ORDER BY name ASC
   </select>
 
-  <select id="exists" resultType="int" parameterType="string">
+  <select id="exists" resultType="int">
     SELECT COUNT(*) FROM artist WHERE id = #{id}
   </select>
 
   <!-- 해당아티스트의 인기 1위 뮤비url 을 반환 -->
   <select id="selectTopMvUrlByArtist"
-        parameterType="string"
+       
         resultType="string">
     SELECT
         IFNULL(NULLIF(mv_url, ''), 'empty_mv_url') AS mv_url
@@ -58,7 +59,7 @@
   </select>
 
   <select id="selectArtistByTrackId"
-    parameterType="string"
+   
     resultMap="ArtistResultMap">
     SELECT a.*
     FROM   artist a
@@ -73,24 +74,45 @@
   </select>
 
 
-  <select id="searchList" resultMap="ArtistResultMap" parameterType="string">
-    SELECT *
-    FROM artist
-    WHERE name LIKE CONCAT('%', #{keyword}, '%')
-    LIMIT 6
+  <select id="searchList" resultMap="ArtistResultMap">
+      SELECT a.*, COUNT(af.id) AS follower_count,
+            CASE
+                WHEN a.name = #{keyword} THEN 1
+                WHEN a.name LIKE CONCAT(#{keyword}, '%') THEN 2
+                WHEN a.name LIKE CONCAT('%', #{keyword}, '%') THEN 3
+                ELSE 4
+            END AS sort_order
+      FROM artist a
+      LEFT JOIN artist_follow af ON a.id = af.artist_id
+      WHERE a.name LIKE CONCAT('%', #{keyword}, '%')
+      GROUP BY a.id
+      ORDER BY sort_order, follower_count DESC, a.name ASC
+      LIMIT 0, 6
   </select>
 
-  <select id="allSearchList" resultMap="ArtistResultMap" parameterType="map">
-    SELECT *
-    FROM artist
-    WHERE name LIKE CONCAT('%', #{keyword}, '%')
-    LIMIT #{index}, #{size}
+
+  <select id="allSearchList" resultMap="ArtistResultMap">
+      SELECT a.*, COUNT(af.id) AS follower_count,
+            CASE
+                WHEN a.name = #{keyword} THEN 1
+                WHEN a.name LIKE CONCAT(#{keyword}, '%') THEN 2
+                WHEN a.name LIKE CONCAT('%', #{keyword}, '%') THEN 3
+                ELSE 4
+            END AS sort_order
+      FROM artist a
+      LEFT JOIN artist_follow af ON a.id = af.artist_id
+      WHERE a.name LIKE CONCAT('%', #{keyword}, '%')
+      GROUP BY a.id
+      ORDER BY sort_order, follower_count DESC, a.name ASC
+      LIMIT #{index}, #{size}
   </select>
 
-  <select id="searchCount" resultType="long" parameterType="string">
-    SELECT COUNT(*)
-    FROM artist
-    WHERE name LIKE CONCAT('%', #{keyword}, '%')
+
+  <select id="searchCount" resultType="long">
+    SELECT IFNULL(COUNT(DISTINCT a.id), 0)
+    FROM artist a
+    LEFT JOIN artist_follow af ON a.id = af.artist_id
+    WHERE a.name LIKE CONCAT('%', #{keyword}, '%')
   </select>
   
   <!-- 전체 아티스트 수 조회 -->
@@ -101,7 +123,7 @@
 
   <!-- 앨범id로 아티스트 객체 -->
   <select id="findArtistByAlbumId"
-        parameterType="string"
+       
         resultMap="ArtistResultMap">
   SELECT ar.*
   FROM album a
