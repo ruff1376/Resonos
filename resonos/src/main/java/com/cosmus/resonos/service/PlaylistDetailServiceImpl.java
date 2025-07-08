@@ -1,8 +1,11 @@
 package com.cosmus.resonos.service;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import com.cosmus.resonos.domain.PlaylistDetail;
+import com.cosmus.resonos.domain.Track;
 import com.cosmus.resonos.mapper.PlaylistDetailMapper;
 
 @Service
@@ -42,5 +45,10 @@ public class PlaylistDetailServiceImpl implements PlaylistDetailService {
     @Override
     public int getMaxOrderNo(Long playlistId) throws Exception {
         return playlistDetailMapper.getMaxOrderNo(playlistId);
+    }
+
+    @Override
+    public boolean updateTrackOrderNo(Long playlistId, List<Track> trackList) throws Exception {
+        return playlistDetailMapper.updateTrackOrderNo(playlistId, trackList) > 0 ? true : false;
     }
 }

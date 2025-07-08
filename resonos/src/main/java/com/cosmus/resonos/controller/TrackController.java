@@ -89,8 +89,9 @@ public class TrackController {
      */
     @PostMapping(value = "/from-playlists", consumes = "application/json")
     public ResponseEntity<?> getAjaxTracks(@RequestBody Map<String, String> data) throws Exception {
-        List<Track> trackList = trackService.addTrackList(data.get("keyword"));
 
+        log.info("트랙 요청 들어옴.");
+        List<Track> trackList = trackService.addTrackList(data.get("keyword"));
         if(trackList != null)
             return new ResponseEntity<>(trackList, HttpStatus.OK);
 

@@ -64,7 +64,12 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public boolean updateTrackOrder(String playlistId, List<Map<String, Object>> orderList) throws Exception {
+    public boolean updateTrackOrder(Long playlistId, List<Map<String, Object>> orderList) throws Exception {
         return playlistMapper.updateTrackOrder(playlistId, orderList) > 0 ? true : false;
+    }
+
+    @Override
+    public boolean deleteTracks(Long playlistId, int orderNo) throws Exception {
+        return playlistMapper.deleteTracks(playlistId, orderNo) > 0 ? true : false;
     }
 }
