@@ -20,6 +20,7 @@
     <result property="releaseDate" column="release_date"/>
     <result property="likeCount" column="like_count"/>
     <result property="followerCount" column="follower_count"/>
+    <result property="popularityScore" column="popularity_score"/>
   </resultMap>
 
   <select id="selectAll" resultMap="Track">
@@ -46,6 +47,34 @@
     LIMIT #{index}, #{size}
   </select>
 
+  <select id="mainHotList" resultMap="Track">
+    SELECT t.*,
+          (COUNT(DISTINCT tr.id) * 3 +
+            COUNT(DISTINCT lt.id) +
+            COUNT(DISTINCT pd.id)) AS popularity_score
+    FROM track t
+    LEFT JOIN track_review tr ON t.id = tr.track_id
+    LEFT JOIN liked_track lt ON t.id = lt.track_id
+    LEFT JOIN playlist_detail pd ON t.id = pd.track_id
+    GROUP BY t.id
+    ORDER BY popularity_score DESC
+    LIMIT 12
+  </select>
+
+  <select id="hotList" resultMap="Track">
+    SELECT t.*,
+          (COUNT(DISTINCT tr.id) * 3 +
+            COUNT(DISTINCT lt.id) +
+            COUNT(DISTINCT pd.id)) AS popularity_score
+    FROM track t
+    LEFT JOIN track_review tr ON t.id = tr.track_id
+    LEFT JOIN liked_track lt ON t.id = lt.track_id
+    LEFT JOIN playlist_detail pd ON t.id = pd.track_id
+    GROUP BY t.id
+    ORDER BY popularity_score DESC
+    LIMIT #{index}, #{size}
+  </select>
+
   <select id="count" resultType="long">
     SELECT COUNT(*)
     FROM track
@@ -56,6 +85,15 @@
     FROM track t
     LEFT JOIN album al ON t.album_id = al.id
     WHERE al.release_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+  </select>
+  </select>
+
+  <select id="hotCount" resultType="long">
+    SELECT COUNT(DISTINCT t.id)
+    FROM track t
+    LEFT JOIN track_review tr ON t.id = tr.track_id
+    LEFT JOIN liked_track lt ON t.id = lt.track_id
+    LEFT JOIN playlist_detail pd ON t.id = pd.track_id
   </select>
 
   <select id="selectById"  resultMap="Track">

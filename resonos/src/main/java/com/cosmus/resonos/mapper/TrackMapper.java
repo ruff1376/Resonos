@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Track;
 
@@ -17,10 +18,16 @@ public interface TrackMapper {
     public List<Track> mainNewList() throws Exception;
     // 최신 트랙 목록
     public List<Track> newList(Pagination pagination) throws Exception;
+    // 메인 화면 인기 트랙 목록
+    public List<Album> mainHotList() throws Exception;
+    // 인기 트랙 목록
+    public List<Album> hotList(Pagination pagination) throws Exception;
     // 데이터 수
     public long count() throws Exception;
     // 최신 데이터 수
     public long newCount() throws Exception;
+    // 인기 데이터 수
+    public long hotCount() throws Exception;
     // 조회
     public Track selectById(String id) throws Exception;
     // 삽입

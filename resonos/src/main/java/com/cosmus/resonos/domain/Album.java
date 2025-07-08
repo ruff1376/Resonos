@@ -20,4 +20,5 @@ public class Album {
     private String artistName;
     private int likeCount;
     private int followerCount;
+    private int popularityScore;
 }

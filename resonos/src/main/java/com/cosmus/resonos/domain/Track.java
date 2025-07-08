@@ -22,6 +22,7 @@ public class Track {
     private Date releaseDate;
     private int likeCount;
     private int followerCount;
+    private int popularityScore;
 
     public String getFormattedDuration() {
         int minutes = duration / 60;
