@@ -2,6 +2,7 @@ package com.cosmus.resonos.mapper;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+
 import com.cosmus.resonos.domain.UserFollow;
 
 @Mapper
@@ -16,4 +17,6 @@ public interface UserFollowMapper {
     public int update(UserFollow userFollow) throws Exception;
     // 삭제
     public int delete(Long id) throws Exception;
+    // 팔로워 수 
+    public  int countFollowers(Long userId);
 }

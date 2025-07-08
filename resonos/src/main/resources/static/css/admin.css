@@ -90,3 +90,85 @@
   width: 320px;
   display: inline-block;
 }
+
+.admin-content {
+  display: flex;
+  gap: 40px;
+  padding: 20px 0;
+}
+.badge-list {
+  flex-grow: 1;
+}
+.badge-add-form {
+  width: 340px;
+  background: #23262e;
+  border-radius: 12px;
+  padding: 24px 20px 20px 20px;
+  color: #fffbe6;
+  box-shadow: 0 2px 16px rgba(24,28,35,0.08);
+}
+.edit-form-wrap {
+  background: #23262e;
+  border-radius: 10px;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 16px rgba(24,28,35,0.08);
+  padding: 12px 16px 8px 16px;
+}
+.btn-xs {
+  font-size: 0.92em;
+  padding: 4px 12px;
+}
+
+.badge-table {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #23262e;
+  margin-bottom: 32px;
+  box-shadow: 0 2px 16px rgba(24,28,35,0.08);
+}
+
+.badge-table-header, .badge-table-row {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  border-bottom: 1px solid #292d36;
+  padding: 0 12px;
+}
+.badge-table-header {
+  background: #191c22;
+  color: #D4B97F;
+  font-weight: bold;
+  font-size: 1.09em;
+}
+.badge-table-row:last-child {
+  border-bottom: none;
+}
+.badge-table-row {
+  background: #23262e;
+  color: #fffbe6;
+  transition: background 0.15s;
+}
+.badge-table-row:hover {
+  background: #262a32;
+}
+.badge-col {
+  padding: 8px 6px;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.badge-col-icon { flex-basis: 54px; min-width: 54px; max-width: 54px; }
+.badge-col-name { flex-basis: 18%; min-width: 90px; }
+.badge-col-desc { flex-basis: 32%; min-width: 140px; }
+.badge-col-cond { flex-basis: 18%; min-width: 80px; }
+.badge-col-action { flex-basis: 18%; min-width: 110px; }
+.badge-icon-img {
+  width: 40px; height: 40px; object-fit: contain; border-radius: 8px; background: #181C23;
+  border: 1px solid #292d36;
+}
+.text-secondary {
+  color: #888 !important;
+}

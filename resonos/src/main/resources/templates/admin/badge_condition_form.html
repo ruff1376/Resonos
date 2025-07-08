@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layouts/admin_layout}">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${condition.id != null} ? '배지 조건 수정' : '배지 조건 추가'">배지 조건 추가</title>
+  <th:block th:replace="~{fragments/link::admin}"></th:block>
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <style>
+    .form-table { width:100%; max-width:500px; margin:0 auto 30px auto; }
+    .form-table th { text-align:right; width:120px; }
+    .form-table td { padding:8px 0; }
+    .form-table input, .form-table select { width:100%; padding:6px 8px; }
+    .admin-form-btns { text-align:center; margin-top:18px; }
+  </style>
+</head>
+<body>
+<th:block layout:fragment="content">
+  <div class="admin-content">
+    <h2 class="admin-title" th:text="${condition.id != null} ? '배지 조건 수정' : '배지 조건 추가'">배지 조건 추가</h2>
+    <form th:action="@{${condition.id != null} ? '/admin/badge-condition/edit/' + ${condition.id} : '/admin/badge-condition/create'}"
+          method="post" autocomplete="off">
+      <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+
+      <table class="form-table">
+        <tr>
+          <th><label for="badgeId">배지</label></th>
+          <td>
+            <select id="badgeId" name="badgeId" required>
+              <option value="" disabled th:if="${condition.badgeId == null}" selected>배지 선택</option>
+              <option th:each="badge : ${badges}"
+                      th:value="${badge.id}"
+                      th:text="${badge.name}"
+                      th:selected="${condition.badgeId} == ${badge.id}">배지명</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th><label for="conditionType">조건 유형</label></th>
+          <td>
+            <select id="conditionType" name="conditionType" required>
+              <option value="" disabled th:if="${condition.conditionType == null}" selected>유형 선택</option>
+              <option value="POST_COUNT" th:selected="${condition.conditionType} == 'POST_COUNT'">게시글 수</option>
+              <option value="FOLLOWER_COUNT" th:selected="${condition.conditionType} == 'FOLLOWER_COUNT'">팔로워 수</option>
+              <option value="COMMENT_COUNT" th:selected="${condition.conditionType} == 'COMMENT_COUNT'">댓글 수</option>
+              <!-- 필요시 유형 추가 -->
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th><label for="conditionValue">조건 값</label></th>
+          <td>
+            <input type="number" id="conditionValue" name="conditionValue" min="1" required
+                   th:value="${condition.conditionValue}" placeholder="예: 10" />
+          </td>
+        </tr>
+      </table>
+
+      <div class="admin-form-btns">
+        <button type="submit" class="btn btn-primary" th:text="${condition.id != null} ? '수정' : '등록'">등록</button>
+        <a th:href="@{/admin/badge-condition}" class="btn btn-secondary">취소</a>
+      </div>
+    </form>
+  </div>
+</th:block>
+</body>
+</html>

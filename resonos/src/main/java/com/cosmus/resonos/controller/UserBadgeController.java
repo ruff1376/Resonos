@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.cosmus.resonos.domain.UserBadge;
+import com.cosmus.resonos.service.BadgeGrantService;
 import com.cosmus.resonos.service.UserBadgeService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -101,4 +102,17 @@ public class UserBadgeController {
         log.info("[UserBadgeController] 유저 뱃지 삭제 완료 - id: {}", id);
         return "redirect:/user-badges";
     }
+
+    // 관리자
+    // 배지 자동 배분 기능 
+    @Autowired
+    private BadgeGrantService badgeGrantService;
+
+    @PostMapping("/check")
+    public void checkAndGrantBadges(@RequestParam Long userId) throws Exception {
+        badgeGrantService.checkAndGrantBadges(userId);
+    }
+
+
+
 }

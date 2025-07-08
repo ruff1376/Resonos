@@ -2,6 +2,8 @@ package com.cosmus.resonos.mapper;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
 import com.cosmus.resonos.domain.BoardPost;
 
 @Mapper
@@ -20,4 +22,6 @@ public interface BoardPostMapper {
     public List<BoardPost> findByCommunity(Long communityId) throws Exception;
     // 어드민 통계용
     public int countAll() throws Exception;
+    // 게시글 구하기 
+    public int countByUserId(Long userId);
 }

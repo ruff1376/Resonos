@@ -35,5 +35,8 @@
   <delete id="delete">
     DELETE FROM user_follow WHERE id = #{id}
   </delete>
-
+  <!-- 팔로워 수 -->
+  <select id="countFollowers" resultType="int">
+    SELECT COUNT(*) FROM user_follow WHERE followee_id = #{userId}
+  </select>
 </mapper>

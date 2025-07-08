@@ -1,4 +1,4 @@
--- Active: 1751625569683@@127.0.0.1@3306@resonos
+-- Active: 1751337677491@@127.0.0.1@3306@resonos
 
 -- 실행 순서 
 -- 1. 테이블 삭제 DROP PROCEDURE IF EXISTS create_tables;
@@ -288,8 +288,10 @@ BEGIN
         `role_id` BIGINT NOT NULL
     );
 
+    DROP TABLE IF EXISTS `badge`;
+    
     CREATE TABLE IF NOT EXISTS `badge` (
-        `id` BIGINT NOT NULL,
+        `id` BIGINT NOT NULL AUTO_INCREMENT,
         `name` VARCHAR(100) NULL,
         `description` TEXT NULL,
         `icon_url` VARCHAR(200) NULL,
@@ -346,12 +348,27 @@ BEGIN
         `user_id` BIGINT NOT NULL
     );
 
-    CREATE TABLE IF NOT EXISTS `user_badge` (
-        `id` BIGINT NOT NULL,
-        `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
-        `user_id` BIGINT NULL,
-        `badge_id` BIGINT NULL
+    CREATE TABLE IF NOT EXISTS user_badge (
+        id BIGINT NOT NULL AUTO_INCREMENT,
+        created_at DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+        user_id BIGINT NOT NULL,
+        badge_id BIGINT NOT NULL,
+        PRIMARY KEY (id),
+        UNIQUE KEY uk_user_badge (user_id, badge_id),
+        FOREIGN KEY (user_id) REFERENCES users(id),
+        FOREIGN KEY (badge_id) REFERENCES badge(id)
     );
+    
+    CREATE TABLE IF NOT EXISTS badge_condition (
+        id BIGINT PRIMARY KEY AUTO_INCREMENT,         -- 조건 고유 번호(자동 증가, PK)
+        badge_id BIGINT NOT NULL,                     -- 배지 고유 번호(외래키, badge 테이블 참조)
+        badge_name VARCHAR(100) NOT NULL,            -- 배지 이름(조건에서 직접 사용, 조회 편의용)
+        description VARCHAR(255),                     -- 배지 설명(조건에서 직접 사용, 조회 편의용)
+        condition_type VARCHAR(50),                   -- 획득 조건 유형(예: POST_COUNT, FOLLOWER_COUNT 등)
+        condition_value INT,                          -- 획득 조건 값(예: 10, 100 등, 유형에 따라 의미 다름)
+        FOREIGN KEY (badge_id) REFERENCES badge(id)   -- badge_id는 badge 테이블의 id를 참조(외래키 제약)
+    );
+
 
     CREATE TABLE IF NOT EXISTS `user_follow` (
         `id` BIGINT NULL,

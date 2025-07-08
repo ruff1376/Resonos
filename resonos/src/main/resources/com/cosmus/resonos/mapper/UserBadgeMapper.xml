@@ -36,4 +36,14 @@
     DELETE FROM user_badge WHERE id = #{id}
   </delete>
 
+  <select id="findBadgeIdsByUserId" resultType="long">
+    SELECT badge_id FROM user_badge WHERE user_id = #{userId}
+  </select>
+  <insert id="grantBadge">
+    INSERT INTO user_badge (user_id, badge_id, created_at)
+    VALUES (#{userId}, #{badgeId}, NOW())
+  </insert>
+
+
+
 </mapper>

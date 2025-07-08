@@ -43,5 +43,8 @@
   <select id="findByTarget" resultMap="CommentResultMap">
     SELECT * FROM comment WHERE type = #{type} AND target_id = #{targetId} ORDER BY created_at DESC
   </select>
-
+  <!-- 댓글 개수 조회 -->
+  <select id="countByUserId" resultType="int">
+    SELECT COUNT(*) FROM comment WHERE user_id = #{userId}
+  </select>
 </mapper>

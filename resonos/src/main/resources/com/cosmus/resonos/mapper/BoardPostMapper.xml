@@ -49,6 +49,10 @@
   <select id="countAll" resultType="int">
   SELECT COUNT(*) FROM report
   </select>
-  
+
+  <!-- 게시글 수 세기 -->
+ <select id="countByUserId" resultType="int">
+    SELECT COUNT(*) FROM board_post WHERE user_id = #{userId}
+  </select>
 
 </mapper>
