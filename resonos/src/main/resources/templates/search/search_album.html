@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RESONOS</title>
+    <title th:text="'앨범 검색 결과 : ' + ${keyword}"></title>
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <th:block th:replace="~{fragments/link::main}"></th:block>
 </head>
@@ -25,13 +25,16 @@
                     <th:block th:each="album : ${allAlbumSearchList}">
                         <!-- 앨범 카드 -->
                         <div class="col d-flex">
-                            <div class="card align-items-center p-3" style="width:228px; height:320px;">
+                            <div class="card align-items-center p-3" style="width:228px; height:360px;">
                                 <a th:href="@{'/albums?id=' + ${album.id}}">
                                     <img th:src="${album.coverImage}" class="card-img-top" alt="앨범 커버">
                                 </a>
                                 <div class="card-body">
                                     <a th:href="@{'/albums?id=' + ${album.id}}" class="card-title" th:text="${album.title}"></a>
-                                    <a th:href="@{'/artists?id=' + ${album.artistId}}" class="card-title" th:text="${album.artistName}"></a>
+                                    <a th:href="@{'/artists?id=' + ${album.artistId}}" class="card-artist" th:text="${album.artistName}"></a>
+                                </div>
+                                <div class="position-absolute bottom-0 start-50 translate-middle-x mb-5">
+                                    <canvas class="doughnut-canvas" width="50" height="50"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -40,6 +43,9 @@
                 <div th:replace="~{fragments/pagination :: pagination}"></div>
             </section>
         </div>
+    </th:block>
+    <th:block layout:fragment="pageScript">
+        <script th:src="@{/js/rating_chart.js}"></script>
     </th:block>
 </body>
 </html>
