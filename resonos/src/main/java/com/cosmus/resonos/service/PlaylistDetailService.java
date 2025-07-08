@@ -18,8 +18,4 @@ public interface PlaylistDetailService {
     public boolean update(PlaylistDetail detail) throws Exception;
     // 삭제
     public boolean delete(Long id) throws Exception;
-    // oreder_no MAX 조회
-    public int getMaxOrderNo(@Param("playlistId") Long playlistId) throws Exception;
-    // order_no 재정렬
-    public boolean updateTrackOrderNo(Long playlistId, List<Track> trackList) throws Exception;
 }

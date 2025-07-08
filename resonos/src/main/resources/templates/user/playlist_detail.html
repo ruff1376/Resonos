@@ -46,9 +46,9 @@
             </div>
           </div>
           <input th:checked="*{isPublic == true}" type="radio" id="true" th:field="*{isPublic}" value="true">
-          <label class="profile-edit-label" for="true">공개</label>
+          <label class="profile-edit-label radio" for="true">공개</label>
           <input th:checked="*{isPublic == false}" type="radio" id="false" th:field="*{isPublic}" value="false">
-          <label class="ㅁprofile-edit-label" for="false">비공개</label>
+          <label class="profile-edit-label radio" for="false">비공개</label>
           <!-- 트랙 목록 -->
           <div class="info-wrapper">
             <div class="info-section">
@@ -84,11 +84,13 @@
             </div>
           </div>
           <button type="submit" class="btn btn-gold mt-5">수정하기</button>
+          <a th:href="@{/playlists}" class="btn btn-outline-gold" type="button">목록으로</a>
         </form>
       </div>
     </section>
     <!-- 모달 -->
     <section class="modal-track">
+      <button id="close-modal"><i class="bi bi-x-lg"></i></button>
       <div class="modal-contents">
         <div class="text-center position-relative">
           <i class="bi bi-search search-icon position-absolute"></i>
@@ -281,7 +283,7 @@
 
         const pathSegments = window.location.pathname.split('/')
         const playlistId = pathSegments[pathSegments.length - 1]
-        let url = `/playlist-details/${playlistId}`
+        let url = `/playlists/${playlistId}/tracks`
 
         try {
             /* Security 제공 CSRF */
@@ -311,6 +313,7 @@
           }
       }
 
+      /* 모달 띄우는 버튼 클릭 */
       const modal = document.querySelector('.modal-track')
       const openBtn = document.getElementById('addTrack')
 

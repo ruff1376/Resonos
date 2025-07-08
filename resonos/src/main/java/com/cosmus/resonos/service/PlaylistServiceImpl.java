@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.PlaylistDTO;
+import com.cosmus.resonos.domain.PlaylistDetail;
+import com.cosmus.resonos.domain.Track;
 import com.cosmus.resonos.mapper.PlaylistMapper;
 
 @Service
@@ -71,5 +73,20 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     public boolean deleteTracks(Long playlistId, int orderNo) throws Exception {
         return playlistMapper.deleteTracks(playlistId, orderNo) > 0 ? true : false;
+    }
+
+    @Override
+    public int getMaxOrderNo(Long playlistId) throws Exception {
+        return playlistMapper.getMaxOrderNo(playlistId);
+    }
+
+    @Override
+    public boolean updateTrackOrderNo(Long playlistId, List<Track> trackList) throws Exception {
+        return playlistMapper.updateTrackOrderNo(playlistId, trackList) > 0 ? true : false;
+    }
+
+    @Override
+    public boolean insertTracks(List<PlaylistDetail> playlistDetail) throws Exception {
+        return playlistMapper.insertTracks(playlistDetail) > 0 ? true : false;
     }
 }

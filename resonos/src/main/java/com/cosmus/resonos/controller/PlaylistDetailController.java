@@ -33,43 +33,6 @@ public class PlaylistDetailController {
     @Autowired
     private PlaylistService playlistService;
 
-
-    /**
-     * 플레이리스트 트랙 추가
-     * @param data
-     * @param playlistId
-     * @return
-     */
-    @PostMapping(value = "/{playlistId}", consumes = "application/json")
-    public ResponseEntity<?> insertAjaxTracks(@RequestBody Map<String, List<String>> data, @PathVariable("playlistId") Long playlistId) {
-        try {
-            List<String> trackIdList = data.get("list");
-            int maxOrderNo = playlistDetailService.getMaxOrderNo(playlistId);
-
-            if(trackIdList != null) {
-                List<PlaylistDetail> trackList = new ArrayList<>();
-                for (int i = 0; i < trackIdList.size(); i++) {
-                    PlaylistDetail pd = new PlaylistDetail();
-                    pd.setPlaylistId(playlistId);
-                    pd.setTrackId(trackIdList.get(i));
-                    pd.setOrderNo(maxOrderNo + i + 1);
-                    trackList.add(pd);
-                }
-                boolean result = playlistDetailService.insert(trackList);
-                if(result) {
-                    PlaylistDTO playlistDto = playlistService.trackOfPlaylist(playlistId);
-
-                    return new ResponseEntity<>(playlistDto, HttpStatus.OK);
-                }
-            }
-            return new ResponseEntity<>("리스트 요청 실패.", HttpStatus.BAD_REQUEST);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>("이미 플레이리스트에 있는 트랙입니다.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     @GetMapping
     public ResponseEntity<List<PlaylistDetail>> getAllDetails() {
         try {

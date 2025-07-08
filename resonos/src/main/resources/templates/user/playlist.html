@@ -31,7 +31,7 @@
             <p>내 플레이리스트가 없습니다.</p>
           </div>
         </th:block>
-        <ul class="ul-list">
+        <ul id="myPlaylist" class="ul-list">
           <th:block th:each="mpl : ${myPlaylists}">
             <li class="list-item">
               <input type="hidden" th:value="${mpl.id}" name="id">
@@ -45,7 +45,7 @@
                   <span class="count" th:text="${mpl.likeCount}">123</span>
                   <span class="like">♥</span>
                 </div>
-                <button onclick="deletePlaylist(event)" class="btn btn-danger">
+                <button class="btn btn-danger">
                   삭제
                 </button>
               </div>
@@ -86,13 +86,6 @@
   <th:block layout:fragment="pageScript">
     <script>
 
-      function deletePli(e) {
-        const check = confirm("삭제하시겠습니까?")
-        if(check) {
-          alert(e.target.closest('li').querySelector('input[type="hidden"]').value + "번 플리 삭제")
-        }
-      }
-
       const likeButton = document.querySelectorAll("button.like");
       likeButton.forEach(button => {
         button.addEventListener('click', (e) => {
@@ -100,6 +93,7 @@
         })
       })
 
+      /* 플레이리스트 상세 가기 */
       const items = document.querySelectorAll('.list-item')
       items.forEach(e => {
         e.addEventListener('click', (event) => {
@@ -109,13 +103,12 @@
         })
       })
 
-       /* 비동기 삭제 요청 */
+      /* 비동기 삭제 요청 */
       async function deletePlaylist(event) {
 
         const id = event.target.closest('.list-item').querySelector('input[type="hidden"]').value
         const pathSegments = window.location.pathname.split('/')
         const playlistId = pathSegments[pathSegments.length - 1]
-        console.log('플레이리스트 아이디 : ' + id)
         let url = `/playlists/${id}`
 
         try {
@@ -131,16 +124,54 @@
 
           if (!response.ok) {
               const result = await response.text()
-              alert(result)
+              alert("삭제 실패하였습니다.")
               return
           }
           // 성공시
-          const result = await response.text()
-          alert(result)
+          const result = await response.json()
+          renderMyPlaylists(result)
+          document.querySelectorAll('.count')[0].textContent = result.length
         } catch (error) {
             console.error("요청 실패:", error)
           }
       }
+
+      function renderMyPlaylists(list) {
+        const ulList = document.getElementById('myPlaylist')
+        ulList.innerHTML = ''
+
+        list.forEach(list => {
+          const li = document.createElement('li')
+          li.classList.add('list-item')
+
+          li.innerHTML = `
+            <input type="hidden" value="${list.id}" name="id">
+            <img src="${list.thumbnailUrl}" class="follow-img">
+            <div class="info">
+              <span class="name-playlist">${list.title}</span>
+            </div>
+            <span class="is-public">${list.isPublic ? '공개' : '비공개'}</span>
+            <div class="right">
+              <div class="like-area">
+                <span class="count">${list.likeCount}</span>
+                <span class="like">♥</span>
+              </div>
+              <button class="btn btn-danger">삭제</button>
+            </div>
+          `
+          ulList.appendChild(li)
+        })
+      }
+
+      /* 삭제 버튼 클릭 */
+      document.getElementById("myPlaylist").addEventListener("click", function (e) {
+
+        if (e.target && e.target.matches(".btn-danger")) {
+          const check = confirm("정말 삭제하시겠습니까? \n삭제한 플레이리스트는 복구가 불가능합니다.")
+          if(!check) return
+          deletePlaylist(e)
+        }
+      });
 
     </script>
   </th:block>
