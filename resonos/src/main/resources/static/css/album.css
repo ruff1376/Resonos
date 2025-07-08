@@ -177,7 +177,7 @@ img {
     font-weight: bold;
     color: var(--main-color);
 }
-.comment-list {
+.review-list {
     display: flex;
     flex-direction: column;
     gap: 10px;

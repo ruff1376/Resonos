@@ -2,6 +2,8 @@ package com.cosmus.resonos.mapper;
 
 import com.cosmus.resonos.domain.TrackReview;
 import com.cosmus.resonos.domain.TrackScore;
+import com.cosmus.resonos.domain.Users;
+import com.cosmus.resonos.validation.ReviewForm;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -17,6 +19,11 @@ public interface TrackReviewMapper {
     int updateBlindStatus(@Param("id") Long id,@Param("blinded") boolean blinded);
     int incrementLikes(@Param("id") Long id);
     int incrementDislikes(@Param("id") Long id);
+    public TrackReview write(String trackId, ReviewForm f, Users u);
+    public TrackReview update(@Param("id") Long id,
+                                @Param("rating") Integer rating,
+                                @Param("content") String content);
+    public void delete(Long id);
     
     // ───────── Aggregation ─────────
     TrackScore findScoreByTrackId(@Param("trackId") String trackId);

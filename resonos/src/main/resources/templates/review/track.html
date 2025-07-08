@@ -5,6 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title th:text="|${track.title} 리뷰|">트랙 리뷰</title>
     <th:block th:replace="~{fragments/link::album}"></th:block>
 </head>
@@ -32,7 +34,9 @@
                     <p>아직 리뷰가 없어요 😅</p>
                 </th:block>
                 <th:block th:if="${score != null and score.averageScore != null}">
-                    <p th:text="|🔮 ${score.averageScore}점 (✅유저 ${score.criticCount}명, 일반유저 ${score.userCount}명)|"></p>
+                    <p
+                        th:text="|🔮 ${#numbers.formatDecimal(score.averageScore, 0, 0)}점 (✅리뷰 ${score.criticCount}개, 일반리뷰 ${score.userCount}개)|">
+                    </p>
                 </th:block>
                 <div>
                     <div class="btn btn-gold">좋아요 ❤️</div>
@@ -75,44 +79,42 @@
                     <h1 id="headline">첫 리뷰를 작성해보세요 🤩</h1>
                 </th:block>
                 <th:block th:if="${score != null and score.averageScore != null}">
-                    <h1 id="headline" th:text="|🔮 ${score.averageScore}|"></h1>
+                    <h1 id="headline" th:text="|🔮 ${#numbers.formatDecimal(score.averageScore, 0, 0)}|"></h1>
                 </th:block>
                 <th:block th:if="${score != null and score.averageScore != null}">
                     <div class="score-bar">
-                        <div class="score-fill" th:style="'width:' + ${score.averageScore} + '%'">
-                            <span th:text="${score.averageScore}"></span>
+                        <div class="score-fill"
+                            th:style="'width:' + ${#numbers.formatDecimal(score.averageScore, 1, 1)} + '%'">
+                            <span th:text="${#numbers.formatDecimal(score.averageScore, 0, 0)}"></span>
                         </div>
                     </div>
                 </th:block>
             </div>
             <div class="review-container">
-                <ul class="comment-list">
-                    <!-- 반복문 -->
-                    <th:block th:each="review : ${review}">
-                        <li class="comment">
-                            <!-- 작성자 + 평점 -->
+                <ul class="review-list">
+                    <th:block th:each="rv : ${review}">
+                        <li class="comment" th:id="|rv-${rv.id}|" th:data-review-id="${rv.id}"
+                            th:data-track-id="${track.id}">
+                            <!-- 작성자 + 프로·점수 -->
                             <div class="name-and-score">
-                                <!-- ① id → class 로 (반복문에서 id 중복 방지) -->
-                                <p id="subtitle" th:text="${review.reviewer.nickname}">작성자 이름</p>
-                                <!-- ② boolean 프로퍼티: Lombok 의 isPro() → 'pro' 로 접근 -->
-                                <th:block th:if="${review.reviewer != null and review.reviewer.pro}">
-                                    <p>✅</p>
-                                </th:block>
-                                <p th:text="|🔮 ${review.rating}|">🔮 100</p>
+                                <p th:text="${rv.reviewer.nickname}">닉네임</p>
+                                <span th:if="${rv.reviewer.pro}">✅</span>
+                                <span>🔮 <span th:text="${rv.rating}">0</span></span>
                             </div>
-                            <!-- ③ 리뷰 본문 -->
-                            <div class="review-content">
-                                <p th:text="${review.content}">리뷰 내용</p>
-                            </div>
-                            <!-- ④ 유틸 영역 -->
+
+                            <div class="review-content" th:text="${rv.content}">내용</div>
+
                             <div class="review-util">
-                                <!-- 날짜 포맷 -->
-                                <p th:text="${#temporals.format(review.createdAt, 'yyyy.MM.dd')}">2025.05.21</p>
-                                <!-- 좋아요: review.likes (s 붙음) -->
-                                <a href="#">
-                                    <p th:text="|❤️ ${review.likes}|">❤️ 0</p>
-                                </a>
-                                <a href="#" class="report">신고</a>
+                                <time th:text="${#temporals.format(rv.createdAt,'yyyy.MM.dd')}">날짜</time>
+                                <a href="#" class="like-btn" th:data-id="${rv.id}">❤️ <span
+                                        th:text="${rv.likes}">0</span></a>
+
+                                <!-- 수정/삭제 버튼: 작성자 or ADMIN -->
+                                <span
+                                    th:if="${(isAdmin != null and isAdmin) or (loginUser != null and rv != null and loginUser.id == rv.userId)}">
+                                    <a href="#" class="edit-btn" th:data-id="${rv.id}">수정</a>
+                                    <a href="#" class="del-btn" th:data-id="${rv.id}">삭제</a>
+                                </span>
                             </div>
                         </li>
                     </th:block>
@@ -133,12 +135,13 @@
                 </ul>
             </div>
             <!-- 페이지네이션 -->
-            <div class="reply">
-                <form action="">
-                    <textarea name="" id="" placeholder="리뷰를 입력해주세요"></textarea>
+            <div th:if="${loginUser != null}" class="reply">
+                <form id="reviewForm">
+                    <input type="hidden" id="trackId" th:value="${track.id}">
+                    <textarea id="content" placeholder="리뷰를 입력해주세요" required></textarea>
                     <div class="score-and-submit">
-                        <input type="text" name="" id="" placeholder="점수를 입력해주세요">
-                        <button class="btn btn-gold">리뷰작성</button>
+                        <input type="number" id="rating" min="0" max="100" placeholder="0~100점" required>
+                        <button type="submit" class="btn btn-gold">리뷰작성</button>
                     </div>
                 </form>
             </div>
@@ -198,6 +201,97 @@
         <!-- 앨범 트랙리스트 분위기 뭐뭐..끝 -->
 
     </div>
+    <script>
+        const csrfToken = document.querySelector("meta[name=_csrf]").content;
+        const csrfHeader = document.querySelector("meta[name=_csrf_header]").content;
+
+        /* ── ① 등록 ───────────────────────────────── */
+        document.getElementById("reviewForm")?.addEventListener("submit", async e => {
+            e.preventDefault();
+            const trackId = document.getElementById("trackId").value;
+            const rating = +document.getElementById("rating").value;
+            const content = document.getElementById("content").value.trim();
+            if (rating < 0 || rating > 100) { alert("0~100점 입력"); return; }
+
+            const res = await fetch(`/tracks/${trackId}/reviews`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", [csrfHeader]: csrfToken },
+                body: JSON.stringify({ rating, content })
+            });
+            if (!res.ok) { alert("등록 실패"); return; }
+            const rv = await res.json();
+            prependReview(rv);                      // 새 리뷰 DOM 삽입 (함수는 밑에)
+            e.target.reset();
+        });
+
+        /* ── ② 수정·삭제·좋아요: 이벤트 위임 ─────────── */
+        document.querySelector(".review-list")?.addEventListener("click", async e => {
+            const btn = e.target.closest(".edit-btn,.del-btn,.like-btn");
+            if (!btn) return; e.preventDefault();
+
+            const li = btn.closest("li.comment");
+            const reviewId = btn.dataset.id || li.dataset.reviewId;
+            const trackId = li.dataset.trackId;
+
+            /* 삭제 */
+            if (btn.matches(".del-btn")) {
+                if (!confirm("삭제할까요?")) return;
+                const res = await fetch(`/tracks/${trackId}/reviews/${reviewId}`, {
+                    method: "DELETE", headers: { [csrfHeader]: csrfToken }
+                });
+                if (res.ok) li.remove(); else alert("삭제 실패");
+            }
+
+            /* 수정 */
+            if (btn.matches(".edit-btn")) {
+                const old = li.querySelector(".review-content").innerText;
+                const nu = prompt("수정할 내용", old);
+                if (nu == null || nu === old) return;
+                const nr = prompt("점수(0~100)", li.querySelector(".rating")?.innerText || "");
+                if (nr == null) return;
+
+                const res = await fetch(`/tracks/${trackId}/reviews/${reviewId}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json", [csrfHeader]: csrfToken },
+                    body: JSON.stringify({ rating: +nr, content: nu })
+                });
+                if (!res.ok) { alert("수정 실패"); return; }
+                const rv = await res.json();
+                li.querySelector(".review-content").innerText = rv.content;
+                li.querySelector(".rating")?.replaceChildren(`🔮 ${rv.rating}`);
+            }
+
+            /* 좋아요 */
+            if (btn.matches(".like-btn")) {
+                const res = await fetch(`/tracks/${trackId}/reviews/${reviewId}/like`, {
+                    method: "POST", headers: { [csrfHeader]: csrfToken }
+                });
+                if (res.ok) { const { likes } = await res.json(); btn.querySelector("span").innerText = likes; }
+            }
+        });
+
+        /* 새 리뷰 DOM 삽입 헬퍼 */
+        function prependReview(rv) {
+            const ul = document.querySelector(".review-list");
+            const li = document.createElement("li");
+            li.className = "comment";
+            li.dataset.reviewId = rv.id; li.dataset.trackId = rv.trackId;
+            li.innerHTML = `
+                <div class="name-and-score">
+                    <p>${rv.reviewer.nickname}</p>${rv.reviewer.pro ? '✅' : ''}
+                    <span class="rating">🔮 ${rv.rating}</span>
+                </div>
+                <div class="review-content">${rv.content}</div>
+                <div class="review-util">
+                    <time>${rv.createdAt.slice(0, 10).replace(/-/g, '.')}</time>
+                    <a href="#" class="like-btn" data-id="${rv.id}">❤️ <span>${rv.likes}</span></a>
+                    <span><a href="#" class="edit-btn" data-id="${rv.id}">수정</a>
+                        <a href="#" class="del-btn"  data-id="${rv.id}">삭제</a></span>
+                </div>`;
+            ul.prepend(li);
+        }
+
+    </script>
 </body>
 
 </html>
