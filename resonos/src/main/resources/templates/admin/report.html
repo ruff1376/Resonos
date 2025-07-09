@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layouts/admin_layout}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <title>신고 내역 관리</title>
+  <th:block th:replace="~{fragments/link::admin}"></th:block>
+  <style>
+    .detail-row {
+      padding: 15px;
+      background-color: #2a2a2a;
+      border-radius: 0 0 8px 8px;
+      margin-bottom: 15px;
+    }
+    .detail-section {
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+
+<th:block layout:fragment="content">
+<body class="bg-dark text-light">
+<main class="py-5 bg-resonos-dark">
+  <div class="container" style="max-width: 1200px;">
+    <h2 class="mb-4 text-light-gold">신고 내역 관리</h2>
+    <!-- 신고 유형별 탭 -->
+    <ul class="nav nav-tabs mb-4" id="reportTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <a class="nav-link [[${tab}=='all' ? 'active' : '']]" th:href="@{/admin/report(tab='all', size=${size}, page=1)}">전체 <span th:text="${totalAll}">0</span></a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link [[${tab}=='pending' ? 'active' : '']]" th:href="@{/admin/report(tab='pending', size=${size}, page=1)}">처리대기 <span th:text="${totalPending}">0</span></a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link [[${tab}=='done' ? 'active' : '']]" th:href="@{/admin/report(tab='done', size=${size}, page=1)}">처리완료 <span th:text="${totalDone}">0</span></a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link [[${tab}=='rejected' ? 'active' : '']]" th:href="@{/admin/report(tab='rejected', size=${size}, page=1)}">반려 <span th:text="${totalRejected}">0</span></a>
+    </li>
+    </ul>
+
+    <div class="tab-content" id="reportTabContent">
+      <div class="tab-pane fade show active" id="report-list" role="tabpanel" aria-labelledby="all-tab">
+        <div class="resonos-card p-3">
+          <!-- 컬럼 헤더 -->
+          <div class="list-group-item bg-secondary text-dark fw-bold d-flex flex-nowrap align-items-center text-center justify-content-center" style="border-radius:8px 8px 0 0;">
+            <div style="flex-basis:8%;min-width:60px;">ID</div>
+            <div style="flex-basis:10%;min-width:80px;">유형</div>
+            <div style="flex-basis:10%;min-width:80px;">대상ID</div>
+            <div style="flex-basis:16%;min-width:120px;">사유</div>
+            <div style="flex-basis:10%;min-width:80px;">신고자</div>
+            <div style="flex-basis:10%;min-width:80px;">일시</div>
+            <div style="flex-basis:10%;min-width:80px;">상태</div>
+            <div style="flex-basis:10%;min-width:80px;">처리자</div>
+            <div style="flex-basis:16%;min-width:120px;">관리</div>
+          </div>
+        <div id="reportTableList" class="list-group">
+        <div th:each="report, stat : ${reports}">
+            <!-- 메인 행 -->
+            <div class="list-group-item bg-dark text-light border-secondary mb-0 rounded-top d-flex flex-nowrap align-items-center text-center justify-content-center">
+            <div style="flex-basis:8%;min-width:60px;" th:text="${report.id} ?: '-'">id</div>
+            <div style="flex-basis:10%;min-width:80px;" th:text="${report.targetType} ?: '-'">유형</div>
+            <div style="flex-basis:10%;min-width:80px;" th:text="${report.targetId} ?: '-'">대상ID</div>
+            <div style="flex-basis:16%;min-width:120px;" th:text="${report.reason} ?: '-'">사유</div>
+            <div style="flex-basis:10%;min-width:80px;" th:text="${report.reporterId} ?: '-'">신고자</div>
+            <div style="flex-basis:10%;min-width:80px;" th:text="${report.createdAt != null ? #dates.format(report.createdAt, 'yyyy-MM-dd HH:mm') : '-'}">일시</div>
+            <div style="flex-basis:10%;min-width:80px;" th:text="${report.status} ?: '-'">상태</div>
+            <div style="flex-basis:10%;min-width:80px;" th:text="${report.processedBy} ?: '-'">처리자</div>
+            <div style="flex-basis:16%;min-width:120px;">
+                <button class="btn btn-outline-gold btn-sm" type="button" th:onclick="'toggleDetail(\'detail\', ' + ${stat.index} + ')'">상세</button>
+                <button class="btn btn-outline-info btn-sm" type="button" th:onclick="'toggleDetail(\'edit\', ' + ${stat.index} + ')'">수정</button>
+                <button class="btn btn-outline-danger btn-sm" type="button" th:onclick="'toggleDetail(\'delete\', ' + ${stat.index} + ')'">삭제</button>
+            </div>
+            </div>
+
+            <!-- 상세 DIV -->
+            <div th:id="'detailRow-detail-' + ${stat.index}" class="detail-row border-secondary mb-2" style="display:none;">
+            <div class="detail-section">
+                <h5 class="text-light-gold">상세 정보</h5>
+                <div class="row">
+                <div class="col-md-6">
+                    <p><strong>신고 ID:</strong> <span th:text="${report.id}"></span></p>
+                    <p><strong>유형:</strong> <span th:text="${report.targetType}"></span></p>
+                    <p><strong>대상 ID:</strong> <span th:text="${report.targetId}"></span></p>
+                    <p><strong>사유:</strong> <span th:text="${report.reason}"></span></p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>신고자:</strong> <span th:text="${report.reporterId}"></span></p>
+                    <p><strong>신고일시:</strong> <span th:text="${report.createdAt != null ? #dates.format(report.createdAt, 'yyyy-MM-dd HH:mm') : '-'}"></span></p>
+                    <p><strong>상태:</strong> <span th:text="${report.status}"></span></p>
+                    <p><strong>처리자:</strong> <span th:text="${report.processedBy ?: '-'}"></span></p>
+                    <p th:if="${report.processedAt != null}"><strong>처리일시:</strong> <span th:text="${#dates.format(report.processedAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+                    <p th:if="${report.processMemo != null}"><strong>처리메모:</strong> <span th:text="${report.processMemo}"></span></p>
+                </div>
+                </div>
+            </div>
+            </div>
+
+            <!-- 수정 DIV -->
+            <div th:id="'detailRow-edit-' + ${stat.index}" class="detail-row border-secondary mb-2" style="display:none;">
+            <div class="detail-section">
+                <h5 class="text-light-gold">상태/메모 수정</h5>
+                <form th:action="@{/admin/report/updateStatus}" method="post" class="d-inline-block">
+                <input type="hidden" name="id" th:value="${report.id}" />
+                <input type="hidden" name="tab" th:value="${tab}" />
+                <input type="hidden" name="page" th:value="${pagination.page}" />
+                <input type="hidden" name="size" th:value="${pagination.size}" />
+                <div class="input-group">
+                    <select name="status" class="form-select form-select-sm">
+                    <option value="PENDING" th:selected="${report.status == 'PENDING'}">대기</option>
+                    <option value="DONE" th:selected="${report.status == 'DONE'}">완료</option>
+                    <option value="REJECTED" th:selected="${report.status == 'REJECTED'}">반려</option>
+                    </select>
+                    <input type="text" name="processMemo" class="form-control form-control-sm" th:value="${report.processMemo}" placeholder="처리 메모" />
+                    <button type="submit" class="btn btn-outline-gold btn-sm">수정</button>
+                </div>
+                </form>
+            </div>
+            </div>
+
+            <!-- 삭제 DIV -->
+            <div th:id="'detailRow-delete-' + ${stat.index}" class="detail-row border-secondary mb-3" style="display:none;">
+            <div class="detail-section">
+                <h5 class="text-danger">정말로 삭제하시겠습니까?</h5>
+            <form th:action="@{/admin/report/delete}" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${report.id}" />
+                <input type="hidden" name="tab" th:value="${tab}" />
+                <input type="hidden" name="page" th:value="${pagination.page}" />
+                <input type="hidden" name="size" th:value="${pagination.size}" />
+                <button ...>삭제</button>
+            </form>
+
+            </div>
+            </div>
+        </div>
+        <div th:if="${#lists.isEmpty(reports)}" class="list-group-item text-center text-secondary bg-dark">신고 내역이 없습니다.</div>
+        </div>
+        <!-- 페이징 -->
+        <div th:replace="~{fragments/pagination :: pagination(pagination=${pagination}, pageUri=${pageUri})}"></div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function toggleDetail(type, idx) {
+    // 모두 닫기
+    ['detail', 'edit', 'delete'].forEach(function(t) {
+        var row = document.getElementById('detailRow-' + t + '-' + idx);
+        if(row) row.style.display = 'none';
+    });
+    // 해당 타입만 토글
+    var target = document.getElementById('detailRow-' + type + '-' + idx);
+    if(target) {
+        if(target.style.display === 'none') target.style.display = 'block';
+        else target.style.display = 'none';
+    }
+    }
+  </script>
+</main>
+</body>
+</th:block>
+</html>

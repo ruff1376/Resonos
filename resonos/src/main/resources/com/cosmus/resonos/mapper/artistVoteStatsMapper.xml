@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.ArtistVoteStatsMapper">
+
+    <select id="getArtistMoodVoteStats" resultType="map">
+        SELECT 
+            a.id AS artist_id,
+            a.name AS artist_name,
+            tg.name AS mood_name,
+            SUM(vote_count) AS vote_count
+        FROM (
+            -- 트랙 투표
+            SELECT t.artist_id, tg.id AS tag_id, COUNT(*) AS vote_count
+            FROM track_mood_vote tmv
+            JOIN track t ON tmv.track_id = t.id
+            JOIN tag tg ON tmv.mood = tg.id
+            GROUP BY t.artist_id, tg.id
+            UNION ALL
+            -- 앨범 투표
+            SELECT al.artist_id, tg.id AS tag_id, COUNT(*) AS vote_count
+            FROM album_mood_vote amv
+            JOIN album al ON amv.album_id = al.id
+            JOIN tag tg ON amv.mood = tg.id
+            GROUP BY al.artist_id, tg.id
+        ) AS votes
+        JOIN artist a ON votes.artist_id = a.id
+        JOIN tag tg ON votes.tag_id = tg.id
+        GROUP BY a.id, a.name, tg.name, tg.id
+        ORDER BY a.name, vote_count DESC
+    </select>
+
+
+</mapper>
