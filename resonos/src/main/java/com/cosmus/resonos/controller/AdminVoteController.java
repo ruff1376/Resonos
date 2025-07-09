@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cosmus.resonos.service.AlbumMoodVoteService;
 import com.cosmus.resonos.service.TrackMoodVoteService;
-// import com.cosmus.resonos.service.ArtistVoteService;
+import com.cosmus.resonos.service.ArtistVoteStatsService;
 
 @Controller
 @RequestMapping("/admin/vote")
@@ -24,8 +24,8 @@ public class AdminVoteController {
     @Autowired
     private AlbumMoodVoteService albumMoodVoteService;
 
-    // @Autowired
-    // private ArtistVoteService artistVoteService;
+    @Autowired
+    private ArtistVoteStatsService artistVoteStatsService; 
 
     @GetMapping("")
     public String voteStats(
@@ -36,13 +36,12 @@ public class AdminVoteController {
         if ("album".equals(tab)) {
             stats = albumMoodVoteService.getAlbumMoodStats();
         } else if ("artist".equals(tab)) {
-            // stats = artistVoteService.getArtistVoteStats();
-            stats = List.of(); // 임시: 아티스트 투표 구현 전까지 빈 리스트
-        } else { // track (기본)
+            stats = artistVoteStatsService.getArtistMoodVoteStats();
+        } else { 
             stats = trackMoodVoteService.getTrackMoodStats();
         }
         model.addAttribute("stats", stats);
         model.addAttribute("tab", tab);
-        return "admin/vote"; // vote.html (또는 vote_stats.html)
+        return "admin/vote";
     }
 }

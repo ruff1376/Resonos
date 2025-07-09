@@ -5,11 +5,40 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Report;
 import com.cosmus.resonos.mapper.ReportMapper;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class ReportServiceImpl implements ReportService {
+
+    @Override
+    public List<Report> findByReporterId(Long reporterId) throws Exception{
+        return reportMapper.findByReporterId(reporterId);
+    }
+
+    @Override
+    public List<Report> findByTargetId(Long targetId) throws Exception{
+        return reportMapper.findByTargetId(targetId);
+    }
+
+    @Override
+    public List<Report> findByTargetTypeAndTargetId(String targetType, Long targetId) throws Exception{
+        return reportMapper.findByTargetTypeAndTargetId(targetType, targetId);
+    }
+
+    @Override
+    public List<Report> findAll() throws Exception{
+        return reportMapper.findAll();
+    }
+
+    @Override
+    public void updateStatus(Long id, String status, Long processedBy, String processMemo) throws Exception{
+        reportMapper.updateStatus(id, status, processedBy, processMemo);
+    }
 
     @Autowired
     private ReportMapper reportMapper;
@@ -47,6 +76,20 @@ public class ReportServiceImpl implements ReportService {
     public int countByBlind() throws Exception {
         return reportMapper.countByBlind();
     }
-    
+
+    @Override
+    public long countByStatus(String status) throws Exception {
+        return reportMapper.countByStatus(status);
+    }
+
+    @Override
+    public List<Report> findByStatusPaging(String status, Pagination pagination) throws Exception {
+        return reportMapper.findByStatusPaging(status, pagination);
+    }
+
+    @Override
+    public List<Report> findAllPaging(Pagination pagination) throws Exception {
+        return reportMapper.findAllPaging(pagination);
+    }
 
 }

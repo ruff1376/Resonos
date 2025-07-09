@@ -1,16 +1,18 @@
 package com.cosmus.resonos.domain;
 
-import java.util.Date;
-
 import lombok.Data;
+import java.util.Date;
 
 @Data
 public class Report {
     private Long id;
-    private String targetType;  // ENUM 대신 String으로 매핑
+    private String targetType;      // ENUM
+    private Long targetId;          // BIGINT
     private String reason;
-    private String status;
+    private String status;          // ENUM
     private Date createdAt;
     private Long reporterId;
-    private Long targetId;
+    private Long processedBy;       // 관리자 ID
+    private Date processedAt;
+    private String processMemo;
 }

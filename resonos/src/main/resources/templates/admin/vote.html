@@ -143,6 +143,59 @@
             </th:block>
             <th:block th:if="${tab}=='artist'">
                 <!-- 아티스트 투표 현황 테이블 -->
+                <div class="resonos-card p-4" style="padding: 2.5rem;">
+                    <div class="vote-table-header" style="font-size:1.05em;">
+                        <div class="vote-col-id">아티스트ID</div>
+                        <div class="vote-col-title">아티스트명</div>
+                        <div class="vote-col-mood">태그/분위기</div>
+                        <div class="vote-col-count">투표수</div>
+                        <div class="vote-col-more"></div>
+                    </div>
+                    <th:block th:with="statsSize=${#lists.size(stats)}">
+                        <th:block th:each="stat, statStat : ${stats}">
+                            <!-- 대표 mood(아티스트별 첫 row)만 출력 -->
+                            <th:block th:if="${statStat.index == 0 or stats[statStat.index-1]['artist_id'] != stat['artist_id']}">
+                                <div class="vote-table-row track-group-start"
+                                    th:classappend="${statStat.index == 0} ? ' first-track' : ''"
+                                    style="font-weight:600;">
+                                    <div class="vote-col-id" th:text="${stat['artist_id']}"></div>
+                                    <div class="vote-col-title" th:text="${stat['artist_name']}"></div>
+                                    <div class="vote-col-mood" th:text="${stat['mood_name']}"></div>
+                                    <div class="vote-col-count" th:text="${stat['vote_count']}"></div>
+                                    <!-- 더보기 버튼 (해당 아티스트의 mood가 2개 이상일 때만 표시) -->
+                                    <div class="vote-col-more"
+                                        th:if="${statStat.index + 1 < statsSize and stats[statStat.index+1]['artist_id'] == stat['artist_id']}">
+                                        <button type="button" class="btn btn-outline-gold btn-more"
+                                                th:id="'btn-more-' + ${statStat.index}"
+                                                th:onclick="'toggleMore(' + ${statStat.index} + ')'"
+                                                style="font-size:1.1em;padding:2px 16px 2px 16px;">
+                                            더보기
+                                        </button>
+                                    </div>
+                                    <div class="vote-col-more"
+                                        th:if="${!(statStat.index + 1 < statsSize and stats[statStat.index+1]['artist_id'] == stat['artist_id'])}"></div>
+                                </div>
+                                <!-- 더보기 영역 -->
+                                <div class="more-moods" th:id="'more-moods-' + ${statStat.index}">
+                                    <th:block th:each="moreStat, moreStatStat : ${stats}"
+                                            th:if="${moreStat['artist_id'] == stat['artist_id'] and moreStatStat.index != statStat.index}">
+                                        <div class="vote-table-row" style="background:#181c23; color:#ffde7a;">
+                                            <div class="vote-col-id"></div>
+                                            <div class="vote-col-title"></div>
+                                            <div class="vote-col-mood" th:text="${moreStat['mood_name']}"></div>
+                                            <div class="vote-col-count" th:text="${moreStat['vote_count']}"></div>
+                                            <div class="vote-col-more"></div>
+                                        </div>
+                                    </th:block>
+                                </div>
+                            </th:block>
+                        </th:block>
+                    </th:block>
+                    <div th:if="${#lists.isEmpty(stats)}" class="vote-table-row text-center text-secondary">
+                        <div class="vote-col-id" colspan="4">투표 현황 데이터가 없습니다.</div>
+                    </div>
+                </div>
+
             </th:block>
         </div>
 

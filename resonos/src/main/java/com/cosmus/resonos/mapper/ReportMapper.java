@@ -1,12 +1,20 @@
 package com.cosmus.resonos.mapper;
+
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
+import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Report;
 
 @Mapper
 public interface ReportMapper {
+    public List<Report> findByReporterId(Long reporterId)throws Exception;
+    public List<Report> findByTargetId(Long targetId)throws Exception;
+    public List<Report> findByTargetTypeAndTargetId(String targetType, Long targetId)throws Exception;
+    public List<Report> findAll()throws Exception;
+    public void updateStatus(Long id, String status, Long processedBy, String processMemo) throws Exception;
     // 전체 조회
     public List<Report> list() throws Exception;
     // 조회
@@ -21,4 +29,11 @@ public interface ReportMapper {
     public int countAll() throws Exception;
     // 어드민 블라인드
     public int countByBlind() throws Exception;
+    // report 페이징 countByStatus, findByStatusPaging, findAllPaging
+    public long countByStatus(String status) throws Exception;
+    public List<Report> findByStatusPaging(@Param("status") String status,@Param("pagination") Pagination pagination) throws Exception;
+    public List<Report> findAllPaging(Pagination pagination) throws Exception;
+    
+
+    
 }
