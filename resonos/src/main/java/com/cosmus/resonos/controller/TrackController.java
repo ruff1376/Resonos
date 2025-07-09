@@ -79,15 +79,17 @@ public class TrackController {
         Artist artist = artistService.selectArtistByTrackId(id);
         TrackScore score = trackReviewService.getTrackScore(id);
         List<TrackReview> reviews = trackReviewService.reviewWithReviewerByTrackId(id);
-        if (loginUser != null) {
+        if (loginUser != null && reviews != null && !reviews.isEmpty()) {
             List<Long> reviewIds = reviews.stream()
                                         .map(TrackReview::getId)
                                         .collect(Collectors.toList());
 
-            List<Long> likedReviewIds = reviewLikeService.getUserLikedReviewIds("TRACK", reviewIds, loginUser.getId());
+            if (!reviewIds.isEmpty()) {
+                List<Long> likedReviewIds = reviewLikeService.getUserLikedReviewIds("TRACK", reviewIds, loginUser.getId());
 
-            for (TrackReview review : reviews) {
-                review.setIsLikedByCurrentUser(likedReviewIds.contains(review.getId()));
+                for (TrackReview review : reviews) {
+                    review.setIsLikedByCurrentUser(likedReviewIds.contains(review.getId()));
+                }
             }
         }
         if (track == null) {
