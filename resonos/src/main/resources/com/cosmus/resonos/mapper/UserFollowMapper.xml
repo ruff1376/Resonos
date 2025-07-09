@@ -45,10 +45,16 @@
     WHERE follower_id = #{id}
   </select>
 
+  <!-- 마이페이지: 팔로우 하기 -->
   <insert id="insert">
-    INSERT INTO user_follow (id, created_at, follower_id, following_id)
-    VALUES (#{id}, #{createdAt}, #{followerId}, #{followingId})
+    INSERT INTO user_follow (follower_id, following_id)
+    VALUES (#{followerId}, #{followingId})
   </insert>
+
+  <!-- 마이페이지: 팔로우 취소 -->
+  <delete id="delete">
+    DELETE FROM user_follow WHERE id = #{id}
+  </delete>
 
   <update id="update">
     UPDATE user_follow
@@ -58,9 +64,7 @@
     WHERE id = #{id}
   </update>
 
-  <delete id="delete">
-    DELETE FROM user_follow WHERE id = #{id}
-  </delete>
+
   <!-- 팔로워 수 -->
   <select id="countFollowers" resultType="int">
     SELECT COUNT(*) FROM user_follow WHERE followee_id = #{userId}
