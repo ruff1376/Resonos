@@ -74,6 +74,8 @@ public class TrackReviewServiceImpl implements TrackReviewService {
 
     @Transactional
     public TrackReview write(String trackId, ReviewForm f, Users u){
+    System.out.println("작성자 ID: " + u.getId());
+    System.out.println("작성자 isPro: " + u.isPro());
         TrackReview r = TrackReview.builder()
             .trackId(trackId)
             .userId(u.getId())

@@ -2,6 +2,7 @@ package com.cosmus.resonos.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,7 @@ import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.ArtistService;
 import com.cosmus.resonos.service.PlaylistDetailService;
+import com.cosmus.resonos.service.ReviewLikeService;
 import com.cosmus.resonos.service.TrackReviewService;
 import com.cosmus.resonos.service.TrackService;
 import com.cosmus.resonos.validation.ReviewForm;
@@ -53,6 +55,8 @@ public class TrackController {
     private TrackReviewService trackReviewService;
     @Autowired
     private PlaylistDetailService playlistDetailService;
+    @Autowired
+    private ReviewLikeService reviewLikeService;
 
     // 트랙 화면
     @GetMapping
@@ -62,20 +66,30 @@ public class TrackController {
 
         Users loginUser = null;
         if (principal != null) {
-        loginUser = principal.getUser();
-        model.addAttribute("loginUser", loginUser);
-        boolean isAdmin = principal.getAuthorities()
-        .stream()
-        .anyMatch(a -> a.getAuthority().equals("ADMIN"));
-        model.addAttribute("isAdmin", isAdmin);
+            loginUser = principal.getUser();
+            model.addAttribute("loginUser", loginUser);
+            boolean isAdmin = principal.getAuthorities()
+            .stream()
+            .anyMatch(a -> a.getAuthority().equals("ADMIN"));
+            model.addAttribute("isAdmin", isAdmin);
         }
         Track track = trackService.selectById(id);
         Album album = albumService.findAlbumByTrackId(id);
         List<Track> top5List = trackService.findTop5TracksInSameAlbum(id);
-        // String artistName = trackService.findArtistNameByTrackId(id);
         Artist artist = artistService.selectArtistByTrackId(id);
         TrackScore score = trackReviewService.getTrackScore(id);
         List<TrackReview> reviews = trackReviewService.reviewWithReviewerByTrackId(id);
+        if (loginUser != null) {
+            List<Long> reviewIds = reviews.stream()
+                                        .map(TrackReview::getId)
+                                        .collect(Collectors.toList());
+
+            List<Long> likedReviewIds = reviewLikeService.getUserLikedReviewIds("TRACK", reviewIds, loginUser.getId());
+
+            for (TrackReview review : reviews) {
+                review.setIsLikedByCurrentUser(likedReviewIds.contains(review.getId()));
+            }
+        }
         if (track == null) {
             return "redirect:/artists?error=notfound";
         }
@@ -85,6 +99,7 @@ public class TrackController {
         model.addAttribute("artist", artist);
         model.addAttribute("score", score);
         model.addAttribute("review", reviews);
+        model.addAttribute("reviewType", "TRACK");
         return "review/track";
     }
 
@@ -146,11 +161,26 @@ public class TrackController {
         return ResponseEntity.noContent().build();  // 204 No Content 반환
     }
 
-    // /* ── ④ 좋아요 (선택) ───────────────────── */
-    // @PostMapping("/{reviewId}/like")
-    // public LikesDto like(@PathVariable Long reviewId,
-    //                      @AuthenticationPrincipal CustomUser user){
-    //     return trackReviewService.like(reviewId, user.getUser().getId());
-    // }
+    @PostMapping("/track-reviews/{reviewId}/like")
+    @ResponseBody
+    public Map<String, Object> toggleReviewLike(@PathVariable("reviewId") Long reviewId,
+                                                @AuthenticationPrincipal CustomUser user) {
+        reviewLikeService.toggleLike(reviewId, user.getId(), "TRACK");
+
+        int likeCount = reviewLikeService.countLikes(reviewId, "TRACK");
+        boolean liked = reviewLikeService.isLiked(reviewId, user.getId(), "TRACK");
+
+        return Map.of("likeCount", likeCount, "liked", liked);
+    }
+
+    @PostMapping("/reviews/{reviewType}/{reviewId}/report")
+    @ResponseBody
+    public Map<String, Object> reportReview(@PathVariable("reviewType") String reviewType,
+                                            @PathVariable("reviewId") Long reviewId,
+                                            @AuthenticationPrincipal CustomUser user) {
+        reviewLikeService.reportReview(reviewId, user.getId(), reviewType);
+        int reportCount = reviewLikeService.countReports(reviewId, reviewType);
+        return Map.of("reportCount", reportCount);
+    }
     
 }

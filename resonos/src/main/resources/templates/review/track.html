@@ -115,15 +115,20 @@
                             </form>
                             <div class="review-util">
                                 <time th:text="${#temporals.format(rv.createdAt,'yyyy.MM.dd')}">날짜</time>
-                                <a href="#" class="like-btn" th:data-id="${rv.id}">👍 <span
-                                        th:text="${rv.likes}">0</span></a>
+                                <button class="like-btn" th:data-review-id="${rv.id}"
+                                    th:data-review-type="${reviewType}" th:data-liked="${rv.isLikedByCurrentUser}"
+                                    th:text="${rv.isLikedByCurrentUser} ? '💔' : '❤️'">❤️</button>
+
+                                <span th:id="'like-count-' + ${rv.id}" th:text="${rv.likes}">0</span>
+
+                                <button class="report-btn" th:data-review-id="${rv.id}"
+                                    th:data-review-type="${reviewType}">🚨 신고</button>
                                 <!-- 수정/삭제 버튼: 작성자 or ADMIN -->
                                 <span
                                     th:if="${(isAdmin != null and isAdmin) or (loginUser != null and rv != null and loginUser.id == rv.userId)}">
                                     <a href="#" class="edit-btn" th:data-id="${rv.id}">수정</a>
                                     <a href="#" class="del-btn" th:data-id="${rv.id}">삭제</a>
                                 </span>
-                                <a href="#">신고</a>
                             </div>
                         </li>
                     </th:block>
@@ -229,7 +234,7 @@
                     type: 'GET',
                     success: function (html) {
                         $('.review-score').html(html);
-                        
+
                     },
                     error: function () {
                         console.error("점수 갱신 실패");
@@ -344,6 +349,33 @@
                         alert('삭제 실패: ' + xhr.responseText);
                     }
                 });
+            });
+        });
+
+        $(document).on("click", ".like-btn", function () {
+            const btn = $(this);
+            const reviewId = btn.data("review-id");
+            const reviewType = btn.data("review-type");
+
+            $.post(`/tracks/${reviewType.toLowerCase()}-reviews/${reviewId}/like`, {}, function (data) {
+                btn.data("liked", data.liked);
+                btn.text(data.liked ? '💔' : '❤️');
+
+                const countEl = $("#like-count-" + reviewId);
+                countEl.text(data.likeCount);
+                countEl.stop(true).css({ color: "#e91e63" }).animate({ color: "#000" }, 500);
+            }).fail(function (xhr) {
+                alert("좋아요 처리 중 오류 발생: " + xhr.responseText);
+            });
+        });
+
+        $(document).on("click", ".report-btn", function () {
+            const btn = $(this);
+            const reviewId = btn.data("review-id");
+            const reviewType = btn.data("review-type");
+
+            $.post(`/reviews/${reviewType}/${reviewId}/report`, {}, function (data) {
+                alert("신고되었습니다. 총 신고 수: " + data.reportCount);
             });
         });
     </script>
