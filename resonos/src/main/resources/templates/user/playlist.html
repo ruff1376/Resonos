@@ -15,20 +15,24 @@
 <body>
   <main class="con con-music position-relative" layout:fragment="content">
     <!-- 왼쪽 리모컨 -->
-    <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
-    <!-- 내 플레이리스트 -->
-    <section class="info-wrapper">
+    <th:block th:if="${isOwner}">
+      <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
+    </th:block>
+    <!-- 플레이리스트 -->
+    <section class="info-wrapper" th:classappend="${ !isOwner ? 'go-center' : ''}">
       <div class="info-section">
         <div class="title">
           <div>
-            <h2 class="text-start">내 플레이리스트</h2>
-            <span class="count" th:text="${myPlaylists.size()}">내 플레이리스트 수</span>
+            <h2 class="text-start" th:text="${isOwner ? '내 플레이리스트' : '플레이리스트'}">내 플레이리스트</h2>
+            <span class="count" th:text="${myPlaylists.size()}">플레이리스트 수</span>
           </div>
-          <a th:href="@{/playlists/create}" id="addPli">추가하기<img width="20px" height="20px" th:src="@{/img/plus_circle.png}" alt="추가버튼"></a>
+          <th:block th:if="${isOwner}">
+            <a th:href="@{/playlists/create}" id="addPli">추가하기<img width="20px" height="20px" th:src="@{/img/plus_circle.png}" alt="추가버튼"></a>
+          </th:block>
         </div>
         <th:block th:if="${#lists.isEmpty(myPlaylists)}">
           <div class="empty-text">
-            <p>내 플레이리스트가 없습니다.</p>
+            <p>플레이리스트가 없습니다.</p>
           </div>
         </th:block>
         <ul id="myPlaylist" class="ul-list">
@@ -39,15 +43,19 @@
               <div class="info">
                 <span class="name-playlist" th:text="${mpl.title}">플레이리스트 명</span>
               </div>
-              <span class="is-public" th:text="${mpl.isPublic} ? '공개' : '비공개' ">공개</span>
+              <th:block th:if="${isOwner}">
+                <span class="is-public" th:text="${mpl.isPublic} ? '공개' : '비공개' ">공개</span>
+              </th:block>
               <div class="right">
                 <div class="like-area">
                   <span class="count" th:text="${mpl.likeCount}">123</span>
                   <span class="like">♥</span>
                 </div>
-                <button class="btn btn-danger">
-                  삭제
-                </button>
+                <th:block th:if="${isOwner}">
+                  <button class="btn btn-danger">
+                    삭제
+                  </button>
+                </th:block>
               </div>
             </li>
           </th:block>
@@ -55,7 +63,7 @@
       </div>
     </section>
     <!-- 좋아요 한 플레이 리스트 -->
-    <section class="info-wrapper">
+    <section class="info-wrapper" th:classappend="${ !isOwner ? 'go-center' : ''}">
       <div class="info-section">
         <div class="title">
           <div>
@@ -72,11 +80,13 @@
           <th:block th:each="lpl : ${likedPlaylists}">
             <li class="list-item">
               <input type="hidden" th:value="${lpl.id}" name="id">
-              <img src="https://i.scdn.co/image/ab67616d0000b2738ad8f5243d6534e03b656c8b" alt="GalaxiNote" class="follow-img" />
+              <img th:src="${lpl.thumbnailUrl}" class="follow-img" />
               <div class="info">
                 <span class="name-album" th:text="${lpl.title}">좋아요 한 플레이리스트 명</span>
               </div>
-              <button class="like">♥</button>
+              <th:block th:if="${isOwner}">
+                <button class="like">♥</button>
+              </th:block>
             </li>
           </th:block>
         </ul>
@@ -99,7 +109,7 @@
         e.addEventListener('click', (event) => {
           if (event.target.tagName.toLowerCase() === 'button') return
           const id = e.querySelector('input[type="hidden"]').value
-          location.href = `playlists/${id}`
+          location.href = `/playlists/${id}`
         })
       })
 

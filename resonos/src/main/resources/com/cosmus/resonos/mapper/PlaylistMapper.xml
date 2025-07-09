@@ -107,10 +107,10 @@
   <select id="trackOfPlaylist" resultMap="trackOfPlaylistMap">
     SELECT p.*, pd.order_no, t.id AS trackId, t.title as trackTitle, a.cover_image, art.name AS artistName
     FROM playlist p
-      INNER JOIN playlist_detail pd ON p.id = pd.playlist_id
-      INNER JOIN track t ON pd.track_id = t.id
-      INNER JOIN album a ON t.album_id = a.id
-      INNER JOIN artist art ON t.artist_id = art.id
+      LEFT JOIN playlist_detail pd ON p.id = pd.playlist_id
+      LEFT JOIN track t ON pd.track_id = t.id
+      LEFT JOIN album a ON t.album_id = a.id
+      LEFT JOIN artist art ON t.artist_id = art.id
     WHERE p.id = #{id}
     ORDER BY pd.order_no;
   </select>

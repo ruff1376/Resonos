@@ -13,9 +13,11 @@
 <body>
   <main class="con con-follow position-relative" layout:fragment="content">
     <!-- 왼쪽 리모컨 -->
-    <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
+    <th:block th:if="${isOwner}">
+      <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
+    </th:block>
     <!-- 팔로워 -->
-    <section class="info-wrapper">
+    <section class="info-wrapper" th:classappend="${ !isOwner ? 'go-center' : ''}">
       <div class="info-section">
         <div class="title">
           <div>
@@ -29,6 +31,7 @@
           </th:block>
           <th:block th:each="follower : ${myFollower}">
             <li class="list-item">
+              <input type="hidden" th:value="${follower.id}">
               <img th:src="@{${follower.profileImage}}" alt="프로필 이미지" class="follow-img" />
               <div class="info">
                 <span class="follow-nick" th:text="${follower.nickname}">닉네임</span>
@@ -40,7 +43,7 @@
       </div>
     </section>
     <!-- 팔로우 -->
-    <section class="info-wrapper">
+    <section class="info-wrapper" th:classappend="${ !isOwner ? 'go-center' : ''}">
       <div class="info-section">
         <div class="title">
           <div>
@@ -59,12 +62,26 @@
                 <span class="follow-nick" th:text="${follow.nickname}">닉네임</span>
                 <span class="follow-badge">배지</span>
               </div>
-              <button class="btn-outline-gold btn-sm">언팔로우</button>
+              <th:block th:if="${isOwner}">
+                <button class="btn-outline-gold btn-sm">언팔로우</button>
+              </th:block>
             </li>
           </th:block>
         </ul>
       </div>
     </section>
   </main>
+  <th:block layout:fragment="pageScript">
+    <script>
+      const items = document.querySelectorAll("li.list-item")
+      items.forEach(e => {
+        e.addEventListener("click", function(event) {
+          if (event.target.tagName.toLowerCase() === 'button') return
+          const userId = this.querySelector('input[type="hidden"]').value
+          location.href = `/users/${userId}`
+        })
+      })
+    </script>
+  </th:block>
 </body>
 </html>

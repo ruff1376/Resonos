@@ -19,17 +19,21 @@
           <th:block th:text="${user.nickname}"></th:block>
           <span class="badge">JAZZ LOVER</span>
         </h2>
-        <p id="bio" th:text="${user.bio}">음악과 우주, 그리고 커뮤니티를 사랑하는 평론가입니다.</p>
-        <div class="profile-actions">
-          <a th:href="@{/users/edit}" class="mybtn-gold">프로필 편집</a>
-          <form th:action="@{/logout}" method="post">
-            <button class="mybtn-outline d-flex justify-content-center" type="submit">로그아웃</button>
-          </form>
-        </div>
+        <th:block th:if="${user.bio != null}">
+          <p id="bio" th:text="${user.bio}">음악과 우주, 그리고 커뮤니티를 사랑하는 평론가입니다.</p>
+        </th:block>
+        <th:block th:if="${isOwner}">
+          <div class="profile-actions">
+            <a th:href="@{/users/edit}" class="mybtn-gold">프로필 편집</a>
+            <form th:action="@{/logout}" method="post">
+              <button class="mybtn-outline d-flex justify-content-center" type="submit">로그아웃</button>
+            </form>
+          </div>
+        </th:block>
       </div>
       <div class="profile-meta">
-        <div><a th:href="@{/user-follows}"><b>팔로워</b><br><th:block th:text="${followerCount}">수</th:block></a></div>
-        <div><a th:href="@{/user-follows}"><b>팔로우</b><br><th:block th:text="${followCount}">수</th:block></a></div>
+        <div><a th:href="@{/user-follows/{id}(id = ${user.id})}"><b>팔로워</b><br><th:block th:text="${followerCount}">수</th:block></a></div>
+        <div><a th:href="@{/user-follows/{id}(id = ${user.id})}"><b>팔로우</b><br><th:block th:text="${followCount}">수</th:block></a></div>
         <div><a><b>뱃지</b><br>3</a></div>
       </div>
     </section>

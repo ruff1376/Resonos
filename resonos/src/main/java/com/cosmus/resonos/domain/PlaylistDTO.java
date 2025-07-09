@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PlaylistDTO {
   private Long id;
-  private String userId;
+  private Long userId;
   private String title;
   private String description;
   private String thumbnailUrl;
