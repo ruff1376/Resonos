@@ -118,9 +118,21 @@ public class AlbumServiceImpl implements AlbumService {
         return albumMapper.searchCount(keyword);
     }
 
-    
+    @Override
+    public List<Album> mainHotList() throws Exception {
+        return albumMapper.mainHotList();
+    }
 
-    
+    @Override
+    public List<Album> hotList(Pagination pagination) throws Exception {
+        long total = albumMapper.hotCount();
+        pagination.setTotal(total);
+        return albumMapper.hotList(pagination);
+    }
 
+    @Override
+    public long hotCount() throws Exception {
+        return albumMapper.hotCount();
+    }
     
 }

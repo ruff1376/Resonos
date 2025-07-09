@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인기 앨범</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <th:block th:replace="~{fragments/link::main}"></th:block>
+</head>
+
+<body>
+    <th:block layout:fragment="content">
+        <div class="container-fluid d-flex flex-column align-items-center px-0" style="max-width:1440px; min-height:2300px; padding-top:150px; gap:50px;">
+            <!-- 인기 앨범 섹션 -->
+            <section class="main-section-bg w-100 py-4 mb-5">
+                <div class="d-flex flex-row align-items-center px-4 mb-3" style="height:50px;">
+                    <div class="section-title flex-grow-1">인기 앨범</div>
+                </div>
+                <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-0 m-0 mb-5 justify-content-start">
+                    <th:block th:each="hotAlbum : ${hotAlbumList}">
+                        <!-- 앨범 카드 -->
+                        <div class="col d-flex">
+                            <div class="card align-items-center p-3" style="width:228px; height:360px;">
+                                <a th:href="@{'/albums?id=' + ${hotAlbum.id}}">
+                                    <img th:src="${hotAlbum.coverImage}" class="card-img-top" alt="앨범커버">
+                                </a>
+                                <div class="card-body d-flex flex-column align-items-center p-2">
+                                    <a th:href="@{'/albums?id=' + ${hotAlbum.id}}" class="card-title" th:text="${hotAlbum.title}"></a>
+                                    <a th:href="@{'/artists?id=' + ${hotAlbum.artistId}}" class="card-artist" th:text="${hotAlbum.artistName}"></a>
+                                </div>
+                                <div class="position-absolute bottom-0 start-50 translate-middle-x mb-5">
+                                    <canvas class="doughnut-canvas" width="50" height="50"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+                <div th:replace="~{fragments/pagination :: pagination}"></div>
+            </section>
+        </div>
+    </th:block>
+    <th:block layout:fragment="pageScript">
+        <script th:src="@{/js/rating_chart.js}"></script>
+    </th:block>
+</body>
