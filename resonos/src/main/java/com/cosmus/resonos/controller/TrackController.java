@@ -4,12 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -90,6 +88,13 @@ public class TrackController {
         return "review/track";
     }
 
+    @GetMapping("/{id}/score-fragment")
+    public String scoreRefresh(@PathVariable("id") String id, Model model) {
+        TrackScore score = trackReviewService.getTrackScore(id);
+        model.addAttribute("score", score);
+        return "review/score :: scoreFragment";  // Thymeleaf 조각 이름 지정
+    }
+
     /**
      * 플레이리스트에 추가할 트랙 리스트 요청
      * @param entity
@@ -118,19 +123,27 @@ public class TrackController {
 
     /* ── ② 수정 ────────────────────────────── */
     @PutMapping("/{id}/review/{reviewId}")
-    @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#reviewId, authentication)")
-    public TrackReview update(@PathVariable("id") String trackId,
+    @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, authentication)")
+    @ResponseBody
+    public ResponseEntity<?> update(@PathVariable("id") String trackId,
                               @PathVariable("reviewId") Long reviewId,
                               @RequestBody ReviewForm form) {
-        return trackReviewService.update(reviewId, form);
+        boolean success = trackReviewService.update(reviewId, form);
+        if (!success) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("수정 실패");
+        }
+        TrackReview updatedReview = trackReviewService.findById(reviewId);
+        return ResponseEntity.ok(updatedReview);
     }
 
     /* ── ③ 삭제 ────────────────────────────── */
     @DeleteMapping("/{id}/review/{reviewId}")
-    @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#reviewId, authentication)")
-    public void delete(@PathVariable("id") String trackId,
+    @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, authentication)")
+    @ResponseBody
+    public ResponseEntity<Void> delete(@PathVariable("id") String trackId,
                        @PathVariable("reviewId") Long reviewId) {
         trackReviewService.delete(reviewId);
+        return ResponseEntity.noContent().build();  // 204 No Content 반환
     }
 
     // /* ── ④ 좋아요 (선택) ───────────────────── */

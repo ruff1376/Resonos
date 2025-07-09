@@ -37,6 +37,7 @@ public class TrackReviewServiceImpl implements TrackReviewService {
         mapper.insert(review);
         return review;
     }
+    
 
     @Override
     public List<TrackReview> getReviewsForTrack(String trackId) {
@@ -89,11 +90,16 @@ public class TrackReviewServiceImpl implements TrackReviewService {
     }
 
     @Transactional
-    public TrackReview update(Long id, ReviewForm f){
-        mapper.update(id, f.getRating(), f.getContent());
-        return mapper.findById(id);
+    public boolean update(Long id, ReviewForm form){
+        return mapper.update(id, form.getRating(), form.getContent());
     }
 
     @Transactional
     public void delete(Long id){ mapper.delete(id); }
+
+
+    @Override
+    public TrackReview findById(Long id) {
+        return mapper.findById(id);
+    }
 }

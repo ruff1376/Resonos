@@ -283,6 +283,16 @@ BEGIN
         `track_id` VARCHAR(200) NOT NULL
     );
 
+    CREATE TABLE IF NOT EXISTS `track_review_like` (
+        `id`          BIGINT AUTO_INCREMENT PRIMARY KEY,
+        `review_id`   BIGINT NOT NULL,
+        `user_id`     BIGINT NOT NULL,
+        `created_at`  DATETIME DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE (review_id, user_id),
+        FOREIGN KEY (review_id) REFERENCES track_review(id) ON DELETE CASCADE,
+        FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+    );
+
     CREATE TABLE IF NOT EXISTS `user_role` (
         `id` BIGINT NOT NULL,
         `assigned_at` DATETIME NOT NULL,
