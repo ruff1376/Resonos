@@ -1,13 +1,24 @@
 package com.cosmus.resonos.controller;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.cosmus.resonos.domain.Album;
+import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.LikedAlbum;
+import com.cosmus.resonos.domain.Track;
+import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.LikedAlbumService;
+import com.cosmus.resonos.service.TrackService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,18 +29,37 @@ public class LikedAlbumController {
 
     @Autowired
     private LikedAlbumService likedAlbumService;
+    @Autowired
+    private AlbumService albumService;
+    @Autowired
+    private TrackService trackService;
 
     /**
      * 좋아요 한 앨범/트랙 페이지 요청
      * @param model
      * @param request
      * @return
+     * @throws Exception
      */
-    @GetMapping("")
+    @GetMapping({"", "/user/{id}"})
     // TODO: @AuthenticationPrincipal 로 출력할 리스트 나누기
-    public String likedMusic(Model model) {
+    public String likedMusic(
+        @AuthenticationPrincipal CustomUser loginUser,
+        @PathVariable(value = "id", required = false) Long id,
+        Model model
+    ) throws Exception {
+        if(id == null && loginUser == null) return "redirect:/login";
 
-        model.addAttribute("lastPath", "liked-music");
+        // PathVariable 검사
+        Long targetId = (id != null) ? id : loginUser.getUser().getId();
+        // 자기 자신인지
+        boolean isOwner = loginUser != null && loginUser.getId().equals(targetId);
+        List<Album> likedAlbumList = albumService.likedAlbums(targetId);
+        List<Track> likedTrackList = trackService.likedTracks(targetId);
+
+        model.addAttribute("isOwner", isOwner);
+        model.addAttribute("likedAlbumList", likedAlbumList);
+        model.addAttribute("likedTrackList", likedTrackList);
         return "user/liked_music";
     }
 

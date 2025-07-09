@@ -29,8 +29,10 @@ import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.PlaylistDTO;
 import com.cosmus.resonos.domain.PlaylistDetail;
+import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.Track;
 import com.cosmus.resonos.service.PlaylistService;
+import com.cosmus.resonos.service.UserService;
 import com.cosmus.resonos.util.UploadImage;
 
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +46,8 @@ public class PlaylistController {
 
     @Autowired
     private PlaylistService playlistService;
+    @Autowired
+    private UserService userService;
 
     /**
      * 플레이리스트 페이지 요청
@@ -131,14 +135,18 @@ public class PlaylistController {
         @RequestParam(value = "success", required = false) String success,
         @AuthenticationPrincipal CustomUser loginUser
     ) throws Exception {
-
         // 플레이리스트 + 트랙 정보
         PlaylistDTO playlist = playlistService.trackOfPlaylist(id);
         // 플레이리스트 소유자
         Long ownerId =  playlist.getUserId();;
         // 자기 자신인지
         boolean isOwner = loginUser != null && loginUser.getId().equals(ownerId);
+        // 비공개 + 주인X 조회 불가능
+        if(!playlist.getIsPublic() && !isOwner) return "redirect:/playlists";
+        // 플레이리스트 주인 정보
+        PublicUserDto owner = userService.publicSelectById(ownerId);
 
+        model.addAttribute("owner", owner);
         model.addAttribute("playlist", playlist);
         model.addAttribute("isOwner", isOwner);
         model.addAttribute("success", success);

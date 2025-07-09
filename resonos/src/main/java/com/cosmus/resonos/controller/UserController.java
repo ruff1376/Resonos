@@ -14,11 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.PublicUserDto;
+import com.cosmus.resonos.domain.Track;
 import com.cosmus.resonos.domain.Users;
+import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.PlaylistService;
+import com.cosmus.resonos.service.TrackService;
 import com.cosmus.resonos.service.UserFollowService;
 import com.cosmus.resonos.service.UserService;
 import com.cosmus.resonos.util.UploadImage;
@@ -35,6 +39,10 @@ public class UserController {
   @Autowired UserService userService;
 
   @Autowired UserFollowService userFollowService;
+
+  @Autowired AlbumService albumService;
+
+  @Autowired TrackService trackSErvice;
 
   /**
    * 로그인 페이지 요청
@@ -65,6 +73,13 @@ public class UserController {
     int followerCount = userFollowService.myFollowerCount(user.getId());
     // 팔로우 수
     int followCount = userFollowService.myFollowCount(user.getId());
+    // 좋아요 한 앨범
+    List<Album> albumList = albumService.likedAlbumsTop3(user.getId());
+    // 좋아요 한 트랙
+    List<Track> trackList = trackSErvice.likedTracksTop3(user.getId());
+
+    model.addAttribute("trackList", trackList);
+    model.addAttribute("albumList", albumList);
     model.addAttribute("loginUser", loginUser);
     model.addAttribute("playlists", playlists);
     model.addAttribute("user", user);
@@ -97,14 +112,24 @@ public class UserController {
     int followCount = userFollowService.myFollowCount(id);
     // 플레이 리스트
     List<Playlist> playlists = playlistService.usersPlaylist3(id);
+    // 좋아요 한 앨범
+    List<Album> albumList = albumService.likedAlbumsTop3(id);
+    // 좋아요 한 트랙
+    List<Track> trackList = trackSErvice.likedTracksTop3(id);
+
     // 자기 자신인지
     boolean isOwner = loginUser != null && loginUser.getId().equals(id);
-
     if(isOwner) {
       Users me = userService.selectById(id);
       model.addAttribute("user", me);
-    } else model.addAttribute("user", user);
+    } else {
+      // 자기 자신이 아니면 공개 플레이리스트만
+      playlists = playlistService.publicUsersPlaylist3(id);
+      model.addAttribute("user", user);
+    }
 
+    model.addAttribute("trackList", trackList);
+    model.addAttribute("albumList", albumList);
     model.addAttribute("followerCount", followerCount);
     model.addAttribute("followCount", followCount);
     model.addAttribute("playlists", playlists);

@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/albums")
 public class AlbumController {
-    
+
     // @Autowired
     // private AlbumService albumService;
 
@@ -31,7 +31,7 @@ public class AlbumController {
     private AlbumService albumService;
     @Autowired
     private ArtistService artistService;
-    
+
     //앨범
     @GetMapping
     public String albumInfo(@RequestParam("id") String id, Model model) throws Exception {
@@ -40,7 +40,7 @@ public class AlbumController {
         List<Track> top5List = trackService.findTop5TracksByAlbumId(id);
         List<Track> tracks = trackService.findTracksByAlbumId(id);
         Artist artist = artistService.findArtistByAlbumId(id);
-        
+
     if (album == null) {
         return "redirect:/artists?error=notfound";
     }
@@ -51,7 +51,7 @@ public class AlbumController {
     model.addAttribute("artist", artist);
     return "review/album";
     }
-    
+
 
     // // 앨범 목록 화면
     // @GetMapping

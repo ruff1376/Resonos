@@ -19,9 +19,7 @@
           <th:block th:text="${user.nickname}"></th:block>
           <span class="badge">JAZZ LOVER</span>
         </h2>
-        <th:block th:if="${user.bio != null}">
-          <p id="bio" th:text="${user.bio}">음악과 우주, 그리고 커뮤니티를 사랑하는 평론가입니다.</p>
-        </th:block>
+        <p id="bio" th:text="${user.bio}">자기소개</p>
         <th:block th:if="${isOwner}">
           <div class="profile-actions">
             <a th:href="@{/users/edit}" class="mybtn-gold">프로필 편집</a>
@@ -39,9 +37,9 @@
     </section>
     <div class="my-middle">
       <!-- 플레이리스트 -->
-      <a th:href="@{/playlists}">
+      <a th:href="@{/playlists/user/{id}(id = ${user.id})}">
         <div class="mypage-card playlist">
-          <h3>내 플레이리스트</h3>
+          <h3 th:text="${isOwner ? '내 플레이리스트' : '플레이리스트'}">내 플레이리스트</h3>
           <th:block th:if="${#lists.isEmpty(playlists)}">
             <div class="empty-text">
               <p>플레이리스트가 없습니다.</p>
@@ -70,49 +68,47 @@
     </div>
     <section class="mypage-grid">
       <!-- 좋아요 한 앨범 -->
-      <a th:href="@{/liked-albums}">
+      <a th:href="@{/liked-albums/user/{id}(id = ${user.id})}">
         <div class="mypage-card album">
-          <h3>좋아요 표시한 앨범<p>></p></h3>
+          <h3>좋아요 표시한 앨범</h3>
           <ul>
-            <li>
-              <img width="50px" height="50px" src="https://i.scdn.co/image/ab67616d0000b27340735818c3f8f04ba30e47c2" alt="커버이미지">
-              <p>좋아요 표시한 앨범</p>
-            </li>
-            <li>
-              <img width="50px" height="50px" src="https://i.scdn.co/image/ab67616d0000b273df1580ff05c0fb1b0cd23e1a">
-              <p>좋아요 표시한 앨범</p>
-            </li>
-            <li>
-              <img width="50px" height="50px" src="https://i.scdn.co/image/ab67616d0000b27373f85e8b4338d2aa07f59f3a">
-              <p>좋아요 표시한 앨범</p>
-            </li>
+            <th:block th:if="${albumList.isEmpty() or albumList == null}">
+              <div class="empty-text">
+                <p>좋아요 표시한 앨범이 없습니다.</p>
+              </div>
+            </th:block>
+            <th:block th:each="album : ${albumList}">
+              <li>
+                <img width="50px" height="50px" th:src="${album.coverImage}" alt="커버이미지">
+                <p th:text="${album.title}">좋아요 표시한 앨범</p>
+              </li>
+            </th:block>
           </ul>
         </div>
       </a>
       <!-- 좋아요 한 트랙 -->
-      <a th:href="@{/liked-albums}">
+      <a th:href="@{/liked-albums/user/{id}(id = ${user.id})}">
         <div class="mypage-card track">
-          <h3>좋아요 표시한 트랙<p>></p></h3>
+          <h3>좋아요 표시한 트랙</h3>
           <ul>
-            <li>
-              <img width="50px" height="50px" src="https://i.scdn.co/image/ab67616d0000b27340735818c3f8f04ba30e47c2" alt="커버이미지">
-              <p>좋아요 표시한 트랙</p>
-            </li>
-            <li>
-              <img width="50px" height="50px" src="https://i.scdn.co/image/ab67616d0000b273df1580ff05c0fb1b0cd23e1a">
-              <p>좋아요 표시한 트랙</p>
-            </li>
-            <li>
-              <img width="50px" height="50px" src="https://i.scdn.co/image/ab67616d0000b27373f85e8b4338d2aa07f59f3a">
-              <p>좋아요 표시한 트랙</p>
-            </li>
+            <th:block th:if="${trackList.isEmpty() or trackList == null}">
+              <div class="empty-text">
+                <p>좋아요 표시한 트랙 없습니다.</p>
+              </div>
+            </th:block>
+            <th:block th:each="track : ${trackList}">
+              <li>
+                <img width="50px" height="50px" th:src="${track.coverImage}" alt="커버이미지">
+                <p th:text="${track.title}">좋아요 표시한 트랙</p>
+              </li>
+            </th:block>
           </ul>
         </div>
       </a>
       <!-- 팔로우 한 아티스트 -->
       <a href="/artist-follows">
         <div class="mypage-card artist">
-          <h3>팔로우 아티스트<p>></p></h3>
+          <h3>팔로우 아티스트</h3>
           <ul>
             <li>
               <img width="50px" height="50px" src="https://i.scdn.co/image/ab6761610000e5eb667b1c37aac06716daa5fe92" alt="커버이미지">
@@ -155,7 +151,7 @@
       <th:block th:if="${isOwner}">
       <a th:href="@{/users/badge}">
         <div class="mypage-card badge-area">
-          <h3>배지<p>></p></h3>
+          <h3>배지</h3>
           <ul>
             <li>최근 획득한 배지</li>
             <li>
@@ -171,7 +167,7 @@
       <th:block th:if="${isOwner}">
       <a href="">
         <div class="mypage-card alarm">
-          <h3>알림 설정<p>></p></h3>
+          <h3>알림 설정</h3>
           <ul>
             <li></li>
           </ul>
@@ -182,7 +178,7 @@
       <th:block th:if="${isOwner}">
       <a href="">
         <div class="mypage-card security">
-          <h3>계정 / 보안<p>></p></h3>
+          <h3>계정 / 보안</h3>
           <ul>
             <li>이메일: <th:block th:text="${user.email}"></th:block></li>
             <li class="impor"><span>비밀번호 변경</span>&nbsp;/&nbsp;<span>탈퇴</span></li>

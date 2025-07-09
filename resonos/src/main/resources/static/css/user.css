@@ -235,7 +235,7 @@ button.social-btn:hover {
   gap: 28px;
 }
 .mypage-card {
-  min-height: 150px;
+  min-height: 233px;
   padding:  15px 13px;
   color: #fffbe6;
   background: rgba(24,28,35,0.82);
@@ -297,9 +297,11 @@ button.social-btn:hover {
   font-size: 1.4rem;
 }
 .mypage-card.activate ul {
+  height: 150px;
   margin-top: 20px;
   display: flex;
   justify-content: space-around;
+  align-items: center;
 }
 .mypage-card.activate ul li {
   width: 25%;
@@ -365,7 +367,9 @@ a:hover > .mypage-card {
 .cover-img {margin-right: 20px;}
 .like-count {display: flex; align-items: center;}
 .profile-info .badge {margin-left: 10px;}.con .title h2 {margin-bottom: 0;}
-
+.mypage-card.playlist .empty-text {height: 120px;}
+.mypage-card .empty-text {height: 140px;}
+.mypage-card img {border-radius: 10px;}
 /* 회원정보수정 */
 .profile-edit-box {
   align-items: center;
@@ -737,6 +741,22 @@ button.like {background-color: inherit; border: none;}
   pointer-events: none;
 }
 .profile-edit-label.radio {cursor: pointer;}
+.owner-info {
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.owner-info p {margin-top: 10px;}
+.owner-info img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 1.5px solid #D4B97F;
+  object-fit: cover;
+  background: #181C23;
+}
 
 
 /* 내 활동 */
@@ -919,7 +939,7 @@ button.like {background-color: inherit; border: none;}
 
 h2 + #bio {
   max-width: 350px;
-  overflow: hidden;
+  /* overflow: hidden;
   white-space: nowrap;
-  text-overflow: ellipsis;
+  text-overflow: ellipsis; */
 }

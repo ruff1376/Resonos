@@ -57,7 +57,12 @@ public interface TrackMapper {
     public List<Track> allSearchList(Map<String, Object> paramMap) throws Exception;
     // 검색 데이터 수
     public long searchCount(String keyword) throws Exception;
+
+    /* 마이페이지 */
     // 플레이리스트에 추가할 트랙 목록 검색
     public List<Track> addTrackList(@Param("keyword") String keyword) throws Exception;
-
+    // 좋아요 한 트랙 3개 조회
+    public List<Track> likedTracksTop3(@Param("id") Long id) throws Exception;
+    // 좋아요 한 트랙 전체 조회
+    public List<Track> likedTracks(@Param("id") Long id) throws Exception;
 }

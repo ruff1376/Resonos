@@ -134,5 +134,16 @@ public class AlbumServiceImpl implements AlbumService {
     public long hotCount() throws Exception {
         return albumMapper.hotCount();
     }
-    
+
+    @Override
+    public List<Album> likedAlbumsTop3(Long id) throws Exception {
+        return albumMapper.likedAlbumsTop3(id);
+    }
+
+
+    @Override
+    public List<Album> likedAlbums(Long id) throws Exception {
+        return albumMapper.likedAlbums(id);
+    }
+
 }

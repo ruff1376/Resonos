@@ -81,6 +81,21 @@
     LIMIT 3
   </select>
 
+  <!-- 마이페이지 플레이리스트 (3개) 비공개 필터링 -->
+  <select id="publicUsersPlaylist3" resultType="Playlist">
+    SELECT p.*, IFNULL(sub.like_count, 0) AS likeCount
+    FROM playlist p
+      LEFT JOIN (
+        SELECT playlist_id, COUNT(*) AS like_count
+        FROM liked_playlist
+        GROUP BY playlist_id
+      ) sub ON p.id = sub.playlist_id
+    WHERE p.user_id = #{userId}
+    AND p.is_public = TRUE
+    ORDER BY created_at DESC
+    LIMIT 3
+  </select>
+
   <!-- 마이페이지 플레이리스트 (전체) -->
   <select id="usersPlaylist" resultType="Playlist">
     SELECT p.*, IFNULL(sub.like_count, 0) AS likeCount
@@ -91,6 +106,20 @@
         GROUP BY playlist_id
       ) sub ON p.id = sub.playlist_id
     WHERE p.user_id = #{userId}
+    ORDER BY created_at DESC
+  </select>
+
+  <!-- 마이페이지 플레이리스트 (전체) 공개 필터링 -->
+  <select id="publicUsersPlaylist" resultType="Playlist">
+    SELECT p.*, IFNULL(sub.like_count, 0) AS likeCount
+    FROM playlist p
+      LEFT JOIN (
+        SELECT playlist_id, COUNT(*) AS like_count
+        FROM liked_playlist
+        GROUP BY playlist_id
+      ) sub ON p.id = sub.playlist_id
+    WHERE p.user_id = #{userId}
+    AND p.is_public = TRUE
     ORDER BY created_at DESC
   </select>
 
