@@ -142,23 +142,27 @@
         }
       })
 
-      /* Sortable */
-      const dragList = document.querySelector('.ul-list')
-      Sortable.create(dragList, {
-        animation: 200,
-        scrollContainer: dragList,
-        scroll: true,
-        scrollSensitivity: 100,
-        scrollSpeed: 20,
-        forceFallback: true,
-        onEnd: (evt) => {
-          const newOrder = [...dragList.children].map((li, index) => ({
-            trackId: li.querySelector('input[type="hidden"]').value,
-            orderNo: index + 1
-          }))
-          changeOrder(newOrder)
-        },
-      })
+      let isOwner = "[[${isOwner}]]"
+
+      if(isOwner) {
+        /* Sortable */
+        const dragList = document.querySelector('.ul-list')
+        Sortable.create(dragList, {
+          animation: 200,
+          scrollContainer: dragList,
+          scroll: true,
+          scrollSensitivity: 100,
+          scrollSpeed: 20,
+          forceFallback: true,
+          onEnd: (evt) => {
+            const newOrder = [...dragList.children].map((li, index) => ({
+              trackId: li.querySelector('input[type="hidden"]').value,
+              orderNo: index + 1
+            }))
+            changeOrder(newOrder)
+          },
+        })
+      }
 
       /* 비동기 순서 바꾸기 */
       async function changeOrder(orderData) {
@@ -183,7 +187,8 @@
 
           if (!response.ok) {
               const result = await response.text()
-              console.log(result)
+              alert(result)
+              location.href = location.pathname
               return
           }
           // 성공시
@@ -343,13 +348,15 @@
         }
       }
 
-      openBtn.addEventListener('click', (event) => {
-        modal.classList.add('action')
-        // 모달 열릴 때만 window 클릭 이벤트 등록
-        window.addEventListener('click', onWindowClick)
+      if(openBtn) {
+        openBtn.addEventListener('click', (event) => {
+          modal.classList.add('action')
+          // 모달 열릴 때만 window 클릭 이벤트 등록
+          window.addEventListener('click', onWindowClick)
 
-        event.stopPropagation()
-      })
+          event.stopPropagation()
+        })
+      }
 
       /* 트랙리스트 선택 */
       const ulList = document.querySelector('.ul-list.modall')
@@ -424,11 +431,11 @@
       const ul = document.querySelector('.ul-list')
       ul.addEventListener('click', (event) => {
         const button = event.target.closest('button.btn-danger')
+        const li = event.target.closest('.list-item')
         if (!button || !ul.contains(button)) return
-
+        if(li) alert("실행")
         deleteTracks(event)
       })
-
 
     </script>
   </th:block>

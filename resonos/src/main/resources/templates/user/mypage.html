@@ -16,7 +16,10 @@
       <div class="d-flex flex-column justify-content-center row-gap-4 me-5">
         <img th:src="${user.profileImage}" alt="프로필 이미지" class="profile-img">
         <th:block th:if="${!isOwner}">
-          <button id="btn-follow" class="btn btn-outline-gold not-follow">팔로우</button>
+          <button id="btn-follow" class="btn-gold"
+          th:text="${alreadyFollow ? '언팔로우' : '팔로우'}"
+          th:classappend="${alreadyFollow ? 'already' : ''}"
+          >팔로우</button>
         </th:block>
       </div>
       <div class="profile-info">
@@ -35,8 +38,8 @@
         </th:block>
       </div>
       <div class="profile-meta">
-        <div><a th:href="@{/users/{id}/follow-user(id = ${user.id})}"><b>팔로워</b><br><th:block th:text="${followerCount}">수</th:block></a></div>
-        <div><a th:href="@{/users/{id}/follow-user(id = ${user.id})}"><b>팔로우</b><br><th:block th:text="${followCount}">수</th:block></a></div>
+        <div><a th:href="@{/users/{id}/follow-user(id = ${user.id})}"><b>팔로워</b><br><span id="follower-count" th:text="${followerCount}">수</span></a></div>
+        <div><a th:href="@{/users/{id}/follow-user(id = ${user.id})}"><b>팔로우</b><br><span id="follow-count" th:text="${followCount}">수</span></a></div>
         <div><a><b>뱃지</b><br>3</a></div>
       </div>
     </section>
@@ -266,19 +269,18 @@
       /* 팔로우 / 언팔로우 */
       async function follow(event) {
 
-        let url = ''
-        let data = {}
-        const currentStyle = event.target.classList.contains('not-follow')
+        let method = ''
+        const currentStyle = event.target.classList.contains('already')
         let userId = [[${user.id}]]
-        if(currentStyle) url = `/user-follows/{${userId}}`
-        else url = ''
-
+        let url = `/user-follows/${userId}`
+        if(currentStyle) method = 'DELETE'
+        else method = 'POST'
         try {
             /* Security 제공 CSRF */
             const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
             const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
             const response = await fetch(url, {
-                method: "POST",
+                method: method,
                 headers: {
                     [header] : token,
                     "Content-Type": "application/json"
@@ -287,16 +289,24 @@
 
           if (!response.ok) {
               const result = await response.text()
-              console.log(result)
+              alert(result)
+              if(result === '로그인이 필요한 서비스입니다.')
+                location.href = '/login'
               return
           }
           // 성공시
           const text = await response.text()
           alert(text)
-        } catch (error) {
-            console.error("요청 실패:", error)
-            followBtn.classList.remove('not-follow')
+          followBtn.classList.toggle('already')
+          if(event.target.classList.contains('already')) {
             followBtn.textContent = '언팔로우'
+            document.getElementById('follower-count').innerText = (Number)(document.getElementById('follower-count').innerText) + 1
+          } else {
+            followBtn.textContent = '팔로우'
+            document.getElementById('follower-count').innerText = (Number)(document.getElementById('follower-count').innerText) - 1
+          }
+        } catch (error) {
+            console.log("서버 에러.")
           }
       }
     </script>

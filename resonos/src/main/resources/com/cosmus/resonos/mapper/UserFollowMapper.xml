@@ -53,8 +53,18 @@
 
   <!-- 마이페이지: 팔로우 취소 -->
   <delete id="delete">
-    DELETE FROM user_follow WHERE id = #{id}
+    DELETE FROM user_follow
+    WHERE follower_id = #{loginUserId}
+    AND following_id = #{id}
   </delete>
+
+  <!-- 팔로우 되어 있는지 체크 -->
+  <select id="checkAlreadyFollow" resultType="int">
+    SELECT COUNT(*)
+    FROM user_follow
+    WHERE follower_id = #{loginUserId}
+    AND following_id = #{id}
+  </select>
 
   <update id="update">
     UPDATE user_follow

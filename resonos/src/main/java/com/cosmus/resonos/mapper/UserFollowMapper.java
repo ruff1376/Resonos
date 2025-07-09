@@ -19,7 +19,7 @@ public interface UserFollowMapper {
     // 수정
     public int update(UserFollow userFollow) throws Exception;
     // 삭제
-    public int delete(Long id) throws Exception;
+    public int delete(@Param("loginUserId") Long loginUserId, @Param("id") Long id) throws Exception;
     // 팔로워 수
     public  int countFollowers(Long userId);
     // 팔로워 수 조회
@@ -30,4 +30,6 @@ public interface UserFollowMapper {
     public List<Users> myFollower(@Param("id") Long id) throws Exception;
     // 팔로우 조회
     public List<Users> myFollow(@Param("id") Long id) throws Exception;
+    // 이미 팔로우 체크
+    public int checkAlreadyFollow(@Param("loginUserId") Long loginUserId, @Param("id") Long id) throws Exception;
 }
