@@ -20,8 +20,8 @@ CALL create_tables(); -- 밑에 정의된 프로시저 호출
 
 
 -- 모든 테이블을 생성하고 제약 조건을 설정하는 프로시저
-CREATE PROCEDURE create_tables()
 DELIMITER //
+CREATE PROCEDURE create_tables()
 BEGIN
     -- 외래 키 제약 조건 일시 비활성화
     SET FOREIGN_KEY_CHECKS = 0;
@@ -123,7 +123,7 @@ BEGIN
         `email` VARCHAR(100) NOT NULL,
         `password` VARCHAR(100) NOT NULL,
         `nickname` VARCHAR(100) NOT NULL,
-        `profile_image` VARCHAR(200) '/img/resonosLogo.png',
+        `profile_image` VARCHAR(200) DEFAULT '/img/resonosLogo.png',
         `bio` TEXT NULL,
         `is_pro` BOOLEAN NOT NULL DEFAULT FALSE,
         `enabled` BOOLEAN NOT NULL DEFAULT TRUE,
@@ -201,7 +201,7 @@ BEGIN
         `user_id` BIGINT NOT NULL,
         `title` VARCHAR(200) NOT NULL,
         `description` TEXT NULL,
-        `thumbnail_url` VARCHAR(200) '/img/resonosLogo.png',
+        `thumbnail_url` VARCHAR(200) DEFAULT '/img/resonosLogo.png',
         `is_public` BOOLEAN NOT NULL,
         `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
@@ -255,7 +255,7 @@ BEGIN
         `playlist_id` BIGINT NOT NULL,
         `order_no` INT NOT NULL
     );
-    ADD CONSTRAINT uk_playlist_track UNIQUE (playlist_id, track_id);
+    ALTER TABLE playlist_detail ADD CONSTRAINT uk_playlist_track UNIQUE (playlist_id, track_id);
 
     CREATE TABLE IF NOT EXISTS `policy` (
         `id` BIGINT NOT NULL,
@@ -298,7 +298,7 @@ BEGIN
         `description` TEXT NULL,
         `icon_url` VARCHAR(200) NULL,
         `criteria` VARCHAR(200) NULL,
-        `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP
+        `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,     PRIMARY KEY (`id`)
     );
 
     CREATE TABLE IF NOT EXISTS `notification` (
@@ -357,7 +357,7 @@ BEGIN
         badge_id BIGINT NOT NULL,
         PRIMARY KEY (id),
         UNIQUE KEY uk_user_badge (user_id, badge_id),
-        FOREIGN KEY (user_id) REFERENCES users(id),
+        FOREIGN KEY (user_id) REFERENCES user(id),
         FOREIGN KEY (badge_id) REFERENCES badge(id)
     );
     
@@ -433,13 +433,11 @@ BEGIN
     ALTER TABLE `board_post` ADD CONSTRAINT `PK_BOARD_POST` PRIMARY KEY (`id`);
     ALTER TABLE `chart_entry` ADD CONSTRAINT `PK_CHART_ENTRY` PRIMARY KEY (`id`);
     ALTER TABLE `user_role` ADD CONSTRAINT `PK_USER_ROLE` PRIMARY KEY (`id`);
-    ALTER TABLE `badge` ADD CONSTRAINT `PK_BADGE` PRIMARY KEY (`id`);
     ALTER TABLE `notification` ADD CONSTRAINT `PK_NOTIFICATION` PRIMARY KEY (`id`);
     ALTER TABLE `setting` ADD CONSTRAINT `PK_SETTING` PRIMARY KEY (`id`);
     ALTER TABLE `track_mood_vote` ADD CONSTRAINT `PK_TRACK_MOOD_VOTE` PRIMARY KEY (`id`);
     ALTER TABLE `track_review` ADD CONSTRAINT `PK_TRACK_REVIEW` PRIMARY KEY (`id`);
     ALTER TABLE `user_activity_log` ADD CONSTRAINT `PK_USER_ACTIVITY_LOG` PRIMARY KEY (`id`);
-    ALTER TABLE `user_badge` ADD CONSTRAINT `PK_USER_BADGE` PRIMARY KEY (`id`);
     ALTER TABLE `user_follow` ADD CONSTRAINT `PK_USER_FOLLOW` PRIMARY KEY (`id`);
     ALTER TABLE `album_review` ADD CONSTRAINT `PK_ALBUM_REVIEW` PRIMARY KEY (`id`);
     ALTER TABLE `liked_album` ADD CONSTRAINT `PK_LIKED_ALBUM` PRIMARY KEY (`id`);
