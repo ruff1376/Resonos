@@ -170,8 +170,21 @@ public class TrackServiceImpl implements TrackService {
         return trackMapper.searchCount(keyword);
     }
 
-    
+    @Override
+    public List<Track> mainHotList() throws Exception {
+        return trackMapper.mainHotList();
+    }
 
-    
+    @Override
+    public List<Track> hotList(Pagination pagination) throws Exception {
+        long total = trackMapper.hotCount();
+        pagination.setTotal(total);
+        return trackMapper.hotList(pagination);
+    }
+
+    @Override
+    public long hotCount() throws Exception {
+        return trackMapper.hotCount();
+    }
 
 }

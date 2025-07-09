@@ -44,22 +44,28 @@
 
   <select id="mainHotList" resultMap="Album">
     SELECT a.*,
-          (COUNT(DISTINCT ar.id) * 3 + COUNT(DISTINCT la.id)) AS popularity_score
+          (COUNT(DISTINCT arw.id) * 3 + COUNT(DISTINCT la.id)) AS popularity_score,
+          art.name AS artist_name
     FROM album a
-    LEFT JOIN album_review ar ON a.id = ar.album_id
+    LEFT JOIN artist art ON a.artist_id = art.id
+    LEFT JOIN album_review arw ON a.id = arw.album_id
     LEFT JOIN liked_album la ON a.id = la.album_id
     GROUP BY a.id
+    HAVING popularity_score >= 25
     ORDER BY popularity_score DESC
     LIMIT 12
   </select>
 
   <select id="hotList" resultMap="Album">
     SELECT a.*,
-          (COUNT(DISTINCT ar.id) * 3 + COUNT(DISTINCT la.id)) AS popularity_score
+          (COUNT(DISTINCT arw.id) * 3 + COUNT(DISTINCT la.id)) AS popularity_score,
+          art.name AS artist_name
     FROM album a
-    LEFT JOIN album_review ar ON a.id = ar.album_id
+    LEFT JOIN artist art ON a.artist_id = art.id
+    LEFT JOIN album_review arw ON a.id = arw.album_id
     LEFT JOIN liked_album la ON a.id = la.album_id
     GROUP BY a.id
+    HAVING popularity_score >= 25
     ORDER BY popularity_score DESC
     LIMIT #{index}, #{size}
   </select>
@@ -76,10 +82,16 @@
   </select>
 
   <select id="hotCount" resultType="long">
-    SELECT COUNT(DISTINCT a.id)
-    FROM album a
-    LEFT JOIN album_review ar ON a.id = ar.album_id
-    LEFT JOIN liked_album la ON a.id = la.album_id
+    SELECT COUNT(*) 
+    FROM (
+      SELECT a.id,
+            (COUNT(DISTINCT arw.id) * 3 + COUNT(DISTINCT la.id)) AS popularity_score
+      FROM album a
+      LEFT JOIN album_review arw ON a.id = arw.album_id
+      LEFT JOIN liked_album la ON a.id = la.album_id
+      GROUP BY a.id
+      HAVING popularity_score >= 25
+    ) AS filtered
   </select>
 
   <select id="select" resultMap="Album">
