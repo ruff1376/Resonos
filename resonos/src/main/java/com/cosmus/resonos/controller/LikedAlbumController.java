@@ -34,35 +34,6 @@ public class LikedAlbumController {
     @Autowired
     private TrackService trackService;
 
-    /**
-     * 좋아요 한 앨범/트랙 페이지 요청
-     * @param model
-     * @param request
-     * @return
-     * @throws Exception
-     */
-    @GetMapping({"", "/user/{id}"})
-    // TODO: @AuthenticationPrincipal 로 출력할 리스트 나누기
-    public String likedMusic(
-        @AuthenticationPrincipal CustomUser loginUser,
-        @PathVariable(value = "id", required = false) Long id,
-        Model model
-    ) throws Exception {
-        if(id == null && loginUser == null) return "redirect:/login";
-
-        // PathVariable 검사
-        Long targetId = (id != null) ? id : loginUser.getUser().getId();
-        // 자기 자신인지
-        boolean isOwner = loginUser != null && loginUser.getId().equals(targetId);
-        List<Album> likedAlbumList = albumService.likedAlbums(targetId);
-        List<Track> likedTrackList = trackService.likedTracks(targetId);
-
-        model.addAttribute("isOwner", isOwner);
-        model.addAttribute("likedAlbumList", likedAlbumList);
-        model.addAttribute("likedTrackList", likedTrackList);
-        return "user/liked_music";
-    }
-
     // 상세
     @GetMapping("/{id}")
     public String detail(@PathVariable Long id, Model model) throws Exception {

@@ -18,7 +18,7 @@
     </th:block>
     <!-- 앨범 -->
     <section class="info-wrapper" th:classappend="${ !isOwner ? 'go-center' : ''}">
-      <div class="info-section">
+      <div class="info-section album">
         <div class="title">
           <div>
             <h2 class="text-start">좋아요 한 앨범</h2>
@@ -47,7 +47,7 @@
     </section>
     <!-- 트랙 -->
     <section class="info-wrapper" th:classappend="${ !isOwner ? 'go-center' : ''}">
-      <div class="info-section">
+      <div class="info-section track">
         <div class="title">
           <div>
             <h2 class="text-start">좋아요 한 트랙</h2>
@@ -75,5 +75,26 @@
       </div>
     </section>
   </main>
+  <th:block layout:fragment="pageScript">
+    <script>
+      const albumItems = document.querySelectorAll(".info-section.album .list-item")
+      albumItems.forEach(e => {
+        e.addEventListener("click", function(event) {
+          if (event.target.tagName.toLowerCase() === 'button') return
+          const albumId = this.querySelector('input[type="hidden"]').value
+          location.href = `/albums?id=${albumId}`
+        })
+      })
+
+      const trackItems = document.querySelectorAll(".info-section.track .list-item")
+      trackItems.forEach(e => {
+        e.addEventListener("click", function(event) {
+          if (event.target.tagName.toLowerCase() === 'button') return
+          const trackId = this.querySelector('input[type="hidden"]').value
+          location.href = `/tracks?id=${trackId}`
+        })
+      })
+    </script>
+  </th:block>
 </body>
 </html>
