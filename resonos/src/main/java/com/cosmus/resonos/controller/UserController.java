@@ -48,7 +48,6 @@ public class UserController {
 
   /**
    * 마이페이지 요청
-   * 굳이 없어도 될 것 같음.. 보류
    * @param model
    * @return
    * @throws Exception
