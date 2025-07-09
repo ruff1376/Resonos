@@ -52,4 +52,6 @@ public class TrackReview {
     private String trackId;
 
     private Reviewer reviewer;  // 연관된 Reviewer 정보 포함
+    // 좋아요누른 유저인지 확인
+    private Boolean isLikedByCurrentUser;
 }
