@@ -311,7 +311,7 @@
 
   <!-- 마이페이지: 좋아요 표시한 트랙 3개 -->
   <select id="likedTracksTop3" resultType="Track">
-    SELECT a.*, lt.created_at, a.cover_image
+    SELECT t.*, lt.created_at, a.cover_image
     FROM track t
       INNER JOIN liked_track lt ON lt.track_id = t.id
       INNER JOIN album a ON t.album_id = a.id
@@ -322,7 +322,7 @@
 
   <!-- 마이페이지: 좋아요 표시한 트랙 전체 -->
   <select id="likedTracks" resultType="Track">
-    SELECT a.*, lt.created_at, a.cover_image, art.name AS artistName
+    SELECT t.*, lt.created_at, a.cover_image, art.name AS artistName
     FROM liked_track lt
       INNER JOIN track t ON lt.track_id = t.id
       INNER JOIN album a ON t.album_id = a.id

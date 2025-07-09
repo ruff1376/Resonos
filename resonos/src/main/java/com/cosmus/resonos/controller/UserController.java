@@ -15,12 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cosmus.resonos.domain.Album;
+import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.Track;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.AlbumService;
+import com.cosmus.resonos.service.ArtistService;
 import com.cosmus.resonos.service.PlaylistService;
 import com.cosmus.resonos.service.TrackService;
 import com.cosmus.resonos.service.UserFollowService;
@@ -44,6 +46,9 @@ public class UserController {
 
   @Autowired TrackService trackSErvice;
 
+  @Autowired ArtistService artistService;
+
+  @Autowired TrackService trackService;
   /**
    * 로그인 페이지 요청
    * @param param
@@ -77,7 +82,11 @@ public class UserController {
     List<Album> albumList = albumService.likedAlbumsTop3(user.getId());
     // 좋아요 한 트랙
     List<Track> trackList = trackSErvice.likedTracksTop3(user.getId());
+    // 팔로우 한 아티스트
+    List<Artist> artistList = artistService.followingArtistsTop3(user.getId());
 
+
+    model.addAttribute("artistList", artistList);
     model.addAttribute("trackList", trackList);
     model.addAttribute("albumList", albumList);
     model.addAttribute("loginUser", loginUser);
@@ -116,6 +125,8 @@ public class UserController {
     List<Album> albumList = albumService.likedAlbumsTop3(id);
     // 좋아요 한 트랙
     List<Track> trackList = trackSErvice.likedTracksTop3(id);
+    // 팔로우 한 아티스트
+    List<Artist> artistList = artistService.followingArtistsTop3(id);
 
     // 자기 자신인지
     boolean isOwner = loginUser != null && loginUser.getId().equals(id);
@@ -128,6 +139,7 @@ public class UserController {
       model.addAttribute("user", user);
     }
 
+    model.addAttribute("artistList", artistList);
     model.addAttribute("trackList", trackList);
     model.addAttribute("albumList", albumList);
     model.addAttribute("followerCount", followerCount);
@@ -215,5 +227,121 @@ public class UserController {
 
     model.addAttribute("lastPath", "setting-alarm");
     return "user/setting-alarm";
+  }
+
+  /**
+   * 아티스트 팔로우 페이지 요청
+   * @param model
+   * @param request
+   * @return
+   * @throws Exception
+   */
+  @GetMapping({"follow-artist", "/{id}/follow-artist"})
+  public String followArtists(
+    @AuthenticationPrincipal CustomUser loginUser,
+    @PathVariable(value = "id", required = false) Long id,
+    Model model
+  ) throws Exception {
+    if(id == null && loginUser == null) return "redirect:/login";
+
+    // PathVariable 검사
+    Long targetId = (id != null) ? id : loginUser.getUser().getId();
+    // 자기 자신인지
+    boolean isOwner = loginUser != null && loginUser.getId().equals(targetId);
+    // 팔로우한 아티스트 리스트
+    List<Artist> artistList = artistService.followingArtists(targetId);
+
+    model.addAttribute("artistList", artistList);
+    model.addAttribute("isOwner", isOwner);
+
+    model.addAttribute("lastPath", "artist-follows");
+    return "user/follow_artist";
+  }
+
+  /**
+   * 플레이리스트 페이지 요청
+   * @param model
+   * @return
+   * @throws Exception
+   */
+  @GetMapping({"playlists", "/{id}/playlists"})
+  public String playlist(
+      @AuthenticationPrincipal CustomUser loginUser,
+      @PathVariable(value = "id", required = false) Long id,
+      Model model
+  ) throws Exception {
+    if(id == null && loginUser == null) return "redirect:/login";
+
+    // PathVariable 검사
+    Long targetId = (id != null) ? id : loginUser.getUser().getId();
+    // 자기 자신인지
+    boolean isOwner = loginUser != null && loginUser.getId().equals(targetId);
+
+    List<Playlist> myPlaylists = playlistService.usersPlaylist(targetId);
+    List<Playlist> likedPlaylists = playlistService.likedPlaylist(targetId);
+
+    model.addAttribute("isOwner", isOwner);
+    model.addAttribute("myPlaylists", myPlaylists);
+    model.addAttribute("likedPlaylists", likedPlaylists);
+    model.addAttribute("lastPath", "playlist");
+    return "user/playlist";
+  }
+
+  /**
+   * 좋아요 한 앨범/트랙 페이지 요청
+   * @param model
+   * @param request
+   * @return
+   * @throws Exception
+   */
+  @GetMapping({"liked-music", "/{id}/liked-music"})
+  public String likedMusic(
+    @AuthenticationPrincipal CustomUser loginUser,
+    @PathVariable(value = "id", required = false) Long id,
+    Model model
+  ) throws Exception {
+    if(id == null && loginUser == null) return "redirect:/login";
+
+    // PathVariable 검사
+    Long targetId = (id != null) ? id : loginUser.getUser().getId();
+    // 자기 자신인지
+    boolean isOwner = loginUser != null && loginUser.getId().equals(targetId);
+    List<Album> likedAlbumList = albumService.likedAlbums(targetId);
+    List<Track> likedTrackList = trackService.likedTracks(targetId);
+
+    model.addAttribute("isOwner", isOwner);
+    model.addAttribute("likedAlbumList", likedAlbumList);
+    model.addAttribute("likedTrackList", likedTrackList);
+    return "user/liked_music";
+  }
+
+  /**
+   * 유저 팔로우 페이지 요청
+   * @param model
+   * @param request
+   * @return
+   * @throws Exception
+   */
+  @GetMapping({"follow-user", "/{id}/follow-user"})
+  public String followUsers(
+    Model model,
+    @AuthenticationPrincipal CustomUser loginUser,
+    @PathVariable(value = "id", required = false) Long id
+  ) throws Exception {
+    if(id == null && loginUser == null) return "redirect:/login";
+
+    // PathVariable 검사
+    Long targetId = (id != null) ? id : loginUser.getUser().getId();
+    // 자기 자신인지
+    boolean isOwner = loginUser != null && loginUser.getId().equals(targetId);
+    // 팔로우, 팔로워 정보
+    List<Users> myFollower = userFollowService.myFollower(targetId);
+    List<Users> myFollow = userFollowService.myFollow(targetId);
+
+    model.addAttribute("myFollower", myFollower);
+    model.addAttribute("myFollow", myFollow);
+    model.addAttribute("lastPath", "user-follows");
+    model.addAttribute("isOwner", isOwner);
+    return "user/follow_user";
   }
 }

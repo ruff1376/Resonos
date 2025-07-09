@@ -13,34 +13,39 @@
 <body>
   <main class="con con-mypage" layout:fragment="content">
     <section class="profile-section">
-      <img th:src="${user.profileImage}" alt="프로필 이미지" class="profile-img">
+      <div class="d-flex flex-column justify-content-center row-gap-4 me-5">
+        <img th:src="${user.profileImage}" alt="프로필 이미지" class="profile-img">
+        <th:block th:if="${!isOwner}">
+          <button id="btn-follow" class="btn btn-outline-gold">팔로우</button>
+        </th:block>
+      </div>
       <div class="profile-info">
-        <h2>
-          <th:block th:text="${user.nickname}"></th:block>
+        <div class="info-top">
+          <h2 th:text="${user.nickname}">닉네임</h2>
           <span class="badge">JAZZ LOVER</span>
-        </h2>
+        </div>
         <p id="bio" th:text="${user.bio}">자기소개</p>
         <th:block th:if="${isOwner}">
           <div class="profile-actions">
             <a th:href="@{/users/edit}" class="mybtn-gold">프로필 편집</a>
-            <form th:action="@{/logout}" method="post">
-              <button class="mybtn-outline d-flex justify-content-center" type="submit">로그아웃</button>
+            <form th:action="@{/logout}" id="form-logout" method="post">
+              <button id="btn-logout" class="mybtn-outline d-flex justify-content-center" type="submit">로그아웃</button>
             </form>
           </div>
         </th:block>
       </div>
       <div class="profile-meta">
-        <div><a th:href="@{/user-follows/{id}(id = ${user.id})}"><b>팔로워</b><br><th:block th:text="${followerCount}">수</th:block></a></div>
-        <div><a th:href="@{/user-follows/{id}(id = ${user.id})}"><b>팔로우</b><br><th:block th:text="${followCount}">수</th:block></a></div>
+        <div><a th:href="@{/users/{id}/follow-user(id = ${user.id})}"><b>팔로워</b><br><th:block th:text="${followerCount}">수</th:block></a></div>
+        <div><a th:href="@{/users/{id}/follow-user(id = ${user.id})}"><b>팔로우</b><br><th:block th:text="${followCount}">수</th:block></a></div>
         <div><a><b>뱃지</b><br>3</a></div>
       </div>
     </section>
     <div class="my-middle">
       <!-- 플레이리스트 -->
-      <a th:href="@{/playlists/user/{id}(id = ${user.id})}">
+      <a th:href="@{/users/{id}/playlists(id = ${user.id})}">
         <div class="mypage-card playlist">
           <h3 th:text="${isOwner ? '내 플레이리스트' : '플레이리스트'}">내 플레이리스트</h3>
-          <th:block th:if="${#lists.isEmpty(playlists)}">
+          <th:block th:if="${playlists == null or #lists.isEmpty(playlists)}">
             <div class="empty-text">
               <p>플레이리스트가 없습니다.</p>
               <p>만들러 가기 ➡️</p>
@@ -68,11 +73,11 @@
     </div>
     <section class="mypage-grid">
       <!-- 좋아요 한 앨범 -->
-      <a th:href="@{/liked-albums/user/{id}(id = ${user.id})}">
+      <a th:href="@{/users/{id}/liked-music(id = ${user.id})}">
         <div class="mypage-card album">
           <h3>좋아요 표시한 앨범</h3>
           <ul>
-            <th:block th:if="${albumList.isEmpty() or albumList == null}">
+            <th:block th:if="${albumList == null or albumList.isEmpty()}">
               <div class="empty-text">
                 <p>좋아요 표시한 앨범이 없습니다.</p>
               </div>
@@ -87,11 +92,11 @@
         </div>
       </a>
       <!-- 좋아요 한 트랙 -->
-      <a th:href="@{/liked-albums/user/{id}(id = ${user.id})}">
+      <a th:href="@{/users/{id}/liked-music(id = ${user.id})}">
         <div class="mypage-card track">
           <h3>좋아요 표시한 트랙</h3>
           <ul>
-            <th:block th:if="${trackList.isEmpty() or trackList == null}">
+            <th:block th:if="${trackList == null or trackList.isEmpty()}">
               <div class="empty-text">
                 <p>좋아요 표시한 트랙 없습니다.</p>
               </div>
@@ -106,22 +111,21 @@
         </div>
       </a>
       <!-- 팔로우 한 아티스트 -->
-      <a href="/artist-follows">
+      <a th:href="@{/users/{id}/follow-artist(id = ${user.id})}">
         <div class="mypage-card artist">
           <h3>팔로우 아티스트</h3>
           <ul>
-            <li>
-              <img width="50px" height="50px" src="https://i.scdn.co/image/ab6761610000e5eb667b1c37aac06716daa5fe92" alt="커버이미지">
-              <p>팔로우 한 아티스트</p>
-            </li>
-            <li>
-              <img width="50px" height="50px" src="https://i.scdn.co/image/ab6761610000e5eb538dad5b42d963e338726c26">
-              <p>팔로우 한 아티스트</p>
-            </li>
-            <li>
-              <img width="50px" height="50px" src="https://i.scdn.co/image/ab6761610000e5ebd642648235ebf3460d2d1f6a">
-              <p>팔로우 한 아티스트</p>
-            </li>
+            <th:block th:if="${artistList == null or artistList.isEmpty()}">
+              <div class="empty-text">
+                <p>팔로우 한 아티스트가 없습니다.</p>
+              </div>
+            </th:block>
+            <th:block th:each="artist : ${artistList}">
+              <li>
+                <img width="50px" height="50px" th:src="${artist.profileImage}" alt="커버이미지">
+                <p th:text="${artist.name}">팔로우 한 아티스트</p>
+              </li>
+            </th:block>
           </ul>
         </div>
       </a>
@@ -241,6 +245,13 @@
             }
           }
         });
+      })
+
+      document.getElementById('btn-logout').addEventListener('click', (e) => {
+        e.preventDefault();
+        const check = confirm("로그아웃 하시겠습니까?")
+        if(!check) return
+        document.getElementById('form-logout').submit()
       })
     </script>
   </th:block>

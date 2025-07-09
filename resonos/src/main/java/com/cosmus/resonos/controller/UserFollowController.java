@@ -35,36 +35,6 @@ public class UserFollowController {
     @Autowired
     private BadgeGrantService badgeGrantService;
 
-    /**
-     * 유저 팔로우 페이지 요청
-     * @param model
-     * @param request
-     * @return
-     * @throws Exception
-     */
-    @GetMapping({"", "/{id}"})
-    public String followUsers(
-        Model model,
-        @AuthenticationPrincipal CustomUser loginUser,
-        @PathVariable(value = "id", required = false) Long id
-    ) throws Exception {
-        if(id == null && loginUser == null) return "redirect:/login";
-
-        // PathVariable 검사
-        Long targetId = (id != null) ? id : loginUser.getUser().getId();
-        // 자기 자신인지
-        boolean isOwner = loginUser != null && loginUser.getId().equals(targetId);
-        // 팔로우, 팔로워 정보
-        List<Users> myFollower = userFollowService.myFollower(targetId);
-        List<Users> myFollow = userFollowService.myFollow(targetId);
-
-        model.addAttribute("myFollower", myFollower);
-        model.addAttribute("myFollow", myFollow);
-        model.addAttribute("lastPath", "user-follows");
-        model.addAttribute("isOwner", isOwner);
-        return "user/follow_user";
-    }
-
     // 등록 폼
     @GetMapping("/new")
     public String create(Model model) {
