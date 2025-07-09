@@ -50,35 +50,6 @@ public class PlaylistController {
     private UserService userService;
 
     /**
-     * 플레이리스트 페이지 요청
-     * @param model
-     * @return
-     * @throws Exception
-     */
-    @GetMapping({"", "/user/{id}"})
-    public String playlist(
-        @AuthenticationPrincipal CustomUser loginUser,
-        @PathVariable(value = "id", required = false) Long id,
-        Model model
-    ) throws Exception {
-        if(id == null && loginUser == null) return "redirect:/login";
-
-        // PathVariable 검사
-        Long targetId = (id != null) ? id : loginUser.getUser().getId();
-        // 자기 자신인지
-        boolean isOwner = loginUser != null && loginUser.getId().equals(targetId);
-
-        List<Playlist> myPlaylists = playlistService.usersPlaylist(targetId);
-        List<Playlist> likedPlaylists = playlistService.likedPlaylist(targetId);
-
-        model.addAttribute("isOwner", isOwner);
-        model.addAttribute("myPlaylists", myPlaylists);
-        model.addAttribute("likedPlaylists", likedPlaylists);
-        model.addAttribute("lastPath", "playlist");
-        return "user/playlist";
-    }
-
-    /**
      * 플레이리스트 생성 페이지 요청
      * @param model
      * @return

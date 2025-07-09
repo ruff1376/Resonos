@@ -19,8 +19,8 @@ body {
 .album-card.secondary {
     border-color: #B1B1B1;
     min-width: 260px;
-    max-width: 380px;
-    height: 50px;
+    max-width: 500px;
+    height: 70px;
 }
 
 .album-rank {
@@ -30,6 +30,7 @@ body {
     font-weight: 400;
     width: 24px;
     text-align: center;
+    margin-left: 1rem;
 }
 
 .album-title {
@@ -40,7 +41,7 @@ body {
 }
 
 .album-artist {
-    font-size: 12px;
+    font-size: 14px;
     /* 크기 축소 */
     color: #B1B1B1;
 }
@@ -54,9 +55,9 @@ body {
 }
 
 .album-img {
-    width: 48px;
+    width: 75px;
     /* 크기 축소 */
-    height: 48px;
+    height: 75px;
     object-fit: cover;
     background: var(--background-color);
 }

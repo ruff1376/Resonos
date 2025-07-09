@@ -3,6 +3,8 @@ package com.cosmus.resonos.service;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.cosmus.resonos.domain.Artist;
 
 public interface ArtistService {
@@ -45,4 +47,10 @@ public interface ArtistService {
     public long count() throws Exception;
     // 앨범아이디로 아티스트객체
     public Artist findArtistByAlbumId(String id) throws Exception;
+
+    /* 마이페이지 */
+    // 팔로우 한 아티스트 3건 조회
+    public List<Artist> followingArtistsTop3(Long id) throws Exception;
+    // 팔로우 한 아티스트 전체 조회
+    public List<Artist> followingArtists(Long id) throws Exception;
 }
