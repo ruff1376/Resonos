@@ -64,4 +64,25 @@
         GROUP BY review_id
     </select>
 
+    <!-- 신고는 TrackReivew 의 싫어요에 매핑, 조회할때 뷰로 같이가져옴 -->
+    <insert id="insertReviewReport">
+        INSERT INTO review_report (review_id, user_id, review_type)
+        VALUES (#{reviewId}, #{userId}, #{reviewType})
+    </insert>
+
+    <select id="existsReport" resultType="boolean">
+        SELECT EXISTS(
+            SELECT 1 FROM review_report
+            WHERE review_id = #{reviewId}
+            AND user_id = #{userId}
+            AND review_type = #{reviewType}
+        )
+    </select>
+
+    <select id="countReports" resultType="int">
+        SELECT COUNT(*) FROM review_report
+        WHERE review_id = #{reviewId}
+        AND review_type = #{reviewType}
+    </select>
+
 </mapper>

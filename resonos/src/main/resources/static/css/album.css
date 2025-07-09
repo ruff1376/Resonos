@@ -163,6 +163,10 @@ img {
     gap: 20px;
     padding-bottom: 10px;
 }
+.like-btn,
+.report-btn {
+    background-color: transparent;
+}
 .review-score h1 {
     font-size: 3.4rem !important;
     padding-top: 10px;

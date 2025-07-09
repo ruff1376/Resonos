@@ -132,10 +132,15 @@ public class TrackController {
     /* ── ① 등록 ────────────────────────────── */
     @PostMapping
     @ResponseBody
-    public TrackReview create(@RequestParam("id") String trackId,
+    public ResponseEntity<?> create(@RequestParam("id") String trackId,
                               @RequestBody ReviewForm form,
                               @AuthenticationPrincipal CustomUser user) {
-        return trackReviewService.write(trackId, form, user.getUser());
+        try {
+            TrackReview review = trackReviewService.write(trackId, form, user.getUser());
+            return ResponseEntity.ok(review);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 리뷰를 작성했습니다.");
+        }
     }
 
     /* ── ② 수정 ────────────────────────────── */
@@ -165,24 +170,37 @@ public class TrackController {
 
     @PostMapping("/track-reviews/{reviewId}/like")
     @ResponseBody
-    public Map<String, Object> toggleReviewLike(@PathVariable("reviewId") Long reviewId,
+    public ResponseEntity<?> toggleReviewLike(@PathVariable("reviewId") Long reviewId,
                                                 @AuthenticationPrincipal CustomUser user) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                                .body("로그인이 필요합니다.");
+        }
         reviewLikeService.toggleLike(reviewId, user.getId(), "TRACK");
 
         int likeCount = reviewLikeService.countLikes(reviewId, "TRACK");
         boolean liked = reviewLikeService.isLiked(reviewId, user.getId(), "TRACK");
 
-        return Map.of("likeCount", likeCount, "liked", liked);
+        return ResponseEntity.ok(Map.of("likeCount", likeCount, "liked", liked));
     }
 
     @PostMapping("/reviews/{reviewType}/{reviewId}/report")
     @ResponseBody
-    public Map<String, Object> reportReview(@PathVariable("reviewType") String reviewType,
+    public ResponseEntity<?> reportReview(@PathVariable("reviewType") String reviewType,
                                             @PathVariable("reviewId") Long reviewId,
                                             @AuthenticationPrincipal CustomUser user) {
-        reviewLikeService.reportReview(reviewId, user.getId(), reviewType);
-        int reportCount = reviewLikeService.countReports(reviewId, reviewType);
-        return Map.of("reportCount", reportCount);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("로그인이 필요합니다.");
+        }
+        try {
+            reviewLikeService.reportReview(reviewId, user.getId(), reviewType);
+            int reportCount = reviewLikeService.countReports(reviewId, reviewType);
+            return ResponseEntity.ok(Map.of("reportCount", reportCount));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                    .body("이미 신고한 리뷰입니다.");
+        }
     }
     
 }

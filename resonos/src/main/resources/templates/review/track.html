@@ -117,7 +117,7 @@
                                 <time th:text="${#temporals.format(rv.createdAt,'yyyy.MM.dd')}">날짜</time>
                                 <button class="like-btn" th:data-review-id="${rv.id}"
                                     th:data-review-type="${reviewType}" th:data-liked="${rv.isLikedByCurrentUser}"
-                                    th:text="${rv.isLikedByCurrentUser} ? '💔' : '❤️'">❤️</button>
+                                    th:text="${rv.isLikedByCurrentUser} ? '💕' : '❤️'">❤️</button>
 
                                 <span th:id="'like-count-' + ${rv.id}" th:text="${rv.likes}">0</span>
 
@@ -216,6 +216,9 @@
 
     </div>
     <th:block th:replace="~{fragments/script::album}"></th:block>
+    <script th:inline="javascript">
+        const isLogin = [[${loginUser != null ? 'true' : 'false'}]];
+    </script>
     <script>
         $(document).ready(function () {
             const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
@@ -265,8 +268,11 @@
                         location.reload(); // 또는 동적으로 append 가능
                     },
                     error: function (xhr) {
-                        console.error(xhr.responseText);
-                        alert('등록 실패: ' + xhr.responseText);
+                        if (xhr.status === 409) {
+                            alert("이미 리뷰를 작성했습니다.");
+                        } else {
+                            alert("리뷰 등록 중 오류 발생.");
+                        }
                     }
                 });
             });
@@ -351,15 +357,20 @@
                 });
             });
         });
+        const isLogin = /*[[${loginUser != null}]]*/ false;
 
         $(document).on("click", ".like-btn", function () {
+            if (!isLogin) {
+                alert("로그인이 필요합니다.");
+                return;
+            }
             const btn = $(this);
             const reviewId = btn.data("review-id");
             const reviewType = btn.data("review-type");
 
             $.post(`/tracks/${reviewType.toLowerCase()}-reviews/${reviewId}/like`, {}, function (data) {
                 btn.data("liked", data.liked);
-                btn.text(data.liked ? '💔' : '❤️');
+                btn.text(data.liked ? '💕' : '❤️');
 
                 const countEl = $("#like-count-" + reviewId);
                 countEl.text(data.likeCount);
@@ -370,12 +381,24 @@
         });
 
         $(document).on("click", ".report-btn", function () {
-            const btn = $(this);
-            const reviewId = btn.data("review-id");
-            const reviewType = btn.data("review-type");
+            if (!isLogin) {
+                alert("로그인이 필요합니다.");
+                return;
+            }
 
-            $.post(`/reviews/${reviewType}/${reviewId}/report`, {}, function (data) {
-                alert("신고되었습니다. 총 신고 수: " + data.reportCount);
+            const reviewId = $(this).data("review-id");
+            const reviewType = $(this).data("review-type");
+
+            $.post(`/tracks/reviews/${reviewType}/${reviewId}/report`, {}, function (data) {
+                alert("신고 완료! 총 신고 수: " + data.reportCount);
+            }).fail(function (xhr) {
+                if (xhr.status === 429) {
+                    alert("이미 신고한 리뷰입니다.");
+                } else if (xhr.status === 401) {
+                    alert("로그인이 필요합니다.");
+                } else {
+                    alert("신고 중 오류 발생.");
+                }
             });
         });
     </script>

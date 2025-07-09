@@ -51,7 +51,10 @@ public class ReviewLikeServiceImpl implements ReviewLikeService {
     }
     @Override
     public void reportReview(Long reviewId, Long userId, String reviewType) {
-        mapper.reportReview(reviewId, userId, reviewType);
+        if (mapper.existsReport(reviewId, userId, reviewType)) {
+            throw new IllegalStateException("이미 신고한 리뷰입니다.");
+        }
+        mapper.insertReviewReport(reviewId, userId, reviewType);
     }
 
     @Override
