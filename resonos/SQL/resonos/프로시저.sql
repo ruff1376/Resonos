@@ -306,7 +306,7 @@ BEGIN
     );
 
     DROP TABLE IF EXISTS `badge`;
-    
+
     CREATE TABLE IF NOT EXISTS `badge` (
         `id` BIGINT NOT NULL AUTO_INCREMENT,
         `name` VARCHAR(100) NULL,
@@ -375,7 +375,7 @@ BEGIN
         FOREIGN KEY (user_id) REFERENCES user(id),
         FOREIGN KEY (badge_id) REFERENCES badge(id)
     );
-    
+
     CREATE TABLE IF NOT EXISTS badge_condition (
         id BIGINT PRIMARY KEY AUTO_INCREMENT,         -- 조건 고유 번호(자동 증가, PK)
         badge_id BIGINT NOT NULL,                     -- 배지 고유 번호(외래키, badge 테이블 참조)
@@ -393,6 +393,7 @@ BEGIN
         `follower_id` BIGINT NOT NULL,
         `following_id` BIGINT NOT NULL
     );
+    ALTER TABLE user_follow ADD CONSTRAINT UK_following_and_follower UNIQUE (follower_id, following_id);
 
     CREATE TABLE IF NOT EXISTS `album_review` (
         `id` BIGINT NOT NULL,
