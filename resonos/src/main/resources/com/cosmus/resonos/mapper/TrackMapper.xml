@@ -98,7 +98,7 @@
   </select>
 
   <select id="hotCount" resultType="long">
-    SELECT COUNT(*) 
+    SELECT COUNT(*)
     FROM (
       SELECT t.id,
             (COUNT(DISTINCT tr.id) * 3 + COUNT(DISTINCT lt.id) + COUNT(DISTINCT pd.id)) AS popularity_score
@@ -300,7 +300,7 @@
     WHERE t.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
   </select>
 
-  <!-- 플레이 리스트 추가 -->
+  <!-- 마이페이지: 플레이 리스트 추가 -->
   <select id="addTrackList" resultMap="Track" >
     SELECT t.*, ar.name AS artist_name, al.cover_image
     FROM track t
@@ -309,4 +309,25 @@
     WHERE t.title LIKE CONCAT('%', #{keyword}, '%')
   </select>
 
+  <!-- 마이페이지: 좋아요 표시한 트랙 3개 -->
+  <select id="likedTracksTop3" resultType="Track">
+    SELECT a.*, lt.created_at, a.cover_image
+    FROM track t
+      INNER JOIN liked_track lt ON lt.track_id = t.id
+      INNER JOIN album a ON t.album_id = a.id
+    WHERE lt.user_id = #{id}
+    ORDER BY lt.created_at DESC
+    LIMIT 3
+  </select>
+
+  <!-- 마이페이지: 좋아요 표시한 트랙 전체 -->
+  <select id="likedTracks" resultType="Track">
+    SELECT a.*, lt.created_at, a.cover_image, art.name AS artistName
+    FROM liked_track lt
+      INNER JOIN track t ON lt.track_id = t.id
+      INNER JOIN album a ON t.album_id = a.id
+      INNER JOIN artist art ON t.artist_id = art.id
+    WHERE lt.user_id = #{id}
+    ORDER BY lt.created_at DESC
+  </select>
 </mapper>

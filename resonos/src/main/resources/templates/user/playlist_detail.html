@@ -32,6 +32,14 @@
             <h2 class="text-start">플레이리스트 상세</h2>
           </div>
         </div>
+        <th:block th:if="${!isOwner}">
+          <div class="owner-info">
+            <a th:href="@{/users/{id}(id = ${owner.id})}">
+              <img th:src="${owner.profileImage}" alt="프로필이미지">
+              <p th:text="${owner.nickname}">닉네임</p>
+            </a>
+          </div>
+        </th:block>
         <form th:action="@{/playlists/{id}(id=${playlist.id})}" method="post" class="profile-edit-box" enctype="multipart/form-data" th:object="${playlist}">
           <!-- CSRF TOKEN -->
           <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
@@ -39,6 +47,7 @@
             <label id="profileBtn" for="thumbnail">
               <img th:src="@{${playlist.thumbnailUrl}}" alt="썸네일 이미지" class="profile-img edit">
               <input type="file" name="thumbnail" id="thumbnail"/>
+              <input type="hidden" name="thumbnailUrl" th:value="${playlist.thumbnailUrl}">
             </label>
             <div class="input-area">
               <label class="profile-edit-label" for="title">플레이리스트 제목</label>

@@ -37,27 +37,29 @@
         </th:block>
         <ul id="myPlaylist" class="ul-list">
           <th:block th:each="mpl : ${myPlaylists}">
-            <li class="list-item">
-              <input type="hidden" th:value="${mpl.id}" name="id">
-              <img th:src="@{${mpl.thumbnailUrl}}" alt="GalaxiNote" class="follow-img" />
-              <div class="info">
-                <span class="name-playlist" th:text="${mpl.title}">플레이리스트 명</span>
-              </div>
-              <th:block th:if="${isOwner}">
-                <span class="is-public" th:text="${mpl.isPublic} ? '공개' : '비공개' ">공개</span>
-              </th:block>
-              <div class="right">
-                <div class="like-area">
-                  <span class="count" th:text="${mpl.likeCount}">123</span>
-                  <span class="like">♥</span>
+            <th:block th:if="${mpl.isPublic or isOwner}">
+              <li class="list-item">
+                <input type="hidden" th:value="${mpl.id}" name="id">
+                <img th:src="@{${mpl.thumbnailUrl}}" alt="GalaxiNote" class="follow-img" />
+                <div class="info">
+                  <span class="name-playlist" th:text="${mpl.title}">플레이리스트 명</span>
                 </div>
                 <th:block th:if="${isOwner}">
-                  <button class="btn btn-danger">
-                    삭제
-                  </button>
+                  <span class="is-public" th:text="${mpl.isPublic} ? '공개' : '비공개' ">공개</span>
                 </th:block>
-              </div>
-            </li>
+                <div class="right">
+                  <div class="like-area">
+                    <span class="count" th:text="${mpl.likeCount}">123</span>
+                    <span class="like">♥</span>
+                  </div>
+                  <th:block th:if="${isOwner}">
+                    <button class="btn btn-danger">
+                      삭제
+                    </button>
+                  </th:block>
+                </div>
+              </li>
+            </th:block>
           </th:block>
         </ul>
       </div>

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.Pagination;
@@ -48,4 +49,10 @@ public interface AlbumMapper {
     public List<Album> allSearchList(Map<String, Object> paramMap) throws Exception;
     // 검색 데이터 수
     public long searchCount(String keyword) throws Exception;
+
+    /* 마이페이지 */
+    // 좋아요한 앨범 3개
+    public List<Album> likedAlbumsTop3(@Param("id") Long id) throws Exception;
+    // 좋아요한 앨범 전체
+    public List<Album> likedAlbums(@Param("id") Long id) throws Exception;
 }

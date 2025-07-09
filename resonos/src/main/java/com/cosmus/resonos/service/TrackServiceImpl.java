@@ -187,4 +187,14 @@ public class TrackServiceImpl implements TrackService {
         return trackMapper.hotCount();
     }
 
+    @Override
+    public List<Track> likedTracksTop3(Long id) throws Exception {
+        return trackMapper.likedTracksTop3(id);
+    }
+
+    @Override
+    public List<Track> likedTracks(Long id) throws Exception {
+        return trackMapper.likedTracks(id);
+    }
+
 }

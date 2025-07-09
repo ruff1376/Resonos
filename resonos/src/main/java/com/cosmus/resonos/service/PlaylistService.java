@@ -28,6 +28,10 @@ public interface PlaylistService {
     public List<Playlist> usersPlaylist(Long userId) throws Exception;
     // 특정 유저의 플레이리스트 전체 조회
     public List<Playlist> usersPlaylist3(Long userId) throws Exception;
+    // 특정 유저의 공개 플레이리스트 전체 조회
+    public List<Playlist> publicUsersPlaylist(Long userId) throws Exception;
+    // 특정 유저의 공개 플레이리스트 3개 조회
+    public List<Playlist> publicUsersPlaylist3(Long userId) throws Exception;
     // 좋아요한 플레이리스트 조회
     public List<Playlist> likedPlaylist(Long userId) throws Exception;
     // 플레이리스트 상세 조회

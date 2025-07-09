@@ -89,4 +89,14 @@ public class PlaylistServiceImpl implements PlaylistService {
     public boolean insertTracks(List<PlaylistDetail> playlistDetail) throws Exception {
         return playlistMapper.insertTracks(playlistDetail) > 0 ? true : false;
     }
+
+    @Override
+    public List<Playlist> publicUsersPlaylist(Long userId) throws Exception {
+        return playlistMapper.publicUsersPlaylist(userId);
+    }
+
+    @Override
+    public List<Playlist> publicUsersPlaylist3(Long userId) throws Exception {
+        return playlistMapper.publicUsersPlaylist3(userId);
+    }
 }

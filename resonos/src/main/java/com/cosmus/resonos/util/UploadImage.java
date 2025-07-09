@@ -11,6 +11,7 @@ import com.cosmus.resonos.domain.Users;
 public class UploadImage {
 
   public static void uploadProfileImage(MultipartFile file, Users user) {
+    if (file == null || file.isEmpty()) return;
     try {
       String uploadDir = System.getProperty("user.dir") + "/resonos/uploads/profile_img";
 
@@ -39,6 +40,7 @@ public class UploadImage {
   }
 
   public static void uploadThumbnailImage(MultipartFile file, Playlist playlist) {
+    if (file == null || file.isEmpty()) return;
     try {
       String uploadDir = System.getProperty("user.dir") + "/resonos/uploads/thumbnail";
 
