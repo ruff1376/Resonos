@@ -34,8 +34,8 @@ public class UserFollowServiceImpl implements UserFollowService {
     }
 
     @Override
-    public boolean delete(Long id) throws Exception {
-        return userFollowMapper.delete(id) > 0;
+    public boolean delete(Long loginUserId, Long id) throws Exception {
+        return userFollowMapper.delete(loginUserId, id) > 0;
     }
 
     @Override
@@ -56,5 +56,10 @@ public class UserFollowServiceImpl implements UserFollowService {
     @Override
     public List<Users> myFollow(Long id) throws Exception {
         return userFollowMapper.myFollow(id);
+    }
+
+    @Override
+    public boolean checkAlreadyFollow(Long loginUserId, Long id) throws Exception {
+        return userFollowMapper.checkAlreadyFollow(loginUserId, id) > 0 ? true : false;
     }
 }

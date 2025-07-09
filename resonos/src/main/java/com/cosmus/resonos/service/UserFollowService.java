@@ -17,7 +17,7 @@ public interface UserFollowService {
     // 수정
     public boolean update(UserFollow userFollow) throws Exception;
     // 삭제
-    public boolean delete(Long id) throws Exception;
+    public boolean delete(Long loginUserId, Long id) throws Exception;
     // 팔로워 수 조회
     public int myFollowerCount(@Param("id") Long id) throws Exception;
     // 팔로우 수 조회
@@ -26,4 +26,6 @@ public interface UserFollowService {
     public List<Users> myFollower(@Param("id") Long id) throws Exception;
     // 팔로우 조회
     public List<Users> myFollow(@Param("id") Long id) throws Exception;
+    // 이미 팔로우 체크
+    public boolean checkAlreadyFollow(Long loginUserId, Long id) throws Exception;
 }

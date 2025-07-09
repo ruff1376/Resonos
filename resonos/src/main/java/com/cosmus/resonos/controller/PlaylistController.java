@@ -133,7 +133,14 @@ public class PlaylistController {
      * @throws Exception
      */
     @PutMapping("/{playlistId}/tracks/order")
-    public ResponseEntity<?> changeOrderNo(@PathVariable("playlistId") Long playlistId, @RequestBody List<Map<String, Object>> orderList) throws Exception {
+    public ResponseEntity<?> changeOrderNo(
+        @PathVariable("playlistId") Long playlistId,
+        @RequestBody List<Map<String, Object>> orderList,
+        @AuthenticationPrincipal CustomUser loginUser
+    ) throws Exception {
+        Long ownerId = playlistService.select(playlistId).getId();
+        if(loginUser == null || !loginUser.getId().equals(ownerId))
+            return new ResponseEntity<>("권한이 없습니다.", HttpStatus.FORBIDDEN);
         boolean result = playlistService.updateTrackOrder(playlistId, orderList);
         if(result) return new ResponseEntity<>("정렬 완료.", HttpStatus.OK);
 

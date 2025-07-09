@@ -127,6 +127,8 @@ public class UserController {
     List<Track> trackList = trackSErvice.likedTracksTop3(id);
     // 팔로우 한 아티스트
     List<Artist> artistList = artistService.followingArtistsTop3(id);
+    // 팔로우 했는지
+    boolean alreadyFollow = userFollowService.checkAlreadyFollow(loginUser.getId(), id);
 
     // 자기 자신인지
     boolean isOwner = loginUser != null && loginUser.getId().equals(id);
@@ -139,6 +141,7 @@ public class UserController {
       model.addAttribute("user", user);
     }
 
+    model.addAttribute("alreadyFollow", alreadyFollow);
     model.addAttribute("artistList", artistList);
     model.addAttribute("trackList", trackList);
     model.addAttribute("albumList", albumList);
