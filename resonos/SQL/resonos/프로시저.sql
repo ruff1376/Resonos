@@ -160,14 +160,19 @@ BEGIN
     );
 
     CREATE TABLE IF NOT EXISTS `report` (
-        `id` BIGINT NOT NULL,
+        `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
         `target_type` ENUM('boardPost', 'comment', 'review', 'playlist', 'album', 'track', 'user', 'artist', 'qna') NOT NULL,
+        `target_id` BIGINT NOT NULL,
         `reason` TEXT NOT NULL,
-        `status` VARCHAR(10) NOT NULL,
+        `status` ENUM('PENDING', 'DONE', 'REJECTED') NOT NULL DEFAULT 'PENDING',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `reporter_id` BIGINT NOT NULL,
-        `target_id` BIGINT NOT NULL
+        `processed_by` BIGINT NULL,
+        `processed_at` DATETIME NULL,
+        `process_memo` TEXT NULL,
+        FOREIGN KEY (`reporter_id`) REFERENCES `user`(`id`)
     );
+
 
     CREATE TABLE IF NOT EXISTS `album_mood_vote` (
         `id` BIGINT NOT NULL,

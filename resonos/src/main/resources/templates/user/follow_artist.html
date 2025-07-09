@@ -33,6 +33,7 @@
           </th:block>
           <th:block th:each="artist : ${artistList}">
             <li class="list-item">
+              <input type="hidden" th:value="${artist.id}">
               <img th:src="${artist.profileImage}" alt="GalaxiNote" class="follow-img" />
               <div class="info">
                 <span class="follow-nick" th:text="${artist.name}">GalaxiNote</span>
@@ -46,5 +47,17 @@
       </div>
     </section>
   </main>
+  <th:block layout:fragment="pageScript">
+    <script>
+      /* 아티스트 상세 페이지 이동 */
+      document.querySelectorAll(".ul-list .list-item").forEach(e => {
+        e.addEventListener('click', function(event) {
+          const id = this.querySelector('input[type="hidden"]').value
+          if(event.target.tagName.toLowerCase() === 'button') return
+          location.href = `/artists?id=${id}`
+        })
+      })
+    </script>
+  </th:block>
 </body>
 </html>

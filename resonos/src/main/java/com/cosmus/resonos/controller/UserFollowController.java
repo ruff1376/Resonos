@@ -1,9 +1,8 @@
 package com.cosmus.resonos.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,17 +10,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.UserFollow;
-import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.BadgeGrantService;
 import com.cosmus.resonos.service.UserFollowService;
 import com.cosmus.resonos.service.UserService;
-import com.cosmus.resonos.util.CheckAuthentication;
 
 import lombok.extern.slf4j.Slf4j;
+
 
 @Slf4j
 @Controller
@@ -45,8 +44,10 @@ public class UserFollowController {
 
     // 등록 처리
     @PostMapping
-    public String createPost(@ModelAttribute UserFollow follow, Model model,
-                            @AuthenticationPrincipal CustomUser customUser) throws Exception {
+    public String createPost(
+        @ModelAttribute UserFollow follow, Model model,
+        @AuthenticationPrincipal CustomUser customUser
+    ) throws Exception {
         log.info("[UserFollowController] 팔로우 등록 시도: {}", follow);
         boolean success = userFollowService.insert(follow);
 
@@ -101,4 +102,24 @@ public class UserFollowController {
         log.info("[UserFollowController] 팔로우 삭제 완료 - id: {}", id);
         return "redirect:/user-follows";
     }
+
+    @PostMapping(value = "{id}")
+    public ResponseEntity<?> postMethodName(
+        @AuthenticationPrincipal CustomUser loginUser,
+        @PathVariable("id") Long id
+    ) throws Exception {
+        if(loginUser == null) {
+            return new ResponseEntity<>("로그인이 필요한 서비스입니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        UserFollow uf = new UserFollow();
+        uf.setFollowerId(loginUser.getId());
+        uf.setFollowingId(id);
+        boolean result = userFollowService.insert(uf);
+        if(result)
+            return new ResponseEntity<>("팔로우하였습니다.", HttpStatus.OK);
+
+        return new ResponseEntity<>("팔로우가 실패하였습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

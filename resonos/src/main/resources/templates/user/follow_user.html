@@ -57,6 +57,7 @@
           </th:block>
           <th:block th:each="follow : ${myFollow}">
             <li class="list-item">
+              <input type="hidden" th:value="${follow.id}">
               <img th:src="@{${follow.profileImage}}" alt="프로필 이미지" class="follow-img" />
               <div class="info">
                 <span class="follow-nick" th:text="${follow.nickname}">닉네임</span>
