@@ -291,6 +291,7 @@
               const result = await response.text()
               alert(result)
               if(result === '로그인이 필요한 서비스입니다.')
+                sessionStorage.setItem('returnTo', location.href)
                 location.href = '/login'
               return
           }

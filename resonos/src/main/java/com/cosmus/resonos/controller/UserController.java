@@ -128,7 +128,7 @@ public class UserController {
     // 팔로우 한 아티스트
     List<Artist> artistList = artistService.followingArtistsTop3(id);
     // 팔로우 했는지
-    boolean alreadyFollow = userFollowService.checkAlreadyFollow(loginUser.getId(), id);
+    boolean alreadyFollow = loginUser != null ? userFollowService.checkAlreadyFollow(loginUser.getId(), id) : false ;
 
     // 자기 자신인지
     boolean isOwner = loginUser != null && loginUser.getId().equals(id);
