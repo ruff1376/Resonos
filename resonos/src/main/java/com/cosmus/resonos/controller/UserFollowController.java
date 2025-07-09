@@ -1,5 +1,6 @@
 package com.cosmus.resonos.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.BadgeGrantService;
 import com.cosmus.resonos.service.UserFollowService;
 import com.cosmus.resonos.service.UserService;
+import com.cosmus.resonos.util.CheckAuthentication;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,22 +42,26 @@ public class UserFollowController {
      * @return
      * @throws Exception
      */
-    @GetMapping("")
+    @GetMapping({"", "/{id}"})
     public String followUsers(
         Model model,
-        @AuthenticationPrincipal CustomUser loginUser
+        @AuthenticationPrincipal CustomUser loginUser,
+        @PathVariable(value = "id", required = false) Long id
     ) throws Exception {
-        // 유저 정보
-        Users user = userService.select(loginUser.getUsername());
-        // 내 팔로워
-        List<Users> myFollower = userFollowService.myFollower(loginUser.getUser().getId());
-        // 내가 팔로우 한 유저
-        List<Users> myFollow = userFollowService.myFollow(loginUser.getUser().getId());
+        if(id == null && loginUser == null) return "redirect:/login";
 
-        model.addAttribute("user", user);
+        // PathVariable 검사
+        Long targetId = (id != null) ? id : loginUser.getUser().getId();
+        // 자기 자신인지
+        boolean isOwner = loginUser != null && loginUser.getId().equals(targetId);
+        // 팔로우, 팔로워 정보
+        List<Users> myFollower = userFollowService.myFollower(targetId);
+        List<Users> myFollow = userFollowService.myFollow(targetId);
+
         model.addAttribute("myFollower", myFollower);
         model.addAttribute("myFollow", myFollow);
         model.addAttribute("lastPath", "user-follows");
+        model.addAttribute("isOwner", isOwner);
         return "user/follow_user";
     }
 

@@ -550,6 +550,12 @@ textarea.form-control {
   margin-left: 20%;
   max-width: 1000px;
 }
+.info-wrapper.go-center {
+  margin-left: 0;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
 .info-section {
   padding: 0 30px 20px;
   align-items: center;

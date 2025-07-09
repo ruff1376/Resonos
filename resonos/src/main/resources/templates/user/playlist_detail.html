@@ -15,9 +15,11 @@
 <body>
   <main class="con con-pli-detail my-5 position-relative" layout:fragment="content">
     <!-- 왼쪽 리모컨 -->
-    <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
-    <!-- 팔로워 -->
-    <section class="info-wrapper">
+    <th:block th:if="${isOwner}">
+      <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
+    </th:block>
+    <!-- 플레이리스트 정보 -->
+    <section class="info-wrapper" th:classappend="${!isOwner ? 'go-center' : ''}">
       <div class="info-section">
         <th:block th:if="${success}">
           <p class="success-fail middle"
@@ -40,15 +42,17 @@
             </label>
             <div class="input-area">
               <label class="profile-edit-label" for="title">플레이리스트 제목</label>
-              <input type="text" class="form-control" th:field="*{title}" >
+              <input type="text" class="form-control" th:field="*{title}" th:readonly="${!isOwner}">
               <label class="profile-edit-label" for="description">플레이리스트 설명</label>
-              <textarea class="form-control" th:field="*{description}" rows="2"></textarea>
+              <textarea class="form-control" th:field="*{description}" rows="2" th:readonly="${!isOwner}"></textarea>
             </div>
           </div>
-          <input th:checked="*{isPublic == true}" type="radio" id="true" th:field="*{isPublic}" value="true">
-          <label class="profile-edit-label radio" for="true">공개</label>
-          <input th:checked="*{isPublic == false}" type="radio" id="false" th:field="*{isPublic}" value="false">
-          <label class="profile-edit-label radio" for="false">비공개</label>
+          <th:block th:if="${isOwner}">
+            <input th:checked="*{isPublic == true}" type="radio" id="true" th:field="*{isPublic}" value="true">
+            <label class="profile-edit-label radio" for="true">공개</label>
+            <input th:checked="*{isPublic == false}" type="radio" id="false" th:field="*{isPublic}" value="false">
+            <label class="profile-edit-label radio" for="false">비공개</label>
+          </th:block>
           <!-- 트랙 목록 -->
           <div class="info-wrapper">
             <div class="info-section">
@@ -57,10 +61,12 @@
                   <h2 class="text-start">트랙 목록</h2>
                     <span class="count" th:text="${playlist.trackList != null ? #lists.size(playlist.trackList) : 0}">트랙 수</span>
                 </div>
-                <button type="button" href="/playlists/create" id="addTrack">추가하기<img width="20px" height="20px" src="/img/plus_circle.png" alt="추가버튼"></button>
+                <th:block th:if="${isOwner}">
+                  <button type="button" href="/playlists/create" id="addTrack">추가하기<img width="20px" height="20px" src="/img/plus_circle.png" alt="추가버튼"></button>
+                </th:block>
               </div>
               <ul class="ul-list">
-                <th:block th:if="${playlist.trackList == null}">
+                <th:block th:if="${playlist.trackList.isEmpty()}">
                   <div class="empty-text">
                     추가한 트랙이 없습니다.
                   </div>
@@ -74,17 +80,21 @@
                       <span class="name-album" th:text="*{title}">트랙 명</span>
                       <span class="name-artist" th:text="*{artistName}">아티스트 명</span>
                     </div>
-                    <div class="right">
-                      <span class="like">♥</span>
-                      <button type="button" class="btn btn-danger">삭제</button>
-                    </div>
+                    <th:block th:if="${isOwner}">
+                      <div class="right">
+                        <span class="like">♥</span>
+                        <button type="button" class="btn btn-danger">삭제</button>
+                      </div>
+                    </th:block>
                   </li>
                 </th:block>
               </ul>
             </div>
           </div>
-          <button type="submit" class="btn btn-gold mt-5">수정하기</button>
-          <a th:href="@{/playlists}" class="btn btn-outline-gold" type="button">목록으로</a>
+          <th:block th:if="${isOwner}">
+            <button type="submit" class="btn btn-gold mt-5">수정하기</button>
+          </th:block>
+          <button onclick="history.back()" class="btn btn-outline-gold" type="button" th:classappend="${!isOwner ? 'mt-5' : ''}">뒤로가기</button>
         </form>
       </div>
     </section>

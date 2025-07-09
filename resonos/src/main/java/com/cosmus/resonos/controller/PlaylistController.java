@@ -51,13 +51,23 @@ public class PlaylistController {
      * @return
      * @throws Exception
      */
-    @GetMapping("")
-    public String playlist(@AuthenticationPrincipal CustomUser loginUser, Model model) throws Exception {
+    @GetMapping({"", "/user/{id}"})
+    public String playlist(
+        @AuthenticationPrincipal CustomUser loginUser,
+        @PathVariable(value = "id", required = false) Long id,
+        Model model
+    ) throws Exception {
+        if(id == null && loginUser == null) return "redirect:/login";
 
-        List<Playlist> myPlaylists = playlistService.usersPlaylist(loginUser.getUser().getId());
-        List<Playlist> likedPlaylists = playlistService.likedPlaylist(loginUser.getUser().getId());
+        // PathVariable 검사
+        Long targetId = (id != null) ? id : loginUser.getUser().getId();
+        // 자기 자신인지
+        boolean isOwner = loginUser != null && loginUser.getId().equals(targetId);
 
-        model.addAttribute("loginUser", loginUser.getUser());
+        List<Playlist> myPlaylists = playlistService.usersPlaylist(targetId);
+        List<Playlist> likedPlaylists = playlistService.likedPlaylist(targetId);
+
+        model.addAttribute("isOwner", isOwner);
         model.addAttribute("myPlaylists", myPlaylists);
         model.addAttribute("likedPlaylists", likedPlaylists);
         model.addAttribute("lastPath", "playlist");
@@ -118,18 +128,21 @@ public class PlaylistController {
     public String playlistDetail(
         Model model,
         @PathVariable("id") Long id,
-        @RequestParam(value = "success", required = false) String success
+        @RequestParam(value = "success", required = false) String success,
+        @AuthenticationPrincipal CustomUser loginUser
     ) throws Exception {
-        PlaylistDTO playlist = playlistService.trackOfPlaylist(id);
 
-        if(playlist == null) {
-            model.addAttribute("playlist", playlistService.select(id));
-        } else {
-            model.addAttribute("playlist", playlist);
-        }
+        // 플레이리스트 + 트랙 정보
+        PlaylistDTO playlist = playlistService.trackOfPlaylist(id);
+        // 플레이리스트 소유자
+        Long ownerId =  playlist.getUserId();;
+        // 자기 자신인지
+        boolean isOwner = loginUser != null && loginUser.getId().equals(ownerId);
+
+        model.addAttribute("playlist", playlist);
+        model.addAttribute("isOwner", isOwner);
         model.addAttribute("success", success);
         model.addAttribute("lastPath", "playlist");
-        model.addAttribute("playlistObj", new Playlist());
         return "user/playlist_detail";
     }
 
@@ -209,10 +222,11 @@ public class PlaylistController {
             PlaylistDTO playlistDto = playlistService.trackOfPlaylist(playlistId);
             if(playlistDto != null) {
                 List<Track> trackList = playlistDto.getTrackList();
-                for(int i = 1; i <= trackList.size(); i++) {
-                    trackList.get(i-1).setOrderNo(i);
+                if(trackList != null && !trackList.isEmpty()) {
+                    for(int i = 1; i <= trackList.size(); i++)
+                        trackList.get(i-1).setOrderNo(i);
+                    playlistService.updateTrackOrderNo(playlistId, trackList);
                 }
-                playlistService.updateTrackOrderNo(playlistId, trackList);
             }
 
             return new ResponseEntity<>(playlistDto, HttpStatus.OK);
