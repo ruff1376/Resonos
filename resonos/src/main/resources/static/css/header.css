@@ -1,3 +1,12 @@
+.site-header,
+.site-header .submenu-item,
+.site-header .header-submenu li a,
+.site-header .btn-outline-gold,
+.site-header .search-box::placeholder {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.6rem;
+}
+
 .site-header .navbar {
     border-bottom: 1px solid var(--main-color);
 }
@@ -41,8 +50,9 @@
 }
 
 .site-header .search-box::placeholder {
+    font-family: inherit;
+    font-size: 12px;
     color: #B1B1B1;
-    opacity: 1;
 }
 
 .site-header .search-box:focus {
@@ -65,6 +75,7 @@
     color: #D4B97F;
     border-radius: 10px;
     background: transparent;
+    font-family: inherit;
     font-size: 12px;
     height: 35px;
     width: 75px;
@@ -74,24 +85,49 @@
     padding: 0;
 }
 
+.site-header .submenu-item,
+.site-header .header-submenu li a {
+    font-family: inherit;
+    font-size: 1.6rem;
+}
+
 .site-header .btn-outline-gold:hover {
     background: #D4B97F;
     color: #181C23;
 }
 
+.site-header .profile-dropdown .dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.site-header .profile-dropdown img {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+}
+
+
 /* 프로필 드롭다운 화살표 색상 */
-.header-navbar .profile-dropdown .dropdown-toggle::after {
+.site-header .profile-dropdown .dropdown-toggle::after {
     color: #B1B1B1 !important;
     filter: none;
 }
 
 /* 검색창, 종, 프로필 간격 */
-.header-navbar .header-gap {
+.site-header .header-gap {
     gap: 10px;
 }
 
-.header-navbar .dropdown-menu {
-    border-radius: 15px;
+.site-header .dropdown-menu {
+    z-index: 1050;
+    position: absolute;
+    border-radius: 1.5rem;
+}
+
+.site-header .dropdown-menu.show {
+    display: block;
 }
 
 .site-header .dropdown-item {
@@ -118,11 +154,11 @@
     display: inline;
 }
 
-.menu-wrapper {
+.header-menu-wrapper {
     position: relative;
 }
 
-.submenu-container {
+.header-submenu-container {
     position: absolute;
     top: 75px;
     /* 상단 메뉴 높이만큼 내려옴 */
@@ -138,17 +174,17 @@
     text-align: center; /* 전체 내부 텍스트 가운데 정렬 */
 }
 
-.submenu {
+.header-submenu {
     margin: 0;
     padding: 0;
     width: 100%;
 }
 
-.submenu li {
+.header-submenu li {
     list-style: none;
 }
 
-.submenu li a {
+.header-submenu li a {
     display: block;
     color: white;
     text-decoration: none;
@@ -156,11 +192,11 @@
     padding: 8px 0;
 }
 
-.submenu li a:hover {
+.header-submenu li a:hover {
     color: #D4B97F;
 }
 
 /* 메뉴 hover 시 해당 하단 메뉴만 보이기 */
-.menu-wrapper:hover .submenu-container {
+.header-menu-wrapper:hover .header-submenu-container {
     display: block;
 }
