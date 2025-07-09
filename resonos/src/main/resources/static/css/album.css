@@ -207,6 +207,9 @@ img {
     width: 100%;
     gap: 10px;
 }
+.score-fill {
+  transition: width 0.5s ease-in-out;
+}
 .reply form textarea {
     display: flex;
     padding: 5px;

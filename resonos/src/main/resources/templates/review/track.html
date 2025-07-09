@@ -72,21 +72,21 @@
         <!-- 평점&리뷰 -->
         <div class="review-card">
             <p id="headline">평점 & 리뷰</p>
-            <div class="review-score">
-                <th:block th:if="${score == null or score.averageScore == null}">
-                    <h1 id="headline">첫 리뷰를 작성해보세요 🤩</h1>
-                </th:block>
-                <th:block th:if="${score != null and score.averageScore != null}">
-                    <h1 id="headline" th:text="|🔮 ${#numbers.formatDecimal(score.averageScore, 0, 0)}|"></h1>
-                </th:block>
-                <th:block th:if="${score != null and score.averageScore != null}">
-                    <div class="score-bar">
-                        <div class="score-fill"
-                            th:style="'width:' + ${#numbers.formatDecimal(score.averageScore, 1, 1)} + '%'">
-                            <span th:text="${#numbers.formatDecimal(score.averageScore, 0, 0)}"></span>
+            <div th:fragment="scoreFragment">
+                <div class="review-score">
+                    <th:block th:if="${score == null or score.averageScore == null}">
+                        <h1 id="headline">첫 리뷰를 작성해보세요 🤩</h1>
+                    </th:block>
+                    <th:block th:if="${score != null and score.averageScore != null}">
+                        <h1 id="headline" th:text="|🔮 ${#numbers.formatDecimal(score.averageScore, 0, 0)}|"></h1>
+                        <div class="score-bar">
+                            <div class="score-fill"
+                                th:style="'width:' + ${#numbers.formatDecimal(score.averageScore, 1, 1)} + '%'">
+                                <span th:text="${#numbers.formatDecimal(score.averageScore, 0, 0)}"></span>
+                            </div>
                         </div>
-                    </div>
-                </th:block>
+                    </th:block>
+                </div>
             </div>
             <div class="review-container">
                 <ul class="review-list">
@@ -101,8 +101,6 @@
                             <div class="review-content">
                                 <p class="content-text" th:text="${rv.content}">내용</p>
                             </div>
-
-                            <!-- 👇 수정 폼은 기본으로 숨김 -->
                             <form class="edit-form" style="display: none;">
                                 <div class="reply">
                                     <textarea class="edit-content" required></textarea>
@@ -218,12 +216,26 @@
             const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
             const csrfToken = $('meta[name="_csrf"]').attr('content');
 
+            // CSRF 설정
             $.ajaxSetup({
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader(csrfHeader, csrfToken);
                 }
             });
-
+            // 점수 부분만 새로고침
+            function reloadScoreBox(trackId) {
+                $.ajax({
+                    url: `/tracks/${trackId}/score-fragment`,
+                    type: 'GET',
+                    success: function (html) {
+                        $('.review-score').html(html);
+                        
+                    },
+                    error: function () {
+                        console.error("점수 갱신 실패");
+                    }
+                });
+            }
             /** ① 등록 */
             $('#reviewForm').on('submit', function (e) {
                 e.preventDefault();
@@ -243,8 +255,9 @@
                     contentType: 'application/json',
                     data: JSON.stringify({ content, rating }),
                     success: function () {
-                        alert('리뷰 등록 성공!');
-                        location.reload(); // 또는 append로 동적으로 갱신
+                        alert('리뷰 등록 완료!');
+                        reloadScoreBox(trackId);
+                        location.reload(); // 또는 동적으로 append 가능
                     },
                     error: function (xhr) {
                         console.error(xhr.responseText);
@@ -253,44 +266,49 @@
                 });
             });
 
-            /** ② 수정 버튼 → 폼 표시 + 기존 내용 세팅 */
+            /** ② 수정 버튼 클릭 → 폼 열기 + 기존 내용 채우기 */
             $(document).on('click', '.edit-btn', function (e) {
                 e.preventDefault();
 
                 const li = $(this).closest('li');
-                const content = li.find('.review-content').text().trim();
+                const reviewId = li.attr('data-review-id');
+                const trackId = li.attr('data-track-id');
+                const contentText = li.find('.content-text');
+                const content = contentText.text().trim();
                 const rating = li.find('.name-and-score span span').text().trim();
-
-                li.find('.edit-form').slideDown();
+                // 텍스트 숨기고 폼 보여줌
+                contentText.slideUp(200);
                 li.find('.edit-content').val(content);
                 li.find('.edit-rating').val(rating);
+                li.find('.edit-form').slideDown();
             });
 
-            /** ③ 수정 완료 */
+            /** ③ 수정 완료 → 서버 PUT 요청 */
             $(document).on('submit', '.edit-form', function (e) {
                 e.preventDefault();
 
                 const form = $(this);
                 const li = form.closest('li');
-                const reviewId = li.data('review-id');
-                const trackId = li.data('track-id');
+                const reviewId = li.attr('data-review-id');
+                const trackId = li.attr('data-track-id');
                 const content = form.find('.edit-content').val().trim();
                 const rating = form.find('.edit-rating').val();
 
                 if (content === '' || rating === '') {
-                    alert("내용과 점수를 입력해주세요.");
+                    alert("내용과 점수를 모두 입력해주세요.");
                     return;
                 }
-
                 $.ajax({
                     url: `/tracks/${trackId}/review/${reviewId}`,
                     method: 'PUT',
                     contentType: 'application/json',
                     data: JSON.stringify({ content, rating }),
                     success: function (updated) {
-                        li.find('.review-content').text(updated.content);
+                        li.find('.content-text').text(updated.content).slideDown();
                         li.find('.name-and-score span span').text(updated.rating);
                         form.slideUp();
+                        // console.log('프래그먼트 응답 확인:', html);
+                        reloadScoreBox(trackId);
                     },
                     error: function (xhr) {
                         console.error(xhr.responseText);
@@ -319,6 +337,7 @@
                     method: 'DELETE',
                     success: function () {
                         li.slideUp(() => li.remove());
+                        reloadScoreBox(trackId);
                     },
                     error: function (xhr) {
                         console.error(xhr.responseText);
@@ -327,8 +346,8 @@
                 });
             });
         });
-
     </script>
+
 
 
 </body>
