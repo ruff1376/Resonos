@@ -172,3 +172,50 @@
 .text-secondary {
   color: #888 !important;
 }
+
+
+/* 투표 통계 테이블 스타일 (vote_stats_track) */
+.vote-table-header, .vote-table-row {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+.vote-table-header {
+  background: #444;
+  color: #ffde7a;
+  font-weight: bold;
+  border-radius: 8px 8px 0 0;
+  padding: 10px 0;
+}
+.vote-table-row {
+  background: #222;
+  color: #fff;
+  border-bottom: 1px solid #333;
+  padding: 10px 0;
+  transition: background 0.2s;
+}
+.track-group-start {
+  border-top: 2px solid #D4B97F;
+  margin-top: 16px;
+  background: #2a2320;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 2px 6px #0002;
+}
+.track-group-start.first-track {
+  margin-top: 0;
+  border-radius: 8px 8px 0 0;
+}
+.vote-table-row:last-child {
+  border-radius: 0 0 8px 8px;
+  border-bottom: none;
+}
+.vote-col-id    { flex-basis: 22%; min-width: 120px; }
+.vote-col-title { flex-basis: 28%; min-width: 100px; }
+.vote-col-mood  { flex-basis: 30%; min-width: 90px; }
+.vote-col-count { flex-basis: 10%; min-width: 60px; }
+.vote-col-more  { flex-basis: 10%; min-width: 60px; text-align: right; }
+.more-moods { display: none; flex-direction: column; background: #191818; }
+.vote-table-row .btn-more { font-size: 13px; padding: 2px 7px; margin-left: 8px; }
+.text-secondary {
+  color: #888 !important;
+}

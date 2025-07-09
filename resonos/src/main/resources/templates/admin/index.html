@@ -49,6 +49,7 @@
 
 
         <!-- 관리 메뉴 요약 -->
+        <!-- 1번째 줄 -->
         <div class="row g-4 mt-4">
           <div class="col-md-3">
             <div class="resonos-card">
@@ -75,7 +76,7 @@
             </div>
           </div>
         </div>
-
+        <!-- 2번째 줄 -->
         <div class="row g-4 mt-2">
           <div class="col-md-3">
             <div class="resonos-card">
@@ -98,6 +99,33 @@
           <div class="col-md-3">
             <div class="resonos-card">
               <div class="card-sm-title card-title">정책/환경설정</div>
+              <a href="@{/admin/PolicySetting/policy}" class="btn btn-sm mt-2 btn-outline-gold">설정</a>
+            </div>
+          </div>
+        </div>
+        <!-- 3번째 줄 -->
+        <div class="row g-4 mt-2">
+          <div class="col-md-3">
+            <div class="resonos-card">
+              <div class="card-sm-title card-title">배지 관리</div>
+              <a th:href="@{/admin/badge}" class="btn btn-sm mt-2 btn-outline-gold">조건 관리</a>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="resonos-card">
+              <div class="card-sm-title card-title">태그 관리</div>
+              <a th:href="@{/admin/tags}" class="btn btn-sm mt-2 btn-outline-gold">태그 관리</a>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="resonos-card">
+              <div class="card-sm-title card-title">트랙, 앨범, 아티스트 투표 관리</div>
+              <a th:href="@{/admin/vote}" class="btn btn-sm mt-2 btn-outline-gold">태그 확인</a>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="resonos-card">
+              <div class="card-sm-title card-title">미정</div>
               <a href="@{/admin/PolicySetting}" class="btn btn-sm mt-2 btn-outline-gold">설정</a>
             </div>
           </div>

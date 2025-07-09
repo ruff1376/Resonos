@@ -19,7 +19,7 @@
   </select>
 
   <insert id="insert">
-    INSERT INTO tag (id, name) VALUES (#{id}, #{name})
+    INSERT INTO tag ( name) VALUES ( #{name})
   </insert>
 
   <update id="update">
@@ -29,5 +29,11 @@
   <delete id="delete">
     DELETE FROM tag WHERE id = #{id}
   </delete>
+
+  <!-- searchByName -->
+  <select id="searchByName" resultMap="TagResultMap">
+    SELECT * FROM tag WHERE name LIKE CONCAT('%', #{keyword}, '%')
+  </select>
+
 
 </mapper>
