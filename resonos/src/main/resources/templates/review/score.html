@@ -1,0 +1,13 @@
+<th:block th:fragment="scoreFragment">
+        <th:block th:if="${score == null or score.averageScore == null}">
+            <h1 id="headline">첫 리뷰를 작성해보세요 🤩</h1>
+        </th:block>
+        <th:block th:if="${score != null and score.averageScore != null}">
+            <h1 id="headline" th:text="|🔮 ${#numbers.formatDecimal(score.averageScore, 0, 0)}|"></h1>
+            <div class="score-bar">
+                <div class="score-fill" th:style="'width:' + ${#numbers.formatDecimal(score.averageScore, 1, 1)} + '%'">
+                    <span th:text="${#numbers.formatDecimal(score.averageScore, 0, 0)}"></span>
+                </div>
+            </div>
+        </th:block>
+</th:block>

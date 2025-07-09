@@ -20,7 +20,7 @@ public interface TrackReviewMapper {
     int incrementLikes(@Param("id") Long id);
     int incrementDislikes(@Param("id") Long id);
     public TrackReview write(String trackId, ReviewForm f, Users u);
-    public TrackReview update(@Param("id") Long id,
+    public boolean update(@Param("id") Long id,
                                 @Param("rating") Integer rating,
                                 @Param("content") String content);
     public void delete(Long id);
