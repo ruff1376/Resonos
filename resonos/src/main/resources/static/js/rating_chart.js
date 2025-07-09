@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.doughnut-canvas').forEach((canvas) => {
+    document.querySelectorAll('.doughnut-canvas').forEach((canvas, index) => {
         const value = 40; // 예시용 값 — 이 부분은 실제 데이터로 바꿔도 됩니다
 
         // 색상 조건
@@ -14,13 +14,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const ctx = canvas.getContext('2d');
 
+        // ✅ 첫 번째일 경우: 큰 폰트
+        const isFirst = canvas.dataset.first === "true";
+        const fontSize = isFirst ? 20 : 14; // px 기준 폰트 크기 조절
+
         // 중앙 텍스트 플러그인
         const centerTextPlugin = {
             id: 'centerText',
             afterDraw(chart) {
                 const { ctx, chartArea: { width, height } } = chart;
                 ctx.save();
-                ctx.font = 'bold 14px sans-serif';
+                ctx.font = `bold ${fontSize}px sans-serif`;
                 ctx.fillStyle = color;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';

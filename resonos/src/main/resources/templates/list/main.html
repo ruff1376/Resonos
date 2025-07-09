@@ -17,105 +17,62 @@
                 <div class="d-flex flex-column align-items-start justify-content-start p-0" style="width:50%; min-width:320px; margin: 50px;">
                     <div class="main-title py-3 px-4 w-100">🔥🇰🇷리뷰 급상승 국내 앨범</div>
                     <div class="d-flex flex-column justify-content-start gap-3 w-100" style="margin: 20px 10px;">
-                        <!-- 앨범 카드 예시 -->
-                        <div class="album-card d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-2 w-100">
-                            <div class="album-rank">1</div>
-                            <img src="4094379.jpg" alt="앨범커버" class="album-img">
-                            <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
-                                <div class="album-title">POWER ANDRE 99</div>
-                                <div class="album-artist">실리카겔</div>
-                            </div>
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                        <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
-                            <div class="album-rank text-white">2</div>
-                            <img src="4094379.jpg" alt="앨범커버" class="album-img">
-                            <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
-                                <div class="album-title">POWER ANDRE 99</div>
-                                <div class="album-artist">실리카겔</div>
-                            </div>
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                        <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
-                            <div class="album-rank text-white">3</div>
-                            <img src="4094379.jpg" alt="앨범커버" class="album-img">
-                            <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
-                                <div class="album-title">POWER ANDRE 99</div>
-                                <div class="album-artist">실리카겔</div>
-                            </div>
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                        <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
-                            <div class="album-rank text-white">4</div>
-                            <img src="4094379.jpg" alt="앨범커버" class="album-img">
-                            <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
-                                <div class="album-title">POWER ANDRE 99</div>
-                                <div class="album-artist">실리카겔</div>
-                            </div>
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                        <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
-                            <div class="album-rank text-white">5</div>
-                            <img src="4094379.jpg" alt="앨범커버" class="album-img">
-                            <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
-                                <div class="album-title">POWER ANDRE 99</div>
-                                <div class="album-artist">실리카겔</div>
-                            </div>
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                        <!-- 추가 앨범 카드 반복 ... -->
+                        <th:block th:each="album, iterStat : ${korHotReviewAlbumList}">
+                            <a th:href="@{'/albums?id=' + ${album.id}}" th:class="'album-card' + (${iterStat.index == 0} ? '' : ' secondary') + 
+                                        ' d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4 w-100 position-relative'">
+                                <!-- 왼쪽 정보 묶음 -->
+                                <div class="d-flex align-items-center gap-4 flex-shrink-1" style="min-width:0;">
+                                    <div th:class="'album-rank ' + (${iterStat.index == 0} ? 'top' : '')" 
+                                        th:text="${iterStat.count}" style="flex: 0 0 auto;"></div>
+
+                                    <img th:src="@{${album.coverImage}}" alt="앨범커버" class="album-img" style="flex: 0 0 auto;">
+
+                                    <!-- 텍스트 묶음 -->
+                                    <div class="d-flex flex-column justify-content-center text-truncate" style="min-width: 180px; max-width: 220px; overflow: hidden;">
+                                        <div class="album-title text-truncate" th:text="${album.title}">앨범명</div>
+                                        <div class="album-artist text-truncate" th:text="${album.artistName}">아티스트</div>
+                                    </div>
+                                </div>
+
+                                <!-- 오른쪽 캔버스 -->
+                                <div class="d-flex justify-content-end align-items-center me-4" style="flex-shrink: 0;">
+                                    <canvas class="doughnut-canvas" th:if="${iterStat.index == 0}" width="75" height="75" data-first="true"></canvas>
+                                    <canvas class="doughnut-canvas" th:unless="${iterStat.index == 0}" width="50" height="50"></canvas>
+                                </div>
+                            </a>
+                        </th:block>
                     </div>
+
                 </div>
                 <!-- 해외 앨범 -->
                 <div class="d-flex flex-column align-items-start justify-content-start p-0" style="width:50%; min-width:320px; margin: 50px;">
                     <div class="main-title py-3 px-4 w-100">🔥🌎리뷰 급상승 해외 앨범</div>
                     <div class="d-flex flex-column justify-content-start gap-3 w-100" style="margin: 20px 10px;">
                         <!-- 앨범 카드 예시 (구조 동일, 내용만 변경) -->
-                        <div class="album-card d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4 w-100">
-                            <div class="album-rank">1</div>
-                            <img src="4094379.jpg" alt="앨범커버" class="album-img">
-                            <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
-                                <div class="album-title">POWER ANDRE 99</div>
-                                <div class="album-artist">실리카겔</div>
-                            </div>
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                        <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
-                            <div class="album-rank text-white">2</div>
-                            <img src="4094379.jpg" alt="앨범커버" class="album-img">
-                            <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
-                                <div class="album-title">POWER ANDRE 99</div>
-                                <div class="album-artist">실리카겔</div>
-                            </div>
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                        <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
-                            <div class="album-rank text-white">3</div>
-                            <img src="4094379.jpg" alt="앨범커버" class="album-img">
-                            <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
-                                <div class="album-title">POWER ANDRE 99</div>
-                                <div class="album-artist">실리카겔</div>
-                            </div>
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                        <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
-                            <div class="album-rank text-white">4</div>
-                            <img src="4094379.jpg" alt="앨범커버" class="album-img">
-                            <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
-                                <div class="album-title">POWER ANDRE 99</div>
-                                <div class="album-artist">실리카겔</div>
-                            </div>
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
-                        <div class="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4">
-                            <div class="album-rank text-white">5</div>
-                            <img src="4094379.jpg" alt="앨범커버" class="album-img">
-                            <div class="d-flex flex-column justify-content-center ms-3" style="min-width:182px;">
-                                <div class="album-title">POWER ANDRE 99</div>
-                                <div class="album-artist">실리카겔</div>
-                            </div>
-                            <img src="캡처.png" alt="rating" class="album-rating">
-                        </div>
+                        <th:block th:each="album, iterStat : ${worldHotReviewAlbumList}">
+                            <a th:href="@{'/albums?id=' + ${album.id}}" th:class="'album-card' + (${iterStat.index == 0} ? '' : ' secondary') + 
+                                        ' d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4 w-100 position-relative'">
+                                <!-- 왼쪽 정보 묶음 -->
+                                <div class="d-flex align-items-center gap-4 flex-shrink-1" style="min-width:0;">
+                                    <div th:class="'album-rank ' + (${iterStat.index == 0} ? 'top' : '')" 
+                                        th:text="${iterStat.count}" style="flex: 0 0 auto;"></div>
+
+                                    <img th:src="@{${album.coverImage}}" alt="앨범커버" class="album-img" style="flex: 0 0 auto;">
+
+                                    <!-- 텍스트 묶음 -->
+                                    <div class="d-flex flex-column justify-content-center text-truncate" style="min-width: 180px; max-width: 220px; overflow: hidden;">
+                                        <div class="album-title text-truncate" th:text="${album.title}">앨범명</div>
+                                        <div class="album-artist text-truncate" th:text="${album.artistName}">아티스트</div>
+                                    </div>
+                                </div>
+
+                                <!-- 오른쪽 캔버스 -->
+                                <div class="d-flex justify-content-end align-items-center me-4" style="flex-shrink: 0;">
+                                    <canvas class="doughnut-canvas" th:if="${iterStat.index == 0}" width="75" height="75" data-first="true"></canvas>
+                                    <canvas class="doughnut-canvas" th:unless="${iterStat.index == 0}" width="50" height="50"></canvas>
+                                </div>
+                            </a>
+                        </th:block>
                         <!-- 추가 앨범 카드 반복 ... -->
                     </div>
                 </div>

@@ -24,13 +24,18 @@ body {
 }
 
 .album-rank {
-    color: var(--main-color);
+    color: white;
     font-size: 16px;
     /* 크기 축소 */
     font-weight: 400;
     width: 24px;
     text-align: center;
     margin-left: 1rem;
+}
+
+.album-rank.top {
+    color: var(--main-color);
+    font-size: 24px;
 }
 
 .album-title {
@@ -47,11 +52,11 @@ body {
 }
 
 .album-card.secondary .album-title {
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .album-card.secondary .album-artist {
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .album-img {
@@ -63,8 +68,8 @@ body {
 }
 
 .album-card.secondary .album-img {
-    width: 32px;
-    height: 32px;
+    width: 50px;
+    height: 50px;
     object-fit: cover;
     background: var(--background-color);
 }

@@ -37,6 +37,8 @@ public class ListController {
     
     @GetMapping("/main")
     public String mainAlbumTrackList(Model model) throws Exception {
+        List<Album> korHotReviewAlbumList = albumService.korHotReviewList();
+        List<Album> worldHotReviewAlbumList = albumService.worldHotReviewList();
         List<Album> newAlbumList = albumService.mainNewList();
         List<Album> hotAlbumList = albumService.mainHotList();
         List<Track> newTrackList = trackService.mainNewList();
@@ -47,6 +49,8 @@ public class ListController {
         long newTrackCount = trackService.newCount();
         long hotTrackCount = trackService.hotCount();
 
+        model.addAttribute("korHotReviewAlbumList", korHotReviewAlbumList);
+        model.addAttribute("worldHotReviewAlbumList", worldHotReviewAlbumList);
         model.addAttribute("newAlbumList", newAlbumList);
         model.addAttribute("hotAlbumList", hotAlbumList);
         model.addAttribute("newTrackList", newTrackList);

@@ -13,6 +13,10 @@ import com.cosmus.resonos.domain.Pagination;
 public interface AlbumMapper {
     // 목록
     public List<Album> list() throws Exception;
+    // 국내 리뷰 급상승 앨범 목록
+    public List<Album> korHotReviewList() throws Exception;
+    // 해외 리뷰 급상승 앨범 목록
+    public List<Album> worldHotReviewList() throws Exception;
     // 메인 화면 최신 앨범 목록
     public List<Album> mainNewList() throws Exception;
     // 최신 앨범 목록

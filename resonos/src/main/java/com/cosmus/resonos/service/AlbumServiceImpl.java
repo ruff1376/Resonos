@@ -146,4 +146,14 @@ public class AlbumServiceImpl implements AlbumService {
         return albumMapper.likedAlbums(id);
     }
 
+    @Override
+    public List<Album> korHotReviewList() throws Exception {
+        return albumMapper.korHotReviewList();
+    }
+
+    @Override
+    public List<Album> worldHotReviewList() throws Exception {
+        return albumMapper.worldHotReviewList();
+    }
+
 }

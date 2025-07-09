@@ -17,11 +17,39 @@
     <result property="likeCount" column="like_count"/>
     <result property="followerCount" column="follower_count"/>
     <result property="popularityScore" column="popularity_score"/>
+    <result property="country" column="country"/>
+    <result property="reviewCount" column="review_count"/>
   </resultMap>
 
   <select id="list" resultMap="Album">
     SELECT * FROM album
     ORDER BY release_date DESC
+  </select>
+
+  <select id="korHotReviewList" resultMap="Album">
+    SELECT a.*, ar.name AS artist_name, COUNT(arw.id) AS review_count
+    FROM album a
+    LEFT JOIN artist ar ON a.artist_id = ar.id
+    LEFT JOIN album_review arw
+      ON a.id = arw.album_id
+      AND DATE(arw.created_at) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+    WHERE a.country = 'KOR'
+    GROUP BY a.id
+    ORDER BY review_count DESC
+    LIMIT 5
+  </select>
+
+  <select id="worldHotReviewList" resultMap="Album">
+    SELECT a.*, ar.name AS artist_name, COUNT(arw.id) AS review_count
+    FROM album a
+    JOIN artist ar ON a.artist_id = ar.id
+    LEFT JOIN album_review arw
+      ON a.id = arw.album_id
+      AND DATE(arw.created_at) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+    WHERE a.country IS NOT NULL AND a.country != 'KOR'
+    GROUP BY a.id
+    ORDER BY review_count DESC
+    LIMIT 5
   </select>
 
   <select id="mainNewList" resultMap="Album">

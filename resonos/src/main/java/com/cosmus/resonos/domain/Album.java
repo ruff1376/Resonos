@@ -21,4 +21,6 @@ public class Album {
     private int likeCount;
     private int followerCount;
     private int popularityScore;
+    private String country;
+    private int reviewCount;
 }
