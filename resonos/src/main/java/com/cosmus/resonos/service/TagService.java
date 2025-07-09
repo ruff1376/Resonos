@@ -15,4 +15,6 @@ public interface TagService {
     public boolean update(Tag tag) throws Exception;
     // 삭제
     public boolean delete(Long id) throws Exception;
+    // 검색 searchByName
+    public List<Tag> searchByName(String keyword);
 }

@@ -40,4 +40,10 @@ public class TagServiceImpl implements TagService {
     public boolean delete(Long id) throws Exception {
         return tagMapper.delete(id) > 0;
     }
+
+    @Override
+    public List<Tag> searchByName(String keyword) {
+        return tagMapper.searchByName(keyword);
+    }
+    
 }
