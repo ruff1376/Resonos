@@ -168,6 +168,10 @@ button.social-btn:hover {
 .profile-info p {
   color: #D4B97F;
   margin: 0 0 14px 0;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .profile-actions {
   display: flex;
@@ -366,12 +370,12 @@ a:hover > .mypage-card {
 .con .title > div {display: flex; align-items: center; gap: 10px;}
 .cover-img {margin-right: 20px;}
 .like-count {display: flex; align-items: center;}
-.profile-info {width: 50%;}
+.profile-info {width: 30%;}
 .profile-info .badge {margin-left: 10px;}.con .title h2 {margin-bottom: 0;}
 .mypage-card.playlist .empty-text {height: 120px;}
 .mypage-card .empty-text {height: 140px;}
 .mypage-card img {border-radius: 10px;}
-.info-top {display: flex; align-items: center; margin-bottom: 20px;}
+.info-top {display: flex; align-items: center; margin-bottom: 14px;}
 #btn-follow {margin: 0;}
 
 /* 회원정보수정 */
