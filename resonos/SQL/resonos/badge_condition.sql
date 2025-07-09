@@ -50,56 +50,95 @@ ALTER TABLE user_badge
 
 
 
--- 테스트 데이터 추가 
--- 1. 커뮤니티 (community) - board_post에 필요
-INSERT INTO community (id, name, description, created_at, creator_id)
-VALUES (1, '테스트커뮤니티', '배지 지급 테스트용', NOW(), 1)
-ON DUPLICATE KEY UPDATE name=VALUES(name);
+-- 배지 자동 배분 테스트
 
--- 3. 배지 (badge)
+-- 배지, 배지 조건 
 INSERT INTO badge (id, name, description, icon_url)
-VALUES
-  (1, '테스트 배지', '테스트용 배지', '/static/img/default-badge.png'),
-  (2, '활동가', '게시글 10개 작성 시 지급', '/static/img/default-badge.png')
+VALUES (1, '테스트 배지', '테스트용 배지', '/static/img/default-badge.png'),
+       (2, '활동가', '게시글 10개 작성 시 지급', '/static/img/default-badge.png')
 ON DUPLICATE KEY UPDATE name=VALUES(name);
 
--- 4. 배지 조건 (badge_condition)
 INSERT INTO badge_condition (badge_id, badge_name, description, condition_type, condition_value)
-VALUES
-  (1, '테스트 배지', '게시글 2개 작성', 'POST_COUNT', 2),
-  (2, '활동가', '게시글 10개 작성', 'POST_COUNT', 10)
+VALUES (1, '테스트 배지', '게시글 2개 작성', 'POST_COUNT', 2),
+       (2, '활동가', '게시글 10개 작성', 'POST_COUNT', 10)
 ON DUPLICATE KEY UPDATE badge_name=VALUES(badge_name);
 
--- 5. 게시글 (board_post) - user_id=1(2개), user_id=2(10개), user_id=3(1개), user_id=4(0개)
-INSERT INTO board_post (id, title, content, type, created_at, community_id, user_id)
+-- 커뮤니티, 유저, 게시글 
+
+-- 3) 커뮤니티 생성 (user: id=1, admin: id=2, test: id=3로 가정)
+INSERT INTO community (name, description, creator_id)
 VALUES
-  (101, '테스터1 첫 글', '테스트 게시글1', 'free', NOW(), 1, 1),
-  (102, '테스터1 두번째 글', '테스트 게시글2', 'free', NOW(), 1, 1),
-  (201, '테스터2 첫 글', '테스트 게시글3', 'free', NOW(), 1, 2),
-  (202, '테스터2 두번째 글', '테스트 게시글4', 'free', NOW(), 1, 2),
-  (203, '테스터2 세번째 글', '테스트 게시글5', 'free', NOW(), 1, 2),
-  (204, '테스터2 네번째 글', '테스트 게시글6', 'free', NOW(), 1, 2),
-  (205, '테스터2 다섯번째 글', '테스트 게시글7', 'free', NOW(), 1, 2),
-  (206, '테스터2 여섯번째 글', '테스트 게시글8', 'free', NOW(), 1, 2),
-  (207, '테스터2 일곱번째 글', '테스트 게시글9', 'free', NOW(), 1, 2),
-  (208, '테스터2 여덟번째 글', '테스트 게시글10', 'free', NOW(), 1, 2),
-  (209, '테스터2 아홉번째 글', '테스트 게시글11', 'free', NOW(), 1, 2),
-  (210, '테스터2 열번째 글', '테스트 게시글12', 'free', NOW(), 1, 2),
-  (301, '테스터3 첫 글', '테스트 게시글13', 'free', NOW(), 1, 3)
-ON DUPLICATE KEY UPDATE title=VALUES(title);
+  ('테스트커뮤니티', '배지 지급 테스트용', 1),
+  ('관리자커뮤니티', '관리자 테스트용', 2);
 
--- 6. 팔로우 (user_follow) - tester2(2)가 tester1(1) 팔로우
-INSERT INTO user_follow (id, created_at, follower_id, following_id)
-VALUES (1, NOW(), 2, 1)
-ON DUPLICATE KEY UPDATE follower_id=VALUES(follower_id);
-
--- 7. 댓글 (comment) - type은 'posts', target_id는 board_post.id
-INSERT INTO comment (id, content, created_at, user_id, type, target_id)
+-- 4) 게시글 생성
+-- user: 게시글 2개 (테스트 배지 조건 충족)
+INSERT INTO board_post (title, content, type, community_id, user_id)
 VALUES
-  (401, '테스터1 댓글', NOW(), 1, 'posts', 101),
-  (402, '테스터2 댓글', NOW(), 2, 'posts', 201),
-  (403, '테스터3 댓글', NOW(), 3, 'posts', 301)
-ON DUPLICATE KEY UPDATE content=VALUES(content);
+  ('user 첫 글', 'user의 첫 게시글', 'free', 1, 1),
+  ('user 두번째 글', 'user의 두번째 게시글', 'free', 1, 1);
 
--- 8. (자동 지급 테스트 결과는 user_badge 테이블에서 확인)
--- 지급 로직 실행 후 user_badge에 데이터가 들어가는지 확인하세요!
+-- admin: 게시글 10개 (활동가 조건 충족)
+INSERT INTO board_post (title, content, type, community_id, user_id)
+VALUES
+  ('admin 첫 글', 'admin의 첫 게시글', 'free', 2, 2),
+  ('admin 두번째 글', 'admin의 두번째 게시글', 'free', 2, 2),
+  ('admin 세번째 글', 'admin의 세번째 게시글', 'free', 2, 2),
+  ('admin 네번째 글', 'admin의 네번째 게시글', 'free', 2, 2),
+  ('admin 다섯번째 글', 'admin의 다섯번째 게시글', 'free', 2, 2),
+  ('admin 여섯번째 글', 'admin의 여섯번째 게시글', 'free', 2, 2),
+  ('admin 일곱번째 글', 'admin의 일곱번째 게시글', 'free', 2, 2),
+  ('admin 여덟번째 글', 'admin의 여덟번째 게시글', 'free', 2, 2),
+  ('admin 아홉번째 글', 'admin의 아홉번째 게시글', 'free', 2, 2),
+  ('admin 열번째 글', 'admin의 열번째 게시글', 'free', 2, 2);
+
+-- test: 게시글 1개 (조건 미달)
+INSERT INTO board_post (title, content, type, community_id, user_id)
+VALUES ('test 첫 글', 'test의 첫 게시글', 'free', 1, 3);
+
+-- 5) 배지 및 배지 조건
+INSERT INTO badge (id, name, description, icon_url)
+VALUES (1, '테스트 배지', '테스트용 배지', '/static/img/default-badge.png'),
+       (2, '활동가', '게시글 10개 작성 시 지급', '/static/img/default-badge.png')
+ON DUPLICATE KEY UPDATE name=VALUES(name);
+
+INSERT INTO badge_condition (badge_id, badge_name, description, condition_type, condition_value)
+VALUES (1, '테스트 배지', '게시글 2개 작성', 'POST_COUNT', 2),
+       (2, '활동가', '게시글 10개 작성', 'POST_COUNT', 10)
+ON DUPLICATE KEY UPDATE badge_name=VALUES(badge_name);
+
+
+-- 트리거 실행 
+
+-- user_id=1이 게시글 2개 이상이면 배지 지급
+INSERT IGNORE INTO user_badge (user_id, badge_id)
+SELECT 1, 1 FROM DUAL
+WHERE (SELECT COUNT(*) FROM board_post WHERE user_id=1) >= 2;
+
+-- user_id=2가 게시글 10개 이상이면 배지 지급
+INSERT IGNORE INTO user_badge (user_id, badge_id)
+SELECT 2, 2 FROM DUAL
+WHERE (SELECT COUNT(*) FROM board_post WHERE user_id=2) >= 10;
+
+
+-- 확인 
+SELECT * FROM user_badge;
+
+
+
+-- 오류 발생 user_badge 지급이 안됨 
+-- 유저 확인
+SELECT id, username FROM user;
+
+-- 배지 확인
+SELECT id, name FROM badge;
+
+-- 배지 조건 확인
+SELECT * FROM badge_condition;
+
+-- 게시글 수 확인
+SELECT user_id, COUNT(*) FROM board_post GROUP BY user_id;
+
+SELECT * FROM user_badge;
+
+

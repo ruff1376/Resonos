@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.UserFollow;
 import com.cosmus.resonos.domain.Users;
+import com.cosmus.resonos.service.BadgeGrantService;
 import com.cosmus.resonos.service.UserFollowService;
 import com.cosmus.resonos.service.UserService;
 
@@ -29,6 +30,8 @@ public class UserFollowController {
     private UserFollowService userFollowService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private BadgeGrantService badgeGrantService;
 
     /**
      * 유저 팔로우 페이지 요청
@@ -66,9 +69,16 @@ public class UserFollowController {
 
     // 등록 처리
     @PostMapping
-    public String createPost(@ModelAttribute UserFollow follow, Model model) throws Exception {
+    public String createPost(@ModelAttribute UserFollow follow, Model model,
+                            @AuthenticationPrincipal CustomUser customUser) throws Exception {
         log.info("[UserFollowController] 팔로우 등록 시도: {}", follow);
         boolean success = userFollowService.insert(follow);
+
+        // 팔로우 등록 성공 시 배지 자동 지급 트리거 호출
+        if (success && customUser != null) {
+            badgeGrantService.checkAndGrantBadges(customUser.getUser().getId());
+        }
+
         if (success) {
             log.info("[UserFollowController] 팔로우 등록 성공: {}", follow);
             return "redirect:/user-follows";
@@ -77,6 +87,7 @@ public class UserFollowController {
         model.addAttribute("error", "등록 실패");
         return "userfollow/form";
     }
+
 
     // 수정 폼
     @GetMapping("/{id}/edit")
