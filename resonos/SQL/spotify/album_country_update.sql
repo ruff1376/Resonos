@@ -24,3 +24,9 @@ WHERE label LIKE '%Atlantic%'
 UPDATE album SET country = 'GBR'
 WHERE label LIKE '%UK%'
    OR label LIKE '%X5 Music Group%';
+
+-- 일본 (JPN)
+UPDATE album SET country = 'JPN'
+WHERE label LIKE '%japan%'
+   OR label LIKE '%avex%'
+   OR label LIKE '%sony%';

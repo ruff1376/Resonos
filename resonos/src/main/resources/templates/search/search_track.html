@@ -34,7 +34,12 @@
                                     <a th:href="@{'/artists?id=' + ${track.artistId}}" class="card-artist" th:text="${track.artistName}"></a>
                                 </div>
                                 <div class="position-absolute bottom-0 start-50 translate-middle-x mb-5">
-                                    <canvas class="doughnut-canvas" width="50" height="50"></canvas>
+                                    <th:block th:if="${track.avgRating != null}">
+                                        <canvas class="doughnut-canvas" th:attr="data-rating=${track.avgRating}" width="50" height="50"></canvas>
+                                    </th:block>
+                                    <th:block th:unless="${track.avgRating != null}">
+                                        <span class="no-rating fw-bold fs-2">NR</span>
+                                    </th:block>
                                 </div>
                             </div>
                         </div>
