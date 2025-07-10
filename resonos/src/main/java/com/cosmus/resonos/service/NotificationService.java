@@ -22,12 +22,13 @@ public interface NotificationService {
 
     // [추가] 정책 위반 등 알림 생성 (비즈니스 목적)
     public boolean createPolicyViolationNotification(@Param("userId") Long userId, 
-        @Param("banword") String banword, @Param("targetId") Long targetId) throws Exception;
+        @Param("banword") String banword, @Param("targetId") String targetId) throws Exception;
 
     // 알림(댓글, 좋아요, 시스템, 공지)
     public boolean createNotification(@Param("userId") Long userId, @Param("type") String type,
-        @Param("message") String message, @Param("content") String content, @Param("targetId") Long targetId) throws Exception;
+        @Param("message") String message, @Param("content") String content, @Param("targetId") String targetId) throws Exception;
 
+    
 
 
     

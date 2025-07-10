@@ -47,7 +47,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public boolean createPolicyViolationNotification(Long userId, String banword, Long targetId) throws Exception {
+    public boolean createPolicyViolationNotification(Long userId, String banword, String targetId) throws Exception {
         Notification notification = new Notification();
         notification.setUserId(userId);
         notification.setType("policy_violation"); // ← 반드시 추가!
@@ -60,7 +60,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public boolean createNotification(Long userId, String type, String message, String content, Long targetId) throws Exception {
+    public boolean createNotification(Long userId, String type, String message, String content, String targetId) throws Exception {
         Notification notification = new Notification();
         notification.setUserId(userId);
         notification.setType(type);

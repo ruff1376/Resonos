@@ -3,14 +3,18 @@ package com.cosmus.resonos.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cosmus.resonos.domain.Reviewer;
+import com.cosmus.resonos.domain.Track;
 import com.cosmus.resonos.domain.TrackReview;
 import com.cosmus.resonos.domain.TrackScore;
 import com.cosmus.resonos.domain.Users;
+import com.cosmus.resonos.mapper.TrackMapper;
 import com.cosmus.resonos.mapper.TrackReviewMapper;
+import com.cosmus.resonos.mapper.UserMapper;
 import com.cosmus.resonos.validation.ReviewForm;
 
 import lombok.RequiredArgsConstructor;
@@ -20,6 +24,14 @@ import lombok.RequiredArgsConstructor;
 public class TrackReviewServiceImpl implements TrackReviewService {
 
     private final TrackReviewMapper mapper;
+
+    @Autowired
+    private NotificationService notificationService;
+    @Autowired
+    private TrackMapper trackMapper;
+    @Autowired
+    private UserMapper userMapper;
+
 
     /**
      * 평점(0~100) 유효성 검증 후 저장
@@ -35,8 +47,35 @@ public class TrackReviewServiceImpl implements TrackReviewService {
         review.setLikes(0);
         review.setDislikes(0);
         mapper.insert(review);
+
+        // 1. 트랙 소유자(아티스트) ID
+        Track track = trackMapper.selectById(review.getTrackId());        // 아티스트 ID가 String이므로 Long으로 변환
+        // Long ownerId = Long.valueOf(track.getArtistId());
+        // Long ownerId = track.getArtistId(); // 임시로 변환
+        Long ownerId = Long.valueOf(track.getArtistId());
+        
+
+        // 2. 리뷰 작성자 닉네임
+        Users reviewer = userMapper.selectById(review.getUserId());
+        String reviewerName = reviewer.getNickname();
+
+        // 3. 리뷰 대상 타입 및 ID
+        String targetType = "트랙";
+        String targetId = review.getTrackId();
+
+        // 4. 알림 전송
+        notificationService.createNotification(
+            ownerId,
+            "review",
+            "새 리뷰가 작성되었습니다.",
+            reviewerName + "님이 " + targetType + "에 리뷰를 남겼습니다.",
+            targetId
+        );
+
         return review;
     }
+
+
     
 
     @Override

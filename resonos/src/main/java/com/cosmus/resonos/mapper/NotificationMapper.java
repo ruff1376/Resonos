@@ -19,7 +19,9 @@ public interface NotificationMapper {
     // 유저
     public List<Notification> findByUser(Long userId) throws Exception;
 
+    // 정책 
     public int createPolicyViolationNotification(Long userId, String banword, Long targetId) throws Exception;
+    // 유저용 
     public int createNotification(Long userId, String type, String message, String content, Long targetId) throws Exception;
     
 }

@@ -11,6 +11,6 @@ public class Notification {
     private String content;
     private Boolean isRead;
     private Date createdAt;
-    private Long targetId;
+    private String targetId;
     private Long userId;
 }
