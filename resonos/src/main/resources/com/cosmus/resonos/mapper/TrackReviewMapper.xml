@@ -16,6 +16,7 @@
         <result property="critic"    column="critic"/>
         <result property="userId"    column="user_id"/>
         <result property="trackId"   column="track_id"/>
+        <result property="title"     column="title"/>
             <association property="reviewer" javaType="com.cosmus.resonos.domain.Reviewer">
                 <id property="id" column="reviewer_id"/>
                 <result property="nickname" column="reviewer_nickname"/>
