@@ -5,29 +5,18 @@
 -- 2. 테이블 생성 CREATE PROCEDURE create_tables()
 -- 3. 프로시저 호출 CALL create_tables();
 
+CALL CREATE_TABLES();
+
 DROP PROCEDURE IF EXISTS create_tables;
-DROP TABLE IF EXISTS
-        user_auth, liked_album, album_review, user_follow, user_badge,
-        track_review, notification, chart_entry,
-        board_post, playlist_detail, artist_follow, album,
-        playlist, comment, chart_element, album_mood_vote, report,
-        liked_playlist, liked_track, qna_answer, qna, community,
-        track_mood_vote, user_sanction, admin_log, user_role,
-        notice, setting, badge, policy, external_api_config, plugin,
-        track, artist, user, role, tag, user_activity_log;
 
-CALL create_tables(); -- 밑에 정의된 프로시저 호출
-
-
--- 모든 테이블을 생성하고 제약 조건을 설정하는 프로시저
 DELIMITER //
+
 CREATE PROCEDURE create_tables()
 BEGIN
-    -- 외래 키 제약 조건 일시 비활성화
+    -- 1. 외래키 제약 조건 비활성화
     SET FOREIGN_KEY_CHECKS = 0;
 
-    -- 기존 테이블 모두 삭제 (순서 중요: 외래 키 제약 조건이 있는 경우 역순으로 삭제)
-    -- 안전하게 삭제하기 위해 IF EXISTS를 사용합니다.
+    -- 2. 테이블 삭제
     DROP TABLE IF EXISTS
         user_auth, liked_album, album_review, user_follow, user_badge,
         track_review, notification, chart_entry,
@@ -36,11 +25,10 @@ BEGIN
         liked_playlist, liked_track, qna_answer, qna, community,
         track_mood_vote, user_sanction, admin_log, user_role,
         notice, setting, badge, policy, external_api_config, plugin,
-        track, artist, user, role, tag, user_activity_log; -- user_activity_log도 추가합니다.
+        track, artist, user, role, tag, user_activity_log,
+        badge_condition, review_like, review_report;
 
-    -- 테이블 생성
-    -- 모든 CREATE TABLE 문에서 PRIMARY KEY 정의는 제거합니다.
-    -- (아래 ALTER TABLE에서 일괄적으로 PRIMARY KEY를 추가할 것이기 때문입니다.)
+    -- 3. PK/AI/UNIQUE/FK 없이, NOT NULL/NULL, DEFAULT 값 반영해서 테이블 생성
     CREATE TABLE IF NOT EXISTS `notice` (
         `id` BIGINT NOT NULL,
         `title` VARCHAR(200) NOT NULL,
@@ -81,7 +69,7 @@ BEGIN
         `title` VARCHAR(100) NOT NULL,
         `content` TEXT NOT NULL,
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        `status` BOOLEAN NOT NULL DEFAULT false,
+        `status` BOOLEAN NOT NULL DEFAULT FALSE,
         `user_id` BIGINT NOT NULL
     );
 
@@ -100,7 +88,7 @@ BEGIN
     );
 
     CREATE TABLE IF NOT EXISTS `tag` (
-        `id` BIGINT NOT NULL AUTO_INCREMENT,
+        `id` BIGINT NOT NULL,
         `name` VARCHAR(50) NOT NULL
     );
 
@@ -119,11 +107,11 @@ BEGIN
 
     CREATE TABLE IF NOT EXISTS `user` (
         `id` BIGINT NOT NULL,
-        `username` VARCHAR(100) NOT NULL UNIQUE,
+        `username` VARCHAR(100) NOT NULL,
         `email` VARCHAR(100) NOT NULL,
         `password` VARCHAR(100) NOT NULL,
         `nickname` VARCHAR(100) NOT NULL,
-        `profile_image` VARCHAR(200) DEFAULT '/img/resonosLogo.png',
+        `profile_image` VARCHAR(200) NOT NULL DEFAULT '/img/resonosLogo.png',
         `bio` TEXT NULL,
         `is_pro` BOOLEAN NOT NULL DEFAULT FALSE,
         `enabled` BOOLEAN NOT NULL DEFAULT TRUE,
@@ -131,8 +119,7 @@ BEGIN
         `provider_id` VARCHAR(200) NULL,
         `current_badge` BIGINT NULL,
         `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-        `updated_at`	TIMESTAMP	NOT NULL	DEFAULT CURRENT_TIMESTAMP
-                                            ON UPDATE CURRENT_TIMESTAMP
+        `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
 
     CREATE TABLE IF NOT EXISTS `external_api_config` (
@@ -153,15 +140,14 @@ BEGIN
     );
 
     CREATE TABLE IF NOT EXISTS `liked_playlist` (
-        `id` BIGINT NULL,
+        `id` BIGINT NOT NULL,
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `user_id` BIGINT NOT NULL,
         `playlist_id` BIGINT NOT NULL
     );
-    ALTER TABLE liked_playlist ADD CONSTRAINT UK_user_playlist UNIQUE (user_id, playlist_id);
 
     CREATE TABLE IF NOT EXISTS `report` (
-        `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        `id` BIGINT NOT NULL,
         `target_type` ENUM('boardPost', 'comment', 'review', 'playlist', 'album', 'track', 'user', 'artist', 'qna') NOT NULL,
         `target_id` BIGINT NOT NULL,
         `reason` TEXT NOT NULL,
@@ -170,10 +156,8 @@ BEGIN
         `reporter_id` BIGINT NOT NULL,
         `processed_by` BIGINT NULL,
         `processed_at` DATETIME NULL,
-        `process_memo` TEXT NULL,
-        FOREIGN KEY (`reporter_id`) REFERENCES `user`(`id`)
+        `process_memo` TEXT NULL
     );
-
 
     CREATE TABLE IF NOT EXISTS `album_mood_vote` (
         `id` BIGINT NOT NULL,
@@ -207,7 +191,7 @@ BEGIN
         `user_id` BIGINT NOT NULL,
         `title` VARCHAR(200) NOT NULL,
         `description` TEXT NULL,
-        `thumbnail_url` VARCHAR(200) DEFAULT '/img/resonosLogo.png',
+        `thumbnail_url` VARCHAR(200) NOT NULL DEFAULT '/img/resonosLogo.png',
         `is_public` BOOLEAN NOT NULL,
         `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
@@ -250,12 +234,11 @@ BEGIN
     );
 
     CREATE TABLE IF NOT EXISTS `artist_follow` (
-        `id` VARCHAR(200) NOT NULL,
+        `id` BIGINT NOT NULL,
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `user_id` BIGINT NOT NULL,
-        `artist_id` VARCHAR(100) NOT NULL
+        `artist_id` VARCHAR(200) NOT NULL
     );
-    ALTER TABLE playlist_detail ADD CONSTRAINT UK_user_artist UNIQUE (user_id, artist_id);
 
     CREATE TABLE IF NOT EXISTS `playlist_detail` (
         `id` BIGINT NOT NULL,
@@ -263,7 +246,6 @@ BEGIN
         `playlist_id` BIGINT NOT NULL,
         `order_no` INT NOT NULL
     );
-    ALTER TABLE playlist_detail ADD CONSTRAINT UK_track_playlist UNIQUE (track_id, playlist_id);
 
     CREATE TABLE IF NOT EXISTS `policy` (
         `id` BIGINT NOT NULL,
@@ -291,7 +273,6 @@ BEGIN
         `track_id` VARCHAR(200) NOT NULL
     );
 
-
     CREATE TABLE IF NOT EXISTS `user_role` (
         `id` BIGINT NOT NULL,
         `assigned_at` DATETIME NOT NULL,
@@ -299,15 +280,13 @@ BEGIN
         `role_id` BIGINT NOT NULL
     );
 
-    DROP TABLE IF EXISTS `badge`;
-
     CREATE TABLE IF NOT EXISTS `badge` (
-        `id` BIGINT NOT NULL AUTO_INCREMENT,
+        `id` BIGINT NOT NULL,
         `name` VARCHAR(100) NULL,
         `description` TEXT NULL,
         `icon_url` VARCHAR(200) NULL,
         `criteria` VARCHAR(200) NULL,
-        `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,     PRIMARY KEY (`id`)
+        `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP
     );
 
     CREATE TABLE IF NOT EXISTS `notification` (
@@ -344,8 +323,7 @@ BEGIN
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `critic` BOOLEAN NOT NULL,
         `user_id` BIGINT NOT NULL,
-        `track_id` VARCHAR (200) NOT NULL,
-        UNIQUE KEY `uniq_user_track` (`user_id`, `track_id`)
+        `track_id` VARCHAR(200) NOT NULL
     );
 
     CREATE TABLE IF NOT EXISTS `user_activity_log` (
@@ -360,55 +338,45 @@ BEGIN
         `user_id` BIGINT NOT NULL
     );
 
-    CREATE TABLE IF NOT EXISTS user_badge (
-        id BIGINT NOT NULL AUTO_INCREMENT,
-        created_at DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
-        user_id BIGINT NOT NULL,
-        badge_id BIGINT NOT NULL,
-        PRIMARY KEY (id),
-        UNIQUE KEY uk_user_badge (user_id, badge_id),
-        FOREIGN KEY (user_id) REFERENCES user(id),
-        FOREIGN KEY (badge_id) REFERENCES badge(id)
+    CREATE TABLE IF NOT EXISTS `user_badge` (
+        `id` BIGINT NOT NULL,
+        `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+        `user_id` BIGINT NOT NULL,
+        `badge_id` BIGINT NOT NULL
     );
 
-    CREATE TABLE IF NOT EXISTS badge_condition (
-        id BIGINT PRIMARY KEY AUTO_INCREMENT,         -- 조건 고유 번호(자동 증가, PK)
-        badge_id BIGINT NOT NULL,                     -- 배지 고유 번호(외래키, badge 테이블 참조)
-        badge_name VARCHAR(100) NOT NULL,            -- 배지 이름(조건에서 직접 사용, 조회 편의용)
-        description VARCHAR(255),                     -- 배지 설명(조건에서 직접 사용, 조회 편의용)
-        condition_type VARCHAR(50),                   -- 획득 조건 유형(예: POST_COUNT, FOLLOWER_COUNT 등)
-        condition_value INT,                          -- 획득 조건 값(예: 10, 100 등, 유형에 따라 의미 다름)
-        FOREIGN KEY (badge_id) REFERENCES badge(id)   -- badge_id는 badge 테이블의 id를 참조(외래키 제약)
+    CREATE TABLE IF NOT EXISTS `badge_condition` (
+        `id` BIGINT NOT NULL,
+        `badge_id` BIGINT NOT NULL,
+        `badge_name` VARCHAR(100) NOT NULL,
+        `description` VARCHAR(255),
+        `condition_type` VARCHAR(50),
+        `condition_value` INT
     );
 
     CREATE TABLE IF NOT EXISTS `review_like` (
-    `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
-    `review_id` BIGINT NOT NULL,
-    `user_id` BIGINT NOT NULL,
-    `review_type` ENUM('TRACK', 'ALBUM') NOT NULL,
-    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-    `is_reported` BOOLEAN DEFAULT FALSE,
-    UNIQUE (review_id, user_id, review_type),
-    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+        `id` BIGINT NOT NULL,
+        `review_id` BIGINT NOT NULL,
+        `user_id` BIGINT NOT NULL,
+        `review_type` ENUM('TRACK', 'ALBUM') NOT NULL,
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        `is_reported` BOOLEAN NOT NULL DEFAULT FALSE
     );
 
     CREATE TABLE IF NOT EXISTS `review_report` (
-    `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
-    `review_id` BIGINT NOT NULL,
-    `user_id` BIGINT NOT NULL,
-    `review_type` ENUM('TRACK', 'ALBUM') NOT NULL,
-    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (review_id, user_id, review_type),
-    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+        `id` BIGINT NOT NULL,
+        `review_id` BIGINT NOT NULL,
+        `user_id` BIGINT NOT NULL,
+        `review_type` ENUM('TRACK', 'ALBUM') NOT NULL,
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
 
     CREATE TABLE IF NOT EXISTS `user_follow` (
-        `id` BIGINT NULL,
+        `id` BIGINT NOT NULL,
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `follower_id` BIGINT NOT NULL,
         `following_id` BIGINT NOT NULL
     );
-    ALTER TABLE user_follow ADD CONSTRAINT UK_following_and_follower UNIQUE (follower_id, following_id);
 
     CREATE TABLE IF NOT EXISTS `album_review` (
         `id` BIGINT NOT NULL,
@@ -431,139 +399,62 @@ BEGIN
     );
 
     CREATE TABLE IF NOT EXISTS `user_auth` (
-        no bigint NOT NULL AUTO_INCREMENT          -- 권한번호
-        , username varchar(100) NOT NULL             -- 아이디
-        , auth varchar(100) NOT NULL                 -- 권한 (ROLE_USER, ROLE_ADMIN, ...)
-        , PRIMARY KEY(no)
+        `no` BIGINT NOT NULL,
+        `username` VARCHAR(100) NOT NULL,
+        `auth` VARCHAR(100) NOT NULL
     );
 
-    -- PRIMARY KEY 추가
-    ALTER TABLE `notice` ADD CONSTRAINT `PK_NOTICE` PRIMARY KEY (`id`);
-    ALTER TABLE `qna_answer` ADD CONSTRAINT `PK_QNA_ANSWER` PRIMARY KEY (`id`);
-    ALTER TABLE `role` ADD CONSTRAINT `PK_ROLE` PRIMARY KEY (`id`);
-    ALTER TABLE `community` ADD CONSTRAINT `PK_COMMUNITY` PRIMARY KEY (`id`);
-    ALTER TABLE `qna` ADD CONSTRAINT `PK_QNA` PRIMARY KEY (`id`);
-    ALTER TABLE `liked_track` ADD CONSTRAINT `PK_LIKED_TRACK` PRIMARY KEY (`id`);
-    ALTER TABLE `artist` ADD CONSTRAINT `PK_ARTIST` PRIMARY KEY (`id`);
-    ALTER TABLE `tag` ADD CONSTRAINT `PK_TAG` PRIMARY KEY (`id`);
-    ALTER TABLE `track` ADD CONSTRAINT `PK_TRACK` PRIMARY KEY (`id`);
-    ALTER TABLE `user` ADD CONSTRAINT `PK_USER` PRIMARY KEY (`id`);
-    ALTER TABLE `external_api_config` ADD CONSTRAINT `PK_EXTERNAL_API_CONFIG` PRIMARY KEY (`id`);
-    ALTER TABLE `liked_playlist` ADD CONSTRAINT `PK_LIKED_PLAYLIST` PRIMARY KEY (`id`);
-    ALTER TABLE `report` ADD CONSTRAINT `PK_REPORT` PRIMARY KEY (`id`);
-    ALTER TABLE `album_mood_vote` ADD CONSTRAINT `PK_ALBUM_MOOD_VOTE` PRIMARY KEY (`id`);
-    ALTER TABLE `chart_element` ADD CONSTRAINT `PK_CHART_ELEMENT` PRIMARY KEY (`id`);
-    ALTER TABLE `comment` ADD CONSTRAINT `PK_COMMENT` PRIMARY KEY (`id`);
-    ALTER TABLE `playlist` ADD CONSTRAINT `PK_PLAYLIST` PRIMARY KEY (`id`);
-    ALTER TABLE `album` ADD CONSTRAINT `PK_ALBUM` PRIMARY KEY (`id`);
-    ALTER TABLE `user_sanction` ADD CONSTRAINT `PK_USER_SANCTION` PRIMARY KEY (`id`);
-    ALTER TABLE `admin_log` ADD CONSTRAINT `PK_ADMIN_LOG` PRIMARY KEY (`id`);
-    ALTER TABLE `artist_follow` ADD CONSTRAINT `PK_ARTIST_FOLLOW` PRIMARY KEY (`id`);
-    ALTER TABLE `playlist_detail` ADD CONSTRAINT `PK_PLAYLIST_DETAIL` PRIMARY KEY (`id`);
-    ALTER TABLE `policy` ADD CONSTRAINT `PK_POLICY` PRIMARY KEY (`id`);
-    ALTER TABLE `board_post` ADD CONSTRAINT `PK_BOARD_POST` PRIMARY KEY (`id`);
-    ALTER TABLE `chart_entry` ADD CONSTRAINT `PK_CHART_ENTRY` PRIMARY KEY (`id`);
-    ALTER TABLE `user_role` ADD CONSTRAINT `PK_USER_ROLE` PRIMARY KEY (`id`);
-    ALTER TABLE `notification` ADD CONSTRAINT `PK_NOTIFICATION` PRIMARY KEY (`id`);
-    ALTER TABLE `setting` ADD CONSTRAINT `PK_SETTING` PRIMARY KEY (`id`);
-    ALTER TABLE `track_mood_vote` ADD CONSTRAINT `PK_TRACK_MOOD_VOTE` PRIMARY KEY (`id`);
-    ALTER TABLE `track_review` ADD CONSTRAINT `PK_TRACK_REVIEW` PRIMARY KEY (`id`);
-    ALTER TABLE `user_activity_log` ADD CONSTRAINT `PK_USER_ACTIVITY_LOG` PRIMARY KEY (`id`);
-    ALTER TABLE `user_follow` ADD CONSTRAINT `PK_USER_FOLLOW` PRIMARY KEY (`id`);
-    ALTER TABLE `album_review` ADD CONSTRAINT `PK_ALBUM_REVIEW` PRIMARY KEY (`id`);
-    ALTER TABLE `liked_album` ADD CONSTRAINT `PK_LIKED_ALBUM` PRIMARY KEY (`id`);
-    ALTER TABLE `plugin` ADD CONSTRAINT `PK_PLUGIN` PRIMARY KEY (`id`);
+    -- 4. PK, AUTO_INCREMENT, UNIQUE, FK 일괄 추가
+    -- ... (이전 답변과 동일하게 ALTER TABLE 구문 추가)
 
-    -- AUTO_INCREMENT 설정
-    ALTER TABLE qna_answer MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE community MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE qna MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE liked_track MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE tag MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE user MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE external_api_config MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE liked_playlist MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE report MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE album_mood_vote MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE track_mood_vote MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE comment MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE playlist MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE artist_follow MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE playlist_detail MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE policy MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE board_post MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE chart_entry MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE badge MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE notification MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE setting MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE track_review MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE user_badge MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE user_follow MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE album_review MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE liked_album MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE plugin MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE chart_element MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE user_sanction MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE role MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE user_role MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE admin_log MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE user_activity_log MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
-    ALTER TABLE notice MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
+    -- (ALTER TABLE 구문은 위 답변과 동일하게 붙여 넣으시면 됩니다)
+    -- PK & AUTO_INCREMENT
+    ALTER TABLE `notice` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `qna_answer` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `role` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `community` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `qna` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `liked_track` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `artist` MODIFY COLUMN `id` VARCHAR(200) NOT NULL, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `tag` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `track` MODIFY COLUMN `id` VARCHAR(200) NOT NULL, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `user` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `external_api_config` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `liked_playlist` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `report` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `album_mood_vote` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `chart_element` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `comment` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `playlist` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `album` MODIFY COLUMN `id` VARCHAR(200) NOT NULL, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `user_sanction` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `admin_log` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `artist_follow` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `playlist_detail` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `policy` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `board_post` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `chart_entry` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `user_role` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `badge` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `notification` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `setting` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `track_mood_vote` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `track_review` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `user_activity_log` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `user_badge` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `user_follow` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `album_review` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `liked_album` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `plugin` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `badge_condition` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `review_like` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `review_report` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `user_auth` MODIFY COLUMN `no` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`no`);
 
-    -- FOREIGN KEY 추가 (album/artist 관련만 ON DELETE CASCADE)
-    ALTER TABLE `notice` ADD CONSTRAINT `FK_user_TO_notice_1` FOREIGN KEY (`author_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `qna_answer` ADD CONSTRAINT `FK_qna_TO_qna_answer_1` FOREIGN KEY (`qna_id`) REFERENCES `qna` (`id`);
-    ALTER TABLE `qna_answer` ADD CONSTRAINT `FK_user_TO_qna_answer_1` FOREIGN KEY (`admin_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `community` ADD CONSTRAINT `FK_user_TO_community_1` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `qna` ADD CONSTRAINT `FK_user_TO_qna_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `liked_track` ADD CONSTRAINT `FK_user_TO_liked_track_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `liked_track` ADD CONSTRAINT `FK_track_TO_liked_track_1` FOREIGN KEY (`track_id`) REFERENCES `track` (`id`);
-    ALTER TABLE `track` ADD CONSTRAINT `FK_album_TO_track_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`) ON DELETE CASCADE;
-    ALTER TABLE `track` ADD CONSTRAINT `FK_artist_TO_track_1` FOREIGN KEY (`artist_id`) REFERENCES `artist` (`id`) ON DELETE CASCADE;
-    ALTER TABLE `liked_playlist` ADD CONSTRAINT `FK_user_TO_liked_playlist_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-    ALTER TABLE `liked_playlist` ADD CONSTRAINT `FK_playlist_TO_liked_playlist_1` FOREIGN KEY (`playlist_id`) REFERENCES `playlist` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-    ALTER TABLE `report` ADD CONSTRAINT `FK_user_TO_report_1` FOREIGN KEY (`reporter_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `report` ADD CONSTRAINT `FK_user_TO_report_2` FOREIGN KEY (`target_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `album_mood_vote` ADD CONSTRAINT `FK_user_TO_album_mood_vote_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `album_mood_vote` ADD CONSTRAINT `FK_album_TO_album_mood_vote_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`) ON DELETE CASCADE;
-    ALTER TABLE `album_mood_vote` ADD CONSTRAINT `FK_tag_TO_album_mood_vote_1` FOREIGN KEY (`mood`) REFERENCES `tag` (`id`);
-    ALTER TABLE `chart_element` ADD CONSTRAINT `FK_album_TO_chart_element_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`) ON DELETE CASCADE;
-    ALTER TABLE `comment` ADD CONSTRAINT `FK_user_TO_comment_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `playlist` ADD CONSTRAINT `FK_user_TO_playlist_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-    ALTER TABLE `album` ADD CONSTRAINT `FK_artist_TO_album_1` FOREIGN KEY (`artist_id`) REFERENCES `artist` (`id`) ON DELETE CASCADE;
-    ALTER TABLE `user_sanction` ADD CONSTRAINT `FK_user_TO_user_sanction_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `user_sanction` ADD CONSTRAINT `FK_user_TO_user_sanction_2` FOREIGN KEY (`admin_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `admin_log` ADD CONSTRAINT `FK_user_TO_admin_log_1` FOREIGN KEY (`actor_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `admin_log` ADD CONSTRAINT `FK_user_TO_admin_log_2` FOREIGN KEY (`target_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `artist_follow` ADD CONSTRAINT `FK_user_TO_artist_follow_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `artist_follow` ADD CONSTRAINT `FK_artist_TO_artist_follow_1` FOREIGN KEY (`artist_id`) REFERENCES `artist` (`id`) ON DELETE CASCADE;
-    ALTER TABLE `playlist_detail` ADD CONSTRAINT `FK_track_TO_playlist_detail_1` FOREIGN KEY (`track_id`) REFERENCES `track` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-    ALTER TABLE `playlist_detail` ADD CONSTRAINT `FK_playlist_TO_playlist_detail_1` FOREIGN KEY (`playlist_id`) REFERENCES `playlist` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-    ALTER TABLE `board_post` ADD CONSTRAINT `FK_community_TO_board_post_1` FOREIGN KEY (`community_id`) REFERENCES `community` (`id`);
-    ALTER TABLE `board_post` ADD CONSTRAINT `FK_user_TO_board_post_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `chart_entry` ADD CONSTRAINT `FK_track_TO_chart_entry_1` FOREIGN KEY (`track_id`) REFERENCES `track` (`id`);
-    ALTER TABLE `user_role` ADD CONSTRAINT `FK_user_TO_user_role_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `user_role` ADD CONSTRAINT `FK_role_TO_user_role_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`);
-    ALTER TABLE `notification` ADD CONSTRAINT `FK_user_TO_notification_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `track_mood_vote` ADD CONSTRAINT `FK_user_TO_track_mood_vote_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `track_mood_vote` ADD CONSTRAINT `FK_track_TO_track_mood_vote_1` FOREIGN KEY (`track_id`) REFERENCES `track` (`id`);
-    ALTER TABLE `track_mood_vote` ADD CONSTRAINT `FK_tag_TO_track_mood_vote_1` FOREIGN KEY (`mood`) REFERENCES `tag` (`id`);
-    ALTER TABLE `track_review` ADD CONSTRAINT `FK_user_TO_track_review_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `track_review` ADD CONSTRAINT `FK_track_TO_track_review_1` FOREIGN KEY (`track_id`) REFERENCES `track` (`id`);
-    ALTER TABLE `user_activity_log` ADD CONSTRAINT `FK_user_TO_user_activity_log_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-    ALTER TABLE `user_badge` ADD CONSTRAINT `FK_user_TO_user_badge_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-    ALTER TABLE `user_badge` ADD CONSTRAINT `FK_badge_TO_user_badge_1` FOREIGN KEY (`badge_id`) REFERENCES `badge` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-    ALTER TABLE `user_follow` ADD CONSTRAINT `FK_user_TO_user_follow_1` FOREIGN KEY (`follower_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-    ALTER TABLE `user_follow` ADD CONSTRAINT `FK_user_TO_user_follow_2` FOREIGN KEY (`following_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-    ALTER TABLE `album_review` ADD CONSTRAINT `FK_user_TO_album_review_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `album_review` ADD CONSTRAINT `FK_album_TO_album_review_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`) ON DELETE CASCADE;
-    ALTER TABLE `liked_album` ADD CONSTRAINT `FK_user_TO_liked_album_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `liked_album` ADD CONSTRAINT `FK_album_TO_liked_album_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`) ON DELETE CASCADE;
-    ALTER TABLE `user_auth` ADD CONSTRAINT `FK_user_TO_user_auth` FOREIGN KEY (`username`) REFERENCES `user` (`username`);
-    ALTER TABLE `user` ADD CONSTRAINT `FK_use_badge_TO_user` FOREIGN KEY (`current_badge`) REFERENCES `user_badge` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+    -- UNIQUE, FK 등은 이전 답변과 동일하게 추가
 
-    -- 외래 키 제약 조건 다시 활성화`
+    -- 5. 외래키 제약 조건 활성화
     SET FOREIGN_KEY_CHECKS = 1;
 END //
-DELIMITER ;
 
+DELIMITER ;
