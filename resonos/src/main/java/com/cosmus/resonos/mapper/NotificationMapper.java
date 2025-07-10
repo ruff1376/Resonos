@@ -18,4 +18,8 @@ public interface NotificationMapper {
     public int delete(Long id) throws Exception;
     // 유저
     public List<Notification> findByUser(Long userId) throws Exception;
+
+    public int createPolicyViolationNotification(Long userId, String banword, Long targetId) throws Exception;
+    public int createNotification(Long userId, String type, String message, String content, Long targetId) throws Exception;
+    
 }

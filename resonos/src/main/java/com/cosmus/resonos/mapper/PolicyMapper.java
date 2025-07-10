@@ -16,4 +16,7 @@ public interface PolicyMapper {
     public int update(Policy policy) throws Exception;
     // 삭제
     public int delete(Long id) throws Exception;
+    // type으로 조회 ("banword" 정책) 
+    public Policy selectByType(String type);
+
 }
