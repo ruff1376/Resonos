@@ -1,6 +1,9 @@
 package com.cosmus.resonos.service;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.cosmus.resonos.domain.Badge;
 
 public interface BadgeService {
@@ -14,4 +17,8 @@ public interface BadgeService {
     public boolean update(Badge badge) throws Exception;
     // 삭제
     public boolean delete(Long id) throws Exception;
+    // 회득 배지 조회
+    public List<Badge> haveBadge(Long loginUserId) throws Exception;
+    // 미회득 배지 조회
+    public List<Badge> doesNotHaveBadge(Long loginUserId) throws Exception;
 }

@@ -40,4 +40,28 @@
     DELETE FROM badge WHERE id = #{id}
   </delete>
 
+  <!-- 획득 배지 출력 -->
+  <select id="haveBadge" resultMap="BadgeResultMap">
+    SELECT *
+    FROM badge b
+    WHERE EXISTS (
+      SELECT 1
+      FROM user_badge ub
+      WHERE ub.user_id = #{loginUserId}
+      AND ub.badge_id = b.id
+    )
+  </select>
+
+  <!-- 미획득 배지 조회 -->
+  <select id="doesNotHaveBadge" resultMap="BadgeResultMap">
+    SELECT *
+    FROM badge b
+    WHERE NOT EXISTS (
+      SELECT 1
+      FROM user_badge ub
+      WHERE ub.user_id = #{loginUserId}
+      AND ub.badge_id = b.id
+    )
+  </select>
+
 </mapper>
