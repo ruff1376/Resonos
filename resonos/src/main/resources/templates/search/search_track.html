@@ -10,7 +10,7 @@
 </head>
 <body>
     <th:block layout:fragment="content">
-        <div class="container-fluid d-flex flex-column align-items-center px-0" style="max-width:1440px; height:2400px; padding-top:150px; gap:50px;">
+        <div class="container-fluid d-flex flex-column align-items-center px-0" style="max-width:1440px; padding-top:150px; gap:50px;">
             <!-- 검색 결과 : "OOO" -->
             <div class="d-flex flex-row mb-5 w-100" style="max-width:1440px; margin:10px auto; gap:10px;">
                 <h1 style="color: white; margin-left: 3rem;">검색 결과 : "<span th:text="${keyword}">검색어</span>"</h1>
@@ -24,8 +24,8 @@
                 <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-0 m-0 mb-5 justify-content-start">
                     <th:block th:each="track : ${allTrackSearchList}">
                         <!-- 트랙 카드 -->
-                        <div class="col d-flex">
-                            <div class="card align-items-center p-3" style="width:228px; height:360px;">
+                        <div class="col d-flex justify-content-center">
+                            <div class="card align-items-center p-3" style="width:228px; height:340px;">
                                 <a th:href="@{'/tracks?id=' + ${track.id}}">
                                     <img th:src="${track.coverImage}" class="card-img-top" alt="앨범 커버">
                                 </a>
@@ -33,7 +33,7 @@
                                     <a th:href="@{'/tracks?id=' + ${track.id}}" class="card-title" th:text="${track.title}"></a>
                                     <a th:href="@{'/artists?id=' + ${track.artistId}}" class="card-artist" th:text="${track.artistName}"></a>
                                 </div>
-                                <div class="position-absolute bottom-0 start-50 translate-middle-x mb-5">
+                                <div class="position-relative bottom-0 mb-5">
                                     <th:block th:if="${track.avgRating != null}">
                                         <canvas class="doughnut-canvas" th:attr="data-rating=${track.avgRating}" width="50" height="50"></canvas>
                                     </th:block>
