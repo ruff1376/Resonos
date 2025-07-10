@@ -2,6 +2,7 @@ package com.cosmus.resonos.service;
 
 
 import java.util.List;
+import java.util.Map;
 
 import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.UserAuth;
@@ -68,5 +69,12 @@ public interface UserService {
     public Users selectById(Long id) throws Exception;
     // 회원 아이디로 공개 정보 조회
     public PublicUserDto publicSelectById(Long id) throws Exception;
+
+    // 검색 결과 목록
+    public List<Users> searchList(String keyword) throws Exception;
+    // 검색 결과 전체 목록
+    public List<Users> allSearchList(Map<String, Object> paramMap) throws Exception;
+    // 검색 데이터 수
+    public long searchCount(String keyword) throws Exception;
 
 }
