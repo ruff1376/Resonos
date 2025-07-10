@@ -325,7 +325,7 @@ BEGIN
 
     CREATE TABLE IF NOT EXISTS `track_review` (
         `id` BIGINT NOT NULL,
-        `rating` FLOAT NOT NULL,
+        `rating` INT NOT NULL,
         `content` TEXT NOT NULL,
         `blinded` BOOLEAN NOT NULL,
         `likes` INT NOT NULL DEFAULT 0,

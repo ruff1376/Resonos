@@ -74,9 +74,35 @@
         WHERE tr.track_id = #{trackId}
         AND tr.blinded = 0
         ORDER BY tr.critic DESC,
-                likes DESC,
-                tr.created_at ASC
-            </select>
+            likes DESC,
+            tr.created_at ASC
+    </select>
+
+    <select id="selectPagedReviewsWithReviewer"
+            parameterType="map"
+            resultMap="TrackReview">
+        SELECT
+            tr.id,
+            tr.rating,
+            tr.content,
+            tr.blinded,
+            tr.created_at,
+            tr.critic,
+            tr.user_id,
+            tr.track_id,
+            u.id AS reviewer_id,
+            u.nickname AS reviewer_nickname,
+            u.profile_image AS reviewer_profile_image,
+            u.is_pro AS reviewer_is_pro,
+            (SELECT COUNT(*) FROM review_like WHERE review_id = tr.id AND review_type = 'TRACK') AS likes,
+            (SELECT COUNT(*) FROM review_report WHERE review_id = tr.id AND review_type = 'TRACK') AS dislikes
+        FROM track_review tr
+        JOIN user u ON u.id = tr.user_id
+        WHERE tr.track_id = #{trackId}
+        AND tr.blinded = 0
+        ORDER BY tr.critic DESC, likes DESC, tr.created_at ASC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
 
     <!-- update blind status -->
     <update id="updateBlindStatus">
@@ -124,5 +150,20 @@
         WHERE user_id = #{userId}
         AND track_id = #{trackId}
     </select>
+
+    <!-- 전체 리뷰 수 -->
+    <select id="countByTrackId" resultType="long">
+        SELECT COUNT(*) FROM track_review
+        WHERE track_id = #{trackId}
+        AND blinded = 0
+    </select>
+
+    <!-- 페이징된 리뷰 목록 -->
+    <!-- <select id="selectPagedReviews" parameterType="map" resultMap="TrackReviewResultMap">
+        SELECT * FROM track_review
+        WHERE track_id = #{trackId}
+        ORDER BY created_at DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select> -->
 
 </mapper>
