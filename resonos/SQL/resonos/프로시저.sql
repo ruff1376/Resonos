@@ -368,7 +368,7 @@ BEGIN
         `user_id` BIGINT NOT NULL,
         `review_type` ENUM('TRACK', 'ALBUM') NOT NULL,
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        `is_reported` BOOLEAN NOT NULL DEFAULT FALSE
+        UNIQUE (review_id, user_id, review_type)
     );
 
     CREATE TABLE IF NOT EXISTS `review_report` (
@@ -376,7 +376,8 @@ BEGIN
         `review_id` BIGINT NOT NULL,
         `user_id` BIGINT NOT NULL,
         `review_type` ENUM('TRACK', 'ALBUM') NOT NULL,
-        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE (review_id, user_id, review_type)
     );
 
     CREATE TABLE IF NOT EXISTS `user_follow` (
