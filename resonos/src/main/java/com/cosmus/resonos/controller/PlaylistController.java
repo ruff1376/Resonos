@@ -1,6 +1,7 @@
 package com.cosmus.resonos.controller;
 
 import java.io.File;
+import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -116,7 +117,10 @@ public class PlaylistController {
         if(!playlist.getIsPublic() && !isOwner) return "redirect:/playlists";
         // 플레이리스트 주인 정보
         PublicUserDto owner = userService.publicSelectById(ownerId);
+        // 좋아요 눌렀는지
+        boolean alreadyLiked = loginUser != null ? playlistService.alreadyLikedPlaylist(loginUser.getId(), id) : false;
 
+        model.addAttribute("alreadyLiked", alreadyLiked);
         model.addAttribute("owner", owner);
         model.addAttribute("playlist", playlist);
         model.addAttribute("isOwner", isOwner);
@@ -288,5 +292,44 @@ public class PlaylistController {
         }
 
         return new ResponseEntity<>("삭제 실패하였습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * 플레이리스트 좋아요 요청
+     * @param playlistId
+     * @param orderList
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/{playlistId}/like")
+    public ResponseEntity<?> likePlaylist(
+        @PathVariable("playlistId") Long playlistId,
+        @AuthenticationPrincipal CustomUser loginUser
+    ) throws Exception {
+        if(loginUser == null) return new ResponseEntity<>("로그인이 필요한 서비스입니다.", HttpStatus.FORBIDDEN);
+        boolean result = playlistService.likePlaylist(loginUser.getId(), playlistId);
+        if(result)
+            return new ResponseEntity<>("이 플레이리스트를 좋아요 합니다.", HttpStatus.OK);
+
+        return new ResponseEntity<>("에러.", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * 플레이리스트 좋아요 취소 요청
+     * @param playlistId
+     * @param orderList
+     * @return
+     * @throws Exception
+     */
+    @DeleteMapping("/{playlistId}/like")
+    public ResponseEntity<?> likePlaylistCancle(
+        @PathVariable("playlistId") Long playlistId,
+        @AuthenticationPrincipal CustomUser loginUser
+    ) throws Exception {
+        boolean result = playlistService.cancleLikePlaylist(loginUser.getId(), playlistId);
+        if(result)
+            return new ResponseEntity<>("좋아요를 취소하였습니다.", HttpStatus.OK);
+
+        return new ResponseEntity<>("에러.", HttpStatus.BAD_REQUEST);
     }
 }

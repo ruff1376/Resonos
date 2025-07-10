@@ -37,7 +37,7 @@ public class TrackReviewServiceImpl implements TrackReviewService {
         mapper.insert(review);
         return review;
     }
-    
+
 
     @Override
     public List<TrackReview> getReviewsForTrack(String trackId) {
@@ -117,9 +117,13 @@ public class TrackReviewServiceImpl implements TrackReviewService {
         return mapper.selectPagedReviewsWithReviewer(trackId, size, offset);
     }
 
-
     @Override
     public long countByTrackId(String trackId) {
         return mapper.countByTrackId(trackId);
+    }
+
+    @Override
+    public List<TrackReview> reviewWithReviewerByUserId(Long loginUserId) throws Exception {
+        return mapper.reviewWithReviewerByUserId(loginUserId);
     }
 }

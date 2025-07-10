@@ -20,10 +20,12 @@ import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.Track;
+import com.cosmus.resonos.domain.TrackReview;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.ArtistService;
 import com.cosmus.resonos.service.PlaylistService;
+import com.cosmus.resonos.service.TrackReviewService;
 import com.cosmus.resonos.service.TrackService;
 import com.cosmus.resonos.service.UserFollowService;
 import com.cosmus.resonos.service.UserService;
@@ -49,6 +51,8 @@ public class UserController {
   @Autowired ArtistService artistService;
 
   @Autowired TrackService trackService;
+
+  @Autowired TrackReviewService trackReviewService;
   /**
    * 로그인 페이지 요청
    * @param param
@@ -208,11 +212,21 @@ public class UserController {
    * 내 활동 페이지 요청
    * @param model
    * @return
+   * @throws Exception
    */
   @GetMapping("/activity")
-  // TODO: @AuthenticationPrincipal 로 접근 권한
-  public String activity(Model model) {
+  public String activity(
+    @AuthenticationPrincipal CustomUser loginUser,
+    Model model
+    ) throws Exception {
+    if(loginUser == null) return "redirect:/login";
+    // 로그인 유저 정보
+    Users user = userService.select(loginUser.getUsername());
+    // 유저가 쓴 리뷰 정보
+    List<TrackReview> tReviewList = trackReviewService.reviewWithReviewerByUserId(loginUser.getId());
 
+    model.addAttribute("tReviewList", tReviewList);
+    model.addAttribute("user", user);
     model.addAttribute("lastPath", "activity");
     return "user/activity";
   }
