@@ -219,7 +219,8 @@ BEGIN
         `genre` VARCHAR(64) NULL,
         `label` VARCHAR(100) NULL,
         `description` TEXT NULL,
-        `artist_id` VARCHAR(200) NOT NULL
+        `artist_id` VARCHAR(200) NOT NULL,
+        `country` CHAR(3) NULL
     );
 
     CREATE TABLE IF NOT EXISTS `user_sanction` (

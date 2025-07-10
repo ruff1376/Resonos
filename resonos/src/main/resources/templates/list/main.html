@@ -36,8 +36,13 @@
 
                                 <!-- 오른쪽 캔버스 -->
                                 <div class="d-flex justify-content-end align-items-center me-4" style="flex-shrink: 0;">
-                                    <canvas class="doughnut-canvas" th:if="${iterStat.index == 0}" width="75" height="75" data-first="true"></canvas>
-                                    <canvas class="doughnut-canvas" th:unless="${iterStat.index == 0}" width="50" height="50"></canvas>
+                                    <th:block th:if="${album.avgRating != null}">
+                                        <canvas class="doughnut-canvas" th:if="${iterStat.index == 0}" th:attr="data-rating=${album.avgRating}" width="75" height="75" data-first="true"></canvas>
+                                        <canvas class="doughnut-canvas" th:unless="${iterStat.index == 0}" th:attr="data-rating=${album.avgRating}" width="50" height="50"></canvas>
+                                    </th:block>
+                                    <th:block th:unless="${album.avgRating != null}">
+                                        <span class="no-rating me-4 fw-bold fs-2">NR</span>
+                                    </th:block>
                                 </div>
                             </a>
                         </th:block>
@@ -68,8 +73,13 @@
 
                                 <!-- 오른쪽 캔버스 -->
                                 <div class="d-flex justify-content-end align-items-center me-4" style="flex-shrink: 0;">
-                                    <canvas class="doughnut-canvas" th:if="${iterStat.index == 0}" width="75" height="75" data-first="true"></canvas>
-                                    <canvas class="doughnut-canvas" th:unless="${iterStat.index == 0}" width="50" height="50"></canvas>
+                                    <th:block th:if="${album.avgRating != null}">
+                                        <canvas class="doughnut-canvas" th:if="${iterStat.index == 0}" th:attr="data-rating=${album.avgRating}" width="75" height="75" data-first="true"></canvas>
+                                        <canvas class="doughnut-canvas" th:unless="${iterStat.index == 0}" th:attr="data-rating=${album.avgRating}" width="50" height="50"></canvas>
+                                    </th:block>
+                                    <th:block th:unless="${album.avgRating != null}">
+                                        <span class="no-rating me-4 fw-bold fs-2">NR</span>
+                                    </th:block>
                                 </div>
                             </a>
                         </th:block>

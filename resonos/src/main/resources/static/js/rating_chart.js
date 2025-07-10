@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.doughnut-canvas').forEach((canvas, index) => {
-        const value = 40; // 예시용 값 — 이 부분은 실제 데이터로 바꿔도 됩니다
+        const value = parseInt(canvas.dataset.rating);
 
         // 색상 조건
         let color;
