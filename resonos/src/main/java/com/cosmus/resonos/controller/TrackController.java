@@ -139,7 +139,8 @@ public class TrackController {
             }
         }
         Track track = trackService.selectById(trackId);
-        boolean hasNext = trackReviewService.hasNextPage(trackId, page, size);
+        // boolean hasNext = trackReviewService.hasNextPage(trackId, page, size);
+        boolean hasNext = reviews.size() == size;
         // 💡 여기서도 모델 변수명은 review
         model.addAttribute("hasNext", hasNext);
         model.addAttribute("track", track);
