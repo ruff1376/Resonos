@@ -96,7 +96,7 @@
                             <div class="name-and-score">
                                 <p th:text="${rv.reviewer.nickname}">닉네임</p>
                                 <span th:if="${rv.critic == true }">✅</span>
-                                <span>🔮 <span th:text="${rv.rating}">0</span></span>
+                                <span>  🔮<span th:text="${rv.rating}">0</span></span>
                             </div>
                             <div class="review-content">
                                 <p class="content-text" th:text="${rv.content}">내용</p>
@@ -122,7 +122,7 @@
                                 <span th:id="'like-count-' + ${rv.id}" th:text="${rv.likes}">0</span>
 
                                 <button class="report-btn" th:data-review-id="${rv.id}"
-                                    th:data-review-type="${reviewType}">🚨 신고</button>
+                                    th:data-review-type="${reviewType}">🚨</button>
                                 <!-- 수정/삭제 버튼: 작성자 or ADMIN -->
                                 <span
                                     th:if="${(isAdmin != null and isAdmin) or (loginUser != null and rv != null and loginUser.id == rv.userId)}">
@@ -357,7 +357,6 @@
                 });
             });
         });
-        const isLogin = /*[[${loginUser != null}]]*/ false;
 
         $(document).on("click", ".like-btn", function () {
             if (!isLogin) {

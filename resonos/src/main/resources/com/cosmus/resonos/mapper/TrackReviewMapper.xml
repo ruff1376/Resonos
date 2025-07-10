@@ -54,23 +54,29 @@
     </select>
     
     <select id="reviewWithReviewerByTrackId" parameterType="string" resultMap="TrackReview">
-        SELECT tr.*,
-            u.id            AS reviewer_id,
-            u.nickname      AS reviewer_nickname,
+        SELECT
+            tr.id,
+            tr.rating,
+            tr.content,
+            tr.blinded,
+            tr.created_at,
+            tr.critic,
+            tr.user_id,
+            tr.track_id,
+            u.id AS reviewer_id,
+            u.nickname AS reviewer_nickname,
             u.profile_image AS reviewer_profile_image,
-            u.is_pro        AS reviewer_is_pro,
-            (SELECT COUNT(*) FROM review_like
-                WHERE review_id = tr.id AND review_type = 'TRACK') AS likes,
-            (SELECT COUNT(*) FROM review_report
-                WHERE review_id = tr.id AND review_type = 'TRACK') AS dislikes
-        FROM   track_review tr
-            JOIN user u ON u.id = tr.user_id
-        WHERE  tr.track_id = #{trackId}
-            AND tr.blinded = 0
+            u.is_pro AS reviewer_is_pro,
+            (SELECT COUNT(*) FROM review_like WHERE review_id = tr.id AND review_type = 'TRACK') AS likes,
+            (SELECT COUNT(*) FROM review_report WHERE review_id = tr.id AND review_type = 'TRACK') AS dislikes
+        FROM track_review tr
+        JOIN user u ON u.id = tr.user_id
+        WHERE tr.track_id = #{trackId}
+        AND tr.blinded = 0
         ORDER BY tr.critic DESC,
                 likes DESC,
                 tr.created_at ASC
-    </select>
+            </select>
 
     <!-- update blind status -->
     <update id="updateBlindStatus">

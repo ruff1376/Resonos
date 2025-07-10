@@ -288,15 +288,6 @@ BEGIN
         `track_id` VARCHAR(200) NOT NULL
     );
 
-    CREATE TABLE IF NOT EXISTS `track_review_like` (
-        `id`          BIGINT AUTO_INCREMENT PRIMARY KEY,
-        `review_id`   BIGINT NOT NULL,
-        `user_id`     BIGINT NOT NULL,
-        `created_at`  DATETIME DEFAULT CURRENT_TIMESTAMP,
-        UNIQUE (review_id, user_id),
-        FOREIGN KEY (review_id) REFERENCES track_review(id) ON DELETE CASCADE,
-        FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
-    );
 
     CREATE TABLE IF NOT EXISTS `user_role` (
         `id` BIGINT NOT NULL,
@@ -387,7 +378,7 @@ BEGIN
         FOREIGN KEY (badge_id) REFERENCES badge(id)   -- badge_id는 badge 테이블의 id를 참조(외래키 제약)
     );
 
-    CREATE TABLE `review_like` (
+    CREATE TABLE IF NOT EXISTS `review_like` (
     `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
     `review_id` BIGINT NOT NULL,
     `user_id` BIGINT NOT NULL,
@@ -398,7 +389,7 @@ BEGIN
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
     );
 
-    CREATE TABLE `review_report` (
+    CREATE TABLE IF NOT EXISTS `review_report` (
     `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
     `review_id` BIGINT NOT NULL,
     `user_id` BIGINT NOT NULL,

@@ -70,7 +70,7 @@ public class TrackController {
             model.addAttribute("loginUser", loginUser);
             boolean isAdmin = principal.getAuthorities()
             .stream()
-            .anyMatch(a -> a.getAuthority().equals("ADMIN"));
+            .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
             model.addAttribute("isAdmin", isAdmin);
         }
         Track track = trackService.selectById(id);
