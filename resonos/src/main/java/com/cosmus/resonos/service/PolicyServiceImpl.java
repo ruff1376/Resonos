@@ -25,11 +25,15 @@ public class PolicyServiceImpl implements PolicyService {
 
     @Override
     public boolean insert(Policy policy) throws Exception {
+        // version 자동 생성
+        policy.setVersion("v" + System.currentTimeMillis());
         return policyMapper.insert(policy) > 0;
     }
 
     @Override
     public boolean update(Policy policy) throws Exception {
+        // version 자동 갱신
+        policy.setVersion("v" + System.currentTimeMillis());
         return policyMapper.update(policy) > 0;
     }
 
@@ -37,4 +41,9 @@ public class PolicyServiceImpl implements PolicyService {
     public boolean delete(Long id) throws Exception {
         return policyMapper.delete(id) > 0;
     }
+    @Override
+    public Policy selectByType(String type) throws Exception {
+        return policyMapper.selectByType(type);
+    }
+
 }

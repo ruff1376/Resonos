@@ -1,7 +1,10 @@
 package com.cosmus.resonos.service;
 
+import java.util.Date;
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+
 import com.cosmus.resonos.domain.Notification;
 import com.cosmus.resonos.mapper.NotificationMapper;
 
@@ -43,4 +46,32 @@ public class NotificationServiceImpl implements NotificationService {
     public List<Notification> findByUser(Long userId) throws Exception {
         return notificationMapper.findByUser(userId);
     }
+
+    @Override
+    public boolean createPolicyViolationNotification(Long userId, String banword, Long targetId) throws Exception {
+        Notification notification = new Notification();
+        notification.setUserId(userId);
+        notification.setType("policy_violation"); // ← 반드시 추가!
+        notification.setMessage("금칙어 사용 안내");
+        notification.setContent("입력하신 내용에 금칙어(" + banword + ")가 포함되어 있습니다.");
+        notification.setIsRead(false);
+        notification.setCreatedAt(new Date());
+        notification.setTargetId(targetId);
+        return insert(notification);
+    }
+
+    @Override
+    public boolean createNotification(Long userId, String type, String message, String content, Long targetId) throws Exception {
+        Notification notification = new Notification();
+        notification.setUserId(userId);
+        notification.setType(type);
+        notification.setMessage(message);
+        notification.setContent(content);
+        notification.setIsRead(false);
+        notification.setCreatedAt(new Date());
+        notification.setTargetId(targetId);
+        return insert(notification);
+    }
+
+
 }

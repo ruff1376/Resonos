@@ -9,10 +9,8 @@ import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Report;
 import com.cosmus.resonos.mapper.ReportMapper;
 
-import lombok.RequiredArgsConstructor;
-
+ 
 @Service
-@RequiredArgsConstructor
 public class ReportServiceImpl implements ReportService {
 
     @Override

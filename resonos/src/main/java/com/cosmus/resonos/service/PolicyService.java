@@ -15,5 +15,7 @@ public interface PolicyService {
     public boolean update(Policy policy) throws Exception;
     // 삭제
     public boolean delete(Long id) throws Exception;
+     // type으로 조회 ("banword" 정책) 
+    public Policy selectByType(String type) throws Exception;
 }
 

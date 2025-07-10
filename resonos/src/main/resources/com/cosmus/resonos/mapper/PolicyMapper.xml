@@ -20,21 +20,27 @@
     SELECT * FROM policy WHERE id = #{id}
   </select>
 
-  <insert id="insert" useGeneratedKeys="true" >
-    INSERT INTO policy (type, content, version)
-    VALUES (#{type}, #{content}, #{version})
+  <insert id="insert" useGeneratedKeys="true">
+    INSERT INTO policy (type, content, version, updated_at)
+    VALUES (#{type}, #{content}, #{version}, NOW())
   </insert>
 
   <update id="update">
     UPDATE policy
     SET type = #{type},
         content = #{content},
-        version = #{version}
+        version = #{version},
+        updated_at = NOW()
     WHERE id = #{id}
   </update>
 
   <delete id="delete">
     DELETE FROM policy WHERE id = #{id}
   </delete>
+
+  <!-- 정책 type 조회 -->
+  <select id="selectByType" resultMap="PolicyResultMap">
+    SELECT * FROM policy WHERE type = #{type}
+</select>
 
 </mapper>
