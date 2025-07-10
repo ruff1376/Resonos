@@ -1,7 +1,9 @@
 package com.cosmus.resonos.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.UserActivityLog;
 import com.cosmus.resonos.domain.UserAuth;
@@ -262,6 +265,31 @@ public class UserServiceImpl implements UserService {
     @Override
     public PublicUserDto publicSelectById(Long id) throws Exception {
         return userMapper.publicSelectById(id);
+    }
+
+    @Override
+    public List<Users> searchList(String keyword) throws Exception {
+        return userMapper.searchList(keyword);
+    }
+
+    @Override
+    public List<Users> allSearchList(Map<String, Object> paramMap) throws Exception {
+        String keyword = (String) paramMap.get("keyword");
+        Pagination pagination = (Pagination) paramMap.get("pagination");
+        long total = userMapper.searchCount(keyword);
+        if (pagination != null) {
+            pagination.setTotal(total);
+        }
+        Map<String, Object> queryMap = new HashMap<>();
+        queryMap.put("keyword", keyword);
+        queryMap.put("index", pagination.getIndex());
+        queryMap.put("size", pagination.getSize());
+        return userMapper.allSearchList(queryMap);
+    }
+
+    @Override
+    public long searchCount(String keyword) throws Exception {
+        return userMapper.searchCount(keyword);
     }
 
 }

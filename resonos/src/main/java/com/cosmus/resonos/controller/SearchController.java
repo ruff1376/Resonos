@@ -16,9 +16,11 @@ import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Track;
+import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.ArtistService;
 import com.cosmus.resonos.service.TrackService;
+import com.cosmus.resonos.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,6 +38,9 @@ public class SearchController {
 
     @Autowired
     private TrackService trackService;
+
+    @Autowired
+    private UserService userService;
     
     @GetMapping("")
     public String search(
@@ -47,24 +52,29 @@ public class SearchController {
         List<Artist> artistSearchList = artistService.searchList(keyword);
         List<Album> albumSearchList = albumService.searchList(keyword);
         List<Track> trackSearchList = trackService.searchList(keyword);
+        List<Users> userSearchList = userService.searchList(keyword);
 
         long artistSearchCount = artistService.searchCount(keyword);
         long albumSearchCount = albumService.searchCount(keyword);
         long trackSearchCount = trackService.searchCount(keyword);
+        long userSearchCount = userService.searchCount(keyword);
         
         model.addAttribute("keyword", keyword);
 
         model.addAttribute("artistSearchList", artistSearchList);
         model.addAttribute("albumSearchList", albumSearchList);
         model.addAttribute("trackSearchList", trackSearchList);
+        model.addAttribute("userSearchList", userSearchList);
 
         model.addAttribute("artistSearchCount", artistSearchCount);
         model.addAttribute("albumSearchCount", albumSearchCount);
         model.addAttribute("trackSearchCount", trackSearchCount);
+        model.addAttribute("userSearchCount", userSearchCount);
 
         log.info("artistSearchCount : " + artistSearchCount);
         log.info("albumSearchCount : " + albumSearchCount);
         log.info("trackSearchCount : " + trackSearchCount);
+        log.info("userSearchCount : " + userSearchCount);
         
         return "search/search";
     }
@@ -172,6 +182,41 @@ public class SearchController {
                                             .toUriString();
         model.addAttribute("pageUri", pageUri);
         return "search/search_track";
+    }
+    
+    @GetMapping("/users")
+    public String userSearch(
+        @RequestParam("q") String keyword,
+        @RequestParam(value = "size", defaultValue = "30") int size,
+        @RequestParam(value = "page", defaultValue = "1") int page,
+        Model model,
+        Pagination pagination
+    ) throws Exception {
+        pagination.setSize(size);
+        pagination.setPage(page);
+        pagination.setCount(10);
+
+        Map<String, Object> paramMap = new HashMap<>();
+        keyword = keyword.trim();
+        paramMap.put("keyword", keyword);
+        paramMap.put("index", pagination.getIndex());
+        paramMap.put("size", pagination.getSize());
+        paramMap.put("pagination", pagination);
+
+        List<Users> allUserSearchList = userService.allSearchList(paramMap);
+
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("pagination", pagination);
+        model.addAttribute("allUserSearchList", allUserSearchList);
+        
+        String pageUri = UriComponentsBuilder.fromPath("/search/users")
+                                            .queryParam("q", keyword)
+                                            .queryParam("size", pagination.getSize())
+                                            .queryParam("count", pagination.getCount())
+                                            .build()
+                                            .toUriString();
+        model.addAttribute("pageUri", pageUri);
+        return "search/search_user";
     }
     
 }

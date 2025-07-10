@@ -10,7 +10,7 @@
 </head>
 <body>
     <th:block layout:fragment="content">
-        <div class="container-fluid d-flex flex-column align-items-center px-0" style="max-width:1440px; height:3000px; padding-top:150px; gap:50px;">
+        <div class="container-fluid d-flex flex-column align-items-center px-0" style="max-width:1440px; height:3500px; padding-top:150px; gap:50px;">
             <!-- 검색 결과 : "OOO" -->
             <div class="d-flex flex-row mb-5 w-100" style="max-width:1440px; margin:10px auto; gap:10px;">
                 <h1 style="color: white; margin-left: 3rem;">검색 결과 : "<span th:text="${keyword}">검색어</span>"</h1>
@@ -28,7 +28,7 @@
                         </div>
                     </div>
                 </th:block>
-                <th:block th:if="${artistSearchList != null and !artistSearchList.isEmpty()}">
+                <th:block th:if="${ artistSearchList != null && !artistSearchList.isEmpty() }">
                     <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-0 m-0 justify-content-start">
                         <th:block th:each="artist : ${artistSearchList}">
                             <!-- 아티스트 카드 -->
@@ -64,7 +64,7 @@
                         </div>
                     </div>
                 </th:block>
-                <th:block th:if="${albumSearchList != null and !albumSearchList.isEmpty()}">
+                <th:block th:if="${ albumSearchList != null && !albumSearchList.isEmpty() }">
                     <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-0 m-0 justify-content-start">
                         <th:block th:each="album : ${albumSearchList}">
                             <!-- 앨범 카드 -->
@@ -109,7 +109,7 @@
                         </div>
                     </div>
                 </th:block>
-                <th:block th:if="${trackSearchList != null and !trackSearchList.isEmpty()}">
+                <th:block th:if="${ trackSearchList != null && !trackSearchList.isEmpty() }">
                     <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-0 m-0 justify-content-start">
                         <th:block th:each="track : ${trackSearchList}">
                             <!-- 트랙 카드 -->
@@ -138,6 +138,42 @@
                 <div class="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style="height:50px;">
                     <th:block th:if="${ trackSearchCount > 12 }">
                         <a th:href="@{'/search/tracks?q=' + ${keyword}}" class="more-link">더 보기 &gt;</a>
+                    </th:block>
+                </div>
+            </section>
+
+            <!-- 회원 -->
+            <section class="main-section-bg w-100 py-4 mb-5">
+                <div class="d-flex flex-row align-items-center px-4 mb-3" style="height:50px;">
+                    <div class="section-title flex-grow-1">회원</div>
+                </div>
+                <th:block th:if="${ userSearchList == null || userSearchList.isEmpty() }">
+                    <div style="border-top: 1px solid #D4B97F; border-bottom: 1px solid #D4B97F; padding: 40px 0;">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <h3 style="color: #B1B1B1;">검색된 회원이 없습니다.</h3>
+                        </div>
+                    </div>
+                </th:block>
+                <th:block th:if="${ userSearchList != null && !userSearchList.isEmpty() }">
+                    <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-0 m-0 justify-content-start">
+                        <th:block th:each="user : ${userSearchList}">
+                            <!-- 회원 카드 -->
+                            <div class="col d-flex">
+                                <div class="card align-items-center p-3" style="width:228px; height:220px;">
+                                    <a th:href="@{'/users/' + ${user.id}}">
+                                        <img th:src="${user.profileImage}" class="card-img-top rounded-circle" alt="회원 이미지">
+                                    </a>
+                                    <div class="card-body">
+                                        <a th:href="@{'/users/' + ${user.id}}" class="card-title" th:text="${user.nickname}"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                </th:block>
+                <div class="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style="height:50px;">
+                    <th:block th:if="${ userSearchCount > 6 }">
+                        <a th:href="@{'/search/users?q=' + ${keyword}}" class="more-link">더 보기 &gt;</a>
                     </th:block>
                 </div>
             </section>

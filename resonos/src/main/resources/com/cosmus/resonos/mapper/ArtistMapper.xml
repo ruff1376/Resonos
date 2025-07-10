@@ -111,7 +111,6 @@
   <select id="searchCount" resultType="long">
     SELECT IFNULL(COUNT(DISTINCT a.id), 0)
     FROM artist a
-    LEFT JOIN artist_follow af ON a.id = af.artist_id
     WHERE a.name LIKE CONCAT('%', #{keyword}, '%')
   </select>
 
