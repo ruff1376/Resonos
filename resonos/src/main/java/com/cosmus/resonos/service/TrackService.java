@@ -36,7 +36,7 @@ public interface TrackService {
     public boolean exists(String id) throws Exception;
 
     // 동기화: Spotify에서 트랙 정보를 가져와서 데이터베이스에 저장
-    public void syncTrackFromSpotify(String spotifyTrackId);
+    public void syncTrackFromSpotify(String spotifyTrackId) throws Exception;
     // 아티스트별 상위7개 인기곡
     public List<Track> selectTop7TracksByArtist(String id) throws Exception;
     // 아티스트아이디당 트랙갯수
@@ -54,7 +54,7 @@ public interface TrackService {
     public Track findTopTrackByAlbumId(String id) throws Exception;
 
     // 검색 결과 목록
-    public List<Track> searchList(String keyword) throws Exception;
+    public List<Track> searchList(@Param("keyword") String keyword) throws Exception;
     // 검색 결과 전체 목록
     public List<Track> allSearchList(Map<String, Object> paramMap) throws Exception;
     // 검색 데이터 수

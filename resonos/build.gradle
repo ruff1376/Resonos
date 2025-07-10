@@ -59,3 +59,8 @@ tasks.named('test') {
 springBoot {
     mainClass = 'com.cosmus.resonos.SecurityApplication'
 }
+
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += ["-parameters"]
+}

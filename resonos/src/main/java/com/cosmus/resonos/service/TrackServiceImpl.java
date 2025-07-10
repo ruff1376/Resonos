@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Track;
+import com.cosmus.resonos.external.SpotifyApiClient;
 // import com.cosmus.resonos.external.SpotifyApiClient;
 import com.cosmus.resonos.mapper.TrackMapper;
 
@@ -77,29 +78,6 @@ public class TrackServiceImpl implements TrackService {
         return trackMapper.exists(id) > 0;
     }
 
-    // 구현 예정
-
-    // // 스포티파이 동기화 서비스
-    // @Autowired
-    // private SpotifyApiClient spotifyApiClient;
-
-    // public void syncTrackFromSpotify(String spotifyTrackId) throws Exception {
-    //     String token = spotifyApiClient.getAccessToken();
-    //     Map<String, Object> trackData = spotifyApiClient.getTrack(spotifyTrackId, token);
-
-    //     // 1.2.1. trackData → Track 도메인 변환
-    //     Track track = new Track();
-    //     track.setId((String) trackData.get("id"));
-    //     track.setTitle((String) trackData.get("name"));
-    //     // ... 기타 필드 매핑
-
-    //     // 1.2.2. 이미 존재하면 update, 없으면 insert
-    //     if (this.exists(track.getId())) {
-    //         this.update(track);
-    //     } else {
-    //         this.insert(track);
-    //     }
-    // }
 
     @Override
     public List<Track> selectTop7TracksByArtist(String id) throws Exception {
@@ -111,11 +89,48 @@ public class TrackServiceImpl implements TrackService {
         return trackMapper.countTracksByArtist(id);
     }
 
+        @Autowired
+    private SpotifyApiClient spotifyApiClient;
+
     @Override
-    public void syncTrackFromSpotify(String spotifyTrackId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'syncTrackFromSpotify'");
+    public void syncTrackFromSpotify(String spotifyTrackId) throws Exception {
+        // 1. Spotify API에서 트랙 정보 가져오기
+        String accessToken = spotifyApiClient.getAccessToken();
+        Map<String, Object> trackData = spotifyApiClient.getTrack(spotifyTrackId, accessToken);
+
+        if (trackData == null || trackData.get("id") == null) {
+            throw new IllegalArgumentException("Spotify에서 트랙 정보를 가져오지 못했습니다.");
+        }
+
+        // 2. 트랙 도메인 객체로 매핑
+        Track track = new Track();
+        track.setId((String) trackData.get("id"));
+        track.setTitle((String) trackData.get("name"));
+        track.setDuration(trackData.get("duration_ms") != null ? ((Number) trackData.get("duration_ms")).intValue() / 1000 : 0);
+        track.setGenre(""); // 필요시
+        track.setStreamingUrl((String) trackData.getOrDefault("preview_url", null));
+        // 앨범 ID
+        if (trackData.get("album") instanceof Map) {
+            Map<?, ?> album = (Map<?, ?>)trackData.get("album");
+            track.setAlbumId((String)album.get("id"));
+        }
+        // 아티스트 ID
+        if (trackData.get("artists") instanceof java.util.List && !((java.util.List<?>)trackData.get("artists")).isEmpty()) {
+            java.util.Map<?, ?> firstArtist = (java.util.Map<?, ?>)((java.util.List<?>)trackData.get("artists")).get(0);
+            track.setArtistId((String)firstArtist.get("id"));
+        }
+        track.setPopularity(trackData.get("popularity") != null ? ((Number) trackData.get("popularity")).intValue() : 0);
+        track.setTrackNo(trackData.get("track_number") != null ? ((Number) trackData.get("track_number")).intValue() : 0);
+
+        // 3. DB 저장 (존재하면 update, 없으면 insert)
+        if (trackMapper.exists(track.getId()) == 0) {
+            trackMapper.insert(track);
+        } else {
+            trackMapper.update(track);
+        }
     }
+
+
     @Override
     public List<Track> findTop5TracksInSameAlbum(String id) throws Exception {
         return trackMapper.findTop5TracksInSameAlbum(id);

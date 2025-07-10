@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.Pagination;
+import com.cosmus.resonos.external.SpotifyApiClient;
 import com.cosmus.resonos.mapper.AlbumMapper;
 
 @Service
@@ -154,6 +155,48 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public List<Album> worldHotReviewList() throws Exception {
         return albumMapper.worldHotReviewList();
+    }
+
+    // spotify 앨범 저장 
+    @Autowired
+    private SpotifyApiClient spotifyApiClient;
+
+    @Override
+    public void syncAlbumFromSpotify(String spotifyAlbumId) throws Exception {
+        // 1. Spotify API에서 앨범 정보 가져오기
+        String accessToken = spotifyApiClient.getAccessToken();
+        Map<String, Object> albumData = spotifyApiClient.getAlbum(spotifyAlbumId, accessToken);
+
+        if (albumData == null || albumData.get("id") == null) {
+            throw new IllegalArgumentException("Spotify에서 앨범 정보를 가져오지 못했습니다.");
+        }
+
+        // 2. 앨범 도메인 객체로 매핑
+        Album album = new Album();
+        album.setId((String) albumData.get("id"));
+        album.setTitle((String) albumData.get("name"));
+        album.setCoverImage(
+            albumData.get("images") instanceof java.util.List && !((java.util.List<?>) albumData.get("images")).isEmpty()
+                ? (String)((java.util.Map<?, ?>)((java.util.List<?>) albumData.get("images")).get(0)).get("url") : null
+        );
+        Object releaseDateObj = albumData.get("release_date");
+        if (releaseDateObj instanceof String) {
+            album.setReleaseDate(java.sql.Date.valueOf((String) releaseDateObj));
+        }
+        album.setGenre(""); // 필요시
+        album.setLabel((String) albumData.getOrDefault("label", ""));
+        album.setDescription(""); // 필요시
+        // 아티스트 ID 추출
+        if (albumData.get("artists") instanceof java.util.List && !((java.util.List<?>)albumData.get("artists")).isEmpty()) {
+            java.util.Map<?, ?> firstArtist = (java.util.Map<?, ?>)((java.util.List<?>)albumData.get("artists")).get(0);
+            album.setArtistId((String)firstArtist.get("id"));
+        }
+        // 3. DB 저장 (존재하면 update, 없으면 insert)
+        if (albumMapper.exists(album.getId()) == 0) {
+            albumMapper.insert(album);
+        } else {
+            albumMapper.update(album);
+        }
     }
 
 }

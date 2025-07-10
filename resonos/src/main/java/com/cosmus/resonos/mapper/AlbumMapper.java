@@ -48,7 +48,7 @@ public interface AlbumMapper {
     // 트랙 아이디로 앨범 객체
     public Album findAlbumByTrackId(String id) throws Exception;
     // 검색 결과 목록
-    public List<Album> searchList(String keyword) throws Exception;
+    public List<Album> searchList(@Param("keyword") String keyword) throws Exception;
     // 검색 결과 전체 목록
     public List<Album> allSearchList(Map<String, Object> paramMap) throws Exception;
     // 검색 데이터 수
