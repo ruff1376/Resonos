@@ -12,7 +12,6 @@ body {
     min-width: 320px;
     margin-bottom: 16px;
     height: 100px;
-    /* 높이 축소 */
     padding: 0 !important;
 }
 
@@ -26,7 +25,6 @@ body {
 .album-rank {
     color: white;
     font-size: 16px;
-    /* 크기 축소 */
     font-weight: 400;
     width: 24px;
     text-align: center;
@@ -41,13 +39,11 @@ body {
 .album-title {
     font-weight: 700;
     font-size: 16px;
-    /* 크기 축소 */
     color: #fff;
 }
 
 .album-artist {
     font-size: 14px;
-    /* 크기 축소 */
     color: #B1B1B1;
 }
 
@@ -61,7 +57,6 @@ body {
 
 .album-img {
     width: 75px;
-    /* 크기 축소 */
     height: 75px;
     object-fit: cover;
     background: var(--background-color);
@@ -76,7 +71,6 @@ body {
 
 .album-rating {
     width: 32px;
-    /* 크기 축소 */
     height: 32px;
     object-fit: cover;
     background: var(--background-color);
@@ -126,6 +120,16 @@ body {
     font-size: 16px;
     color: #fff;
     margin-bottom: 4px;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    line-height: 1.5em;
+    max-height: 3em;
+    text-align: center;
 }
 
 .album-grid .card-artist {
@@ -134,19 +138,14 @@ body {
 }
 
 .album-grid .card-body {
-    /* display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; */
     width: 100%;
-    text-align: center; /* 텍스트 가운데 정렬 */
+    text-align: center;
 }
 
-.album-grid .card-title,
 .album-grid .card-artist {
     display: block;
     width: 100%;
-    text-align: center; /* 여러 줄도 항상 가운데 정렬 */
+    text-align: center;
     word-break: break-all;
     white-space: normal;
 }

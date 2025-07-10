@@ -1,7 +1,10 @@
 package com.cosmus.resonos.mapper;
 
 import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
 import com.cosmus.resonos.domain.Badge;
 
 @Mapper
@@ -16,4 +19,9 @@ public interface BadgeMapper {
     public int update(Badge badge) throws Exception;
     // 삭제
     public int delete(Long id) throws Exception;
+
+    // 회득 배지 조회
+    public List<Badge> haveBadge(@Param("loginUserId") Long loginUserId) throws Exception;
+    // 미회득 배지 조회
+    public List<Badge> doesNotHaveBadge(@Param("loginUserId") Long loginUserId) throws Exception;
 }

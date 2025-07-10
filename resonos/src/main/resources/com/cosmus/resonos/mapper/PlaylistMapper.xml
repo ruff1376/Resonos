@@ -200,5 +200,22 @@
     </foreach>
   </update>
 
+  <!-- 플레이리스트 좋아요 -->
+  <insert id="likePlaylist">
+    INSERT INTO liked_playlist (user_id, playlist_id)
+    VALUES (#{loginUserId}, #{playlistId})
+  </insert>
 
+  <!-- 플레이리스트 좋아요 취소 -->
+  <insert id="cancleLikePlaylist">
+    DELETE FROM liked_playlist WHERE user_id = #{loginUserId} AND playlist_id = #{playlistId}
+  </insert>
+
+  <!-- 플레이 리스트 좋아요 유무 -->
+  <select id="alreadyLikedPlaylist" resultType="int">
+    SELECT COUNT(*)
+    FROM liked_playlist
+    WHERE user_id = #{loginUserId}
+    AND playlist_id = #{playlistId}
+  </select>
 </mapper>

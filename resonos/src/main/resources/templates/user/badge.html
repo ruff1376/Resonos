@@ -22,14 +22,19 @@
             <h2 class="text-start">획득한 배지</h2>
           </div>
         </div>
+        <th:block th:if="${haveBagdeList == null or haveBagdeList.isEmpty()}">
+          <div class="empty-text">
+            <p>획득한 배지가 없습니다.</p>
+          </div>
+        </th:block>
         <ul class="ul-list bl d-flex">
-          <th:block th:each="i : ${#numbers.sequence(1, 10)}">
+          <th:block th:each="badge : ${haveBagdeList}">
             <li>
               <div class="bg-badge">
                 <div class="badge">
-                  <span th:text="|배지 이름 ${i}|">배지 이름</span>
+                  <span th:text="${badge.name}">배지 이름</span>
                 </div>
-                <p>획득 조건 출력</p>
+                <p th:text="${badge.description}">획득 조건 출력</p>
               </div>
             </li>
           </th:block>
@@ -45,13 +50,18 @@
           </div>
         </div>
         <ul class="ul-list bl d-flex">
-          <th:block th:each="i : ${#numbers.sequence(1, 10)}">
+          <th:block th:if="${notHaveBadgeList == null or notHaveBadgeList.isEmpty()}">
+            <div class="empty-text">
+              <p>회원님은 전설이십니다.</p>
+            </div>
+          </th:block>
+          <th:block th:each="badge : ${notHaveBadgeList}">
             <li>
               <div class="bg-badge cg">
                 <div class="badge cg">
-                  <span th:text="|배지 이름 ${i}|">배지 이름</span>
+                  <span th:text="${badge.name}">배지 이름</span>
                 </div>
-                <p>획득 조건 출력</p>
+                <p th:text="${badge.description}">획득 조건 출력</p>
               </div>
             </li>
           </th:block>

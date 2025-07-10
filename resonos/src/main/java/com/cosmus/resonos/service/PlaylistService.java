@@ -46,4 +46,10 @@ public interface PlaylistService {
     public boolean deleteTracks(@Param("playlistId") Long playlistId, @Param("orderNo") int orderNo) throws Exception;
     // 플레이리스트 트랙 추가
     public boolean insertTracks(List<PlaylistDetail> playlistDetail) throws Exception;
+    // 플레이리스트 좋아요
+    public boolean likePlaylist(Long loginUserId, Long playlistId) throws Exception;
+    // 플레이리스트 좋아요 취소
+    public boolean cancleLikePlaylist(Long loginUserId, Long playlistId) throws Exception;
+    // 플레이리스트 좋아요 유무
+    public boolean alreadyLikedPlaylist(Long loginUserId, Long playlistId) throws Exception;
 }

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class TrackReview {
     // 리뷰 아이디
     private Long id;
@@ -54,4 +56,8 @@ public class TrackReview {
     private Reviewer reviewer;  // 연관된 Reviewer 정보 포함
     // 좋아요누른 유저인지 확인
     private Boolean isLikedByCurrentUser;
+
+    /* 트랙 명 */
+    private String title;
+
 }

@@ -16,14 +16,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.Artist;
+import com.cosmus.resonos.domain.Badge;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.Track;
+import com.cosmus.resonos.domain.TrackReview;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.ArtistService;
+import com.cosmus.resonos.service.BadgeService;
 import com.cosmus.resonos.service.PlaylistService;
+import com.cosmus.resonos.service.TrackReviewService;
 import com.cosmus.resonos.service.TrackService;
 import com.cosmus.resonos.service.UserFollowService;
 import com.cosmus.resonos.service.UserService;
@@ -49,6 +53,10 @@ public class UserController {
   @Autowired ArtistService artistService;
 
   @Autowired TrackService trackService;
+
+  @Autowired TrackReviewService trackReviewService;
+
+  @Autowired BadgeService badgeService;
   /**
    * 로그인 페이지 요청
    * @param param
@@ -208,21 +216,22 @@ public class UserController {
    * 내 활동 페이지 요청
    * @param model
    * @return
+   * @throws Exception
    */
   @GetMapping("/activity")
-  // TODO: @AuthenticationPrincipal 로 접근 권한
-  public String activity(Model model) {
-
+  public String activity(
+    @AuthenticationPrincipal CustomUser loginUser,
+    Model model
+    ) throws Exception {
+    if(loginUser == null) return "redirect:/login";
+    // 로그인 유저 정보
+    Users user = userService.select(loginUser.getUsername());
+    // 유저가 쓴 리뷰 정보
+    List<TrackReview> tReviewList = trackReviewService.reviewWithReviewerByUserId(loginUser.getId());
+    model.addAttribute("tReviewList", tReviewList);
+    model.addAttribute("user", user);
     model.addAttribute("lastPath", "activity");
     return "user/activity";
-  }
-
-  @GetMapping("/badge")
-  // TODO: @AuthenticationPrincipal 로 접근 권한
-  public String badge(Model model) {
-
-    model.addAttribute("lastPath", "badge");
-    return "user/badge";
   }
 
   @GetMapping("/setting-alarm")
@@ -348,4 +357,23 @@ public class UserController {
     model.addAttribute("isOwner", isOwner);
     return "user/follow_user";
   }
+
+  @GetMapping("/badge")
+  public String badge(
+    @AuthenticationPrincipal CustomUser loginUser,
+    Model model
+  ) throws Exception {
+    if(loginUser == null) return "redirect:/login";
+    // 로그인 유저 정보
+    Users user = userService.select(loginUser.getUsername());
+    // 획득 배지 리스트
+    List<Badge> haveBagdeList = badgeService.haveBadge(loginUser.getId());
+    // 미획득 배지 리스트
+    List<Badge> notHaveBadgeList = badgeService.doesNotHaveBadge(loginUser.getId());
+
+    model.addAttribute("haveBagdeList", haveBagdeList);
+    model.addAttribute("notHaveBadgeList", notHaveBadgeList);
+    return "user/badge";
+  }
+
 }

@@ -321,6 +321,7 @@ button.social-btn:hover {
   margin-left: 8px;
   cursor: pointer;
 }
+.con-pli-detail .like.top-margin {margin-left: 0; margin-top: 20px; font-size: 4rem;}
 .stats-card .stat-bar {
   background: #222;
   border-radius: 8px;
@@ -513,7 +514,6 @@ textarea.form-control {
   cursor: pointer;
 }
 .con .bg-badge:hover {
-  transform: translateY(-1px) scale(1.04);
   border-color: #fffbe6;
   box-shadow: 0 8px 32px rgba(212, 185, 127, 0.18);
 }
@@ -603,6 +603,7 @@ textarea.form-control {
   top: 0;
   background-color: inherit;
   z-index: 10;
+  margin: 0 -10px;
 }
 .count {
   color: #B0B6BE;
@@ -850,6 +851,7 @@ button.like {background-color: inherit; border: none;}
 .hide {display: none;}
 .con-pli-detail .empty-text {height: 400px;}
 .con-follow .empty-text {height: 300px;}
+.con-badge .empty-text {height: 150px;}
 
 /* 아이디 찾기 */
 .con-find-id .user-form {

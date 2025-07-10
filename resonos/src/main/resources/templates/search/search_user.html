@@ -10,7 +10,7 @@
 </head>
 <body>
     <th:block layout:fragment="content">
-        <div class="container-fluid d-flex flex-column align-items-center px-0" style="max-width:1440px; height:2800px; padding-top:150px; gap:50px;">
+        <div class="container-fluid d-flex flex-column align-items-center px-0" style="max-width:1440px; padding-top:150px; gap:50px;">
             <!-- 검색 결과 : "OOO" -->
             <div class="d-flex flex-row mb-5 w-100" style="max-width:1440px; margin:10px auto; gap:10px;">
                 <h1 style="color: white; margin-left: 3rem;">검색 결과 : "<span th:text="${keyword}">검색어</span>"</h1>
@@ -21,10 +21,10 @@
                 <div class="d-flex flex-row align-items-center px-4 mb-3" style="height:50px;">
                     <div class="section-title flex-grow-1">회원</div>
                 </div>
-                <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-0 m-0 mb-5 justify-content-start">
+                <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-0 m-0 mb-5 justify-content-start">
                     <th:block th:each="user : ${allUserSearchList}">
                         <!-- 회원 카드 -->
-                        <div class="col d-flex">
+                        <div class="col d-flex justify-content-center">
                             <div class="card align-items-center p-3 mb-5" style="width:228px; height:230px;">
                                 <a th:href="@{'/users/' + ${user.id}}">
                                     <img th:src="${user.profileImage}" class="card-img-top rounded-circle" alt="회원 이미지">

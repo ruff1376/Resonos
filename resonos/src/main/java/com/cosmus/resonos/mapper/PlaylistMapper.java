@@ -47,4 +47,11 @@ public interface PlaylistMapper {
     public int deleteTracks(@Param("playlistId") Long playlistId, @Param("orderNo") int orderNo) throws Exception;
     // 플레이리스트 트랙 추가
     public int insertTracks(List<PlaylistDetail> playlistDetail) throws Exception;
+    // 플레이리스트 좋아요
+    public int likePlaylist(@Param("loginUserId") Long loginUserId, @Param("playlistId") Long playlistId) throws Exception;
+    // 플레이리스트 좋아요 취소
+    public int cancleLikePlaylist(@Param("loginUserId") Long loginUserId, @Param("playlistId") Long playlistId) throws Exception;
+    // 플레이리스트 좋아요 유무
+    public int alreadyLikedPlaylist(@Param("loginUserId") Long loginUserId, @Param("playlistId") Long playlistId) throws Exception;
 }
+
