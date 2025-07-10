@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.domain.CustomUser;
+import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Track;
 import com.cosmus.resonos.domain.TrackReview;
 import com.cosmus.resonos.domain.TrackScore;
@@ -78,7 +79,11 @@ public class TrackController {
         List<Track> top5List = trackService.findTop5TracksInSameAlbum(id);
         Artist artist = artistService.selectArtistByTrackId(id);
         TrackScore score = trackReviewService.getTrackScore(id);
-        List<TrackReview> reviews = trackReviewService.reviewWithReviewerByTrackId(id);
+        // List<TrackReview> reviews = trackReviewService.reviewWithReviewerByTrackId(id);
+        int page = 1;
+        int size = 5;
+
+        List<TrackReview> reviews = trackReviewService.getMoreReviews(id, page, size);
         if (loginUser != null && reviews != null && !reviews.isEmpty()) {
             List<Long> reviewIds = reviews.stream()
                                         .map(TrackReview::getId)
@@ -92,16 +97,22 @@ public class TrackController {
                 }
             }
         }
-        if (track == null) {
-            return "redirect:/artists?error=notfound";
-        }
+        // ⭐ 페이징 객체 만들어서 더보기 여부 판단용
+        long totalCount = trackReviewService.countByTrackId(id);
+        Pagination pagination = new Pagination(page, size, 10, totalCount);
+        boolean hasNext = pagination.getLast() > page;
+
         model.addAttribute("track", track);
         model.addAttribute("album", album);
         model.addAttribute("top5List", top5List);
         model.addAttribute("artist", artist);
         model.addAttribute("score", score);
         model.addAttribute("review", reviews);
+        model.addAttribute("hasNext", hasNext);
         model.addAttribute("reviewType", "TRACK");
+        if (track == null) {
+            return "redirect:/artists?error=notfound";
+        }
         return "review/track";
     }
 
@@ -109,7 +120,34 @@ public class TrackController {
     public String scoreRefresh(@PathVariable("id") String id, Model model) {
         TrackScore score = trackReviewService.getTrackScore(id);
         model.addAttribute("score", score);
-        return "review/score :: scoreFragment";  // Thymeleaf 조각 이름 지정
+        return "review/trackFrag :: scoreFragment";  // Thymeleaf 조각 이름 지정
+    }
+
+    @GetMapping("/{trackId}/reviews/more")
+    public String loadMoreReviews(@PathVariable("trackId") String trackId,
+                                @RequestParam(name = "page", defaultValue = "1") int page,
+                                @RequestParam(defaultValue = "5") int size,
+                                Model model,
+                                @AuthenticationPrincipal CustomUser principal) {
+
+        List<TrackReview> reviews = trackReviewService.getMoreReviews(trackId, page, size);
+
+        if (principal != null && !reviews.isEmpty()) {
+            List<Long> reviewIds = reviews.stream().map(TrackReview::getId).toList();
+            List<Long> likedIds = reviewLikeService.getUserLikedReviewIds("TRACK", reviewIds, principal.getUser().getId());
+            for (TrackReview r : reviews) {
+                r.setIsLikedByCurrentUser(likedIds.contains(r.getId()));
+            }
+        }
+
+        // 💡 여기서도 모델 변수명은 review
+        model.addAttribute("review", reviews);
+        model.addAttribute("reviewType", "TRACK");
+        model.addAttribute("loginUser", principal != null ? principal.getUser() : null);
+        model.addAttribute("isAdmin", principal != null && principal.getAuthorities().stream()
+            .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")));
+
+        return "review/trackFrag :: reviewItems";
     }
 
     /**

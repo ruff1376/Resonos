@@ -89,14 +89,14 @@
                 </div>
             </div>
             <div class="review-container">
-                <ul class="review-list">
+                <!-- <ul class="review-list">
                     <th:block th:each="rv : ${review}">
                         <li class="comment" th:id="|rv-${rv.id}|" th:data-review-id="${rv.id}"
                             th:data-track-id="${track.id}">
                             <div class="name-and-score">
                                 <p th:text="${rv.reviewer.nickname}">닉네임</p>
                                 <span th:if="${rv.critic == true }">✅</span>
-                                <span>  🔮<span th:text="${rv.rating}">0</span></span>
+                                <span> 🔮<span th:text="${rv.rating}">0</span></span>
                             </div>
                             <div class="review-content">
                                 <p class="content-text" th:text="${rv.content}">내용</p>
@@ -117,13 +117,12 @@
                                 <time th:text="${#temporals.format(rv.createdAt,'yyyy.MM.dd')}">날짜</time>
                                 <button class="like-btn" th:data-review-id="${rv.id}"
                                     th:data-review-type="${reviewType}" th:data-liked="${rv.isLikedByCurrentUser}"
-                                    th:text="${rv.isLikedByCurrentUser} ? '💕' : '❤️'">❤️</button>
+                                    th:text="${rv.isLikedByCurrentUser} ? '❤️' : '🤍'">❤️</button>
 
                                 <span th:id="'like-count-' + ${rv.id}" th:text="${rv.likes}">0</span>
 
                                 <button class="report-btn" th:data-review-id="${rv.id}"
                                     th:data-review-type="${reviewType}">🚨</button>
-                                <!-- 수정/삭제 버튼: 작성자 or ADMIN -->
                                 <span
                                     th:if="${(isAdmin != null and isAdmin) or (loginUser != null and rv != null and loginUser.id == rv.userId)}">
                                     <a href="#" class="edit-btn" th:data-id="${rv.id}">수정</a>
@@ -132,21 +131,13 @@
                             </div>
                         </li>
                     </th:block>
-                    <!-- <li class="comment">
-                        <div class="name-and-score">
-                            <p id="subtitle">페페사랑단12</p>
-                            <p> 🔮 100</p>
-                        </div>
-                        <div class="review-content">
-                            <p>우리 페페 많이 사랑해주세요222</p>
-                        </div>
-                        <div class="review-util">
-                            <p>2025.05.21</p>
-                            <a href="#">❤ 3</a>
-                            <a href="#" id="report">신고</a>
-                        </div>
-                    </li> -->
-                </ul>
+                </ul> -->
+                <ul class="review-list" th:replace="~{review/trackFrag :: reviewItems(review=${review})}"></ul>
+                <!-- 더보기 버튼 -->
+                <div class="more-box" th:if="${hasNext}">
+                    <button id="load-more-btn" data-page="1" th:data-track-id="${track.id}" class="btn btn-dark">리뷰
+                        더보기</button>
+                </div>
             </div>
             <!-- 페이지네이션 -->
             <div th:if="${loginUser != null}" class="reply">
@@ -198,7 +189,7 @@
             <div class="info album-moods">
                 <p id="headline">트랙의 분위기</p>
                 <div class="mood-list">
-                    <button class="btn btn-gold">동해물과</button>
+                    <button class="btn btn-gold">동해물과23</button>
                     <button class="btn btn-gold">백두산이 마르고</button>
                     <button class="btn btn-gold">닳도록 하느</button>
                     <button class="btn btn-gold">닳도록 하느</button>
@@ -217,7 +208,7 @@
     </div>
     <th:block th:replace="~{fragments/script::album}"></th:block>
     <script th:inline="javascript">
-        const isLogin = [[${loginUser != null ? 'true' : 'false'}]];
+        const isLogin = [[${ loginUser != null ? 'true' : 'false'}]];
     </script>
     <script>
         $(document).ready(function () {
@@ -253,7 +244,12 @@
                 const rating = $('#rating').val();
 
                 if (content === '' || rating === '') {
-                    alert("내용과 점수를 모두 입력해주세요.");
+                    Swal.fire({
+                        title: '리뷰를 입력해 주세요',
+                        text: '리뷰를 입력하지 않으셨습니다.',
+                        icon: 'error',
+                        confirmButtonText: '확인'
+                    });
                     return;
                 }
 
@@ -263,15 +259,31 @@
                     contentType: 'application/json',
                     data: JSON.stringify({ content, rating }),
                     success: function () {
-                        alert('리뷰 등록 완료!');
-                        reloadScoreBox(trackId);
-                        location.reload(); // 또는 동적으로 append 가능
+                        Swal.fire({
+                            title: '성공',
+                            text: '리뷰를 등록 하였습니다.',
+                            icon: 'success',
+                            confirmButtonText: '확인'
+                        }).then(() => {
+                            reloadScoreBox(trackId);  // 점수 박스 먼저 다시 불러오고
+                            location.reload();        // 새로고침
+                        });
                     },
                     error: function (xhr) {
                         if (xhr.status === 409) {
-                            alert("이미 리뷰를 작성했습니다.");
+                            Swal.fire({
+                                title: '중복',
+                                text: '이미 리뷰를 작성했습니다.',
+                                icon: 'warning',
+                                confirmButtonText: '확인'
+                            });
                         } else {
-                            alert("리뷰 등록 중 오류 발생.");
+                            Swal.fire({
+                                title: '오류',
+                                text: '리뷰 등록 중 오류 발생.',
+                                icon: 'error',
+                                confirmButtonText: '확인'
+                            });
                         }
                     }
                 });
@@ -306,7 +318,12 @@
                 const rating = form.find('.edit-rating').val();
 
                 if (content === '' || rating === '') {
-                    alert("내용과 점수를 모두 입력해주세요.");
+                    Swal.fire({
+                        title: '리뷰를 입력해 주세요',
+                        text: '리뷰를 입력하지 않으셨습니다.',
+                        icon: 'error',
+                        confirmButtonText: '확인'
+                    });
                     return;
                 }
                 $.ajax({
@@ -323,36 +340,69 @@
                     },
                     error: function (xhr) {
                         console.error(xhr.responseText);
-                        alert('수정 실패: ' + xhr.responseText);
+                        Swal.fire({
+                            title: '오류',
+                            text: '리뷰 수정 중 오류 발생.',
+                            icon: 'error',
+                            confirmButtonText: '확인'
+                        });
                     }
                 });
             });
 
             /** ④ 수정 취소 */
             $(document).on('click', '.btn-danger', function () {
-                $(this).closest('.edit-form').slideUp();
+                const form = $(this).closest('.edit-form');
+                const li = form.closest('li');
+
+                // 수정 폼 숨김
+                form.slideUp();
+
+                // 원래 리뷰 내용 다시 표시
+                li.find('.content-text').slideDown();
             });
 
             /** ⑤ 삭제 */
             $(document).on('click', '.del-btn', function (e) {
                 e.preventDefault();
 
-                if (!confirm('정말 삭제하시겠습니까?')) return;
-
                 const li = $(this).closest('li');
                 const reviewId = li.data('review-id');
                 const trackId = li.data('track-id');
 
-                $.ajax({
-                    url: `/tracks/${trackId}/review/${reviewId}`,
-                    method: 'DELETE',
-                    success: function () {
-                        li.slideUp(() => li.remove());
-                        reloadScoreBox(trackId);
-                    },
-                    error: function (xhr) {
-                        console.error(xhr.responseText);
-                        alert('삭제 실패: ' + xhr.responseText);
+                Swal.fire({
+                    title: '정말 삭제하시겠습니까?',
+                    text: '삭제된 리뷰는 복구할 수 없습니다.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: '삭제',
+                    cancelButtonText: '취소'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: `/tracks/${trackId}/review/${reviewId}`,
+                            method: 'DELETE',
+                            success: function () {
+                                li.slideUp(() => li.remove());
+                                reloadScoreBox(trackId);
+
+                                Swal.fire({
+                                    title: '삭제 완료',
+                                    text: '리뷰가 삭제되었습니다.',
+                                    icon: 'success',
+                                    confirmButtonText: '확인'
+                                });
+                            },
+                            error: function (xhr) {
+                                console.error(xhr.responseText);
+                                Swal.fire({
+                                    title: '오류',
+                                    text: '리뷰 삭제 중 오류 발생.',
+                                    icon: 'error',
+                                    confirmButtonText: '확인'
+                                });
+                            }
+                        });
                     }
                 });
             });
@@ -360,44 +410,129 @@
 
         $(document).on("click", ".like-btn", function () {
             if (!isLogin) {
-                alert("로그인이 필요합니다.");
+                Swal.fire({
+                    title: '로그인을 해주세요',
+                    text: '로그인시 사용할 수 있는 기능입니다.',
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
                 return;
             }
+
             const btn = $(this);
             const reviewId = btn.data("review-id");
             const reviewType = btn.data("review-type");
 
             $.post(`/tracks/${reviewType.toLowerCase()}-reviews/${reviewId}/like`, {}, function (data) {
                 btn.data("liked", data.liked);
-                btn.text(data.liked ? '💕' : '❤️');
+                btn.text(data.liked ? '❤️' : '🤍');
 
+                // 하트 커졌다 작아지는 애니메이션
+                btn.addClass("pop-heart");
+                setTimeout(() => btn.removeClass("pop-heart"), 300);
+
+                // 좋아요 수 슬라이드 애니메이션
                 const countEl = $("#like-count-" + reviewId);
-                countEl.text(data.likeCount);
-                countEl.stop(true).css({ color: "#e91e63" }).animate({ color: "#000" }, 500);
+                const currentCount = parseInt(countEl.text(), 10);
+
+                if (currentCount !== data.likeCount) {
+                    countEl.slideUp(150, function () {
+                        countEl.text(data.likeCount).slideDown(150);
+                    });
+                }
             }).fail(function (xhr) {
-                alert("좋아요 처리 중 오류 발생: " + xhr.responseText);
+                Swal.fire({
+                    title: '로그인을 해주세요',
+                    text: '로그인시 사용할 수 있는 기능입니다.',
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
             });
         });
 
         $(document).on("click", ".report-btn", function () {
             if (!isLogin) {
-                alert("로그인이 필요합니다.");
+                Swal.fire({
+                    title: "로그인이 필요합니다",
+                    text: "신고하려면 로그인이 필요합니다.",
+                    icon: "warning",
+                    confirmButtonText: "확인"
+                });
                 return;
             }
 
             const reviewId = $(this).data("review-id");
             const reviewType = $(this).data("review-type");
 
-            $.post(`/tracks/reviews/${reviewType}/${reviewId}/report`, {}, function (data) {
-                alert("신고 완료! 총 신고 수: " + data.reportCount);
-            }).fail(function (xhr) {
-                if (xhr.status === 429) {
-                    alert("이미 신고한 리뷰입니다.");
-                } else if (xhr.status === 401) {
-                    alert("로그인이 필요합니다.");
-                } else {
-                    alert("신고 중 오류 발생.");
+            Swal.fire({
+                title: "신고하시겠습니까?",
+                text: "해당 리뷰를 신고하시겠습니까?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "신고",
+                cancelButtonText: "취소"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post(`/tracks/reviews/${reviewType}/${reviewId}/report`, {}, function (data) {
+                        Swal.fire({
+                            title: "신고 완료",
+                            text: `총 신고 수: ${data.reportCount}`,
+                            icon: "success",
+                            confirmButtonText: "확인"
+                        });
+                    }).fail(function (xhr) {
+                        if (xhr.status === 429) {
+                            Swal.fire({
+                                title: "중복 신고",
+                                text: "이미 신고한 리뷰입니다.",
+                                icon: "warning",
+                                confirmButtonText: "확인"
+                            });
+                        } else if (xhr.status === 401) {
+                            Swal.fire({
+                                title: "로그인 필요",
+                                text: "신고하려면 로그인이 필요합니다.",
+                                icon: "warning",
+                                confirmButtonText: "확인"
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "오류",
+                                text: "신고 중 오류가 발생했습니다.",
+                                icon: "error",
+                                confirmButtonText: "확인"
+                            });
+                        }
+                    });
                 }
+            });
+        });
+        $(document).ready(function () {
+            $('#load-more-btn').on('click', function () {
+                const $btn = $(this);
+                let page = parseInt($btn.data('page'));
+                const trackId = $btn.data('track-id');
+                const size = 5;
+
+                const nextPage = page + 1;
+
+                $.ajax({
+                    url: `/tracks/${trackId}/reviews/more`,
+                    type: 'GET',
+                    data: { page: nextPage, size: size },
+                    success: function (fragmentHtml) {
+                        $('.review-list').append(fragmentHtml);
+                        $btn.data('page', nextPage);
+
+                        // 빈 조각이 반환되면 더보기 버튼 숨김
+                        if ($(fragmentHtml).filter('li.comment').length === 0) {
+                            $btn.hide();
+                        }
+                    },
+                    error: function () {
+                        alert('리뷰를 불러오는 중 오류가 발생했습니다.');
+                    }
+                });
             });
         });
     </script>
