@@ -44,11 +44,16 @@
           <!-- CSRF TOKEN -->
           <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
           <div class="d-flex align-items-center column-gap-5">
-            <label id="profileBtn" for="thumbnail">
-              <img th:src="@{${playlist.thumbnailUrl}}" alt="썸네일 이미지" class="profile-img edit">
-              <input type="file" name="thumbnail" id="thumbnail"/>
-              <input type="hidden" name="thumbnailUrl" th:value="${playlist.thumbnailUrl}">
-            </label>
+            <div class="d-flex flex-column justify-content-center">
+              <label id="profileBtn" for="thumbnail">
+                <img th:src="@{${playlist.thumbnailUrl}}" alt="썸네일 이미지" class="profile-img edit">
+                <input type="file" name="thumbnail" id="thumbnail"/>
+                <input type="hidden" name="thumbnailUrl" th:value="${playlist.thumbnailUrl}">
+              </label>
+              <button id="like-button" class="like">
+                ♡
+              </button>
+            </div>
             <div class="input-area">
               <label class="profile-edit-label" for="title">플레이리스트 제목</label>
               <input type="text" class="form-control" th:field="*{title}" th:readonly="${!isOwner}">
@@ -142,7 +147,7 @@
         }
       })
 
-      let isOwner = "[[${isOwner}]]"
+      let isOwner = [[${isOwner}]]
 
       if(isOwner) {
         /* Sortable */
@@ -187,8 +192,21 @@
 
           if (!response.ok) {
               const result = await response.text()
-              alert(result)
-              location.href = location.pathname
+              Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: result,
+                showConfirmButton: false,
+                timer: 1000,
+                customClass: {
+                  popup: 'follow-popup',
+                  icon: 'success-icon',
+                  title: 'alert-title'
+                }
+              });
+              setTimeout(() => {
+                location.href = location.pathname
+              }, 1001)
               return
           }
           // 성공시
@@ -324,14 +342,36 @@
 
           if (!response.ok) {
               const result = await response.text()
-              alert(result)
+              Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: result,
+                showConfirmButton: false,
+                timer: 1500,
+                customClass: {
+                  popup: 'follow-popup',
+                  icon: 'success-icon',
+                  title: 'alert-title'
+                }
+              });
               return
           }
           // 성공시
           const result = await response.json()
           renderTracks(result.trackList)
           document.querySelector('.count').textContent = result.trackList.length
-          alert("트랙이 추가되었습니다.")
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "플레이리스트에 추가되었습니다.",
+            showConfirmButton: false,
+            timer: 1500,
+            customClass: {
+              popup: 'follow-popup',
+              icon: 'success-icon',
+              title: 'alert-title'
+            }
+          });
         } catch (error) {
             console.error("요청 실패:", error)
           }
@@ -340,23 +380,38 @@
       /* 모달 띄우는 버튼 클릭 */
       const modal = document.querySelector('.modal-track')
       const openBtn = document.getElementById('addTrack')
+      const closeBtn = document.getElementById('close-modal')
 
-      function onWindowClick(event) {
-        if (!event.target.closest('.modal-contents')) {
-          modal.classList.remove('action')
-          window.removeEventListener('click', onWindowClick)
-        }
-      }
+      // function onWindowClick(event) {
+      //   if (!event.target.closest('.modal-contents')) {
+      //     modal.classList.remove('action')
+      //     window.removeEventListener('click', onWindowClick)
+      //   }
+      // }
 
+      /* 모달 띄우기 */
       if(openBtn) {
         openBtn.addEventListener('click', (event) => {
           modal.classList.add('action')
           // 모달 열릴 때만 window 클릭 이벤트 등록
-          window.addEventListener('click', onWindowClick)
-
-          event.stopPropagation()
+          // window.addEventListener('click', onWindowClick)
+          // event.stopPropagation()
         })
       }
+
+      /* 모달 닫기 */
+      if(closeBtn) {
+        closeBtn.addEventListener('click', (event) => {
+          modal.classList.remove('action')
+        })
+      }
+
+      /* 모달 닫기 ESC */
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          modal.classList.remove('action')
+        }
+      });
 
       /* 트랙리스트 선택 */
       const ulList = document.querySelector('.ul-list.modall')
@@ -370,16 +425,29 @@
       /* 플레이리스트에 추가 버튼 */
       document.getElementById('btn-modal').addEventListener('click', () => {
         const items = document.querySelectorAll('.ul-list.modall .list-item.select')
-        const check = confirm(`선택한 ${items.length}개의 트랙을 추가합니다.`)
-        if(!check) return
-        else {
-          let list = []
-          items.forEach(e => {
-            const trackId = e.querySelector('input[type="hidden"]').value
-            list.push(trackId)
-          })
-          addTracks(list)
-        }
+        Swal.fire({
+            title: `선택한 ${items.length}개의 트랙을 추가합니다.`,
+            showCancelButton: true,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소",
+            reverseButtons: true,
+            customClass: {
+            popup: 'follow-popup',
+            icon: 'warning-icon',
+            title: 'alert-title no-icon',
+            confirmButton: 'alert-button',
+            cancelButton: 'alert-cancle-button'
+          }
+          }).then((result) => {
+            if (result.isConfirmed) {
+              let list = []
+              items.forEach(e => {
+                const trackId = e.querySelector('input[type="hidden"]').value
+                list.push(trackId)
+              })
+              addTracks(list)
+            }
+          });
       })
 
       /* 플레이리스트 트랙 삭제 */
@@ -428,15 +496,24 @@
           }
       }
 
+      /* 트랙 삭제 버튼 */
       const ul = document.querySelector('.ul-list')
       ul.addEventListener('click', (event) => {
         const button = event.target.closest('button.btn-danger')
         const li = event.target.closest('.list-item')
         if (!button || !ul.contains(button)) return
-        if(li) alert("실행")
         deleteTracks(event)
       })
 
+      /* 트랙 페이지 이동 */
+      const items = document.querySelectorAll("li.list-item")
+      items.forEach(e => {
+        e.addEventListener("click", function(event) {
+          if (event.target.tagName.toLowerCase() === 'button') return
+          const trackId = this.querySelector('input[type="hidden"]').value
+          location.href = `/trakcs?id=${trackId}`
+        })
+      })
     </script>
   </th:block>
 </body>

@@ -1,5 +1,6 @@
 package com.cosmus.resonos.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -35,17 +36,25 @@ public class ReviewLikeServiceImpl implements ReviewLikeService {
 
     @Override
     public List<Long> getUserLikedReviewIds(String reviewType, List<Long> reviewIds, Long userId) {
+        if (reviewIds == null || reviewIds.isEmpty()) {
+            return Collections.emptyList();
+        }
         return mapper.findLikedReviewIds(reviewType, reviewIds, userId);
     }
 
     @Override
     public Map<Long, Integer> getLikeCountsByReviewIds(String reviewType, List<Long> reviewIds) {
+        if (reviewIds == null || reviewIds.isEmpty()) {
+            return Collections.emptyMap();  // 💡 빈 Map 반환
+        }
         return mapper.countLikesByReviewIds(reviewType, reviewIds);
     }
-
     @Override
     public void reportReview(Long reviewId, Long userId, String reviewType) {
-        mapper.reportReview(reviewId, userId, reviewType);
+        if (mapper.existsReport(reviewId, userId, reviewType)) {
+            throw new IllegalStateException("이미 신고한 리뷰입니다.");
+        }
+        mapper.insertReviewReport(reviewId, userId, reviewType);
     }
 
     @Override

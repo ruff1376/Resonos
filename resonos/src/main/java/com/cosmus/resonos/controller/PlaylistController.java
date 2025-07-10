@@ -86,7 +86,7 @@ public class PlaylistController {
 
         boolean result = playlistService.insert(playlist);
         if(result) {
-            return "redirect:/playlists";
+            return "redirect:/users/playlists";
         }
 
         return "redirect:/playlists/create?fail=true";

@@ -679,7 +679,7 @@ textarea.form-control {
 .con-badge .info-wrapper + .info-wrapper {margin-top: 50px;}
 .con-follow .bio {flex: 1;}
 .con-follow .ul-list.follower .bio {flex: auto;}
-.con-follow .btn-outline-gold, .con-follow-art .btn-outline-gold {width: 80px; margin-bottom: 0; padding: 3px 5px; margin-left: auto;}
+.con-follow .btn-outline-gold, .con-follow-art .btn-outline-gold {width: 80px; margin-bottom: 0; padding: 3px 5px; margin-left: auto !important;}
 
 
 /* 아티스트 팔로우 */
@@ -966,4 +966,53 @@ h2 + #bio {
   /* overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis; */
+}
+
+/* sweet alert */
+.follow-popup {
+  border: 1px solid var(--main-color);
+  background-color: var(--background-color);
+  border-radius: 10px;
+  width: 500px;
+  height: 300px;
+  color: var(--main-color)
+}
+.success-icon {
+  margin-top: 80px !important;
+}
+.alert-title {
+  margin-top: 0 !important;
+}
+.alert-title.no-icon {
+  margin-top: 100px !important;
+}
+.alert-text {
+  font-size: 1.4rem;
+}
+.warning-icon {
+  margin-top: 60px !important;
+}
+.alert-button {
+  background-color: var(--main-color);
+  width: 100px;
+  height: 40px;
+  border-radius: 10px;
+  margin-left: 20px;
+}
+.alert-button:hover {
+  background-color: #fff;
+  color: var(--main-color);
+}
+.alert-cancle-button {
+  background-color: inherit;
+  border: 1px solid var(--main-color);
+  color: var(--main-color);
+  width: 100px;
+  height: 40px;
+  border-radius: 10px;
+  margin-right: 20px;
+}
+.alert-cancle-button:hover {
+  background-color: var(--main-color);
+  color: #fff;
 }

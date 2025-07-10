@@ -30,4 +30,7 @@ public interface TrackReviewMapper {
     
     // 리뷰 + 리뷰어
     List<TrackReview> reviewWithReviewerByTrackId(@Param("trackId") String trackId);
+
+    // 중복 방지
+    boolean existsByUserAndTrack(@Param("userId") Long userId, @Param("trackId") String trackId);
 }
