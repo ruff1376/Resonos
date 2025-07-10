@@ -23,4 +23,5 @@ public class Album {
     private int popularityScore;
     private String country;
     private int reviewCount;
+    private Integer avgRating;
 }

@@ -19,6 +19,7 @@
     <result property="popularityScore" column="popularity_score"/>
     <result property="country" column="country"/>
     <result property="reviewCount" column="review_count"/>
+    <result property="avgRating" column="avg_rating"/>
   </resultMap>
 
   <select id="list" resultMap="Album">
@@ -27,7 +28,7 @@
   </select>
 
   <select id="korHotReviewList" resultMap="Album">
-    SELECT a.*, ar.name AS artist_name, COUNT(arw.id) AS review_count
+    SELECT a.*, ar.name AS artist_name, COUNT(arw.id) AS review_count, ROUND(AVG(arw.rating)) AS avg_rating
     FROM album a
     LEFT JOIN artist ar ON a.artist_id = ar.id
     LEFT JOIN album_review arw
@@ -40,7 +41,7 @@
   </select>
 
   <select id="worldHotReviewList" resultMap="Album">
-    SELECT a.*, ar.name AS artist_name, COUNT(arw.id) AS review_count
+    SELECT a.*, ar.name AS artist_name, COUNT(arw.id) AS review_count, ROUND(AVG(arw.rating)) AS avg_rating
     FROM album a
     JOIN artist ar ON a.artist_id = ar.id
     LEFT JOIN album_review arw
