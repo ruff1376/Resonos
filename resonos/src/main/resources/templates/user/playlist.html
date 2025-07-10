@@ -133,14 +133,36 @@
                   [header] : token,
               },
           })
-
           if (!response.ok) {
-              const result = await response.text()
-              alert("삭제 실패하였습니다.")
-              return
+            const result = await response.text()
+            Swal.fire({
+            position: "center",
+            icon: "warning",
+            title:  "삭제 실패하였습니다.",
+            showConfirmButton: false,
+            timer: 1500,
+            customClass: {
+              popup: 'follow-popup',
+              icon: 'success-icon',
+              title: 'alert-title'
+              }
+            })
+            return
           }
           // 성공시
           const result = await response.json()
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title:  "삭제되었습니다.",
+            showConfirmButton: false,
+            timer: 1500,
+            customClass: {
+              popup: 'follow-popup',
+              icon: 'success-icon',
+              title: 'alert-title'
+              }
+          });
           renderMyPlaylists(result)
           document.querySelectorAll('.count')[0].textContent = result.length
         } catch (error) {
@@ -179,12 +201,29 @@
       document.getElementById("myPlaylist").addEventListener("click", function (e) {
 
         if (e.target && e.target.matches(".btn-danger")) {
-          const check = confirm("정말 삭제하시겠습니까? \n삭제한 플레이리스트는 복구가 불가능합니다.")
-          if(!check) return
-          deletePlaylist(e)
-        }
-      });
-
+          Swal.fire({
+            title: "정말 삭제하시겠습니까?",
+            html: '<p class="alert-text">삭제한 플레이리스트는 복구가 불가능합니다.</p>',
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "삭제",
+            cancelButtonText: "취소",
+            reverseButtons: false,
+            customClass: {
+            popup: 'follow-popup',
+            icon: 'warning-icon',
+            title: 'alert-title',
+            text: 'alert-text',
+            confirmButton: 'alert-button',
+            cancelButton: 'alert-cancle-button'
+          }
+          }).then((result) => {
+            if (result.isConfirmed) {
+              deletePlaylist(e);
+            }
+          });
+          }
+        });
     </script>
   </th:block>
 </body>
