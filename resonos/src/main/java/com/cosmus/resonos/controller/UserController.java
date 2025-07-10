@@ -70,6 +70,7 @@ public class UserController {
     Model model,
     @AuthenticationPrincipal CustomUser loginUser
     ) throws Exception {
+    if(loginUser == null) return "redirect:/login";
     // 유저 정보
     Users user = userService.select(loginUser.getUsername());
     // 내 플레이 리스트
@@ -84,7 +85,7 @@ public class UserController {
     List<Track> trackList = trackSErvice.likedTracksTop3(user.getId());
     // 팔로우 한 아티스트
     List<Artist> artistList = artistService.followingArtistsTop3(user.getId());
-
+    //
 
     model.addAttribute("artistList", artistList);
     model.addAttribute("trackList", trackList);

@@ -43,7 +43,7 @@ body {
   align-items: center;
   justify-content: center;
 }
-.con {margin: 120px 0; padding: 0 10px;}
+.con {margin: 120px 0 200px; padding: 0 10px;}
 .con-mypage a {color: #fff !important;}
 .content-wrap {
   display: flex;
@@ -550,6 +550,7 @@ textarea.form-control {
   position: absolute;
   left: 40px;
   padding: 3px;
+  transition: all 0.7s ease-in-out;
 }
 .mypage-tabs .tab {
   display: block;
