@@ -344,4 +344,11 @@
     WHERE lt.user_id = #{id}
     ORDER BY lt.created_at DESC
   </select>
+
+  <!-- 페이징 전체 데이터 -->
+  <select id="getAllTracks" resultMap="Track">
+    SELECT * FROM track
+    ORDER BY popularity DESC
+    LIMIT #{index}, #{size}
+  </select>
 </mapper>

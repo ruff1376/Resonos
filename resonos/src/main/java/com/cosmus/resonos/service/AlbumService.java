@@ -60,4 +60,8 @@ public interface AlbumService {
     public List<Album> likedAlbums(Long id) throws Exception;
      // [추가] Spotify 앨범 동기화
     public void syncAlbumFromSpotify(String spotifyAlbumId) throws Exception;
+
+
+    // 페이징 전체 앨범 데이터 불러오기
+    public List<Album> getAllAlbums(Pagination pagination) throws Exception;
 }

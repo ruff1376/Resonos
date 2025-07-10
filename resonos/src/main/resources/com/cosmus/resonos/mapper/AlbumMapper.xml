@@ -278,4 +278,14 @@
     WHERE la.user_id = #{id}
     ORDER BY la.created_at DESC
   </select>
+
+
+  <!-- 전체 앨범 데이터 불러오기  -->
+  <select id="getAllAlbums" resultMap="Album">
+    SELECT * FROM album
+    ORDER BY release_date DESC
+    LIMIT #{index}, #{size}
+  </select>
+
+
 </mapper>
