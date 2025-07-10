@@ -11,7 +11,7 @@
 
 <body>
     <th:block layout:fragment="content">
-        <div class="container-fluid d-flex flex-column align-items-center px-0" style="max-width:1440px; min-height:2300px; padding-top:150px; gap:50px;">
+        <div class="container-fluid d-flex flex-column align-items-center px-0" style="max-width:1440px; padding-top:150px; gap:50px;">
             <!-- 인기 트랙 섹션 -->
             <section class="main-section-bg w-100 py-4 mb-5">
                 <div class="d-flex flex-row align-items-center px-4 mb-3" style="height:50px;">
@@ -20,8 +20,8 @@
                 <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-0 m-0 mb-5 justify-content-start">
                     <th:block th:each="hotTrack : ${hotTrackList}">
                         <!-- 트랙 카드 -->
-                        <div class="col d-flex">
-                            <div class="card align-items-center p-3" style="width:228px; height:360px;">
+                        <div class="col d-flex justify-content-center">
+                            <div class="card align-items-center p-3" style="width:228px; height:340px;">
                                 <a th:href="@{'/tracks?id=' + ${hotTrack.id}}">
                                     <img th:src="${hotTrack.coverImage}" class="card-img-top" alt="앨범커버">
                                 </a>
@@ -29,7 +29,7 @@
                                     <a th:href="@{'/tracks?id=' + ${hotTrack.id}}" class="card-title" th:text="${hotTrack.title}"></a>
                                     <a th:href="@{'/artists?id=' + ${hotTrack.artistId}}" class="card-artist" th:text="${hotTrack.artistName}"></a>
                                 </div>
-                                <div class="position-absolute bottom-0 start-50 translate-middle-x mb-5">
+                                <div class="position-relative bottom-0 mb-5">
                                     <canvas class="doughnut-canvas" width="50" height="50"></canvas>
                                 </div>
                             </div>

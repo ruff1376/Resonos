@@ -148,4 +148,17 @@ public class TrackReviewServiceImpl implements TrackReviewService {
     public TrackReview findById(Long id) {
         return mapper.findById(id);
     }
+
+
+    @Override
+    public List<TrackReview> getMoreReviews(String trackId, int page, int size) {
+        int offset = (page - 1) * size;
+        return mapper.selectPagedReviewsWithReviewer(trackId, size, offset);
+    }
+
+
+    @Override
+    public long countByTrackId(String trackId) {
+        return mapper.countByTrackId(trackId);
+    }
 }
