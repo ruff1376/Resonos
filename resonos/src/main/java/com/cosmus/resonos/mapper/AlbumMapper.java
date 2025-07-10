@@ -59,4 +59,9 @@ public interface AlbumMapper {
     public List<Album> likedAlbumsTop3(@Param("id") Long id) throws Exception;
     // 좋아요한 앨범 전체
     public List<Album> likedAlbums(@Param("id") Long id) throws Exception;
+
+    // 전체 앨범 데이터 불러오기
+    public List<Album> getAllAlbums(Pagination pagination) throws Exception;
 }
+
+

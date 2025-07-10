@@ -212,4 +212,11 @@ public class TrackServiceImpl implements TrackService {
         return trackMapper.likedTracks(id);
     }
 
+    // 페이징 전체 데이터
+    @Override
+    public List<Track> getAllTracks(Pagination pagination) throws Exception {
+        return trackMapper.getAllTracks(pagination);
+    }
+    
+
 }

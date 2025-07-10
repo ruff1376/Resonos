@@ -199,4 +199,10 @@ public class AlbumServiceImpl implements AlbumService {
         }
     }
 
+    // 전체 앨범 데이터 블러오기 
+    @Override
+    public List<Album> getAllAlbums(Pagination pagination) throws Exception {
+        return albumMapper.getAllAlbums(pagination);
+    }
+
 }

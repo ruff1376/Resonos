@@ -47,55 +47,60 @@ public class AdminMusicController {
     private SpotifySyncService spotifySyncService; // Spotify 동기화 서비스
 
 
+@GetMapping("")
+public String musicAdminPage(
+    @RequestParam(value = "tab", defaultValue = "track") String tab,
+    @RequestParam(value = "page", defaultValue = "1") int page,
+    @RequestParam(value = "size", defaultValue = "10") int size,
+    Model model
+) throws Exception {
+    // 각 탭별 페이지 번호 (기본 1)
+    int albumPage = 1, trackPage = 1, artistPage = 1;
+    if ("album".equals(tab)) albumPage = page;
+    else if ("artist".equals(tab)) artistPage = page;
+    else trackPage = page; // 기본이 track
 
+    // Pagination 객체 생성
+    Pagination albumPagination = new Pagination(albumPage, size, 10, 0);
+    Pagination trackPagination = new Pagination(trackPage, size, 10, 0);
+    Pagination artistPagination = new Pagination(artistPage, size, 10, 0);
 
+    // 전체 데이터 수 세팅 (컨트롤러에서만!)
+    long albumTotal = albumService.count();   // 전체 앨범 개수
+    long trackTotal = trackService.count();   // 전체 트랙 개수
+    long artistTotal = artistService.count(); // 전체 아티스트 개수
+    albumPagination.setTotal(albumTotal);
+    trackPagination.setTotal(trackTotal);
+    artistPagination.setTotal(artistTotal);
 
-    @GetMapping("")
-    public String musicAdminPage(
-        @RequestParam(value = "tab", defaultValue = "track") String tab,
-        @RequestParam(value = "page", defaultValue = "1") int page,
-        @RequestParam(value = "size", defaultValue = "10") int size,
-        Model model
-    ) throws Exception {
-        // 각 탭별 페이지 번호 (기본 1)
-        int albumPage = 1, trackPage = 1, artistPage = 1;
-        if ("album".equals(tab)) albumPage = page;
-        else if ("artist".equals(tab)) artistPage = page;
-        else trackPage = page; // 기본이 track
+    // 목록 조회 (페이징)
+    List<Album> albums = albumService.getAllAlbums(albumPagination);
+    List<Track> tracks = trackService.getAllTracks(trackPagination);
+    List<Artist> artists = artistService.listPaging(
+        (int) artistPagination.getIndex(), (int) artistPagination.getSize());
 
-        // Pagination 객체 생성
-        Pagination albumPagination = new Pagination(albumPage, size, 10, 0);
-        Pagination trackPagination = new Pagination(trackPage, size, 10, 0);
-        Pagination artistPagination = new Pagination(artistPage, size, 10, 0);
+    // 모델에 담기
+    model.addAttribute("albums", albums);
+    model.addAttribute("albumPagination", albumPagination);
+    model.addAttribute("albumPageUri", "/admin/music?tab=album&size=" + size);
 
-        // 전체 아티스트 수 세팅
-        long artistTotal = artistService.count();
-        artistPagination.setTotal(artistTotal);
+    model.addAttribute("tracks", tracks);
+    model.addAttribute("trackPagination", trackPagination);
+    model.addAttribute("trackPageUri", "/admin/music?tab=track&size=" + size);
 
-        // 목록 조회
-        List<Album> albums = albumService.newList(albumPagination);
-        List<Track> tracks = trackService.newList(trackPagination);
-        List<Artist> artists = artistService.listPaging(
-            (int) artistPagination.getIndex(), (int) artistPagination.getSize());
+    model.addAttribute("artists", artists);
+    model.addAttribute("artistPagination", artistPagination);
+    model.addAttribute("artistPageUri", "/admin/music?tab=artist&size=" + size);
 
-        // 모델에 담기 (pageUri에는 page 파라미터만 사용)
-        model.addAttribute("albums", albums);
-        model.addAttribute("albumPagination", albumPagination);
-        model.addAttribute("albumPageUri", "/admin/music?tab=album&size=" + size);
+    model.addAttribute("tab", tab);
+    model.addAttribute("size", size);
 
-        model.addAttribute("tracks", tracks);
-        model.addAttribute("trackPagination", trackPagination);
-        model.addAttribute("trackPageUri", "/admin/music?tab=track&size=" + size);
+    // 로그
+    log.info("앨범 개수: {}", albums.size());
+    log.info("트랙 개수: {}", tracks.size());
 
-        model.addAttribute("artists", artists);
-        model.addAttribute("artistPagination", artistPagination);
-        model.addAttribute("artistPageUri", "/admin/music?tab=artist&size=" + size);
-
-        // 현재 탭 정보도 뷰에 전달 (활성화 표시용)
-        model.addAttribute("tab", tab);
-        model.addAttribute("size", size); // 탭 이동 시 size 유지
-        return "admin/music";
-    }
+    return "admin/music";
+}
 
 
     // 트랙 저장(등록/수정)
