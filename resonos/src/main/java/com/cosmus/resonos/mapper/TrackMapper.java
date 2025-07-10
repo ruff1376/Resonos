@@ -52,7 +52,7 @@ public interface TrackMapper {
     // 앨범아이디로 앨범의 탑1트랙
     public Track findTopTrackByAlbumId(String id) throws Exception;
     // 검색 결과 목록
-    public List<Track> searchList(String keyword) throws Exception;
+    public List<Track> searchList(@Param("keyword") String keyword) throws Exception;
     // 검색 결과 전체 목록
     public List<Track> allSearchList(Map<String, Object> paramMap) throws Exception;
     // 검색 데이터 수

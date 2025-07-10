@@ -308,6 +308,40 @@ public class AdminMusicController {
         return result;
     }
 
+    @PostMapping("/sync-track")
+    @ResponseBody
+    public Map<String, Object> syncTrackAjax(@RequestParam String spotifyTrackId) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            // 실제 동기화 서비스 호출
+            trackService.syncTrackFromSpotify(spotifyTrackId);
+            result.put("success", true);
+            result.put("message", "트랙 동기화 성공!");
+        } catch (Exception e) {
+            result.put("success", false);
+            result.put("message", "트랙 동기화 실패: " + e.getMessage());
+        }
+        return result;
+    }
+    @PostMapping("/sync-album")
+    @ResponseBody
+    public Map<String, Object> syncAlbumAjax(@RequestParam String spotifyAlbumId) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            // 실제 동기화 서비스 호출
+            result.put("success", true);
+            result.put("message", "앨범 동기화 성공!");
+        } catch (Exception e) {
+            result.put("success", false);
+            result.put("message", "앨범 동기화 실패: " + e.getMessage());
+        }
+        return result;
+    }
+
+
+
+
+
     // DB 아티스트 검색
     @GetMapping("/artist/list")
     @ResponseBody

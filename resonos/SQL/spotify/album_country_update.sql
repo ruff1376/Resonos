@@ -1,3 +1,4 @@
+-- Active: 1751337677491@@127.0.0.1@3306@resonos
 -- 대한민국 (KOR)
 UPDATE album SET country = 'KOR'
 WHERE label LIKE '%Starship%'

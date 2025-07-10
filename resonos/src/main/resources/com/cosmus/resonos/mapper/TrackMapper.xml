@@ -255,7 +255,10 @@
     LEFT JOIN liked_track lt ON t.id = lt.track_id
     LEFT JOIN artist_follow af ON ar.id = af.artist_id
     LEFT JOIN track_review tr ON t.id = tr.track_id
-    WHERE t.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
+    WHERE 1=1
+      <if test="keyword != null and keyword != ''">
+        AND (t.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%'))
+      </if>
     GROUP BY t.id
     ORDER BY
       CASE
@@ -271,8 +274,8 @@
       follower_count DESC,
       t.title ASC,
       ar.name ASC
-    LIMIT 12
   </select>
+
 
   <select id="allSearchList" resultMap="Track">
     SELECT t.*, ar.name AS artist_name, al.cover_image,

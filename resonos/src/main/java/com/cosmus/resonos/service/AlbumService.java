@@ -47,7 +47,7 @@ public interface AlbumService {
     // 트랙 아이디로 앨범 객체
     public Album findAlbumByTrackId(String id) throws Exception;
     // 검색 결과 목록
-    public List<Album> searchList(String keyword) throws Exception;
+    public List<Album> searchList(@Param("keyword") String keyword) throws Exception;
     // 검색 결과 전체 목록
     public List<Album> allSearchList(Map<String, Object> paramMap) throws Exception;
     // 검색 데이터 수
@@ -58,4 +58,6 @@ public interface AlbumService {
     public List<Album> likedAlbumsTop3(Long id) throws Exception;
     // 좋아요한 앨범 전체
     public List<Album> likedAlbums(Long id) throws Exception;
+     // [추가] Spotify 앨범 동기화
+    public void syncAlbumFromSpotify(String spotifyAlbumId) throws Exception;
 }

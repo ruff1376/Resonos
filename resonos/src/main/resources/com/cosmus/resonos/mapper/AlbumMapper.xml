@@ -201,7 +201,10 @@
     LEFT JOIN liked_album la ON a.id = la.album_id
     LEFT JOIN artist_follow af ON ar.id = af.artist_id
     LEFT JOIN album_review arw ON a.id = arw.album_id
-    WHERE a.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
+    WHERE 1=1
+      <if test="keyword != null and keyword != ''">
+        AND (a.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%'))
+      </if>
     GROUP BY a.id
     ORDER BY
       CASE
@@ -217,8 +220,8 @@
       follower_count DESC,
       a.title ASC,
       ar.name ASC
-    LIMIT 12
   </select>
+
 
   <select id="allSearchList" resultMap="Album">
     SELECT a.*, ar.name AS artist_name,
