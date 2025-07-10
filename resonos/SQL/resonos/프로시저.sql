@@ -1,4 +1,4 @@
--- Active: 1751625569683@@127.0.0.1@3306@resonos
+-- Active: 1751337677491@@127.0.0.1@3306@resonos
 
 -- 실행 순서
 -- 1. 테이블 삭제 DROP PROCEDURE IF EXISTS create_tables;
@@ -35,9 +35,8 @@ BEGIN
         track_mood_vote, user_sanction, admin_log, user_role, review_like, review_report,
         notice, setting, badge, policy, external_api_config, plugin,
         track, artist, user, role, tag, user_activity_log,
-        badge_condition, review_like, review_report;
+        badge_condition;
 
-    -- 3. PK/AI/UNIQUE/FK 없이, NOT NULL/NULL, DEFAULT 값 반영해서 테이블 생성
     CREATE TABLE IF NOT EXISTS `notice` (
         `id` BIGINT NOT NULL,
         `title` VARCHAR(200) NOT NULL,
