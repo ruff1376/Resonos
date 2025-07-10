@@ -52,7 +52,7 @@
           AND blinded = 0
         ORDER BY created_at DESC
     </select>
-    
+
     <select id="reviewWithReviewerByTrackId" parameterType="string" resultMap="TrackReview">
         SELECT
             tr.id,
@@ -81,6 +81,12 @@
     <select id="selectPagedReviewsWithReviewer"
             parameterType="map"
             resultMap="TrackReview">
+                likes DESC,
+                tr.created_at ASC
+    </select>
+
+    <!-- 특정 유저의 리뷰 정보 -->
+    <select id="reviewWithReviewerByUserId" parameterType="Long" resultMap="TrackReview">
         SELECT
             tr.id,
             tr.rating,
@@ -95,13 +101,15 @@
             u.profile_image AS reviewer_profile_image,
             u.is_pro AS reviewer_is_pro,
             (SELECT COUNT(*) FROM review_like WHERE review_id = tr.id AND review_type = 'TRACK') AS likes,
-            (SELECT COUNT(*) FROM review_report WHERE review_id = tr.id AND review_type = 'TRACK') AS dislikes
+            (SELECT COUNT(*) FROM review_report WHERE review_id = tr.id AND review_type = 'TRACK') AS dislikes,
+            t.title
         FROM track_review tr
         JOIN user u ON u.id = tr.user_id
-        WHERE tr.track_id = #{trackId}
-        AND tr.blinded = 0
-        ORDER BY tr.critic DESC, likes DESC, tr.created_at ASC
-        LIMIT #{size} OFFSET #{offset}
+        JOIN track t ON tr.track_id = t.id
+        WHERE tr.user_id = #{loginUserId}
+        ORDER BY tr.critic DESC,
+                likes DESC,
+                tr.created_at ASC
     </select>
 
     <!-- update blind status -->

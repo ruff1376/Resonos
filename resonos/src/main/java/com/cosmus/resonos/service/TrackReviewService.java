@@ -22,11 +22,15 @@ public interface TrackReviewService {
     public boolean update(Long reviewId, ReviewForm form);
     public void delete(Long id);
     TrackReview findById(Long id);
-    
+
     // 페이지네이션 관련
     List<TrackReview> getMoreReviews(String trackId, int page, int size);
     long countByTrackId(String trackId);
 
+
     // 리뷰 + 리뷰어
     List<TrackReview> reviewWithReviewerByTrackId(@Param("trackId") String trackId);
+
+    // 특정 유저의 리뷰
+    List<TrackReview> reviewWithReviewerByUserId(Long loginUserId) throws Exception;
 }

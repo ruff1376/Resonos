@@ -321,6 +321,7 @@ button.social-btn:hover {
   margin-left: 8px;
   cursor: pointer;
 }
+.con-pli-detail .like.top-margin {margin-left: 0; margin-top: 20px; font-size: 4rem;}
 .stats-card .stat-bar {
   background: #222;
   border-radius: 8px;

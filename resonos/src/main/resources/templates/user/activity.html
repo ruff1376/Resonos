@@ -24,13 +24,13 @@
           </div>
         </div>
         <ul class="ul-list">
-          <th:block th:each="i : ${#numbers.sequence(1, 10)}">
-            <li class="text-item">
-              <a href="">
-                <p class="sm-title">앨범 or 트랙 명</p>
-                <p class="sm-content">내용</p>
-                <span class="date" th:text="2025.02.02">날짜</span>
-                <span class="like" th:text="|좋아요 ${10}|">좋아요</span>
+          <th:block th:each="review : ${tReviewList}">
+            <li class="text-item" th:object="${review}">
+              <a th:href="@{/tracks(id = *{trackId}, reviewId = *{id})}">
+                <p class="sm-title" th:text="*{title}">앨범 or 트랙 명</p>
+                <p class="sm-content" th:text="*{content}">내용</p>
+                <span class="date" th:text="*{createdAt}">날짜</span>
+                <span class="like" th:text="*{likes}">좋아요</span>
               </a>
             </li>
           </th:block>

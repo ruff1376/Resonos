@@ -99,4 +99,19 @@ public class PlaylistServiceImpl implements PlaylistService {
     public List<Playlist> publicUsersPlaylist3(Long userId) throws Exception {
         return playlistMapper.publicUsersPlaylist3(userId);
     }
+
+    @Override
+    public boolean likePlaylist(Long loginUserId, Long playlistId) throws Exception {
+        return playlistMapper.likePlaylist(loginUserId, playlistId) > 0;
+    }
+
+    @Override
+    public boolean alreadyLikedPlaylist(Long loginUserId, Long playlistId) throws Exception {
+        return playlistMapper.alreadyLikedPlaylist(loginUserId, playlistId) > 0;
+    }
+
+    @Override
+    public boolean cancleLikePlaylist(Long loginUserId, Long playlistId) throws Exception {
+        return playlistMapper.cancleLikePlaylist(loginUserId, playlistId) > 0;
+    }
 }
