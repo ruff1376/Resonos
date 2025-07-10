@@ -29,7 +29,7 @@
                     </div>
                 </th:block>
                 <th:block th:if="${ artistSearchList != null && !artistSearchList.isEmpty() }">
-                    <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-0 m-0 justify-content-start">
+                    <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-0 m-0 justify-content-start">
                         <th:block th:each="artist : ${artistSearchList}">
                             <!-- 아티스트 카드 -->
                             <div class="col d-flex justify-content-center">
@@ -66,7 +66,7 @@
                     </div>
                 </th:block>
                 <th:block th:if="${ albumSearchList != null && !albumSearchList.isEmpty() }">
-                    <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-0 m-0 justify-content-start">
+                    <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-0 m-0 justify-content-start">
                         <th:block th:each="album : ${albumSearchList}">
                             <!-- 앨범 카드 -->
                             <div class="col d-flex justify-content-center">
@@ -111,7 +111,7 @@
                     </div>
                 </th:block>
                 <th:block th:if="${ trackSearchList != null && !trackSearchList.isEmpty() }">
-                    <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-0 m-0 justify-content-start">
+                    <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-0 m-0 justify-content-start">
                         <th:block th:each="track : ${trackSearchList}">
                             <!-- 트랙 카드 -->
                             <div class="col d-flex justify-content-center">
@@ -156,7 +156,7 @@
                     </div>
                 </th:block>
                 <th:block th:if="${ userSearchList != null && !userSearchList.isEmpty() }">
-                    <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-0 m-0 justify-content-start">
+                    <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-0 m-0 justify-content-start">
                         <th:block th:each="user : ${userSearchList}">
                             <!-- 회원 카드 -->
                             <div class="col d-flex justify-content-center">
