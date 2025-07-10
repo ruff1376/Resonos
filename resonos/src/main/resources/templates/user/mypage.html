@@ -7,6 +7,8 @@
 >
 <head>
   <meta charset="UTF-8">
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
   <title>마이페이지</title>
   <th:block th:replace="~{fragments/link::user}"></th:block>
 </head>
@@ -297,7 +299,18 @@
           }
           // 성공시
           const text = await response.text()
-          alert(text)
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: text,
+            showConfirmButton: false,
+            timer: 1500,
+            customClass: {
+              popup: 'follow-popup',
+              icon: 'success-icon',
+              title: 'alert-title'
+            }
+          });
           followBtn.classList.toggle('already')
           if(event.target.classList.contains('already')) {
             followBtn.textContent = '언팔로우'
