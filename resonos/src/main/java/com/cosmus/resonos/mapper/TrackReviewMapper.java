@@ -35,7 +35,7 @@ public interface TrackReviewMapper {
     boolean existsByUserAndTrack(@Param("userId") Long userId, @Param("trackId") String trackId);
 
     long countByTrackId(String trackId); // 총 개수
-    
+
     List<TrackReview> selectPagedReviewsWithReviewer(@Param("trackId") String trackId,
                                                     @Param("size") int size,
                                                     @Param("offset") int offset);

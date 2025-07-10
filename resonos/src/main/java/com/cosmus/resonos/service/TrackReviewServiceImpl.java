@@ -117,6 +117,11 @@ public class TrackReviewServiceImpl implements TrackReviewService {
         return mapper.selectPagedReviewsWithReviewer(trackId, size, offset);
     }
 
+    public boolean hasNextPage(String trackId, int page, int size) {
+        int totalCount = (int)mapper.countByTrackId(trackId);
+        int shownCount = page * size; // page=2면 offset=10
+        return totalCount > shownCount;
+    }
 
     @Override
     public long countByTrackId(String trackId) {

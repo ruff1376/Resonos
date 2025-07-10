@@ -26,6 +26,7 @@ public interface TrackReviewService {
     // 페이지네이션 관련
     List<TrackReview> getMoreReviews(String trackId, int page, int size);
     long countByTrackId(String trackId);
+    public boolean hasNextPage(String trackId, int page, int size);
 
     // 리뷰 + 리뷰어
     List<TrackReview> reviewWithReviewerByTrackId(@Param("trackId") String trackId);
