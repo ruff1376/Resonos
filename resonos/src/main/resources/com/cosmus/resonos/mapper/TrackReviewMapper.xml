@@ -104,13 +104,6 @@
         LIMIT #{size} OFFSET #{offset}
     </select>
 
-    <!-- 전체 리뷰 수 -->
-    <select id="countByTrackId" resultType="long">
-        SELECT COUNT(*) FROM track_review
-        WHERE track_id = #{trackId}
-        AND blinded = 0
-    </select>
-
     <!-- 페이징된 리뷰 목록 -->
     <!-- <select id="selectPagedReviews" parameterType="map" resultMap="TrackReviewResultMap">
         SELECT * FROM track_review
