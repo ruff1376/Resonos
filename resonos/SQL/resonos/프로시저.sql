@@ -8,7 +8,7 @@
 DROP PROCEDURE IF EXISTS create_tables;
 DROP TABLE IF EXISTS
         user_auth, liked_album, album_review, user_follow, user_badge,
-        track_review, notification, chart_entry,
+        track_review, notification, chart_entry, persistent_logins,
         board_post, playlist_detail, artist_follow, album,
         playlist, comment, chart_element, album_mood_vote, report,
         liked_playlist, liked_track, qna_answer, qna, community,
