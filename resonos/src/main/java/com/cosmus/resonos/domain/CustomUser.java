@@ -36,6 +36,6 @@ public class CustomUser implements UserDetails {
     // ADMIN 권한 여부 확인 메서드 추가
     public boolean isAdmin() {
         return authList.stream()
-                .anyMatch(auth -> "ADMIN".equals(auth.getAuth()));
+                .anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
     }
 }

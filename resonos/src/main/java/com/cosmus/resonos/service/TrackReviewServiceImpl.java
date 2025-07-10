@@ -74,21 +74,26 @@ public class TrackReviewServiceImpl implements TrackReviewService {
 
     @Transactional
     public TrackReview write(String trackId, ReviewForm f, Users u){
-    System.out.println("작성자 ID: " + u.getId());
-    System.out.println("작성자 isPro: " + u.isPro());
-        TrackReview r = TrackReview.builder()
-            .trackId(trackId)
-            .userId(u.getId())
-            .critic(u.isPro())
-            .rating(f.getRating())
-            .content(f.getContent())
-            .blinded(false)
-            .likes(0).dislikes(0)
-            .createdAt(LocalDateTime.now())
-            .reviewer(new Reviewer(u.getId(), u.getNickname(), u.getProfileImage(), u.isPro()))
-            .build();
-        mapper.insert(r);
-        return r;
+        // 중복 확인
+        boolean exists = mapper.existsByUserAndTrack(u.getId(), trackId);
+        if (exists) {
+            throw new IllegalStateException("이미 해당 트랙에 리뷰를 작성하셨습니다.");
+        }
+        System.out.println("작성자 ID: " + u.getId());
+        System.out.println("작성자 isPro: " + u.isPro());
+            TrackReview r = TrackReview.builder()
+                .trackId(trackId)
+                .userId(u.getId())
+                .critic(u.isPro())
+                .rating(f.getRating())
+                .content(f.getContent())
+                .blinded(false)
+                .likes(0).dislikes(0)
+                .createdAt(LocalDateTime.now())
+                .reviewer(new Reviewer(u.getId(), u.getNickname(), u.getProfileImage(), u.isPro()))
+                .build();
+            mapper.insert(r);
+            return r;
     }
 
     @Transactional

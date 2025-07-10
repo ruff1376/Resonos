@@ -29,5 +29,18 @@ public interface ReviewLikeMapper {
     void reportReview(@Param("reviewId") Long reviewId, @Param("userId") Long userId,
                       @Param("reviewType") String reviewType);
 
-    int countReports(@Param("reviewId") Long reviewId, @Param("reviewType") String reviewType);
+    // 싫어요 ---------
+    
+    void insertReviewReport(@Param("reviewId") Long reviewId,
+                        @Param("userId") Long userId,
+                        @Param("reviewType") String reviewType);
+
+    boolean existsReport(@Param("reviewId") Long reviewId,
+                        @Param("userId") Long userId,
+                        @Param("reviewType") String reviewType);
+
+    int countReports(@Param("reviewId") Long reviewId,
+                    @Param("reviewType") String reviewType);
+
+
 }

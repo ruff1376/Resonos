@@ -37,15 +37,19 @@
     </select>
 
     <!-- 특정 유저가 좋아요한 리뷰 ID들 조회 (리뷰 목록에서 상태 표시용) -->
-    <select id="findLikedReviewIds" resultType="long">
+    <select id="findLikedReviewIds" resultType="long" parameterType="map">
         SELECT review_id
         FROM review_like
-        WHERE review_type = #{reviewType}
-          AND user_id = #{userId}
-          AND review_id IN
-          <foreach collection="reviewIds" item="id" open="(" separator="," close=")">
-              #{id}
-          </foreach>
+        <where>
+            review_type = #{reviewType}
+            AND user_id = #{userId}
+            <if test="reviewIds != null and reviewIds.size() > 0">
+                AND review_id IN
+                <foreach collection="reviewIds" item="id" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
     </select>
 
     <!-- 리뷰 ID 목록별 좋아요 수 Map으로 조회 -->
@@ -58,6 +62,27 @@
               #{id}
           </foreach>
         GROUP BY review_id
+    </select>
+
+    <!-- 신고는 TrackReivew 의 싫어요에 매핑, 조회할때 뷰로 같이가져옴 -->
+    <insert id="insertReviewReport">
+        INSERT INTO review_report (review_id, user_id, review_type)
+        VALUES (#{reviewId}, #{userId}, #{reviewType})
+    </insert>
+
+    <select id="existsReport" resultType="boolean">
+        SELECT EXISTS(
+            SELECT 1 FROM review_report
+            WHERE review_id = #{reviewId}
+            AND user_id = #{userId}
+            AND review_type = #{reviewType}
+        )
+    </select>
+
+    <select id="countReports" resultType="int">
+        SELECT COUNT(*) FROM review_report
+        WHERE review_id = #{reviewId}
+        AND review_type = #{reviewType}
     </select>
 
 </mapper>

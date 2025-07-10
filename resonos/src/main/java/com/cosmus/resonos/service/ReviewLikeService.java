@@ -14,6 +14,9 @@ public interface ReviewLikeService {
 
     Map<Long, Integer> getLikeCountsByReviewIds(String reviewType, List<Long> reviewIds);
 
+
+    // ---------
+    
     void reportReview(Long reviewId, Long userId, String reviewType);
 
     int countReports(Long reviewId, String reviewType);

@@ -289,15 +289,6 @@ BEGIN
         `track_id` VARCHAR(200) NOT NULL
     );
 
-    CREATE TABLE IF NOT EXISTS `track_review_like` (
-        `id`          BIGINT AUTO_INCREMENT PRIMARY KEY,
-        `review_id`   BIGINT NOT NULL,
-        `user_id`     BIGINT NOT NULL,
-        `created_at`  DATETIME DEFAULT CURRENT_TIMESTAMP,
-        UNIQUE (review_id, user_id),
-        FOREIGN KEY (review_id) REFERENCES track_review(id) ON DELETE CASCADE,
-        FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
-    );
 
     CREATE TABLE IF NOT EXISTS `user_role` (
         `id` BIGINT NOT NULL,
@@ -351,7 +342,8 @@ BEGIN
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `critic` BOOLEAN NOT NULL,
         `user_id` BIGINT NOT NULL,
-        `track_id` VARCHAR (200) NOT NULL
+        `track_id` VARCHAR (200) NOT NULL,
+        UNIQUE KEY `uniq_user_track` (`user_id`, `track_id`)
     );
 
     CREATE TABLE IF NOT EXISTS `user_activity_log` (
@@ -387,6 +379,26 @@ BEGIN
         FOREIGN KEY (badge_id) REFERENCES badge(id)   -- badge_id는 badge 테이블의 id를 참조(외래키 제약)
     );
 
+    CREATE TABLE IF NOT EXISTS `review_like` (
+    `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+    `review_id` BIGINT NOT NULL,
+    `user_id` BIGINT NOT NULL,
+    `review_type` ENUM('TRACK', 'ALBUM') NOT NULL,
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `is_reported` BOOLEAN DEFAULT FALSE,
+    UNIQUE (review_id, user_id, review_type),
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+    );
+
+    CREATE TABLE IF NOT EXISTS `review_report` (
+    `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+    `review_id` BIGINT NOT NULL,
+    `user_id` BIGINT NOT NULL,
+    `review_type` ENUM('TRACK', 'ALBUM') NOT NULL,
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (review_id, user_id, review_type),
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+    );
 
     CREATE TABLE IF NOT EXISTS `user_follow` (
         `id` BIGINT NULL,
