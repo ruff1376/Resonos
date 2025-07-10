@@ -44,11 +44,16 @@
           <!-- CSRF TOKEN -->
           <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
           <div class="d-flex align-items-center column-gap-5">
-            <label id="profileBtn" for="thumbnail">
-              <img th:src="@{${playlist.thumbnailUrl}}" alt="썸네일 이미지" class="profile-img edit">
-              <input type="file" name="thumbnail" id="thumbnail"/>
-              <input type="hidden" name="thumbnailUrl" th:value="${playlist.thumbnailUrl}">
-            </label>
+            <div class="d-flex flex-column justify-content-center">
+              <label id="profileBtn" for="thumbnail">
+                <img th:src="@{${playlist.thumbnailUrl}}" alt="썸네일 이미지" class="profile-img edit">
+                <input type="file" name="thumbnail" id="thumbnail"/>
+                <input type="hidden" name="thumbnailUrl" th:value="${playlist.thumbnailUrl}">
+              </label>
+              <button id="like-button" class="like">
+                ♡
+              </button>
+            </div>
             <div class="input-area">
               <label class="profile-edit-label" for="title">플레이리스트 제목</label>
               <input type="text" class="form-control" th:field="*{title}" th:readonly="${!isOwner}">
@@ -142,7 +147,7 @@
         }
       })
 
-      let isOwner = "[[${isOwner}]]"
+      let isOwner = [[${isOwner}]]
 
       if(isOwner) {
         /* Sortable */
@@ -187,8 +192,21 @@
 
           if (!response.ok) {
               const result = await response.text()
-              alert(result)
-              location.href = location.pathname
+              Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: result,
+                showConfirmButton: false,
+                timer: 1000,
+                customClass: {
+                  popup: 'follow-popup',
+                  icon: 'success-icon',
+                  title: 'alert-title'
+                }
+              });
+              setTimeout(() => {
+                location.href = location.pathname
+              }, 1001)
               return
           }
           // 성공시
@@ -487,6 +505,15 @@
         deleteTracks(event)
       })
 
+      /* 트랙 페이지 이동 */
+      const items = document.querySelectorAll("li.list-item")
+      items.forEach(e => {
+        e.addEventListener("click", function(event) {
+          if (event.target.tagName.toLowerCase() === 'button') return
+          const trackId = this.querySelector('input[type="hidden"]').value
+          location.href = `/trakcs?id=${trackId}`
+        })
+      })
     </script>
   </th:block>
 </body>
