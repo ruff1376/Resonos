@@ -112,7 +112,7 @@ public class AdminMusicController {
 
     // 트랙 삭제
     @PostMapping("/track/delete")
-    public String deleteTrack(@RequestParam String id) throws Exception {
+    public String deleteTrack(@RequestParam("id") String id) throws Exception {
         trackService.delete(id);
         return "redirect:/admin/music";
     }
@@ -130,7 +130,7 @@ public class AdminMusicController {
 
     // 앨범 삭제
     @PostMapping("/album/delete")
-    public String deleteAlbum(@RequestParam String id) throws Exception {
+    public String deleteAlbum(@RequestParam("id") String id) throws Exception {
         albumService.delete(id);
         return "redirect:/admin/music";
     }
@@ -151,14 +151,14 @@ public class AdminMusicController {
 
     // 아티스트 삭제
     @PostMapping("/artist/delete")
-    public String deleteArtist(@RequestParam String id) throws Exception {
+    public String deleteArtist(@RequestParam("id") String id) throws Exception {
         artistService.delete(id);
         return "redirect:/admin/music";
     }
 
     // 동기화
     @PostMapping("/track/sync")
-    public String syncTrack(@RequestParam String spotifyTrackId) throws Exception {
+    public String syncTrack(@RequestParam("spotifyTrackId") String spotifyTrackId) throws Exception {
         trackService.syncTrackFromSpotify(spotifyTrackId);
         return "redirect:/admin/music";
     }
@@ -168,7 +168,7 @@ public class AdminMusicController {
     // 성공 시 아티스트 및 관련 앨범/트랙 동기화
     @PostMapping("/sync-artist")
     @ResponseBody
-    public Map<String, Object> syncArtistAjax(@RequestParam String spotifyArtistId) {
+    public Map<String, Object> syncArtistAjax(@RequestParam("spotifyArtistId") String spotifyArtistId) {
         Map<String, Object> result = new HashMap<>();
         try {
             String accessToken = spotifyApiClient.getAccessToken();
@@ -310,7 +310,7 @@ public class AdminMusicController {
 
     @PostMapping("/sync-track")
     @ResponseBody
-    public Map<String, Object> syncTrackAjax(@RequestParam String spotifyTrackId) {
+    public Map<String, Object> syncTrackAjax(@RequestParam("spotifyTrackId") String spotifyTrackId) {
         Map<String, Object> result = new HashMap<>();
         try {
             // 실제 동기화 서비스 호출
@@ -325,7 +325,7 @@ public class AdminMusicController {
     }
     @PostMapping("/sync-album")
     @ResponseBody
-    public Map<String, Object> syncAlbumAjax(@RequestParam String spotifyAlbumId) {
+    public Map<String, Object> syncAlbumAjax(@RequestParam("spotifyAlbumId") String spotifyAlbumId) {
         Map<String, Object> result = new HashMap<>();
         try {
             // 실제 동기화 서비스 호출
@@ -448,21 +448,21 @@ public class AdminMusicController {
 
     // 아티스트별 상위7개 인기곡 조회
     @GetMapping("/artist/{id}/top-tracks")
-    public String getTopTracksByArtist(@PathVariable String id, Model model) throws Exception {
+    public String getTopTracksByArtist(@PathVariable("id") String id, Model model) throws Exception {
         List<Track> topTracks = trackService.selectTop7TracksByArtist(id);
         model.addAttribute("topTracks", topTracks);
         return "admin/top-tracks"; // 별도의 뷰로 결과 표시
     }
     // 아티스트별 트랙 갯수 조회
     @GetMapping("/artist/{id}/track-count")
-    public String getTrackCountByArtist(@PathVariable String id, Model model) throws Exception {
+    public String getTrackCountByArtist(@PathVariable("id") String id, Model model) throws Exception {
         int trackCount = trackService.countTracksByArtist(id);
         model.addAttribute("trackCount", trackCount);
         return "admin/track-count"; // 별도의 뷰로 결과 표시
     }   
     // 트랙 아이디로 같은 앨범 상위 5곡 조회
     @GetMapping("/track/{id}/same-album-top-tracks")    
-    public String getTop5TracksInSameAlbum(@PathVariable String id, Model model) throws Exception {
+    public String getTop5TracksInSameAlbum(@PathVariable("id") String id, Model model) throws Exception {
         List<Track> topTracks = trackService.findTop5TracksInSameAlbum(id);
         model.addAttribute("topTracks", topTracks);
         return "admin/same-album-top-tracks"; // 별도의 뷰로 결과 표시
