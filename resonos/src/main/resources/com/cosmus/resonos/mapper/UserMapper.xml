@@ -18,6 +18,7 @@
     <result property="provider" column="provider"/>
     <result property="providerId" column="provider_id"/>
     <result property="createdAt" column="created_at"/>
+    <result property="followerCount" column="follower_count"/>
 
     <collection property="authList" ofType="UserAuth"
             select="selectAuth"

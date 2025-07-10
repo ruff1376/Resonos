@@ -274,6 +274,7 @@
       follower_count DESC,
       t.title ASC,
       ar.name ASC
+      LIMIT 12
   </select>
 
 
