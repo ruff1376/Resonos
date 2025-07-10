@@ -1,4 +1,4 @@
--- Active: 1751337677491@@127.0.0.1@3306@resonos
+-- Active: 1751625569683@@127.0.0.1@3306@resonos
 
 -- 실행 순서
 -- 1. 테이블 삭제 DROP PROCEDURE IF EXISTS create_tables;
@@ -8,11 +8,11 @@
 DROP PROCEDURE IF EXISTS create_tables;
 DROP TABLE IF EXISTS
         user_auth, liked_album, album_review, user_follow, user_badge,
-        track_review, notification, chart_entry,
+        track_review, notification, chart_entry, persistent_logins,
         board_post, playlist_detail, artist_follow, album,
         playlist, comment, chart_element, album_mood_vote, report,
         liked_playlist, liked_track, qna_answer, qna, community,
-        track_mood_vote, user_sanction, admin_log, user_role,
+        track_mood_vote, user_sanction, admin_log, user_role, review_like, review_report,
         notice, setting, badge, policy, external_api_config, plugin,
         track, artist, user, role, tag, user_activity_log;
 
@@ -34,7 +34,7 @@ BEGIN
         board_post, playlist_detail, artist_follow, album,
         playlist, comment, chart_element, album_mood_vote, report,
         liked_playlist, liked_track, qna_answer, qna, community,
-        track_mood_vote, user_sanction, admin_log, user_role,
+        track_mood_vote, user_sanction, admin_log, user_role, review_like, review_report,
         notice, setting, badge, policy, external_api_config, plugin,
         track, artist, user, role, tag, user_activity_log; -- user_activity_log도 추가합니다.
 
