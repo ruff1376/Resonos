@@ -511,7 +511,7 @@
         e.addEventListener("click", function(event) {
           if (event.target.tagName.toLowerCase() === 'button') return
           const trackId = this.querySelector('input[type="hidden"]').value
-          location.href = `/trakcs?id=${trackId}`
+          location.href = `/tracks?id=${trackId}`
         })
       })
     </script>

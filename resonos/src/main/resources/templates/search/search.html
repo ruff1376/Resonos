@@ -33,12 +33,13 @@
                         <th:block th:each="artist : ${artistSearchList}">
                             <!-- 아티스트 카드 -->
                             <div class="col d-flex">
-                                <div class="card align-items-center p-3" style="width:228px; height:220px;">
+                                <div class="card align-items-center p-3" style="width:228px; height:230px;">
                                     <a th:href="@{'/artists?id=' + ${artist.id}}">
                                         <img th:src="${artist.profileImage}" class="card-img-top rounded-circle" alt="아티스트 이미지">
                                     </a>
                                     <div class="card-body">
                                         <a th:href="@{'/artists?id=' + ${artist.id}}" class="card-title" th:text="${artist.name}"></a>
+                                        <div class="card-artist" th:text="|${#numbers.formatDecimal(artist.followerCount != null ? artist.followerCount : 0, 0, 'COMMA', 0, 'POINT')} 팔로워|"></div>
                                     </div>
                                 </div>
                             </div>
@@ -159,12 +160,13 @@
                         <th:block th:each="user : ${userSearchList}">
                             <!-- 회원 카드 -->
                             <div class="col d-flex">
-                                <div class="card align-items-center p-3" style="width:228px; height:220px;">
+                                <div class="card align-items-center p-3" style="width:228px; height:230px;">
                                     <a th:href="@{'/users/' + ${user.id}}">
                                         <img th:src="${user.profileImage}" class="card-img-top rounded-circle" alt="회원 이미지">
                                     </a>
                                     <div class="card-body">
                                         <a th:href="@{'/users/' + ${user.id}}" class="card-title" th:text="${user.nickname}"></a>
+                                        <div class="card-artist" th:text="|${#numbers.formatDecimal(user.followerCount != null ? user.followerCount : 0, 0, 'COMMA', 0, 'POINT')} 팔로워|"></div>
                                     </div>
                                 </div>
                             </div>

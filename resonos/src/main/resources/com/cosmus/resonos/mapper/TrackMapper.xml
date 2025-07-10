@@ -274,6 +274,7 @@
       follower_count DESC,
       t.title ASC,
       ar.name ASC
+      LIMIT 12
   </select>
 
 
@@ -320,7 +321,20 @@
     FROM track t
       LEFT JOIN artist ar ON t.artist_id = ar.id
       LEFT JOIN album al ON t.album_id = al.id
-    WHERE t.title LIKE CONCAT('%', #{keyword}, '%')
+    WHERE t.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
+    OR ar.name LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
+    ORDER BY
+      CASE
+          WHEN t.title = #{keyword} THEN 1
+          WHEN ar.name = #{keyword} THEN 2
+          WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 3
+          WHEN ar.name LIKE CONCAT(#{keyword}, '%') THEN 4
+          WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 5
+          WHEN ar.name LIKE CONCAT('%', #{keyword}, '%') THEN 6
+          ELSE 7
+      END,
+      t.title ASC,
+      ar.name ASC
   </select>
 
   <!-- 마이페이지: 좋아요 표시한 트랙 3개 -->

@@ -74,6 +74,7 @@ public class Users {
     private String provider;
     private String providerId;
     private Date createdAt;
+    private int followerCount;
 
     // 회원 정보 수정 시 사용
     private Boolean ban; // 회원 제재 여부(0: 정상, 1: 제재)
