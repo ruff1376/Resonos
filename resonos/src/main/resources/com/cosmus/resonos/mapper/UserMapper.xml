@@ -160,4 +160,45 @@
   </select>
 
 
+  <select id="searchList" resultMap="UserResultMap">
+    SELECT u.*, COUNT(uf.id) AS follower_count,
+          CASE
+              WHEN u.nickname = #{keyword} THEN 1
+              WHEN u.nickname LIKE CONCAT(#{keyword}, '%') THEN 2
+              WHEN u.nickname LIKE CONCAT('%', #{keyword}, '%') THEN 3
+              ELSE 4
+          END AS sort_order
+    FROM user u
+    LEFT JOIN user_follow uf ON u.id = uf.following_id
+    WHERE u.nickname LIKE CONCAT('%', #{keyword}, '%')
+    GROUP BY u.id
+    ORDER BY sort_order, follower_count DESC, u.nickname ASC
+    LIMIT 0, 6
+  </select>
+
+
+  <select id="allSearchList" resultMap="UserResultMap">
+      SELECT u.*, COUNT(uf.id) AS follower_count,
+            CASE
+                WHEN u.nickname = #{keyword} THEN 1
+                WHEN u.nickname LIKE CONCAT(#{keyword}, '%') THEN 2
+                WHEN u.nickname LIKE CONCAT('%', #{keyword}, '%') THEN 3
+                ELSE 4
+            END AS sort_order
+      FROM user u
+      LEFT JOIN user_follow uf ON u.id = uf.following_id
+      WHERE u.nickname LIKE CONCAT('%', #{keyword}, '%')
+      GROUP BY u.id
+      ORDER BY sort_order, follower_count DESC, u.nickname ASC
+      LIMIT #{index}, #{size}
+  </select>
+
+
+  <select id="searchCount" resultType="long">
+    SELECT IFNULL(COUNT(DISTINCT u.id), 0)
+    FROM user u
+    WHERE u.nickname LIKE CONCAT('%', #{keyword}, '%')
+  </select>
+
+
 </mapper>
