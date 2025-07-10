@@ -54,19 +54,23 @@
   </select>
 
   <select id="mainNewList" resultMap="Album">
-    SELECT a.*, ar.name AS artist_name
+    SELECT a.*, ar.name AS artist_name, ROUND(AVG(arw.rating)) AS avg_rating
     FROM album a
     LEFT JOIN artist ar ON a.artist_id = ar.id
+    LEFT JOIN album_review arw ON a.id = arw.album_id
     WHERE a.release_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+    GROUP BY a.id
     ORDER BY a.release_date DESC, artist_name
     LIMIT 12
   </select>
 
   <select id="newList" resultMap="Album">
-    SELECT a.*, ar.name AS artist_name
+    SELECT a.*, ar.name AS artist_name, ROUND(AVG(arw.rating)) AS avg_rating
     FROM album a
     LEFT JOIN artist ar ON a.artist_id = ar.id
+    LEFT JOIN album_review arw ON a.id = arw.album_id
     WHERE a.release_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+    GROUP BY a.id
     ORDER BY a.release_date DESC, artist_name
     LIMIT #{index}, #{size}
   </select>
@@ -74,7 +78,7 @@
   <select id="mainHotList" resultMap="Album">
     SELECT a.*,
           (COUNT(DISTINCT arw.id) * 3 + COUNT(DISTINCT la.id)) AS popularity_score,
-          art.name AS artist_name
+          art.name AS artist_name, ROUND(AVG(arw.rating)) AS avg_rating
     FROM album a
     LEFT JOIN artist art ON a.artist_id = art.id
     LEFT JOIN album_review arw ON a.id = arw.album_id
@@ -88,7 +92,7 @@
   <select id="hotList" resultMap="Album">
     SELECT a.*,
           (COUNT(DISTINCT arw.id) * 3 + COUNT(DISTINCT la.id)) AS popularity_score,
-          art.name AS artist_name
+          art.name AS artist_name, ROUND(AVG(arw.rating)) AS avg_rating
     FROM album a
     LEFT JOIN artist art ON a.artist_id = art.id
     LEFT JOIN album_review arw ON a.id = arw.album_id
@@ -190,11 +194,13 @@
   <select id="searchList" resultMap="Album">
     SELECT a.*, ar.name AS artist_name,
           COUNT(DISTINCT la.id) AS like_count,
-          COUNT(DISTINCT af.id) AS follower_count
+          COUNT(DISTINCT af.id) AS follower_count,
+          ROUND(AVG(arw.rating)) AS avg_rating
     FROM album a
     LEFT JOIN artist ar ON a.artist_id = ar.id
     LEFT JOIN liked_album la ON a.id = la.album_id
     LEFT JOIN artist_follow af ON ar.id = af.artist_id
+    LEFT JOIN album_review arw ON a.id = arw.album_id
     WHERE a.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
     GROUP BY a.id
     ORDER BY
@@ -217,11 +223,13 @@
   <select id="allSearchList" resultMap="Album">
     SELECT a.*, ar.name AS artist_name,
           COUNT(DISTINCT la.id) AS like_count,
-          COUNT(DISTINCT af.id) AS follower_count
+          COUNT(DISTINCT af.id) AS follower_count,
+          ROUND(AVG(arw.rating)) AS avg_rating
     FROM album a
     LEFT JOIN artist ar ON a.artist_id = ar.id
     LEFT JOIN liked_album la ON a.id = la.album_id
     LEFT JOIN artist_follow af ON ar.id = af.artist_id
+    LEFT JOIN album_review arw ON a.id = arw.album_id
     WHERE a.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
     GROUP BY a.id
     ORDER BY

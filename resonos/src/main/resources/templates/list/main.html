@@ -108,7 +108,12 @@
                                     <a th:href="@{'/artists?id=' + ${newAlbum.artistId}}" class="card-artist" th:text="${newAlbum.artistName}"></a>
                                 </div>
                                 <div class="position-absolute bottom-0 start-50 translate-middle-x mb-5">
-                                    <canvas class="doughnut-canvas" width="50" height="50"></canvas>
+                                    <th:block th:if="${newAlbum.avgRating != null}">
+                                        <canvas class="doughnut-canvas" th:attr="data-rating=${newAlbum.avgRating}" width="50" height="50"></canvas>
+                                    </th:block>
+                                    <th:block th:unless="${newAlbum.avgRating != null}">
+                                        <span class="no-rating fw-bold fs-2">NR</span>
+                                    </th:block>
                                 </div>
                             </div>
                         </div>
@@ -141,7 +146,12 @@
                                     <a th:href="@{'/artists?id=' + ${hotAlbum.artistId}}" class="card-artist" th:text="${hotAlbum.artistName}"></a>
                                 </div>
                                 <div class="position-absolute bottom-0 start-50 translate-middle-x mb-5">
-                                    <canvas class="doughnut-canvas" width="50" height="50"></canvas>
+                                    <th:block th:if="${hotAlbum.avgRating != null}">
+                                        <canvas class="doughnut-canvas" th:attr="data-rating=${hotAlbum.avgRating}" width="50" height="50"></canvas>
+                                    </th:block>
+                                    <th:block th:unless="${hotAlbum.avgRating != null}">
+                                        <span class="no-rating fw-bold fs-2">NR</span>
+                                    </th:block>
                                 </div>
                             </div>
                         </div>
@@ -172,7 +182,12 @@
                                     <a th:href="@{'/artists?id=' + ${newTrack.artistId}}" class="card-artist" th:text="${newTrack.artistName}"></a>
                                 </div>
                                 <div class="position-absolute bottom-0 start-50 translate-middle-x mb-5">
-                                    <canvas class="doughnut-canvas" width="50" height="50"></canvas>
+                                    <th:block th:if="${newTrack.avgRating != null}">
+                                        <canvas class="doughnut-canvas" th:attr="data-rating=${newTrack.avgRating}" width="50" height="50"></canvas>
+                                    </th:block>
+                                    <th:block th:unless="${newTrack.avgRating != null}">
+                                        <span class="no-rating fw-bold fs-2">NR</span>
+                                    </th:block>
                                 </div>
                             </div>
                         </div>
@@ -203,7 +218,12 @@
                                     <a th:href="@{'/artists?id=' + ${hotTrack.artistId}}" class="card-artist" th:text="${hotTrack.artistName}"></a>
                                 </div>
                                 <div class="position-absolute bottom-0 start-50 translate-middle-x mb-5">
-                                    <canvas class="doughnut-canvas" width="50" height="50"></canvas>
+                                    <th:block th:if="${hotTrack.avgRating != null}">
+                                        <canvas class="doughnut-canvas" th:attr="data-rating=${hotTrack.avgRating}" width="50" height="50"></canvas>
+                                    </th:block>
+                                    <th:block th:unless="${hotTrack.avgRating != null}">
+                                        <span class="no-rating fw-bold fs-2">NR</span>
+                                    </th:block>
                                 </div>
                             </div>
                         </div>
