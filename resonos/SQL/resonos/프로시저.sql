@@ -1,4 +1,4 @@
--- Active: 1751337677491@@127.0.0.1@3306@resonos
+-- Active: 1745889699154@@127.0.0.1@3306@resonos
 
 -- 실행 순서
 -- 1. 테이블 삭제 DROP PROCEDURE IF EXISTS create_tables;
@@ -151,7 +151,8 @@ BEGIN
         `id` BIGINT NOT NULL,
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `user_id` BIGINT NOT NULL,
-        `playlist_id` BIGINT NOT NULL
+        `playlist_id` BIGINT NOT NULL,
+        UNIQUE (user_id, playlist_id)
     );
 
     CREATE TABLE IF NOT EXISTS `report` (
@@ -245,7 +246,8 @@ BEGIN
         `id` BIGINT NOT NULL,
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `user_id` BIGINT NOT NULL,
-        `artist_id` VARCHAR(200) NOT NULL
+        `artist_id` VARCHAR(200) NOT NULL,
+        UNIQUE(user_id, artist_id)
     );
 
     CREATE TABLE IF NOT EXISTS `playlist_detail` (
@@ -384,7 +386,8 @@ BEGIN
         `id` BIGINT NOT NULL,
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `follower_id` BIGINT NOT NULL,
-        `following_id` BIGINT NOT NULL
+        `following_id` BIGINT NOT NULL,
+        UNIQUE (follower_id, following_id)
     );
 
     CREATE TABLE IF NOT EXISTS `album_review` (
@@ -404,7 +407,8 @@ BEGIN
         `id` BIGINT NOT NULL,
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `user_id` BIGINT NOT NULL,
-        `album_id` VARCHAR(200) NOT NULL
+        `album_id` VARCHAR(200) NOT NULL,
+        UNIQUE (user_id, album_id)
     );
 
     CREATE TABLE IF NOT EXISTS `user_auth` (
