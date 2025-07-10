@@ -47,4 +47,14 @@
   <select id="findByUser" resultMap="NotificationResultMap">
     SELECT * FROM notification WHERE user_id = #{userId} ORDER BY created_at DESC
   </select>
+
+  <insert id="createPolicyViolationNotification">
+    INSERT INTO notification (user_id, type, message, content, is_read, created_at, target_id)
+    VALUES (#{userId}, 'POLICY_VIOLATION', '정책 위반 알림', #{banword}, FALSE, NOW(), #{targetId})
+  </insert>
+
+  <insert id="createNotification">
+    INSERT INTO notification (user_id, type, message, content, is_read, created_at, target_id)
+    VALUES (#{userId}, #{type}, #{message}, #{content}, FALSE, NOW(), #{targetId})
+  </insert>
 </mapper>

@@ -100,7 +100,7 @@ BEGIN
     );
 
     CREATE TABLE IF NOT EXISTS `tag` (
-        `id` BIGINT NOT NULL AUTO_INCREMENT,
+        `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
         `name` VARCHAR(50) NOT NULL
     );
 

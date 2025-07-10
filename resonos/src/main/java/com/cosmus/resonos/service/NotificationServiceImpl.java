@@ -3,6 +3,7 @@ package com.cosmus.resonos.service;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.Notification;
@@ -11,11 +12,9 @@ import com.cosmus.resonos.mapper.NotificationMapper;
 @Service
 public class NotificationServiceImpl implements NotificationService {
 
-    private final NotificationMapper notificationMapper;
+    @Autowired
+    private NotificationMapper notificationMapper;
 
-    public NotificationServiceImpl(NotificationMapper notificationMapper) {
-        this.notificationMapper = notificationMapper;
-    }
 
     @Override
     public List<Notification> list() throws Exception {
