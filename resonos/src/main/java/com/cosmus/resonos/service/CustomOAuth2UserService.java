@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -24,6 +25,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     @Autowired
     private UserService userService;
+
+    @Autowired PasswordEncoder passwordEncoder;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -49,10 +52,11 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
             // 4. 최초 로그인일 경우 회원가입 처리
             if (user == null) {
+                String randomUn = provider + UUID.randomUUID().toString().substring(0,10);
                 user = new Users();
-                user.setUsername(UUID.randomUUID() + provider);
-                user.setPassword(UUID.randomUUID().toString());
-                user.setNickname(UUID.randomUUID() + nickname);
+                user.setUsername(randomUn);
+                user.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
+                user.setNickname(nickname + UUID.randomUUID().toString().substring(0, 6));
                 user.setEmail(email);
                 user.setProvider(provider);
                 user.setProviderId(providerId);
@@ -66,17 +70,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                         userService.insertAuth(userAuth);
                         log.info("================== 회원가입 완료 ===================");
                     }
+                    user = userService.select(randomUn);
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
-        }
+            }
 
         // 5. Spring Security 세션 저장용 객체 리턴
-        return new CustomUser(
-            user,
-            attributes
-        );
+        return new CustomUser(user, attributes);
     }
 }

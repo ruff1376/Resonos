@@ -29,7 +29,8 @@ import lombok.extern.slf4j.Slf4j;
 @EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig {
 
-    private final CustomOAuth2UserService customOAuth2UserService;
+    @Autowired
+    private CustomOAuth2UserService customOAuth2UserService;
 
     @Autowired
     private DataSource dataSource;
@@ -48,11 +49,6 @@ public class SecurityConfig {
 
     @Autowired
     private CustomAccessDeniedHandler customAccessDeniedHandler;
-
-
-    SecurityConfig(CustomOAuth2UserService customOAuth2UserService) {
-        this.customOAuth2UserService = customOAuth2UserService;
-    }
 
 
     // 🔐 스프링 시큐리티 설정 메소드

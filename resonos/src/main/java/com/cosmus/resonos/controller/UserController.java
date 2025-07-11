@@ -103,7 +103,10 @@ public class UserController {
     String currentBadge = badge == null ? "" : badge.getName();
     // 최근 획득 배지
     List<Badge> badgeList = badgeService.recentGetBadge(user.getId());
+    // 획득 배지 수
+    int badgeCount = badgeService.badgeCount(user.getId());
 
+    model.addAttribute("badgeCount", badgeCount);
     model.addAttribute("badgeList", badgeList);
     model.addAttribute("currentBadge", currentBadge);
     model.addAttribute("artistList", artistList);
@@ -154,6 +157,8 @@ public class UserController {
     String currentBadge = badge == null ? "" : badge.getName();
     // 최근 획득 배지
     List<Badge> badgeList = badgeService.recentGetBadge(id);
+    // 획득 배지 수
+    int badgeCount = badgeService.badgeCount(id);
 
     // 자기 자신인지
     boolean isOwner = loginUser != null && loginUser.getId().equals(id);
@@ -166,6 +171,7 @@ public class UserController {
       model.addAttribute("user", user);
     }
 
+    model.addAttribute("badgeCount", badgeCount);
     model.addAttribute("badgeList", badgeList);
     model.addAttribute("currentBadge", currentBadge);
     model.addAttribute("alreadyFollow", alreadyFollow);
@@ -224,9 +230,11 @@ public class UserController {
     @RequestParam("profileImg") MultipartFile file,
     @AuthenticationPrincipal CustomUser loginUser
   ) throws Exception {
-    user.setId(loginUser.getUser().getId());
+    log.info("회원 정보 수정 요청 user : {}", user);
+    user.setId(loginUser.getId());
+
     boolean checkBagde = badgeService.checkBadge(loginUser.getId(), user.getCurrentBadge());
-    if(!checkBagde) return "redirect:/users/edit?fail=true";
+    if(!checkBagde) user.setCurrentBadge(null);
 
     // 이미지 파일 저장
     if (!file.isEmpty()) {
