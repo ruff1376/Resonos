@@ -27,21 +27,22 @@
           <input type="hidden" name="profileImage" th:value="${user.profileImage}">
         </label>
         <p class="my-5">
-          <span class="current badge">
+          <span class="current badge" th:text="${badgeName == null ? '' : badgeName}">
             현재 배지
           </span>
-          <input type="hidden" id="submitBadge" value="">
+          <input type="hidden" th:field="*{currentBadge}">
         </p>
         <div class="input-area">
-          <label class="profile-edit-label" for="">보유 배지</label>
+          <p class="profile-edit-label">보유 배지</p>
           <div class="change-edge">
             <div>
-              <th:block th:each="i : ${#numbers.sequence(1, 10)}">
+              <th:block th:each="badge : ${badgeList}">
                 <div class="bg-badge">
+                    <input type="hidden" th:value="${badge.id}">
                     <div class="badge">
-                      <span th:text="|배지 이름 ${i}|"></span>
+                      <span th:text="${badge.name}"></span>
                     </div>
-                  <p>획득 조건 출력</p>
+                  <p th:text="${badge.description}">획득 조건 출력</p>
                 </div>
               </th:block>
             </div>
@@ -81,8 +82,9 @@
       badges.forEach(e => {
         e.addEventListener('click', function() {
         const badge = this.querySelector('.badge span').textContent
+        const badgeId = this.querySelector('input[type="hidden"]').value
         document.querySelector('.current.badge').textContent = badge
-        document.getElementById('submitBadge').value = badge
+        document.getElementById('currentBadge').value = badgeId
         })
       })
     </script>

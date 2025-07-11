@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}"
+>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <title>계정 / 보안</title>
+  <th:block th:replace="~{fragments/link::user}"></th:block>
+</head>
+<body>
+  <main class="con con-security position-relative" layout:fragment="content">
+    <!-- 왼쪽 리모컨 -->
+    <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
+    <!-- 계정 / 보안 -->
+    <section class="info-wrapper">
+      <div class="info-section">
+        <div class="title">
+          <div>
+            <h2 class="text-start">계정 / 보안</h2>
+          </div>
+        </div>
+        <div class="inner">
+          <th:block th:if="${qwer}">
+            <p class="success-fail"
+              th:classappend="${success == 'false' ? ' error' : ''}"
+              th:text="${success == 'false' ? '업데이트 실패하였습니다.' : '업데이트 완료되었습니다.'}">
+            </p>
+          </th:block>
+          <p class="text-start mb-5">연동된 SNS : Kakao</p>
+          <th:block th:if="${!vali}">
+            <form th:action="@{/users/check-password}" method="post">
+              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+              <div class="input-area">
+                <label class="profile-edit-label" for="password">비밀번호</label>
+                <input name="password" id="password" type="password" class="form-control" placeholder="비밀번호를 입력해주세요.">
+                <p class="fail-vali hide text-start">잘못된 비밀번호입니다.</p>
+              </div>
+              <div class="btn-area">
+                <button class="btn btn-gold" type="submit">확인</button>
+              </div>
+            </form>
+          </th:block>
+          <th:block th:if="${vali}">
+            <form th:action="@{/users/change-password}" method="post">
+              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+              <div class="input-area">
+                <label class="profile-edit-label" for="password">변경할 비밀번호</label>
+                <input type="password" class="form-control" id="password" name="password">
+                <p class="fail-vali main hide text-start">특수문자, 영문자를 포함한 8글자 이상이어야 합니다.</p>
+                <label class="profile-edit-label" for="password2">비밀번호 확인</label>
+                <input type="password" class="form-control" id="password2" name="password2">
+                <p class="fail-vali sub hide text-start">비밀번호가 일치하지 않습니다.</p>
+              </div>
+              <div class="btn-area">
+                <button class="btn btn-gold" type="submit">비밀번호 변경</button>
+              </div>
+            </form>
+          </th:block>
+        </div>
+      </div>
+    </section>
+  <th:block layout:fragment="pageScript">
+    <script th:src="@{/js/remotecontroller.js}"></script>
+    <script>
+      const params = new URLSearchParams(location.search);
+
+      const diff = params.get('diff');
+      if(diff != null)
+        document.querySelector('.fail-vali.sub').classList.remove('hide')
+
+      const success = params.get('fail')
+      if(success != null)
+        document.querySelector('.fail-vali').classList.remove('hide')
+
+      const error = params.get('error')
+      if(error != null)
+        document.querySelector('.fail-vali.main').classList.remove('hide')
+
+      const complete = params.get('complete')
+      if(complete != null) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "비밀번호가 변경되었습니다, \n 로그인페이지로 이동합니다.",
+          showConfirmButton: false,
+          timer: 1500,
+          customClass: {
+            popup: 'follow-popup',
+            icon: 'success-icon',
+            title: 'alert-title'
+          }
+        });
+        setTimeout(() => {
+          const form = document.createElement('form');
+          form.method = 'POST';
+          form.action = '/logout';
+
+          const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+          const csrfInput = document.createElement('input');
+          csrfInput.type = 'hidden';
+          csrfInput.name = '_csrf';  // 서버에 맞게 변경
+          csrfInput.value = csrfToken;
+          form.appendChild(csrfInput);
+
+          document.body.appendChild(form);
+          form.submit();
+        }, 1600)
+      }
+    </script>
+  </th:block>
+</body>
+</html>

@@ -10,7 +10,6 @@ function animate() {
 }
 
 window.addEventListener('scroll', () => {
-  console.log(remote.offsetHeight)
   const scrollY = window.scrollY || document.documentElement.scrollTop;
   targetTop = scrollY;
 });

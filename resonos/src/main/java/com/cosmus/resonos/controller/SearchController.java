@@ -119,6 +119,7 @@ public class SearchController {
         @RequestParam("q") String keyword,
         @RequestParam(value = "size", defaultValue = "30") int size,
         @RequestParam(value = "page", defaultValue = "1") int page,
+        @RequestParam(value = "sort", defaultValue = "relevance") String sort,
         Model model,
         Pagination pagination
     ) throws Exception {
@@ -126,23 +127,25 @@ public class SearchController {
         pagination.setPage(page);
         pagination.setCount(10);
 
-        Map<String, Object> paramMap = new HashMap<>();
+        // Map<String, Object> paramMap = new HashMap<>();
         keyword = keyword.trim();
-        paramMap.put("keyword", keyword);
-        paramMap.put("index", pagination.getIndex());
-        paramMap.put("size", pagination.getSize());
-        paramMap.put("pagination", pagination);
+        // paramMap.put("keyword", keyword);
+        // paramMap.put("index", pagination.getIndex());
+        // paramMap.put("size", pagination.getSize());
+        // paramMap.put("pagination", pagination);
 
-        List<Album> allAlbumSearchList = albumService.allSearchList(paramMap);
+        List<Album> allAlbumSearchList = albumService.allSearchList(keyword, pagination, sort);
 
         model.addAttribute("keyword", keyword);
         model.addAttribute("pagination", pagination);
         model.addAttribute("allAlbumSearchList", allAlbumSearchList);
+        model.addAttribute("sort", sort);
         
         String pageUri = UriComponentsBuilder.fromPath("/search/albums")
                                             .queryParam("q", keyword)
                                             .queryParam("size", pagination.getSize())
                                             .queryParam("count", pagination.getCount())
+                                            .queryParam("sort", sort)
                                             .build()
                                             .toUriString();
         model.addAttribute("pageUri", pageUri);
@@ -154,6 +157,7 @@ public class SearchController {
         @RequestParam("q") String keyword,
         @RequestParam(value = "size", defaultValue = "30") int size,
         @RequestParam(value = "page", defaultValue = "1") int page,
+        @RequestParam(value = "sort", defaultValue = "relevance") String sort,
         Model model,
         Pagination pagination
     ) throws Exception {
@@ -161,23 +165,25 @@ public class SearchController {
         pagination.setPage(page);
         pagination.setCount(10);
 
-        Map<String, Object> paramMap = new HashMap<>();
+        // Map<String, Object> paramMap = new HashMap<>();
         keyword = keyword.trim();
-        paramMap.put("keyword", keyword);
-        paramMap.put("index", pagination.getIndex());
-        paramMap.put("size", pagination.getSize());
-        paramMap.put("pagination", pagination);
+        // paramMap.put("keyword", keyword);
+        // paramMap.put("index", pagination.getIndex());
+        // paramMap.put("size", pagination.getSize());
+        // paramMap.put("pagination", pagination);
 
-        List<Track> allTrackSearchList = trackService.allSearchList(paramMap);
+        List<Track> allTrackSearchList = trackService.allSearchList(keyword, pagination, sort);
 
         model.addAttribute("keyword", keyword);
         model.addAttribute("pagination", pagination);
         model.addAttribute("allTrackSearchList", allTrackSearchList);
+        model.addAttribute("sort", sort);
         
         String pageUri = UriComponentsBuilder.fromPath("/search/tracks")
                                             .queryParam("q", keyword)
                                             .queryParam("size", pagination.getSize())
                                             .queryParam("count", pagination.getCount())
+                                            .queryParam("sort", sort)
                                             .build()
                                             .toUriString();
         model.addAttribute("pageUri", pageUri);

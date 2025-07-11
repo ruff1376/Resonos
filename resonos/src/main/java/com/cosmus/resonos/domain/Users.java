@@ -75,12 +75,15 @@ public class Users {
     private String providerId;
     private Date createdAt;
     private int followerCount;
+    private Long currentBadge;
 
     // 회원 정보 수정 시 사용
     private Boolean ban; // 회원 제재 여부(0: 정상, 1: 제재)
     private List<UserActivityLog> logs; // 활동 로그
 
     private List<UserAuth> authList;
+
+
 
 
 }

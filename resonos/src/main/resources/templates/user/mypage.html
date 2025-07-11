@@ -27,7 +27,9 @@
       <div class="profile-info">
         <div class="info-top">
           <h2 th:text="${user.nickname}">닉네임</h2>
-          <span class="badge">JAZZ LOVER</span>
+          <th:block th:if="${!currentBadge.equals('')}">
+            <span class="badge" th:text="${currentBadge}">배지</span>
+          </th:block>
         </div>
         <p id="bio" th:text="${user.bio}">자기소개</p>
         <th:block th:if="${isOwner}">
@@ -42,7 +44,7 @@
       <div class="profile-meta">
         <div><a th:href="@{/users/{id}/follow-user(id = ${user.id})}"><b>팔로워</b><br><span id="follower-count" th:text="${followerCount}">수</span></a></div>
         <div><a th:href="@{/users/{id}/follow-user(id = ${user.id})}"><b>팔로우</b><br><span id="follow-count" th:text="${followCount}">수</span></a></div>
-        <div><a><b>뱃지</b><br>3</a></div>
+        <div><a><b>배지</b><br><span th:text="${badgeCount}">배지 수</span></a></div>
       </div>
     </section>
     <div class="my-middle">
@@ -53,7 +55,9 @@
           <th:block th:if="${playlists == null or #lists.isEmpty(playlists)}">
             <div class="empty-text">
               <p>플레이리스트가 없습니다.</p>
-              <p>만들러 가기 ➡️</p>
+              <th:block th:if="${isOwner}">
+                <p>만들러 가기 ➡️</p>
+              </th:block>
             </div>
           </th:block>
           <ul>
@@ -78,7 +82,7 @@
     </div>
     <section class="mypage-grid">
       <!-- 좋아요 한 앨범 -->
-      <a th:href="@{/users/{id}/liked-music(id = ${user.id})}">
+      <a class="grid-item" th:href="@{/users/{id}/liked-music(id = ${user.id})}">
         <div class="mypage-card album">
           <h3>좋아요 표시한 앨범</h3>
           <ul>
@@ -97,7 +101,7 @@
         </div>
       </a>
       <!-- 좋아요 한 트랙 -->
-      <a th:href="@{/users/{id}/liked-music(id = ${user.id})}">
+      <a class="grid-item" th:href="@{/users/{id}/liked-music(id = ${user.id})}">
         <div class="mypage-card track">
           <h3>좋아요 표시한 트랙</h3>
           <ul>
@@ -116,7 +120,7 @@
         </div>
       </a>
       <!-- 팔로우 한 아티스트 -->
-      <a th:href="@{/users/{id}/follow-artist(id = ${user.id})}">
+      <a class="grid-item" th:href="@{/users/{id}/follow-artist(id = ${user.id})}">
         <div class="mypage-card artist">
           <h3>팔로우 아티스트</h3>
           <ul>
@@ -136,7 +140,7 @@
       </a>
       <!-- 내 활동 -->
       <th:block th:if="${isOwner}">
-      <a href="/users/activity">
+      <a class="grid-item" href="/users/activity">
         <div class="mypage-card activate">
           <h3>내 활동</h3>
           <ul>
@@ -158,23 +162,37 @@
       </th:block>
       <!-- 배지 -->
       <th:block th:if="${isOwner}">
-      <a th:href="@{/users/badge}">
+      <a class="grid-item" th:href="@{/users/badge}">
         <div class="mypage-card badge-area">
           <h3>배지</h3>
+          <h4>최근 획득한 배지</h4>
           <ul>
-            <li>최근 획득한 배지</li>
-            <li>
-              <th:block th:each="i : ${#numbers.sequence(1, 10)}">
-                <span class="badge" th:text="${i}"></span>
-              </th:block>
-            </li>
+            <th:block th:if="${badgeList == null or badgeList.isEmpty()}">
+              <div class="empty-text">
+                <p>최근 획득한 배지가 없습니다.</p>
+              </div>
+            </th:block>
+            <th:block th:each="badge : ${badgeList}">
+              <li>
+                <span class="badge" th:text="${badge.name}">배지 이름</span>
+              </li>
+              <li>
+                <span class="badge" th:text="${badge.name}">배지 이름</span>
+              </li>
+              <li>
+                <span class="badge" th:text="${badge.name}">배지 이름</span>
+              </li>
+              <li>
+                <span class="badge" th:text="${badge.name}">배지 이름</span>
+              </li>
+            </th:block>
           </ul>
         </div>
       </a>
       </th:block>
       <!-- 알림 설정 -->
       <th:block th:if="${isOwner}">
-      <a href="">
+      <a class="grid-item" href="">
         <div class="mypage-card alarm">
           <h3>알림 설정</h3>
           <ul>
@@ -185,7 +203,7 @@
       </th:block>
       <!-- 계정 / 보안 -->
       <th:block th:if="${isOwner}">
-      <a href="">
+      <a class="grid-item" th:href="@{/users/security}">
         <div class="mypage-card security">
           <h3>계정 / 보안</h3>
           <ul>

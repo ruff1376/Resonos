@@ -1,5 +1,6 @@
 package com.cosmus.resonos.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,15 +25,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.domain.CustomUser;
+import com.cosmus.resonos.domain.LikedTrack;
+import com.cosmus.resonos.domain.MoodStat;
 import com.cosmus.resonos.domain.Pagination;
+import com.cosmus.resonos.domain.Tag;
 import com.cosmus.resonos.domain.Track;
+import com.cosmus.resonos.domain.TrackMoodVote;
 import com.cosmus.resonos.domain.TrackReview;
 import com.cosmus.resonos.domain.TrackScore;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.ArtistService;
+import com.cosmus.resonos.service.LikedTrackService;
+import com.cosmus.resonos.service.MoodStatService;
 import com.cosmus.resonos.service.PlaylistDetailService;
 import com.cosmus.resonos.service.ReviewLikeService;
+import com.cosmus.resonos.service.TagService;
+import com.cosmus.resonos.service.TrackMoodVoteService;
 import com.cosmus.resonos.service.TrackReviewService;
 import com.cosmus.resonos.service.TrackService;
 import com.cosmus.resonos.validation.ReviewForm;
@@ -58,6 +67,14 @@ public class TrackController {
     private PlaylistDetailService playlistDetailService;
     @Autowired
     private ReviewLikeService reviewLikeService;
+    @Autowired
+    private TagService tagService;
+    @Autowired
+    private TrackMoodVoteService trackMoodVoteService;
+    @Autowired
+    private MoodStatService moodStatService;
+    @Autowired
+    private LikedTrackService likedTrackService;
 
     // 트랙 화면
     @GetMapping
@@ -73,12 +90,23 @@ public class TrackController {
             .stream()
             .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
             model.addAttribute("isAdmin", isAdmin);
+            Long userVotedMoodId = trackMoodVoteService.getUserVotedMoodId(loginUser.getId(), id);
+            model.addAttribute("userVotedMoodId", userVotedMoodId);
+            // ✅ 좋아요 여부 체크
+            boolean isTrackLiked = likedTrackService.isLikedByUser(loginUser.getId(), id);
+            model.addAttribute("isTrackLikedByUser", isTrackLiked);
+        } else {
+            // 비로그인 사용자를 위해 false로 설정
+            model.addAttribute("isTrackLikedByUser", false);
         }
+
+        
         Track track = trackService.selectById(id);
         Album album = albumService.findAlbumByTrackId(id);
         List<Track> top5List = trackService.findTop5TracksInSameAlbum(id);
         Artist artist = artistService.selectArtistByTrackId(id);
         TrackScore score = trackReviewService.getTrackScore(id);
+        
         // List<TrackReview> reviews = trackReviewService.reviewWithReviewerByTrackId(id);
         int page = 1;
         int size = 5;
@@ -101,7 +129,24 @@ public class TrackController {
         long totalCount = trackReviewService.countByTrackId(id);
         Pagination pagination = new Pagination(page, size, 10, totalCount);
         boolean hasNext = pagination.getLast() > page;
+        // 상위 6개 분위기
+        List<MoodStat> moodStats = moodStatService.getTop6MoodsByTrackId(id);
+        boolean isMoodEmpty = (moodStats == null || moodStats.isEmpty());
+        // moodName과 voteCount 리스트로 나누기
+        List<String> moodLabels = moodStats.stream()
+                .map(MoodStat::getMoodName)
+                .collect(Collectors.toList());
 
+        List<Integer> moodValues = moodStats.stream()
+                .map(MoodStat::getVoteCount)
+                .collect(Collectors.toList());
+        // ✅ 좋아요 수 조회
+        int likeCount = likedTrackService.getTrackLikeCount(id);
+        model.addAttribute("trackLikeCount", likeCount);
+        model.addAttribute("isMoodEmpty", isMoodEmpty);
+        model.addAttribute("moodLabels", moodLabels);
+        model.addAttribute("moodValues", moodValues);
+        model.addAttribute("tags", tagService.list());
         model.addAttribute("track", track);
         model.addAttribute("album", album);
         model.addAttribute("top5List", top5List);
@@ -130,7 +175,9 @@ public class TrackController {
                                 Model model,
                                 @AuthenticationPrincipal CustomUser principal) throws Exception {
                                     
-        List<TrackReview> reviews = trackReviewService.getMoreReviews(trackId, page, size);
+        List<TrackReview> allReviews = trackReviewService.getMoreReviews(trackId, page, size);
+        boolean hasNext = allReviews.size() > size; // ⭐ size+1개면 다음 페이지 존재
+        List<TrackReview> reviews = hasNext ? allReviews.subList(0, size) : allReviews;
         if (principal != null && !reviews.isEmpty()) {
             List<Long> reviewIds = reviews.stream().map(TrackReview::getId).toList();
             List<Long> likedIds = reviewLikeService.getUserLikedReviewIds("TRACK", reviewIds, principal.getUser().getId());
@@ -139,8 +186,6 @@ public class TrackController {
             }
         }
         Track track = trackService.selectById(trackId);
-        // boolean hasNext = trackReviewService.hasNextPage(trackId, page, size);
-        boolean hasNext = reviews.size() == size;
         // 💡 여기서도 모델 변수명은 review
         model.addAttribute("hasNext", hasNext);
         model.addAttribute("track", track);
@@ -242,6 +287,52 @@ public class TrackController {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
                     .body("이미 신고한 리뷰입니다.");
         }
+    }
+
+    @PostMapping("/vote-mood")
+    @ResponseBody
+    public ResponseEntity<?> voteMood(@RequestBody TrackMoodVote request) throws Exception {
+        // 저장 또는 수정
+        trackMoodVoteService.saveOrUpdateVote(request.getUserId(), request.getTrackId(), request.getMood());
+
+        System.out.println("🔥 요청 도착: " + request);
+
+        if (request.getUserId() == null || request.getTrackId() == null || request.getMood() == null) {
+            return ResponseEntity.badRequest().body("필수 데이터 누락");
+        }
+        // 응답 데이터 구성
+        Long votedMoodId = trackMoodVoteService.getUserVotedMoodId(request.getUserId(), request.getTrackId());
+        // 투표 저장 후 최신 mood 데이터 조회
+        List<MoodStat> moodStats = moodStatService.getTop6MoodsByTrackId(request.getTrackId());
+
+        List<Tag> tags = tagService.list();
+        List<String> moodLabels = moodStats.stream()
+            .map(MoodStat::getMoodName)
+            .collect(Collectors.toList());
+        List<Integer> moodValues = moodStats.stream()
+            .map(MoodStat::getVoteCount)
+            .collect(Collectors.toList());
+
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("votedMoodId", votedMoodId);
+        response.put("moods", tags);
+        response.put("labels", moodLabels);
+        response.put("values", moodValues);
+
+        return ResponseEntity.ok(response);
+    }
+    @PostMapping("/toggle-like")
+    @ResponseBody
+    public ResponseEntity<?> toggleTrackLike(@RequestBody LikedTrack dto) throws Exception {
+        boolean liked = likedTrackService.toggleLike(dto.getUserId(), dto.getTrackId());
+        int count = likedTrackService.getTrackLikeCount(dto.getTrackId());
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("liked", liked);
+        result.put("count", count);
+
+        return ResponseEntity.ok(result);
     }
 
 }

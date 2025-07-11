@@ -19,6 +19,7 @@
     <result property="providerId" column="provider_id"/>
     <result property="createdAt" column="created_at"/>
     <result property="followerCount" column="follower_count"/>
+    <result property="currentBadge" column="current_badge"/>
 
     <collection property="authList" ofType="UserAuth"
             select="selectAuth"
@@ -60,7 +61,7 @@
   </update>
 
   <!-- selectPasswordById -->
-  <select id="selectPasswordById" resultType="string" parameterType="long">
+  <select id="selectPasswordById" resultType="string" parameterType="Long">
     SELECT password FROM user WHERE id = #{id}
   </select>
 
@@ -70,7 +71,8 @@
     SET email = #{email},
         nickname = #{nickname},
         profile_image = #{profileImage},
-        bio = #{bio}
+        bio = #{bio},
+        current_badge = #{currentBadge}
     WHERE id = #{id}
   </update>
 
@@ -160,6 +162,26 @@
     SELECT * FROM user WHERE id = #{id}
   </select>
 
+  <!-- 회원 비밀번호 체크 -->
+  <select id="checkPassword" resultType="String">
+    SELECT username FROM user WHERE password = #{password}
+  </select>
+
+  <!-- 비밀번호 변경 -->
+  <update id="changePassword">
+    UPDATE user SET password = #{newPassword}
+    WHERE id = #{loginUserId}
+  </update>
+
+  <!-- 카카오 로그인 사용자 조회 -->
+  <select id="findByProviderAndProviderId" resultMap="UserResultMap">
+    SELECT * FROM user WHERE provider = #{provider} AND provider_id = #{providerId}
+  </select>
+
+  <insert id="insertSnsUser" parameterType="Users">
+        INSERT INTO user (username, password, nickname, email, provider, provider_id)
+        VALUES (#{username}, #{password}, #{nickname}, #{email}, #{provider}, #{providerId})
+  </insert>
 
   <select id="searchList" resultMap="UserResultMap">
     SELECT u.*, COUNT(uf.id) AS follower_count,

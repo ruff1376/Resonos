@@ -17,8 +17,16 @@ public interface BadgeService {
     public boolean update(Badge badge) throws Exception;
     // 삭제
     public boolean delete(Long id) throws Exception;
+
+    /* 마이페이지 */
     // 회득 배지 조회
     public List<Badge> haveBadge(Long loginUserId) throws Exception;
     // 미회득 배지 조회
     public List<Badge> doesNotHaveBadge(Long loginUserId) throws Exception;
+    // 배지 소유 여부 체크
+    public boolean checkBadge(Long loginUserId, Long badgeId) throws Exception;
+    // 최근 획득 배지
+    public List<Badge> recentGetBadge(Long id) throws Exception;
+    // 획득 배지 수 조회
+    public int badgeCount(Long id) throws Exception;
 }

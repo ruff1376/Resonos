@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired PasswordEncoder passwordEncoder;
 
-    @Autowired AuthenticationManager authenticationManager;
+    @Lazy @Autowired AuthenticationManager authenticationManager;
 
     @Autowired UserActivityLogService userActivityLogService;
 
@@ -290,6 +291,31 @@ public class UserServiceImpl implements UserService {
     @Override
     public long searchCount(String keyword) throws Exception {
         return userMapper.searchCount(keyword);
+    }
+
+    @Override
+    public String selectPasswordById(Long id) throws Exception {
+        return userMapper.selectPasswordById(id);
+    }
+
+    @Override
+    public boolean comparePassword(String pw, String dbPw) throws Exception {
+        return passwordEncoder.matches(pw, dbPw);
+    }
+
+    @Override
+    public boolean changePassword(String newPassword, Long loginUserId) throws Exception {
+        return userMapper.changePassword(passwordEncoder.encode(newPassword), loginUserId) > 0;
+    }
+
+    @Override
+    public Users findByProviderAndProviderId(String provider, String providerId) throws Exception {
+        return userMapper.findByProviderAndProviderId(provider, providerId);
+    }
+
+    @Override
+    public boolean insertSnsUser(Users user) throws Exception {
+        return userMapper.insertSnsUser(user) > 0;
     }
 
 }

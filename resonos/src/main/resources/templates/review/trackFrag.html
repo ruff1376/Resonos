@@ -11,7 +11,6 @@
     </div>
   </th:block>
 </th:block>
-<!-- templates/fragments/review-item.html -->
 <th:block th:fragment="reviewItems (review)">
   <li th:each="rv : ${review}" class="comment" th:id="|rv-${rv.id}|" th:data-review-id="${rv.id}"
     th:data-track-id="${track.id}">
@@ -23,13 +22,24 @@
     <div class="review-content">
       <p class="content-text" th:text="${rv.content}">내용</p>
     </div>
+    <form class="edit-form" style="display: none;">
+      <div class="reply">
+        <textarea class="edit-content" required></textarea>
+        <div class="score-and-submit">
+          <input type="number" class="edit-rating" min="0" max="100" required />
+          <div class="button-box">
+            <button type="submit" class="btn btn-gold">수정 완료</button>
+            <button type="button" class="btn btn-danger">취소</button>
+          </div>
+        </div>
+      </div>
+    </form>
     <div class="review-util">
       <time th:text="${#temporals.format(rv.createdAt,'yyyy.MM.dd')}">날짜</time>
       <button class="like-btn" th:data-review-id="${rv.id}" th:data-review-type="${reviewType}"
         th:data-liked="${rv.isLikedByCurrentUser}" th:text="${rv.isLikedByCurrentUser} ? '❤️' : '🤍'">❤️</button>
       <span th:id="'like-count-' + ${rv.id}" th:text="${rv.likes}">0</span>
       <button class="report-btn" th:data-review-id="${rv.id}" th:data-review-type="${reviewType}">🚨</button>
-      <!-- 수정/삭제 버튼은 권한이 있을때만 표시 -->
       <span
         th:if="${(isAdmin != null and isAdmin) or (loginUser != null and rv != null and loginUser.id == rv.userId)}">
         <a href="#" class="edit-btn" th:data-id="${rv.id}">수정</a>
@@ -37,6 +47,5 @@
       </span>
     </div>
   </li>
-  <!-- 숨긴 hasNext 플래그 태그 추가 -->
   <li id="has-next-flag" style="display:none;" th:data-has-next="${hasNext}"></li>
 </th:block>

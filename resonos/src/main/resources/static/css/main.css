@@ -101,6 +101,16 @@ body {
     font-weight: 400;
 }
 
+.select-sort {
+    width: 120px;
+    height: 40px;
+    text-align: center;
+    border-color: transparent;
+    border-radius: 10px;
+    color: #B1B1B1;
+    background: var(--background-color);
+}
+
 .album-grid {
     max-width: 1440px;
     border-top: 1px solid var(--main-color);
@@ -175,4 +185,29 @@ body {
     align-items: center;
     justify-content: flex-end;
     height: 35px;
+}
+
+.floating {
+    position: fixed;
+    bottom: 100px;
+    right: 40px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--main-color);
+}
+.floating a {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    line-height: 45px;
+    font-size: 24px;
+    color: white;
+    user-select: none;
+}
+
+html {
+    /* 스크롤 부드럽게 이동 */
+    scroll-behavior: smooth;
 }

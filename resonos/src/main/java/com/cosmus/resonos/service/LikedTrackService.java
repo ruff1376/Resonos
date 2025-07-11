@@ -13,5 +13,11 @@ public interface LikedTrackService {
     // 수정
     public boolean update(LikedTrack likedTrack) throws Exception;
     // 삭제
-    public boolean delete(Long id) throws Exception;
+    public boolean deleteById(Long id) throws Exception;
+    // 좋아요 여부확인후 처리
+    boolean toggleLike(Long userId, String trackId) throws Exception;
+    // 단건조회후 로그인유저의 좋아요여부를 확인
+    boolean isLikedByUser(Long userId, String trackId);
+    // 트랙의 좋아요수 확인
+    int getTrackLikeCount(String trackId);
 }

@@ -15,5 +15,5 @@ public class PublicUserDto {
   private String nickname;
   private String profileImage;
   private String bio;
-  // TODO: 현재 배지
+  private Long currentBadge;
 }

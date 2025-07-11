@@ -32,8 +32,15 @@
     WHERE id = #{id}
   </update>
 
-  <delete id="delete">
+  <delete id="deleteById">
     DELETE FROM liked_track WHERE id = #{id}
   </delete>
 
+  <select id="findByUserAndTrack" resultMap="LikedTrackResultMap">
+    SELECT * FROM liked_track WHERE user_id = #{userId} AND track_id = #{trackId}
+  </select>
+
+  <select id="countByTrackId" resultType="int">
+    SELECT COUNT(*) FROM liked_track WHERE track_id = #{trackId}
+  </select>
 </mapper>

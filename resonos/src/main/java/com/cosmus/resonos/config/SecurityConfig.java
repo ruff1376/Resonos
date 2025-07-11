@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import com.cosmus.resonos.security.CustomAccessDeniedHandler;
 import com.cosmus.resonos.security.LoginFailureHandler;
 import com.cosmus.resonos.security.LoginSuccessHandler;
+import com.cosmus.resonos.service.CustomOAuth2UserService;
 import com.cosmus.resonos.service.UserDetailServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,9 @@ import lombok.extern.slf4j.Slf4j;
                     // @Secured / @PreAuthorized, @PostAuthorized 으로 메서드 권한 제어 활성화
 @EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig {
+
+    @Autowired
+    private CustomOAuth2UserService customOAuth2UserService;
 
     @Autowired
     private DataSource dataSource;
@@ -76,6 +80,13 @@ public class SecurityConfig {
                                     .failureHandler(loginFailureHandler)      // 로그인 실패 핸들러 설정
 
                         );
+
+        http.oauth2Login(login -> login
+                                    .loginPage("/login")
+                                    .userInfoEndpoint(userInfo -> userInfo
+                                        .userService(customOAuth2UserService)
+                                    )
+                                );
         // 🔐 인증 요청 경로 설정
         http.exceptionHandling( exception -> exception
                                             // 예외 처리 페이지 설정

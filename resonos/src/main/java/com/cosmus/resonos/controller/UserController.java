@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.Artist;
@@ -32,8 +35,10 @@ import com.cosmus.resonos.service.TrackService;
 import com.cosmus.resonos.service.UserFollowService;
 import com.cosmus.resonos.service.UserService;
 import com.cosmus.resonos.util.UploadImage;
+import com.cosmus.resonos.validation.PasswordCheck;
 
 import lombok.extern.slf4j.Slf4j;
+
 
 @Slf4j
 @Controller
@@ -93,8 +98,17 @@ public class UserController {
     List<Track> trackList = trackSErvice.likedTracksTop3(user.getId());
     // 팔로우 한 아티스트
     List<Artist> artistList = artistService.followingArtistsTop3(user.getId());
-    //
+    // 현재 배지
+    Badge badge = badgeService.select(user.getCurrentBadge());
+    String currentBadge = badge == null ? "" : badge.getName();
+    // 최근 획득 배지
+    List<Badge> badgeList = badgeService.recentGetBadge(user.getId());
+    // 획득 배지 수
+    int badgeCount = badgeService.badgeCount(user.getId());
 
+    model.addAttribute("badgeCount", badgeCount);
+    model.addAttribute("badgeList", badgeList);
+    model.addAttribute("currentBadge", currentBadge);
     model.addAttribute("artistList", artistList);
     model.addAttribute("trackList", trackList);
     model.addAttribute("albumList", albumList);
@@ -138,6 +152,13 @@ public class UserController {
     List<Artist> artistList = artistService.followingArtistsTop3(id);
     // 팔로우 했는지
     boolean alreadyFollow = loginUser != null ? userFollowService.checkAlreadyFollow(loginUser.getId(), id) : false ;
+    // 현재 배지
+    Badge badge = badgeService.select(user.getCurrentBadge());
+    String currentBadge = badge == null ? "" : badge.getName();
+    // 최근 획득 배지
+    List<Badge> badgeList = badgeService.recentGetBadge(id);
+    // 획득 배지 수
+    int badgeCount = badgeService.badgeCount(id);
 
     // 자기 자신인지
     boolean isOwner = loginUser != null && loginUser.getId().equals(id);
@@ -150,6 +171,9 @@ public class UserController {
       model.addAttribute("user", user);
     }
 
+    model.addAttribute("badgeCount", badgeCount);
+    model.addAttribute("badgeList", badgeList);
+    model.addAttribute("currentBadge", currentBadge);
     model.addAttribute("alreadyFollow", alreadyFollow);
     model.addAttribute("artistList", artistList);
     model.addAttribute("trackList", trackList);
@@ -179,7 +203,15 @@ public class UserController {
     Model model,
     @RequestParam(value = "success", required = false) String success
   ) throws Exception {
+    if(loginUser == null) return "redirect:/login";
     Users user = userService.select(loginUser.getUsername());
+    List<Badge> badgeList = badgeService.haveBadge(loginUser.getId());
+    // 배지 정보
+    Badge badge = badgeService.select(user.getCurrentBadge());
+    String badgeName = badge == null ? "" : badge.getName();
+
+    model.addAttribute("badgeName", badgeName);
+    model.addAttribute("badgeList", badgeList);
     model.addAttribute("user", user);
     model.addAttribute("success", success);
 
@@ -198,8 +230,11 @@ public class UserController {
     @RequestParam("profileImg") MultipartFile file,
     @AuthenticationPrincipal CustomUser loginUser
   ) throws Exception {
+    log.info("회원 정보 수정 요청 user : {}", user);
+    user.setId(loginUser.getId());
 
-    user.setId(loginUser.getUser().getId());
+    boolean checkBagde = badgeService.checkBadge(loginUser.getId(), user.getCurrentBadge());
+    if(!checkBagde) user.setCurrentBadge(null);
 
     // 이미지 파일 저장
     if (!file.isEmpty()) {
@@ -322,6 +357,8 @@ public class UserController {
     List<Album> likedAlbumList = albumService.likedAlbums(targetId);
     List<Track> likedTrackList = trackService.likedTracks(targetId);
 
+
+    model.addAttribute("lastPath", "liked-music");
     model.addAttribute("isOwner", isOwner);
     model.addAttribute("likedAlbumList", likedAlbumList);
     model.addAttribute("likedTrackList", likedTrackList);
@@ -358,6 +395,13 @@ public class UserController {
     return "user/follow_user";
   }
 
+  /**
+   * 배지 페이지 요청
+   * @param loginUser
+   * @param model
+   * @return
+   * @throws Exception
+   */
   @GetMapping("/badge")
   public String badge(
     @AuthenticationPrincipal CustomUser loginUser,
@@ -371,9 +415,102 @@ public class UserController {
     // 미획득 배지 리스트
     List<Badge> notHaveBadgeList = badgeService.doesNotHaveBadge(loginUser.getId());
 
+    model.addAttribute("lastPath", "badge");
     model.addAttribute("haveBagdeList", haveBagdeList);
     model.addAttribute("notHaveBadgeList", notHaveBadgeList);
     return "user/badge";
+  }
+
+  /**
+   * 계정 / 보안 페이지 요청
+   * @param loginUser
+   * @param model
+   * @return
+   * @throws Exception
+   */
+  @GetMapping("/security")
+  public String security(
+    @AuthenticationPrincipal CustomUser loginUser,
+    Model model
+  ) throws Exception {
+    // 로그인 유저 정보
+    Users user = userService.select(loginUser.getUsername());
+    Boolean success = (Boolean) model.asMap().get("success");
+    log.info("success : {}", success);
+    if(success != null) {
+      model.addAttribute("vali", success);
+    } else {
+      model.addAttribute("vali", false);
+    }
+    model.addAttribute("lastPath", "security");
+    model.addAttribute("user", user);
+    return "user/security";
+  }
+
+  /**
+   * 비밀번호 체크 요청
+   * @param loginUser
+   * @param password
+   * @param model
+   * @return
+   * @throws Exception
+   */
+  @PostMapping("/check-password")
+  public String checkPassword(
+    @AuthenticationPrincipal CustomUser loginUser,
+    @RequestParam("password") String password,
+    RedirectAttributes redirectAttributes,
+    Model model
+    ) throws Exception {
+      if(loginUser == null) return "redirect:/login";
+
+      String dbPassword =  userService.selectPasswordById(loginUser.getId());
+      boolean result = userService.comparePassword(password, dbPassword);
+      log.info("checkId : {}", result);
+      if(result) {
+        redirectAttributes.addFlashAttribute("success", true);
+        return "redirect:/users/security?success";
+      }
+
+      redirectAttributes.addFlashAttribute("success", false);
+      return "redirect:/users/security?fail";
+  }
+
+  /**
+   * 비밀번호 변경 요청
+   * @param loginUser
+   * @param password
+   * @param redirectAttributes
+   * @param model
+   * @return
+   * @throws Exception
+   */
+  @PostMapping("/change-password")
+  public String changePassword(
+    @AuthenticationPrincipal CustomUser loginUser,
+    @Validated(PasswordCheck.class) @ModelAttribute Users user,
+    BindingResult br,
+    @RequestParam("password2") String password2,
+    RedirectAttributes redirectAttributes,
+    Model model
+    ) throws Exception {
+    if(loginUser == null) return "redirect:/login";
+    String password = user.getPassword();
+    log.info("password : {}", password);
+    redirectAttributes.addFlashAttribute("success", true);
+
+    if(br.hasErrors()) {
+      return "redirect:/users/security?error";
+    }
+
+    if(!password.equals(password2))
+    return "redirect:/users/security?diff";
+
+    boolean result = userService.changePassword(password, loginUser.getId());
+    if(result)
+      return "redirect:/users/security?complete";
+
+    return "redirect:/users/security?fail";
   }
 
 }

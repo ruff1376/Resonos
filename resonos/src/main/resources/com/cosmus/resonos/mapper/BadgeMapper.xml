@@ -64,4 +64,28 @@
     )
   </select>
 
+  <!-- 배지 소유 여부 체크 -->
+  <select id="checkBadge" resultType="int">
+    SELECT COUNT(*)
+    FROM user_badge
+    WHERE user_id = #{loginUserId}
+    AND badge_id = #{badgeId}
+  </select>
+
+  <!-- 최근 획득한 배지 -->
+  <select id="recentGetBadge" resultMap="BadgeResultMap">
+      SELECT *
+      FROM user_badge ub
+        INNER JOIN badge b ON ub.badge_id = b.id
+      WHERE user_id = #{id}
+      ORDER BY ub.created_at DESC
+      LIMIT 10
+  </select>
+
+  <!-- 획득 배지 수 조회 -->
+  <select id="badgeCount" resultType="int">
+    SELECT COUNT(*)
+    FROM user_badge
+    WHERE user_id = #{id}
+  </select>
 </mapper>

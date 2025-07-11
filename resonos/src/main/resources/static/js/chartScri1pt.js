@@ -3,7 +3,7 @@
     new Chart(ctx, {
       type: 'radar',
       data: {
-        labels: ['분위기1', '분위기1', '분위기1', '분위기1', '분위기1', '분위기1'],
+        labels: ['분위기1', '분위기2', '분위기3', '분위기4', '분위기5', '분위기6'],
         datasets: [{
           label: '스탯',
           data: [80, 60, 70, 90, 50, 85],
@@ -37,7 +37,7 @@
     plugins: {
       legend: {
         labels: {
-          color: '#D4B97F' // 범례 글자색
+          color: '#FFF' // 범례 글자색
         }
       }
     }

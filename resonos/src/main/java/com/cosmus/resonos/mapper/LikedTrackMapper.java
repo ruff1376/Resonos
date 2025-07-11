@@ -2,6 +2,8 @@ package com.cosmus.resonos.mapper;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
 import com.cosmus.resonos.domain.LikedTrack;
 
 @Mapper
@@ -15,5 +17,10 @@ public interface LikedTrackMapper {
     // 수정
     public int update(LikedTrack likedTrack) throws Exception;
     // 삭제
-    public int delete(Long id) throws Exception;
+    public int deleteById(Long id) throws Exception;
+    // 해당 트랙의 좋아요 수
+    int countByTrackId(@Param("trackId") String trackId);
+    // 단건 조회 (사용자 + 트랙)
+    LikedTrack findByUserAndTrack(@Param("userId") Long userId, @Param("trackId") String trackId);
+    
 }

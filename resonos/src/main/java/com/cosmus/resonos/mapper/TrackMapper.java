@@ -54,7 +54,11 @@ public interface TrackMapper {
     // 검색 결과 목록
     public List<Track> searchList(@Param("keyword") String keyword) throws Exception;
     // 검색 결과 전체 목록
-    public List<Track> allSearchList(Map<String, Object> paramMap) throws Exception;
+    public List<Track> allSearchList(
+        @Param("keyword") String keyword,
+        @Param("pagination") Pagination pagination,
+        @Param("sort") String sort
+    ) throws Exception;
     // 검색 데이터 수
     public long searchCount(String keyword) throws Exception;
 

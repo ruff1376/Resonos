@@ -85,15 +85,15 @@
     padding: 0;
 }
 
+.site-header .btn-outline-gold:hover {
+    background: #D4B97F;
+    color: #181C23;
+}
+
 .site-header .submenu-item,
 .site-header .header-submenu li a {
     font-family: inherit;
     font-size: 1.6rem;
-}
-
-.site-header .btn-outline-gold:hover {
-    background: #D4B97F;
-    color: #181C23;
 }
 
 .site-header .profile-dropdown .dropdown-toggle {

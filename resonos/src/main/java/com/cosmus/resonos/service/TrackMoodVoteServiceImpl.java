@@ -29,4 +29,25 @@ public class TrackMoodVoteServiceImpl implements TrackMoodVoteService {
     public List<TrackMoodVote> findByTrackId(String trackId) {
         return trackMoodVoteMapper.findByTrackId(trackId);
     }
+
+    @Override
+    public void saveOrUpdateVote(Long userId, String trackId, Long moodId) {
+        TrackMoodVote existing = trackMoodVoteMapper.findByUserAndTrack(userId, trackId);
+        if (existing != null) {
+            existing.setMood(moodId);
+            trackMoodVoteMapper.update(existing);
+        } else {
+            TrackMoodVote vote = new TrackMoodVote();
+            vote.setUserId(userId);
+            vote.setTrackId(trackId);
+            vote.setMood(moodId);
+            trackMoodVoteMapper.insert(vote);
+        }
+    }
+
+    @Override
+    public Long getUserVotedMoodId(Long userId, String trackId) {
+        TrackMoodVote vote = trackMoodVoteMapper.findByUserAndTrack(userId, trackId);
+    return vote != null ? vote.getMood() : null;
+    }
 }
