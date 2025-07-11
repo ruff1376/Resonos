@@ -44,7 +44,7 @@
       <div class="profile-meta">
         <div><a th:href="@{/users/{id}/follow-user(id = ${user.id})}"><b>팔로워</b><br><span id="follower-count" th:text="${followerCount}">수</span></a></div>
         <div><a th:href="@{/users/{id}/follow-user(id = ${user.id})}"><b>팔로우</b><br><span id="follow-count" th:text="${followCount}">수</span></a></div>
-        <div><a><b>뱃지</b><br>3</a></div>
+        <div><a><b>배지</b><br><span th:text="${badgeCount}">배지 수</span></a></div>
       </div>
     </section>
     <div class="my-middle">

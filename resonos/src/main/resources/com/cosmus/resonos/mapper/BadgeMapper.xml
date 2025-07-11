@@ -82,4 +82,10 @@
       LIMIT 10
   </select>
 
+  <!-- 획득 배지 수 조회 -->
+  <select id="badgeCount" resultType="int">
+    SELECT COUNT(*)
+    FROM user_badge
+    WHERE user_id = #{id}
+  </select>
 </mapper>

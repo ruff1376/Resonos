@@ -29,5 +29,7 @@ public interface BadgeMapper {
     public int checkBadge(@Param("loginUserId") Long loginUserId, @Param("badgeId") Long badgeId) throws Exception;
     // 최근 획득 배지
     public List<Badge> recentGetBadge(@Param("id") Long id) throws Exception;
+    // 획득 배지 수 조회
+    public int badgeCount(@Param("id") Long id) throws Exception;
 }
 

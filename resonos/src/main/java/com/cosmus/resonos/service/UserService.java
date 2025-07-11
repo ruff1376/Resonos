@@ -83,4 +83,9 @@ public interface UserService {
     // 검색 데이터 수
     public long searchCount(String keyword) throws Exception;
 
+    // 카카오 로그인 유저 조회
+    public Users findByProviderAndProviderId(String provider, String providerId) throws Exception;
+    // 카카오 유저 회원가입
+    public boolean insertSnsUser(Users user) throws Exception;
+
 }

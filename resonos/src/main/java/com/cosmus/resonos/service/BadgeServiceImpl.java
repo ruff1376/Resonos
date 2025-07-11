@@ -69,4 +69,9 @@ public class BadgeServiceImpl implements BadgeService {
     public List<Badge> recentGetBadge(Long id) throws Exception {
         return badgeMapper.recentGetBadge(id);
     }
+
+    @Override
+    public int badgeCount(Long id) throws Exception {
+        return badgeMapper.badgeCount(id);
+    }
 }

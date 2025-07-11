@@ -27,4 +27,6 @@ public interface BadgeService {
     public boolean checkBadge(Long loginUserId, Long badgeId) throws Exception;
     // 최근 획득 배지
     public List<Badge> recentGetBadge(Long id) throws Exception;
+    // 획득 배지 수 조회
+    public int badgeCount(Long id) throws Exception;
 }
