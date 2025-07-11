@@ -36,10 +36,15 @@
                         th:text="|🔮 ${#numbers.formatDecimal(score.averageScore, 0, 0)}점 (✅리뷰 ${score.criticCount}개, 일반리뷰 ${score.userCount}개)|">
                     </p>
                 </th:block>
-                <div>
-                    <div class="btn btn-gold">좋아요 ❤️</div>
+                <!-- <div style="display: flex; gap: 15px;">
+                    <button type="button" id="likeTrackBtn" class="btn btn-gold" th:data-track-id="${track.id}"
+                        th:data-user-id="${loginUser != null ? loginUser.id : 0}" th:data-liked="${isTrackLikedByUser}">
+                        <span id="likeText" th:text="${isTrackLikedByUser ? '좋아요❤️' : '좋아요🤍'}"></span>
+                        <span id="likeCount" th:text="${trackLikeCount}">0</span>
+                    </button>
+
                     <div class="btn btn-gold">저장 💾</div>
-                </div>
+                </div> -->
             </div>
         </div>
         <!-- 트랙 카드 끝 -->
@@ -145,51 +150,38 @@
                 <button class="btn btn-gold" id="submitMoodVote" th:if="${loginUser != null}">투표하기</button>
             </div>
         </div>
-        <!-- <div class="mood-vote">
-                <div class="vote-header">
-                    <p id="headline">Mood Tag</p>
+        <!-- 앨범 트랙리스트 분위기 뭐뭐.. -->
+        <div class="info-card">
+            <div class="info top5track">
+                <p id="headline" th:text="|${album.title}💿 🔥TOP ${#lists.size(top5List)}|"></p>
+                <th:block th:each="tops, stat : ${top5List}">
+                    <a th:href="@{/tracks(id=${tops.id})}">
+                        <p th:text="|${stat.count}. ${tops.title}  ${tops.formattedDuration}|"></p>
+                    </a>
+                </th:block>
+            </div>
+            <div class="info album-moods">
+                <p id="headline">트랙의 분위기</p>
+                <div class="mood-list">
+                    <button class="btn btn-gold">동해물과23</button>
+                    <button class="btn btn-gold">백두산이 마르고</button>
+                    <button class="btn btn-gold">닳도록 하느</button>
+                    <button class="btn btn-gold">닳도록 하느</button>
                 </div>
-                <div class="moods">
-                    <div class="btn btn-gold">분위기1</div>
-                    <div class="btn btn-gold">분위기1324</div>
-                    <div class="btn btn-gold">분위기133</div>
-                    <div class="btn btn-gold">분위기1</div>
-                    <div class="btn btn-gold">분위기144</div>
-                    <div class="btn btn-gold">분위기1</div>
-                </div>
-                <button class="btn btn-gold">분위기 투표</button>
-            </div> -->
+            </div>
+            <div class="info pl-list">
+                <p id="subtitle">이 트랙을 포함한 플리🎶</p>
+                <p>오늘 헤어진 사람들은 위한 플리 ❤352</p>
+                <p>혼자있고 싶어요,, ❤242</p>
+                <p>😢😢😢😢😢😢😢😢😢 ❤122</p>
+                <p>페페사랑단 플레이리스트 ❤64</p>
+            </div>
+        </div>
+        <!-- 앨범 트랙리스트 분위기 뭐뭐..끝 -->
     </div>
     <!-- 분위기 끝 -->
 
-    <!-- 앨범 트랙리스트 분위기 뭐뭐.. -->
-    <div class="info-card">
-        <div class="info top5track">
-            <p id="headline" th:text="|${album.title}💿 🔥TOP ${#lists.size(top5List)}|"></p>
-            <th:block th:each="tops, stat : ${top5List}">
-                <a th:href="@{/tracks(id=${tops.id})}">
-                    <p th:text="|${stat.count}. ${tops.title}  ${tops.formattedDuration}|"></p>
-                </a>
-            </th:block>
-        </div>
-        <div class="info album-moods">
-            <p id="headline">트랙의 분위기</p>
-            <div class="mood-list">
-                <button class="btn btn-gold">동해물과23</button>
-                <button class="btn btn-gold">백두산이 마르고</button>
-                <button class="btn btn-gold">닳도록 하느</button>
-                <button class="btn btn-gold">닳도록 하느</button>
-            </div>
-        </div>
-        <div class="info pl-list">
-            <p id="subtitle">이 트랙을 포함한 플리🎶</p>
-            <p>오늘 헤어진 사람들은 위한 플리 ❤352</p>
-            <p>혼자있고 싶어요,, ❤242</p>
-            <p>😢😢😢😢😢😢😢😢😢 ❤122</p>
-            <p>페페사랑단 플레이리스트 ❤64</p>
-        </div>
-    </div>
-    <!-- 앨범 트랙리스트 분위기 뭐뭐..끝 -->
+
 
     </div>
     <script th:inline="javascript">
@@ -197,7 +189,7 @@
     </script>
     <!-- 비동기 스크립트 -->
     <script>
-        // 비동기관련
+        // 리뷰 더보기
         $(document).ready(function () {
             const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
             const csrfToken = $('meta[name="_csrf"]').attr('content');
@@ -394,7 +386,7 @@
                 });
             });
         });
-
+        // 리뷰 좋아요
         $(document).on("click", ".like-btn", function () {
             if (!isLogin) {
                 Swal.fire({
@@ -436,7 +428,7 @@
                 });
             });
         });
-
+        // 신고
         $(document).on("click", ".report-btn", function () {
             if (!isLogin) {
                 Swal.fire({
@@ -494,7 +486,7 @@
                 }
             });
         });
-
+        // 리뷰 더보기
         $(document).ready(function () {
             $('#load-more-btn').on('click', function () {
                 const $btn = $(this);
@@ -612,6 +604,40 @@
                 });
             });
         });
+
+        // 트랙 좋아요
+        $(document).on('click', '#likeTrackBtn', function () {
+            const $btn = $(this);
+            const userId = $btn.data('user-id');
+            const trackId = $btn.data('track-id');
+
+            if (!userId || userId === 0) {
+                Swal.fire('로그인이 필요합니다!');
+                return;
+            }
+
+            $.ajax({
+                url: '/tracks/toggle-like',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ userId: userId, trackId: trackId }),
+                success: function (res) {
+                    const liked = res.liked;
+                    const count = res.count;
+
+                    // UI 갱신
+                    $('#likeText').text(liked ? '좋아요❤️' : '좋아요🤍');
+                    $('#likeCount').text(count);
+                },
+                error: function () {
+                    Swal.fire('좋아요 처리에 실패했습니다.');
+                }
+            });
+        });
+
+
+
+
     </script>
     <!-- 해당 댓글로 스크롤 이동 -->
     <script>
