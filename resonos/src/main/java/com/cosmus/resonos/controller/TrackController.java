@@ -130,7 +130,9 @@ public class TrackController {
                                 Model model,
                                 @AuthenticationPrincipal CustomUser principal) throws Exception {
                                     
-        List<TrackReview> reviews = trackReviewService.getMoreReviews(trackId, page, size);
+        List<TrackReview> allReviews = trackReviewService.getMoreReviews(trackId, page, size);
+        boolean hasNext = allReviews.size() > size; // ⭐ size+1개면 다음 페이지 존재
+        List<TrackReview> reviews = hasNext ? allReviews.subList(0, size) : allReviews;
         if (principal != null && !reviews.isEmpty()) {
             List<Long> reviewIds = reviews.stream().map(TrackReview::getId).toList();
             List<Long> likedIds = reviewLikeService.getUserLikedReviewIds("TRACK", reviewIds, principal.getUser().getId());
@@ -139,8 +141,6 @@ public class TrackController {
             }
         }
         Track track = trackService.selectById(trackId);
-        // boolean hasNext = trackReviewService.hasNextPage(trackId, page, size);
-        boolean hasNext = reviews.size() == size;
         // 💡 여기서도 모델 변수명은 review
         model.addAttribute("hasNext", hasNext);
         model.addAttribute("track", track);

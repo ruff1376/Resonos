@@ -530,38 +530,35 @@
                 const nextPage = page + 1;
 
                 $.ajax({
-    url: `/tracks/${trackId}/reviews/more`,
-    type: 'GET',
-    data: { page: nextPage, size: size },
-    success: function (fragmentHtml) {
-        // 먼저 응답 fragment를 jQuery 객체로 파싱
-        const $fragment = $(fragmentHtml);
+                    url: `/tracks/${trackId}/reviews/more`,
+                    type: 'GET',
+                    data: { page: nextPage, size: size },
+                    success: function (fragmentHtml) {
+                        // 임시 div로 파싱
+                        const $fragment = $('<div>').html(fragmentHtml);
 
-        // 플래그 태그를 fragment 내부에서 찾음
-        const $hasNextFlag = $fragment.filter('#has-next-flag');
+                        // 리뷰들 추가
+                        $('.review-list').append($fragment.find('li.comment'));
 
-        // 플래그에서 값 읽기 (boolean 문자열 대응)
-        const hasNextRaw = $hasNextFlag.data('has-next');
-        const hasNext = (hasNextRaw === true || hasNextRaw === 'true');
+                        // hasNext 확인
+                        const $hasNextFlag = $fragment.find('#has-next-flag');
+                        const hasNextRaw = $hasNextFlag.data('has-next');
+                        const hasNext = hasNextRaw === true || hasNextRaw === 'true';
 
-        // 플래그 태그는 실제 DOM에는 추가 안 해도 되므로 제거
-        $hasNextFlag.remove();
+                        $hasNextFlag.remove();
 
-        // 리뷰 리스트에 나머지 리뷰 li들만 추가
-        $('.review-list').append($fragment);
-
-        if (hasNext) {
-            $btn.data('page', nextPage); // 페이지 증가
-        } else {
-            $btn.hide(); // 더보기 버튼 숨김
-        }
-    },
-    error: function () {
-        alert('리뷰를 불러오는 중 오류가 발생했습니다.');
-    }
-});
+                        if (hasNext) {
+                            $btn.data('page', nextPage);
+                        } else {
+                            $btn.hide();
+                        }
+                    },
+                    error: function () {
+                        alert('리뷰를 불러오는 중 오류가 발생했습니다.');
+                    }
+                });
             });
-        })
+        });
 
         /* 해당 댓글로 스크롤 이동 */
         document.addEventListener("DOMContentLoaded", function () {
@@ -569,17 +566,17 @@
             const reviewId = params.get("reviewId");
 
             if (reviewId) {
-            const target = document.querySelector(`[data-review-id="${reviewId}"]`);
-            if (target) {
-                target.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center"
-                });
-                target.style.transition = 'background 0.3s';
-                target.style.background = 'rgba(255,255,255,0.3)';
-                target.scroll
-                setTimeout(() => target.style.background = '', 1500);
-            }
+                const target = document.querySelector(`[data-review-id="${reviewId}"]`);
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
+                    target.style.transition = 'background 0.3s';
+                    target.style.background = 'rgba(255,255,255,0.3)';
+                    target.scroll
+                    setTimeout(() => target.style.background = '', 1500);
+                }
             }
         });
     </script>
