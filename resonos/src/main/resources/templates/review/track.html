@@ -545,7 +545,7 @@
             setTimeout(() => $selected.removeClass('pop-heart'), 300);
         });
 
-        // 비동기 투표
+        // 비동기 분위기 투표
         $(document).on('click', '#submitMoodVote', function () {
             const selectedMood = $('input[name="moodVote"]:checked').val();
             if (!selectedMood) {
@@ -579,7 +579,7 @@
                         const votedMoodId = data.votedMoodId;
                         const tags = data.moods;
 
-                        // 무드 UI 재생성
+                        // ✅ 무드 UI 재생성
                         $container.empty();
 
                         tags.forEach(tag => {
@@ -593,7 +593,13 @@
                             $container.append(html);
                         });
 
-                        // 효과 클래스 제거 타이머
+                        if (!Array.isArray(data.values) || data.values.length === 0) {
+                            console.warn("차트를 그릴 수 없습니다: values가 비어있거나 undefined입니다.");
+                            return;
+                        }
+                        renderMoodChart(data.labels, data.values);
+
+                        // ✅ 효과 클래스 제거 타이머
                         setTimeout(() => {
                             $('.mood-option').removeClass('pop-heart');
                         }, 300);
@@ -606,10 +612,6 @@
                 });
             });
         });
-
-
-
-
     </script>
     <!-- 해당 댓글로 스크롤 이동 -->
     <script>

@@ -287,11 +287,23 @@ public class TrackController {
         }
         // 응답 데이터 구성
         Long votedMoodId = trackMoodVoteService.getUserVotedMoodId(request.getUserId(), request.getTrackId());
-        List<Tag> tags = tagService.list();
+        // 투표 저장 후 최신 mood 데이터 조회
+        List<MoodStat> moodStats = moodStatService.getTop6MoodsByTrackId(request.getTrackId());
 
+        List<Tag> tags = tagService.list();
+        List<String> moodLabels = moodStats.stream()
+            .map(MoodStat::getMoodName)
+            .collect(Collectors.toList());
+        List<Integer> moodValues = moodStats.stream()
+            .map(MoodStat::getVoteCount)
+            .collect(Collectors.toList());
+
+        
         Map<String, Object> response = new HashMap<>();
         response.put("votedMoodId", votedMoodId);
         response.put("moods", tags);
+        response.put("labels", moodLabels);
+        response.put("values", moodValues);
 
         return ResponseEntity.ok(response);
     }
