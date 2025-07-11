@@ -103,18 +103,6 @@
                         <p id="headline" style="padding: 10px;">로그인시 리뷰작성이 가능합니다.</p>
                     </th:block>
                 </div>
-                <form class="edit-form" style="display: none;">
-                    <div class="reply">
-                        <textarea class="edit-content" required></textarea>
-                        <div class="score-and-submit">
-                            <input type="number" class="edit-rating" min="0" max="100" required />
-                            <div class="button-box">
-                                <button type="submit" class="btn btn-gold">수정 완료</button>
-                                <button type="button" class="btn btn-danger">취소</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
             </div>
             <!-- 페이지네이션 -->
             <div th:if="${loginUser != null}" class="reply">
@@ -169,13 +157,15 @@
                 </th:block>
             </div>
             <div class="info album-moods">
-                <p id="headline">트랙의 분위기</p>
-                <div class="mood-list">
-                    <button class="btn btn-gold">동해물과23</button>
-                    <button class="btn btn-gold">백두산이 마르고</button>
-                    <button class="btn btn-gold">닳도록 하느</button>
-                    <button class="btn btn-gold">닳도록 하느</button>
-                </div>
+                <p id="headline">분위기로 노래찾기</p>
+                <th:block th:if="${moodLabels == null || moodLabels.isEmpty()}">
+                    <p>아직 아무도 분위기에 투표하지 않았어요 😅</p>
+                </th:block>
+                <th:block th:if="${moodLabels != null}">
+                    <div class="mood-list" th:each="topMoods : ${moodLabels}">
+                        <button class="btn btn-gold" th:text="|#${topMoods}|">분위기1</button>
+                    </div>
+                </th:block>
             </div>
             <div class="info pl-list">
                 <p id="subtitle">이 트랙을 포함한 플리🎶</p>
