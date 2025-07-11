@@ -161,18 +161,10 @@ public class TrackServiceImpl implements TrackService {
     }
 
     @Override
-    public List<Track> allSearchList(Map<String, Object> paramMap) throws Exception {
-        String keyword = (String) paramMap.get("keyword");
-        Pagination pagination = (Pagination) paramMap.get("pagination");
+    public List<Track> allSearchList(String keyword, Pagination pagination, String sort) throws Exception {
         long total = trackMapper.searchCount(keyword);
-        if (pagination != null) {
-            pagination.setTotal(total);
-        }
-        Map<String, Object> queryMap = new HashMap<>();
-        queryMap.put("keyword", keyword);
-        queryMap.put("index", pagination.getIndex());
-        queryMap.put("size", pagination.getSize());
-        return trackMapper.allSearchList(queryMap);
+        pagination.setTotal(total);
+        return trackMapper.allSearchList(keyword, pagination, sort);
     }
 
     @Override

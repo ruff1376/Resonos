@@ -20,6 +20,16 @@
             <section class="main-section-bg w-100 py-4 mb-5">
                 <div class="d-flex flex-row align-items-center px-4 mb-3" style="height:50px;">
                     <div class="section-title flex-grow-1">앨범</div>
+                    <form method="get" th:action="@{/search/albums}" style="display:inline-block;">
+                        <input type="hidden" name="q" th:value="${keyword}">
+                        <input type="hidden" name="size" th:value="${pagination.size}">
+                        <input type="hidden" name="page" th:value="${pagination.page}">
+                        <select class="select-sort" name="sort" onchange="this.form.submit()">
+                            <option value="relevance" th:selected="${sort == 'relevance'}">정확도</option>
+                            <option value="latest" th:selected="${sort == 'latest'}">최신순</option>
+                            <option value="popular" th:selected="${sort == 'popular'}">인기순</option>
+                        </select>
+                    </form>
                 </div>
                 <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-0 m-0 mb-5 justify-content-start">
                     <th:block th:each="album : ${allAlbumSearchList}">
