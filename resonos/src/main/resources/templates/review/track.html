@@ -89,49 +89,6 @@
                 </div>
             </div>
             <div class="review-container">
-                <!-- <ul class="review-list">
-                    <th:block th:each="rv : ${review}">
-                        <li class="comment" th:id="|rv-${rv.id}|" th:data-review-id="${rv.id}"
-                            th:data-track-id="${track.id}">
-                            <div class="name-and-score">
-                                <p th:text="${rv.reviewer.nickname}">닉네임</p>
-                                <span th:if="${rv.critic == true }">✅</span>
-                                <span> 🔮<span th:text="${rv.rating}">0</span></span>
-                            </div>
-                            <div class="review-content">
-                                <p class="content-text" th:text="${rv.content}">내용</p>
-                            </div>
-                            <form class="edit-form" style="display: none;">
-                                <div class="reply">
-                                    <textarea class="edit-content" required></textarea>
-                                    <div class="score-and-submit">
-                                        <input type="number" class="edit-rating" min="0" max="100" required>
-                                        <div class="button-box">
-                                            <button type="submit" class="btn btn-gold">수정 완료</button>
-                                            <button type="button" class="btn btn-danger">취소</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                            <div class="review-util">
-                                <time th:text="${#temporals.format(rv.createdAt,'yyyy.MM.dd')}">날짜</time>
-                                <button class="like-btn" th:data-review-id="${rv.id}"
-                                    th:data-review-type="${reviewType}" th:data-liked="${rv.isLikedByCurrentUser}"
-                                    th:text="${rv.isLikedByCurrentUser} ? '❤️' : '🤍'">❤️</button>
-
-                                <span th:id="'like-count-' + ${rv.id}" th:text="${rv.likes}">0</span>
-
-                                <button class="report-btn" th:data-review-id="${rv.id}"
-                                    th:data-review-type="${reviewType}">🚨</button>
-                                <span
-                                    th:if="${(isAdmin != null and isAdmin) or (loginUser != null and rv != null and loginUser.id == rv.userId)}">
-                                    <a href="#" class="edit-btn" th:data-id="${rv.id}">수정</a>
-                                    <a href="#" class="del-btn" th:data-id="${rv.id}">삭제</a>
-                                </span>
-                            </div>
-                        </li>
-                    </th:block>
-                </ul> -->
                 <ul class="review-list" th:insert="~{review/trackFrag :: reviewItems(review=${review})}"></ul>
                 <!-- 더보기 버튼 -->
                 <div class="more-box" th:if="${hasNext}">
@@ -172,10 +129,27 @@
             </div>
             <div class="mood-vote">
                 <div class="vote-header">
+                    <p id="headline">Mood Tags</p>
+                </div>
+                <div class="moods" th:data-user-id="${loginUser != null ? loginUser.id : 0}"
+                    th:data-track-id="${track.id}" id="moodVoteContainer">
+                    <th:block th:each="tag : ${tags}">
+                        <label class="btn btn-gold mood-option"
+                            th:classappend="${userVotedMoodId == tag.id} ? 'selected'">
+                            <input type="radio" name="moodVote" th:value="${tag.id}"
+                                th:checked="${userVotedMoodId == tag.id}" hidden />
+                            <span th:text="${tag.name}">분위기</span>
+                        </label>
+                    </th:block>
+                </div>
+                <button class="btn btn-gold" id="submitMoodVote" th:if="${loginUser != null}">투표하기</button>
+            </div>
+        </div>
+        <!-- <div class="mood-vote">
+                <div class="vote-header">
                     <p id="headline">Mood Tag</p>
                 </div>
                 <div class="moods">
-                    <!-- 분위기 반복문 -->
                     <div class="btn btn-gold">분위기1</div>
                     <div class="btn btn-gold">분위기1324</div>
                     <div class="btn btn-gold">분위기133</div>
@@ -184,45 +158,46 @@
                     <div class="btn btn-gold">분위기1</div>
                 </div>
                 <button class="btn btn-gold">분위기 투표</button>
-            </div>
-        </div>
-        <!-- 분위기 끝 -->
+            </div> -->
+    </div>
+    <!-- 분위기 끝 -->
 
-        <!-- 앨범 트랙리스트 분위기 뭐뭐.. -->
-        <div class="info-card">
-            <div class="info top5track">
-                <p id="headline" th:text="|${album.title}💿 🔥TOP ${#lists.size(top5List)}|"></p>
-                <th:block th:each="tops, stat : ${top5List}">
-                    <a th:href="@{/tracks(id=${tops.id})}">
-                        <p th:text="|${stat.count}. ${tops.title}  ${tops.formattedDuration}|"></p>
-                    </a>
-                </th:block>
-            </div>
-            <div class="info album-moods">
-                <p id="headline">트랙의 분위기</p>
-                <div class="mood-list">
-                    <button class="btn btn-gold">동해물과23</button>
-                    <button class="btn btn-gold">백두산이 마르고</button>
-                    <button class="btn btn-gold">닳도록 하느</button>
-                    <button class="btn btn-gold">닳도록 하느</button>
-                </div>
-            </div>
-            <div class="info pl-list">
-                <p id="subtitle">이 트랙을 포함한 플리🎶</p>
-                <p>오늘 헤어진 사람들은 위한 플리 ❤352</p>
-                <p>혼자있고 싶어요,, ❤242</p>
-                <p>😢😢😢😢😢😢😢😢😢 ❤122</p>
-                <p>페페사랑단 플레이리스트 ❤64</p>
+    <!-- 앨범 트랙리스트 분위기 뭐뭐.. -->
+    <div class="info-card">
+        <div class="info top5track">
+            <p id="headline" th:text="|${album.title}💿 🔥TOP ${#lists.size(top5List)}|"></p>
+            <th:block th:each="tops, stat : ${top5List}">
+                <a th:href="@{/tracks(id=${tops.id})}">
+                    <p th:text="|${stat.count}. ${tops.title}  ${tops.formattedDuration}|"></p>
+                </a>
+            </th:block>
+        </div>
+        <div class="info album-moods">
+            <p id="headline">트랙의 분위기</p>
+            <div class="mood-list">
+                <button class="btn btn-gold">동해물과23</button>
+                <button class="btn btn-gold">백두산이 마르고</button>
+                <button class="btn btn-gold">닳도록 하느</button>
+                <button class="btn btn-gold">닳도록 하느</button>
             </div>
         </div>
-        <!-- 앨범 트랙리스트 분위기 뭐뭐..끝 -->
+        <div class="info pl-list">
+            <p id="subtitle">이 트랙을 포함한 플리🎶</p>
+            <p>오늘 헤어진 사람들은 위한 플리 ❤352</p>
+            <p>혼자있고 싶어요,, ❤242</p>
+            <p>😢😢😢😢😢😢😢😢😢 ❤122</p>
+            <p>페페사랑단 플레이리스트 ❤64</p>
+        </div>
+    </div>
+    <!-- 앨범 트랙리스트 분위기 뭐뭐..끝 -->
 
     </div>
-    <th:block th:replace="~{fragments/script::album}"></th:block>
     <script th:inline="javascript">
         const isLogin = [[${ loginUser != null ? 'true' : 'false'}]];
     </script>
+    <!-- 비동기 스크립트 -->
     <script>
+        // 비동기관련
         $(document).ready(function () {
             const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
             const csrfToken = $('meta[name="_csrf"]').attr('content');
@@ -530,58 +505,267 @@
                 const nextPage = page + 1;
 
                 $.ajax({
-    url: `/tracks/${trackId}/reviews/more`,
-    type: 'GET',
-    data: { page: nextPage, size: size },
-    success: function (fragmentHtml) {
-        // 먼저 응답 fragment를 jQuery 객체로 파싱
-        const $fragment = $(fragmentHtml);
+                    url: `/tracks/${trackId}/reviews/more`,
+                    type: 'GET',
+                    data: { page: nextPage, size: size },
+                    success: function (fragmentHtml) {
+                        // 임시 div로 파싱
+                        const $fragment = $('<div>').html(fragmentHtml);
 
-        // 플래그 태그를 fragment 내부에서 찾음
-        const $hasNextFlag = $fragment.filter('#has-next-flag');
+                        // 리뷰들 추가
+                        $('.review-list').append($fragment.find('li.comment'));
 
-        // 플래그에서 값 읽기 (boolean 문자열 대응)
-        const hasNextRaw = $hasNextFlag.data('has-next');
-        const hasNext = (hasNextRaw === true || hasNextRaw === 'true');
+                        // hasNext 확인
+                        const $hasNextFlag = $fragment.find('#has-next-flag');
+                        const hasNextRaw = $hasNextFlag.data('has-next');
+                        const hasNext = hasNextRaw === true || hasNextRaw === 'true';
 
-        // 플래그 태그는 실제 DOM에는 추가 안 해도 되므로 제거
-        $hasNextFlag.remove();
+                        $hasNextFlag.remove();
 
-        // 리뷰 리스트에 나머지 리뷰 li들만 추가
-        $('.review-list').append($fragment);
-
-        if (hasNext) {
-            $btn.data('page', nextPage); // 페이지 증가
-        } else {
-            $btn.hide(); // 더보기 버튼 숨김
-        }
-    },
-    error: function () {
-        alert('리뷰를 불러오는 중 오류가 발생했습니다.');
-    }
-});
+                        if (hasNext) {
+                            $btn.data('page', nextPage);
+                        } else {
+                            $btn.hide();
+                        }
+                    },
+                    error: function () {
+                        alert('리뷰를 불러오는 중 오류가 발생했습니다.');
+                    }
+                });
             });
-        })
+        });
+        // 라디오버튼 체크시
+        $(document).on('change', 'input[name="moodVote"]', function () {
+            $('.mood-option').removeClass('selected pop-heart'); // 모든 버튼 초기화
 
+            const $selected = $(this).closest('.mood-option');
+            $selected.addClass('selected pop-heart'); // 선택된 버튼에 클래스 추가
+
+            // pop-heart 클래스는 잠깐 후 제거 (애니메이션)
+            setTimeout(() => $selected.removeClass('pop-heart'), 300);
+        });
+
+        // 비동기 분위기 투표
+        $(document).on('click', '#submitMoodVote', function () {
+            const selectedMood = $('input[name="moodVote"]:checked').val();
+            if (!selectedMood) {
+                Swal.fire('분위기를 선택해주세요!');
+                return;
+            }
+
+            const $container = $('#moodVoteContainer');
+            const userId = $container.data('user-id');
+            const trackId = $container.data('track-id');
+
+            Swal.fire({
+                title: '이 분위기로 투표할까요?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: '네',
+                cancelButtonText: '아니오'
+            }).then(result => {
+                if (!result.isConfirmed) return;
+
+                $.ajax({
+                    url: '/tracks/vote-mood',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        userId: userId,
+                        trackId: trackId,
+                        mood: selectedMood
+                    }),
+                    success: function (data) {
+                        const votedMoodId = data.votedMoodId;
+                        const tags = data.moods;
+
+                        // ✅ 무드 UI 재생성
+                        $container.empty();
+
+                        tags.forEach(tag => {
+                            const selected = (tag.id === votedMoodId);
+                            const html = `
+                        <label class="btn btn-gold mood-option ${selected ? 'selected pop-heart' : ''}">
+                            <input type="radio" name="moodVote" value="${tag.id}" ${selected ? 'checked' : ''} hidden />
+                            <span>${tag.name}</span>
+                        </label>
+                    `;
+                            $container.append(html);
+                        });
+
+                        if (!Array.isArray(data.values) || data.values.length === 0) {
+                            console.warn("차트를 그릴 수 없습니다: values가 비어있거나 undefined입니다.");
+                            return;
+                        }
+                        renderMoodChart(data.labels, data.values);
+
+                        // ✅ 효과 클래스 제거 타이머
+                        setTimeout(() => {
+                            $('.mood-option').removeClass('pop-heart');
+                        }, 300);
+
+                        Swal.fire('투표 완료!');
+                    },
+                    error: function () {
+                        Swal.fire('투표에 실패했습니다.');
+                    }
+                });
+            });
+        });
+    </script>
+    <!-- 해당 댓글로 스크롤 이동 -->
+    <script>
         /* 해당 댓글로 스크롤 이동 */
         document.addEventListener("DOMContentLoaded", function () {
             const params = new URLSearchParams(window.location.search);
             const reviewId = params.get("reviewId");
 
             if (reviewId) {
-            const target = document.querySelector(`[data-review-id="${reviewId}"]`);
-            if (target) {
-                target.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center"
-                });
-                target.style.transition = 'background 0.3s';
-                target.style.background = 'rgba(255,255,255,0.3)';
-                target.scroll
-                setTimeout(() => target.style.background = '', 1500);
-            }
+                const target = document.querySelector(`[data-review-id="${reviewId}"]`);
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
+                    target.style.transition = 'background 0.3s';
+                    target.style.background = 'rgba(255,255,255,0.3)';
+                    target.scroll
+                    setTimeout(() => target.style.background = '', 1500);
+                }
             }
         });
+    </script>
+    <!-- 드래그, 슬라이드 스크립트 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.querySelector('.track-container');
+            if (!container) return;
+
+            /* 카드 하나 + gap = 270 + 20 */
+            const STEP = 290;
+            const THRESHOLD = 5;    // 클릭·드래그 구분
+            const INTERVAL = 3000; // 자동 슬라이드 간격(ms)
+
+            /* ─── 자동 슬라이드 ─── */
+            let autoId = null;
+            const startAuto = () => {
+                clearInterval(autoId);
+                autoId = setInterval(() => {
+                    const max = container.scrollWidth - container.clientWidth;
+                    const atEnd = Math.ceil(container.scrollLeft) >= max;
+                    container.scrollTo({ left: atEnd ? 0 : container.scrollLeft + STEP, behavior: 'smooth' });
+                }, INTERVAL);
+            };
+            const stopAuto = () => clearInterval(autoId);
+
+            /* ─── 드래그 변수 ─── */
+            let down = false, startX = 0, startScroll = 0, moved = 0;
+
+            const dragStart = x => {
+                down = true; moved = 0;
+                startX = x - container.offsetLeft;
+                startScroll = container.scrollLeft;
+                container.classList.add('grabbing');
+                stopAuto();
+            };
+            const dragMove = x => {
+                if (!down) return;
+                const delta = (x - container.offsetLeft) - startX;
+                moved = Math.max(moved, Math.abs(delta));
+                container.scrollLeft = startScroll - delta;
+            };
+            const dragEnd = () => {
+                if (!down) return;
+                down = false; container.classList.remove('grabbing');
+
+                /* 스냅 위치 보정 */
+                const rest = container.scrollLeft % STEP;
+                const target = rest > STEP / 2
+                    ? container.scrollLeft + (STEP - rest)
+                    : container.scrollLeft - rest;
+                container.scrollTo({ left: target, behavior: 'smooth' });
+                startAuto();
+            };
+
+            /* ─── 이벤트 ─── */
+            // 마우스
+            container.addEventListener('mousedown', e => { dragStart(e.pageX); e.preventDefault(); });
+            window.addEventListener('mousemove', e => dragMove(e.pageX));
+            window.addEventListener('mouseup', dragEnd);
+
+            // 터치
+            container.addEventListener('touchstart', e => dragStart(e.touches[0].pageX), { passive: true });
+            container.addEventListener('touchmove', e => dragMove(e.touches[0].pageX), { passive: false });
+            container.addEventListener('touchend', dragEnd);
+
+            // 클릭 vs 드래그
+            container.addEventListener('click', e => {
+                if (moved > THRESHOLD) { e.preventDefault(); e.stopPropagation(); }
+            });
+
+            // 호버 시 자동 슬라이드 일시 정지 (PC)
+            container.addEventListener('mouseenter', stopAuto);
+            container.addEventListener('mouseleave', startAuto);
+
+            startAuto();      // 최초 실행
+        });
+    </script>
+    <!-- 육각 그래프 스크립트 -->
+    <script>
+        // 육각 차트
+        function renderMoodChart(labels, values) {
+            const ctx = document.getElementById('hexRadarChart').getContext('2d');
+
+            if (window.moodChartInstance) {
+                window.moodChartInstance.destroy();
+            }
+
+            const maxValue = Math.max(...values);
+            const roundedMax = Math.ceil(maxValue / 10) * 10;
+
+            window.moodChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Mood Votes',
+                        data: values,
+                        backgroundColor: 'rgba(212, 185, 127, 0.2)',
+                        borderColor: '#D4B97F',
+                        pointBackgroundColor: '#D4B97F'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            grid: { color: '#D4B97F' },
+                            angleLines: { color: '#D4B97F' },
+                            pointLabels: { color: '#D4B97F' },
+                            ticks: {
+                                stepSize: Math.ceil(roundedMax / 5), // 4단계로 분할
+                                backdropColor: 'transparent'
+                            },
+                            min: 0,
+                            max: roundedMax
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+
+    <script th:inline="javascript">
+        const moodLabels = /*[[${moodLabels}]]*/[];
+        const moodValues = /*[[${moodValues}]]*/[];
+
+        renderMoodChart(moodLabels, moodValues);
     </script>
 
 </body>

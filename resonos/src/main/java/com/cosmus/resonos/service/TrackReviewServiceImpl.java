@@ -110,11 +110,11 @@ public class TrackReviewServiceImpl implements TrackReviewService {
         return mapper.findById(id);
     }
 
-
+    
     @Override
     public List<TrackReview> getMoreReviews(String trackId, int page, int size) {
         int offset = (page - 1) * size;
-        return mapper.selectPagedReviewsWithReviewer(trackId, size, offset);
+        return mapper.selectPagedReviewsWithReviewer(trackId, size + 1, offset);  // ⭐ 1개 더 가져옴
     }
 
 

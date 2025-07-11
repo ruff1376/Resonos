@@ -76,8 +76,21 @@ body {
 
 #headline {font-size: 2.4rem; font-weight: bold; color: var(--main-color);}
 #subtitle {font-size: 2rem;}
-
 .btn-gold {
+    appearance: none;      /* 브라우저 기본 라디오 버튼 제거 */
+    border: 1px solid var(--main-color);
+    color: var(--main-color);
+    border-radius: 10px;
+    background: transparent;
+    font-weight: bold;
+    font-size: 1.6rem;
+}
+.btn-gold:hover,
+.btn-gold.selected {
+    background: var(--main-color);
+    color: var(--background-color);
+}
+/* .btn-gold {
   background-color: var(--main-color);
   color: black;
   border: 1px solid goldenrod;
@@ -89,7 +102,7 @@ body {
   background-color: goldenrod;
   color: white;
   border-color: goldenrod;
-}
+} */
 canvas {
     width: 100%;
     height: 100%;
