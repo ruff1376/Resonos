@@ -214,7 +214,6 @@ img {
 .name-and-score {
     display: flex;
     align-items: center;
-    padding: 5px;
 }
 .name-and-score > p:first-child {
     font-weight: bold;

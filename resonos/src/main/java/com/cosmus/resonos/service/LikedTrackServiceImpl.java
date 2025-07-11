@@ -1,8 +1,11 @@
 package com.cosmus.resonos.service;
 
+import java.util.Date;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.cosmus.resonos.domain.LikedTrack;
 import com.cosmus.resonos.mapper.LikedTrackMapper;
 
@@ -33,7 +36,34 @@ public class LikedTrackServiceImpl implements LikedTrackService {
     }
 
     @Override
-    public boolean delete(Long id) throws Exception {
-        return likedTrackMapper.delete(id) > 0;
+    public boolean deleteById(Long id) throws Exception {
+        return likedTrackMapper.deleteById(id) > 0;
     }
+    @Override
+    public boolean toggleLike(Long userId, String trackId) throws Exception {
+        LikedTrack existing = likedTrackMapper.findByUserAndTrack(userId, trackId);
+        if (existing != null) {
+            likedTrackMapper.deleteById(existing.getId());
+            return false; // 좋아요 취소
+        } else {
+            LikedTrack newLike = new LikedTrack();
+            newLike.setId(null); // auto_increment 또는 UUID 사용
+            newLike.setCreatedAt(new Date());
+            newLike.setUserId(userId);
+            newLike.setTrackId(trackId);
+            likedTrackMapper.insert(newLike);
+            return true; // 좋아요 추가
+        }
+    }
+    
+    @Override
+    public int getTrackLikeCount(String trackId) {
+        return likedTrackMapper.countByTrackId(trackId);
+    }
+
+    @Override
+    public boolean isLikedByUser(Long userId, String trackId) {
+        return likedTrackMapper.findByUserAndTrack(userId, trackId) != null;
+    }
+
 }

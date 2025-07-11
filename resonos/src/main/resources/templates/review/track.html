@@ -36,22 +36,21 @@
                         th:text="|🔮 ${#numbers.formatDecimal(score.averageScore, 0, 0)}점 (✅리뷰 ${score.criticCount}개, 일반리뷰 ${score.userCount}개)|">
                     </p>
                 </th:block>
-                <!-- <div style="display: flex; gap: 15px;">
+                <div style="display: flex; gap: 15px;">
                     <button type="button" id="likeTrackBtn" class="btn btn-gold" th:data-track-id="${track.id}"
                         th:data-user-id="${loginUser != null ? loginUser.id : 0}" th:data-liked="${isTrackLikedByUser}">
-                        <span id="likeText" th:text="${isTrackLikedByUser ? '좋아요❤️' : '좋아요🤍'}"></span>
+                        <span id="likeText" th:text="${isTrackLikedByUser != null and isTrackLikedByUser ? '좋아요❤️' : '좋아요🤍'}"></span>
                         <span id="likeCount" th:text="${trackLikeCount}">0</span>
                     </button>
 
                     <div class="btn btn-gold">저장 💾</div>
-                </div> -->
+                </div>
             </div>
         </div>
         <!-- 트랙 카드 끝 -->
         <!-- iframe -->
         <div class="iframe-card">
             <div class="spotify">
-                <!-- 스포티파이 로그인 되어있지않을때 30초 미리듣기 오디오태그 -->
                 <iframe th:src="|https://open.spotify.com/embed/track/${track.id}?utm_source=generator|" frameborder="0"
                     allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                     loading="lazy">
@@ -65,7 +64,6 @@
                         referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
                     </iframe>
                 </th:block>
-                <!-- ② MV URL이 없을 때 → 준비중 이미지 -->
                 <th:block th:if="${#strings.isEmpty(track.mvUrl)}">
                     <img th:src="@{/img/wait_plz.png}" alt="뮤직비디오 준비중" width="560" height="315"
                         style="object-fit:cover;">
@@ -80,7 +78,7 @@
             <div th:fragment="scoreFragment">
                 <div class="review-score">
                     <th:block th:if="${score == null or score.averageScore == null}">
-                        <h1 id="headline">첫 리뷰를 작성해보세요 🤩</h1>
+                        <h1 id="headline" style="padding: 10px;">첫 리뷰를 작성해보세요 🤩</h1>
                     </th:block>
                     <th:block th:if="${score != null and score.averageScore != null}">
                         <h1 id="headline" th:text="|🔮 ${#numbers.formatDecimal(score.averageScore, 0, 0)}|"></h1>
@@ -96,9 +94,14 @@
             <div class="review-container">
                 <ul class="review-list" th:insert="~{review/trackFrag :: reviewItems(review=${review})}"></ul>
                 <!-- 더보기 버튼 -->
-                <div class="more-box" th:if="${hasNext}">
-                    <button id="load-more-btn" data-page="1" th:data-track-id="${track.id}" class="btn btn-gold">리뷰
-                        더보기</button>
+                <div>
+                    <div class="more-box" th:if="${hasNext}">
+                        <button id="load-more-btn" data-page="1" th:data-track-id="${track.id}" class="btn btn-gold">리뷰
+                            더보기</button>
+                    </div>
+                    <th:block th:if="${loginUser == null}">
+                        <p id="headline" style="padding: 10px;">로그인시 리뷰작성이 가능합니다.</p>
+                    </th:block>
                 </div>
                 <form class="edit-form" style="display: none;">
                     <div class="reply">
