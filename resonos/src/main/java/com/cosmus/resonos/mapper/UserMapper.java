@@ -77,8 +77,10 @@ public interface UserMapper {
     public Users selectById(Long id) throws Exception;
     // 회원 아이디로 공개 정보 조회
     public PublicUserDto publicSelectById(Long id) throws Exception;
-
-
+    // 비밀번호 체크
+    public String checkPassword(@Param("password") String password) throws Exception;
+    // 비밀번호 변경
+    public int changePassword(@Param("newPassword") String newPassword, @Param("loginUserId") Long loginUserId) throws Exception;
 
     // 검색
 

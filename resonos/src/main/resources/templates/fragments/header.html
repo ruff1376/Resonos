@@ -23,7 +23,7 @@
                         <!-- 비로그인 -->
                         <th:block th:if="${not #authorization.expression('isAuthenticated()')}">
                             <li class="nav-item ms-lg-2">
-                                <a href="/login" class="btn btn-outline-gold">로그인</a>
+                                <a id="login" href="/login" class="btn btn-outline-gold">로그인</a>
                             </li>
                             <li class="nav-item ms-2">
                                 <a href="/join" class="btn btn-outline-gold">회원가입</a>
@@ -110,5 +110,11 @@
             input.value = trimmed; // 입력값을 trim된 값으로 바꿈
             return true; // 검색 진행
         }
+
+        document.getElementById('login').addEventListener('click', e => {
+            e.preventDefault()
+            sessionStorage.setItem('returnTo', location.href)
+            location.href = '/login'
+        })
     </script>
 </th:block>

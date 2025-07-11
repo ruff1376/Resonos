@@ -110,7 +110,7 @@ button.social-btn:hover {
   text-align: start;
 }
 .con-join .user-form h2 {text-align: center;}
-.con-join .form-control::placeholder, .con-find-id .form-control::placeholder {color: #bbb;}
+input::placeholder {color: #bbb !important;}
 #join-button {margin-top: 80px;}
 .fail-vali {color: #FF3B3B; font-size: 1.2rem;}
 .success {color: rgb(3, 212, 3) !important;}
@@ -238,7 +238,9 @@ button.social-btn:hover {
   gap: 28px;
 }
 .mypage-card {
+  height: 100%;
   min-height: 233px;
+  width: 100%;
   padding:  15px 13px;
   color: #fffbe6;
   background: rgba(24,28,35,0.82);
@@ -246,6 +248,16 @@ button.social-btn:hover {
   border: 1.5px solid #D4B97F;
   box-shadow: 0 2px 12px rgba(24,28,35,0.10);
   transition: all 0.3s;
+}
+.grid-item {
+  min-width: 0;
+}
+.mypage-card.security ul {
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
 }
 .mypage-card.badge-area li {
   display: block;
@@ -266,6 +278,14 @@ button.social-btn:hover {
   list-style: none;
   padding: 0;
   margin: 0 0 7px 0;
+}
+.mypage-card.badge-area ul {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.mypage-card.badge-area h4 {
+  margin-bottom: 20px;
 }
 .mypage-card.playlist {
   min-height: 200px;
@@ -801,7 +821,7 @@ button.like {background-color: inherit; border: none;}
 .text-item.post a {display: flex; justify-content: space-between;}
 
 /* 배지 */
-.ul-list.bl {width: 100%; flex-wrap: wrap; gap: 10px;}
+.ul-list.bl {width: 100%; flex-wrap: wrap; gap: 10px; column-gap: 30px;}
 .con-badge .info-wrapper .info-section {height: 300px;}
 .con .bg-badge.cg {border-color: #706F6F;}
 .badge.cg {background-color: #706F6F;}
@@ -1018,4 +1038,17 @@ h2 + #bio {
 .alert-cancle-button:hover {
   background-color: var(--main-color);
   color: #fff;
+}
+
+/* 계정 / 보안 페이지 */
+.con.con-security .info-section {max-height: 500px; min-height: 0; height: auto;}
+.con.con-security .input-area {padding: 0;}
+.con.con-security .inner {
+  display: flex;
+  flex-direction: column;
+  height: 80%;
+  justify-content: space-between;
+}
+.con.con-security .input-area input {
+  margin-bottom: 8px;
 }

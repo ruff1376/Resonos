@@ -292,4 +292,19 @@ public class UserServiceImpl implements UserService {
         return userMapper.searchCount(keyword);
     }
 
+    @Override
+    public String selectPasswordById(Long id) throws Exception {
+        return userMapper.selectPasswordById(id);
+    }
+
+    @Override
+    public boolean comparePassword(String pw, String dbPw) throws Exception {
+        return passwordEncoder.matches(pw, dbPw);
+    }
+
+    @Override
+    public boolean changePassword(String newPassword, Long loginUserId) throws Exception {
+        return userMapper.changePassword(passwordEncoder.encode(newPassword), loginUserId) > 0;
+    }
+
 }
