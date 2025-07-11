@@ -214,7 +214,6 @@ img {
 .name-and-score {
     display: flex;
     align-items: center;
-    padding: 5px;
 }
 .name-and-score > p:first-child {
     font-weight: bold;
@@ -432,6 +431,7 @@ img {
     border: 2px solid var(--main-color);
     overflow: hidden;
     padding: 10px;
+    display: flex;
 }
 .mood-card {
     max-width: 1350px;

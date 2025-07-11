@@ -92,7 +92,14 @@ public class TrackController {
             model.addAttribute("isAdmin", isAdmin);
             Long userVotedMoodId = trackMoodVoteService.getUserVotedMoodId(loginUser.getId(), id);
             model.addAttribute("userVotedMoodId", userVotedMoodId);
+            // ✅ 좋아요 여부 체크
+            boolean isTrackLiked = likedTrackService.isLikedByUser(loginUser.getId(), id);
+            model.addAttribute("isTrackLikedByUser", isTrackLiked);
+        } else {
+            // 비로그인 사용자를 위해 false로 설정
+            model.addAttribute("isTrackLikedByUser", false);
         }
+
         
         Track track = trackService.selectById(id);
         Album album = albumService.findAlbumByTrackId(id);
@@ -124,7 +131,7 @@ public class TrackController {
         boolean hasNext = pagination.getLast() > page;
         // 상위 6개 분위기
         List<MoodStat> moodStats = moodStatService.getTop6MoodsByTrackId(id);
-
+        boolean isMoodEmpty = (moodStats == null || moodStats.isEmpty());
         // moodName과 voteCount 리스트로 나누기
         List<String> moodLabels = moodStats.stream()
                 .map(MoodStat::getMoodName)
@@ -133,7 +140,10 @@ public class TrackController {
         List<Integer> moodValues = moodStats.stream()
                 .map(MoodStat::getVoteCount)
                 .collect(Collectors.toList());
-
+        // ✅ 좋아요 수 조회
+        int likeCount = likedTrackService.getTrackLikeCount(id);
+        model.addAttribute("trackLikeCount", likeCount);
+        model.addAttribute("isMoodEmpty", isMoodEmpty);
         model.addAttribute("moodLabels", moodLabels);
         model.addAttribute("moodValues", moodValues);
         model.addAttribute("tags", tagService.list());
@@ -311,6 +321,18 @@ public class TrackController {
         response.put("values", moodValues);
 
         return ResponseEntity.ok(response);
+    }
+    @PostMapping("/toggle-like")
+    @ResponseBody
+    public ResponseEntity<?> toggleTrackLike(@RequestBody LikedTrack dto) throws Exception {
+        boolean liked = likedTrackService.toggleLike(dto.getUserId(), dto.getTrackId());
+        int count = likedTrackService.getTrackLikeCount(dto.getTrackId());
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("liked", liked);
+        result.put("count", count);
+
+        return ResponseEntity.ok(result);
     }
 
 }

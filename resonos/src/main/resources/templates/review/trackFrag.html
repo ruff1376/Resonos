@@ -22,6 +22,18 @@
     <div class="review-content">
       <p class="content-text" th:text="${rv.content}">내용</p>
     </div>
+    <form class="edit-form" style="display: none;">
+      <div class="reply">
+        <textarea class="edit-content" required></textarea>
+        <div class="score-and-submit">
+          <input type="number" class="edit-rating" min="0" max="100" required />
+          <div class="button-box">
+            <button type="submit" class="btn btn-gold">수정 완료</button>
+            <button type="button" class="btn btn-danger">취소</button>
+          </div>
+        </div>
+      </div>
+    </form>
     <div class="review-util">
       <time th:text="${#temporals.format(rv.createdAt,'yyyy.MM.dd')}">날짜</time>
       <button class="like-btn" th:data-review-id="${rv.id}" th:data-review-type="${reviewType}"

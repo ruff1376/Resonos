@@ -36,22 +36,21 @@
                         th:text="|🔮 ${#numbers.formatDecimal(score.averageScore, 0, 0)}점 (✅리뷰 ${score.criticCount}개, 일반리뷰 ${score.userCount}개)|">
                     </p>
                 </th:block>
-                <!-- <div style="display: flex; gap: 15px;">
+                <div style="display: flex; gap: 15px;">
                     <button type="button" id="likeTrackBtn" class="btn btn-gold" th:data-track-id="${track.id}"
                         th:data-user-id="${loginUser != null ? loginUser.id : 0}" th:data-liked="${isTrackLikedByUser}">
-                        <span id="likeText" th:text="${isTrackLikedByUser ? '좋아요❤️' : '좋아요🤍'}"></span>
+                        <span id="likeText" th:text="${isTrackLikedByUser != null and isTrackLikedByUser ? '좋아요❤️' : '좋아요🤍'}"></span>
                         <span id="likeCount" th:text="${trackLikeCount}">0</span>
                     </button>
 
                     <div class="btn btn-gold">저장 💾</div>
-                </div> -->
+                </div>
             </div>
         </div>
         <!-- 트랙 카드 끝 -->
         <!-- iframe -->
         <div class="iframe-card">
             <div class="spotify">
-                <!-- 스포티파이 로그인 되어있지않을때 30초 미리듣기 오디오태그 -->
                 <iframe th:src="|https://open.spotify.com/embed/track/${track.id}?utm_source=generator|" frameborder="0"
                     allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                     loading="lazy">
@@ -65,7 +64,6 @@
                         referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
                     </iframe>
                 </th:block>
-                <!-- ② MV URL이 없을 때 → 준비중 이미지 -->
                 <th:block th:if="${#strings.isEmpty(track.mvUrl)}">
                     <img th:src="@{/img/wait_plz.png}" alt="뮤직비디오 준비중" width="560" height="315"
                         style="object-fit:cover;">
@@ -80,7 +78,7 @@
             <div th:fragment="scoreFragment">
                 <div class="review-score">
                     <th:block th:if="${score == null or score.averageScore == null}">
-                        <h1 id="headline">첫 리뷰를 작성해보세요 🤩</h1>
+                        <h1 id="headline" style="padding: 10px;">첫 리뷰를 작성해보세요 🤩</h1>
                     </th:block>
                     <th:block th:if="${score != null and score.averageScore != null}">
                         <h1 id="headline" th:text="|🔮 ${#numbers.formatDecimal(score.averageScore, 0, 0)}|"></h1>
@@ -96,22 +94,15 @@
             <div class="review-container">
                 <ul class="review-list" th:insert="~{review/trackFrag :: reviewItems(review=${review})}"></ul>
                 <!-- 더보기 버튼 -->
-                <div class="more-box" th:if="${hasNext}">
-                    <button id="load-more-btn" data-page="1" th:data-track-id="${track.id}" class="btn btn-gold">리뷰
-                        더보기</button>
-                </div>
-                <form class="edit-form" style="display: none;">
-                    <div class="reply">
-                        <textarea class="edit-content" required></textarea>
-                        <div class="score-and-submit">
-                            <input type="number" class="edit-rating" min="0" max="100" required />
-                            <div class="button-box">
-                                <button type="submit" class="btn btn-gold">수정 완료</button>
-                                <button type="button" class="btn btn-danger">취소</button>
-                            </div>
-                        </div>
+                <div>
+                    <div class="more-box" th:if="${hasNext}">
+                        <button id="load-more-btn" data-page="1" th:data-track-id="${track.id}" class="btn btn-gold">리뷰
+                            더보기</button>
                     </div>
-                </form>
+                    <th:block th:if="${loginUser == null}">
+                        <p id="headline" style="padding: 10px;">로그인시 리뷰작성이 가능합니다.</p>
+                    </th:block>
+                </div>
             </div>
             <!-- 페이지네이션 -->
             <div th:if="${loginUser != null}" class="reply">
@@ -130,7 +121,12 @@
         <!-- 분위기 -->
         <div class="mood-card">
             <div class="chart">
-                <canvas id="hexRadarChart"></canvas>
+                <th:block th:if="${isMoodEmpty}">
+                    <p id="headline">아직 아무도 분위기에 투표하지 않았어요 😅</p>
+                </th:block>
+                <th:block th:if="${!isMoodEmpty}">
+                    <canvas id="hexRadarChart"></canvas>
+                </th:block>
             </div>
             <div class="mood-vote">
                 <div class="vote-header">
@@ -161,13 +157,15 @@
                 </th:block>
             </div>
             <div class="info album-moods">
-                <p id="headline">트랙의 분위기</p>
-                <div class="mood-list">
-                    <button class="btn btn-gold">동해물과23</button>
-                    <button class="btn btn-gold">백두산이 마르고</button>
-                    <button class="btn btn-gold">닳도록 하느</button>
-                    <button class="btn btn-gold">닳도록 하느</button>
-                </div>
+                <p id="headline">분위기로 노래찾기</p>
+                <th:block th:if="${moodLabels == null || moodLabels.isEmpty()}">
+                    <p>아직 아무도 분위기에 투표하지 않았어요 😅</p>
+                </th:block>
+                <th:block th:if="${moodLabels != null}">
+                    <div class="mood-list" th:each="topMoods : ${moodLabels}">
+                        <button class="btn btn-gold" th:text="|#${topMoods}|">분위기1</button>
+                    </div>
+                </th:block>
             </div>
             <div class="info pl-list">
                 <p id="subtitle">이 트랙을 포함한 플리🎶</p>
@@ -570,10 +568,11 @@
                     success: function (data) {
                         const votedMoodId = data.votedMoodId;
                         const tags = data.moods;
+                        const values = data.values;
+                        const labels = data.labels;
 
-                        // ✅ 무드 UI 재생성
+                        // ✅ 무드 버튼 UI 갱신
                         $container.empty();
-
                         tags.forEach(tag => {
                             const selected = (tag.id === votedMoodId);
                             const html = `
@@ -585,11 +584,14 @@
                             $container.append(html);
                         });
 
-                        if (!Array.isArray(data.values) || data.values.length === 0) {
-                            console.warn("차트를 그릴 수 없습니다: values가 비어있거나 undefined입니다.");
-                            return;
+                        // ✅ 차트 영역 갱신
+                        const $chartArea = $('.chart');
+                        if (!Array.isArray(values) || values.length === 0) {
+                            $chartArea.html(`<p id="headline">아직 아무도 분위기에 투표하지 않았어요 😅</p>`);
+                        } else {
+                            $chartArea.html(`<canvas id="hexRadarChart"></canvas>`);
+                            renderMoodChart(labels, values);
                         }
-                        renderMoodChart(data.labels, data.values);
 
                         // ✅ 효과 클래스 제거 타이머
                         setTimeout(() => {
@@ -749,6 +751,12 @@
             const maxValue = Math.max(...values);
             const roundedMax = Math.ceil(maxValue / 10) * 10;
 
+            // ✅ 6개로 맞추기 위해 값 보정
+            while (labels.length < 6) {
+                labels.push('');
+                values.push(0);
+            }
+            
             window.moodChartInstance = new Chart(ctx, {
                 type: 'radar',
                 data: {
