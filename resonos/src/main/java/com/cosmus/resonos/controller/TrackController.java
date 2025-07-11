@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.domain.CustomUser;
+import com.cosmus.resonos.domain.LikedTrack;
 import com.cosmus.resonos.domain.MoodStat;
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Tag;
@@ -35,6 +36,7 @@ import com.cosmus.resonos.domain.TrackScore;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.ArtistService;
+import com.cosmus.resonos.service.LikedTrackService;
 import com.cosmus.resonos.service.MoodStatService;
 import com.cosmus.resonos.service.PlaylistDetailService;
 import com.cosmus.resonos.service.ReviewLikeService;
@@ -71,6 +73,8 @@ public class TrackController {
     private TrackMoodVoteService trackMoodVoteService;
     @Autowired
     private MoodStatService moodStatService;
+    @Autowired
+    private LikedTrackService likedTrackService;
 
     // 트랙 화면
     @GetMapping
@@ -89,6 +93,7 @@ public class TrackController {
             Long userVotedMoodId = trackMoodVoteService.getUserVotedMoodId(loginUser.getId(), id);
             model.addAttribute("userVotedMoodId", userVotedMoodId);
         }
+        
         Track track = trackService.selectById(id);
         Album album = albumService.findAlbumByTrackId(id);
         List<Track> top5List = trackService.findTop5TracksInSameAlbum(id);
