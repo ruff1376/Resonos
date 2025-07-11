@@ -126,12 +126,11 @@ public class TrackController {
     @GetMapping("/{trackId}/reviews/more")
     public String loadMoreReviews(@PathVariable("trackId") String trackId,
                                 @RequestParam(name = "page", defaultValue = "1") int page,
-                                @RequestParam(defaultValue = "5") int size,
+                                @RequestParam(name = "size", defaultValue = "5") int size,
                                 Model model,
-                                @AuthenticationPrincipal CustomUser principal) {
-
+                                @AuthenticationPrincipal CustomUser principal) throws Exception {
+                                    
         List<TrackReview> reviews = trackReviewService.getMoreReviews(trackId, page, size);
-
         if (principal != null && !reviews.isEmpty()) {
             List<Long> reviewIds = reviews.stream().map(TrackReview::getId).toList();
             List<Long> likedIds = reviewLikeService.getUserLikedReviewIds("TRACK", reviewIds, principal.getUser().getId());
@@ -139,8 +138,12 @@ public class TrackController {
                 r.setIsLikedByCurrentUser(likedIds.contains(r.getId()));
             }
         }
-
+        Track track = trackService.selectById(trackId);
+        // boolean hasNext = trackReviewService.hasNextPage(trackId, page, size);
+        boolean hasNext = reviews.size() == size;
         // 💡 여기서도 모델 변수명은 review
+        model.addAttribute("hasNext", hasNext);
+        model.addAttribute("track", track);
         model.addAttribute("review", reviews);
         model.addAttribute("reviewType", "TRACK");
         model.addAttribute("loginUser", principal != null ? principal.getUser() : null);
@@ -240,5 +243,5 @@ public class TrackController {
                     .body("이미 신고한 리뷰입니다.");
         }
     }
-    
+
 }

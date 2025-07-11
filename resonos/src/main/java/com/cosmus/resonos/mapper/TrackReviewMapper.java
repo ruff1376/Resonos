@@ -24,10 +24,10 @@ public interface TrackReviewMapper {
                                 @Param("rating") Integer rating,
                                 @Param("content") String content);
     public void delete(Long id);
-    
+
     // ───────── Aggregation ─────────
     TrackScore findScoreByTrackId(@Param("trackId") String trackId);
-    
+
     // 리뷰 + 리뷰어
     List<TrackReview> reviewWithReviewerByTrackId(@Param("trackId") String trackId);
 
@@ -35,9 +35,12 @@ public interface TrackReviewMapper {
     boolean existsByUserAndTrack(@Param("userId") Long userId, @Param("trackId") String trackId);
 
     long countByTrackId(String trackId); // 총 개수
-    
+
     List<TrackReview> selectPagedReviewsWithReviewer(@Param("trackId") String trackId,
                                                     @Param("size") int size,
                                                     @Param("offset") int offset);
 
+    /* 마이페이지 */
+    // 특정 유저의 리뷰
+    List<TrackReview> reviewWithReviewerByUserId(@Param("loginUserId") Long loginUserId) throws Exception;
 }

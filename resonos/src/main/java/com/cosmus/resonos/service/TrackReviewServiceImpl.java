@@ -36,44 +36,44 @@ public class TrackReviewServiceImpl implements TrackReviewService {
     /**
      * 평점(0~100) 유효성 검증 후 저장
      */
-    @Override
-    @Transactional
-    public TrackReview writeReview(TrackReview review) {
-        if (review.getRating() < 0 || review.getRating() > 100) {
-            throw new IllegalArgumentException("rating must be 0~100");
-        }
-        review.setCreatedAt(LocalDateTime.now());
-        review.setBlinded(false);
-        review.setLikes(0);
-        review.setDislikes(0);
-        mapper.insert(review);
+    // @Override
+    // @Transactional
+    // public TrackReview writeReview(TrackReview review) {
+    //     if (review.getRating() < 0 || review.getRating() > 100) {
+    //         throw new IllegalArgumentException("rating must be 0~100");
+    //     }
+    //     review.setCreatedAt(LocalDateTime.now());
+    //     review.setBlinded(false);
+    //     review.setLikes(0);
+    //     review.setDislikes(0);
+    //     mapper.insert(review);
 
-        // 1. 트랙 소유자(아티스트) ID
-        Track track = trackMapper.selectById(review.getTrackId());        // 아티스트 ID가 String이므로 Long으로 변환
-        // Long ownerId = Long.valueOf(track.getArtistId());
-        // Long ownerId = track.getArtistId(); // 임시로 변환
-        Long ownerId = Long.valueOf(track.getArtistId());
+    //     // 1. 트랙 소유자(아티스트) ID
+    //     Track track = trackMapper.selectById(review.getTrackId());        // 아티스트 ID가 String이므로 Long으로 변환
+    //     // Long ownerId = Long.valueOf(track.getArtistId());
+    //     // Long ownerId = track.getArtistId(); // 임시로 변환
+    //     Long ownerId = Long.valueOf(track.getArtistId());
         
 
-        // 2. 리뷰 작성자 닉네임
-        Users reviewer = userMapper.selectById(review.getUserId());
-        String reviewerName = reviewer.getNickname();
+    //     // 2. 리뷰 작성자 닉네임
+    //     Users reviewer = userMapper.selectById(review.getUserId());
+    //     String reviewerName = reviewer.getNickname();
 
-        // 3. 리뷰 대상 타입 및 ID
-        String targetType = "트랙";
-        String targetId = review.getTrackId();
+    //     // 3. 리뷰 대상 타입 및 ID
+    //     String targetType = "트랙";
+    //     String targetId = review.getTrackId();
 
-        // 4. 알림 전송
-        notificationService.createNotification(
-            ownerId,
-            "review",
-            "새 리뷰가 작성되었습니다.",
-            reviewerName + "님이 " + targetType + "에 리뷰를 남겼습니다.",
-            targetId
-        );
+    //     // 4. 알림 전송
+    //     notificationService.createNotification(
+    //         ownerId,
+    //         "review",
+    //         "새 리뷰가 작성되었습니다.",
+    //         reviewerName + "님이 " + targetType + "에 리뷰를 남겼습니다.",
+    //         targetId
+    //     );
 
-        return review;
-    }
+    //     return review;
+    // }
 
 
     
@@ -157,8 +157,21 @@ public class TrackReviewServiceImpl implements TrackReviewService {
     }
 
 
+    public boolean hasNextPage(String trackId, int page, int size) {
+        int totalCount = (int)mapper.countByTrackId(trackId);
+        int shownCount = page * size; // page=2면 offset=10
+        return totalCount > shownCount;
+    }
+
+
+
     @Override
     public long countByTrackId(String trackId) {
         return mapper.countByTrackId(trackId);
+    }
+
+    @Override
+    public List<TrackReview> reviewWithReviewerByUserId(Long loginUserId) throws Exception {
+        return mapper.reviewWithReviewerByUserId(loginUserId);
     }
 }

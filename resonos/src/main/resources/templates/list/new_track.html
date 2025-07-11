@@ -17,7 +17,7 @@
                 <div class="d-flex flex-row align-items-center px-4 mb-3" style="height:50px;">
                     <div class="section-title flex-grow-1">최신 트랙</div>
                 </div>
-                <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-6 g-0 m-0 mb-5 justify-content-start">
+                <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-0 m-0 mb-5 justify-content-start">
                     <th:block th:each="newTrack : ${newTrackList}">
                         <!-- 트랙 카드 -->
                         <div class="col d-flex justify-content-center">
@@ -30,7 +30,12 @@
                                     <a th:href="@{'/artists?id=' + ${newTrack.artistId}}" class="card-artist" th:text="${newTrack.artistName}"></a>
                                 </div>
                                 <div class="position-relative bottom-0 mb-5">
-                                    <canvas class="doughnut-canvas" width="50" height="50"></canvas>
+                                    <th:block th:if="${newTrack.avgRating != null}">
+                                        <canvas class="doughnut-canvas" th:attr="data-rating=${newTrack.avgRating}" width="50" height="50"></canvas>
+                                    </th:block>
+                                    <th:block th:unless="${newTrack.avgRating != null}">
+                                        <span class="no-rating fw-bold fs-2">NR</span>
+                                    </th:block>
                                 </div>
                             </div>
                         </div>

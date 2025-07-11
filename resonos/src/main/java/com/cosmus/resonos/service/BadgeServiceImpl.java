@@ -44,9 +44,21 @@ public class BadgeServiceImpl implements BadgeService {
     public boolean delete(Long id) throws Exception {
         // 1. 이 뱃지를 참조하는 모든 조건을 먼저 삭제
         badgeConditionService.deleteConditionsByBadgeId(id);
-        
+
         // 2. 뱃지 삭제
         int affectedRows = badgeMapper.delete(id);
         return affectedRows > 0;
     }
+
+    @Override
+    public List<Badge> haveBadge(Long loginUserId) throws Exception {
+        return badgeMapper.haveBadge(loginUserId);
+    }
+
+    @Override
+    public List<Badge> doesNotHaveBadge(Long loginUserId) throws Exception {
+        return badgeMapper.doesNotHaveBadge(loginUserId);
+    }
+
+
 }
