@@ -13,6 +13,13 @@ body {
     margin-bottom: 16px;
     height: 100px;
     padding: 0 !important;
+    transition: transform 0.18s cubic-bezier(0.4,0,0.2,1), box-shadow 0.18s cubic-bezier(0.4,0,0.2,1);
+}
+
+.album-card:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 24px 0 rgba(0,0,0,0.18);
+    z-index: 2;
 }
 
 .album-card.secondary {

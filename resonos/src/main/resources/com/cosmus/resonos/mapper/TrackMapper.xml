@@ -67,8 +67,9 @@
     LEFT JOIN liked_track lt ON t.id = lt.track_id
     LEFT JOIN playlist_detail pd ON t.id = pd.track_id
     GROUP BY t.id
-    HAVING popularity_score >= 25
-    ORDER BY popularity_score DESC
+    <!-- HAVING popularity_score >= 25 -->
+    HAVING popularity_score >= 1
+    ORDER BY popularity_score DESC, avg_rating DESC
     LIMIT 12
   </select>
 
@@ -87,8 +88,9 @@
     LEFT JOIN liked_track lt ON t.id = lt.track_id
     LEFT JOIN playlist_detail pd ON t.id = pd.track_id
     GROUP BY t.id
-    HAVING popularity_score >= 25
-    ORDER BY popularity_score DESC
+    <!-- HAVING popularity_score >= 25 -->
+    HAVING popularity_score >= 1
+    ORDER BY popularity_score DESC, avg_rating DESC
     LIMIT #{index}, #{size}
   </select>
 
@@ -114,7 +116,8 @@
       LEFT JOIN liked_track lt ON t.id = lt.track_id
       LEFT JOIN playlist_detail pd ON t.id = pd.track_id
       GROUP BY t.id
-      HAVING popularity_score >= 25
+      <!-- HAVING popularity_score >= 25 -->
+      HAVING popularity_score >= 1
     ) AS filtered
   </select>
 
