@@ -173,6 +173,15 @@
     WHERE id = #{loginUserId}
   </update>
 
+  <!-- 카카오 로그인 사용자 조회 -->
+  <select id="findByProviderAndProviderId" resultType="Users">
+    SELECT * FROM user WHERE provider = #{provider} AND provider_id = #{providerId}
+  </select>
+
+  <insert id="insertSnsUser" parameterType="Users">
+        INSERT INTO user (username, password, nickname, email, provider, provider_id)
+        VALUES (#{username}, #{password}, #{nickname}, #{email}, #{provider}, #{providerId})
+  </insert>
 
   <select id="searchList" resultMap="UserResultMap">
     SELECT u.*, COUNT(uf.id) AS follower_count,

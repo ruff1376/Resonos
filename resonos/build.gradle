@@ -41,12 +41,14 @@ dependencies {
     testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
     implementation 'com.github.pagehelper:pagehelper-spring-boot-starter:2.1.0'
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
-		/* 유효성 검사 라이브러리 */
+    // 유효성 검사 라이브러리
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
         /* 스프링 웹플럭스 - WebClient */
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
         // 비밀번호 - 랜덤 초기화
     implementation 'org.apache.commons:commons-lang3:3.13.0'
+    // 소셜 로그인
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
 }
 
