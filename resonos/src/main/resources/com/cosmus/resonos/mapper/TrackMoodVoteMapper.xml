@@ -43,4 +43,21 @@
         ORDER BY id DESC
     </select>
 
+    <select id="findByUserAndTrack" resultMap="TrackMoodVoteMap">
+        SELECT * FROM track_mood_vote
+        WHERE user_id = #{userId} AND track_id = #{trackId}
+        LIMIT 1
+    </select>
+
+    <insert id="insert" parameterType="TrackMoodVote">
+        INSERT INTO track_mood_vote (user_id, track_id, mood)
+        VALUES (#{userId}, #{trackId}, #{mood})
+    </insert>
+
+    <update id="update" parameterType="TrackMoodVote">
+        UPDATE track_mood_vote
+        SET mood = #{mood}
+        WHERE user_id = #{userId} AND track_id = #{trackId}
+    </update>
+
 </mapper>

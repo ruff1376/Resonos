@@ -1,5 +1,6 @@
 package com.cosmus.resonos.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,15 +25,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.domain.CustomUser;
+import com.cosmus.resonos.domain.MoodStat;
 import com.cosmus.resonos.domain.Pagination;
+import com.cosmus.resonos.domain.Tag;
 import com.cosmus.resonos.domain.Track;
+import com.cosmus.resonos.domain.TrackMoodVote;
 import com.cosmus.resonos.domain.TrackReview;
 import com.cosmus.resonos.domain.TrackScore;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.ArtistService;
+import com.cosmus.resonos.service.MoodStatService;
 import com.cosmus.resonos.service.PlaylistDetailService;
 import com.cosmus.resonos.service.ReviewLikeService;
+import com.cosmus.resonos.service.TagService;
+import com.cosmus.resonos.service.TrackMoodVoteService;
 import com.cosmus.resonos.service.TrackReviewService;
 import com.cosmus.resonos.service.TrackService;
 import com.cosmus.resonos.validation.ReviewForm;
@@ -58,6 +65,12 @@ public class TrackController {
     private PlaylistDetailService playlistDetailService;
     @Autowired
     private ReviewLikeService reviewLikeService;
+    @Autowired
+    private TagService tagService;
+    @Autowired
+    private TrackMoodVoteService trackMoodVoteService;
+    @Autowired
+    private MoodStatService moodStatService;
 
     // 트랙 화면
     @GetMapping
@@ -73,12 +86,15 @@ public class TrackController {
             .stream()
             .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
             model.addAttribute("isAdmin", isAdmin);
+            Long userVotedMoodId = trackMoodVoteService.getUserVotedMoodId(loginUser.getId(), id);
+            model.addAttribute("userVotedMoodId", userVotedMoodId);
         }
         Track track = trackService.selectById(id);
         Album album = albumService.findAlbumByTrackId(id);
         List<Track> top5List = trackService.findTop5TracksInSameAlbum(id);
         Artist artist = artistService.selectArtistByTrackId(id);
         TrackScore score = trackReviewService.getTrackScore(id);
+        
         // List<TrackReview> reviews = trackReviewService.reviewWithReviewerByTrackId(id);
         int page = 1;
         int size = 5;
@@ -101,7 +117,21 @@ public class TrackController {
         long totalCount = trackReviewService.countByTrackId(id);
         Pagination pagination = new Pagination(page, size, 10, totalCount);
         boolean hasNext = pagination.getLast() > page;
+        // 상위 6개 분위기
+        List<MoodStat> moodStats = moodStatService.getTop6MoodsByTrackId(id);
 
+        // moodName과 voteCount 리스트로 나누기
+        List<String> moodLabels = moodStats.stream()
+                .map(MoodStat::getMoodName)
+                .collect(Collectors.toList());
+
+        List<Integer> moodValues = moodStats.stream()
+                .map(MoodStat::getVoteCount)
+                .collect(Collectors.toList());
+
+        model.addAttribute("moodLabels", moodLabels);
+        model.addAttribute("moodValues", moodValues);
+        model.addAttribute("tags", tagService.list());
         model.addAttribute("track", track);
         model.addAttribute("album", album);
         model.addAttribute("top5List", top5List);
@@ -242,6 +272,28 @@ public class TrackController {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
                     .body("이미 신고한 리뷰입니다.");
         }
+    }
+
+    @PostMapping("/vote-mood")
+    @ResponseBody
+    public ResponseEntity<?> voteMood(@RequestBody TrackMoodVote request) throws Exception {
+        // 저장 또는 수정
+        trackMoodVoteService.saveOrUpdateVote(request.getUserId(), request.getTrackId(), request.getMood());
+
+        System.out.println("🔥 요청 도착: " + request);
+
+        if (request.getUserId() == null || request.getTrackId() == null || request.getMood() == null) {
+            return ResponseEntity.badRequest().body("필수 데이터 누락");
+        }
+        // 응답 데이터 구성
+        Long votedMoodId = trackMoodVoteService.getUserVotedMoodId(request.getUserId(), request.getTrackId());
+        List<Tag> tags = tagService.list();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("votedMoodId", votedMoodId);
+        response.put("moods", tags);
+
+        return ResponseEntity.ok(response);
     }
 
 }
