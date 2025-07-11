@@ -174,4 +174,10 @@ public class TrackReviewServiceImpl implements TrackReviewService {
     public List<TrackReview> reviewWithReviewerByUserId(Long loginUserId) throws Exception {
         return mapper.reviewWithReviewerByUserId(loginUserId);
     }
+
+    @Override
+    public TrackReview writeReview(TrackReview review) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'writeReview'");
+    }
 }
