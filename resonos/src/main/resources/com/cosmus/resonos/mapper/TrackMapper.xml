@@ -29,26 +29,32 @@
   </select>
 
   <select id="mainNewList" resultMap="Track">
-    SELECT t.*, ar.name AS artist_name, al.cover_image, ROUND(AVG(tr.rating)) AS avg_rating
+    SELECT t.*, ar.name AS artist_name, al.cover_image, ROUND(AVG(tr.rating)) AS avg_rating,
+          (COUNT(DISTINCT arw.id) * 3 + COUNT(DISTINCT la.id)) AS popularity_score
     FROM track t
     LEFT JOIN artist ar ON t.artist_id = ar.id
     LEFT JOIN album al ON t.album_id = al.id
     LEFT JOIN track_review tr ON t.id = tr.track_id
+    LEFT JOIN album_review arw ON al.id = arw.album_id
+    LEFT JOIN liked_album la ON al.id = la.album_id
     WHERE al.release_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
     GROUP BY t.id
-    ORDER BY al.release_date DESC, artist_name
+    ORDER BY al.release_date DESC, al.title DESC, popularity_score DESC, t.track_no DESC
     LIMIT 12
   </select>
 
   <select id="newList" resultMap="Track">
-    SELECT t.*, ar.name AS artist_name, al.cover_image, al.release_date, ROUND(AVG(tr.rating)) AS avg_rating
+    SELECT t.*, ar.name AS artist_name, al.cover_image, ROUND(AVG(tr.rating)) AS avg_rating,
+          (COUNT(DISTINCT arw.id) * 3 + COUNT(DISTINCT la.id)) AS popularity_score
     FROM track t
     LEFT JOIN artist ar ON t.artist_id = ar.id
     LEFT JOIN album al ON t.album_id = al.id
     LEFT JOIN track_review tr ON t.id = tr.track_id
+    LEFT JOIN album_review arw ON al.id = arw.album_id
+    LEFT JOIN liked_album la ON al.id = la.album_id
     WHERE al.release_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
     GROUP BY t.id
-    ORDER BY al.release_date DESC, artist_name
+    ORDER BY al.release_date DESC, al.title DESC, popularity_score DESC, t.track_no DESC
     LIMIT #{index}, #{size}
   </select>
 
@@ -285,30 +291,44 @@
     SELECT t.*, ar.name AS artist_name, al.cover_image,
           COUNT(DISTINCT lt.id) AS like_count,
           COUNT(DISTINCT af.id) AS follower_count,
-          ROUND(AVG(tr.rating)) AS avg_rating
+          ROUND(AVG(tr.rating)) AS avg_rating,
+          (COUNT(DISTINCT tr.id) * 3 +
+            COUNT(DISTINCT lt.id) +
+            COUNT(DISTINCT pd.id)) AS popularity_score
     FROM track t
     LEFT JOIN artist ar ON t.artist_id = ar.id
     LEFT JOIN album al ON t.album_id = al.id
     LEFT JOIN liked_track lt ON t.id = lt.track_id
     LEFT JOIN artist_follow af ON ar.id = af.artist_id
     LEFT JOIN track_review tr ON t.id = tr.track_id
+    LEFT JOIN playlist_detail pd ON t.id = pd.track_id
     WHERE t.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
     GROUP BY t.id
-    ORDER BY
-      CASE
-        WHEN t.title = #{keyword} THEN 1
-        WHEN ar.name = #{keyword} THEN 2
-        WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 3
-        WHEN ar.name LIKE CONCAT(#{keyword}, '%') THEN 4
-        WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 5
-        WHEN ar.name LIKE CONCAT('%', #{keyword}, '%') THEN 6
-        ELSE 7
-      END,
-      like_count DESC,
-      follower_count DESC,
-      t.title ASC,
-      ar.name ASC
-    LIMIT #{index}, #{size}
+    <choose>
+        <when test="sort == 'latest'">
+            ORDER BY al.release_date DESC, al.title DESC, t.track_no DESC
+        </when>
+        <when test="sort == 'popular'">
+            ORDER BY popularity_score DESC
+        </when>
+        <otherwise>
+            ORDER BY
+              CASE
+                WHEN t.title = #{keyword} THEN 1
+                WHEN ar.name = #{keyword} THEN 2
+                WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 3
+                WHEN ar.name LIKE CONCAT(#{keyword}, '%') THEN 4
+                WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 5
+                WHEN ar.name LIKE CONCAT('%', #{keyword}, '%') THEN 6
+                ELSE 7
+              END,
+              like_count DESC,
+              follower_count DESC,
+              t.title ASC,
+              ar.name ASC
+        </otherwise>
+    </choose>
+    LIMIT #{pagination.index}, #{pagination.size}
   </select>
 
   <select id="searchCount" resultType="long">

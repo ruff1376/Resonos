@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -99,19 +100,26 @@ public class AlbumServiceImpl implements AlbumService {
         return albumMapper.searchList(keyword);
     }
 
+    // @Override
+    // public List<Album> allSearchList(Map<String, Object> paramMap, @Param("sort") String sort) throws Exception {
+    //     String keyword = (String) paramMap.get("keyword");
+    //     Pagination pagination = (Pagination) paramMap.get("pagination");
+    //     long total = albumMapper.searchCount(keyword);
+    //     if (pagination != null) {
+    //         pagination.setTotal(total);
+    //     }
+    //     Map<String, Object> queryMap = new HashMap<>();
+    //     queryMap.put("keyword", keyword);
+    //     queryMap.put("index", pagination.getIndex());
+    //     queryMap.put("size", pagination.getSize());
+    //     return albumMapper.allSearchList(queryMap, sort);
+    // }
+
     @Override
-    public List<Album> allSearchList(Map<String, Object> paramMap) throws Exception {
-        String keyword = (String) paramMap.get("keyword");
-        Pagination pagination = (Pagination) paramMap.get("pagination");
+    public List<Album> allSearchList(String keyword, Pagination pagination, String sort) throws Exception {
         long total = albumMapper.searchCount(keyword);
-        if (pagination != null) {
-            pagination.setTotal(total);
-        }
-        Map<String, Object> queryMap = new HashMap<>();
-        queryMap.put("keyword", keyword);
-        queryMap.put("index", pagination.getIndex());
-        queryMap.put("size", pagination.getSize());
-        return albumMapper.allSearchList(queryMap);
+        pagination.setTotal(total);
+        return albumMapper.allSearchList(keyword, pagination, sort);
     }
 
     @Override

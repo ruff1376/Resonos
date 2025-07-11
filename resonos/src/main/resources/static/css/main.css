@@ -101,6 +101,16 @@ body {
     font-weight: 400;
 }
 
+.select-sort {
+    width: 120px;
+    height: 40px;
+    text-align: center;
+    border-color: transparent;
+    border-radius: 10px;
+    color: #B1B1B1;
+    background: var(--background-color);
+}
+
 .album-grid {
     max-width: 1440px;
     border-top: 1px solid var(--main-color);
