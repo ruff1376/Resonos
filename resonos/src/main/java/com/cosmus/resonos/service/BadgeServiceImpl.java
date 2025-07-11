@@ -60,5 +60,13 @@ public class BadgeServiceImpl implements BadgeService {
         return badgeMapper.doesNotHaveBadge(loginUserId);
     }
 
+    @Override
+    public boolean checkBadge(Long loginUserId, Long badgeId) throws Exception {
+        return badgeMapper.checkBadge(loginUserId, badgeId) > 0;
+    }
 
+    @Override
+    public List<Badge> recentGetBadge(Long id) throws Exception {
+        return badgeMapper.recentGetBadge(id);
+    }
 }

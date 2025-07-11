@@ -4,6 +4,8 @@ package com.cosmus.resonos.service;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.UserAuth;
 import com.cosmus.resonos.domain.Users;
@@ -53,6 +55,16 @@ public interface UserService {
     public boolean findByUsername(String username) throws Exception;
     // 닉네임 중복 조회
     public boolean findByNickname(String nickname) throws Exception;
+    // 아이디 찾기
+    public Users selectById(Long id) throws Exception;
+    // 회원 아이디로 공개 정보 조회
+    public PublicUserDto publicSelectById(Long id) throws Exception;
+    // 비밀번호 체크
+    public String selectPasswordById(Long id) throws Exception;
+    // 비밀번호 비교
+    public boolean comparePassword(String pw, String dbPw) throws Exception;
+    // 비밀번호 변경
+    public boolean changePassword(String newPassword, Long loginUserId) throws Exception;
 
     // 회원 활성/비활성 상태 변경
     public boolean enableUser(Long id, boolean enabled) throws Exception;
@@ -60,16 +72,10 @@ public interface UserService {
     public boolean banUser(Long id, boolean ban) throws Exception;
     // 특정 권한만 삭제
     public void deleteSpecificAuth(String username, String auth) throws Exception;
-
     // 권한 중복 조회
     public boolean hasAuth(String username, String auth) throws Exception;
     // 비밀번호 초기화
     public boolean updatePassword(Long id, String password) throws Exception;
-    // 아이디 찾기
-    public Users selectById(Long id) throws Exception;
-    // 회원 아이디로 공개 정보 조회
-    public PublicUserDto publicSelectById(Long id) throws Exception;
-
     // 검색 결과 목록
     public List<Users> searchList(String keyword) throws Exception;
     // 검색 결과 전체 목록
