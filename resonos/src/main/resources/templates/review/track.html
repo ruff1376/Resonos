@@ -130,7 +130,12 @@
         <!-- 분위기 -->
         <div class="mood-card">
             <div class="chart">
-                <canvas id="hexRadarChart"></canvas>
+                <th:block th:if="${isMoodEmpty}">
+                    <p id="headline">아직 아무도 분위기에 투표하지 않았어요 😅</p>
+                </th:block>
+                <th:block th:if="${!isMoodEmpty}">
+                    <canvas id="hexRadarChart"></canvas>
+                </th:block>
             </div>
             <div class="mood-vote">
                 <div class="vote-header">
@@ -570,10 +575,11 @@
                     success: function (data) {
                         const votedMoodId = data.votedMoodId;
                         const tags = data.moods;
+                        const values = data.values;
+                        const labels = data.labels;
 
-                        // ✅ 무드 UI 재생성
+                        // ✅ 무드 버튼 UI 갱신
                         $container.empty();
-
                         tags.forEach(tag => {
                             const selected = (tag.id === votedMoodId);
                             const html = `
@@ -585,11 +591,14 @@
                             $container.append(html);
                         });
 
-                        if (!Array.isArray(data.values) || data.values.length === 0) {
-                            console.warn("차트를 그릴 수 없습니다: values가 비어있거나 undefined입니다.");
-                            return;
+                        // ✅ 차트 영역 갱신
+                        const $chartArea = $('.chart');
+                        if (!Array.isArray(values) || values.length === 0) {
+                            $chartArea.html(`<p id="headline">아직 아무도 분위기에 투표하지 않았어요 😅</p>`);
+                        } else {
+                            $chartArea.html(`<canvas id="hexRadarChart"></canvas>`);
+                            renderMoodChart(labels, values);
                         }
-                        renderMoodChart(data.labels, data.values);
 
                         // ✅ 효과 클래스 제거 타이머
                         setTimeout(() => {
@@ -749,6 +758,12 @@
             const maxValue = Math.max(...values);
             const roundedMax = Math.ceil(maxValue / 10) * 10;
 
+            // ✅ 6개로 맞추기 위해 값 보정
+            while (labels.length < 6) {
+                labels.push('');
+                values.push(0);
+            }
+            
             window.moodChartInstance = new Chart(ctx, {
                 type: 'radar',
                 data: {

@@ -124,7 +124,7 @@ public class TrackController {
         boolean hasNext = pagination.getLast() > page;
         // 상위 6개 분위기
         List<MoodStat> moodStats = moodStatService.getTop6MoodsByTrackId(id);
-
+        boolean isMoodEmpty = (moodStats == null || moodStats.isEmpty());
         // moodName과 voteCount 리스트로 나누기
         List<String> moodLabels = moodStats.stream()
                 .map(MoodStat::getMoodName)
@@ -133,7 +133,7 @@ public class TrackController {
         List<Integer> moodValues = moodStats.stream()
                 .map(MoodStat::getVoteCount)
                 .collect(Collectors.toList());
-
+        model.addAttribute("isMoodEmpty", isMoodEmpty);
         model.addAttribute("moodLabels", moodLabels);
         model.addAttribute("moodValues", moodValues);
         model.addAttribute("tags", tagService.list());
