@@ -139,6 +139,8 @@
 
   <th:block layout:fragment="pageScript">
     <script>
+      const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
+      const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
       /* 썸네일 바로보기 */
       document.getElementById('thumbnail').addEventListener('change', function (event) {
         const file = event.target.files[0]
@@ -187,8 +189,7 @@
 
         try {
             /* Security 제공 CSRF */
-            const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
-            const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
+
             const response = await fetch(url, {
                 method: "PUT",
                 headers: {
@@ -238,8 +239,7 @@
 
         try {
             /* Security 제공 CSRF */
-            const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
-            const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
+
             const response = await fetch(url, {
                 method: "POST",
                 headers: {
@@ -337,8 +337,7 @@
 
         try {
             /* Security 제공 CSRF */
-            const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
-            const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
+
             const response = await fetch(url, {
                 method: "POST",
                 headers: {
@@ -468,8 +467,7 @@
 
         try {
             /* Security 제공 CSRF */
-            const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
-            const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
+
             const response = await fetch(url, {
                 method: "DELETE",
                 headers: {
@@ -539,8 +537,7 @@
         console.log(method)
         try {
             /* Security 제공 CSRF */
-            const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
-            const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
+
             const response = await fetch(url, {
                 method: method,
                 headers: {

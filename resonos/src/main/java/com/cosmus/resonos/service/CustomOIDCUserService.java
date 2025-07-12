@@ -5,11 +5,10 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.CustomUser;
@@ -18,23 +17,23 @@ import com.cosmus.resonos.domain.Users;
 
 import lombok.extern.slf4j.Slf4j;
 
-
 @Service
 @Slf4j
-public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class CustomOIDCUserService extends OidcUserService {
 
     @Autowired
     private UserService userService;
 
-    @Autowired PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
-    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+    public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
 
-        log.info("호출됨");
+        log.info("CustomOidcUserService 호출됨");
 
-        OAuth2User oauth2User = new DefaultOAuth2UserService().loadUser(userRequest);
-        Map<String, Object> attributes = oauth2User.getAttributes();
+        OidcUser oidcUser = super.loadUser(userRequest);
+        Map<String, Object> attributes = oidcUser.getAttributes();
 
         String provider = userRequest.getClientRegistration().getRegistrationId();
         String providerId = null;
@@ -43,25 +42,12 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         log.info("provider : {}", provider);
 
-        if ("kakao".equals(provider)) {
-            Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
-            Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
-
-            providerId = String.valueOf(attributes.get("id"));
-            email = (String) kakaoAccount.get("email");
-            nickname = (String) profile.get("nickname");
-
-        } else if ("naver".equals(provider)) {
-            Map<String, Object> response = (Map<String, Object>) attributes.get("response");
-
-            providerId = (String) response.get("id");
-            email = (String) response.get("email");
-            nickname = (String) response.get("nickname");
-
-        }
-
-        else {
-            throw new OAuth2AuthenticationException("지원하지 않는 provider: " + provider);
+        if ("google".equals(provider)) {
+            providerId = (String) attributes.get("sub");
+            email = (String) attributes.get("email");
+            nickname = (String) attributes.get("name");
+        } else {
+            throw new OAuth2AuthenticationException("지원하지 않는 provider (OIDC): " + provider);
         }
 
         log.info("가져온 소셜 유저 정보 : {}, {}, {}, {}", provider, providerId, email, nickname);
@@ -71,7 +57,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             // DB에서 유저 조회
             user = userService.findByProviderAndProviderId(provider, providerId);
 
-            // 최초 로그인일 경우 회원가입 처리
+            // 최초 로그인 시 회원가입 처리
             if (user == null) {
                 String randomUn = provider + UUID.randomUUID().toString().substring(0,10);
                 user = new Users();
@@ -88,7 +74,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                     userAuth.setUsername(user.getUsername());
                     userAuth.setAuth("ROLE_USER");
                     userService.insertAuth(userAuth);
-                    log.info("================== 소셜 회원가입 완료 ===================");
+                    log.info("================== 구글 회원가입 완료 (OIDC) ===================");
                     user = userService.select(randomUn);
                 }
             }
