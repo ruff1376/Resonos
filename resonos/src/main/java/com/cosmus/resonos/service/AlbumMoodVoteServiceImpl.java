@@ -47,6 +47,6 @@ public class AlbumMoodVoteServiceImpl implements AlbumMoodVoteService {
     @Override
     public Long getUserVotedMoodId(Long userId, String albumId) {
         AlbumMoodVote vote = albumMoodVoteMapper.findByUserAndAlbum(userId, albumId);
-        return vote != null ? vote.getMood() : null;
+    return vote != null ? vote.getMood() : null;
     }
 }

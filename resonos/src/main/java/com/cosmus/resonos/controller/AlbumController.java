@@ -74,13 +74,21 @@ public class AlbumController {
     @GetMapping
     public String albumInfo(@RequestParam("id") String id, Model model,
                             @AuthenticationPrincipal CustomUser principal) throws Exception {
-        Users  loginUser = null;
+        Users loginUser = null;
         if( principal != null ) {
             model.addAttribute("loginUser", loginUser = principal.getUser() );
             boolean isAdmin = principal.getAuthorities()
                     .stream()
                     .anyMatch( a -> a.getAuthority().equals("ROLE_ADMIN"));
             model.addAttribute("isAdmin", isAdmin);
+            Long userVotedMoodId = albumMoodVoteService.getUserVotedMoodId(loginUser.getId(), id);
+            model.addAttribute("userVotedMoodId", userVotedMoodId);
+            // ✅ 좋아요 여부 체크
+            boolean isAlbumLiked = likedAlbumService.isLikedByUser(loginUser.getId(), id);
+            model.addAttribute("isAlbumLikedByUser", isAlbumLiked);
+        } else {
+            // 비로그인 사용자를 위해 false로 설정
+            model.addAttribute("isAlbumLikedByUser", false);
         }
 
         AlbumScore score = albumReviewService.getAlbumScore(id);

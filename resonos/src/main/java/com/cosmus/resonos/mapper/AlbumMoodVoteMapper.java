@@ -2,6 +2,7 @@ package com.cosmus.resonos.mapper;
 
 import com.cosmus.resonos.domain.AlbumMoodVote;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,7 @@ public interface AlbumMoodVoteMapper {
     List<AlbumMoodVote> findByAlbumId(String albumId);
 
     // 유저가 특정 앨범에 대해 투표했는지 조회
-    AlbumMoodVote findByUserAndAlbum(Long userId, String albumId);
+    AlbumMoodVote findByUserAndAlbum(@Param("userId")Long userId, @Param("trackId") String albumId);
 
     // 신규 투표 삽입
     void insert(AlbumMoodVote vote);

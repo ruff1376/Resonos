@@ -26,25 +26,30 @@
                     <p th:text="${artist.name}">아티스트 이름</p>
                 </a>
                 <p th:text="${album.label}">레이블</p>
+
                 <th:block th:if="${score == null or score.averageScore == null}">
                     <p>아직 리뷰가 없어요 😅</p>
                 </th:block>
+
                 <th:block th:if="${score != null and score.averageScore != null}">
                     <p
                         th:text="|🔮 ${#numbers.formatDecimal(score.averageScore, 0, 0)}점 (✅리뷰 ${score.criticCount}개, 일반리뷰 ${score.userCount}개)|">
                     </p>
-                    <div style="display: flex; gap: 15px;">
-                        <button type="button" id="likeAlbumBtn" class="btn btn-gold" th:data-album-id="${album.id}"
-                            th:data-user-id="${loginUser != null ? loginUser.id : 0}"
-                            th:data-liked="${isTrackLikedByUser}">
-                            <span id="likeText"
-                                th:text="${isTrackLikedByUser != null and isTrackLikedByUser ? '좋아요❤️' : '좋아요🤍'}"></span>
-                            <span id="likeCount" th:text="${trackLikeCount}">0</span>
-                        </button>
+                </th:block>
 
-                        <div class="btn btn-gold">팔로우? 💾</div>
-                    </div>
+                <!-- ✅ 좋아요 버튼은 항상 표시 -->
+                <div style="display: flex; gap: 15px;">
+                    <button type="button" id="likeAlbumBtn" class="btn btn-gold" th:data-album-id="${album.id}"
+                        th:data-user-id="${loginUser != null ? loginUser.id : 0}" th:data-liked="${isAlbumLikedByUser}">
+                        <span id="likeText"
+                            th:text="${isAlbumLikedByUser != null and isAlbumLikedByUser ? '좋아요❤️' : '좋아요🤍'}"></span>
+                        <span id="likeCount" th:text="${albumLikeCount}">0</span>
+                    </button>
+
+                    <div class="btn btn-gold">팔로우? 💾</div>
+                </div>
             </div>
+
             <div class="track-graphy">
                 <div class="track-header">
                     <p id="headline" th:text="|${album.title}💿 Tracks|">수록곡</p>
@@ -651,7 +656,7 @@
         });
 
         // 앨범 좋아요
-        $(document).on('click', '#likeTrackBtn', function () {
+        $(document).on('click', '#likeAlbumBtn', function () {
             const $btn = $(this);
             const userId = $btn.data('user-id');
             const albumId = $btn.data('album-id');
@@ -693,7 +698,7 @@
 
             const maxValue = Math.max(...values);
             const roundedMax = Math.ceil(maxValue / 10) * 10;
-            
+
             // ✅ 6개로 고정 (많으면 자르고, 적으면 채우기)
             labels = labels.slice(0, 6);
             values = values.slice(0, 6);
