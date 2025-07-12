@@ -228,6 +228,14 @@ public class TrackController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 리뷰를 작성했습니다.");
         }
     }
+    // // 등록후 프래그먼트 반환 비동기로
+    // @GetMapping("/tracks/{trackId}/new-review-frag")
+    // public String newReviewFragment(@PathVariable Long trackId, Model model) {
+    //     TrackReview newReview = reviewService.getLatestReviewByTrack(trackId); // 방금 등록한 리뷰
+    //     model.addAttribute("review", List.of(newReview)); // 주의: review는 List로 전달해야 함
+    //     model.addAttribute("hasNext", false);             // 페이지네이션 여부
+    //     return "review/reviewFrag :: reviewItems";        // fragment 이름 그대로
+    // }
 
     /* ── ② 수정 ────────────────────────────── */
     @PutMapping("/{id}/review/{reviewId}")
