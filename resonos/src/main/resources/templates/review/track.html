@@ -150,14 +150,16 @@
 
         <!-- 앨범 트랙리스트 분위기 뭐뭐.. -->
         <div class="info-card">
-            <div class="info top5track">
-                <p id="headline" th:text="|${album.title}💿 🔥TOP ${#lists.size(top5List)}|"></p>
-                <th:block th:each="tops, stat : ${top5List}">
-                    <a th:href="@{/tracks(id=${tops.id})}">
-                        <p th:text="|${stat.count}. ${tops.title}  ${tops.formattedDuration}|"></p>
-                    </a>
-                </th:block>
-            </div>
+            <th:block th:if="${top5List != null and #lists.size(top5List) > 0}">
+                <div class="info top5track">
+                    <p id="headline" th:text="|${album.title}💿 🔥TOP ${#lists.size(top5List)}|"></p>
+                    <th:block th:each="tops, stat : ${top5List}">
+                        <a th:href="@{/tracks(id=${tops.id})}">
+                            <p th:text="|${stat.count}. ${tops.title}  ${tops.formattedDuration}|"></p>
+                        </a>
+                    </th:block>
+                </div>
+            </th:block>
             <div class="info album-moods">
                 <p id="headline">분위기로 노래찾기</p>
                 <th:block th:if="${moodLabels == null || moodLabels.isEmpty()}">

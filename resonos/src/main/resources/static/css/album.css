@@ -112,6 +112,8 @@ p {
     word-break: break-word;
     white-space: normal;
     font-size: 1.6rem;
+    display: block;
+    width: fit-content;
 }
 img {
     display: block;
@@ -149,6 +151,7 @@ img {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    align-items: flex-start;
 }
 /* 점수 */
 .score-bar {
