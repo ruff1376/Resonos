@@ -11,4 +11,6 @@ public interface MoodStatMapper {
     
     public List<MoodStat> getTop6MoodsByTrackId(String trackId);
 
+    public List<MoodStat> getTop6MoodsByAlbumId(String albumId);
+
 }

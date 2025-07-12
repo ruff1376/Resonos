@@ -92,7 +92,7 @@
                 </div>
             </div>
             <div class="review-container">
-                <ul class="review-list" th:insert="~{review/trackFrag :: reviewItems(review=${review})}"></ul>
+                <ul class="review-list" th:insert="~{review/reviewFrag :: reviewItems(review=${review})}"></ul>
                 <!-- 더보기 버튼 -->
                 <div>
                     <div class="more-box" th:if="${hasNext}">

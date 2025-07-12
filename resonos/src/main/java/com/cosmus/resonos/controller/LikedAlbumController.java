@@ -102,7 +102,7 @@ public class LikedAlbumController {
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Long id) throws Exception {
         log.info("[LikedAlbumController] 좋아요 앨범 삭제 시도 - id: {}", id);
-        likedAlbumService.delete(id);
+        likedAlbumService.deleteById(id);
         log.info("[LikedAlbumController] 좋아요 앨범 삭제 완료 - id: {}", id);
         return "redirect:/liked-albums";
     }

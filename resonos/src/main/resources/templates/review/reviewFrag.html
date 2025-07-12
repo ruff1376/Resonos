@@ -12,16 +12,22 @@
   </th:block>
 </th:block>
 <th:block th:fragment="reviewItems (review)">
-  <li th:each="rv : ${review}" class="comment" th:id="|rv-${rv.id}|" th:data-review-id="${rv.id}"
-    th:data-track-id="${track.id}">
+  <li th:each="rv : ${review}" class="comment"
+      th:id="|rv-${rv.id}|"
+      th:data-review-id="${rv.id}"
+      th:attr="data-track-id=${reviewType == 'TRACK'} ? ${rv.trackId} : null,
+               data-album-id=${reviewType == 'ALBUM'} ? ${rv.albumId} : null">
+
     <div class="name-and-score">
       <p th:text="${rv.reviewer.nickname}">닉네임</p>
       <span th:if="${rv.critic}">✅</span>
       <span> 🔮<span th:text="${rv.rating}">0</span></span>
     </div>
+
     <div class="review-content">
       <p class="content-text" th:text="${rv.content}">내용</p>
     </div>
+
     <form class="edit-form" style="display: none;">
       <div class="reply">
         <textarea class="edit-content" required></textarea>
@@ -34,18 +40,27 @@
         </div>
       </div>
     </form>
+
     <div class="review-util">
       <time th:text="${#temporals.format(rv.createdAt,'yyyy.MM.dd')}">날짜</time>
-      <button class="like-btn" th:data-review-id="${rv.id}" th:data-review-type="${reviewType}"
-        th:data-liked="${rv.isLikedByCurrentUser}" th:text="${rv.isLikedByCurrentUser} ? '❤️' : '🤍'">❤️</button>
+
+      <button class="like-btn"
+              th:data-review-id="${rv.id}"
+              th:data-review-type="${reviewType}"
+              th:data-liked="${rv.isLikedByCurrentUser}"
+              th:text="${rv.isLikedByCurrentUser} ? '❤️' : '🤍'">❤️</button>
       <span th:id="'like-count-' + ${rv.id}" th:text="${rv.likes}">0</span>
-      <button class="report-btn" th:data-review-id="${rv.id}" th:data-review-type="${reviewType}">🚨</button>
-      <span
-        th:if="${(isAdmin != null and isAdmin) or (loginUser != null and rv != null and loginUser.id == rv.userId)}">
+
+      <button class="report-btn"
+              th:data-review-id="${rv.id}"
+              th:data-review-type="${reviewType}">🚨</button>
+
+      <span th:if="${(isAdmin != null and isAdmin) or (loginUser != null and rv != null and loginUser.id == rv.userId)}">
         <a href="#" class="edit-btn" th:data-id="${rv.id}">수정</a>
         <a href="#" class="del-btn" th:data-id="${rv.id}">삭제</a>
       </span>
     </div>
   </li>
+
   <li id="has-next-flag" style="display:none;" th:data-has-next="${hasNext}"></li>
 </th:block>

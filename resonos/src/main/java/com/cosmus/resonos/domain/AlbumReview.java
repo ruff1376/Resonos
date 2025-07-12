@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class TrackReview {
+public class AlbumReview {
     // 리뷰 아이디
     private Long id;
     /**
@@ -46,7 +46,7 @@ public class TrackReview {
     /**
      * 트랙 FK (Spotify ID 등 문자열)
      */
-    private String trackId;
+    private String albumId;
 
     private Reviewer reviewer;  // 연관된 Reviewer 정보 포함
     // 좋아요누른 유저인지 확인

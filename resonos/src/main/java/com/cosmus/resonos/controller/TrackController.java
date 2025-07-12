@@ -195,7 +195,7 @@ public class TrackController {
         model.addAttribute("isAdmin", principal != null && principal.getAuthorities().stream()
             .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")));
 
-        return "review/trackFrag :: reviewItems";
+        return "review/reviewFrag :: reviewItems";
     }
 
     /**
