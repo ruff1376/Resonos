@@ -20,7 +20,7 @@ public interface AlbumMoodVoteMapper {
     List<AlbumMoodVote> findByAlbumId(String albumId);
 
     // 유저가 특정 앨범에 대해 투표했는지 조회
-    AlbumMoodVote findByUserAndAlbum(@Param("userId")Long userId, @Param("trackId") String albumId);
+    AlbumMoodVote findByUserAndAlbum(@Param("userId")Long userId, @Param("albumId") String albumId);
 
     // 신규 투표 삽입
     void insert(AlbumMoodVote vote);

@@ -147,7 +147,7 @@ public class AlbumController {
     public String scoreRefresh(@PathVariable("id") String id, Model model) {
         AlbumScore score = albumReviewService.getAlbumScore(id);
         model.addAttribute("score", score);
-        return "review/albumFrag :: scoreFragment";
+        return "review/reviewFrag :: scoreFragment";
     }
 
     @GetMapping("/{albumId}/reviews/more")
@@ -178,7 +178,7 @@ public class AlbumController {
         model.addAttribute("isAdmin", principal != null && principal.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")));
 
-        return "review/albumFrag :: reviewItems";
+        return "review/reviewFrag :: reviewItems";
     }
 
     @PostMapping
@@ -195,7 +195,7 @@ public class AlbumController {
     }
 
     @PutMapping("/{id}/review/{reviewId}")
-    @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, authentication)")
+    @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, 'ALBUM', authentication)")
     @ResponseBody
     public ResponseEntity<?> update(@PathVariable("id") String albumId,
                                     @PathVariable("reviewId") Long reviewId,
@@ -209,7 +209,7 @@ public class AlbumController {
     }
 
     @DeleteMapping("/{id}/review/{reviewId}")
-    @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, authentication)")
+    @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, 'ALBUM', authentication)")
     @ResponseBody
     public ResponseEntity<Void> delete(@PathVariable("id") String albumId,
                                        @PathVariable("reviewId") Long reviewId) {

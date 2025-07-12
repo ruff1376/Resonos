@@ -50,7 +50,8 @@ public class LikedAlbumServiceImpl implements LikedAlbumService {
 
         if (existing != null) {
             // 좋아요가 이미 있으면 삭제
-            return likedAlbumMapper.deleteById(existing.getId()) > 0;
+            likedAlbumMapper.deleteById(existing.getId());
+            return false;
         } else {
             // 없으면 새로 생성
             LikedAlbum likedAlbum = new LikedAlbum();
