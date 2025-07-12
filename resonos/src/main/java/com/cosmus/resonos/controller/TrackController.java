@@ -231,7 +231,7 @@ public class TrackController {
 
     /* ── ② 수정 ────────────────────────────── */
     @PutMapping("/{id}/review/{reviewId}")
-    @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, authentication)")
+    @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, 'TRACK', authentication)")
     @ResponseBody
     public ResponseEntity<?> update(@PathVariable("id") String trackId,
                               @PathVariable("reviewId") Long reviewId,
@@ -246,7 +246,7 @@ public class TrackController {
 
     /* ── ③ 삭제 ────────────────────────────── */
     @DeleteMapping("/{id}/review/{reviewId}")
-    @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, authentication)")
+    @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, 'TRACK', authentication)")
     @ResponseBody
     public ResponseEntity<Void> delete(@PathVariable("id") String trackId,
                        @PathVariable("reviewId") Long reviewId) {

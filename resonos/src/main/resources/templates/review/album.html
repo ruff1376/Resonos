@@ -39,11 +39,11 @@
 
                 <!-- ✅ 좋아요 버튼은 항상 표시 -->
                 <div style="display: flex; gap: 15px;">
-                    <button type="button" id="likeAlbumBtn" class="btn btn-gold" th:data-album-id="${album.id}"
+                    <button type="button" class="btn btn-gold like-album-btn" th:data-album-id="${album.id}"
                         th:data-user-id="${loginUser != null ? loginUser.id : 0}" th:data-liked="${isAlbumLikedByUser}">
-                        <span id="likeText"
+                        <span class="like-text"
                             th:text="${isAlbumLikedByUser != null and isAlbumLikedByUser ? '좋아요❤️' : '좋아요🤍'}"></span>
-                        <span id="likeCount" th:text="${albumLikeCount}">0</span>
+                        <span class="like-count" th:text="${albumLikeCount}">0</span>
                     </button>
 
                     <div class="btn btn-gold">팔로우? 💾</div>
@@ -211,6 +211,9 @@
 
 
     </div>
+    <script th:inline="javascript">
+        const isLogin = [[${ loginUser != null ? 'true' : 'false'}]];
+    </script>
 
     <!-- 드래그 슬라이드 자바스크립트 -->
     <script>
@@ -656,7 +659,7 @@
         });
 
         // 앨범 좋아요
-        $(document).on('click', '#likeAlbumBtn', function () {
+        $(document).on('click', '.like-album-btn', function () {
             const $btn = $(this);
             const userId = $btn.data('user-id');
             const albumId = $btn.data('album-id');
@@ -672,11 +675,13 @@
                 contentType: 'application/json',
                 data: JSON.stringify({ userId: userId, albumId: albumId }),
                 success: function (res) {
-                    const liked = res.liked;
+                    console.log('응답:', res, '현재 버튼:', $btn);
+                    const liked = res.liked
                     const count = res.count;
 
-                    $('#likeText').text(liked ? '좋아요❤️' : '좋아요🤍');
-                    $('#likeCount').text(count);
+                    // 클릭한 버튼 내부의 like-text와 like-count만 변경
+                    $btn.find('.like-text').text(liked ? '좋아요❤️' : '좋아요🤍');
+                    $btn.find('.like-count').text(count);
                 },
                 error: function () {
                     Swal.fire('좋아요 처리에 실패했습니다.');

@@ -47,7 +47,6 @@ public class LikedTrackServiceImpl implements LikedTrackService {
             return false; // 좋아요 취소
         } else {
             LikedTrack newLike = new LikedTrack();
-            newLike.setId(null); // auto_increment 또는 UUID 사용
             newLike.setCreatedAt(new Date());
             newLike.setUserId(userId);
             newLike.setTrackId(trackId);
