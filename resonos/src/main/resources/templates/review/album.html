@@ -21,10 +21,10 @@
             </div>
             <div class="song-info">
                 <p id="headline" th:text="${album.title}">앨범제목</p>
+                <p th:text="${#dates.format(album.releaseDate, 'yyyy-MM-dd')}">발매일</p>
                 <a th:href="@{artists(id=${artist.id})}">
                     <p th:text="${artist.name}">아티스트 이름</p>
                 </a>
-                <p th:text="${#dates.format(album.releaseDate, 'yyyy-MM-dd')}">발매일</p>
                 <p th:text="${album.label}">레이블</p>
                 <p>🔮 99 (✅유저 30, 일반유저 300명)</p>
                 <div>
@@ -210,7 +210,8 @@
 
 
     </div>
-    <!-- <th:block th:replace="~{fragments/script::album}"></th:block> -->
+    
+    <!-- 드래그 슬라이드 자바스크립트 -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const container = document.querySelector('.track-container');
@@ -285,6 +286,8 @@
             startAuto();      // 최초 실행
         });
     </script>
+
+
 </body>
 
 </html>
