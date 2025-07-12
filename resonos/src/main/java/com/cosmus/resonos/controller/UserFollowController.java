@@ -103,7 +103,7 @@ public class UserFollowController {
     ) throws Exception {
         boolean result = userFollowService.delete(loginUser.getId(), id);
         if(result)
-            return new ResponseEntity<>("언팔로우 하였습니다.", HttpStatus.OK);
+            return new ResponseEntity<>("팔로우 취소하였습니다.", HttpStatus.OK);
         return new ResponseEntity<>("언팔로우가 실패하였습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
