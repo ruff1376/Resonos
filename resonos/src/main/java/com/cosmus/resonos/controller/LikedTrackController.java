@@ -97,7 +97,7 @@ public class LikedTrackController {
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Long id) throws Exception {
         log.info("[LikedTrackController] 좋아요 트랙 삭제 시도 - id: {}", id);
-        likedTrackService.delete(id);
+        likedTrackService.deleteById(id);
         log.info("[LikedTrackController] 좋아요 트랙 삭제 완료 - id: {}", id);
         return "redirect:/liked-tracks";
     }

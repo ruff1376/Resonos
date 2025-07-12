@@ -32,8 +32,15 @@
     WHERE id = #{id}
   </update>
 
-  <delete id="delete">
+  <delete id="deleteById">
     DELETE FROM liked_album WHERE id = #{id}
   </delete>
 
+  <select id="findByUserAndAlbum" resultMap="LikedAlbumResultMap">
+    SELECT * FROM liked_album WHERE user_id = #{userId} AND album_id = #{albumId}
+  </select>
+
+  <select id="countByAlbumId" resultType="int">
+    SELECT COUNT(*) FROM liked_album WHERE album_id = #{albumId}
+  </select>
 </mapper>

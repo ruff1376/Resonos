@@ -12,31 +12,48 @@
         <result property="mood" column="mood"/>
     </resultMap>
 
-    <insert id="insert" >
-        INSERT INTO album_mood_vote (id, user_id, album_id, mood)
-        VALUES (#{id}, #{userId}, #{albumId}, #{mood})
-    </insert>
+    <select id="getAlbumMoodStats" resultType="map">
+        SELECT 
+            a.album_id, 
+            al.name AS album_name, 
+            tg.name AS mood_name, 
+            COUNT(*) AS vote_count
+        FROM album_mood_vote a
+        JOIN tag tg ON a.mood = tg.id
+        JOIN album al ON a.album_id = al.id
+        GROUP BY a.album_id, al.name, tg.name
+        ORDER BY a.album_id, vote_count DESC
+    </select>
 
     <select id="findAll" resultMap="AlbumMoodVoteMap">
-        SELECT id, user_id, album_id, mood FROM album_mood_vote ORDER BY id DESC
+        SELECT id, user_id, album_id, mood
+        FROM album_mood_vote
+        ORDER BY id DESC
     </select>
 
     <select id="findByAlbumId" resultMap="AlbumMoodVoteMap">
-        SELECT id, user_id, album_id, mood FROM album_mood_vote WHERE album_id = #{albumId}
+        SELECT id, user_id, album_id, mood
+        FROM album_mood_vote
+        WHERE album_id = #{albumId}
+        ORDER BY id DESC
     </select>
 
-    <!-- 앨범별 태그/분위기 투표 현황 (앨범ID, 앨범명, mood명, 투표수) -->
-    <select id="getAlbumMoodStats" resultType="map">
-        SELECT 
-            v.album_id, 
-            a.title AS album_title, 
-            t.name AS mood_name, 
-            COUNT(*) AS vote_count
-        FROM album_mood_vote v
-        JOIN album a ON v.album_id = a.id
-        JOIN tag t ON v.mood = t.id
-        GROUP BY v.album_id, a.title, t.name
-        ORDER BY v.album_id, vote_count DESC
+    <select id="findByUserAndAlbum" resultMap="AlbumMoodVoteMap">
+        SELECT *
+        FROM album_mood_vote
+        WHERE user_id = #{userId} AND album_id = #{albumId}
+        LIMIT 1
     </select>
+
+    <insert id="insert" parameterType="AlbumMoodVote">
+        INSERT INTO album_mood_vote (user_id, album_id, mood)
+        VALUES (#{userId}, #{albumId}, #{mood})
+    </insert>
+
+    <update id="update" parameterType="AlbumMoodVote">
+        UPDATE album_mood_vote
+        SET mood = #{mood}
+        WHERE user_id = #{userId} AND album_id = #{albumId}
+    </update>
 
 </mapper>
