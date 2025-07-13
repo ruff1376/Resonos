@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.AlbumReview;
 import com.cosmus.resonos.domain.AlbumScore;
 import com.cosmus.resonos.domain.Reviewer;
@@ -130,5 +131,10 @@ class AlbumReviewServiceImpl implements AlbumReviewService {
     @Override
     public List<AlbumReview> reviewWithReviewerByUserId(Long loginUserId) throws Exception {
         return mapper.reviewWithReviewerByUserId(loginUserId);
+    }
+
+    @Override
+    public AlbumReview getLastestReview(String albumId, Long userId) {
+        return mapper.getLastestReview(albumId, userId);
     }
 }

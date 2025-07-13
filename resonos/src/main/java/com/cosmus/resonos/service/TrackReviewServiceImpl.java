@@ -135,4 +135,10 @@ public class TrackReviewServiceImpl implements TrackReviewService {
     public List<TrackReview> reviewWithReviewerByUserId(Long loginUserId) throws Exception {
         return mapper.reviewWithReviewerByUserId(loginUserId);
     }
+
+
+    @Override
+    public TrackReview getLastestReview(String trackId, Long userId) {
+        return mapper.getLastestReview(trackId, userId);
+    }
 }

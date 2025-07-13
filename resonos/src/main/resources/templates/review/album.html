@@ -347,9 +347,24 @@
                     contentType: 'application/json',
                     data: JSON.stringify({ content, rating }),
                     success: function () {
-                        Swal.fire('성공', '리뷰를 등록 하였습니다.', 'success').then(() => {
-                            reloadScoreBox(albumId);
-                            location.reload();
+                       Swal.fire({
+                            title: '성공',
+                            text: '리뷰를 등록 하였습니다.',
+                            icon: 'success',
+                            confirmButtonText: '확인'
+                        }).then(() => {
+                            reloadScoreBox(albumId);  // 점수 박스 먼저 다시 불러오고
+                            // 방금 작성한 본인의 리뷰 프래그먼트만 불러오기
+                            $.get(`/albums/${albumId}/my-review-frag`, function (html) {
+                                const $html = $('<div>').html(html); // 문자열 → DOM으로 변환
+                                const $newReview = $html.find('li.comment'); // li.comment 요소만 추출
+
+                                if ($newReview.length) {
+                                    $newReview.hide(); // 처음엔 안 보이게
+                                    $('.review-list').append($newReview); // ul에 맨 앞에 추가
+                                    $newReview.slideDown(); // 슬라이드로 등장
+                                }
+                            });
                         });
                     },
                     error: function (xhr) {
