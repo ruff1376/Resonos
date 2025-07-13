@@ -97,13 +97,16 @@
                 <!-- 더보기 버튼 -->
                 <div class="d-flex justify-content-center mb-1">
                     <div class="more-box d-flex gap-3" th:if="${hasNext}">
-                        <button id="load-more-btn" data-page="1" th:data-album-id="${album.id}" class="btn btn-gold">리뷰
+                        <button id="load-more-btn" data-page="1" th:data-track-id="${track.id}" class="btn btn-gold">리뷰
                             더보기</button>
                         <th:block th:if="${loginUser == null}">
                             <a id="login-review" href="/login" class="btn btn-gold">로그인</a>
                         </th:block>
                     </div>
                 </div>
+                <th:block th:if="${loginUser == null}">
+                    <p id="headline" style="padding: 10px;">로그인시 리뷰작성이 가능합니다.</p>
+                </th:block>
             </div>
             <!-- 페이지네이션 -->
             <div th:if="${loginUser != null}" class="reply">
@@ -189,7 +192,7 @@
     <script th:inline="javascript">
         const isLogin = [[${ loginUser != null ? 'true' : 'false'}]];
     </script>
-    
+
     <!-- 로그인시 원래페이지로 -->
     <script>
         document.getElementById('login-review').addEventListener('click', e => {

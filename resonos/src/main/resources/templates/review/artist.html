@@ -9,8 +9,7 @@
     <th:block th:replace="~{fragments/link::artist}"></th:block>
 </head>
 
-<body>
-    <th:block layout:fragment="content">
+<body layout:fragment="content">
         <div class="wrapper">
             <!-- 아티스트 카드 -->
             <div class="artist-card">
@@ -37,15 +36,15 @@
                         <th:block th:each="album : ${albums}">
                             <a th:href="@{albums(id=${album.id})}">
                                 <div class="album">
-                                   <div class="album-img">
-                                       <img th:src="@{${album.coverImage}}" alt="">
-                                       <span class="center-pin"></span>
-                                   </div>
-                                   <div class="album-info">
-                                       <p id="subtitle" th:text="${album.title}">앨범명</p>
-                                       <p th:text="${#dates.format(album.releaseDate, 'yyyy-MM-dd')}">출시일</p>
-                                       <p th:text="${album.label}">레이블</p>
-                                   </div>
+                                    <div class="album-img">
+                                        <img th:src="@{${album.coverImage}}" alt="">
+                                        <span class="center-pin"></span>
+                                    </div>
+                                    <div class="album-info">
+                                        <p id="subtitle" th:text="${album.title}">앨범명</p>
+                                        <p th:text="${#dates.format(album.releaseDate, 'yyyy-MM-dd')}">출시일</p>
+                                        <p th:text="${album.label}">레이블</p>
+                                    </div>
                                 </div>
                             </a>
                         </th:block>
@@ -66,22 +65,17 @@
                 </div>
                 <th:block th:if="${mv != null and mv != 'empty_mv_url'}">
                     <div class="youtube">
-                        <iframe width="560" height="315"
-                                th:src="'https://www.youtube.com/embed/' + ${mv}"
-                                title="YouTube video player"
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                referrerpolicy="strict-origin-when-cross-origin"
-                                allowfullscreen>
+                        <iframe width="560" height="315" th:src="'https://www.youtube.com/embed/' + ${mv}"
+                            title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
                         </iframe>
                     </div>
                 </th:block>
                 <!-- ② MV URL이 없을 때 → 준비중 이미지 -->
                 <th:block th:if="${mv == null or mv == 'empty_mv_url'}">
                     <div class="youtube">
-                        <img th:src="@{/img/wait_plz.png}"
-                            alt="뮤직비디오 준비중"
-                            width="560" height="315"
+                        <img th:src="@{/img/wait_plz.png}" alt="뮤직비디오 준비중" width="560" height="315"
                             style="object-fit:cover;">
                     </div>
                 </th:block>
@@ -113,11 +107,11 @@
                 </div>
                 <div class="info concert-schedule">
                     <p id="headline">공연/이벤트 일정</p>
-                    <p>2025. 08.  25 - 우리집 안방</p>
+                    <p>2025. 08. 25 - 우리집 안방</p>
                     <p>한국(서울)</p>
-                    <p>2025. 08.  25 - 우리집 안방</p>
+                    <p>2025. 08. 25 - 우리집 안방</p>
                     <p>한국(서울)</p>
-                    <p>2025. 08.  25 - 우리집 안방</p>
+                    <p>2025. 08. 25 - 우리집 안방</p>
                     <p>한국(서울)</p>
                     </p>
                 </div>
@@ -146,8 +140,96 @@
             </div>
             <!-- 분위기 끝 -->
         </div>
-    </th:block>
-    <th:block th:replace="~{fragments/script::artist}"></th:block>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.querySelector('.album-container');
+            if (!container) return;
+
+            /* ---------- 기존 DOM 재구성 부분 그대로 ---------- */
+            const track = document.createElement('div');
+            track.className = 'album-track';
+            while (container.firstChild) track.appendChild(container.firstChild);
+            container.appendChild(track);
+
+            const CARD_GAP = 15;
+            const card = track.querySelector('.album');
+            const cardWidth = card.offsetWidth + CARD_GAP;
+
+            /* ---------- 자동 슬라이드 ---------- */
+            let autoSlideId = null;
+            const startAutoSlide = () => {
+                clearInterval(autoSlideId);
+                autoSlideId = setInterval(() => {
+                    if (Math.ceil(container.scrollLeft + container.offsetWidth) >= track.scrollWidth) {
+                        container.scrollLeft = 0;
+                    } else {
+                        container.scrollLeft += cardWidth;
+                    }
+                }, 3000);
+            };
+            const stopAutoSlide = () => clearInterval(autoSlideId);
+            startAutoSlide();
+
+            /* ---------- 드래그 · 클릭 구분 ---------- */
+            const THRESHOLD = 5;        // 5px 이하면 “클릭”, 초과면 “드래그”
+            let isDown = false;     // 누른 상태
+            let startX = 0;         // 누른 지점
+            let scrollLeft = 0;         // 원래 스크롤 값
+            let moved = 0;         // 이동 거리 누적
+
+            const dragStart = (x) => {
+                isDown = true;
+                moved = 0;
+                startX = x - container.offsetLeft;
+                scrollLeft = container.scrollLeft;
+                container.classList.add('grabbing');
+                stopAutoSlide();
+            };
+
+            const dragMove = (x) => {
+                if (!isDown) return;
+                const xPos = x - container.offsetLeft;
+                const walk = xPos - startX;     // (+ → 오른쪽, – → 왼쪽)
+                moved = Math.max(moved, Math.abs(walk));
+                container.scrollLeft = scrollLeft - walk;
+            };
+
+            const dragEnd = () => {
+                isDown = false;
+                container.classList.remove('grabbing');
+                startAutoSlide();
+            };
+
+            /* ---------- 마우스/터치 이벤트 ---------- */
+            // ↓ 마우스
+            container.addEventListener('mousedown', (e) => {
+                dragStart(e.pageX);
+                e.preventDefault();
+            });
+            window.addEventListener('mousemove', (e) => dragMove(e.pageX));
+            window.addEventListener('mouseup', dragEnd);
+
+            // ↓ 터치
+            container.addEventListener('touchstart', (e) => dragStart(e.touches[0].pageX), { passive: true });
+            container.addEventListener('touchmove', (e) => dragMove(e.touches[0].pageX), { passive: false });
+            container.addEventListener('touchend', dragEnd);
+
+            /* ---------- 클릭 취소 로직 ---------- */
+            container.addEventListener('click', (e) => {
+                if (moved > THRESHOLD) {   // 방금 전 동작이 “드래그”였다면
+                    e.preventDefault();      // a 태그 링크 이동 막기
+                    e.stopPropagation();
+                }
+                // moved ≤ 5px 이면 클릭으로 간주 → 링크 정상 작동
+            });
+
+            /* ---------- 호버 시 자동 슬라이드 제어 ---------- */
+            container.addEventListener('mouseenter', stopAutoSlide);
+            container.addEventListener('mouseleave', startAutoSlide);
+        });
+
+    </script>
 
 </body>
 
