@@ -104,7 +104,9 @@
                     </div>
                     <th:block th:if="${isOwner}">
                       <div class="right">
-                        <span class="like">♥</span>
+                        <th:block th:if="${track.liked}">
+                          <button type="button" class="like like-track">♥</button>
+                        </th:block>
                         <button type="button" class="btn btn-danger">삭제</button>
                       </div>
                     </th:block>
@@ -141,6 +143,7 @@
     <script>
       const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
       const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
+      const userId = [[${user.id}]]
       /* 썸네일 바로보기 */
       document.getElementById('thumbnail').addEventListener('change', function (event) {
         const file = event.target.files[0]
@@ -189,7 +192,6 @@
 
         try {
             /* Security 제공 CSRF */
-
             const response = await fetch(url, {
                 method: "PUT",
                 headers: {
@@ -521,9 +523,12 @@
         })
       })
 
-      document.getElementById('like-button').addEventListener('click', e => {
-        likePlaylist(e)
-      })
+      const likeButton = document.getElementById('like-button')
+      if(likeButton) {
+        likeButton.addEventListener('click', e => {
+          likePlaylist(e)
+        })
+      }
 
       /* 플레이리스트 좋아요 */
       async function likePlaylist(event) {
@@ -592,6 +597,46 @@
             console.log("서버 에러.")
           }
       }
+
+      // 트랙 좋아요
+      $(document).on('click', '.like.like-track', function (event) {
+          const trackId = event.target.closest('.list-item').querySelector('input[type="hidden"]').value
+          console.log(trackId)
+          if (!userId || userId === 0) {
+              Swal.fire('로그인이 필요합니다!');
+              return;
+          }
+
+          $.ajax({
+              url: '/tracks/toggle-like',
+              type: 'POST',
+              contentType: 'application/json',
+              headers: {
+                  [header]: token
+              },
+              data: JSON.stringify({ userId: userId, trackId: trackId }),
+              success: function (res) {
+                  const liked = res.liked;
+                  const text = liked ? '좋아요를 완료했습니다.' : '좋아요를 취소했습니다.'
+                  Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: text,
+                    showConfirmButton: false,
+                    timer: 800,
+                    customClass: {
+                      popup: 'follow-popup',
+                      icon: 'success-icon',
+                      title: 'alert-title'
+                    }
+                  });
+                  event.target.innerText = liked ? '♥' : '♡'
+              },
+              error: function () {
+                  Swal.fire('좋아요 처리에 실패했습니다.');
+              }
+          });
+        });
     </script>
   </th:block>
 </body>
