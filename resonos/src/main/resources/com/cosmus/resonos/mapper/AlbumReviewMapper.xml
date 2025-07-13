@@ -101,6 +101,36 @@
         LIMIT #{size} OFFSET #{offset}
     </select>
 
+    <select id="getLastestReview"
+        parameterType="map"
+        resultMap="AlbumReview">
+        SELECT
+            ar.id,
+            ar.rating,
+            ar.content,
+            ar.blinded,
+            ar.created_at,
+            ar.critic,
+            ar.user_id,
+            ar.album_id,
+            u.id AS reviewer_id,
+            u.nickname AS reviewer_nickname,
+            u.profile_image AS reviewer_profile_image,
+            u.is_pro AS reviewer_is_pro,
+            (SELECT COUNT(*) FROM review_like WHERE review_id = ar.id AND review_type = 'ALBUM') AS likes,
+            (SELECT COUNT(*) FROM review_report WHERE review_id = ar.id AND review_type = 'ALBUM') AS dislikes
+
+        FROM album_review ar
+        JOIN user u ON u.id = ar.user_id
+
+        WHERE ar.album_id = #{albumId}
+        AND ar.user_id = #{userId}
+        AND ar.blinded = 0
+
+        LIMIT 1
+    </select>
+
+
     <!-- 특정 유저의 리뷰 정보 -->
     <select id="reviewWithReviewerByUserId" parameterType="long" resultMap="AlbumReview">
         SELECT

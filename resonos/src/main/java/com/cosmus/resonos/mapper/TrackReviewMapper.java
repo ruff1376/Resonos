@@ -36,6 +36,9 @@ public interface TrackReviewMapper {
 
     long countByTrackId(String trackId); // 총 개수
 
+    // 리뷰등록시 비동기반환
+    TrackReview getLastestReview(@Param("trackId")String trackId, @Param("userId") Long userId);
+
     List<TrackReview> selectPagedReviewsWithReviewer(@Param("trackId") String trackId,
                                                     @Param("size") int size,
                                                     @Param("offset") int offset);

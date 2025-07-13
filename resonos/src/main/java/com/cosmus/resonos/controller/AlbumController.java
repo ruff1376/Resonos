@@ -31,6 +31,7 @@ import com.cosmus.resonos.domain.LikedAlbum;
 import com.cosmus.resonos.domain.MoodStat;
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Track;
+import com.cosmus.resonos.domain.TrackReview;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.AlbumMoodVoteService;
 import com.cosmus.resonos.service.AlbumReviewService;
@@ -149,6 +150,25 @@ public class AlbumController {
         model.addAttribute("score", score);
         return "review/reviewFrag :: scoreFragment";
     }
+
+    @GetMapping("/{albumId}/my-review-frag")
+    public String getMyReviewFragment(@PathVariable("albumId") String albumId,
+                                    @AuthenticationPrincipal CustomUser user,
+                                    Model model) throws Exception {
+        Long userId = user.getId(); // 로그인 유저 ID
+        AlbumReview myReview = albumReviewService.getLastestReview(albumId, userId);
+        Track track = trackService.selectById(albumId);
+        if (myReview == null) {
+            return "review/reviewFrag :: empty"; // 아무것도 없는 프래그먼트로 대응 가능
+        }
+
+        model.addAttribute("reviewType", "ALBUM");
+        model.addAttribute("track", track);
+        model.addAttribute("review", List.of(myReview)); // 리스트 형태로 전달
+        model.addAttribute("hasNext", false); // 의미 없지만 구조 유지
+        return "review/reviewFrag :: reviewItems";
+    }
+
 
     @GetMapping("/{albumId}/reviews/more")
     public String loadMoreReviews(@PathVariable("albumId") String albumId,

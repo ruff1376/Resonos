@@ -2,6 +2,9 @@ package com.cosmus.resonos.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
+import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.AlbumReview;
 import com.cosmus.resonos.domain.AlbumScore;
 import com.cosmus.resonos.domain.Users;
@@ -38,4 +41,6 @@ public interface AlbumReviewService {
     long countByAlbumId(String albumId);
 
     List<AlbumReview> reviewWithReviewerByUserId(Long loginUserId) throws Exception;
+
+    AlbumReview getLastestReview(@Param("albumId")String albumId, @Param("userId") Long userId);
 }

@@ -165,7 +165,7 @@ public class TrackController {
     public String scoreRefresh(@PathVariable("id") String id, Model model) {
         TrackScore score = trackReviewService.getTrackScore(id);
         model.addAttribute("score", score);
-        return "review/trackFrag :: scoreFragment";  // Thymeleaf 조각 이름 지정
+        return "review/reviewFrag :: scoreFragment";  // Thymeleaf 조각 이름 지정
     }
 
     @GetMapping("/{trackId}/reviews/more")
@@ -228,14 +228,23 @@ public class TrackController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 리뷰를 작성했습니다.");
         }
     }
-    // // 등록후 프래그먼트 반환 비동기로
-    // @GetMapping("/tracks/{trackId}/new-review-frag")
-    // public String newReviewFragment(@PathVariable Long trackId, Model model) {
-    //     TrackReview newReview = reviewService.getLatestReviewByTrack(trackId); // 방금 등록한 리뷰
-    //     model.addAttribute("review", List.of(newReview)); // 주의: review는 List로 전달해야 함
-    //     model.addAttribute("hasNext", false);             // 페이지네이션 여부
-    //     return "review/reviewFrag :: reviewItems";        // fragment 이름 그대로
-    // }
+    @GetMapping("/{trackId}/my-review-frag")
+    public String getMyReviewFragment(@PathVariable("trackId") String trackId,
+                                    @AuthenticationPrincipal CustomUser user,
+                                    Model model) throws Exception {
+        Long userId = user.getId(); // 로그인 유저 ID
+        TrackReview myReview = trackReviewService.getLastestReview(trackId, userId);
+        Track track = trackService.selectById(trackId);
+        if (myReview == null) {
+            return "review/reviewFrag :: empty"; // 아무것도 없는 프래그먼트로 대응 가능
+        }
+
+        model.addAttribute("reviewType", "TRACK");
+        model.addAttribute("track", track);
+        model.addAttribute("review", List.of(myReview)); // 리스트 형태로 전달
+        model.addAttribute("hasNext", false); // 의미 없지만 구조 유지
+        return "review/reviewFrag :: reviewItems";
+    }
 
     /* ── ② 수정 ────────────────────────────── */
     @PutMapping("/{id}/review/{reviewId}")
