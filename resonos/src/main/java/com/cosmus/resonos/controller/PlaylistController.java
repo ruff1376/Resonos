@@ -188,7 +188,7 @@ public class PlaylistController {
                 }
                 boolean result = playlistService.insertTracks(trackList);
                 if(result) {
-                    PlaylistDTO playlistDto = playlistService.trackOfPlaylist(playlistId);
+                    PlaylistDTO playlistDto = playlistService.trackOfPlaylist(playlistId, loginUser.getId());
 
                     return new ResponseEntity<>(playlistDto, HttpStatus.OK);
                 }
@@ -210,10 +210,10 @@ public class PlaylistController {
      */
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{playlistId}/tracks/{orderNo}")
-    public ResponseEntity<?> deleteByOrderNo(@PathVariable("playlistId") Long playlistId, @PathVariable("orderNo") int orderNo) throws Exception {
+    public ResponseEntity<?> deleteByOrderNo(@PathVariable("playlistId") Long playlistId, @PathVariable("orderNo") int orderNo, @AuthenticationPrincipal CustomUser loginUser) throws Exception {
         boolean result = playlistService.deleteTracks(playlistId, orderNo);
         if(result) {
-            PlaylistDTO playlistDto = playlistService.trackOfPlaylist(playlistId);
+            PlaylistDTO playlistDto = playlistService.trackOfPlaylist(playlistId, loginUser.getId());
             if(playlistDto != null) {
                 List<Track> trackList = playlistDto.getTrackList();
                 if(trackList != null && !trackList.isEmpty()) {
