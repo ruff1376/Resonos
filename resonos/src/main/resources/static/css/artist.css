@@ -80,8 +80,9 @@ p {
     word-break: break-word;
     white-space: normal;
     font-size: 1.6rem;
+    display: block;
+    width: fit-content;
 }
-
 img {
     display: block;
     width: 100%;
@@ -174,6 +175,12 @@ img {
     border-radius: 20px;
     border: 2px solid var(--main-color);
     justify-content: space-evenly;
+}
+.songs {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-start;
 }
 .songs > p:not(:first-child) {
     padding-left: 10px;
