@@ -33,6 +33,7 @@
       <result column="cover_image" property="coverImage"/>
       <result column="order_no" property="orderNo"/>
       <result column="artistName" property="artistName"/>
+      <result column="liked" property="liked"/>
     </collection>
   </resultMap>
 
@@ -134,13 +135,19 @@
 
   <!-- 플레이리스트's 트랙 -->
   <select id="trackOfPlaylist" resultMap="trackOfPlaylistMap">
-    SELECT p.*, pd.order_no, t.id AS trackId, t.title as trackTitle, a.cover_image, art.name AS artistName
+    SELECT p.*, pd.order_no, t.id AS trackId, t.title as trackTitle, a.cover_image, art.name AS artistName,
+    CASE
+      WHEN lt.user_id IS NOT NULL THEN TRUE
+      ELSE FALSE
+    END AS liked
     FROM playlist p
       LEFT JOIN playlist_detail pd ON p.id = pd.playlist_id
       LEFT JOIN track t ON pd.track_id = t.id
       LEFT JOIN album a ON t.album_id = a.id
       LEFT JOIN artist art ON t.artist_id = art.id
-    WHERE p.id = #{id}
+      LEFT JOIN liked_track lt ON t.id = lt.track_id
+                              AND lt.user_id = #{loginUserId}
+    WHERE p.id = #{playlistId}
     ORDER BY pd.order_no;
   </select>
 
