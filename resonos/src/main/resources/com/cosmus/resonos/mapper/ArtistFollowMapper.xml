@@ -36,4 +36,12 @@
     DELETE FROM artist_follow WHERE id = #{id}
   </delete>
 
+  <select id="findByUserAndArtist" resultMap="ArtistFollowResultMap">
+    SELECT * FROM artist_follow WHERE user_id = #{userId} AND artist_id = #{artistId}
+  </select>
+
+  <select id="countByArtistId" resultType="int">
+    SELECT COUNT(*) FROM artist_follow WHERE artist_id = #{artistId}
+  </select>
+
 </mapper>
