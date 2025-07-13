@@ -16,6 +16,7 @@
   <th:block layout:fragment="content">
     <div class="con con-join d-flex justify-content-center">
       <form id="form" th:action="@{/join}" method="post" class="user-form" th:object="${users}">
+        <div class="g-recaptcha" data-sitekey="6LcttYErAAAAANkBhJQLsApQK7PxZmNsgW2PsaWp"></div>
         <h2 class="text-light mb-4">회원가입</h2>
         <div class="input-area">
         <!-- 아이디 -->
@@ -157,6 +158,7 @@
         }
       }
     </script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   </th:block>
 </body>
 </html>

@@ -81,7 +81,7 @@
               <div class="title">
                 <div>
                   <h2 class="text-start">트랙 목록</h2>
-                    <span class="count" th:text="${playlist.trackList != null ? #lists.size(playlist.trackList) : 0}">트랙 수</span>
+                    <span class="count" th:text="${playlist.trackList != null ? #lists.size(playlist.trackList) - 1 : 0}">트랙 수</span>
                 </div>
                 <th:block th:if="${isOwner}">
                   <button type="button" href="/playlists/create" id="addTrack">추가하기<img width="20px" height="20px" src="/img/plus_circle.png" alt="추가버튼"></button>
@@ -93,7 +93,7 @@
                     추가한 트랙이 없습니다.
                   </div>
                 </th:block>
-                <th:block th:each="track : ${playlist.trackList}">
+                <th:block th:each="track : ${playlist.trackList}" th:if="${track.id != null}">
                   <li class="list-item" th:object="${track}">
                     <input type="hidden" th:value="${track.id}">
                     <p class="order-no" th:text="*{orderNo}">순서</p>
@@ -281,7 +281,7 @@
               <span class="name-artist">${track.artistName}</span>
             </div>
             <div class="right">
-              <span class="like">♥</span>
+              <button class="like like-track">${track.liked ? '♥' : ''}</button>
             </div>
           `
           ulList.appendChild(li)
@@ -306,7 +306,7 @@
               <span class="name-artist">${track.artistName}</span>
             </div>
             <div class="right">
-              <span class="like">♥</span>
+              <button class="like like-button">${track.liked ? '♥' : ''}</button>
               <button type="button" class="btn btn-danger">삭제</button>
             </div>
           `
