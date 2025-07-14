@@ -8,12 +8,15 @@ import java.util.stream.Collectors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import lombok.Getter;
 
 @Getter
-public class CustomUser implements UserDetails, OAuth2User  {
+public class CustomUser implements UserDetails, OAuth2User, OidcUser  {
     private final Users user;
     private final List<UserAuth> authList;
 
@@ -58,5 +61,20 @@ public class CustomUser implements UserDetails, OAuth2User  {
     @Override
     public String getName() {
         return String.valueOf(user.getUsername());
+    }
+
+    @Override
+    public Map<String, Object> getClaims() {
+        throw new UnsupportedOperationException("Unimplemented method 'getClaims'");
+    }
+
+    @Override
+    public OidcUserInfo getUserInfo() {
+        throw new UnsupportedOperationException("Unimplemented method 'getUserInfo'");
+    }
+
+    @Override
+    public OidcIdToken getIdToken() {
+        throw new UnsupportedOperationException("Unimplemented method 'getIdToken'");
     }
 }

@@ -61,8 +61,8 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public PlaylistDTO trackOfPlaylist(Long playlistId) throws Exception {
-        return playlistMapper.trackOfPlaylist(playlistId);
+    public PlaylistDTO trackOfPlaylist(Long playlistId, Long loginUserId) throws Exception {
+        return playlistMapper.trackOfPlaylist(playlistId, loginUserId);
     }
 
     @Override

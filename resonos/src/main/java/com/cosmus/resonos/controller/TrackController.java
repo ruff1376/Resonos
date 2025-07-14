@@ -165,7 +165,7 @@ public class TrackController {
     public String scoreRefresh(@PathVariable("id") String id, Model model) {
         TrackScore score = trackReviewService.getTrackScore(id);
         model.addAttribute("score", score);
-        return "review/trackFrag :: scoreFragment";  // Thymeleaf 조각 이름 지정
+        return "review/reviewFrag :: scoreFragment";  // Thymeleaf 조각 이름 지정
     }
 
     @GetMapping("/{trackId}/reviews/more")
@@ -195,7 +195,7 @@ public class TrackController {
         model.addAttribute("isAdmin", principal != null && principal.getAuthorities().stream()
             .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")));
 
-        return "review/trackFrag :: reviewItems";
+        return "review/reviewFrag :: reviewItems";
     }
 
     /**
@@ -228,10 +228,27 @@ public class TrackController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 리뷰를 작성했습니다.");
         }
     }
+    @GetMapping("/{trackId}/my-review-frag")
+    public String getMyReviewFragment(@PathVariable("trackId") String trackId,
+                                    @AuthenticationPrincipal CustomUser user,
+                                    Model model) throws Exception {
+        Long userId = user.getId(); // 로그인 유저 ID
+        TrackReview myReview = trackReviewService.getLastestReview(trackId, userId);
+        Track track = trackService.selectById(trackId);
+        if (myReview == null) {
+            return "review/reviewFrag :: empty"; // 아무것도 없는 프래그먼트로 대응 가능
+        }
+
+        model.addAttribute("reviewType", "TRACK");
+        model.addAttribute("track", track);
+        model.addAttribute("review", List.of(myReview)); // 리스트 형태로 전달
+        model.addAttribute("hasNext", false); // 의미 없지만 구조 유지
+        return "review/reviewFrag :: reviewItems";
+    }
 
     /* ── ② 수정 ────────────────────────────── */
     @PutMapping("/{id}/review/{reviewId}")
-    @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, authentication)")
+    @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, 'TRACK', authentication)")
     @ResponseBody
     public ResponseEntity<?> update(@PathVariable("id") String trackId,
                               @PathVariable("reviewId") Long reviewId,
@@ -246,7 +263,7 @@ public class TrackController {
 
     /* ── ③ 삭제 ────────────────────────────── */
     @DeleteMapping("/{id}/review/{reviewId}")
-    @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, authentication)")
+    @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, 'TRACK', authentication)")
     @ResponseBody
     public ResponseEntity<Void> delete(@PathVariable("id") String trackId,
                        @PathVariable("reviewId") Long reviewId) {

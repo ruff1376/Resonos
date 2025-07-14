@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cosmus.resonos.mapper.AlbumReviewMapper">
+
+    <!-- ─────────────────────── AlbumReview → 도메인 매핑 -->
+    <resultMap id="AlbumReview" type="com.cosmus.resonos.domain.AlbumReview">
+        <id     property="id"        column="id"/>
+        <result property="rating"    column="rating"/>
+        <result property="content"   column="content"/>
+        <result property="blinded"   column="blinded"/>
+        <result property="likes"     column="likes"/>
+        <result property="dislikes"  column="dislikes"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="critic"    column="critic"/>
+        <result property="userId"    column="user_id"/>
+        <result property="albumId"   column="album_id"/>
+        <result property="title"     column="title"/>
+        <association property="reviewer" javaType="com.cosmus.resonos.domain.Reviewer">
+            <id property="id" column="reviewer_id"/>
+            <result property="nickname" column="reviewer_nickname"/>
+            <result property="profileImage" column="reviewer_profile_image"/>
+            <result property="pro" column="reviewer_is_pro"/>
+        </association>
+    </resultMap>
+
+    <!-- ─────────────────────── AlbumScore → 집계 매핑 -->
+    <resultMap id="AlbumScore" type="com.cosmus.resonos.domain.AlbumScore">
+        <id property="albumId"         column="album_id"/>
+        <result property="averageScore" column="avg_score"/>
+        <result property="criticCount"  column="critic_count"/>
+        <result property="userCount"    column="user_count"/>
+    </resultMap>
+
+    <!-- insert -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO album_review (
+            rating, content, blinded, likes, dislikes, created_at, critic, user_id, album_id)
+        VALUES (
+            #{rating}, #{content}, #{blinded}, #{likes}, #{dislikes}, #{createdAt}, #{critic}, #{userId}, #{albumId})
+    </insert>
+
+    <!-- find by id -->
+    <select id="findById" resultMap="AlbumReview">
+        SELECT * FROM album_review WHERE id = #{id}
+    </select>
+
+    <!-- find reviews for album (blinded 제외) -->
+    <select id="findByAlbumId" resultMap="AlbumReview">
+        SELECT * FROM album_review
+        WHERE album_id = #{albumId}
+          AND blinded = 0
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="reviewWithReviewerByAlbumId" parameterType="string" resultMap="AlbumReview">
+        SELECT
+            ar.id,
+            ar.rating,
+            ar.content,
+            ar.blinded,
+            ar.created_at,
+            ar.critic,
+            ar.user_id,
+            ar.album_id,
+            u.id AS reviewer_id,
+            u.nickname AS reviewer_nickname,
+            u.profile_image AS reviewer_profile_image,
+            u.is_pro AS reviewer_is_pro,
+            (SELECT COUNT(*) FROM review_like WHERE review_id = ar.id AND review_type = 'ALBUM') AS likes,
+            (SELECT COUNT(*) FROM review_report WHERE review_id = ar.id AND review_type = 'ALBUM') AS dislikes
+        FROM album_review ar
+        JOIN user u ON u.id = ar.user_id
+        WHERE ar.album_id = #{albumId}
+          AND ar.blinded = 0
+        ORDER BY ar.critic DESC, likes DESC, ar.created_at ASC
+    </select>
+
+    <select id="selectPagedReviewsWithReviewer" parameterType="map" resultMap="AlbumReview">
+        SELECT
+            ar.id,
+            ar.rating,
+            ar.content,
+            ar.blinded,
+            ar.created_at,
+            ar.critic,
+            ar.user_id,
+            ar.album_id,
+            u.id AS reviewer_id,
+            u.nickname AS reviewer_nickname,
+            u.profile_image AS reviewer_profile_image,
+            u.is_pro AS reviewer_is_pro,
+            (SELECT COUNT(*) FROM review_like WHERE review_id = ar.id AND review_type = 'ALBUM') AS likes,
+            (SELECT COUNT(*) FROM review_report WHERE review_id = ar.id AND review_type = 'ALBUM') AS dislikes
+        FROM album_review ar
+        JOIN user u ON u.id = ar.user_id
+        WHERE ar.album_id = #{albumId}
+          AND ar.blinded = 0
+        ORDER BY ar.critic DESC, likes DESC, ar.created_at ASC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <select id="getLastestReview"
+        parameterType="map"
+        resultMap="AlbumReview">
+        SELECT
+            ar.id,
+            ar.rating,
+            ar.content,
+            ar.blinded,
+            ar.created_at,
+            ar.critic,
+            ar.user_id,
+            ar.album_id,
+            u.id AS reviewer_id,
+            u.nickname AS reviewer_nickname,
+            u.profile_image AS reviewer_profile_image,
+            u.is_pro AS reviewer_is_pro,
+            (SELECT COUNT(*) FROM review_like WHERE review_id = ar.id AND review_type = 'ALBUM') AS likes,
+            (SELECT COUNT(*) FROM review_report WHERE review_id = ar.id AND review_type = 'ALBUM') AS dislikes
+
+        FROM album_review ar
+        JOIN user u ON u.id = ar.user_id
+
+        WHERE ar.album_id = #{albumId}
+        AND ar.user_id = #{userId}
+        AND ar.blinded = 0
+
+        LIMIT 1
+    </select>
+
+
+    <!-- 특정 유저의 리뷰 정보 -->
+    <select id="reviewWithReviewerByUserId" parameterType="long" resultMap="AlbumReview">
+        SELECT
+            ar.id,
+            ar.rating,
+            ar.content,
+            ar.blinded,
+            ar.created_at,
+            ar.critic,
+            ar.user_id,
+            ar.album_id,
+            u.id AS reviewer_id,
+            u.nickname AS reviewer_nickname,
+            u.profile_image AS reviewer_profile_image,
+            u.is_pro AS reviewer_is_pro,
+            (SELECT COUNT(*) FROM review_like WHERE review_id = ar.id AND review_type = 'ALBUM') AS likes,
+            (SELECT COUNT(*) FROM review_report WHERE review_id = ar.id AND review_type = 'ALBUM') AS dislikes,
+            a.title
+        FROM album_review ar
+        JOIN user u ON u.id = ar.user_id
+        JOIN album a ON ar.album_id = a.id
+        WHERE ar.user_id = #{loginUserId}
+        ORDER BY ar.critic DESC, likes DESC, ar.created_at ASC
+    </select>
+
+    <!-- update blind status -->
+    <update id="updateBlindStatus">
+        UPDATE album_review SET blinded = #{blinded} WHERE id = #{id}
+    </update>
+
+    <!-- like / dislike -->
+    <update id="incrementLikes">
+        UPDATE album_review SET likes = likes + 1 WHERE id = #{id}
+    </update>
+
+    <update id="incrementDislikes">
+        UPDATE album_review SET dislikes = dislikes + 1 WHERE id = #{id}
+    </update>
+
+    <!-- ───────── AlbumScore Aggregation -->
+    <select id="findScoreByAlbumId" resultMap="AlbumScore">
+        <![CDATA[
+        SELECT album_id,
+               ROUND(AVG(rating)) AS avg_score,
+               SUM(CASE WHEN critic = 1 THEN 1 ELSE 0 END) AS critic_count,
+               SUM(CASE WHEN critic = 0 THEN 1 ELSE 0 END) AS user_count
+        FROM album_review
+        WHERE album_id = #{albumId}
+          AND blinded = 0
+        GROUP BY album_id
+        ]]>
+    </select>
+
+    <update id="update">
+        UPDATE album_review
+        SET rating = #{rating},
+            content = #{content}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM album_review WHERE id = #{id}
+    </delete>
+
+    <!-- 중복 리뷰 방지 -->
+    <select id="existsByUserAndAlbum" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM album_review
+        WHERE user_id = #{userId}
+          AND album_id = #{albumId}
+    </select>
+
+    <!-- 전체 리뷰 수 -->
+    <select id="countByAlbumId" resultType="long">
+        SELECT COUNT(*) FROM album_review
+        WHERE album_id = #{albumId}
+          AND blinded = 0
+    </select>
+
+</mapper>

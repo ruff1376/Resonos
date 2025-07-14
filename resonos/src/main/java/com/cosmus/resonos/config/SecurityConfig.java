@@ -18,6 +18,7 @@ import com.cosmus.resonos.security.CustomAccessDeniedHandler;
 import com.cosmus.resonos.security.LoginFailureHandler;
 import com.cosmus.resonos.security.LoginSuccessHandler;
 import com.cosmus.resonos.service.CustomOAuth2UserService;
+import com.cosmus.resonos.service.CustomOIDCUserService;
 import com.cosmus.resonos.service.UserDetailServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,9 @@ public class SecurityConfig {
 
     @Autowired
     private CustomOAuth2UserService customOAuth2UserService;
+
+    @Autowired
+    private CustomOIDCUserService customOidcUserService;
 
     @Autowired
     private DataSource dataSource;
@@ -84,6 +88,7 @@ public class SecurityConfig {
         http.oauth2Login(login -> login
                                     .loginPage("/login")
                                     .userInfoEndpoint(userInfo -> userInfo
+                                        .oidcUserService(customOidcUserService)
                                         .userService(customOAuth2UserService)
                                     )
                                 );

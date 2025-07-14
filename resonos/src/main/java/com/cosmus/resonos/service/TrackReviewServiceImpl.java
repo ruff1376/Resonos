@@ -179,5 +179,11 @@ public class TrackReviewServiceImpl implements TrackReviewService {
     public TrackReview writeReview(TrackReview review) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'writeReview'");
+
     }
+    @Override
+    public TrackReview getLastestReview(String trackId, Long userId) {
+        return mapper.getLastestReview(trackId, userId);
+    }
+
 }

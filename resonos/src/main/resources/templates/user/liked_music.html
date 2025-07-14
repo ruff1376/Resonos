@@ -68,7 +68,7 @@
                 <span class="name-album" th:text="${track.title}">트랙 명</span>
                 <span class="name-artist" th:text="${track.artistName}">아티스트 명</span>
               </div>
-              <span class="like">♥</span>
+              <button type="button" class="like like-track">♥</button>
             </li>
           </th:block>
         </ul>
@@ -76,7 +76,13 @@
     </section>
   </main>
   <th:block layout:fragment="pageScript">
-    <script>
+    <script th:inline="javascript">
+      const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
+      const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
+      const userId = [[${user.id}]]
+      if(userId == null) location.href = '/login'
+
+      /* 앨범 이동 */
       const albumItems = document.querySelectorAll(".info-section.album .list-item")
       albumItems.forEach(e => {
         e.addEventListener("click", function(event) {
@@ -86,6 +92,7 @@
         })
       })
 
+      /* 트랙 이동 */
       const trackItems = document.querySelectorAll(".info-section.track .list-item")
       trackItems.forEach(e => {
         e.addEventListener("click", function(event) {
@@ -94,6 +101,48 @@
           location.href = `/tracks?id=${trackId}`
         })
       })
+
+      // 트랙 좋아요
+      $(document).on('click', '.like.like-track', function (event) {
+
+
+          const trackId = event.target.closest('.list-item').querySelector('input[type="hidden"]').value
+          console.log(trackId)
+          if (!userId || userId === 0) {
+              Swal.fire('로그인이 필요합니다!');
+              return;
+          }
+
+          $.ajax({
+              url: '/tracks/toggle-like',
+              type: 'POST',
+              contentType: 'application/json',
+              headers: {
+                  [header]: token
+              },
+              data: JSON.stringify({ userId: userId, trackId: trackId }),
+              success: function (res) {
+                  const liked = res.liked;
+                  const text = liked ? '좋아요를 완료했습니다.' : '좋아요를 취소했습니다.'
+                  Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: text,
+                    showConfirmButton: false,
+                    timer: 800,
+                    customClass: {
+                      popup: 'follow-popup',
+                      icon: 'success-icon',
+                      title: 'alert-title'
+                    }
+                  });
+                  event.target.innerText = liked ? '♥' : '♡'
+              },
+              error: function () {
+                  Swal.fire('좋아요 처리에 실패했습니다.');
+              }
+          });
+        });
     </script>
     <script th:src="@{/js/remotecontroller.js}"></script>
   </th:block>

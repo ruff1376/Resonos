@@ -1,5 +1,6 @@
 package com.cosmus.resonos.service;
 
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,33 @@ public class ArtistFollowServiceImpl implements ArtistFollowService {
     }
 
     @Override
-    public boolean delete(String id) throws Exception {
+    public boolean delete(Long id) throws Exception {
         return artistFollowMapper.delete(id) > 0;
+    }
+
+    @Override
+    public boolean toggleLike(Long userId, String artistId) throws Exception {
+        ArtistFollow exsisting = artistFollowMapper.findByUserAndArtist(userId, artistId);
+        if (exsisting != null) {
+            artistFollowMapper.delete(exsisting.getId());
+            return false;
+        } else {
+            ArtistFollow newFollow = new ArtistFollow();
+            newFollow.setUserId(userId);
+            newFollow.setArtistId(artistId);
+            newFollow.setCreatedAt(new Date());
+            artistFollowMapper.insert(newFollow);
+            return true;
+        }
+    }
+
+    @Override
+    public boolean isLikedByUser(Long userId, String artistId) throws Exception {
+        return artistFollowMapper.findByUserAndArtist(userId, artistId) != null ;
+    }
+
+    @Override
+    public int getArtistFollowCount(String artistId) {
+        return artistFollowMapper.countByArtistId(artistId);
     }
 }

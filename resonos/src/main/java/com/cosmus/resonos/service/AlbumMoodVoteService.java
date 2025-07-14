@@ -6,8 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 public interface AlbumMoodVoteService {
-    public int insert(AlbumMoodVote vote);
-    public List<AlbumMoodVote> findAll();
-    public List<AlbumMoodVote> findByAlbumId(String albumId);
-    public List<Map<String, Object>> getAlbumMoodStats();
+
+    List<Map<String, Object>> getAlbumMoodStats();
+
+    List<AlbumMoodVote> findAll();
+
+    List<AlbumMoodVote> findByAlbumId(String albumId);
+
+    void saveOrUpdateVote(Long userId, String albumId, Long moodId);
+
+    Long getUserVotedMoodId(Long userId, String albumId);
 }

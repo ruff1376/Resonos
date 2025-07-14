@@ -111,10 +111,13 @@
             return true; // 검색 진행
         }
 
-        document.getElementById('login').addEventListener('click', e => {
-            e.preventDefault()
-            sessionStorage.setItem('returnTo', location.href)
-            location.href = '/login'
-        })
+        const loginButton = document.getElementById('login')
+        if(loginButton) {
+            loginButton.addEventListener('click', e => {
+                e.preventDefault()
+                sessionStorage.setItem('returnTo', location.href)
+                location.href = '/login'
+            })
+        }
     </script>
 </th:block>

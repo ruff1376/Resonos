@@ -37,9 +37,9 @@
           <a th:href="@{/find-pw}" class="login-link d-block mt-2">비밀번호 찾기</a>
         </div>
         <div class="text-secondary my-3">또는</div>
-        <button class="btn social-btn w-100 mb-2" type="button">Google로 로그인</button>
+        <button onclick="location.href='/oauth2/authorization/google'" class="btn social-btn w-100 mb-2" type="button">Google로 로그인</button>
         <button onclick="location.href='/oauth2/authorization/kakao'" class="btn social-btn w-100 mb-2" type="button">Kakao로 로그인</button>
-        <button class="btn social-btn w-100 mb-3" type="button">Naver로 로그인</button>
+        <button onclick="location.href='/oauth2/authorization/naver'" class="btn social-btn w-100 mb-3" type="button">Naver로 로그인</button>
         <div>
           <span class="text-secondary">아직 회원이 아니신가요?</span>
           <a href="/join" class="login-link">회원가입</a>

@@ -108,7 +108,7 @@ public class PlaylistController {
         @AuthenticationPrincipal CustomUser loginUser
     ) throws Exception {
         // 플레이리스트 + 트랙 정보
-        PlaylistDTO playlist = playlistService.trackOfPlaylist(id);
+        PlaylistDTO playlist = playlistService.trackOfPlaylist(id, loginUser.getId());
         // 플레이리스트 소유자
         Long ownerId =  playlist.getUserId();;
         // 자기 자신인지
@@ -119,6 +119,8 @@ public class PlaylistController {
         PublicUserDto owner = userService.publicSelectById(ownerId);
         // 좋아요 눌렀는지
         boolean alreadyLiked = loginUser != null ? playlistService.alreadyLikedPlaylist(loginUser.getId(), id) : false;
+
+        log.info("track : {}", playlist.getTrackList().toString());
 
         model.addAttribute("alreadyLiked", alreadyLiked);
         model.addAttribute("owner", owner);
@@ -142,7 +144,9 @@ public class PlaylistController {
         @RequestBody List<Map<String, Object>> orderList,
         @AuthenticationPrincipal CustomUser loginUser
     ) throws Exception {
-        Long ownerId = playlistService.select(playlistId).getId();
+        Long ownerId = playlistService.select(playlistId).getUserId();
+        log.info("ownerId : {}", ownerId);
+        log.info("customUser : {}", loginUser.getId());
         if(loginUser == null || !loginUser.getId().equals(ownerId))
             return new ResponseEntity<>("권한이 없습니다.", HttpStatus.FORBIDDEN);
         boolean result = playlistService.updateTrackOrder(playlistId, orderList);
@@ -184,7 +188,7 @@ public class PlaylistController {
                 }
                 boolean result = playlistService.insertTracks(trackList);
                 if(result) {
-                    PlaylistDTO playlistDto = playlistService.trackOfPlaylist(playlistId);
+                    PlaylistDTO playlistDto = playlistService.trackOfPlaylist(playlistId, loginUser.getId());
 
                     return new ResponseEntity<>(playlistDto, HttpStatus.OK);
                 }
@@ -206,10 +210,10 @@ public class PlaylistController {
      */
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{playlistId}/tracks/{orderNo}")
-    public ResponseEntity<?> deleteByOrderNo(@PathVariable("playlistId") Long playlistId, @PathVariable("orderNo") int orderNo) throws Exception {
+    public ResponseEntity<?> deleteByOrderNo(@PathVariable("playlistId") Long playlistId, @PathVariable("orderNo") int orderNo, @AuthenticationPrincipal CustomUser loginUser) throws Exception {
         boolean result = playlistService.deleteTracks(playlistId, orderNo);
         if(result) {
-            PlaylistDTO playlistDto = playlistService.trackOfPlaylist(playlistId);
+            PlaylistDTO playlistDto = playlistService.trackOfPlaylist(playlistId, loginUser.getId());
             if(playlistDto != null) {
                 List<Track> trackList = playlistDto.getTrackList();
                 if(trackList != null && !trackList.isEmpty()) {

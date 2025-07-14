@@ -28,6 +28,8 @@ public interface TrackReviewService {
     long countByTrackId(String trackId);
     public boolean hasNextPage(String trackId, int page, int size);
 
+    // 리뷰등록시 비동기반환
+    TrackReview getLastestReview(@Param("trackId")String trackId, @Param("userId") Long userId);
 
     // 리뷰 + 리뷰어
     List<TrackReview> reviewWithReviewerByTrackId(@Param("trackId") String trackId);

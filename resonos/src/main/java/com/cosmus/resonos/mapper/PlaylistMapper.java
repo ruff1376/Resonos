@@ -36,7 +36,7 @@ public interface PlaylistMapper {
     // 좋아요한 플레이리스트 조회
     public List<Playlist> likedPlaylist(Long userId) throws Exception;
     // 플레이리스트 상세 조회
-    public PlaylistDTO trackOfPlaylist(Long playlistId) throws Exception;
+    public PlaylistDTO trackOfPlaylist(@Param("playlistId")Long playlistId, @Param("loginUserId") Long loginUserId) throws Exception;
     // oreder_no MAX 조회
     public int getMaxOrderNo(@Param("playlistId") Long playlistId) throws Exception;
     // order_no 재정렬

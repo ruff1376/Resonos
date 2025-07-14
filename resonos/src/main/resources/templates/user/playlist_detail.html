@@ -81,7 +81,7 @@
               <div class="title">
                 <div>
                   <h2 class="text-start">트랙 목록</h2>
-                    <span class="count" th:text="${playlist.trackList != null ? #lists.size(playlist.trackList) : 0}">트랙 수</span>
+                    <span class="count" th:text="${playlist.trackList != null ? #lists.size(playlist.trackList) - 1 : 0}">트랙 수</span>
                 </div>
                 <th:block th:if="${isOwner}">
                   <button type="button" href="/playlists/create" id="addTrack">추가하기<img width="20px" height="20px" src="/img/plus_circle.png" alt="추가버튼"></button>
@@ -93,7 +93,7 @@
                     추가한 트랙이 없습니다.
                   </div>
                 </th:block>
-                <th:block th:each="track : ${playlist.trackList}">
+                <th:block th:each="track : ${playlist.trackList}" th:if="${track.id != null}">
                   <li class="list-item" th:object="${track}">
                     <input type="hidden" th:value="${track.id}">
                     <p class="order-no" th:text="*{orderNo}">순서</p>
@@ -104,7 +104,9 @@
                     </div>
                     <th:block th:if="${isOwner}">
                       <div class="right">
-                        <span class="like">♥</span>
+                        <th:block th:if="${track.liked}">
+                          <button type="button" class="like like-track">♥</button>
+                        </th:block>
                         <button type="button" class="btn btn-danger">삭제</button>
                       </div>
                     </th:block>
@@ -139,6 +141,9 @@
 
   <th:block layout:fragment="pageScript">
     <script>
+      const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
+      const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
+      const userId = [[${user.id}]]
       /* 썸네일 바로보기 */
       document.getElementById('thumbnail').addEventListener('change', function (event) {
         const file = event.target.files[0]
@@ -187,8 +192,6 @@
 
         try {
             /* Security 제공 CSRF */
-            const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
-            const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
             const response = await fetch(url, {
                 method: "PUT",
                 headers: {
@@ -238,8 +241,7 @@
 
         try {
             /* Security 제공 CSRF */
-            const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
-            const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
+
             const response = await fetch(url, {
                 method: "POST",
                 headers: {
@@ -279,7 +281,7 @@
               <span class="name-artist">${track.artistName}</span>
             </div>
             <div class="right">
-              <span class="like">♥</span>
+              <button class="like like-track">${track.liked ? '♥' : ''}</button>
             </div>
           `
           ulList.appendChild(li)
@@ -304,7 +306,7 @@
               <span class="name-artist">${track.artistName}</span>
             </div>
             <div class="right">
-              <span class="like">♥</span>
+              <button class="like like-button">${track.liked ? '♥' : ''}</button>
               <button type="button" class="btn btn-danger">삭제</button>
             </div>
           `
@@ -337,8 +339,7 @@
 
         try {
             /* Security 제공 CSRF */
-            const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
-            const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
+
             const response = await fetch(url, {
                 method: "POST",
                 headers: {
@@ -468,8 +469,7 @@
 
         try {
             /* Security 제공 CSRF */
-            const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
-            const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
+
             const response = await fetch(url, {
                 method: "DELETE",
                 headers: {
@@ -523,9 +523,12 @@
         })
       })
 
-      document.getElementById('like-button').addEventListener('click', e => {
-        likePlaylist(e)
-      })
+      const likeButton = document.getElementById('like-button')
+      if(likeButton) {
+        likeButton.addEventListener('click', e => {
+          likePlaylist(e)
+        })
+      }
 
       /* 플레이리스트 좋아요 */
       async function likePlaylist(event) {
@@ -539,8 +542,7 @@
         console.log(method)
         try {
             /* Security 제공 CSRF */
-            const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
-            const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
+
             const response = await fetch(url, {
                 method: method,
                 headers: {
@@ -595,6 +597,46 @@
             console.log("서버 에러.")
           }
       }
+
+      // 트랙 좋아요
+      $(document).on('click', '.like.like-track', function (event) {
+          const trackId = event.target.closest('.list-item').querySelector('input[type="hidden"]').value
+          console.log(trackId)
+          if (!userId || userId === 0) {
+              Swal.fire('로그인이 필요합니다!');
+              return;
+          }
+
+          $.ajax({
+              url: '/tracks/toggle-like',
+              type: 'POST',
+              contentType: 'application/json',
+              headers: {
+                  [header]: token
+              },
+              data: JSON.stringify({ userId: userId, trackId: trackId }),
+              success: function (res) {
+                  const liked = res.liked;
+                  const text = liked ? '좋아요를 완료했습니다.' : '좋아요를 취소했습니다.'
+                  Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: text,
+                    showConfirmButton: false,
+                    timer: 800,
+                    customClass: {
+                      popup: 'follow-popup',
+                      icon: 'success-icon',
+                      title: 'alert-title'
+                    }
+                  });
+                  event.target.innerText = liked ? '♥' : '♡'
+              },
+              error: function () {
+                  Swal.fire('좋아요 처리에 실패했습니다.');
+              }
+          });
+        });
     </script>
   </th:block>
 </body>

@@ -9,145 +9,279 @@
     <th:block th:replace="~{fragments/link::artist}"></th:block>
 </head>
 
-<body>
-    <th:block layout:fragment="content">
-        <div class="wrapper">
-            <!-- 아티스트 카드 -->
-            <div class="artist-card">
-                <div class="artist-overall">
-                    <div class="artist-img">
-                        <img th:src="@{${artist.profileImage}}" alt="">
-                    </div>
-                    <div class="artist-info">
-                        <p id="headline" th:text="${artist.name}"></p>
-                        <p>팔로워 99,999</p>
-                        <p th:text="|💽앨범 : ${albumCount}|">앨범 30</p>
-                        <p th:text="|🎶곡 : ${trackCount}|">곡 300</p>
-                        <div>
-                            <div class="btn btn-gold">❤ 팔로우</div>
-                        </div>
-                    </div>
+<body layout:fragment="content">
+    <div class="wrapper">
+        <!-- 아티스트 카드 -->
+        <div class="artist-card">
+            <div class="artist-overall">
+                <div class="artist-img">
+                    <img th:src="@{${artist.profileImage}}" alt="">
                 </div>
-                <div class="disco-graphy">
-                    <div class="graphy-header">
-                        <p id="headline">디스코 그래피</p>
-                    </div>
-                    <div class="album-container">
-                        <!-- 반복문 구간 -->
-                        <th:block th:each="album : ${albums}">
-                            <a th:href="@{albums(id=${album.id})}">
-                                <div class="album">
-                                   <div class="album-img">
-                                       <img th:src="@{${album.coverImage}}" alt="">
-                                       <span class="center-pin"></span>
-                                   </div>
-                                   <div class="album-info">
-                                       <p id="subtitle" th:text="${album.title}">앨범명</p>
-                                       <p th:text="${#dates.format(album.releaseDate, 'yyyy-MM-dd')}">출시일</p>
-                                       <p th:text="${album.label}">레이블</p>
-                                   </div>
-                                </div>
-                            </a>
-                        </th:block>
+                <div class="artist-info">
+                    <p id="headline" th:text="${artist.name}"></p>
+                    <p th:text="|💽앨범 : ${albumCount}|">앨범 30</p>
+                    <p th:text="|🎶곡 : ${trackCount}|">곡 300</p>
+                    <div style="display: flex; gap: 15px;">
+                        <button type="button" id="followArtistBtn" class="btn btn-gold" th:data-artist-id="${artist.id}"
+                            th:data-user-id="${loginUser != null ? loginUser.id : 0}"
+                            th:data-followed="${isArtistFollowed}">
+                            <span id="followText"
+                                th:text="${isArtistFollowed != null and isArtistFollowed ? '팔로우❤️' : '팔로우🤍'}"></span>
+                            <span id="followCount" th:text="${followCount}">0</span>
+                        </button>
                     </div>
                 </div>
             </div>
-            <!-- 아티스트 카드 끝 -->
-            <!-- 인기곡 유튜브 -->
-            <div class="hottest-card">
-                <div class="songs">
-                    <p id="headline" th:text="|${artist.name}'s 🔥TOP ${#lists.size(TOP7)}|"></p>
-                    <!-- 반복문 인기곡 -->
-                    <th:block th:each="tops, stat : ${TOP7}">
-                        <a th:href="@{/tracks(id=${tops.id})}">
-                            <p th:text="|${stat.count}. ${tops.title}  ${tops.formattedDuration}|"></p>
+            <div class="disco-graphy">
+                <div class="graphy-header">
+                    <p id="headline">디스코 그래피</p>
+                </div>
+                <div class="album-container">
+                    <!-- 반복문 구간 -->
+                    <th:block th:each="album : ${albums}">
+                        <a th:href="@{albums(id=${album.id})}">
+                            <div class="album">
+                                <div class="album-img">
+                                    <img th:src="@{${album.coverImage}}" alt="">
+                                    <span class="center-pin"></span>
+                                </div>
+                                <div class="album-info">
+                                    <p id="subtitle" th:text="${album.title}">앨범명</p>
+                                    <p th:text="${#dates.format(album.releaseDate, 'yyyy-MM-dd')}">출시일</p>
+                                    <p th:text="${album.label}">레이블</p>
+                                </div>
+                            </div>
                         </a>
                     </th:block>
                 </div>
-                <th:block th:if="${mv != null and mv != 'empty_mv_url'}">
-                    <div class="youtube">
-                        <iframe width="560" height="315"
-                                th:src="'https://www.youtube.com/embed/' + ${mv}"
-                                title="YouTube video player"
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                referrerpolicy="strict-origin-when-cross-origin"
-                                allowfullscreen>
-                        </iframe>
-                    </div>
-                </th:block>
-                <!-- ② MV URL이 없을 때 → 준비중 이미지 -->
-                <th:block th:if="${mv == null or mv == 'empty_mv_url'}">
-                    <div class="youtube">
-                        <img th:src="@{/img/wait_plz.png}"
-                            alt="뮤직비디오 준비중"
-                            width="560" height="315"
-                            style="object-fit:cover;">
-                    </div>
-                </th:block>
             </div>
-            <!-- 인기곡 카드 끝 -->
-            <!-- 아티스트 리뷰/일정.. -->
-            <div class="info-card">
-                <div class="info recent-review">
-                    <p id="headline" th:text="|${artist.name} 최근 리뷰|"></p>
-                    <p>이번 신곡 쩔었다</p>
-                    <p>동해물과 백두산이 마르고 닳도록</p>
-                    <p>동해물과 백두산이 마르고 닳도록</p>
-                    <p>동해물과 백두산이 마르고 닳도록</p>
-                    <p>동해물과 백두산이 마르고 닳도록</p>
-                    <div>
-                        <button class="btn btn-gold">앨범 전체 보기</button>
-                    </div>
-                </div>
-                <div class="info simillar-artist">
-                    <p id="headline" th:text="|${artist.name}🎙와 유사한 아티스트|"></p>
-                    <p>1.쩔었다</p>
-                    <p>2.동해물</p>
-                    <p>3.백두산</p>
-                    <p>4.마르고</p>
-                    <p>4.마르고</p>
-                    <div>
-                        <button class="btn btn-gold">아티스트 더보기</button>
-                    </div>
-                </div>
-                <div class="info concert-schedule">
-                    <p id="headline">공연/이벤트 일정</p>
-                    <p>2025. 08.  25 - 우리집 안방</p>
-                    <p>한국(서울)</p>
-                    <p>2025. 08.  25 - 우리집 안방</p>
-                    <p>한국(서울)</p>
-                    <p>2025. 08.  25 - 우리집 안방</p>
-                    <p>한국(서울)</p>
-                    </p>
-                </div>
-            </div>
-            <!-- 아티스트 리뷰/일정.. -->
-            <!-- 분위기 -->
-            <div class="mood-card">
-                <div class="chart">
-                    <canvas id="hexRadarChart"></canvas>
-                </div>
-                <div class="mood-vote">
-                    <div class="vote-header">
-                        <p id="headline">Mood Tag</p>
-                    </div>
-                    <div class="moods">
-                        <!-- 분위기 반복문 -->
-                        <div class="btn btn-gold">분위기1</div>
-                        <div class="btn btn-gold">분위기1324</div>
-                        <div class="btn btn-gold">분위기133</div>
-                        <div class="btn btn-gold">분위기1</div>
-                        <div class="btn btn-gold">분위기144</div>
-                        <div class="btn btn-gold">분위기1</div>
-                    </div>
-                    <button class="btn btn-gold">분위기 투표</button>
-                </div>
-            </div>
-            <!-- 분위기 끝 -->
         </div>
-    </th:block>
-    <th:block th:replace="~{fragments/script::artist}"></th:block>
+        <!-- 아티스트 카드 끝 -->
+        <!-- 인기곡 유튜브 -->
+        <div class="hottest-card">
+            <div class="songs">
+                <p id="headline" th:text="|${artist.name}'s 🔥TOP ${#lists.size(TOP7)}|"></p>
+                <!-- 반복문 인기곡 -->
+                <th:block th:each="tops, stat : ${TOP7}">
+                    <a th:href="@{/tracks(id=${tops.id})}">
+                        <p th:text="|${stat.count}. ${tops.title}  ${tops.formattedDuration}|"></p>
+                    </a>
+                </th:block>
+            </div>
+            <th:block th:if="${mv != null and mv != 'empty_mv_url'}">
+                <div class="youtube">
+                    <iframe width="560" height="315" th:src="'https://www.youtube.com/embed/' + ${mv}"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                    </iframe>
+                </div>
+            </th:block>
+            <!-- ② MV URL이 없을 때 → 준비중 이미지 -->
+            <th:block th:if="${mv == null or mv == 'empty_mv_url'}">
+                <div class="youtube">
+                    <img th:src="@{/img/wait_plz.png}" alt="뮤직비디오 준비중" width="560" height="315"
+                        style="object-fit:cover;">
+                </div>
+            </th:block>
+        </div>
+        <!-- 인기곡 카드 끝 -->
+        <!-- 아티스트 리뷰/일정.. -->
+        <div class="info-card">
+            <div class="info recent-review">
+                <p id="headline" th:text="|${artist.name} 최근 리뷰|"></p>
+                <p>이번 신곡 쩔었다</p>
+                <p>동해물과 백두산이 마르고 닳도록</p>
+                <p>동해물과 백두산이 마르고 닳도록</p>
+                <p>동해물과 백두산이 마르고 닳도록</p>
+                <p>동해물과 백두산이 마르고 닳도록</p>
+                <div>
+                    <button class="btn btn-gold">앨범 전체 보기</button>
+                </div>
+            </div>
+            <div class="info simillar-artist">
+                <p id="headline" th:text="|${artist.name}🎙와 유사한 아티스트|"></p>
+                <p>1.쩔었다</p>
+                <p>2.동해물</p>
+                <p>3.백두산</p>
+                <p>4.마르고</p>
+                <p>4.마르고</p>
+                <div>
+                    <button class="btn btn-gold">아티스트 더보기</button>
+                </div>
+            </div>
+            <div class="info concert-schedule">
+                <p id="headline">공연/이벤트 일정</p>
+                <p>2025. 08. 25 - 우리집 안방</p>
+                <p>한국(서울)</p>
+                <p>2025. 08. 25 - 우리집 안방</p>
+                <p>한국(서울)</p>
+                <p>2025. 08. 25 - 우리집 안방</p>
+                <p>한국(서울)</p>
+                </p>
+            </div>
+        </div>
+        <!-- 아티스트 리뷰/일정.. -->
+        <!-- 분위기 -->
+        <div class="mood-card">
+            <div class="chart">
+                <canvas id="hexRadarChart"></canvas>
+            </div>
+            <div class="mood-vote">
+                <div class="vote-header">
+                    <p id="headline">Mood Tag</p>
+                </div>
+                <div class="moods">
+                    <!-- 분위기 반복문 -->
+                    <div class="btn btn-gold">분위기1</div>
+                    <div class="btn btn-gold">분위기1324</div>
+                    <div class="btn btn-gold">분위기133</div>
+                    <div class="btn btn-gold">분위기1</div>
+                    <div class="btn btn-gold">분위기144</div>
+                    <div class="btn btn-gold">분위기1</div>
+                </div>
+                <button class="btn btn-gold">분위기 투표</button>
+            </div>
+        </div>
+        <!-- 분위기 끝 -->
+    </div>
+
+    <script th:inline="javascript">
+        const isLogin = [[${ loginUser != null ? 'true' : 'false'}]];
+    </script>
+
+    <!-- 아티스트 팔로우 -->
+    <script>
+        // 트랙 좋아요
+        $(document).on('click', '#followArtistBtn', function () {
+            const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+            const csrfToken = $('meta[name="_csrf"]').attr('content');
+
+            // CSRF 설정
+            $.ajaxSetup({
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(csrfHeader, csrfToken);
+                }
+            });
+            const $btn = $(this);
+            const userId = $btn.data('user-id');
+            const artistId = $btn.data('artist-id');
+
+            if (!userId || userId === 0) {
+                Swal.fire('로그인이 필요합니다!');
+                return;
+            }
+
+            $.ajax({
+                url: '/artists/toggle-like',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ userId: userId, artistId: artistId }),
+                success: function (res) {
+                    const followed = res.followed;
+                    const count = res.count;
+
+                    // UI 갱신
+                    $('#followText').text(followed ? '팔로우❤️' : '팔로우🤍');
+                    $('#followCount').text(count);
+                },
+                error: function () {
+                    Swal.fire('좋아요 처리에 실패했습니다.');
+                }
+            });
+        });
+    </script>
+
+    <!-- 드래그 슬라이드 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.querySelector('.album-container');
+            if (!container) return;
+
+            /* ---------- 기존 DOM 재구성 부분 그대로 ---------- */
+            const track = document.createElement('div');
+            track.className = 'album-track';
+            while (container.firstChild) track.appendChild(container.firstChild);
+            container.appendChild(track);
+
+            const CARD_GAP = 15;
+            const card = track.querySelector('.album');
+            const cardWidth = card.offsetWidth + CARD_GAP;
+
+            /* ---------- 자동 슬라이드 ---------- */
+            let autoSlideId = null;
+            const startAutoSlide = () => {
+                clearInterval(autoSlideId);
+                autoSlideId = setInterval(() => {
+                    if (Math.ceil(container.scrollLeft + container.offsetWidth) >= track.scrollWidth) {
+                        container.scrollLeft = 0;
+                    } else {
+                        container.scrollLeft += cardWidth;
+                    }
+                }, 3000);
+            };
+            const stopAutoSlide = () => clearInterval(autoSlideId);
+            startAutoSlide();
+
+            /* ---------- 드래그 · 클릭 구분 ---------- */
+            const THRESHOLD = 5;        // 5px 이하면 “클릭”, 초과면 “드래그”
+            let isDown = false;     // 누른 상태
+            let startX = 0;         // 누른 지점
+            let scrollLeft = 0;         // 원래 스크롤 값
+            let moved = 0;         // 이동 거리 누적
+
+            const dragStart = (x) => {
+                isDown = true;
+                moved = 0;
+                startX = x - container.offsetLeft;
+                scrollLeft = container.scrollLeft;
+                container.classList.add('grabbing');
+                stopAutoSlide();
+            };
+
+            const dragMove = (x) => {
+                if (!isDown) return;
+                const xPos = x - container.offsetLeft;
+                const walk = xPos - startX;     // (+ → 오른쪽, – → 왼쪽)
+                moved = Math.max(moved, Math.abs(walk));
+                container.scrollLeft = scrollLeft - walk;
+            };
+
+            const dragEnd = () => {
+                isDown = false;
+                container.classList.remove('grabbing');
+                startAutoSlide();
+            };
+
+            /* ---------- 마우스/터치 이벤트 ---------- */
+            // ↓ 마우스
+            container.addEventListener('mousedown', (e) => {
+                dragStart(e.pageX);
+                e.preventDefault();
+            });
+            window.addEventListener('mousemove', (e) => dragMove(e.pageX));
+            window.addEventListener('mouseup', dragEnd);
+
+            // ↓ 터치
+            container.addEventListener('touchstart', (e) => dragStart(e.touches[0].pageX), { passive: true });
+            container.addEventListener('touchmove', (e) => dragMove(e.touches[0].pageX), { passive: false });
+            container.addEventListener('touchend', dragEnd);
+
+            /* ---------- 클릭 취소 로직 ---------- */
+            container.addEventListener('click', (e) => {
+                if (moved > THRESHOLD) {   // 방금 전 동작이 “드래그”였다면
+                    e.preventDefault();      // a 태그 링크 이동 막기
+                    e.stopPropagation();
+                }
+                // moved ≤ 5px 이면 클릭으로 간주 → 링크 정상 작동
+            });
+
+            /* ---------- 호버 시 자동 슬라이드 제어 ---------- */
+            container.addEventListener('mouseenter', stopAutoSlide);
+            container.addEventListener('mouseleave', startAutoSlide);
+        });
+
+    </script>
 
 </body>
 
