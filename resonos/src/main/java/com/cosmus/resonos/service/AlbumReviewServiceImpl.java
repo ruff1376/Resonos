@@ -137,4 +137,8 @@ class AlbumReviewServiceImpl implements AlbumReviewService {
     public AlbumReview getLastestReview(String albumId, Long userId) {
         return mapper.getLastestReview(albumId, userId);
     }
+    @Override
+    public long countAll() throws Exception {
+        return mapper.countAll();
+    }
 }

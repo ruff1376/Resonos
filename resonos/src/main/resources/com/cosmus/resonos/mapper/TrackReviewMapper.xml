@@ -231,4 +231,9 @@
         LIMIT #{size} OFFSET #{offset}
     </select> -->
 
+    <!-- 전체 리뷰 수 -->
+    <select id="countAll" resultType="long">
+        SELECT COUNT(*) FROM track_review
+    </select>
+
 </mapper>

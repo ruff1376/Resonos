@@ -210,4 +210,33 @@
           AND blinded = 0
     </select>
 
+    <!-- 전체 리뷰 수 -->
+    <select id="countAll" resultType="long">
+        SELECT COUNT(*) FROM album_review
+    </select>
+
+    <!-- 어드민 리뷰 관련  -->
+    <resultMap id="ReviewReport" type="com.cosmus.resonos.domain.ReviewReport">
+        <id property="id" column="id"/>
+        <result property="reviewId" column="review_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="reviewType" column="review_type"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+    <select id="findByReviewIdAndType" resultMap="ReviewReport">
+        SELECT * FROM review_report
+        WHERE review_id = #{reviewId}
+          AND review_type = #{reviewType}
+        ORDER BY id DESC
+    </select>
+    <select id="findAllByType" resultMap="ReviewReport">
+        SELECT * FROM review_report
+        WHERE review_type = #{reviewType}
+        ORDER BY id DESC
+    </select>
+    <select id="countByType" resultType="long">
+        SELECT COUNT(*) FROM review_report
+        WHERE review_type = #{reviewType}
+    </select>
+
 </mapper>

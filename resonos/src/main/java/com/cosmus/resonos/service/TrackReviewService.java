@@ -36,4 +36,8 @@ public interface TrackReviewService {
 
     // 특정 유저의 리뷰
     List<TrackReview> reviewWithReviewerByUserId(Long loginUserId) throws Exception;
+
+    // 리뷰 countall
+    public long countAll() throws Exception;
+
 }
