@@ -19,6 +19,27 @@ body {
 .album:hover .album-img img {          /* 이미지 회전 */
   animation: spin360 6s linear infinite;
 }
+/* 좋아요 애니메이션 */
+.like-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  padding: 4px;
+}
+
+.pop-heart {
+  animation: pop 0.3s ease;
+}
+
+@keyframes pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.6); }
+  100% { transform: scale(1); }
+}
+/* 좋아요 끝 */
+
 /* 컨테이너 */
 .album-img {
   position: relative;          /* 안쪽 절대좌표 기준 */
@@ -219,11 +240,11 @@ img {
     min-width: 100px; 
     justify-content: start;
 }
-.top5track > p:first-child,
+.recent-review > p:first-child,
 .mood-vote p ,
-.review-card > p:first-child, 
+.simillar-artist > p:first-child, 
 .album-moods > p:first-child, 
-.pl-list > p:first-child {
+.concert-schedule > p:first-child {
     margin-bottom: 5px;
     border-bottom: 1px solid var(--main-color);
 }
@@ -285,6 +306,16 @@ img {
 }
 .moods .btn{
   flex:0 0 auto;           /* grow 0, shrink 0, basis auto */
+}
+.vote-header {
+    width: 100%;
+    margin-bottom: 10px;
+}
+.vote-header p {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* 드래그 슬라이드 css */
