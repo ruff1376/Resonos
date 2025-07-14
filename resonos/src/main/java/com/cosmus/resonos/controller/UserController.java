@@ -429,9 +429,10 @@ public class UserController {
     // 자기 자신인지
     boolean isOwner = loginUser != null && loginUser.getId().equals(targetId);
     // 팔로우, 팔로워 정보
-    List<Users> myFollower = userFollowService.myFollower(targetId);
-    List<Users> myFollow = userFollowService.myFollow(targetId);
+    List<Users> myFollower = userFollowService.myFollower(targetId, "");
+    List<Users> myFollow = userFollowService.myFollow(targetId, "");
 
+    model.addAttribute("userId", targetId);
     model.addAttribute("myFollower", myFollower);
     model.addAttribute("myFollow", myFollow);
     model.addAttribute("lastPath", "user-follows");
