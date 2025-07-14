@@ -81,7 +81,7 @@
               <div class="title">
                 <div>
                   <h2 class="text-start">트랙 목록</h2>
-                    <span class="count" th:text="${playlist.trackList != null ? #lists.size(playlist.trackList) - 1 : 0}">트랙 수</span>
+                    <span class="count" th:text="${playlist.trackList != null && playlist.trackList.get(0).getId() != null ? #lists.size(playlist.trackList) : 0}">트랙 수</span>
                 </div>
                 <th:block th:if="${isOwner}">
                   <button type="button" href="/playlists/create" id="addTrack">추가하기<img width="20px" height="20px" src="/img/plus_circle.png" alt="추가버튼"></button>
@@ -93,24 +93,26 @@
                     추가한 트랙이 없습니다.
                   </div>
                 </th:block>
-                <th:block th:each="track : ${playlist.trackList}" th:if="${track.id != null}">
-                  <li class="list-item" th:object="${track}">
-                    <input type="hidden" th:value="${track.id}">
-                    <p class="order-no" th:text="*{orderNo}">순서</p>
-                    <img th:src="*{coverImage}" class="follow-img" />
-                    <div class="info">
-                      <span class="name-album" th:text="*{title}">트랙 명</span>
-                      <span class="name-artist" th:text="*{artistName}">아티스트 명</span>
-                    </div>
-                    <th:block th:if="${isOwner}">
-                      <div class="right">
-                        <th:block th:if="${track.liked}">
-                          <button type="button" class="like like-track">♥</button>
-                        </th:block>
-                        <button type="button" class="btn btn-danger">삭제</button>
+                <th:block th:if="${!playlist.trackList.isEmpty()}">
+                  <th:block th:each="track : ${playlist.trackList}" th:if="${track.id != null}">
+                    <li class="list-item" th:object="${track}">
+                      <input type="hidden" th:value="${track.id}">
+                      <p class="order-no" th:text="*{orderNo}">순서</p>
+                      <img th:src="*{coverImage}" class="follow-img" />
+                      <div class="info">
+                        <span class="name-album" th:text="*{title}">트랙 명</span>
+                        <span class="name-artist" th:text="*{artistName}">아티스트 명</span>
                       </div>
-                    </th:block>
-                  </li>
+                      <th:block th:if="${isOwner}">
+                        <div class="right">
+                          <th:block th:if="${track.liked}">
+                            <button type="button" class="like like-track">♥</button>
+                          </th:block>
+                          <button type="button" class="btn btn-danger">삭제</button>
+                        </div>
+                      </th:block>
+                    </li>
+                  </th:block>
                 </th:block>
               </ul>
             </div>
@@ -558,7 +560,7 @@
                 icon: "warning",
                 title: result,
                 showConfirmButton: false,
-                timer: 1500,
+                timer: 800,
                 customClass: {
                   popup: 'follow-popup',
                   icon: 'success-icon',
@@ -569,7 +571,7 @@
                 sessionStorage.setItem('returnTo', location.href)
                 setTimeout(() => {
                   location.href = '/login'
-                }, 1600)
+                }, 900)
               }
               return
           }
@@ -580,7 +582,7 @@
             icon: "success",
             title: text,
             showConfirmButton: false,
-            timer: 1500,
+            timer: 800,
             customClass: {
               popup: 'follow-popup',
               icon: 'success-icon',

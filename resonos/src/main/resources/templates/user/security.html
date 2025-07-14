@@ -30,8 +30,8 @@
               th:text="${success == 'false' ? '업데이트 실패하였습니다.' : '업데이트 완료되었습니다.'}">
             </p>
           </th:block>
-          <p class="text-start mb-5">연동된 SNS : Kakao</p>
-          <th:block th:if="${!vali}">
+          <p class="text-start mb-5">연동된 SNS : <th:block th:text="${user.provider}"></th:block></p>
+          <th:block th:if="${!vali && user.provider == null}">
             <form th:action="@{/users/check-password}" method="post">
               <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
               <div class="input-area">

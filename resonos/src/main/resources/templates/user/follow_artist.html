@@ -39,7 +39,7 @@
                 <span class="follow-nick" th:text="${artist.name}">GalaxiNote</span>
               </div>
               <th:block th:if="${isOwner}">
-                <button class="btn-outline-gold btn-sm">언팔로우</button>
+                <button class="btn-outline-gold btn-sm follow-artist">언팔로우</button>
               </th:block>
             </li>
           </th:block>
@@ -57,6 +57,62 @@
           location.href = `/artists?id=${id}`
         })
       })
+
+      // 아티스트 팔로우
+      $(document).on('click', '.follow-artist', function () {
+          const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+          const csrfToken = $('meta[name="_csrf"]').attr('content');
+
+          // CSRF 설정
+          $.ajaxSetup({
+              beforeSend: function (xhr) {
+                  xhr.setRequestHeader(csrfHeader, csrfToken);
+              }
+          });
+          const $btn = this
+          const userId = [[${userId}]]
+          const artistId = $btn.closest('.list-item').querySelector('input[type="hidden"]').value
+
+          if (!userId || userId === 0) {
+              Swal.fire('로그인이 필요합니다!');
+              return;
+          }
+
+          $.ajax({
+              url: '/artists/toggle-like',
+              type: 'POST',
+              contentType: 'application/json',
+              data: JSON.stringify({ userId: userId, artistId: artistId }),
+              success: function (res) {
+                  const followed = res.followed;
+                  const text = followed ? '팔로우 하였습니다.' : '언팔로우 하였습니다.'
+                  Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: text,
+                    showConfirmButton: false,
+                    timer: 800,
+                    customClass: {
+                      popup: 'follow-popup',
+                      icon: 'success-icon',
+                      title: 'alert-title'
+                    }
+                  });
+                  // UI 갱신
+                  $btn.textContent = followed ? '언팔로우' : '팔로우'
+                  if(!followed) {
+                    $btn.classList.remove('btn-outline-gold')
+                    $btn.classList.add('btn-gold')
+                  } else {
+                    $btn.classList.add('btn-outline-gold')
+                    $btn.classList.remove('btn-gold')
+                  }
+              },
+              error: function () {
+                  Swal.fire('좋아요 처리에 실패했습니다.');
+              }
+          });
+      });
     </script>
     <script th:src="@{/js/remotecontroller.js}"></script>
   </th:block>
