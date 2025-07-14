@@ -25,6 +25,7 @@ import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.AlbumReview;
 import com.cosmus.resonos.domain.AlbumScore;
 import com.cosmus.resonos.domain.Artist;
+import com.cosmus.resonos.domain.ChartElement;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.LikedAlbum;
 import com.cosmus.resonos.domain.Pagination;
@@ -33,6 +34,7 @@ import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.AlbumReviewService;
 import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.ArtistService;
+import com.cosmus.resonos.service.ChartElementService;
 import com.cosmus.resonos.service.LikedAlbumService;
 import com.cosmus.resonos.service.ReviewLikeService;
 import com.cosmus.resonos.service.TrackService;
@@ -58,6 +60,8 @@ public class AlbumController {
     private ReviewLikeService reviewLikeService;
     @Autowired
     private LikedAlbumService likedAlbumService;
+    @Autowired
+    private ChartElementService chartElementService;
 
     //앨범
     @GetMapping
@@ -253,6 +257,19 @@ public class AlbumController {
         result.put("liked", liked);
         result.put("count", count);
         return ResponseEntity.ok(result);
+    }
+    @PostMapping("/vote")
+    public ResponseEntity<?> saveOrUpdateVote(@RequestBody ChartElement element) {
+        chartElementService.saveOrUpdate(element);
+        return ResponseEntity.ok().build();
+    }
+    @GetMapping("/chart/user")
+    public ResponseEntity<ChartElement> getUserVote(
+            @RequestParam("userId") Long userId,
+            @RequestParam("albumId") String albumId
+    ) {
+        ChartElement element = chartElementService.getUserVote(userId, albumId);
+        return ResponseEntity.ok(element != null ? element : new ChartElement());
     }
 
 }

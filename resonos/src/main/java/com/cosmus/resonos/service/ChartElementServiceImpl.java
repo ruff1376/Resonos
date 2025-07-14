@@ -1,10 +1,11 @@
 package com.cosmus.resonos.service;
 
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.cosmus.resonos.domain.ChartElement;
 import com.cosmus.resonos.mapper.ChartElementMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 public class ChartElementServiceImpl implements ChartElementService {
@@ -13,27 +14,23 @@ public class ChartElementServiceImpl implements ChartElementService {
     private ChartElementMapper chartElementMapper;
 
     @Override
-    public List<ChartElement> list() throws Exception {
-        return chartElementMapper.list();
+    public void saveOrUpdate(ChartElement element) {
+        ChartElement existing = chartElementMapper.findByUserAndAlbum(element.getUserId(), element.getAlbumId());
+        if (existing != null) {
+            element.setId(existing.getId());
+            chartElementMapper.update(element);
+        } else {
+            chartElementMapper.insert(element);
+        }
     }
 
     @Override
-    public ChartElement select(Long id) throws Exception {
-        return chartElementMapper.select(id);
+    public ChartElement getUserVote(Long userId, String albumId) {
+        return chartElementMapper.findByUserAndAlbum(userId, albumId);
     }
 
     @Override
-    public boolean insert(ChartElement chartElement) throws Exception {
-        return chartElementMapper.insert(chartElement) > 0;
-    }
-
-    @Override
-    public boolean update(ChartElement chartElement) throws Exception {
-        return chartElementMapper.update(chartElement) > 0;
-    }
-
-    @Override
-    public boolean delete(Long id) throws Exception {
-        return chartElementMapper.delete(id) > 0;
+    public Map<String, Object> getAverageScores(String albumId) {
+        return chartElementMapper.getAverageScoresByAlbumId(albumId);
     }
 }
