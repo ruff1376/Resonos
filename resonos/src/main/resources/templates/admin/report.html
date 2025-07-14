@@ -221,11 +221,13 @@ function toggleDetail(type, idx) {
     // 해당 타입 토글
     var target = document.getElementById('detailRow-' + type + '-' + idx);
     if(target) {
-        var isVisible = window.getComputedStyle(target).display !== 'none';
-        target.style.display = isVisible ? 'none' : 'block';
+        if(target.style.display === 'block') {
+            target.style.display = 'none';
+        } else {
+            target.style.display = 'block';
+        }
     }
 }
-
 
   </script>
 </main>

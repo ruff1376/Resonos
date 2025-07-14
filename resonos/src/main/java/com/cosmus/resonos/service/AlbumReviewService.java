@@ -46,4 +46,7 @@ public interface AlbumReviewService {
 
     // countall
     public long countAll() throws Exception;
+    public List<AlbumReview> findAllReviewsWithReviewer() throws Exception;
+    public List<AlbumReview> getAllReviewsWithReviewer() throws Exception; 
+    
 }
