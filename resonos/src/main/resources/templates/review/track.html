@@ -28,14 +28,9 @@
                 <a th:href="@{/albums(id=${album.id})}">
                     <p th:text="|${album.title}💿의 ${track.trackNo}th track|">어디앨범의 몇번째곡</p>
                 </a>
-                <th:block th:if="${score == null or score.averageScore == null}">
-                    <p>아직 리뷰가 없어요 😅</p>
-                </th:block>
-                <th:block th:if="${score != null and score.averageScore != null}">
-                    <p
-                        th:text="|🔮 ${#numbers.formatDecimal(score.averageScore, 0, 0)}점 (✅리뷰 ${score.criticCount}개, 일반리뷰 ${score.userCount}개)|">
-                    </p>
-                </th:block>
+                <div class="review-section">
+                    <th:block th:replace="~{review/reviewFrag :: reviewSection(score=${score})}"></th:block>
+                </div>
                 <div style="display: flex; gap: 15px;">
                     <button type="button" id="likeTrackBtn" class="btn btn-gold" th:data-track-id="${track.id}"
                         th:data-user-id="${loginUser != null ? loginUser.id : 0}" th:data-liked="${isTrackLikedByUser}">
@@ -263,16 +258,29 @@
                             icon: 'success',
                             confirmButtonText: '확인'
                         }).then(() => {
-                            reloadScoreBox(trackId);  // 점수 박스 먼저 다시 불러오고
-                            // 방금 작성한 본인의 리뷰 프래그먼트만 불러오기
+                            $('#reviewForm').trigger('reset');
+                            // 1. 점수 박스 리로드
+                            reloadScoreBox(trackId);
+
+                            // 2. review-section 프래그먼트 갱신
+                            $.get(`/tracks/${trackId}/refresh-frag`, function (html) {
+                                const $html = $('<div>').html(html);
+                                const $newSection = $html.find('.review-section');
+
+                                if ($newSection.length) {
+                                    $('.song-info .review-section').replaceWith($newSection);
+                                }
+                            });
+
+                            // 3. 내 리뷰 프래그먼트 추가
                             $.get(`/tracks/${trackId}/my-review-frag`, function (html) {
-                                const $html = $('<div>').html(html); // 문자열 → DOM으로 변환
-                                const $newReview = $html.find('li.comment'); // li.comment 요소만 추출
+                                const $html = $('<div>').html(html);
+                                const $newReview = $html.find('li.comment');
 
                                 if ($newReview.length) {
-                                    $newReview.hide(); // 처음엔 안 보이게
-                                    $('.review-list').append($newReview); // ul에 맨 앞에 추가
-                                    $newReview.slideDown(); // 슬라이드로 등장
+                                    $newReview.hide();
+                                    $('.review-list').append($newReview);
+                                    $newReview.slideDown();
                                 }
                             });
                         });
@@ -390,10 +398,10 @@
                         $.ajax({
                             url: `/tracks/${trackId}/review/${reviewId}`,
                             method: 'DELETE',
-                            success: function () {
+                            success: function (html) {
                                 li.slideUp(() => li.remove());
                                 reloadScoreBox(trackId);
-
+                                $('.song-info .review-section').replaceWith(html);
                                 Swal.fire({
                                     title: '삭제 완료',
                                     text: '리뷰가 삭제되었습니다.',
