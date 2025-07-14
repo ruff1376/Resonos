@@ -10,5 +10,5 @@ public interface ChartElementService {
 
     ChartElement getUserVote(Long userId, String albumId);
 
-    Map<String, Object> getAverageScores(String albumId);
+    Map<String, Integer> getAverageScoresByAlbumId(String albumId);
 }

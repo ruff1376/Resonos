@@ -16,4 +16,5 @@ public interface ChartElementMapper {
     void update(ChartElement element);
 
     Map<String, Object> getAverageScoresByAlbumId(@Param("albumId") String albumId);
+
 }
