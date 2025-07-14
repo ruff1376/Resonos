@@ -1,15 +1,12 @@
 package com.cosmus.resonos.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -164,6 +161,15 @@ public class UserController {
     List<Badge> badgeList = badgeService.recentGetBadge(id);
     // 획득 배지 수
     int badgeCount = badgeService.badgeCount(id);
+    // TODO: 차트에 넘길 데이터
+
+    /* SELECT a.genre, COUNT(*) AS like_count
+    FROM liked_track lt
+      JOIN track t ON lt.track_id = t.id
+      JOIN album a ON t.album_id = a.id
+    WHERE lt.user_id = 1
+    GROUP BY a.genre
+    ORDER BY like_count DESC; */
 
     // 자기 자신인지
     boolean isOwner = loginUser != null && loginUser.getId().equals(id);

@@ -15,7 +15,7 @@
 <body>
   <th:block layout:fragment="content">
     <div class="con con-find-id d-flex justify-content-center">
-      <form id="form" th:action="@{/join}" method="post" class="user-form">
+      <div class="user-form">
         <h2 class="text-light mb-4">아이디 찾기</h2>
         <div class="input-area">
           <!-- 이메일 -->
@@ -41,7 +41,7 @@
           <a th:href="@{/login}" class="btn btn-gold w-100 mb-2">로그인 화면</a>
           <a th:href="@{/find-pw}" class="btn btn-outline-gold w-100 mb-2">비밀번호 찾기</a>
         </div>
-      </form>
+      </div>
     </div>
   </th:block>
   <th:block layout:fragment="pageScript">
@@ -96,9 +96,6 @@
 
         const errorMessage = document.getElementById(`emailError`)
         errorMessage.innerText = ''
-
-
-
         const data = {
             email: document.getElementById('email').value
         }
@@ -118,6 +115,7 @@
 
             if (!response.ok) {
                 const text = await response.text()
+                errorMessage.classList.remove('success')
                 errorMessage.textContent = text
                 return
             }
