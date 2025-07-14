@@ -49,13 +49,13 @@ public class UserFollowServiceImpl implements UserFollowService {
     }
 
     @Override
-    public List<Users> myFollower(Long id) throws Exception {
-        return userFollowMapper.myFollower(id);
+    public List<Users> myFollower(Long id, String keyword) throws Exception {
+        return userFollowMapper.myFollower(id, keyword);
     }
 
     @Override
-    public List<Users> myFollow(Long id) throws Exception {
-        return userFollowMapper.myFollow(id);
+    public List<Users> myFollow(Long id, String keyword) throws Exception {
+        return userFollowMapper.myFollow(id, keyword);
     }
 
     @Override

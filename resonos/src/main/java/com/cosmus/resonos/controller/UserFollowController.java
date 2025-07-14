@@ -1,6 +1,8 @@
 package com.cosmus.resonos.controller;
 
-import org.hibernate.validator.cfg.defs.pl.REGONDef;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +14,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.UserFollow;
+import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.BadgeGrantService;
 import com.cosmus.resonos.service.UserFollowService;
 import com.cosmus.resonos.service.UserService;
@@ -107,6 +111,13 @@ public class UserFollowController {
         return new ResponseEntity<>("언팔로우가 실패하였습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    /**
+     * 유저 팔로우
+     * @param loginUser
+     * @param id
+     * @return
+     * @throws Exception
+     */
     @PostMapping(value = "{id}")
     public ResponseEntity<?> postMethodName(
         @AuthenticationPrincipal CustomUser loginUser,
@@ -124,6 +135,32 @@ public class UserFollowController {
             return new ResponseEntity<>("팔로우 하였습니다.", HttpStatus.OK);
 
         return new ResponseEntity<>("팔로우가 실패하였습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * 팔로우 유저 비동기 검색
+     * @param data
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/search")
+    public ResponseEntity<?> searchMyAlbums(
+        @RequestBody Map<String, Object> data
+    ) throws Exception {
+        Long userId = Long.valueOf(data.get("userId").toString());
+        String keyword = data.get("keyword").toString();
+        String choice = data.get("choice").toString();
+        List<Users> userList = null;
+
+        if(choice.equals("follow"))
+            userList = userFollowService.myFollow(userId, keyword);
+        else
+            userList = userFollowService.myFollower(userId, keyword);
+
+        if(userList != null)
+            return new ResponseEntity<>(userList, HttpStatus.OK);
+
+        return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
