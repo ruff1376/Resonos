@@ -53,7 +53,7 @@ public class TrackReviewServiceImpl implements TrackReviewService {
     //     // Long ownerId = Long.valueOf(track.getArtistId());
     //     // Long ownerId = track.getArtistId(); // 임시로 변환
     //     Long ownerId = Long.valueOf(track.getArtistId());
-        
+
 
     //     // 2. 리뷰 작성자 닉네임
     //     Users reviewer = userMapper.selectById(review.getUserId());
@@ -76,7 +76,7 @@ public class TrackReviewServiceImpl implements TrackReviewService {
     // }
 
 
-    
+
 
     @Override
     public List<TrackReview> getReviewsForTrack(String trackId) {
@@ -149,7 +149,7 @@ public class TrackReviewServiceImpl implements TrackReviewService {
         return mapper.findById(id);
     }
 
-    
+
     @Override
     public List<TrackReview> getMoreReviews(String trackId, int page, int size) {
         int offset = (page - 1) * size;
@@ -176,6 +176,11 @@ public class TrackReviewServiceImpl implements TrackReviewService {
     }
 
     @Override
+    public List<TrackReview> likedReviewByUserId(Long loginUserId) throws Exception {
+        return mapper.likedReviewByUserId(loginUserId);
+    }
+
+    @Override
     public TrackReview writeReview(TrackReview review) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'writeReview'");
@@ -187,6 +192,5 @@ public class TrackReviewServiceImpl implements TrackReviewService {
     @Override
     public long countAll() throws Exception {
         return mapper.countAll();
-    }   
-
+    }
 }

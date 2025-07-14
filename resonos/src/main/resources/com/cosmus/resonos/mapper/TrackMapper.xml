@@ -358,6 +358,7 @@
       END,
       t.title ASC,
       ar.name ASC
+      LIMIT 200
   </select>
 
   <!-- 마이페이지: 좋아요 표시한 트랙 3개 -->

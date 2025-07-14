@@ -307,6 +307,10 @@ public class UserController {
     Users user = userService.select(loginUser.getUsername());
     // 유저가 쓴 리뷰 정보
     List<TrackReview> tReviewList = trackReviewService.reviewWithReviewerByUserId(loginUser.getId());
+    // 유저가 좋아요 한 리뷰 정보
+    List<TrackReview> ltReviewList = trackReviewService.likedReviewByUserId(loginUser.getId());
+
+    model.addAttribute("ltReviewList", ltReviewList);
     model.addAttribute("tReviewList", tReviewList);
     model.addAttribute("user", user);
     model.addAttribute("lastPath", "activity");

@@ -146,6 +146,8 @@
       const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
       const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
       const userId = [[${userId}]]
+      const playlistId = [[${playlist.id}]]
+
       /* 썸네일 바로보기 */
       document.getElementById('thumbnail').addEventListener('change', function (event) {
         const file = event.target.files[0]
@@ -186,9 +188,6 @@
 
       /* 비동기 순서 바꾸기 */
       async function changeOrder(orderData) {
-
-        const pathSegments = window.location.pathname.split('/')
-        const playlistId = pathSegments[pathSegments.length - 1]
         const data = orderData
         let url = `/playlists/${playlistId}/tracks/order`
 
@@ -335,8 +334,7 @@
           list : list
         }
 
-        const pathSegments = window.location.pathname.split('/')
-        const playlistId = pathSegments[pathSegments.length - 1]
+        const playlistId = [[${playlist.id}]]
         let url = `/playlists/${playlistId}/tracks`
 
         try {
@@ -358,7 +356,7 @@
                 icon: "warning",
                 title: result,
                 showConfirmButton: false,
-                timer: 1500,
+                timer: 800,
                 customClass: {
                   popup: 'follow-popup',
                   icon: 'success-icon',
@@ -376,7 +374,7 @@
             icon: "success",
             title: "플레이리스트에 추가되었습니다.",
             showConfirmButton: false,
-            timer: 1500,
+            timer: 800,
             customClass: {
               popup: 'follow-popup',
               icon: 'success-icon',
@@ -465,13 +463,9 @@
       async function deleteTracks(event) {
 
         const orderNo = event.target.closest('.list-item').querySelector('.order-no').textContent
-        const pathSegments = window.location.pathname.split('/')
-        const playlistId = pathSegments[pathSegments.length - 1]
         let url = `/playlists/${playlistId}/tracks/${orderNo}`
 
         try {
-            /* Security 제공 CSRF */
-
             const response = await fetch(url, {
                 method: "DELETE",
                 headers: {
@@ -487,9 +481,10 @@
           }
           // 성공시
           const text = await response.text()
+          console.log(text)
           if(text) {
             const result = JSON.parse(text);
-            if(result.trackList) {
+            if(result.trackList && result.trackList.some(track => track.id != null)) {
               renderTracks(result.trackList)
               document.querySelector('.count').textContent = result.trackList.length
             } else {
@@ -516,13 +511,14 @@
       })
 
       /* 트랙 페이지 이동 */
-      const items = document.querySelectorAll("li.list-item")
-      items.forEach(e => {
-        e.addEventListener("click", function(event) {
+      const list = document.querySelector(".ul-list")
+      list.addEventListener("click", function(event) {
           if (event.target.tagName.toLowerCase() === 'button') return
-          const trackId = this.querySelector('input[type="hidden"]').value
-          location.href = `/tracks?id=${trackId}`
-        })
+          if (event.target.tagName.toLowerCase() === 'li') {
+            const trackId = event.target.querySelector('input[type="hidden"]').value
+            location.href = `/tracks?id=${trackId}`
+            return
+          }
       })
 
       const likeButton = document.getElementById('like-button')
@@ -537,7 +533,7 @@
 
         let method = ''
         const currentStyle = event.currentTarget.classList.contains('already')
-        let playlistId = [[${playlist.id}]]
+
         let url = `/playlists/${playlistId}/like`
         if(currentStyle) method = 'DELETE'
         else method = 'POST'
