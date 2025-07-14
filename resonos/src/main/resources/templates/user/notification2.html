@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}">
+<head>
+  <meta charset="UTF-8" />
+  <title>notification2</title>
+  <th:block th:replace="~{fragments/link::user}"></th:block>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  <style>
+    .list-item.read { opacity: 0.6; }
+    .list-item.read .red-circle { display: none; }
+    .red-circle { color: red; margin-right: 6px; }
+  </style>
+</head>
+<body>
+  <main class="con con-noti position-relative" layout:fragment="content">
+    <!-- 왼쪽 리모컨 -->
+    <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
+
+    <!-- 최근 알림 (공지 + 알림 통합) -->
+    <section class="info-wrapper">
+      <div class="info-section">
+        <div class="title">
+          <h2 class="text-start">최근 알림</h2>
+          <div>
+            <button onclick="readAll()">전체 읽음</button>
+            <button onclick="deleteAll()">전체 삭제</button>
+          </div>
+        </div>
+
+        <!-- 알림/공지 개수 확인용 -->
+        <h1>개수 확인용</h1>
+        <p th:text="'알림 개수: ' + ${#lists.size(notifications)}"></p>
+        <p th:text="'공지 개수: ' + ${#lists.size(notices)}"></p>
+        <p th:text="'통합 알람 개수: ' + ${#lists.size(recentAlarms)}"></p>
+
+        <ul class="ul-list">
+          <th:block th:each="item : ${recentAlarms}">
+            <li class="list-item"
+                th:classappend="${item.alarmType == 'notification' and item.alarm.isRead} ? 'read' : ''">
+              <!-- 공지 -->
+              <th:block th:if="${item.alarmType == 'notice'}">
+                <a th:href="@{'/notice/' + ${item.alarm.id}}">
+                  <span class="notice-title" th:text="'[공지] ' + ${item.alarm.title}"></span>
+                  <span class="date" th:text="${#dates.format(item.alarm.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+                </a>
+              </th:block>
+              <!-- 알림 -->
+              <th:block th:if="${item.alarmType == 'notification'}">
+                <a th:if="${item.alarm.type == 'announcement'}" th:href="@{'/notice/' + ${item.alarm.targetId}}">
+                  <span class="noti-title" th:text="'[공지알림] ' + ${item.alarm.message}"></span>
+                </a>
+                <a th:if="${item.alarm.type != 'announcement'}" th:href="@{'/notification/' + ${item.alarm.id}}">
+                  <span class="noti-title" th:text="${item.alarm.message}"></span>
+                </a>
+                <span class="date" th:text="${#dates.format(item.alarm.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+                <span class="red-circle" th:if="!${item.alarm.isRead}">●</span>
+                <input class="is-read" type="checkbox" th:checked="${item.alarm.isRead}" th:data-id="${item.alarm.id}">
+              </th:block>
+            </li>
+          </th:block>
+        </ul>
+      </div>
+    </section>
+  </main>
+  <th:block layout:fragment="pageScript">
+    <script>
+      // CSRF 토큰 읽기
+      const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+      const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+      // fetch 옵션에 CSRF 헤더 추가 함수
+      function csrfFetch(url, options = {}) {
+        options.headers = options.headers || {};
+        options.headers[csrfHeader] = csrfToken;
+        return fetch(url, options);
+      }
+
+      // 알림 읽음 처리 (개별)
+      document.querySelectorAll('.is-read').forEach((e) => {
+        e.addEventListener('change', (ev) => {
+          const id = ev.target.dataset.id;
+          csrfFetch(`/notifications2/read/${id}`, {method: 'POST'})
+            .then(response => {
+              if (response.ok) {
+                const li = ev.target.closest('.list-item');
+                li.classList.add('read');
+                const redCircle = li.querySelector('.red-circle');
+                if (redCircle) redCircle.style.display = 'none';
+              } else {
+                alert('읽음 처리에 실패했습니다.');
+              }
+            })
+            .catch(() => alert('서버 오류로 읽음 처리에 실패했습니다.'));
+        });
+      });
+
+      // 전체 읽음 처리 (DB 반영)
+      function readAll() {
+        csrfFetch('/notifications2/readAll', {method: 'POST'})
+          .then(response => {
+            if (response.ok) {
+              document.querySelectorAll('.list-item').forEach(li => {
+                li.classList.add('read');
+                const redCircle = li.querySelector('.red-circle');
+                if (redCircle) redCircle.style.display = 'none';
+                const cb = li.querySelector('.is-read');
+                if (cb) cb.checked = true;
+              });
+            } else {
+              alert('전체 읽음 처리에 실패했습니다.');
+            }
+          })
+          .catch(() => alert('서버 오류로 전체 읽음 처리에 실패했습니다.'));
+      }
+
+      // 전체 삭제 처리 (화면에서만 삭제)
+      function deleteAll() {
+        if (confirm("알림을 전부 삭제하시겠습니까?")) {
+          document.querySelectorAll('.ul-list')[0].innerHTML = '';
+        }
+      }
+    </script>
+    <script th:src="@{/js/remotecontroller.js}"></script>
+  </th:block>
+</body>
+</html>

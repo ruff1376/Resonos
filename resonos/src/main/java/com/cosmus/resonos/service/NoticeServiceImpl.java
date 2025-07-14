@@ -39,4 +39,9 @@ public class NoticeServiceImpl implements NoticeService {
         return noticeMapper.delete(id) > 0;
     }
 
+    @Override
+    public List<Notice> listActive() throws Exception {
+        return noticeMapper.listActive();
+    }
+
 }

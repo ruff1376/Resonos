@@ -15,4 +15,6 @@ public interface NoticeService {
     public boolean update(Notice notice) throws Exception;
     // 삭제
     public boolean delete(Long id) throws Exception;
+    // 활성화 된 공지사항 목록
+    public List<Notice> listActive() throws Exception; 
 }
