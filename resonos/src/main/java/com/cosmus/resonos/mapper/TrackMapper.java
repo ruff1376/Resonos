@@ -68,8 +68,8 @@ public interface TrackMapper {
     // 좋아요 한 트랙 3개 조회
     public List<Track> likedTracksTop3(@Param("id") Long id) throws Exception;
     // 좋아요 한 트랙 전체 조회
-    public List<Track> likedTracks(@Param("id") Long id) throws Exception;
+    public List<Track> likedTracks(@Param("id") Long id, @Param("keyword") String keyword) throws Exception;
 
-    // 페이징 전체 데이터 
+    // 페이징 전체 데이터
     public List<Track> getAllTracks(Pagination pagination) throws Exception;
 }

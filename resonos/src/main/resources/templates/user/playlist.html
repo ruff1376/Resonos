@@ -49,8 +49,8 @@
                 </th:block>
                 <div class="right">
                   <div class="like-area">
-                    <span class="count" th:text="${mpl.likeCount}">123</span>
                     <span class="like">♥</span>
+                    <span class="count" th:text="${mpl.likeCount}">123</span>
                   </div>
                   <th:block th:if="${isOwner}">
                     <button class="btn btn-danger">
@@ -105,10 +105,11 @@
       const items = document.querySelectorAll('.list-item')
       items.forEach(e => {
         e.addEventListener('click', (event) => {
-          if (event.target.tagName.toLowerCase() === 'button') {
+          if(event.target.classList.contains('like-button')) {
             likePlaylist(event)
             return
           }
+          if(event.target.tagName.toLowerCase() === 'button') return
           const id = e.querySelector('input[type="hidden"]').value
           location.href = `/playlists/${id}`
         })

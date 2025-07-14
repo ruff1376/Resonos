@@ -24,8 +24,12 @@
             <h2 class="text-start">좋아요 한 앨범</h2>
             <span class="count" th:text="${likedAlbumList.size()}">앨범 수</span>
           </div>
+          <div class="text-center position-relative">
+            <i class="bi bi-search search-icon position-absolute"></i>
+            <input id="album-search" type="text" class="basic-input" name="keyword" placeholder="키워드를 입력하세요.">
+          </div>
         </div>
-        <ul class="ul-list">
+        <ul class="ul-list album">
           <th:block th:if="${likedAlbumList == null or likedAlbumList.isEmpty()}">
             <div class="empty-text">
               <p>좋아요 한 앨범이 없습니다.</p>
@@ -39,7 +43,9 @@
                 <span class="name-album" th:text="${album.title}">앨범 명</span>
                 <span class="name-artist" th:text="${album.artistName}">아티스트 명</span>
               </div>
-              <span class="like">♥</span>
+              <th:block th:if="${isOwner}">
+                <span class="like like-album">♥</span>
+              </th:block>
             </li>
           </th:block>
         </ul>
@@ -53,8 +59,12 @@
             <h2 class="text-start">좋아요 한 트랙</h2>
             <span class="count" th:text="${likedTrackList.size()}">트랙 수</span>
           </div>
+          <div class="text-center position-relative">
+            <i class="bi bi-search search-icon position-absolute"></i>
+            <input id="track-search" type="text" class="basic-input" name="keyword" placeholder="키워드를 입력하세요.">
+          </div>
         </div>
-        <ul class="ul-list">
+        <ul class="ul-list track">
           <th:block th:if="${likedTrackList == null or likedTrackList.isEmpty()}">
             <div class="empty-text">
               <p>좋아요 한 트랙이 없습니다.</p>
@@ -68,7 +78,9 @@
                 <span class="name-album" th:text="${track.title}">트랙 명</span>
                 <span class="name-artist" th:text="${track.artistName}">아티스트 명</span>
               </div>
-              <button type="button" class="like like-track">♥</button>
+              <th:block th:if="${isOwner}">
+                <button type="button" class="like like-track">♥</button>
+              </th:block>
             </li>
           </th:block>
         </ul>
@@ -79,32 +91,31 @@
     <script th:inline="javascript">
       const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
       const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
-      const userId = [[${user.id}]]
+      const userId = [[${userId}]]
       if(userId == null) location.href = '/login'
 
       /* 앨범 이동 */
-      const albumItems = document.querySelectorAll(".info-section.album .list-item")
-      albumItems.forEach(e => {
-        e.addEventListener("click", function(event) {
-          if (event.target.tagName.toLowerCase() === 'button') return
-          const albumId = this.querySelector('input[type="hidden"]').value
+      const albumList = document.querySelector(".info-section.album ul")
+      albumList.addEventListener("click", function(event) {
+        if(event.target.tagName.toLowerCase() === 'button') return
+        if(event.target.tagName.toLowerCase() === 'li') {
+          const albumId = event.target.closest('.list-item').querySelector('input[type="hidden"]').value
           location.href = `/albums?id=${albumId}`
-        })
+        }
       })
 
       /* 트랙 이동 */
-      const trackItems = document.querySelectorAll(".info-section.track .list-item")
-      trackItems.forEach(e => {
-        e.addEventListener("click", function(event) {
-          if (event.target.tagName.toLowerCase() === 'button') return
-          const trackId = this.querySelector('input[type="hidden"]').value
+      const trackList = document.querySelector(".info-section.track ul")
+      trackList.addEventListener("click", function(event) {
+        if (event.target.tagName.toLowerCase() === 'button') return
+        if(event.target.tagName.toLowerCase() === 'li') {
+          const trackId = event.target.closest('.list-item').querySelector('input[type="hidden"]').value
           location.href = `/tracks?id=${trackId}`
-        })
+        }
       })
 
       // 트랙 좋아요
       $(document).on('click', '.like.like-track', function (event) {
-
 
           const trackId = event.target.closest('.list-item').querySelector('input[type="hidden"]').value
           console.log(trackId)
@@ -143,6 +154,131 @@
               }
           });
         });
+
+
+      function debounce(fn, delay) {
+        let timer;
+        return function (...args) {
+          clearTimeout(timer);
+          timer = setTimeout(() => fn.apply(this, args), delay);
+        };
+      }
+
+      /* 요청에 딜레이 넣기 */
+      const debouncedGetTracks = debounce(getTracks, 300);
+      document.getElementById('track-search').addEventListener('keyup', debouncedGetTracks);
+
+      /* 좋아요 한 트랙 검색 */
+      async function getTracks(event) {
+
+        let url = `/tracks/search`
+
+        const data = {
+          keyword : event.target.value,
+          userId : userId
+        }
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    [header] : token,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+
+          if (!response.ok) {
+              const result = await response.text()
+              console.log(result)
+              return
+          }
+          // 성공시
+          const result = await response.json()
+          renderTracks(result)
+        } catch (error) {
+            console.log(error)
+          }
+      }
+
+      /* 좋아요 한 트랙 렌더링 */
+      function renderTracks(tracks) {
+        const ulList = document.querySelector('.ul-list.track')
+        ulList.innerHTML = ''
+
+        tracks.forEach(track => {
+          const li = document.createElement('li')
+          li.classList.add('list-item')
+
+          li.innerHTML = `
+            <input type="hidden" value="${track.id}">
+            <img src="${track.coverImage}" class="follow-img">
+            <div class="info">
+              <span class="name-album">${track.title}</span>
+              <span class="name-artist">${track.artistName}</span>
+            </div>
+          `
+          ulList.appendChild(li)
+        })
+      }
+
+      /* 요청에 딜레이 넣기 */
+      const debouncedGetAlbum = debounce(getAlbums, 500);
+      document.getElementById('album-search').addEventListener('keyup', debouncedGetAlbum);
+
+      /* 좋아요 한 앨범 검색 */
+      async function getAlbums(event) {
+
+        let url = `/albums/search`
+
+        const data = {
+          keyword : event.target.value,
+          userId : userId
+        }
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    [header] : token,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+
+          if (!response.ok) {
+              const result = await response.text()
+              console.log(result)
+              return
+          }
+          // 성공시
+          const result = await response.json()
+          renderAlbums(result)
+        } catch (error) {
+            console.log(error)
+          }
+      }
+
+      /* 좋아요 한 트랙 렌더링 */
+      function renderAlbums(albums) {
+        const ulList = document.querySelector('.ul-list.album')
+        ulList.innerHTML = ''
+
+        albums.forEach(album => {
+          const li = document.createElement('li')
+          li.classList.add('list-item')
+
+          li.innerHTML = `
+            <input type="hidden" value="${album.id}">
+            <img src="${album.coverImage}" class="follow-img">
+            <div class="info">
+              <span class="name-album">${album.title}</span>
+              <span class="name-artist">${album.artistName}</span>
+            </div>
+          `
+          ulList.appendChild(li)
+        })
+      }
     </script>
     <script th:src="@{/js/remotecontroller.js}"></script>
   </th:block>

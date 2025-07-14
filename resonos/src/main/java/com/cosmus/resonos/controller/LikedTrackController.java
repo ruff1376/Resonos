@@ -1,15 +1,23 @@
 package com.cosmus.resonos.controller;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cosmus.resonos.domain.LikedTrack;
 import com.cosmus.resonos.service.LikedTrackService;
 
 import lombok.extern.slf4j.Slf4j;
+
 
 @Slf4j
 @Controller
@@ -97,9 +105,12 @@ public class LikedTrackController {
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Long id) throws Exception {
         log.info("[LikedTrackController] 좋아요 트랙 삭제 시도 - id: {}", id);
-        // 이거 없는 메서드라는데? - 
+        // 이거 없는 메서드라는데? -
         // likedTrackService.delete(id);
         log.info("[LikedTrackController] 좋아요 트랙 삭제 완료 - id: {}", id);
         return "redirect:/liked-tracks";
     }
+
+
 }
+
