@@ -298,7 +298,7 @@ public class AlbumController {
     public ResponseEntity<Map<String, Integer>> getAverageScores(@RequestParam("albumId") String albumId) {
         Map<String, Integer> averages = chartElementService.getAverageScoresByAlbumId(albumId);
         return ResponseEntity.ok(averages);
-
+    }
     /**
      * 비동기 좋아요 한 앨범(키워드 검색)
      * @param data
