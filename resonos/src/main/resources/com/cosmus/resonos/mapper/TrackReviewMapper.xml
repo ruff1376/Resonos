@@ -144,7 +144,7 @@
     </select> -->
 
 
-    <!-- 특정 유저의 리뷰 정보 -->
+    <!-- 특정 유저의 트랙 리뷰 정보 -->
     <select id="reviewWithReviewerByUserId" parameterType="Long" resultMap="TrackReview">
         SELECT
             tr.id,
@@ -169,6 +169,32 @@
         ORDER BY tr.critic DESC,
                 likes DESC,
                 tr.created_at ASC
+    </select>
+
+    <!-- 특정 유저의 좋아요 한 트랙 리뷰 정보 -->
+    <select id="likedReviewByUserId" resultMap="TrackReview">
+        SELECT
+            tr.id,
+            tr.rating,
+            tr.content,
+            tr.blinded,
+            tr.created_at,
+            tr.critic,
+            tr.user_id,
+            tr.track_id,
+            u.id AS reviewer_id,
+            u.nickname AS reviewer_nickname,
+            u.profile_image AS reviewer_profile_image,
+            u.is_pro AS reviewer_is_pro,
+            (SELECT COUNT(*) FROM review_like WHERE review_id = tr.id AND review_type = 'TRACK') AS likes,
+            (SELECT COUNT(*) FROM review_report WHERE review_id = tr.id AND review_type = 'TRACK') AS dislikes,
+            t.title
+        FROM review_like rl
+        JOIN track_review tr ON tr.id = rl.review_id
+        JOIN user u ON tr.user_id = u.id
+        JOIN track t ON tr.track_id = t.id
+        WHERE rl.user_id = #{loginUserId}
+        ORDER BY rl.created_at DESC
     </select>
 
     <!-- update blind status -->

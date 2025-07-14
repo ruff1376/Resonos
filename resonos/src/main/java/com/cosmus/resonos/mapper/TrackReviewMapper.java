@@ -47,6 +47,9 @@ public interface TrackReviewMapper {
     // 특정 유저의 리뷰
     List<TrackReview> reviewWithReviewerByUserId(@Param("loginUserId") Long loginUserId) throws Exception;
 
+    List<TrackReview> likedReviewByUserId(@Param("loginUserId") Long loginUserId) throws Exception;
+
+
     // 리뷰 countall
     public long countAll() throws Exception;
 }

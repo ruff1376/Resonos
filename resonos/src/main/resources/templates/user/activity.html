@@ -14,12 +14,12 @@
   <main class="con con-activity position-relative" layout:fragment="content">
     <!-- 왼쪽 리모컨 -->
     <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
-    <!-- 리뷰 -->
+    <!-- 트랙 리뷰 -->
     <section class="info-wrapper">
       <div class="info-section">
         <div class="title">
           <div>
-            <h2 class="text-start">내가 쓴 리뷰</h2>
+            <h2 class="text-start">내가 쓴 트랙 리뷰</h2>
             <span class="count" th:text="${tReviewList.size()}">리뷰 수</span>
           </div>
         </div>
@@ -29,7 +29,7 @@
               <a th:href="@{/tracks(id = *{trackId}, reviewId = *{id})}">
                 <p class="sm-title" th:text="*{title}">앨범 or 트랙 명</p>
                 <p class="sm-content" th:text="*{content}">내용</p>
-                <span th:text="${#temporals.format(review.createdAt, 'yyyy-MM-dd HH:mm')}">날짜</span>
+                <span class="date" th:text="${#temporals.format(review.createdAt, 'yyyy-MM-dd HH:mm')}">날짜</span>
                 <span class="like" th:text="|❤️ *{likes}|">좋아요</span>
               </a>
             </li>
@@ -37,34 +37,27 @@
         </ul>
       </div>
     </section>
-    <!-- 게시글 -->
+    <!-- 좋아요 한 트랙 리뷰 -->
     <section class="info-wrapper">
       <div class="info-section">
         <div class="title">
           <div>
-            <h2 class="text-start">내가 쓴 게시물</h2>
-            <span class="count">92</span>
+            <h2 class="text-start">좋아요 한 트랙 리뷰</h2>
+            <span class="count" th:text="${ltReviewList != null ? ltReviewList.size() : '0'}">92</span>
           </div>
         </div>
         <ul class="ul-list">
-          <li class="text-item post">
-            <a href="">
-              <p class="sm-title">게시글 제목</p>
-              <span class="date" th:text="2025.02.02">날짜</span>
-            </a>
-          </li>
-          <li class="text-item post">
-            <a href="">
-              <p class="sm-title">게시글 제목</p>
-              <span class="date" th:text="2025.02.02">날짜</span>
-            </a>
-          </li>
-          <li class="text-item post">
-            <a href="">
-              <p class="sm-title">게시글 제목</p>
-              <span class="date" th:text="2025.02.02">날짜</span>
-            </a>
-          </li>
+          <th:block th:each="ltReview : ${ltReviewList}">
+            <li class="text-item" th:object="${ltReview}">
+              <a th:href="@{/tracks(id = *{trackId}, reviewId = *{id})}">
+                <p class="sm-title" th:text="*{title}">앨범 or 트랙 명</p>
+                <p class="sm-content" th:text="*{content}">내용</p>
+                <span class="rv-name" th:text="*{reviewer.nickname}">리뷰어 닉네임</span>
+                <span class="date" th:text="${#temporals.format(ltReview.createdAt, 'yyyy-MM-dd HH:mm')}">날짜</span>
+                <span class="like" th:text="|❤️ *{likes}|">좋아요</span>
+              </a>
+            </li>
+          </th:block>
         </ul>
       </div>
     </section>

@@ -118,7 +118,6 @@
       $(document).on('click', '.like.like-track', function (event) {
 
           const trackId = event.target.closest('.list-item').querySelector('input[type="hidden"]').value
-          console.log(trackId)
           if (!userId || userId === 0) {
               Swal.fire('로그인이 필요합니다!');
               return;
@@ -222,6 +221,46 @@
         })
       }
 
+      // 앨범 좋아요
+      $(document).on('click', '.like-album', function (event) {
+          const albumId = event.target.closest('.list-item').querySelector('input[type="hidden"]').value
+
+          if (!userId || userId === 0) {
+              Swal.fire('로그인이 필요합니다!');
+              return;
+          }
+
+          $.ajax({
+              url: '/albums/toggle-like',
+              type: 'POST',
+              contentType: 'application/json',
+              headers: {
+                  [header]: token
+              },
+              data: JSON.stringify({ userId: userId, albumId: albumId }),
+              success: function (res) {
+                  const liked = res.liked;
+                  const text = liked ? '좋아요를 완료했습니다.' : '좋아요를 취소했습니다.'
+                  Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: text,
+                    showConfirmButton: false,
+                    timer: 800,
+                    customClass: {
+                      popup: 'follow-popup',
+                      icon: 'success-icon',
+                      title: 'alert-title'
+                    }
+                  });
+                  event.target.innerText = liked ? '♥' : '♡'
+              },
+              error: function () {
+                  Swal.fire('좋아요 처리에 실패했습니다.');
+              }
+          });
+      });
+
       /* 요청에 딜레이 넣기 */
       const debouncedGetAlbum = debounce(getAlbums, 500);
       document.getElementById('album-search').addEventListener('keyup', debouncedGetAlbum);
@@ -259,7 +298,7 @@
           }
       }
 
-      /* 좋아요 한 트랙 렌더링 */
+      /* 좋아요 한 앨범 렌더링 */
       function renderAlbums(albums) {
         const ulList = document.querySelector('.ul-list.album')
         ulList.innerHTML = ''

@@ -810,7 +810,7 @@ button.like {background-color: inherit; border: none;}
 
 /* 내 활동 */
 .con-activity .info-wrapper .info-section {height: 300px; text-align: start;}
-.text-item {color: #fff; border-bottom: 0.5px dashed var(--main-color); padding: 10px 0; transition: all 0.3s; cursor: pointer;}
+.text-item {color: #fff; border-bottom: 0.5px dashed var(--main-color); padding: 15px 0; transition: all 0.3s; cursor: pointer;}
 .text-item:hover {transform: scale(1.01);}
 .ul-list .text-item:last-child {border-bottom: none;}
 .text-item .sm-title {color: var(--main-color);}
@@ -822,6 +822,8 @@ button.like {background-color: inherit; border: none;}
 .text-item.post .sm-title {flex: 0.8; color: #fff; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
 .text-item.post .date::after {content: none;}
 .text-item.post a {display: flex; justify-content: space-between;}
+.text-item .rv-name {font-size: 1.4rem; color: var(--main-color);}
+.text-item .rv-name + .date {margin-left: 5px;}
 
 /* 배지 */
 .ul-list.bl {width: 100%; flex-wrap: wrap; gap: 10px; column-gap: 30px;}
@@ -971,7 +973,7 @@ button.like {background-color: inherit; border: none;}
   font-size: 1.4rem;
   width: 100%;
 }
-.ul-list.modall {overflow: auto;}
+.ul-list.modall {overflow: auto; padding: 20px 0 100px;}
 .ul-list.modall .list-item {border-color: var(--silver-color);}
 .ul-list.modall .list-item:hover {border-color: var(--main-color);}
 .modal-track .btn-area {
