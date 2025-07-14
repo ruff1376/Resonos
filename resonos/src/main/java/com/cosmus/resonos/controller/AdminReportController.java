@@ -12,10 +12,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.cosmus.resonos.domain.AlbumReview;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Report;
+import com.cosmus.resonos.domain.TrackReview;
 import com.cosmus.resonos.service.ReportService;
+import com.cosmus.resonos.service.TrackReviewService;
+import com.cosmus.resonos.service.AlbumReviewService;
 
 @Controller
 @RequestMapping("/admin/report")
@@ -139,5 +143,104 @@ public class AdminReportController {
 
     
 
+
+
+
+    // review 신고 처리 
+
+    @Autowired
+    private TrackReviewService trackReviewService;
+    @Autowired
+    private AlbumReviewService albumReviewService;
+
+    // 리뷰 목록 (앨범/트랙)
+    @GetMapping("/review")
+    public String reviewList(
+            @RequestParam(value = "type", defaultValue = "album") String type,
+            @RequestParam(value = "page", defaultValue = "1") long page,
+            @RequestParam(value = "size", defaultValue = "10") long size,
+            Model model) throws Exception {
+
+        if ("track".equalsIgnoreCase(type)) {
+            long total = trackReviewService.countAll(); // 트랙 리뷰 전체 수 (필요시 구현)
+            Pagination pagination = new Pagination(page, size, 10, total);
+            List<TrackReview> reviews = trackReviewService.getMoreReviews(null, (int) page, (int) size);
+
+            model.addAttribute("reviews", reviews);
+            model.addAttribute("pagination", pagination);
+            model.addAttribute("pageUri", "/admin/report/review?type=track&size=" + size);
+            model.addAttribute("type", "track");
+        } else {
+            long total = albumReviewService.countAll(); // 앨범 리뷰 전체 수 (필요시 구현)
+            Pagination pagination = new Pagination(page, size, 10, total);
+            List<AlbumReview> reviews = albumReviewService.getMoreReviews(null, (int) page, (int) size);
+
+            model.addAttribute("reviews", reviews);
+            model.addAttribute("pagination", pagination);
+            model.addAttribute("pageUri", "/admin/report/review?type=album&size=" + size);
+            model.addAttribute("type", "album");
+        }
+        model.addAttribute("size", size);
+
+        // 뷰 파일: templates/admin/review.html
+        return "admin/review";
+    }
+
+    // 리뷰 상세
+    @GetMapping("/review/{type}/{id}")
+    public String reviewDetail(
+            @PathVariable String type,
+            @PathVariable Long id,
+            Model model) {
+
+        if ("track".equalsIgnoreCase(type)) {
+            TrackReview review = trackReviewService.findById(id);
+            if (review == null) {
+                return "redirect:/admin/report/review?type=track&error=notfound";
+            }
+            model.addAttribute("review", review);
+            model.addAttribute("type", "track");
+        } else {
+            AlbumReview review = albumReviewService.findById(id);
+            if (review == null) {
+                return "redirect:/admin/report/review?type=album&error=notfound";
+            }
+            model.addAttribute("review", review);
+            model.addAttribute("type", "album");
+        }
+        // 뷰 파일: templates/admin/review_detail.html
+        return "admin/review_detail";
+    }
+
+    // 블라인드/해제
+    @PostMapping("/review/{type}/{id}/blind")
+    public String blindReview(
+            @PathVariable String type,
+            @PathVariable Long id,
+            @RequestParam boolean blinded) {
+
+        if ("track".equalsIgnoreCase(type)) {
+            trackReviewService.blindReview(id, blinded);
+            return "redirect:/admin/report/review/track/" + id;
+        } else {
+            albumReviewService.blindReview(id, blinded);
+            return "redirect:/admin/report/review/album/" + id;
+        }
+    }
+
+    // 삭제
+    @PostMapping("/review/{type}/{id}/delete")
+    public String deleteReview(
+            @PathVariable String type,
+            @PathVariable Long id) {
+
+        if ("track".equalsIgnoreCase(type)) {
+            trackReviewService.delete(id);
+            return "redirect:/admin/report/review?type=track";
+        } else {
+            albumReviewService.delete(id);
+            return "redirect:/admin/report/review?type=album";
+        }
+    }
 
 }

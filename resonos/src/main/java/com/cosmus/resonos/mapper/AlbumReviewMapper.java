@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.AlbumReview;
 import com.cosmus.resonos.domain.AlbumScore;
+import com.cosmus.resonos.domain.ReviewReport;
 
 @Mapper
 public interface AlbumReviewMapper {
@@ -43,4 +44,11 @@ public interface AlbumReviewMapper {
     boolean existsByUserAndAlbum(@Param("userId") Long userId, @Param("albumId") String albumId);
 
     long countByAlbumId(String albumId);
+
+    public long countAll() throws Exception;
+
+    // 어드민 리포트 관련 메소드
+    public List<ReviewReport> findByReviewIdAndType(@Param("reviewId") Long reviewId, @Param("reviewType") String reviewType);
+    public List<ReviewReport> findAllByType(@Param("reviewType") String reviewType);
+    public long countByType(@Param("reviewType") String reviewType);
 }

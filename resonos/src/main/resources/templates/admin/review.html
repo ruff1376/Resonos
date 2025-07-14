@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layouts/admin_layout}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <title>리뷰 신고 관리</title>
+  <th:block th:replace="~{fragments/link::admin}"></th:block>
+  <style>
+    .detail-row {
+      padding: 15px;
+      background-color: #2a2a2a;
+      border-radius: 0 0 8px 8px;
+      margin-bottom: 15px;
+    }
+    .detail-section {
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+
+<th:block layout:fragment="content">
+<body class="bg-dark text-light">
+<main class="py-5 bg-resonos-dark">
+  <div class="container" style="max-width: 1200px;">
+    <h2 class="mb-4 text-light-gold">리뷰 신고 관리</h2>
+    <!-- 리뷰 타입별 탭 -->
+    <ul class="nav nav-tabs mb-4" id="reviewTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link [[${type}=='album' ? 'active' : '']]" th:href="@{/admin/report/review(type='album', size=${size}, page=1)}">앨범 리뷰</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link [[${type}=='track' ? 'active' : '']]" th:href="@{/admin/report/review(type='track', size=${size}, page=1)}">트랙 리뷰</a>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="reviewTabContent">
+      <div class="tab-pane fade show active" id="review-list" role="tabpanel">
+        <div class="resonos-card p-3">
+          <!-- 컬럼 헤더 -->
+          <div class="list-group-item bg-secondary text-dark fw-bold d-flex flex-nowrap align-items-center text-center justify-content-center" style="border-radius:8px 8px 0 0;">
+            <div style="flex-basis:8%;min-width:60px;">ID</div>
+            <div style="flex-basis:12%;min-width:80px;">작성자</div>
+            <div style="flex-basis:10%;min-width:80px;">대상ID</div>
+            <div style="flex-basis:20%;min-width:120px;">리뷰 내용</div>
+            <div style="flex-basis:8%;min-width:60px;">평점</div>
+            <div style="flex-basis:8%;min-width:60px;">블라인드</div>
+            <div style="flex-basis:8%;min-width:60px;">좋아요</div>
+            <div style="flex-basis:8%;min-width:60px;">싫어요</div>
+            <div style="flex-basis:10%;min-width:80px;">관리</div>
+          </div>
+          <div id="reviewTableList" class="list-group">
+            <div th:each="review, stat : ${reviews}">
+              <div class="list-group-item bg-dark text-light border-secondary mb-0 rounded-top d-flex flex-nowrap align-items-center text-center justify-content-center">
+                <div style="flex-basis:8%;min-width:60px;" th:text="${review.id}">id</div>
+                <div style="flex-basis:12%;min-width:80px;" th:text="${review.userId}">작성자</div>
+                <div style="flex-basis:10%;min-width:80px;" th:text="${type == 'album' ? review.albumId : review.trackId}">대상ID</div>
+                <div style="flex-basis:20%;min-width:120px;" th:text="${review.content}">리뷰 내용</div>
+                <div style="flex-basis:8%;min-width:60px;" th:text="${review.rating}">평점</div>
+                <div style="flex-basis:8%;min-width:60px;">
+                  <span th:text="${review.blinded} ? 'Y' : 'N'"></span>
+                </div>
+                <div style="flex-basis:8%;min-width:60px;" th:text="${review.likes}">좋아요</div>
+                <div style="flex-basis:8%;min-width:60px;" th:text="${review.dislikes}">싫어요</div>
+                <div style="flex-basis:10%;min-width:80px;">
+                  <a th:href="@{'/admin/report/review/' + ${type} + '/' + ${review.id}}" class="btn btn-outline-gold btn-sm">상세</a>
+                  <form th:action="@{'/admin/report/review/' + ${type} + '/' + ${review.id} + '/blind'}" method="post" style="display:inline;">
+                    <input type="hidden" name="blinded" th:value="${!review.blinded}" />
+                    <button type="submit" class="btn btn-outline-danger btn-sm" th:text="${review.blinded} ? '블라인드 해제' : '블라인드'"></button>
+                  </form>
+                  <form th:action="@{'/admin/report/review/' + ${type} + '/' + ${review.id} + '/delete'}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-outline-danger btn-sm">삭제</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div th:if="${#lists.isEmpty(reviews)}" class="list-group-item text-center text-secondary bg-dark">리뷰가 없습니다.</div>
+          </div>
+          <!-- 페이징 -->
+          <div th:replace="~{fragments/pagination :: pagination(pagination=${pagination}, pageUri=${pageUri})}"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</th:block>
+</html>

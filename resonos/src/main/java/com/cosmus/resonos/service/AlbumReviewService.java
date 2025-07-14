@@ -43,4 +43,7 @@ public interface AlbumReviewService {
     List<AlbumReview> reviewWithReviewerByUserId(Long loginUserId) throws Exception;
 
     AlbumReview getLastestReview(@Param("albumId")String albumId, @Param("userId") Long userId);
+
+    // countall
+    public long countAll() throws Exception;
 }
