@@ -220,7 +220,7 @@
       follower_count DESC,
       a.title ASC,
       ar.name ASC
-      LIMIT 12
+    LIMIT 12
   </select>
 
 
