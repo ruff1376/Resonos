@@ -111,15 +111,13 @@
                 </th:block>
             </div>
             <div class="info album-moods">
-                <p id="headline">분위기로 노래찾기</p>
-                <th:block th:if="${moodLabels == null || moodLabels.isEmpty()}">
-                    <p>아직 아무도 분위기에 투표하지 않았어요 😅</p>
-                </th:block>
-                <th:block th:if="${moodLabels != null}">
-                    <div class="mood-list" th:each="topMoods : ${moodLabels}">
-                        <button class="btn btn-gold" th:text="|#${topMoods}|">분위기1</button>
-                    </div>
-                </th:block>
+                <p id="headline">앨범의 평균 점수</p>
+                <p>가사:100점</p>
+                <p>가사:100점</p>
+                <p>가사:100점</p>
+                <p>가사:100점</p>
+                <p>가사:100점</p>
+                <p>가사:100점</p>
             </div>
             <div class="info pl-list">
                 <p id="subtitle" th:text="|${album.title}의 트랙이 포함된 플리🎶|">이 트랙을 포함한 플리🎶</p>
@@ -157,13 +155,13 @@
                     <div class="more-box d-flex gap-3" th:if="${hasNext}">
                         <button id="load-more-btn" data-page="1" th:data-album-id="${album.id}" class="btn btn-gold">리뷰
                             더보기</button>
-                        <th:block th:if="${loginUser == null}">
-                            <a id="login-review" href="/login" class="btn btn-gold">로그인</a>
-                        </th:block>
                     </div>
                 </div>
                 <th:block th:if="${loginUser == null}">
-                    <p id="headline" style="padding: 10px;">로그인시 리뷰작성이 가능합니다.</p>
+                    <div class="d-flex gap-3 align-items-center">
+                        <p id="headline" style="padding: 10px; margin-bottom: 0px">로그인시 리뷰작성과 점수투표가 가능합니다.</p>
+                        <a id="login-review" href="/login" class="btn btn-gold">로그인</a>
+                    </div>
                 </th:block>
             </div>
             <!-- 페이지네이션 -->
@@ -180,35 +178,86 @@
         </div>
         <!-- 평점&리뷰 끝 -->
 
-        <!-- 분위기 -->
-        <div class="mood-card">
+        <!-- 요소 투표 -->
+        <div class="arg-card">
             <div class="chart">
-                <th:block th:if="${isMoodEmpty}">
-                    <p id="headline">아직 아무도 분위기에 투표하지 않았어요 😅</p>
-                </th:block>
-                <th:block th:if="${!isMoodEmpty}">
                     <canvas id="hexRadarChart"></canvas>
-                </th:block>
             </div>
-            <div class="mood-vote">
+            <div class="arg-vote" th:data-album-id="${album.id}" th:data-user-id="${loginUser?.id}">
                 <div class="vote-header">
-                    <p id="headline">Mood Tags</p>
+                    <p id="headline">6요소 평가</p>
                 </div>
-                <div class="moods" th:data-user-id="${loginUser != null ? loginUser.id : 0}"
-                    th:data-album-id="${album.id}" id="moodVoteContainer">
-                    <th:block th:each="tag : ${tags}">
-                        <label class="btn btn-gold mood-option"
-                            th:classappend="${userVotedMoodId == tag.id} ? 'selected'">
-                            <input type="radio" name="moodVote" th:value="${tag.id}"
-                                th:checked="${userVotedMoodId == tag.id}" hidden />
-                            <span th:text="${tag.name}">분위기</span>
-                        </label>
-                    </th:block>
+                <!-- 평가 출력 (기존 점수) -->
+                <th:block th:if="${loginUser == null}">
+                    <p id="headline">로그인후 점수투표가 가능합니다</p>
+                </th:block>
+                <div class="d-flex gap-5">
+                    <div id="vote-result-view" class="vote-result-view">
+                        <ul>
+                            <li><span>가사 : </span><span id="lyric-view">-</span></li>
+                            <li><span>사운드 : </span><span id="sound-view">-</span></li>
+                            <li><span>멜로디 : </span><span id="melody-view">-</span></li>
+                            <li><span>스토리텔링 : </span><span id="storytelling-view">-</span></li>
+                            <li><span>유기성 : </span><span id="cohesiveness-view">-</span></li>
+                            <li><span>독창성 : </span><span id="creativity-view">-</span></li>
+                        </ul>
+                        <button id="edit-btn" class="btn btn-gold">수정</button>
+                    </div>
+                    <!-- 평가 폼 (입력용) -->
+                    <form id="vote-form" class="vote-form">
+                        <div class="vote-row">
+                            <label class="vote-label">가사</label>
+                            <input type="range" id="lyric-slider" name="lyric" min="0" max="100" value="50"
+                                style="vertical-align: middle;">
+                            <input type="number" id="lyric-input" name="lyricInput" min="0" max="100" value="50">
+                            <br>
+                        </div>
+                        <div class="vote-row">
+                            <label class="vote-label">사운드</label>
+                            <input type="range" id="sound-slider" name="sound" min="0" max="100" value="50"
+                                style="vertical-align: middle;">
+                            <input type="number" id="sound-input" name="soundInput" min="0" max="100" value="50">
+                            <br>
+                        </div>
+                        <div class="vote-row">
+                            <label class="vote-label">멜로디</label>
+                            <input type="range" id="melody-slider" name="melody" min="0" max="100" value="50"
+                                style="vertical-align: middle;">
+                            <input type="number" id="melody-input" name="melodyInput" min="0" max="100" value="50">
+                            <br>
+                        </div>
+                        <div class="vote-row">
+                            <label class="vote-label">스토리텔링</label>
+                            <input type="range" id="storytelling-slider" name="storytelling" min="0" max="100"
+                                value="50" style="vertical-align: middle;">
+                            <input type="number" id="storytelling-input" name="storytellingInput" min="0" max="100"
+                                value="50">
+                            <br>
+                        </div>
+                        <div class="vote-row">
+                            <label class="vote-label">유기성</label>
+                            <input type="range" id="cohesiveness-slider" name="cohesiveness" min="0" max="100"
+                                value="50" style="vertical-align: middle;">
+                            <input type="number" id="cohesiveness-input" name="cohesivenessInput" min="0" max="100"
+                                value="50">
+                            <br>
+                        </div>
+                        <div class="vote-row">
+                            <label class="vote-label">독창성</label>
+                            <input type="range" id="creativity-slider" name="creativity" min="0" max="100" value="50"
+                                style="vertical-align: middle;">
+                            <input type="number" id="creativity-input" name="creativityInput" min="0" max="100"
+                                value="50">
+                            <br>
+                        </div>
+                        <button type="button" id="save-btn" class="btn btn-gold">저장</button>
+                    </form>
                 </div>
-                <button class="btn btn-gold" id="submitMoodVote" th:if="${loginUser != null}">투표하기</button>
+                <div></div>
             </div>
+
         </div>
-        <!-- 분위기 끝 -->
+        <!-- 요소 투표 끝 -->
 
 
     </div>
@@ -345,7 +394,7 @@
                     contentType: 'application/json',
                     data: JSON.stringify({ content, rating }),
                     success: function () {
-                       Swal.fire({
+                        Swal.fire({
                             title: '성공',
                             text: '리뷰를 등록 하였습니다.',
                             icon: 'success',
@@ -601,82 +650,122 @@
 
     <!-- 분위기, 앨범 관련 투표 -->
     <script>
-        // 라디오버튼 체크시
-        $(document).on('change', 'input[name="moodVote"]', function () {
-            $('.mood-option').removeClass('selected pop-heart'); // 모든 버튼 초기화
+        // 6요소 투표
+        $(document).ready(function () {
+            const $argVote = $('.arg-vote');
+            const albumId = $argVote.data('album-id');
+            const userId = $argVote.data('user-id');
+            const fields = ['lyric', 'sound', 'melody', 'storytelling', 'cohesiveness', 'creativity'];
+            let isUpdate = false;
+            let isEditing = false; // 폼 열림 여부
 
-            const $selected = $(this).closest('.mood-option');
-            $selected.addClass('selected pop-heart'); // 선택된 버튼에 클래스 추가
-
-            setTimeout(() => $selected.removeClass('pop-heart'), 300);
-        });
-
-        // 분위기 투표
-        $(document).on('click', '#submitMoodVote', function () {
-            const selectedMood = $('input[name="moodVote"]:checked').val();
-            if (!selectedMood) {
-                Swal.fire('분위기를 선택해주세요!');
-                return;
+            function syncSliderAndInput(field) {
+                $(`#${field}-slider`).on('input', function () {
+                    $(`#${field}-input`).val(this.value);
+                });
+                $(`#${field}-input`).on('input', function () {
+                    let val = parseInt(this.value) || 0;
+                    val = Math.max(0, Math.min(100, val));
+                    $(`#${field}-slider`).val(val);
+                    $(this).val(val);
+                });
             }
 
-            const $container = $('#moodVoteContainer');
-            const userId = $container.data('user-id');
-            const albumId = $container.data('album-id');
+            fields.forEach(syncSliderAndInput);
 
-            Swal.fire({
-                title: '이 분위기로 투표할까요?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: '네',
-                cancelButtonText: '아니오'
-            }).then(result => {
-                if (!result.isConfirmed) return;
+            $('#vote-result-view').hide();
+            $('#vote-form').hide();
+
+            if (!userId) return;
+
+            // 유저 평가 불러오기
+            $.get('/albums/chart/user', { userId, albumId }, function (data) {
+                $('#vote-result-view').show();
+
+                if (data && data.lyric != null) {
+                    isUpdate = true;
+                    fields.forEach(field => {
+                        $(`#${field}-view`).text(data[field]);
+                        $(`#${field}-slider`).val(data[field]);
+                        $(`#${field}-input`).val(data[field]);
+                    });
+                    $('#edit-btn').text('수정하기');
+                } else {
+                    $('#edit-btn').text('투표하기');
+                    fields.forEach(field => $(`#${field}-view`).text('-'));
+                }
+            });
+
+            // 수정 / 취소 버튼
+            $('#edit-btn').on('click', function () {
+                const $form = $('#vote-form');
+
+                if (isEditing) {
+                    // 닫기
+                    $form.removeClass('active');
+                    $('#edit-btn').text(isUpdate ? '수정하기' : '투표하기');
+                    isEditing = false;
+
+                    // 트랜지션 끝난 후에 숨김 처리
+                    setTimeout(() => $form.hide(), 400);
+                } else {
+                    $form.show(); // 먼저 block 처리
+                    void $form[0].offsetWidth; // ✅ reflow 강제 (transition 동작 유도)
+                    $form.addClass('active');
+                    $('#edit-btn').text('취소');
+                    isEditing = true;
+                }
+            });
+
+            // 저장
+            $('#save-btn').on('click', function () {
+                const payload = { albumId, userId };
+                fields.forEach(field => {
+                    payload[field] = parseInt($(`#${field}-input`).val()) || 0;
+                });
 
                 $.ajax({
-                    url: '/albums/vote-mood',
                     type: 'POST',
+                    url: '/albums/vote',
                     contentType: 'application/json',
-                    data: JSON.stringify({
-                        userId: userId,
-                        albumId: albumId,
-                        mood: selectedMood
-                    }),
-                    success: function (data) {
-                        const votedMoodId = data.votedMoodId;
-                        const tags = data.moods;
-                        const values = data.values;
-                        const labels = data.labels;
+                    data: JSON.stringify(payload),
+                    success: function () {
+                        const msg = isUpdate ? '수정 완료!' : '투표 완료!';
+                        isUpdate = true;
 
-                        // ✅ 무드 버튼 UI 갱신
-                        $container.empty();
-                        tags.forEach(tag => {
-                            const selected = (tag.id === votedMoodId);
-                            const html = `
-                        <label class="btn btn-gold mood-option ${selected ? 'selected pop-heart' : ''}">
-                            <input type="radio" name="moodVote" value="${tag.id}" ${selected ? 'checked' : ''} hidden />
-                            <span>${tag.name}</span>
-                        </label>
-                    `;
-                            $container.append(html);
+                        fields.forEach(field => {
+                            $(`#${field}-view`).text(payload[field]);
+                            $(`#${field}-slider`).val(payload[field]);
+                            $(`#${field}-input`).val(payload[field]);
                         });
 
-                        // ✅ 차트 갱신
-                        const $chartArea = $('.chart');
-                        if (!Array.isArray(values) || values.length === 0) {
-                            $chartArea.html(`<p id="headline">아직 아무도 분위기에 투표하지 않았어요 😅</p>`);
-                        } else {
-                            $chartArea.html(`<canvas id="hexRadarChart"></canvas>`);
-                            renderMoodChart(labels, values);
-                        }
+                        $('#vote-result-view').show();
 
-                        setTimeout(() => {
-                            $('.mood-option').removeClass('pop-heart');
-                        }, 300);
+                        // 폼 슬라이드로 닫기
+                        const $form = $('#vote-form');
+                        $form.removeClass('active');
+                        setTimeout(() => $form.hide(), 400);
+                        $('#edit-btn').text('수정하기');
+                        isEditing = false;
 
-                        Swal.fire('투표 완료!');
+                        // 차트 갱신
+                        $.get('/albums/chart/average', { albumId }, function (avg) {
+                            const argLabels = ['가사', '사운드', '멜로디', '스토리텔링', '유기성', '독창성'];
+                            const argScores = [
+                                avg.lyric ?? 0,
+                                avg.sound ?? 0,
+                                avg.melody ?? 0,
+                                avg.storytelling ?? 0,
+                                avg.cohesiveness ?? 0,
+                                avg.creativity ?? 0
+                            ];
+                            renderArgChart(argLabels, argScores);
+                        });
+
+                        Swal.fire(msg, '', 'success');
                     },
                     error: function () {
-                        Swal.fire('투표에 실패했습니다.');
+                        Swal.fire('저장 실패', '오류가 발생했습니다.', 'error');
                     }
                 });
             });
@@ -717,31 +806,22 @@
 
     <!-- 육각 그래프 스크립트 -->
     <script>
-        // 육각 차트
-        function renderMoodChart(labels, values) {
+        function renderArgChart(labels, values) {
             const ctx = document.getElementById('hexRadarChart').getContext('2d');
 
-            if (window.moodChartInstance) {
-                window.moodChartInstance.destroy();
+            if (window.argChartInstance) {
+                window.argChartInstance.destroy();
             }
 
             const maxValue = Math.max(...values);
-            const roundedMax = Math.ceil(maxValue / 10) * 10;
+            const roundedMax = Math.ceil(maxValue / 10) * 10 || 100;
 
-            // ✅ 6개로 고정 (많으면 자르고, 적으면 채우기)
-            labels = labels.slice(0, 6);
-            values = values.slice(0, 6);
-            while (labels.length < 6) {
-                labels.push('');
-                values.push(0);
-            }
-
-            window.moodChartInstance = new Chart(ctx, {
+            window.argChartInstance = new Chart(ctx, {
                 type: 'radar',
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Mood Votes',
+                        label: '평균 점수',
                         data: values,
                         backgroundColor: 'rgba(212, 185, 127, 0.2)',
                         borderColor: '#D4B97F',
@@ -755,30 +835,32 @@
                         r: {
                             grid: { color: '#D4B97F' },
                             angleLines: { color: '#D4B97F' },
-                            pointLabels: { color: '#D4B97F' },
+                            pointLabels: {
+                                color: '#D4B97F',
+                                font: { size: 16, weight: 'bold' }
+                            },
                             ticks: {
-                                stepSize: Math.ceil(roundedMax / 5), // 4단계로 분할
+                                stepSize: 20,
                                 backdropColor: 'transparent'
                             },
                             min: 0,
-                            max: roundedMax
+                            max: 100
                         }
                     },
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    }
+                    plugins: { legend: { display: false } }
                 }
             });
         }
+
     </script>
 
-    <script th:inline="javascript">
-        const moodLabels = /*[[${moodLabels}]]*/[];
-        const moodValues = /*[[${moodValues}]]*/[];
 
-        renderMoodChart(moodLabels, moodValues);
+
+    <script th:inline="javascript">
+        const argLabels = /*[[${argLabels}]]*/[];
+        const argScores = /*[[${argScores}]]*/[];
+
+        renderArgChart(argLabels, argScores);
     </script>
 
 </body>

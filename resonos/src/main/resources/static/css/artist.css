@@ -19,6 +19,27 @@ body {
 .album:hover .album-img img {          /* 이미지 회전 */
   animation: spin360 6s linear infinite;
 }
+/* 좋아요 애니메이션 */
+.like-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  padding: 4px;
+}
+
+.pop-heart {
+  animation: pop 0.3s ease;
+}
+
+@keyframes pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.6); }
+  100% { transform: scale(1); }
+}
+/* 좋아요 끝 */
+
 /* 컨테이너 */
 .album-img {
   position: relative;          /* 안쪽 절대좌표 기준 */
@@ -65,9 +86,8 @@ body {
     font-weight: bold;
     font-size: 1.6rem;
 }
-
 .btn-gold:hover,
-.btn-gold:checked {
+.btn-gold.selected {
     background: var(--main-color);
     color: var(--background-color);
 }
@@ -220,6 +240,14 @@ img {
     min-width: 100px; 
     justify-content: start;
 }
+.recent-review > p:first-child,
+.mood-vote p ,
+.simillar-artist > p:first-child, 
+.album-moods > p:first-child, 
+.concert-schedule > p:first-child {
+    margin-bottom: 5px;
+    border-bottom: 1px solid var(--main-color);
+}
 .chart {
     width: 400px;
     height: 400px;
@@ -227,6 +255,7 @@ img {
     border: 2px solid var(--main-color);
     overflow: hidden;
     padding: 10px;
+    display: flex;
 }
 .mood-card {
     max-width: 1350px;
@@ -242,6 +271,7 @@ img {
     display: flex;
     height: 100%;
     padding: 5px;
+    gap: 5px;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
@@ -252,6 +282,11 @@ img {
     flex-direction: column;
     height: 400px;
     align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
 }
 .moods {
     display: flex;
@@ -271,6 +306,16 @@ img {
 }
 .moods .btn{
   flex:0 0 auto;           /* grow 0, shrink 0, basis auto */
+}
+.vote-header {
+    width: 100%;
+    margin-bottom: 10px;
+}
+.vote-header p {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* 드래그 슬라이드 css */

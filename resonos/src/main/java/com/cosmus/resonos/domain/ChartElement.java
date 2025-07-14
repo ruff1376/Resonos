@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class ChartElement {
     private Long id;
+    private Long userId;
     private Integer lyric;
     private Integer sound;
     private Integer melody;

@@ -1,5 +1,6 @@
 package com.cosmus.resonos.controller;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,30 +23,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cosmus.resonos.domain.Album;
-import com.cosmus.resonos.domain.AlbumMoodVote;
 import com.cosmus.resonos.domain.AlbumReview;
 import com.cosmus.resonos.domain.AlbumScore;
 import com.cosmus.resonos.domain.Artist;
+import com.cosmus.resonos.domain.ChartElement;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.LikedAlbum;
-import com.cosmus.resonos.domain.MoodStat;
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Track;
-import com.cosmus.resonos.domain.TrackReview;
 import com.cosmus.resonos.domain.Users;
-import com.cosmus.resonos.service.AlbumMoodVoteService;
 import com.cosmus.resonos.service.AlbumReviewService;
 import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.ArtistService;
+import com.cosmus.resonos.service.ChartElementService;
 import com.cosmus.resonos.service.LikedAlbumService;
-import com.cosmus.resonos.service.MoodStatService;
 import com.cosmus.resonos.service.ReviewLikeService;
-import com.cosmus.resonos.service.TagService;
 import com.cosmus.resonos.service.TrackService;
 import com.cosmus.resonos.validation.ReviewForm;
 
 import lombok.extern.slf4j.Slf4j;
-
 
 @Slf4j
 @Controller
@@ -63,27 +59,21 @@ public class AlbumController {
     @Autowired
     private ReviewLikeService reviewLikeService;
     @Autowired
-    private MoodStatService moodStatService;
-    @Autowired
     private LikedAlbumService likedAlbumService;
     @Autowired
-    private TagService tagService;
-    @Autowired
-    private AlbumMoodVoteService albumMoodVoteService;
+    private ChartElementService chartElementService;
 
-    //앨범
+    // 앨범
     @GetMapping
     public String albumInfo(@RequestParam("id") String id, Model model,
-                            @AuthenticationPrincipal CustomUser principal) throws Exception {
+            @AuthenticationPrincipal CustomUser principal) throws Exception {
         Users loginUser = null;
-        if( principal != null ) {
-            model.addAttribute("loginUser", loginUser = principal.getUser() );
+        if (principal != null) {
+            model.addAttribute("loginUser", loginUser = principal.getUser());
             boolean isAdmin = principal.getAuthorities()
                     .stream()
-                    .anyMatch( a -> a.getAuthority().equals("ROLE_ADMIN"));
+                    .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
             model.addAttribute("isAdmin", isAdmin);
-            Long userVotedMoodId = albumMoodVoteService.getUserVotedMoodId(loginUser.getId(), id);
-            model.addAttribute("userVotedMoodId", userVotedMoodId);
             // ✅ 좋아요 여부 체크
             boolean isAlbumLiked = likedAlbumService.isLikedByUser(loginUser.getId(), id);
             model.addAttribute("isAlbumLikedByUser", isAlbumLiked);
@@ -115,12 +105,26 @@ public class AlbumController {
         Pagination pagination = new Pagination(page, size, 10, totalCount);
         boolean hasNext = pagination.getLast() > page;
 
-        List<MoodStat> moodStats = moodStatService.getTop6MoodsByAlbumId(id);
-        boolean isMoodEmpty = (moodStats == null || moodStats.isEmpty());
-        List<String> moodLabels = moodStats.stream().map(MoodStat::getMoodName).toList();
-        List<Integer> moodValues = moodStats.stream().map(MoodStat::getVoteCount).toList();
-
         int likeCount = likedAlbumService.getAlbumLikeCount(id);
+
+        Map<String, Integer> argValues = chartElementService.getAverageScoresByAlbumId(id);
+
+        // 요소 이름 리스트 (순서 고정)
+        List<String> argLabels = Arrays.asList("가사", "사운드", "멜로디", "스토리텔링", "유기성", "독창성");
+
+        // 요소 점수 리스트
+        List<Integer> argScores = Arrays.asList(
+                argValues.getOrDefault("lyric", 0),
+                argValues.getOrDefault("sound", 0),
+                argValues.getOrDefault("melody", 0),
+                argValues.getOrDefault("storytelling", 0),
+                argValues.getOrDefault("cohesiveness", 0),
+                argValues.getOrDefault("creativity", 0));
+
+        model.addAttribute("argLabels", argLabels);
+        model.addAttribute("argScores", argScores);
+
+
 
         model.addAttribute("album", album);
         model.addAttribute("artist", artist);
@@ -130,11 +134,7 @@ public class AlbumController {
         model.addAttribute("score", score);
         model.addAttribute("review", reviews);
         model.addAttribute("hasNext", hasNext);
-        model.addAttribute("tags", tagService.list());
         model.addAttribute("reviewType", "ALBUM");
-        model.addAttribute("isMoodEmpty", isMoodEmpty);
-        model.addAttribute("moodLabels", moodLabels);
-        model.addAttribute("moodValues", moodValues);
         model.addAttribute("albumLikeCount", likeCount);
 
         if (album == null) {
@@ -153,8 +153,8 @@ public class AlbumController {
 
     @GetMapping("/{albumId}/my-review-frag")
     public String getMyReviewFragment(@PathVariable("albumId") String albumId,
-                                    @AuthenticationPrincipal CustomUser user,
-                                    Model model) throws Exception {
+            @AuthenticationPrincipal CustomUser user,
+            Model model) throws Exception {
         Long userId = user.getId(); // 로그인 유저 ID
         AlbumReview myReview = albumReviewService.getLastestReview(albumId, userId);
         Track track = trackService.selectById(albumId);
@@ -169,13 +169,12 @@ public class AlbumController {
         return "review/reviewFrag :: reviewItems";
     }
 
-
     @GetMapping("/{albumId}/reviews/more")
     public String loadMoreReviews(@PathVariable("albumId") String albumId,
-                                  @RequestParam(name = "page", defaultValue = "1") int page,
-                                  @RequestParam(name = "size", defaultValue = "5") int size,
-                                  Model model,
-                                  @AuthenticationPrincipal CustomUser principal) throws Exception {
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            Model model,
+            @AuthenticationPrincipal CustomUser principal) throws Exception {
 
         List<AlbumReview> allReviews = albumReviewService.getMoreReviews(albumId, page, size);
         boolean hasNext = allReviews.size() > size;
@@ -183,13 +182,15 @@ public class AlbumController {
 
         if (principal != null && !reviews.isEmpty()) {
             List<Long> reviewIds = reviews.stream().map(AlbumReview::getId).toList();
-            List<Long> likedIds = reviewLikeService.getUserLikedReviewIds("ALBUM", reviewIds, principal.getUser().getId());
+            List<Long> likedIds = reviewLikeService.getUserLikedReviewIds("ALBUM", reviewIds,
+                    principal.getUser().getId());
             for (AlbumReview r : reviews) {
                 r.setIsLikedByCurrentUser(likedIds.contains(r.getId()));
             }
         }
 
         Album album = albumService.select(albumId);
+
         model.addAttribute("hasNext", hasNext);
         model.addAttribute("album", album);
         model.addAttribute("review", reviews);
@@ -204,8 +205,8 @@ public class AlbumController {
     @PostMapping
     @ResponseBody
     public ResponseEntity<?> create(@RequestParam("id") String albumId,
-                                    @RequestBody ReviewForm form,
-                                    @AuthenticationPrincipal CustomUser user) {
+            @RequestBody ReviewForm form,
+            @AuthenticationPrincipal CustomUser user) {
         try {
             AlbumReview review = albumReviewService.write(albumId, form, user.getUser());
             return ResponseEntity.ok(review);
@@ -218,8 +219,8 @@ public class AlbumController {
     @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, 'ALBUM', authentication)")
     @ResponseBody
     public ResponseEntity<?> update(@PathVariable("id") String albumId,
-                                    @PathVariable("reviewId") Long reviewId,
-                                    @RequestBody ReviewForm form) {
+            @PathVariable("reviewId") Long reviewId,
+            @RequestBody ReviewForm form) {
         boolean success = albumReviewService.update(reviewId, form);
         if (!success) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("수정 실패");
@@ -232,7 +233,7 @@ public class AlbumController {
     @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, 'ALBUM', authentication)")
     @ResponseBody
     public ResponseEntity<Void> delete(@PathVariable("id") String albumId,
-                                       @PathVariable("reviewId") Long reviewId) {
+            @PathVariable("reviewId") Long reviewId) {
         albumReviewService.delete(reviewId);
         return ResponseEntity.noContent().build();
     }
@@ -240,7 +241,7 @@ public class AlbumController {
     @PostMapping("/album-reviews/{reviewId}/like")
     @ResponseBody
     public ResponseEntity<?> toggleReviewLike(@PathVariable("reviewId") Long reviewId,
-                                              @AuthenticationPrincipal CustomUser user) {
+            @AuthenticationPrincipal CustomUser user) {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
         }
@@ -253,8 +254,8 @@ public class AlbumController {
     @PostMapping("/reviews/{reviewType}/{reviewId}/report")
     @ResponseBody
     public ResponseEntity<?> reportReview(@PathVariable("reviewType") String reviewType,
-                                          @PathVariable("reviewId") Long reviewId,
-                                          @AuthenticationPrincipal CustomUser user) {
+            @PathVariable("reviewId") Long reviewId,
+            @AuthenticationPrincipal CustomUser user) {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
         }
@@ -267,25 +268,6 @@ public class AlbumController {
         }
     }
 
-    @PostMapping("/vote-mood")
-    @ResponseBody
-    public ResponseEntity<?> voteMood(@RequestBody AlbumMoodVote request) throws Exception {
-        albumMoodVoteService.saveOrUpdateVote(request.getUserId(), request.getAlbumId(), request.getMood());
-        if (request.getUserId() == null || request.getAlbumId() == null || request.getMood() == null) {
-            return ResponseEntity.badRequest().body("필수 데이터 누락");
-        }
-        Long votedMoodId = albumMoodVoteService.getUserVotedMoodId(request.getUserId(), request.getAlbumId());
-        List<MoodStat> moodStats = moodStatService.getTop6MoodsByAlbumId(request.getAlbumId());
-        List<String> moodLabels = moodStats.stream().map(MoodStat::getMoodName).toList();
-        List<Integer> moodValues = moodStats.stream().map(MoodStat::getVoteCount).toList();
-        Map<String, Object> response = new HashMap<>();
-        response.put("votedMoodId", votedMoodId);
-        response.put("labels", moodLabels);
-        response.put("values", moodValues);
-        response.put("moods", tagService.list());
-        return ResponseEntity.ok(response);
-    }
-
     @PostMapping("/toggle-like")
     @ResponseBody
     public ResponseEntity<?> toggleAlbumLike(@RequestBody LikedAlbum dto) throws Exception {
@@ -296,6 +278,26 @@ public class AlbumController {
         result.put("count", count);
         return ResponseEntity.ok(result);
     }
+
+
+    @PostMapping("/vote")
+    public ResponseEntity<?> saveOrUpdateVote(@RequestBody ChartElement element) {
+        chartElementService.saveOrUpdate(element);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/chart/user")
+    public ResponseEntity<ChartElement> getUserVote(
+            @RequestParam("userId") Long userId,
+            @RequestParam("albumId") String albumId) {
+        ChartElement element = chartElementService.getUserVote(userId, albumId);
+        return ResponseEntity.ok(element != null ? element : new ChartElement());
+    }
+
+    @GetMapping("/chart/average")
+    public ResponseEntity<Map<String, Integer>> getAverageScores(@RequestParam("albumId") String albumId) {
+        Map<String, Integer> averages = chartElementService.getAverageScoresByAlbumId(albumId);
+        return ResponseEntity.ok(averages);
 
     /**
      * 비동기 좋아요 한 앨범(키워드 검색)
@@ -315,5 +317,6 @@ public class AlbumController {
             return new ResponseEntity<>(albumList, HttpStatus.OK);
 
         return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 }

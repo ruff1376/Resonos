@@ -22,14 +22,14 @@
         LIMIT 6
     </select>
 
-    <!-- 앨범아이디로 무드 상위6개 -->
-    <select id="getTop6MoodsByAlbumId" resultMap="MoodStatMap">
+    <!-- 아티스트아이디로 무드 상위6개 -->
+    <select id="getTop6MoodsByArtistId" resultMap="MoodStatMap">
         SELECT 
             tg.name AS mood_name,
             COUNT(*) AS vote_count
-        FROM album_mood_vote a
+        FROM artist_mood_vote a
         JOIN tag tg ON a.mood = tg.id
-        WHERE a.album_id = #{albumId}
+        WHERE a.artist_id = #{artistId}
         GROUP BY tg.name
         ORDER BY vote_count DESC
         LIMIT 6

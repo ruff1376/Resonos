@@ -20,8 +20,8 @@ public class MoodStatServiceImpl implements MoodStatService {
     }
 
     @Override
-    public List<MoodStat> getTop6MoodsByAlbumId(String albumId) {
-        return moodStatMapper.getTop6MoodsByAlbumId(albumId);
+    public List<MoodStat> getTop6MoodsByArtistId(String artistId) {
+        return moodStatMapper.getTop6MoodsByArtistId(artistId);
     }
     
     

@@ -18,15 +18,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cosmus.resonos.domain.Album;
+import com.cosmus.resonos.domain.ArtistMoodVote;
 import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.domain.ArtistFollow;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.LikedTrack;
+import com.cosmus.resonos.domain.MoodStat;
 import com.cosmus.resonos.domain.Track;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.ArtistFollowService;
+import com.cosmus.resonos.service.ArtistMoodVoteService;
 import com.cosmus.resonos.service.ArtistService;
+import com.cosmus.resonos.service.MoodStatService;
+import com.cosmus.resonos.service.TagService;
 import com.cosmus.resonos.service.TrackService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +51,12 @@ public class ArtistController {
     private TrackService trackService;
     @Autowired
     private ArtistFollowService artistFollowService;
+    @Autowired
+    private ArtistMoodVoteService artistMoodVoteService;
+    @Autowired
+    private MoodStatService moodStatService;
+    @Autowired
+    private TagService tagService;
 
     // 아티스트 화면
     @GetMapping
@@ -59,6 +70,8 @@ public class ArtistController {
             // 팔로우 여부 체크
             boolean isArtistFollowed = artistFollowService.isLikedByUser(loginUser.getId(), id);
             model.addAttribute("isArtistFollowed", isArtistFollowed);
+            Long userVotedMoodId = artistMoodVoteService.getUserVotedMoodId(loginUser.getId(), id);
+            model.addAttribute("userVotedMoodId", userVotedMoodId);
         } else {
             model.addAttribute("isArtistFollowed", false);
         }
@@ -72,12 +85,25 @@ public class ArtistController {
         List<Track> top7List = trackService.selectTop7TracksByArtist(id);
         String mv_url = artistService.selectTopMvUrlByArtist(id);
 
+
+        List<MoodStat> moodStats = moodStatService.getTop6MoodsByArtistId(id);
+        boolean isMoodEmpty = (moodStats == null || moodStats.isEmpty());
+        List<String> moodLabels = moodStats.stream().map(MoodStat::getMoodName).toList();
+        List<Integer> moodValues = moodStats.stream().map(MoodStat::getVoteCount).toList();
+        
+
+
         model.addAttribute("artist", artist);
         model.addAttribute("mv", mv_url);
         model.addAttribute("albums", albums);
         model.addAttribute("albumCount", albumCount);
         model.addAttribute("TOP7", top7List);
         model.addAttribute("trackCount", trackCount);
+        model.addAttribute("isMoodEmpty", isMoodEmpty);
+        model.addAttribute("moodLabels", moodLabels);
+        model.addAttribute("moodValues", moodValues);
+        model.addAttribute("tags", tagService.list());
+
         if (artist == null) {
             return "redirect:/artists?error=notfound";
         }
@@ -97,6 +123,25 @@ public class ArtistController {
         return ResponseEntity.ok(result);
     }
 
+
+    @PostMapping("/vote-mood")
+    @ResponseBody
+    public ResponseEntity<?> voteMood(@RequestBody ArtistMoodVote request) throws Exception {
+        artistMoodVoteService.saveOrUpdateVote(request.getUserId(), request.getArtistId(), request.getMood());
+        if (request.getUserId() == null || request.getArtistId() == null || request.getMood() == null) {
+            return ResponseEntity.badRequest().body("필수 데이터 누락");
+        }
+        Long votedMoodId = artistMoodVoteService.getUserVotedMoodId(request.getUserId(), request.getArtistId());
+        List<MoodStat> moodStats = moodStatService.getTop6MoodsByArtistId(request.getArtistId());
+        List<String> moodLabels = moodStats.stream().map(MoodStat::getMoodName).toList();
+        List<Integer> moodValues = moodStats.stream().map(MoodStat::getVoteCount).toList();
+        Map<String, Object> response = new HashMap<>();
+        response.put("votedMoodId", votedMoodId);
+        response.put("labels", moodLabels);
+        response.put("values", moodValues);
+        response.put("moods", tagService.list());
+        return ResponseEntity.ok(response);
+
     /**
      * 비동기 팔로우 아티스트 검색
      * @param data
@@ -115,6 +160,7 @@ public class ArtistController {
             return new ResponseEntity<>(artistList, HttpStatus.OK);
 
         return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 
 }

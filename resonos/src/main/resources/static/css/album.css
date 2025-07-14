@@ -380,6 +380,7 @@ img {
     gap: 10px;
 }
 .top5track > p:first-child,
+.arg-vote p ,
 .mood-vote p ,
 .review-card > p:first-child, 
 .album-moods > p:first-child, 
@@ -435,6 +436,16 @@ img {
     padding: 10px;
     display: flex;
 }
+.arg-card {
+    max-width: 1350px;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+    gap: 30px;
+    padding-left: 20px;
+}
 .mood-card {
     max-width: 1350px;
     width: 100%;
@@ -445,6 +456,15 @@ img {
     gap: 30px;
     padding-left: 20px;
 }
+.arg-list {
+    display: flex;
+    height: 100%;
+    padding: 5px;
+    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
 .mood-list {
     display: flex;
     height: 100%;
@@ -454,17 +474,41 @@ img {
     justify-content: space-between;
     align-items: center;
 }
+.arg-vote {
+    display: flex;
+    flex:1;
+    flex-direction: column;
+    height: 400px;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+}
 .mood-vote {
     display: flex;
     flex:1;
     flex-direction: column;
     height: 400px;
     align-items: center;
+    justify-content: space-between;
     padding-left: 10px;
     padding-right: 10px;
     padding-bottom: 10px;
     border-radius: 20px;
     border: 2px solid var(--main-color);
+}
+.args {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    height: 100%;
+    width: 100%;
+    align-items:flex-start;
+    justify-content:flex-start;
+    align-content: flex-start;
 }
 .moods {
     display: flex;
@@ -476,16 +520,24 @@ img {
     justify-content:flex-start;
     align-content: flex-start;
 }
+.arg-vote button {
+    width: 100%;
+    max-width: 470px;
+    align-items: center;
+    justify-content: center;
+}
 .mood-vote button {
     width: 100%;
     max-width: 470px;
     align-items: center;
     justify-content: center;
 }
+.args .btn{
+  flex:0 0 auto;           /* grow 0, shrink 0, basis auto */
+}
 .moods .btn{
   flex:0 0 auto;           /* grow 0, shrink 0, basis auto */
 }
-
 /* 애니메이션 */
 @keyframes spin360 {
   from { transform: rotate(0deg); }
@@ -579,4 +631,147 @@ img {
   .track-graphy {
     display: none !important;
   }
+}
+
+/* 점수 슬라이더 css */
+.arg-card input[type="range"] {
+  -webkit-appearance: none;
+  width: 200px;
+  height: 10px;
+  background: transparent;
+  border: 2px solid var(--main-color);
+  border-radius: 5px;
+  outline: none;
+}
+
+/* 트랙 (전체 라인) */
+.arg-card input[type="range"]::-webkit-slider-runnable-track {
+  height: 6px;
+  background: var(--main-color);
+  border-radius: 5px;
+}
+
+/* 슬라이더 핸들 */
+.arg-card input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--main-color);
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -4px; /* 가운데 정렬 보정 */
+}
+
+/* Firefox 대응 */
+.arg-card input[type="range"]::-moz-range-track {
+  height: 6px;
+  background: var(--main-color);
+}
+.arg-card input[type="range"]::-moz-range-thumb {
+  background: var(--main-color);
+  border: 2px solid white;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+.arg-card input[type="number"] {
+  width: 40px;
+  background-color: transparent;
+  color: white;
+  border: 2px solid var(--main-color);
+  border-radius: 5px;
+  text-align: center;
+  outline: none;
+}
+
+/* Chrome & Edge에서 숫자 스핀 제거 */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox에서 숫자 스핀 제거 */
+.arg-card input[type="number"] {
+  -moz-appearance: textfield;
+}
+.vote-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 360px;
+    justify-content: space-between;
+    height: 280px;
+}
+.vote-row {
+  display: flex;
+  align-items: center;
+}
+.vote-label {
+  min-width: 90px;
+  color: white;
+  font-weight: bold;
+}
+.vote-row input[type="number"] {
+    margin-left: 10px;
+}
+.vote-result-view {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    font-weight: bold;
+    color: var(--main-color);
+    height: 280px;
+    max-width: 135px;
+
+}
+.vote-result-view ul {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 !important;
+    height: 230px;
+}
+.vote-result-view>ul li {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 10px;
+    height: 28px;
+}
+.vote-result-view>ul li span:first-child {
+    width: 95px;
+    color: white;
+}
+.vote-result-view>ul li span:last-child {
+    width: 30px;
+    color: var(--main-color);
+}
+/* 슬라이드바 박스 슬라이드 */
+.vote-form {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: all 0.4s ease;
+  display: none;
+}
+
+.vote-form.active {
+  display: block;
+  opacity: 1;
+  transform: translateX(0);
+}
+.vote-form.slide-in {
+    display: block;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* 요소 간 간격 */
+.vote-row {
+    margin-bottom: 13px;
+    min-width: 100px;
 }

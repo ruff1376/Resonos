@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.cosmus.resonos.service.AlbumMoodVoteService;
 import com.cosmus.resonos.service.TrackMoodVoteService;
+import com.cosmus.resonos.service.ArtistMoodVoteService;
 import com.cosmus.resonos.service.ArtistVoteStatsService;
 
 @Controller
@@ -22,7 +22,7 @@ public class AdminVoteController {
     private TrackMoodVoteService trackMoodVoteService;
 
     @Autowired
-    private AlbumMoodVoteService albumMoodVoteService;
+    private ArtistMoodVoteService artistMoodVoteService;
 
     @Autowired
     private ArtistVoteStatsService artistVoteStatsService; 
@@ -34,7 +34,7 @@ public class AdminVoteController {
     ) {
         List<Map<String, Object>> stats = null;
         if ("album".equals(tab)) {
-            stats = albumMoodVoteService.getAlbumMoodStats();
+            stats = artistMoodVoteService.getArtistMoodStats();
         } else if ("artist".equals(tab)) {
             stats = artistVoteStatsService.getArtistMoodVoteStats();
         } else { 
