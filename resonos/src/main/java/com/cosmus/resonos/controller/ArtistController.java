@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -70,7 +71,7 @@ public class ArtistController {
         int trackCount = trackService.countTracksByArtist(id);
         List<Track> top7List = trackService.selectTop7TracksByArtist(id);
         String mv_url = artistService.selectTopMvUrlByArtist(id);
-        
+
         model.addAttribute("artist", artist);
         model.addAttribute("mv", mv_url);
         model.addAttribute("albums", albums);
@@ -94,6 +95,26 @@ public class ArtistController {
         result.put("count", count);
 
         return ResponseEntity.ok(result);
+    }
+
+    /**
+     * 비동기 팔로우 아티스트 검색
+     * @param data
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/search")
+    public ResponseEntity<?> searchMyAlbums(
+        @RequestBody Map<String, Object> data
+    ) throws Exception {
+        Long userId = Long.valueOf(data.get("userId").toString());
+        String keyword = data.get("keyword").toString();
+
+        List<Artist> artistList = artistService.followingArtists(userId, keyword);
+        if(artistList != null)
+            return new ResponseEntity<>(artistList, HttpStatus.OK);
+
+        return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

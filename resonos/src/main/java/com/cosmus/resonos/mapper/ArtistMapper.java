@@ -43,5 +43,5 @@ public interface ArtistMapper {
     // 팔로우 한 아티스트 3건 조회
     public List<Artist> followingArtistsTop3(@Param("id") Long id) throws Exception;
     // 팔로우 한 아티스트 전체 조회
-    public List<Artist> followingArtists(@Param("id") Long id) throws Exception;
+    public List<Artist> followingArtists(@Param("id") Long id, @Param("keyword") String keyword) throws Exception;
 }

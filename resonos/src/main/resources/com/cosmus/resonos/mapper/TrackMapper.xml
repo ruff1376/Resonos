@@ -379,7 +379,28 @@
       INNER JOIN album a ON t.album_id = a.id
       INNER JOIN artist art ON t.artist_id = art.id
     WHERE lt.user_id = #{id}
-    ORDER BY lt.created_at DESC
+    <if test="keyword != null and keyword != ''">
+      AND (
+        t.title LIKE CONCAT('%', #{keyword}, '%')
+        OR art.name LIKE CONCAT('%', #{keyword}, '%')
+      )
+    </if>
+    ORDER BY
+    <choose>
+      <when test="keyword != null and keyword != ''">
+        CASE
+          WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 0       -- 제목이 keyword로 시작
+          WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 1  -- 제목에 keyword 포함
+          WHEN art.name LIKE CONCAT(#{keyword}, '%') THEN 2      -- 아티스트명이 keyword로 시작
+          WHEN art.name LIKE CONCAT('%', #{keyword}, '%') THEN 3 -- 아티스트명에 keyword 포함
+          ELSE 4
+        END,
+        lt.created_at DESC
+      </when>
+      <otherwise>
+        lt.created_at DESC
+      </otherwise>
+    </choose>
   </select>
 
   <!-- 페이징 전체 데이터 -->

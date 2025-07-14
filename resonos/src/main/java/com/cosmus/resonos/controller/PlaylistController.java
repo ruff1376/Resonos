@@ -120,6 +120,7 @@ public class PlaylistController {
         // 좋아요 눌렀는지
         boolean alreadyLiked = loginUser != null ? playlistService.alreadyLikedPlaylist(loginUser.getId(), id) : false;
 
+        model.addAttribute("userId", ownerId);
         model.addAttribute("alreadyLiked", alreadyLiked);
         model.addAttribute("owner", owner);
         model.addAttribute("playlist", playlist);

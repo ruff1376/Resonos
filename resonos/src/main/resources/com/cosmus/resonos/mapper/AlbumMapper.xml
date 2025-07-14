@@ -274,8 +274,8 @@
   <!-- 마이페이지: 좋아요 표시한 앨범 3개 -->
   <select id="likedAlbumsTop3" resultType="Album">
     SELECT a.*, la.created_at
-    FROM album a
-      INNER JOIN liked_album la ON la.album_id = a.id
+    FROM liked_album la
+      INNER JOIN album a ON la.album_id = a.id
     WHERE la.user_id = #{id}
     ORDER BY la.created_at DESC
     LIMIT 3
@@ -284,11 +284,32 @@
   <!-- 마이페이지: 좋아요 표시한 앨범 전체 -->
   <select id="likedAlbums" resultType="Album">
     SELECT a.*, la.created_at, art.name AS artistName
-    FROM album a
-      INNER JOIN liked_album la ON la.album_id = a.id
+    FROM liked_album la
+      INNER JOIN album a ON la.album_id = a.id
       INNER JOIN artist art ON a.artist_id = art.id
     WHERE la.user_id = #{id}
-    ORDER BY la.created_at DESC
+    <if test="keyword != null and keyword != ''">
+      AND(
+        a.title LIKE CONCAT('%', #{keyword}, '%')
+        OR art.name LIKE CONCAT('%', #{keyword}, '%')
+      )
+    </if>
+    ORDER BY
+    <choose>
+      <when test="keyword != null and keyword != ''">
+        CASE
+          WHEN a.title LIKE CONCAT(#{keyword}, '%') THEN 0
+          WHEN a.title LIKE CONCAT('%', #{keyword}, '%') THEN 1
+          WHEN art.name LIKE CONCAT(#{keyword}, '%') THEN 2
+          WHEN art.name LIKE CONCAT('%', #{keyword}, '%') THEN 3
+          ELSE 4
+        END,
+        la.created_at DESC
+      </when>
+      <otherwise>
+        la.created_at DESC
+      </otherwise>
+    </choose>
   </select>
 
 

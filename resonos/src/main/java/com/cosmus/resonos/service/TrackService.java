@@ -70,9 +70,9 @@ public interface TrackService {
     // 좋아요 한 트랙 3개 조회
     public List<Track> likedTracksTop3(Long id) throws Exception;
     // 좋아요 한 트랙 전체 조회
-    public List<Track> likedTracks(Long id) throws Exception;
+    public List<Track> likedTracks(Long id, String keyword) throws Exception;
 
-    // 페이징 전체 데이터 
+    // 페이징 전체 데이터
     public List<Track> getAllTracks(Pagination pagination) throws Exception;
-    
+
 }

@@ -52,5 +52,5 @@ public interface ArtistService {
     // 팔로우 한 아티스트 3건 조회
     public List<Artist> followingArtistsTop3(Long id) throws Exception;
     // 팔로우 한 아티스트 전체 조회
-    public List<Artist> followingArtists(Long id) throws Exception;
+    public List<Artist> followingArtists(Long id, String keyword) throws Exception;
 }

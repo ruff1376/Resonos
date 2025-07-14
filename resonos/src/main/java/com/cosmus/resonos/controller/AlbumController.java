@@ -121,7 +121,7 @@ public class AlbumController {
         List<Integer> moodValues = moodStats.stream().map(MoodStat::getVoteCount).toList();
 
         int likeCount = likedAlbumService.getAlbumLikeCount(id);
-        
+
         model.addAttribute("album", album);
         model.addAttribute("artist", artist);
         model.addAttribute("tracks", tracks);
@@ -140,7 +140,7 @@ public class AlbumController {
         if (album == null) {
             return "redirect:/artists?error=notfound";
         }
-        
+
         return "review/album";
     }
 
@@ -297,4 +297,23 @@ public class AlbumController {
         return ResponseEntity.ok(result);
     }
 
+    /**
+     * 비동기 좋아요 한 앨범(키워드 검색)
+     * @param data
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/search")
+    public ResponseEntity<?> searchMyAlbums(
+        @RequestBody Map<String, Object> data
+    ) throws Exception {
+        Long userId = Long.valueOf(data.get("userId").toString());
+        String keyword = data.get("keyword").toString();
+
+        List<Album> albumList = albumService.likedAlbums(userId, keyword);
+        if(albumList != null)
+            return new ResponseEntity<>(albumList, HttpStatus.OK);
+
+        return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
