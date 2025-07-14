@@ -146,7 +146,26 @@
     FROM artist_follow af
       INNER JOIN artist a ON af.artist_id = a.id
     WHERE af.user_id = #{id}
-    ORDER BY af.created_at
+    <if test="keyword != null and keyword != ''">
+      AND (
+        a.name LIKE CONCAT('%', #{keyword}, '%')
+      )
+    </if>
+    ORDER BY
+    <choose>
+      <when test="keyword != null and keyword != ''">
+        CASE
+          WHEN a.name LIKE CONCAT(#{keyword}, '%') THEN 0       -- 제목이 keyword로 시작
+          WHEN a.name LIKE CONCAT('%', #{keyword}, '%') THEN 1  -- 제목에 keyword 포함
+          ELSE 2
+        END,
+        af.created_at DESC
+      </when>
+      <otherwise>
+        af.created_at DESC
+      </otherwise>
+    </choose>
+
   </select>
 
 </mapper>

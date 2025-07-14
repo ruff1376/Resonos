@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.PlaylistDTO;
 import com.cosmus.resonos.domain.PlaylistDetail;
@@ -113,5 +114,22 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     public boolean cancleLikePlaylist(Long loginUserId, Long playlistId) throws Exception {
         return playlistMapper.cancleLikePlaylist(loginUserId, playlistId) > 0;
+    }
+
+    @Override
+    public List<Playlist> searchList(String keyword) throws Exception {
+        return playlistMapper.searchList(keyword);
+    }
+
+    @Override
+    public List<Playlist> allSearchList(String keyword, Pagination pagination, String sort) throws Exception {
+        long total = playlistMapper.searchCount(keyword);
+        pagination.setTotal(total);
+        return playlistMapper.allSearchList(keyword, pagination, sort);
+    }
+
+    @Override
+    public long searchCount(String keyword) throws Exception {
+        return playlistMapper.searchCount(keyword);
     }
 }

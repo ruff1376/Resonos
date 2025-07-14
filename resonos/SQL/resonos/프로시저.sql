@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS
         notice, setting, badge, policy, external_api_config, plugin,
         track, artist, user, role, tag, user_activity_log;
 
--- CALL create_tables(); -- 밑에 정의된 프로시저 호출
+CALL create_tables(); -- 밑에 정의된 프로시저 호출
 
 DELIMITER //
 

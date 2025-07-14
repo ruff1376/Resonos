@@ -784,10 +784,11 @@ button.like {background-color: inherit; border: none;}
 .search-icon {
   position: absolute;
   left: 10px;
-  font-size: 29px;
+  font-size: 1.6rem;
   color: #B1B1B1;
   pointer-events: none;
 }
+.modal-track .search-icon {font-size: 2.9rem;}
 .profile-edit-label.radio {cursor: pointer;}
 .owner-info {
   color: #fff;
@@ -951,14 +952,24 @@ button.like {background-color: inherit; border: none;}
   gap: 30px;
 }
 .modal-input {
-    border: 1px solid #B1B1B1;
-    border-radius: 10px;
-    height: 45px;
-    background: transparent;
-    color: #B1B1B1;
-    padding-left: 45px;
-    font-size: 1.6rem;
-    width: 100%;
+  border: 1px solid #B1B1B1;
+  border-radius: 10px;
+  height: 45px;
+  background: transparent;
+  color: #B1B1B1;
+  padding-left: 45px;
+  font-size: 1.6rem;
+  width: 100%;
+}
+.basic-input {
+  border: 1px solid #B1B1B1;
+  border-radius: 10px;
+  height: 30px;
+  background: transparent;
+  color: #B1B1B1;
+  padding-left: 33px;
+  font-size: 1.4rem;
+  width: 100%;
 }
 .ul-list.modall {overflow: auto;}
 .ul-list.modall .list-item {border-color: var(--silver-color);}
