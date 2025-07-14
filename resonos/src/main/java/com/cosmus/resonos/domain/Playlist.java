@@ -21,6 +21,7 @@ public class Playlist {
     private Date createdAt;
     private String trackId;
     private int likeCount;
+    private String maker;
 
     List<Track> trackList;
 }
