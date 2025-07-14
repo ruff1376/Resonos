@@ -392,4 +392,68 @@
           OR u.nickname LIKE CONCAT('%', #{keyword}, '%')
           OR t.title LIKE CONCAT('%', #{keyword}, '%')
   </select>
+
+  <select id="mainNewList" resultMap="PlaylistResultMap">
+    SELECT p.*, u.nickname AS maker,
+          COUNT(DISTINCT lp.id) AS like_count
+    FROM playlist p
+    LEFT JOIN user u ON p.user_id = u.id
+    LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+    WHERE p.created_at >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+    GROUP BY p.id
+    ORDER BY p.created_at DESC
+    LIMIT 12
+  </select>
+
+  <select id="newList" resultMap="PlaylistResultMap">
+    SELECT p.*, u.nickname AS maker,
+          COUNT(DISTINCT lp.id) AS like_count
+    FROM playlist p
+    LEFT JOIN user u ON p.user_id = u.id
+    LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+    WHERE p.created_at >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+    GROUP BY p.id
+    ORDER BY p.created_at DESC
+    LIMIT #{index}, #{size}
+  </select>
+
+  <select id="mainHotList" resultMap="PlaylistResultMap">
+    SELECT p.*, u.nickname AS maker,
+          COUNT(DISTINCT lp.id) AS like_count
+    FROM playlist p
+    LEFT JOIN user u ON p.user_id = u.id
+    LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+    GROUP BY p.id
+    HAVING COUNT(lp.id) > 0
+    ORDER BY like_count DESC
+    LIMIT 12
+  </select>
+
+  <select id="hotList" resultMap="PlaylistResultMap">
+    SELECT p.*, u.nickname AS maker,
+          COUNT(DISTINCT lp.id) AS like_count
+    FROM playlist p
+    LEFT JOIN user u ON p.user_id = u.id
+    LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+    GROUP BY p.id
+    HAVING COUNT(lp.id) > 0
+    ORDER BY like_count DESC, p.created_at DESC
+    LIMIT #{index}, #{size}
+  </select>
+
+  <select id="newCount" resultType="long">
+    SELECT COUNT(*) FROM playlist
+    WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+  </select>
+
+  <select id="hotCount" resultType="long">
+    SELECT COUNT(*) FROM (
+      SELECT p.id
+      FROM playlist p
+      LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+      GROUP BY p.id
+      HAVING COUNT(lp.id) > 0
+    ) AS filtered
+  </select>
+
 </mapper>

@@ -234,5 +234,43 @@ public class SearchController {
         model.addAttribute("pageUri", pageUri);
         return "search/search_user";
     }
+
+    @GetMapping("/playlists")
+    public String playlistSearch(
+        @RequestParam("q") String keyword,
+        @RequestParam(value = "size", defaultValue = "30") int size,
+        @RequestParam(value = "page", defaultValue = "1") int page,
+        @RequestParam(value = "sort", defaultValue = "relevance") String sort,
+        Model model,
+        Pagination pagination
+    ) throws Exception {
+        pagination.setSize(size);
+        pagination.setPage(page);
+        pagination.setCount(10);
+
+        // Map<String, Object> paramMap = new HashMap<>();
+        keyword = keyword.trim();
+        // paramMap.put("keyword", keyword);
+        // paramMap.put("index", pagination.getIndex());
+        // paramMap.put("size", pagination.getSize());
+        // paramMap.put("pagination", pagination);
+
+        List<Playlist> allPlaylistSearchList = playlistService.allSearchList(keyword, pagination, sort);
+
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("pagination", pagination);
+        model.addAttribute("allPlaylistSearchList", allPlaylistSearchList);
+        model.addAttribute("sort", sort);
+        
+        String pageUri = UriComponentsBuilder.fromPath("/search/playlists")
+                                            .queryParam("q", keyword)
+                                            .queryParam("size", pagination.getSize())
+                                            .queryParam("count", pagination.getCount())
+                                            .queryParam("sort", sort)
+                                            .build()
+                                            .toUriString();
+        model.addAttribute("pageUri", pageUri);
+        return "search/search_playlist";
+    }
     
 }

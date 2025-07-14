@@ -65,4 +65,18 @@ public interface PlaylistService {
     ) throws Exception;
     // 검색 데이터 수
     public long searchCount(String keyword) throws Exception;
+
+    /* 메인 */
+    // 메인 최신
+    public List<Playlist> mainNewList() throws Exception;
+    // 메인 최신 전체
+    public List<Playlist> newList(Pagination pagination) throws Exception;
+    // 메인 인기
+    public List<Playlist> mainHotList() throws Exception;
+    // 메인 인기 전체
+    public List<Playlist> hotList(Pagination pagination) throws Exception;
+    // 최신 데이터 수
+    public long newCount() throws Exception;
+    // 인기 데이터 수
+    public long hotCount() throws Exception;
 }

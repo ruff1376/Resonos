@@ -47,7 +47,7 @@
     LEFT JOIN album_review arw
       ON a.id = arw.album_id
       AND DATE(arw.created_at) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
-    WHERE a.country IS NOT NULL AND a.country != 'KOR'
+    WHERE a.country IS NULL OR a.country != 'KOR'
     GROUP BY a.id
     ORDER BY review_count DESC
     LIMIT 5

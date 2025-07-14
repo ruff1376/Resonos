@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layouts/main_layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인기 플레이리스트</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <th:block th:replace="~{fragments/link::main}"></th:block>
+</head>
+
+<body>
+    <th:block layout:fragment="content">
+        <div class="container-fluid d-flex flex-column align-items-center px-0" style="max-width:1440px; padding-top:150px; gap:50px;">
+            <!-- 인기 플레이리스트 섹션 -->
+            <section class="main-section-bg w-100 py-4 mb-5">
+                <div class="d-flex flex-row align-items-center px-4 mb-3" style="height:50px;">
+                    <div class="section-title flex-grow-1">인기 플레이리스트</div>
+                </div>
+                <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-0 m-0 mb-5 justify-content-start">
+                    <th:block th:each="hotPlaylist : ${hotPlaylistList}">
+                        <!-- 플레이리스트 카드 -->
+                        <div class="col d-flex justify-content-center">
+                            <div class="card align-items-center p-3" style="width:228px; height:240px;">
+                                <a th:href="@{'/playlists/' + ${hotPlaylist.id}}">
+                                    <img th:src="${hotPlaylist.thumbnailUrl}" class="card-img-top" alt="플레이리스트 썸네일">
+                                </a>
+                                <div class="card-body">
+                                    <a th:href="@{'/playlists/' + ${hotPlaylist.id}}" class="card-title" th:text="${hotPlaylist.title}"></a>
+                                    <a th:href="@{'/users/' + ${hotPlaylist.userId}}" class="card-artist" th:text="'제작자 : ' + ${hotPlaylist.maker}"></a>
+                                    <div class="card-artist" th:text="|♥ ${#numbers.formatDecimal(hotPlaylist.likeCount != null ? hotPlaylist.likeCount : 0, 0, 'COMMA', 0, 'POINT')}|"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+                <div th:replace="~{fragments/pagination :: pagination}"></div>
+            </section>
+            
+            <div class="floating">
+                <a href="#top">
+                    <i class="bi bi-caret-up-fill"></i>
+                </a>
+            </div>
+        </div>
+    </th:block>
+    <th:block layout:fragment="pageScript">
+        <script th:src="@{/js/rating_chart.js}"></script>
+    </th:block>
+</body>

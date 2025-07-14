@@ -1,13 +1,11 @@
 package com.cosmus.resonos.mapper;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.cosmus.resonos.domain.Album;
-import com.cosmus.resonos.domain.AlbumReview;
 import com.cosmus.resonos.domain.Pagination;
 
 @Mapper
