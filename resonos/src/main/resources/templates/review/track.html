@@ -178,10 +178,13 @@
             </div>
             <div class="info pl-list">
                 <p id="subtitle">이 트랙을 포함한 플리🎶</p>
-                <p>오늘 헤어진 사람들은 위한 플리 ❤352</p>
-                <p>혼자있고 싶어요,, ❤242</p>
-                <p>😢😢😢😢😢😢😢😢😢 ❤122</p>
-                <p>페페사랑단 플레이리스트 ❤64</p>
+                <th:block th:if="${emptyPlayList == true || playLists.isEmpty()}">
+                    <p>해당 음원을 포함한</p>
+                    <p>플레이리스트를 만들어보세요! 🤩</p>
+                </th:block>
+                <th:block th:each="playList : ${playLists}">
+                    <p th:text="|${playList.title} ❤️${playList.likeCount}|"></p>
+                </th:block>
             </div>
         </div>
         <!-- 앨범 트랙리스트 분위기 뭐뭐..끝 -->

@@ -166,4 +166,16 @@ public class PlaylistServiceImpl implements PlaylistService {
     public long hotCount() throws Exception {
         return playlistMapper.hotCount();
     }
+
+
+    // 해당 매개변수의 트랙을 포함한 플레이리스트들
+    @Override
+    public List<Playlist> getPlaylistsByTrackId(String trackId) {
+        return playlistMapper.getPlaylistsByTrackId(trackId);
+    }
+
+    @Override
+    public List<Playlist> getPlaylistsByAlbumId(String albumId) {
+        return playlistMapper.getPlaylistsByAlbumId(albumId);
+    }
 }

@@ -456,4 +456,47 @@
     ) AS filtered
   </select>
 
+  <!-- 트랙 ID 기준 -->
+  <select id="getPlaylistsByTrackId" resultType="Playlist">
+      SELECT
+          p.id,
+          p.user_id AS userId,
+          p.title,
+          p.description,
+          p.thumbnail_url AS thumbnailUrl,
+          p.is_public AS isPublic,
+          p.created_at AS createdAt,
+          COUNT(lp.id) AS likeCount
+      FROM playlist p
+      JOIN playlist_detail pd ON p.id = pd.playlist_id
+      LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+      WHERE pd.track_id = #{trackId}
+        AND p.is_public = TRUE
+      GROUP BY p.id
+      ORDER BY likeCount DESC
+      LIMIT 6
+  </select>
+
+  <!-- 앨범 ID 기준 (앨범에 속한 트랙 포함하는 공개 플레이리스트들) -->
+  <select id="getPlaylistsByAlbumId" resultType="Playlist">
+      SELECT
+          p.id,
+          p.user_id AS userId,
+          p.title,
+          p.description,
+          p.thumbnail_url AS thumbnailUrl,
+          p.is_public AS isPublic,
+          p.created_at AS createdAt,
+          COUNT(lp.id) AS likeCount
+      FROM playlist p
+      JOIN playlist_detail pd ON p.id = pd.playlist_id
+      JOIN track t ON pd.track_id = t.id
+      LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+      WHERE t.album_id = #{albumId}
+        AND p.is_public = TRUE
+      GROUP BY p.id
+      ORDER BY likeCount DESC
+      LIMIT 6
+  </select>
+
 </mapper>

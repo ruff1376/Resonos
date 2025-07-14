@@ -79,4 +79,10 @@ public interface PlaylistService {
     public long newCount() throws Exception;
     // 인기 데이터 수
     public long hotCount() throws Exception;
+
+    // 해당 매개변수의 음악을 포함한 플레이리스트
+    List<Playlist> getPlaylistsByTrackId(String trackId);
+    List<Playlist> getPlaylistsByAlbumId(String albumId);
+
+    
 }
