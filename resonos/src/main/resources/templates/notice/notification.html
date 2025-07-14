@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layouts/main_layout}">
+<head>
+    <meta charset="UTF-8" />
+    <title>알림 상세</title>
+    <th:block th:replace="~{fragments/link::user}"></th:block>
+</head>
+<body>
+<main class="con con-noti-detail" layout:fragment="content">
+    <section class="info-wrapper">
+        <div class="info-section">
+            <div class="title">
+                <h2>알림 상세</h2>
+                <a th:href="@{/notifications2}" class="btn btn-outline-secondary btn-sm" style="float:right;">← 목록으로</a>
+            </div>
+            <div class="notification-detail">
+                <p><b>유형:</b> <span th:text="${notification.type}"></span></p>
+                <p><b>메시지:</b> <span th:text="${notification.message}"></span></p>
+                <p><b>내용:</b> <span th:text="${notification.content}"></span></p>
+                <p><b>생성일:</b> <span th:text="${#dates.format(notification.createdAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+                <p><b>읽음 여부:</b>
+                    <span th:text="${notification.isRead} ? '읽음' : '안읽음'"></span>
+                </p>
+                <p th:if="${notification.targetId}">
+                    <b>관련 대상:</b>
+                    <a th:href="@{'/notice/' + ${notification.targetId}}" th:if="${notification.type == 'announcement'}">관련 공지 바로가기</a>
+                    <!-- 필요시 다른 타입별 링크 추가 -->
+                </p>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>
