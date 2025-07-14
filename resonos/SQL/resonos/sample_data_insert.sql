@@ -98,9 +98,9 @@ INSERT INTO user (id, username, email, password, nickname, is_pro, enabled, crea
 INSERT INTO user (id, username, email, password, nickname, is_pro, enabled, created_at) VALUES (98, 'user98', 'user98@mail.com', 'pass98', '닉네임98', 0, 1, '2025-06-08 05:46:11');
 INSERT INTO user (id, username, email, password, nickname, is_pro, enabled, created_at) VALUES (99, 'user99', 'user99@mail.com', 'pass99', '닉네임99', 1, 1, '2025-06-12 05:46:11');
 INSERT INTO user (id, username, email, password, nickname, is_pro, enabled, created_at) VALUES (100, 'user100', 'user100@mail.com', 'pass100', '닉네임100', 0, 1, '2025-06-01 05:46:11');
-INSERT INTO community (id, name, description, creator_id, created_at) VALUES (1, '커뮤니티1', '설명1', 1, '2025-06-19 05:46:11');
-INSERT INTO community (id, name, description, creator_id, created_at) VALUES (2, '커뮤니티2', '설명2', 2, '2025-06-12 05:46:11');
-INSERT INTO community (id, name, description, creator_id, created_at) VALUES (3, '커뮤니티3', '설명3', 3, '2025-06-22 05:46:11');
+-- INSERT INTO community (id, name, description, creator_id, created_at) VALUES (1, '커뮤니티1', '설명1', 1, '2025-06-19 05:46:11');
+-- INSERT INTO community (id, name, description, creator_id, created_at) VALUES (2, '커뮤니티2', '설명2', 2, '2025-06-12 05:46:11');
+-- INSERT INTO community (id, name, description, creator_id, created_at) VALUES (3, '커뮤니티3', '설명3', 3, '2025-06-22 05:46:11');
 INSERT INTO community (id, name, description, creator_id, created_at) VALUES (4, '커뮤니티4', '설명4', 4, '2025-06-11 05:46:11');
 INSERT INTO community (id, name, description, creator_id, created_at) VALUES (5, '커뮤니티5', '설명5', 5, '2025-06-12 05:46:11');
 INSERT INTO community (id, name, description, creator_id, created_at) VALUES (6, '커뮤니티6', '설명6', 6, '2025-06-18 05:46:11');

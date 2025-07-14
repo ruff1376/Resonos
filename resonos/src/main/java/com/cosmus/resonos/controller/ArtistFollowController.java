@@ -62,7 +62,7 @@ public class ArtistFollowController {
 
     // 수정 처리
     @PostMapping("/{id}/edit")
-    public String updatePost(@PathVariable String id, @ModelAttribute ArtistFollow follow, Model model) throws Exception {
+    public String updatePost(@PathVariable Long id, @ModelAttribute ArtistFollow follow, Model model) throws Exception {
         log.info("[ArtistFollowController] 아티스트 팔로우 수정 시도 - id: {}, follow: {}", id, follow);
         follow.setId(id);
         boolean success = artistFollowService.update(follow);
@@ -77,7 +77,7 @@ public class ArtistFollowController {
 
     // 삭제 처리
     @PostMapping("/{id}/delete")
-    public String delete(@PathVariable String id) throws Exception {
+    public String delete(@PathVariable Long id) throws Exception {
         log.info("[ArtistFollowController] 아티스트 팔로우 삭제 시도 - id: {}", id);
         artistFollowService.delete(id);
         log.info("[ArtistFollowController] 아티스트 팔로우 삭제 완료 - id: {}", id);

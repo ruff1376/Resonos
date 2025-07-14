@@ -97,4 +97,11 @@ public interface UserMapper {
     public int insertSnsUser(Users user) throws Exception;
 
 
+    // countByKeword - 키워드 검색
+    public long countByKeyword(String keyword) throws Exception;    
+    // searchByKeywordPaging - 키워드 검색 페이징
+    public List<Users> searchByKeywordPaging(@Param("keyword") String keyword, @Param("index") int index, @Param("size") int size) throws Exception;
+    // listPaging - 전체 페이징 
+    public List<Users> listPaging(@Param("index") int index, @Param("size") int size) throws Exception;
+
 }
