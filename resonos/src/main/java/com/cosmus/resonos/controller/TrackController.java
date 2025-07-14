@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cosmus.resonos.domain.Album;
+import com.cosmus.resonos.domain.AlbumScore;
 import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.LikedTrack;
@@ -181,6 +182,13 @@ public class TrackController {
         return "review/reviewFrag :: scoreFragment";  // Thymeleaf 조각 이름 지정
     }
 
+    @GetMapping("/{id}/refresh-frag")
+    public String reivewRefresh(@PathVariable("id") String id, Model model) {
+        TrackScore score = trackReviewService.getTrackScore(id);
+        model.addAttribute("score", score);
+        return "review/reviewFrag :: reviewSection";
+    }
+
     @GetMapping("/{trackId}/reviews/more")
     public String loadMoreReviews(@PathVariable("trackId") String trackId,
                                 @RequestParam(name = "page", defaultValue = "1") int page,
@@ -243,10 +251,17 @@ public class TrackController {
     }
     @GetMapping("/{trackId}/my-review-frag")
     public String getMyReviewFragment(@PathVariable("trackId") String trackId,
-                                    @AuthenticationPrincipal CustomUser user,
+                                    @AuthenticationPrincipal CustomUser principal,
                                     Model model) throws Exception {
-        Long userId = user.getId(); // 로그인 유저 ID
-        TrackReview myReview = trackReviewService.getLastestReview(trackId, userId);
+        Users loginUser = null;
+        if (principal != null) {
+            model.addAttribute("loginUser", loginUser = principal.getUser());
+            boolean isAdmin = principal.getAuthorities()
+                    .stream()
+                    .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+            model.addAttribute("isAdmin", isAdmin);
+        }
+        TrackReview myReview = trackReviewService.getLastestReview(trackId, loginUser.getId());
         Track track = trackService.selectById(trackId);
         if (myReview == null) {
             return "review/reviewFrag :: empty"; // 아무것도 없는 프래그먼트로 대응 가능
@@ -277,11 +292,13 @@ public class TrackController {
     /* ── ③ 삭제 ────────────────────────────── */
     @DeleteMapping("/{id}/review/{reviewId}")
     @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, 'TRACK', authentication)")
-    @ResponseBody
-    public ResponseEntity<Void> delete(@PathVariable("id") String trackId,
-                       @PathVariable("reviewId") Long reviewId) {
+    public String deleteAndRefresh(@PathVariable("id") String trackId,
+                                @PathVariable("reviewId") Long reviewId,
+                                Model model) {
         trackReviewService.delete(reviewId);
-        return ResponseEntity.noContent().build();  // 204 No Content 반환
+        TrackScore score = trackReviewService.getTrackScore(trackId);
+        model.addAttribute("score", score);
+        return "review/reviewFrag :: reviewSection";  // 리뷰 섹션 프래그먼트 반환
     }
 
     @PostMapping("/track-reviews/{reviewId}/like")

@@ -32,6 +32,7 @@ import com.cosmus.resonos.domain.LikedAlbum;
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.Track;
+import com.cosmus.resonos.domain.TrackScore;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.AlbumReviewService;
 import com.cosmus.resonos.service.AlbumService;
@@ -162,13 +163,32 @@ public class AlbumController {
         model.addAttribute("score", score);
         return "review/reviewFrag :: scoreFragment";
     }
+    @GetMapping("/{id}/refresh-frag")
+    public String reivewRefresh(@PathVariable("id") String id, Model model) {
+        AlbumScore score = albumReviewService.getAlbumScore(id);
+        model.addAttribute("score", score);
+        return "review/reviewFrag :: reviewSection";
+    }
 
     @GetMapping("/{albumId}/my-review-frag")
     public String getMyReviewFragment(@PathVariable("albumId") String albumId,
-            @AuthenticationPrincipal CustomUser user,
+            @AuthenticationPrincipal CustomUser principal,
             Model model) throws Exception {
-        Long userId = user.getId(); // 로그인 유저 ID
-        AlbumReview myReview = albumReviewService.getLastestReview(albumId, userId);
+        Users loginUser = null;
+        if (principal != null) {
+            model.addAttribute("loginUser", loginUser = principal.getUser());
+            boolean isAdmin = principal.getAuthorities()
+                    .stream()
+                    .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+            model.addAttribute("isAdmin", isAdmin);
+            // ✅ 좋아요 여부 체크
+            boolean isAlbumLiked = likedAlbumService.isLikedByUser(loginUser.getId(), albumId);
+            model.addAttribute("isAlbumLikedByUser", isAlbumLiked);
+        } else {
+            // 비로그인 사용자를 위해 false로 설정
+            model.addAttribute("isAlbumLikedByUser", false);
+        }
+        AlbumReview myReview = albumReviewService.getLastestReview(albumId, loginUser.getId());
         Track track = trackService.selectById(albumId);
         if (myReview == null) {
             return "review/reviewFrag :: empty"; // 아무것도 없는 프래그먼트로 대응 가능
@@ -241,13 +261,16 @@ public class AlbumController {
         return ResponseEntity.ok(updatedReview);
     }
 
+    /* ── ③ 삭제 ────────────────────────────── */
     @DeleteMapping("/{id}/review/{reviewId}")
     @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, 'ALBUM', authentication)")
-    @ResponseBody
-    public ResponseEntity<Void> delete(@PathVariable("id") String albumId,
-            @PathVariable("reviewId") Long reviewId) {
+    public String deleteAndRefresh(@PathVariable("id") String albumId,
+                                @PathVariable("reviewId") Long reviewId,
+                                Model model) {
         albumReviewService.delete(reviewId);
-        return ResponseEntity.noContent().build();
+        AlbumScore score = albumReviewService.getAlbumScore(albumId);
+        model.addAttribute("score", score);
+        return "review/reviewFrag :: reviewSection";  // 리뷰 섹션 프래그먼트 반환
     }
 
     @PostMapping("/album-reviews/{reviewId}/like")

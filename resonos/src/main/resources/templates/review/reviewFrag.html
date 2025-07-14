@@ -64,3 +64,20 @@
 
   <li id="has-next-flag" style="display:none;" th:data-has-next="${hasNext}"></li>
 </th:block>
+
+<!-- 리뷰 섹션 프래그먼트 -->
+<th:block th:fragment="reviewSection(score)">
+    <div class="review-section">
+        <th:block th:if="${score == null or score.averageScore == null}">
+            <p>아직 리뷰가 없어요 😅</p>
+        </th:block>
+
+        <th:block th:if="${score != null and score.averageScore != null}">
+            <p>
+                🔮 <span th:text="${#numbers.formatDecimal(score.averageScore, 0, 0)}">0</span>점
+                (✅리뷰 <span th:text="${score.criticCount}">0</span>개,
+                일반리뷰 <span th:text="${score.userCount}">0</span>개)
+            </p>
+        </th:block>
+    </div>
+</th:block>
