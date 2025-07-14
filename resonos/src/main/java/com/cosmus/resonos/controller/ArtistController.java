@@ -141,6 +141,7 @@ public class ArtistController {
         response.put("values", moodValues);
         response.put("moods", tagService.list());
         return ResponseEntity.ok(response);
+    }
 
     /**
      * 비동기 팔로우 아티스트 검색
