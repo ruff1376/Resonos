@@ -121,6 +121,7 @@ img {
     height: 100%;
     object-fit: cover;
 }
+a { display: inline-block;}
 .song-card {
     margin-top: 50px;
     display: flex;
@@ -373,11 +374,12 @@ img {
     border-right: 2px solid var(--main-color);
     gap: 5px;
 }
-.top5track {
+.album-moods {
     flex: 1 1 auto;         /* 유연하게 줄어들고 늘어남 */
-    max-width: 400px;       /* 최대 너비 제한 */
-    min-width: 350px;
+    max-width: 300px;       /* 최대 너비 제한 */
+    min-width: 250px;
     gap: 10px;
+    margin-left: 20px;
 }
 .top5track > p:first-child,
 .arg-vote p ,
@@ -404,6 +406,26 @@ img {
 .info p {
     padding: 0;
     margin: 0;
+}
+.top5track {
+  align-items: flex-start
+}
+.score-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-weight: bold;
+}
+.score-info div {
+  display: flex;
+  gap: 3px;
+}
+.score-info div p {
+  width: 90px;
+}
+.score-info div span {
+  width: 20px;
+  text-align: end;
 }
 .pl-list p:first-child {
     font-weight: bold;
@@ -435,6 +457,8 @@ img {
     overflow: hidden;
     padding: 10px;
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .arg-card {
     max-width: 1350px;
@@ -603,7 +627,7 @@ img {
     display: flex;
     padding: 10px;
     gap: 20px;
-    max-width: 600px;
+    max-width: 780px;
     overflow-x: auto;
 }
 .track {
