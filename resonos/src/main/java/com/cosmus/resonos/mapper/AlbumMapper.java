@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.cosmus.resonos.domain.Album;
+import com.cosmus.resonos.domain.AlbumReview;
 import com.cosmus.resonos.domain.Pagination;
 
 @Mapper
@@ -66,6 +67,7 @@ public interface AlbumMapper {
 
     // 전체 앨범 데이터 불러오기
     public List<Album> getAllAlbums(Pagination pagination) throws Exception;
+
 }
 
 

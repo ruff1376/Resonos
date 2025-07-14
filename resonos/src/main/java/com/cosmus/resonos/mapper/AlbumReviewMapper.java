@@ -46,9 +46,6 @@ public interface AlbumReviewMapper {
     long countByAlbumId(String albumId);
 
     public long countAll() throws Exception;
+    public     List<AlbumReview> findAllReviewsWithReviewer();
 
-    // 어드민 리포트 관련 메소드
-    public List<ReviewReport> findByReviewIdAndType(@Param("reviewId") Long reviewId, @Param("reviewType") String reviewType);
-    public List<ReviewReport> findAllByType(@Param("reviewType") String reviewType);
-    public long countByType(@Param("reviewType") String reviewType);
 }
