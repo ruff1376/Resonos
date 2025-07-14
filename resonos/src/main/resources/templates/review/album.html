@@ -112,12 +112,31 @@
             </div>
             <div class="info album-moods">
                 <p id="headline">앨범의 평균 점수</p>
-                <p>가사:100점</p>
-                <p>가사:100점</p>
-                <p>가사:100점</p>
-                <p>가사:100점</p>
-                <p>가사:100점</p>
-                <p>가사:100점</p>
+                <th:block th:if="${argScores == null or argScores.isEmpty()}">
+                    <p>아직 아무도 투표하지 않았어요</p>
+                </th:block>
+                <th:block th:if="${argScores != null and !argScores.isEmpty()}">
+                    <div class="score-info">
+                        <div>
+                            <p>가사 : </p><span th:text="${argScores[0]}">가사:100점</span>
+                        </div>
+                        <div>
+                            <p>사운드 : </p><span th:text="${argScores[1]}">가사:100점</span>
+                        </div>
+                        <div>
+                            <p>멜로디 : </p><span th:text="${argScores[2]}">가사:100점</span>
+                        </div>
+                        <div>
+                            <p>스토리텔링 : </p><span th:text="${argScores[3]}">가사:100점</span>
+                        </div>
+                        <div>
+                            <p>유기성 : </p><span th:text="${argScores[4]}">가사:100점</span>
+                        </div>
+                        <div>
+                            <p>독창성 : </p><span th:text="${argScores[5]}">가사:100점</span>
+                        </div>
+                    </div>
+                </th:block>
             </div>
             <div class="info pl-list">
                 <p id="subtitle" th:text="|${album.title}의 트랙이 포함된 플리🎶|">이 트랙을 포함한 플리🎶</p>
@@ -184,7 +203,12 @@
         <!-- 요소 투표 -->
         <div class="arg-card">
             <div class="chart">
+                <th:block th:if="${argScores == null or argScores.isEmpty()}">
+                    <p id="headline">아직 아무도 투표하지 않았어요</p>
+                </th:block>
+                <th:block th:if="${argScores != null and !argScores.isEmpty()}">
                     <canvas id="hexRadarChart"></canvas>
+                </th:block>
             </div>
             <div class="arg-vote" th:data-album-id="${album.id}" th:data-user-id="${loginUser?.id}">
                 <div class="vote-header">
@@ -762,7 +786,44 @@
                                 avg.cohesiveness ?? 0,
                                 avg.creativity ?? 0
                             ];
-                            renderArgChart(argLabels, argScores);
+                            const $moodsBox = $('.album-moods');
+                            let $infoBox = $moodsBox.find('.score-info');
+
+                            if ($infoBox.length === 0) {
+                                // 없으면 새로 생성해서 삽입 (headline 바로 뒤에)
+                                $infoBox = $(`
+                                    <div class="score-info">
+                                        <div><p>가사 : </p><span>${argScores[0]}</span></div>
+                                        <div><p>사운드 : </p><span>${argScores[1]}</span></div>
+                                        <div><p>멜로디 : </p><span>${argScores[2]}</span></div>
+                                        <div><p>스토리텔링 : </p><span>${argScores[3]}</span></div>
+                                        <div><p>유기성 : </p><span>${argScores[4]}</span></div>
+                                        <div><p>독창성 : </p><span>${argScores[5]}</span></div>
+                                    </div>
+                                `);
+                                $moodsBox.find('#headline').after($infoBox);
+                            } else {
+                                // 있으면 내용 갱신
+                                $infoBox.html(`
+                                    <div><p>가사 : </p><span>${argScores[0]}</span></div>
+                                    <div><p>사운드 : </p><span>${argScores[1]}</span></div>
+                                    <div><p>멜로디 : </p><span>${argScores[2]}</span></div>
+                                    <div><p>스토리텔링 : </p><span>${argScores[3]}</span></div>
+                                    <div><p>유기성 : </p><span>${argScores[4]}</span></div>
+                                    <div><p>독창성 : </p><span>${argScores[5]}</span></div>
+                                `);
+                            }
+
+                            // "아직 아무도 투표하지 않았어요" 문구 제거
+                            $moodsBox.find('p:contains("아직 아무도")').remove();
+                            $('.chart').find('p:contains("아직 아무도")').remove();
+
+                            // ✅ 차트 영역 갱신
+                            const $chartArea = $('.chart');
+                            if ($chartArea.length) {
+                                $chartArea.html(`<canvas id="hexRadarChart"></canvas>`);
+                                renderArgChart(argLabels, argScores);
+                            }
                         });
 
                         Swal.fire(msg, '', 'success');

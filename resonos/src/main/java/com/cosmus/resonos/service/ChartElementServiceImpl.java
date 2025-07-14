@@ -36,14 +36,7 @@ public class ChartElementServiceImpl implements ChartElementService {
 
         Map<String, Integer> result = new HashMap<>();
         if (raw == null) {
-            // 평균 평가가 아무것도 없을 때도 0으로 채운다 (차트에서 빈값 안나오게)
-            result.put("lyric", 0);
-            result.put("sound", 0);
-            result.put("melody", 0);
-            result.put("storytelling", 0);
-            result.put("cohesiveness", 0);
-            result.put("creativity", 0);
-            return result;
+            return null;
         }
 
         for (Map.Entry<String, Object> entry : raw.entrySet()) {

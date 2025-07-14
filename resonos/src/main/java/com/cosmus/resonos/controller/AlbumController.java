@@ -115,27 +115,27 @@ public class AlbumController {
 
         // 요소 이름 리스트 (순서 고정)
         List<String> argLabels = Arrays.asList("가사", "사운드", "멜로디", "스토리텔링", "유기성", "독창성");
-
         // 요소 점수 리스트
-        List<Integer> argScores = Arrays.asList(
-                argValues.getOrDefault("lyric", 0),
-                argValues.getOrDefault("sound", 0),
-                argValues.getOrDefault("melody", 0),
-                argValues.getOrDefault("storytelling", 0),
-                argValues.getOrDefault("cohesiveness", 0),
-                argValues.getOrDefault("creativity", 0));
-                
-                
-                
+        List<Integer> argScores = null;
+        if (argValues != null && !argValues.isEmpty()) {
+            argScores = Arrays.asList(
+                    argValues.getOrDefault("lyric", 0),
+                    argValues.getOrDefault("sound", 0),
+                    argValues.getOrDefault("melody", 0),
+                    argValues.getOrDefault("storytelling", 0),
+                    argValues.getOrDefault("cohesiveness", 0),
+                    argValues.getOrDefault("creativity", 0));
+        }
+
         boolean emptyPlayList = true;
         List<Playlist> playLists = null;
-        if(playlistService.getPlaylistsByAlbumId(id) != null) {
+        if (playlistService.getPlaylistsByAlbumId(id) != null) {
             playLists = playlistService.getPlaylistsByAlbumId(id);
             emptyPlayList = false;
         }
 
         model.addAttribute("emptyPlayList", emptyPlayList);
-        model.addAttribute("playLists", playLists); 
+        model.addAttribute("playLists", playLists);
         model.addAttribute("argLabels", argLabels);
         model.addAttribute("argScores", argScores);
         model.addAttribute("album", album);
@@ -291,7 +291,6 @@ public class AlbumController {
         return ResponseEntity.ok(result);
     }
 
-
     @PostMapping("/vote")
     public ResponseEntity<?> saveOrUpdateVote(@RequestBody ChartElement element) {
         chartElementService.saveOrUpdate(element);
@@ -311,21 +310,22 @@ public class AlbumController {
         Map<String, Integer> averages = chartElementService.getAverageScoresByAlbumId(albumId);
         return ResponseEntity.ok(averages);
     }
+
     /**
      * 비동기 좋아요 한 앨범(키워드 검색)
+     * 
      * @param data
      * @return
      * @throws Exception
      */
     @PostMapping("/search")
     public ResponseEntity<?> searchMyAlbums(
-        @RequestBody Map<String, Object> data
-    ) throws Exception {
+            @RequestBody Map<String, Object> data) throws Exception {
         Long userId = Long.valueOf(data.get("userId").toString());
         String keyword = data.get("keyword").toString();
 
         List<Album> albumList = albumService.likedAlbums(userId, keyword);
-        if(albumList != null)
+        if (albumList != null)
             return new ResponseEntity<>(albumList, HttpStatus.OK);
 
         return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);
