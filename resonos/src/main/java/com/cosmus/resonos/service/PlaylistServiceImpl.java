@@ -132,4 +132,38 @@ public class PlaylistServiceImpl implements PlaylistService {
     public long searchCount(String keyword) throws Exception {
         return playlistMapper.searchCount(keyword);
     }
+
+    @Override
+    public List<Playlist> mainNewList() throws Exception {
+        return playlistMapper.mainNewList();
+    }
+
+    @Override
+    public List<Playlist> newList(Pagination pagination) throws Exception {
+        long total = playlistMapper.newCount();
+        pagination.setTotal(total);
+        return playlistMapper.newList(pagination);
+    }
+
+    @Override
+    public List<Playlist> mainHotList() throws Exception {
+        return playlistMapper.mainHotList();
+    }
+
+    @Override
+    public List<Playlist> hotList(Pagination pagination) throws Exception {
+        long total = playlistMapper.hotCount();
+        pagination.setTotal(total);
+        return playlistMapper.hotList(pagination);
+    }
+
+    @Override
+    public long newCount() throws Exception {
+        return playlistMapper.newCount();
+    }
+
+    @Override
+    public long hotCount() throws Exception {
+        return playlistMapper.hotCount();
+    }
 }
