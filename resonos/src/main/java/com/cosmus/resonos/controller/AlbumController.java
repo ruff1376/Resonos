@@ -22,25 +22,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cosmus.resonos.domain.Album;
-import com.cosmus.resonos.domain.AlbumMoodVote;
 import com.cosmus.resonos.domain.AlbumReview;
 import com.cosmus.resonos.domain.AlbumScore;
 import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.LikedAlbum;
-import com.cosmus.resonos.domain.MoodStat;
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Track;
-import com.cosmus.resonos.domain.TrackReview;
 import com.cosmus.resonos.domain.Users;
-import com.cosmus.resonos.service.AlbumMoodVoteService;
 import com.cosmus.resonos.service.AlbumReviewService;
 import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.ArtistService;
 import com.cosmus.resonos.service.LikedAlbumService;
-import com.cosmus.resonos.service.MoodStatService;
 import com.cosmus.resonos.service.ReviewLikeService;
-import com.cosmus.resonos.service.TagService;
 import com.cosmus.resonos.service.TrackService;
 import com.cosmus.resonos.validation.ReviewForm;
 
@@ -63,13 +57,7 @@ public class AlbumController {
     @Autowired
     private ReviewLikeService reviewLikeService;
     @Autowired
-    private MoodStatService moodStatService;
-    @Autowired
     private LikedAlbumService likedAlbumService;
-    @Autowired
-    private TagService tagService;
-    @Autowired
-    private AlbumMoodVoteService albumMoodVoteService;
 
     //앨범
     @GetMapping
@@ -82,8 +70,6 @@ public class AlbumController {
                     .stream()
                     .anyMatch( a -> a.getAuthority().equals("ROLE_ADMIN"));
             model.addAttribute("isAdmin", isAdmin);
-            Long userVotedMoodId = albumMoodVoteService.getUserVotedMoodId(loginUser.getId(), id);
-            model.addAttribute("userVotedMoodId", userVotedMoodId);
             // ✅ 좋아요 여부 체크
             boolean isAlbumLiked = likedAlbumService.isLikedByUser(loginUser.getId(), id);
             model.addAttribute("isAlbumLikedByUser", isAlbumLiked);
@@ -115,11 +101,6 @@ public class AlbumController {
         Pagination pagination = new Pagination(page, size, 10, totalCount);
         boolean hasNext = pagination.getLast() > page;
 
-        List<MoodStat> moodStats = moodStatService.getTop6MoodsByAlbumId(id);
-        boolean isMoodEmpty = (moodStats == null || moodStats.isEmpty());
-        List<String> moodLabels = moodStats.stream().map(MoodStat::getMoodName).toList();
-        List<Integer> moodValues = moodStats.stream().map(MoodStat::getVoteCount).toList();
-
         int likeCount = likedAlbumService.getAlbumLikeCount(id);
         
         model.addAttribute("album", album);
@@ -130,11 +111,7 @@ public class AlbumController {
         model.addAttribute("score", score);
         model.addAttribute("review", reviews);
         model.addAttribute("hasNext", hasNext);
-        model.addAttribute("tags", tagService.list());
         model.addAttribute("reviewType", "ALBUM");
-        model.addAttribute("isMoodEmpty", isMoodEmpty);
-        model.addAttribute("moodLabels", moodLabels);
-        model.addAttribute("moodValues", moodValues);
         model.addAttribute("albumLikeCount", likeCount);
 
         if (album == null) {
@@ -265,25 +242,6 @@ public class AlbumController {
         } catch (IllegalStateException e) {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("이미 신고한 리뷰입니다.");
         }
-    }
-
-    @PostMapping("/vote-mood")
-    @ResponseBody
-    public ResponseEntity<?> voteMood(@RequestBody AlbumMoodVote request) throws Exception {
-        albumMoodVoteService.saveOrUpdateVote(request.getUserId(), request.getAlbumId(), request.getMood());
-        if (request.getUserId() == null || request.getAlbumId() == null || request.getMood() == null) {
-            return ResponseEntity.badRequest().body("필수 데이터 누락");
-        }
-        Long votedMoodId = albumMoodVoteService.getUserVotedMoodId(request.getUserId(), request.getAlbumId());
-        List<MoodStat> moodStats = moodStatService.getTop6MoodsByAlbumId(request.getAlbumId());
-        List<String> moodLabels = moodStats.stream().map(MoodStat::getMoodName).toList();
-        List<Integer> moodValues = moodStats.stream().map(MoodStat::getVoteCount).toList();
-        Map<String, Object> response = new HashMap<>();
-        response.put("votedMoodId", votedMoodId);
-        response.put("labels", moodLabels);
-        response.put("values", moodValues);
-        response.put("moods", tagService.list());
-        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/toggle-like")

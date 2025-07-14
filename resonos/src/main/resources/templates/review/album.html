@@ -157,13 +157,13 @@
                     <div class="more-box d-flex gap-3" th:if="${hasNext}">
                         <button id="load-more-btn" data-page="1" th:data-album-id="${album.id}" class="btn btn-gold">리뷰
                             더보기</button>
-                        <th:block th:if="${loginUser == null}">
-                            <a id="login-review" href="/login" class="btn btn-gold">로그인</a>
-                        </th:block>
                     </div>
                 </div>
                 <th:block th:if="${loginUser == null}">
-                    <p id="headline" style="padding: 10px;">로그인시 리뷰작성이 가능합니다.</p>
+                    <div class="d-flex gap-5 align-items-center">
+                        <p id="headline" style="padding: 10px;">로그인시 리뷰작성이 가능합니다.</p>
+                        <a id="login-review" href="/login" class="btn btn-gold">로그인</a>
+                    </div>
                 </th:block>
             </div>
             <!-- 페이지네이션 -->
@@ -181,7 +181,7 @@
         <!-- 평점&리뷰 끝 -->
 
         <!-- 분위기 -->
-        <div class="mood-card">
+        <!-- <div class="mood-card">
             <div class="chart">
                 <th:block th:if="${isMoodEmpty}">
                     <p id="headline">아직 아무도 분위기에 투표하지 않았어요 😅</p>
@@ -207,7 +207,7 @@
                 </div>
                 <button class="btn btn-gold" id="submitMoodVote" th:if="${loginUser != null}">투표하기</button>
             </div>
-        </div>
+        </div> -->
         <!-- 분위기 끝 -->
 
 
@@ -345,7 +345,7 @@
                     contentType: 'application/json',
                     data: JSON.stringify({ content, rating }),
                     success: function () {
-                       Swal.fire({
+                        Swal.fire({
                             title: '성공',
                             text: '리뷰를 등록 하였습니다.',
                             icon: 'success',
@@ -716,7 +716,7 @@
     </script>
 
     <!-- 육각 그래프 스크립트 -->
-    <script>
+    <!-- <script>
         // 육각 차트
         function renderMoodChart(labels, values) {
             const ctx = document.getElementById('hexRadarChart').getContext('2d');
@@ -779,7 +779,7 @@
         const moodValues = /*[[${moodValues}]]*/[];
 
         renderMoodChart(moodLabels, moodValues);
-    </script>
+    </script> -->
 
 </body>
 

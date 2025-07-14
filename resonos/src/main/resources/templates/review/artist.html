@@ -125,22 +125,29 @@
         <!-- 분위기 -->
         <div class="mood-card">
             <div class="chart">
-                <canvas id="hexRadarChart"></canvas>
+                <th:block th:if="${isMoodEmpty}">
+                    <p id="headline">아직 아무도 분위기에 투표하지 않았어요 😅</p>
+                </th:block>
+                <th:block th:if="${!isMoodEmpty}">
+                    <canvas id="hexRadarChart"></canvas>
+                </th:block>
             </div>
             <div class="mood-vote">
                 <div class="vote-header">
-                    <p id="headline">Mood Tag</p>
+                    <p id="headline">Mood Tags</p>
                 </div>
-                <div class="moods">
-                    <!-- 분위기 반복문 -->
-                    <div class="btn btn-gold">분위기1</div>
-                    <div class="btn btn-gold">분위기1324</div>
-                    <div class="btn btn-gold">분위기133</div>
-                    <div class="btn btn-gold">분위기1</div>
-                    <div class="btn btn-gold">분위기144</div>
-                    <div class="btn btn-gold">분위기1</div>
+                <div class="moods" th:data-user-id="${loginUser != null ? loginUser.id : 0}"
+                    th:data-artist-id="${artist.id}" id="moodVoteContainer">
+                    <th:block th:each="tag : ${tags}">
+                        <label class="btn btn-gold mood-option"
+                            th:classappend="${userVotedMoodId == tag.id} ? 'selected'">
+                            <input type="radio" name="moodVote" th:value="${tag.id}"
+                                th:checked="${userVotedMoodId == tag.id}" hidden />
+                            <span th:text="${tag.name}">분위기</span>
+                        </label>
+                    </th:block>
                 </div>
-                <button class="btn btn-gold">분위기 투표</button>
+                <button class="btn btn-gold" id="submitMoodVote" th:if="${loginUser != null}">투표하기</button>
             </div>
         </div>
         <!-- 분위기 끝 -->
@@ -190,6 +197,162 @@
                 }
             });
         });
+    </script>
+
+    <!-- 분위기, 앨범 관련 투표 -->
+    <script>
+        // 라디오버튼 체크시
+        $(document).on('change', 'input[name="moodVote"]', function () {
+
+            $('.mood-option').removeClass('selected pop-heart'); // 모든 버튼 초기화
+
+            const $selected = $(this).closest('.mood-option');
+            $selected.addClass('selected pop-heart'); // 선택된 버튼에 클래스 추가
+
+            setTimeout(() => $selected.removeClass('pop-heart'), 300);
+        });
+
+        // 분위기 투표
+        $(document).on('click', '#submitMoodVote', function () {
+            const selectedMood = $('input[name="moodVote"]:checked').val();
+            if (!selectedMood) {
+                Swal.fire('분위기를 선택해주세요!');
+                return;
+            }
+            
+            const $container = $('#moodVoteContainer');
+            const userId = $container.data('user-id');
+            const artistId = $container.data('artist-id');
+            const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+            const csrfToken = $('meta[name="_csrf"]').attr('content');
+            
+            Swal.fire({
+                title: '이 분위기로 투표할까요?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: '네',
+                cancelButtonText: '아니오'
+            }).then(result => {
+                if (!result.isConfirmed) return;
+
+                $.ajax({
+                    url: '/artists/vote-mood',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(csrfHeader, csrfToken);
+                    },
+                    data: JSON.stringify({
+                        userId: userId,
+                        artistId: artistId,
+                        mood: selectedMood
+                    }),
+                    success: function (data) {
+                        const votedMoodId = data.votedMoodId;
+                        const tags = data.moods;
+                        const values = data.values;
+                        const labels = data.labels;
+
+                        // ✅ 무드 버튼 UI 갱신
+                        $container.empty();
+                        tags.forEach(tag => {
+                            const selected = (tag.id === votedMoodId);
+                            const html = `
+                        <label class="btn btn-gold mood-option ${selected ? 'selected pop-heart' : ''}">
+                            <input type="radio" name="moodVote" value="${tag.id}" ${selected ? 'checked' : ''} hidden />
+                            <span>${tag.name}</span>
+                        </label>
+                    `;
+                            $container.append(html);
+                        });
+
+                        // ✅ 차트 갱신
+                        const $chartArea = $('.chart');
+                        if (!Array.isArray(values) || values.length === 0) {
+                            $chartArea.html(`<p id="headline">아직 아무도 분위기에 투표하지 않았어요 😅</p>`);
+                        } else {
+                            $chartArea.html(`<canvas id="hexRadarChart"></canvas>`);
+                            renderMoodChart(labels, values);
+                        }
+
+                        setTimeout(() => {
+                            $('.mood-option').removeClass('pop-heart');
+                        }, 300);
+
+                        Swal.fire('투표 완료!');
+                    },
+                    error: function () {
+                        Swal.fire('투표에 실패했습니다.');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- 육각 그래프 스크립트 -->
+    <script>
+        // 육각 차트
+        function renderMoodChart(labels, values) {
+            const ctx = document.getElementById('hexRadarChart').getContext('2d');
+
+            if (window.moodChartInstance) {
+                window.moodChartInstance.destroy();
+            }
+
+            const maxValue = Math.max(...values);
+            const roundedMax = Math.ceil(maxValue / 10) * 10;
+
+            // ✅ 6개로 고정 (많으면 자르고, 적으면 채우기)
+            labels = labels.slice(0, 6);
+            values = values.slice(0, 6);
+            while (labels.length < 6) {
+                labels.push('');
+                values.push(0);
+            }
+
+            window.moodChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Mood Votes',
+                        data: values,
+                        backgroundColor: 'rgba(212, 185, 127, 0.2)',
+                        borderColor: '#D4B97F',
+                        pointBackgroundColor: '#D4B97F'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            grid: { color: '#D4B97F' },
+                            angleLines: { color: '#D4B97F' },
+                            pointLabels: { color: '#D4B97F' },
+                            ticks: {
+                                stepSize: Math.ceil(roundedMax / 5), // 4단계로 분할
+                                backdropColor: 'transparent'
+                            },
+                            min: 0,
+                            max: roundedMax
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+
+    <script th:inline="javascript">
+        const moodLabels = /*[[${moodLabels}]]*/[];
+        const moodValues = /*[[${moodValues}]]*/[];
+
+        renderMoodChart(moodLabels, moodValues);
     </script>
 
     <!-- 드래그 슬라이드 -->
