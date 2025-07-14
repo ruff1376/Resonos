@@ -28,6 +28,7 @@ import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.LikedTrack;
 import com.cosmus.resonos.domain.MoodStat;
 import com.cosmus.resonos.domain.Pagination;
+import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.Tag;
 import com.cosmus.resonos.domain.Track;
 import com.cosmus.resonos.domain.TrackMoodVote;
@@ -39,6 +40,7 @@ import com.cosmus.resonos.service.ArtistService;
 import com.cosmus.resonos.service.LikedTrackService;
 import com.cosmus.resonos.service.MoodStatService;
 import com.cosmus.resonos.service.PlaylistDetailService;
+import com.cosmus.resonos.service.PlaylistService;
 import com.cosmus.resonos.service.ReviewLikeService;
 import com.cosmus.resonos.service.TagService;
 import com.cosmus.resonos.service.TrackMoodVoteService;
@@ -75,6 +77,8 @@ public class TrackController {
     private MoodStatService moodStatService;
     @Autowired
     private LikedTrackService likedTrackService;
+    @Autowired
+    private PlaylistService playlistService;
 
     // 트랙 화면
     @GetMapping
@@ -99,7 +103,6 @@ public class TrackController {
             // 비로그인 사용자를 위해 false로 설정
             model.addAttribute("isTrackLikedByUser", false);
         }
-
 
         Track track = trackService.selectById(id);
         Album album = albumService.findAlbumByTrackId(id);
@@ -142,6 +145,16 @@ public class TrackController {
                 .collect(Collectors.toList());
         // ✅ 좋아요 수 조회
         int likeCount = likedTrackService.getTrackLikeCount(id);
+
+        boolean emptyPlayList = true;
+        List<Playlist> playLists = null;
+        if(playlistService.getPlaylistsByTrackId(id) != null) {
+            playLists = playlistService.getPlaylistsByTrackId(id);
+            emptyPlayList = false;
+        }
+
+        model.addAttribute("emptyPlayList", emptyPlayList);
+        model.addAttribute("playLists", playLists);
         model.addAttribute("trackLikeCount", likeCount);
         model.addAttribute("isMoodEmpty", isMoodEmpty);
         model.addAttribute("moodLabels", moodLabels);

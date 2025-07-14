@@ -30,6 +30,7 @@ import com.cosmus.resonos.domain.ChartElement;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.LikedAlbum;
 import com.cosmus.resonos.domain.Pagination;
+import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.Track;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.AlbumReviewService;
@@ -37,6 +38,7 @@ import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.ArtistService;
 import com.cosmus.resonos.service.ChartElementService;
 import com.cosmus.resonos.service.LikedAlbumService;
+import com.cosmus.resonos.service.PlaylistService;
 import com.cosmus.resonos.service.ReviewLikeService;
 import com.cosmus.resonos.service.TrackService;
 import com.cosmus.resonos.validation.ReviewForm;
@@ -62,6 +64,8 @@ public class AlbumController {
     private LikedAlbumService likedAlbumService;
     @Autowired
     private ChartElementService chartElementService;
+    @Autowired
+    private PlaylistService playlistService;
 
     // 앨범
     @GetMapping
@@ -120,12 +124,20 @@ public class AlbumController {
                 argValues.getOrDefault("storytelling", 0),
                 argValues.getOrDefault("cohesiveness", 0),
                 argValues.getOrDefault("creativity", 0));
+                
+                
+                
+        boolean emptyPlayList = true;
+        List<Playlist> playLists = null;
+        if(playlistService.getPlaylistsByAlbumId(id) != null) {
+            playLists = playlistService.getPlaylistsByAlbumId(id);
+            emptyPlayList = false;
+        }
 
+        model.addAttribute("emptyPlayList", emptyPlayList);
+        model.addAttribute("playLists", playLists); 
         model.addAttribute("argLabels", argLabels);
         model.addAttribute("argScores", argScores);
-
-
-
         model.addAttribute("album", album);
         model.addAttribute("artist", artist);
         model.addAttribute("tracks", tracks);
