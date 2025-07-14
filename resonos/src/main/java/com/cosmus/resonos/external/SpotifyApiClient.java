@@ -133,11 +133,14 @@ public class SpotifyApiClient {
                 .bodyToMono(Map.class)
                 .block();
     }
-
-    // 8. 아티스트의 앨범 목록
+    // 8. 아티스트의 앨범 목록 (album, single만 반환)
     public List<Map<String, Object>> getAlbumsByArtist(String artistId, String accessToken) {
         Map<String, Object> result = webClient.get()
-                .uri("/artists/" + artistId + "/albums")
+                .uri(uriBuilder -> uriBuilder
+                    .path("/artists/" + artistId + "/albums")
+                    .queryParam("include_groups", "album,single") // album, single만 포함
+                    .queryParam("limit", 50) // 필요시 페이지네이션 구현
+                    .build())
                 .header("Authorization", accessToken)
                 .retrieve()
                 .bodyToMono(Map.class)
@@ -146,6 +149,7 @@ public class SpotifyApiClient {
         if (result == null || !result.containsKey("items")) return Collections.emptyList();
         return (List<Map<String, Object>>) result.get("items");
     }
+
 
     // 9. 앨범의 트랙 목록
     public List<Map<String, Object>> getTracksByAlbum(String albumId, String accessToken) {

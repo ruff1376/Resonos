@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.PlaylistDTO;
 import com.cosmus.resonos.domain.PlaylistDetail;
@@ -113,5 +114,56 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     public boolean cancleLikePlaylist(Long loginUserId, Long playlistId) throws Exception {
         return playlistMapper.cancleLikePlaylist(loginUserId, playlistId) > 0;
+    }
+
+    @Override
+    public List<Playlist> searchList(String keyword) throws Exception {
+        return playlistMapper.searchList(keyword);
+    }
+
+    @Override
+    public List<Playlist> allSearchList(String keyword, Pagination pagination, String sort) throws Exception {
+        long total = playlistMapper.searchCount(keyword);
+        pagination.setTotal(total);
+        return playlistMapper.allSearchList(keyword, pagination, sort);
+    }
+
+    @Override
+    public long searchCount(String keyword) throws Exception {
+        return playlistMapper.searchCount(keyword);
+    }
+
+    @Override
+    public List<Playlist> mainNewList() throws Exception {
+        return playlistMapper.mainNewList();
+    }
+
+    @Override
+    public List<Playlist> newList(Pagination pagination) throws Exception {
+        long total = playlistMapper.newCount();
+        pagination.setTotal(total);
+        return playlistMapper.newList(pagination);
+    }
+
+    @Override
+    public List<Playlist> mainHotList() throws Exception {
+        return playlistMapper.mainHotList();
+    }
+
+    @Override
+    public List<Playlist> hotList(Pagination pagination) throws Exception {
+        long total = playlistMapper.hotCount();
+        pagination.setTotal(total);
+        return playlistMapper.hotList(pagination);
+    }
+
+    @Override
+    public long newCount() throws Exception {
+        return playlistMapper.newCount();
+    }
+
+    @Override
+    public long hotCount() throws Exception {
+        return playlistMapper.hotCount();
     }
 }

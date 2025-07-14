@@ -1,7 +1,6 @@
 package com.cosmus.resonos.mapper;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -62,10 +61,11 @@ public interface AlbumMapper {
     // 좋아요한 앨범 3개
     public List<Album> likedAlbumsTop3(@Param("id") Long id) throws Exception;
     // 좋아요한 앨범 전체
-    public List<Album> likedAlbums(@Param("id") Long id) throws Exception;
+    public List<Album> likedAlbums(@Param("id") Long id, @Param("keyword") String keyword) throws Exception;
 
     // 전체 앨범 데이터 불러오기
     public List<Album> getAllAlbums(Pagination pagination) throws Exception;
+
 }
 
 

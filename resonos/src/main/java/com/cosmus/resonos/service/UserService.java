@@ -88,4 +88,12 @@ public interface UserService {
     // 카카오 유저 회원가입
     public boolean insertSnsUser(Users user) throws Exception;
 
+    // countByKeword - 키워드 검색 
+    public long countByKeyword(String keyword) throws Exception;
+    // searchByKeywordPaging - 키워드 검색 페이징
+    List<Users> searchByKeywordPaging(String keyword, int index, int size) throws Exception;
+    // listPaging - 전체 페이징
+    public List<Users> listPaging(int index, int size) throws Exception;
+
+
 }

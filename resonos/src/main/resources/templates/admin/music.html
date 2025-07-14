@@ -336,7 +336,8 @@
               <div th:if="${#lists.isEmpty(artists)}" class="list-group-item text-center text-secondary bg-dark">등록된 아티스트가 없습니다.</div>
             </div>
           </div>
-          <div th:replace="~{fragments/pagination :: pagination(pagination=${artistPagination}, pageUri=${artistPageUri})}"></div>
+          <div th:replace="~{fragments/pagination :: pagination(pagination=${pagination}, pageUri=${pageUri})}"></div>
+
         </div>
 
 

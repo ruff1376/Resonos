@@ -107,10 +107,10 @@ public class PlaylistController {
         @RequestParam(value = "success", required = false) String success,
         @AuthenticationPrincipal CustomUser loginUser
     ) throws Exception {
-        // 플레이리스트 + 트랙 정보
-        PlaylistDTO playlist = playlistService.trackOfPlaylist(id, loginUser.getId());
         // 플레이리스트 소유자
-        Long ownerId =  playlist.getUserId();;
+        Long ownerId =  playlistService.select(id).getUserId();
+        // 플레이리스트 + 트랙 정보
+        PlaylistDTO playlist = playlistService.trackOfPlaylist(id, ownerId);
         // 자기 자신인지
         boolean isOwner = loginUser != null && loginUser.getId().equals(ownerId);
         // 비공개 + 주인X 조회 불가능
@@ -120,8 +120,7 @@ public class PlaylistController {
         // 좋아요 눌렀는지
         boolean alreadyLiked = loginUser != null ? playlistService.alreadyLikedPlaylist(loginUser.getId(), id) : false;
 
-        log.info("track : {}", playlist.getTrackList().toString());
-
+        model.addAttribute("userId", ownerId);
         model.addAttribute("alreadyLiked", alreadyLiked);
         model.addAttribute("owner", owner);
         model.addAttribute("playlist", playlist);

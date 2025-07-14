@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -84,11 +85,14 @@ public class ArtistController {
         List<Track> top7List = trackService.selectTop7TracksByArtist(id);
         String mv_url = artistService.selectTopMvUrlByArtist(id);
 
+
         List<MoodStat> moodStats = moodStatService.getTop6MoodsByArtistId(id);
         boolean isMoodEmpty = (moodStats == null || moodStats.isEmpty());
         List<String> moodLabels = moodStats.stream().map(MoodStat::getMoodName).toList();
         List<Integer> moodValues = moodStats.stream().map(MoodStat::getVoteCount).toList();
         
+
+
         model.addAttribute("artist", artist);
         model.addAttribute("mv", mv_url);
         model.addAttribute("albums", albums);
@@ -119,6 +123,7 @@ public class ArtistController {
         return ResponseEntity.ok(result);
     }
 
+
     @PostMapping("/vote-mood")
     @ResponseBody
     public ResponseEntity<?> voteMood(@RequestBody ArtistMoodVote request) throws Exception {
@@ -136,6 +141,26 @@ public class ArtistController {
         response.put("values", moodValues);
         response.put("moods", tagService.list());
         return ResponseEntity.ok(response);
+
+    /**
+     * 비동기 팔로우 아티스트 검색
+     * @param data
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/search")
+    public ResponseEntity<?> searchMyAlbums(
+        @RequestBody Map<String, Object> data
+    ) throws Exception {
+        Long userId = Long.valueOf(data.get("userId").toString());
+        String keyword = data.get("keyword").toString();
+
+        List<Artist> artistList = artistService.followingArtists(userId, keyword);
+        if(artistList != null)
+            return new ResponseEntity<>(artistList, HttpStatus.OK);
+
+        return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 
 }

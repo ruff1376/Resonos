@@ -94,10 +94,24 @@ public String musicAdminPage(
 
     model.addAttribute("tab", tab);
     model.addAttribute("size", size);
+    
 
     // 로그
     log.info("앨범 개수: {}", albums.size());
     log.info("트랙 개수: {}", tracks.size());
+
+    if ("album".equals(tab)) {
+    model.addAttribute("pagination", albumPagination);
+    model.addAttribute("pageUri", "/admin/music?tab=album&size=" + size);
+    } else if ("artist".equals(tab)) {
+        model.addAttribute("pagination", artistPagination);
+        model.addAttribute("pageUri", "/admin/music?tab=artist&size=" + size);
+    } else {
+        model.addAttribute("pagination", trackPagination);
+        model.addAttribute("pageUri", "/admin/music?tab=track&size=" + size);
+    }
+
+
 
     return "admin/music";
 }

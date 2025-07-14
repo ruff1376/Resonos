@@ -49,8 +49,8 @@
                 </th:block>
                 <div class="right">
                   <div class="like-area">
-                    <span class="count" th:text="${mpl.likeCount}">123</span>
                     <span class="like">♥</span>
+                    <span class="count" th:text="${mpl.likeCount}">123</span>
                   </div>
                   <th:block th:if="${isOwner}">
                     <button class="btn btn-danger">
@@ -87,7 +87,7 @@
                 <span class="name-album" th:text="${lpl.title}">좋아요 한 플레이리스트 명</span>
               </div>
               <th:block th:if="${isOwner}">
-                <button class="like">♥</button>
+                <button class="like like-button already">♥</button>
               </th:block>
             </li>
           </th:block>
@@ -98,18 +98,18 @@
   <th:block layout:fragment="pageScript">
     <script>
 
-      const likeButton = document.querySelectorAll("button.like");
-      likeButton.forEach(button => {
-        button.addEventListener('click', (e) => {
-          alert(e.target.closest('li').querySelector('input[type="hidden"]').value + "번 플리 좋아요 취소")
-        })
-      })
+      const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
+      const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
 
       /* 플레이리스트 상세 가기 */
       const items = document.querySelectorAll('.list-item')
       items.forEach(e => {
         e.addEventListener('click', (event) => {
-          if (event.target.tagName.toLowerCase() === 'button') return
+          if(event.target.classList.contains('like-button')) {
+            likePlaylist(event)
+            return
+          }
+          if(event.target.tagName.toLowerCase() === 'button') return
           const id = e.querySelector('input[type="hidden"]').value
           location.href = `/playlists/${id}`
         })
@@ -125,8 +125,7 @@
 
         try {
           /* Security 제공 CSRF */
-          const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
-          const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
+
           const response = await fetch(url, {
               method: "DELETE",
               headers: {
@@ -224,6 +223,74 @@
           });
           }
         });
+
+      // 플레이리스트 좋아요 / 취소
+      async function likePlaylist(event) {
+
+        const button = event.target
+        let method = ''
+        const currentStyle = button.classList.contains('already')
+        let playlistId = button.closest('.list-item').querySelector('input[type="hidden"]').value
+        let url = `/playlists/${playlistId}/like`
+        if(currentStyle) method = 'DELETE'
+        else method = 'POST'
+
+        try {
+            /* Security 제공 CSRF */
+
+            const response = await fetch(url, {
+                method: method,
+                headers: {
+                    [header] : token,
+                    "Content-Type": "application/json"
+                },
+            })
+
+          if (!response.ok) {
+              const result = await response.text()
+              Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: result,
+                showConfirmButton: false,
+                timer: 800,
+                customClass: {
+                  popup: 'follow-popup',
+                  icon: 'success-icon',
+                  title: 'alert-title'
+                }
+              });
+              if(result === '로그인이 필요한 서비스입니다.') {
+                sessionStorage.setItem('returnTo', location.href)
+                setTimeout(() => {
+                  location.href = '/login'
+                }, 900)
+              }
+              return
+          }
+          // 성공시
+          const text = await response.text()
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: text,
+            showConfirmButton: false,
+            timer: 1500,
+            customClass: {
+              popup: 'follow-popup',
+              icon: 'success-icon',
+              title: 'alert-title'
+            }
+          });
+          button.classList.toggle('already')
+          if(button.classList.contains('already'))
+            button.textContent = '♥'
+          else
+            button.textContent = '♡'
+        } catch (error) {
+            console.log("서버 에러.")
+          }
+      }
     </script>
     <script th:src="@{/js/remotecontroller.js}"></script>
   </th:block>

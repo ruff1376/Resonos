@@ -106,6 +106,7 @@ public class AlbumController {
         boolean hasNext = pagination.getLast() > page;
 
         int likeCount = likedAlbumService.getAlbumLikeCount(id);
+
         Map<String, Integer> argValues = chartElementService.getAverageScoresByAlbumId(id);
 
         // 요소 이름 리스트 (순서 고정)
@@ -122,6 +123,9 @@ public class AlbumController {
 
         model.addAttribute("argLabels", argLabels);
         model.addAttribute("argScores", argScores);
+
+
+
         model.addAttribute("album", album);
         model.addAttribute("artist", artist);
         model.addAttribute("tracks", tracks);
@@ -275,6 +279,7 @@ public class AlbumController {
         return ResponseEntity.ok(result);
     }
 
+
     @PostMapping("/vote")
     public ResponseEntity<?> saveOrUpdateVote(@RequestBody ChartElement element) {
         chartElementService.saveOrUpdate(element);
@@ -293,5 +298,25 @@ public class AlbumController {
     public ResponseEntity<Map<String, Integer>> getAverageScores(@RequestParam("albumId") String albumId) {
         Map<String, Integer> averages = chartElementService.getAverageScoresByAlbumId(albumId);
         return ResponseEntity.ok(averages);
+
+    /**
+     * 비동기 좋아요 한 앨범(키워드 검색)
+     * @param data
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/search")
+    public ResponseEntity<?> searchMyAlbums(
+        @RequestBody Map<String, Object> data
+    ) throws Exception {
+        Long userId = Long.valueOf(data.get("userId").toString());
+        String keyword = data.get("keyword").toString();
+
+        List<Album> albumList = albumService.likedAlbums(userId, keyword);
+        if(albumList != null)
+            return new ResponseEntity<>(albumList, HttpStatus.OK);
+
+        return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 }

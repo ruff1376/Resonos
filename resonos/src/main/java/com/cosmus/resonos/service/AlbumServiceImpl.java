@@ -1,10 +1,8 @@
 package com.cosmus.resonos.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -151,8 +149,8 @@ public class AlbumServiceImpl implements AlbumService {
 
 
     @Override
-    public List<Album> likedAlbums(Long id) throws Exception {
-        return albumMapper.likedAlbums(id);
+    public List<Album> likedAlbums(Long id, String keyword) throws Exception {
+        return albumMapper.likedAlbums(id, keyword);
     }
 
     @Override
@@ -165,7 +163,7 @@ public class AlbumServiceImpl implements AlbumService {
         return albumMapper.worldHotReviewList();
     }
 
-    // spotify 앨범 저장 
+    // spotify 앨범 저장
     @Autowired
     private SpotifyApiClient spotifyApiClient;
 
@@ -207,7 +205,7 @@ public class AlbumServiceImpl implements AlbumService {
         }
     }
 
-    // 전체 앨범 데이터 블러오기 
+    // 전체 앨범 데이터 블러오기
     @Override
     public List<Album> getAllAlbums(Pagination pagination) throws Exception {
         return albumMapper.getAllAlbums(pagination);

@@ -46,31 +46,29 @@ public class NotificationServiceImpl implements NotificationService {
         return notificationMapper.findByUser(userId);
     }
 
-    @Override
-    public boolean createPolicyViolationNotification(Long userId, String banword, Long targetId) throws Exception {
-        Notification notification = new Notification();
-        notification.setUserId(userId);
-        notification.setType("policy_violation"); // ← 반드시 추가!
-        notification.setMessage("금칙어 사용 안내");
-        notification.setContent("입력하신 내용에 금칙어(" + banword + ")가 포함되어 있습니다.");
-        notification.setIsRead(false);
-        notification.setCreatedAt(new Date());
-        notification.setTargetId(targetId);
-        return insert(notification);
-    }
+    // public boolean createPolicyViolationNotification(Long userId, String banword, String targetId) throws Exception {
+    //     Notification notification = new Notification();
+    //     notification.setUserId(userId);
+    //     notification.setType("policy_violation"); // ← 반드시 추가!
+    //     notification.setMessage("금칙어 사용 안내");
+    //     notification.setContent("입력하신 내용에 금칙어(" + banword + ")가 포함되어 있습니다.");
+    //     notification.setIsRead(false);
+    //     notification.setCreatedAt(new Date());
+    //     notification.setTargetId(targetId);
+    //     return insert(notification);
+    // }
 
-    @Override
-    public boolean createNotification(Long userId, String type, String message, String content, Long targetId) throws Exception {
-        Notification notification = new Notification();
-        notification.setUserId(userId);
-        notification.setType(type);
-        notification.setMessage(message);
-        notification.setContent(content);
-        notification.setIsRead(false);
-        notification.setCreatedAt(new Date());
-        notification.setTargetId(targetId);
-        return insert(notification);
-    }
+    // public boolean createNotification(Long userId, String type, String message, String content, String targetId) throws Exception {
+    //     Notification notification = new Notification();
+    //     notification.setUserId(userId);
+    //     notification.setType(type);
+    //     notification.setMessage(message);
+    //     notification.setContent(content);
+    //     notification.setIsRead(false);
+    //     notification.setCreatedAt(new Date());
+    //     notification.setTargetId(targetId);
+    //     return insert(notification);
+    // }
 
 
 }

@@ -15,10 +15,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.domain.Pagination;
+import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.Track;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.ArtistService;
+import com.cosmus.resonos.service.PlaylistService;
 import com.cosmus.resonos.service.TrackService;
 import com.cosmus.resonos.service.UserService;
 
@@ -41,6 +43,9 @@ public class SearchController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PlaylistService playlistService;
     
     @GetMapping("")
     public String search(
@@ -53,11 +58,13 @@ public class SearchController {
         List<Album> albumSearchList = albumService.searchList(keyword);
         List<Track> trackSearchList = trackService.searchList(keyword);
         List<Users> userSearchList = userService.searchList(keyword);
+        List<Playlist> playlistSearchList = playlistService.searchList(keyword);
 
         long artistSearchCount = artistService.searchCount(keyword);
         long albumSearchCount = albumService.searchCount(keyword);
         long trackSearchCount = trackService.searchCount(keyword);
         long userSearchCount = userService.searchCount(keyword);
+        long playlistSearchCount = playlistService.searchCount(keyword);
         
         model.addAttribute("keyword", keyword);
 
@@ -65,16 +72,19 @@ public class SearchController {
         model.addAttribute("albumSearchList", albumSearchList);
         model.addAttribute("trackSearchList", trackSearchList);
         model.addAttribute("userSearchList", userSearchList);
+        model.addAttribute("playlistSearchList", playlistSearchList);
 
         model.addAttribute("artistSearchCount", artistSearchCount);
         model.addAttribute("albumSearchCount", albumSearchCount);
         model.addAttribute("trackSearchCount", trackSearchCount);
         model.addAttribute("userSearchCount", userSearchCount);
+        model.addAttribute("playlistSearchCount", playlistSearchCount);
 
         log.info("artistSearchCount : " + artistSearchCount);
         log.info("albumSearchCount : " + albumSearchCount);
         log.info("trackSearchCount : " + trackSearchCount);
         log.info("userSearchCount : " + userSearchCount);
+        log.info("playlistSearchCount : " + playlistSearchCount);
         
         return "search/search";
     }
@@ -223,6 +233,44 @@ public class SearchController {
                                             .toUriString();
         model.addAttribute("pageUri", pageUri);
         return "search/search_user";
+    }
+
+    @GetMapping("/playlists")
+    public String playlistSearch(
+        @RequestParam("q") String keyword,
+        @RequestParam(value = "size", defaultValue = "30") int size,
+        @RequestParam(value = "page", defaultValue = "1") int page,
+        @RequestParam(value = "sort", defaultValue = "relevance") String sort,
+        Model model,
+        Pagination pagination
+    ) throws Exception {
+        pagination.setSize(size);
+        pagination.setPage(page);
+        pagination.setCount(10);
+
+        // Map<String, Object> paramMap = new HashMap<>();
+        keyword = keyword.trim();
+        // paramMap.put("keyword", keyword);
+        // paramMap.put("index", pagination.getIndex());
+        // paramMap.put("size", pagination.getSize());
+        // paramMap.put("pagination", pagination);
+
+        List<Playlist> allPlaylistSearchList = playlistService.allSearchList(keyword, pagination, sort);
+
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("pagination", pagination);
+        model.addAttribute("allPlaylistSearchList", allPlaylistSearchList);
+        model.addAttribute("sort", sort);
+        
+        String pageUri = UriComponentsBuilder.fromPath("/search/playlists")
+                                            .queryParam("q", keyword)
+                                            .queryParam("size", pagination.getSize())
+                                            .queryParam("count", pagination.getCount())
+                                            .queryParam("sort", sort)
+                                            .build()
+                                            .toUriString();
+        model.addAttribute("pageUri", pageUri);
+        return "search/search_playlist";
     }
     
 }

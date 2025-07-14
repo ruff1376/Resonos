@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layouts/admin_layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>리뷰 상세</title>
+</head>
+
+<!-- layout:fragment="content"는 body 안에서 사용 -->
+<th:block layout:fragment="content">
+<main class="py-5 bg-resonos-dark">
+  <div class="container" style="max-width: 900px;">
+    <h2 class="mb-4 text-light-gold">리뷰 상세</h2>
+
+    <table class="table table-dark table-bordered align-middle">
+      <tr>
+        <th style="width:140px;">ID</th>
+        <td th:text="${review.id}"></td>
+      </tr>
+      <tr>
+        <th>작성자</th>
+        <td>
+          <span th:if="${review.reviewer != null}" th:text="${review.reviewer.nickname}"></span>
+          <span th:if="${review.reviewer == null}" th:text="${review.userId}"></span>
+        </td>
+      </tr>
+      <tr th:if="${type == 'album'}">
+        <th>앨범ID</th>
+        <td th:text="${review.albumId}"></td>
+      </tr>
+      <tr th:if="${type == 'track'}">
+        <th>트랙ID</th>
+        <td th:text="${review.trackId}"></td>
+      </tr>
+      <tr>
+        <th>평점</th>
+        <td th:text="${review.rating}"></td>
+      </tr>
+      <tr>
+        <th>리뷰 내용</th>
+        <td th:text="${review.content}"></td>
+      </tr>
+      <tr>
+        <th>블라인드</th>
+        <td>
+          <span th:text="${review.blinded} ? 'Y' : 'N'"></span>
+        </td>
+      </tr>
+      <tr>
+        <th>좋아요</th>
+        <td th:text="${review.likes}"></td>
+      </tr>
+      <tr>
+        <th>싫어요</th>
+        <td th:text="${review.dislikes}"></td>
+      </tr>
+      <tr>
+        <th>작성일시</th>
+         <td th:text="${review.createdAt != null ? #temporals.format(review.createdAt, 'yyyy-MM-dd HH:mm') : ''}"></td>
+      </tr>
+    </table>
+
+    <div class="mt-3">
+      <form th:action="@{'/admin/report/review/' + ${type} + '/' + ${review.id} + '/blind'}" method="post" style="display:inline;">
+        <input type="hidden" name="blinded" th:value="${!review.blinded}" />
+        <button type="submit" class="btn btn-outline-danger btn-sm"
+                th:text="${review.blinded} ? '블라인드 해제' : '블라인드'"></button>
+      </form>
+      <form th:action="@{'/admin/report/review/' + ${type} + '/' + ${review.id} + '/delete'}" method="post" style="display:inline;">
+        <button type="submit" class="btn btn-outline-danger btn-sm">삭제</button>
+      </form>
+      <a th:href="@{/admin/report/review(type=${type})}" class="btn btn-secondary btn-sm">목록</a>
+    </div>
+
+    <!-- 디버깅용: 리뷰 전체 데이터 확인 -->
+    <!-- <pre th:text="${#objects.toJson(review)}"></pre> -->
+  </div>
+</main>
+</th:block>
+</html>

@@ -47,7 +47,7 @@
     LEFT JOIN album_review arw
       ON a.id = arw.album_id
       AND DATE(arw.created_at) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
-    WHERE a.country IS NOT NULL AND a.country != 'KOR'
+    WHERE a.country IS NULL OR a.country != 'KOR'
     GROUP BY a.id
     ORDER BY review_count DESC
     LIMIT 5
@@ -220,7 +220,7 @@
       follower_count DESC,
       a.title ASC,
       ar.name ASC
-      LIMIT 12
+    LIMIT 12
   </select>
 
 
@@ -274,8 +274,8 @@
   <!-- 마이페이지: 좋아요 표시한 앨범 3개 -->
   <select id="likedAlbumsTop3" resultType="Album">
     SELECT a.*, la.created_at
-    FROM album a
-      INNER JOIN liked_album la ON la.album_id = a.id
+    FROM liked_album la
+      INNER JOIN album a ON la.album_id = a.id
     WHERE la.user_id = #{id}
     ORDER BY la.created_at DESC
     LIMIT 3
@@ -284,11 +284,32 @@
   <!-- 마이페이지: 좋아요 표시한 앨범 전체 -->
   <select id="likedAlbums" resultType="Album">
     SELECT a.*, la.created_at, art.name AS artistName
-    FROM album a
-      INNER JOIN liked_album la ON la.album_id = a.id
+    FROM liked_album la
+      INNER JOIN album a ON la.album_id = a.id
       INNER JOIN artist art ON a.artist_id = art.id
     WHERE la.user_id = #{id}
-    ORDER BY la.created_at DESC
+    <if test="keyword != null and keyword != ''">
+      AND(
+        a.title LIKE CONCAT('%', #{keyword}, '%')
+        OR art.name LIKE CONCAT('%', #{keyword}, '%')
+      )
+    </if>
+    ORDER BY
+    <choose>
+      <when test="keyword != null and keyword != ''">
+        CASE
+          WHEN a.title LIKE CONCAT(#{keyword}, '%') THEN 0
+          WHEN a.title LIKE CONCAT('%', #{keyword}, '%') THEN 1
+          WHEN art.name LIKE CONCAT(#{keyword}, '%') THEN 2
+          WHEN art.name LIKE CONCAT('%', #{keyword}, '%') THEN 3
+          ELSE 4
+        END,
+        la.created_at DESC
+      </when>
+      <otherwise>
+        la.created_at DESC
+      </otherwise>
+    </choose>
   </select>
 
 

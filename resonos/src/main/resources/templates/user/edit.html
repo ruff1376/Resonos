@@ -49,8 +49,10 @@
           </div>
           <label class="profile-edit-label" for="nickname">닉네임</label>
           <input type="text" class="form-control" th:field="*{nickname}">
+          <p class="fail-vali text-start" th:text="${nickError != null ? '영문 + 숫자, 한글 + 숫자, 한글, 영문 조합 2글자 이상, 10글자 이하여야 합니다.' : nickDuple != null ? '사용중인 닉네임 입니다.' : ''}">닉네임 형식이 올바르지 않습니다.</p>
           <label class="profile-edit-label" for="email">이메일</label>
           <input type="email" class="form-control" th:field="*{email}">
+          <p class="fail-vali text-start"  th:text="${emailError != null ? '유효한 형식의 이메일을 입력해주세요.' : ''}">이메일 형식이 올바르지 않습니다.</p>
           <label class="profile-edit-label" for="bio">자기소개</label>
           <textarea class="form-control" th:field="*{bio}" rows="2" placeholder="자기소개를 입력하세요.">음악과 우주, 그리고 커뮤니티를 사랑합니다.</textarea>
         </div>
@@ -78,11 +80,22 @@
         }
       });
 
+      /* 배지 변경 */
       const badges = document.querySelectorAll('.bg-badge')
       badges.forEach(e => {
         e.addEventListener('click', function() {
         const badge = this.querySelector('.badge span').textContent
         const badgeId = this.querySelector('input[type="hidden"]').value
+
+        console.log(typeof badgeId)
+        console.log(typeof document.getElementById('currentBadge').value)
+
+        if(badgeId.trim() === document.getElementById('currentBadge').value.trim()) {
+          document.querySelector('.current.badge').textContent = ''
+          document.getElementById('currentBadge').value = 0
+          return
+        }
+
         document.querySelector('.current.badge').textContent = badge
         document.getElementById('currentBadge').value = badgeId
         })

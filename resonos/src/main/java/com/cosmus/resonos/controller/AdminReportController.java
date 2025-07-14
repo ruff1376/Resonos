@@ -12,11 +12,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.cosmus.resonos.domain.AlbumReview;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Report;
+import com.cosmus.resonos.domain.TrackReview;
 import com.cosmus.resonos.service.ReportService;
+import com.cosmus.resonos.service.TrackReviewService;
 
+import lombok.extern.slf4j.Slf4j;
+
+import com.cosmus.resonos.service.AlbumReviewService;
+
+@Slf4j
 @Controller
 @RequestMapping("/admin/report")
 public class AdminReportController {
@@ -137,7 +145,84 @@ public class AdminReportController {
         return "redirect:/admin/report?tab=" + tab + "&page=" + page + "&size=" + size;
     }
 
-    
+
+
+
+
+
+
+    // 리뷰 목록 ##############################
+    @Autowired
+    private TrackReviewService trackReviewService;
+    @Autowired
+    private AlbumReviewService albumReviewService;
+
+     // 리뷰 목록 (앨범/트랙)
+    @GetMapping("/review")
+    public String reviewList(
+            @RequestParam(value = "type", defaultValue = "album") String type,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            Model model) throws Exception {
+
+        log.info("리뷰 목록 요청: type={}, page={}, size={}", type, page, size);
+
+        long total;
+        Pagination pagination;
+        List<?> reviews;
+
+        if ("track".equalsIgnoreCase(type)) {
+            total = trackReviewService.countAll();
+            reviews = trackReviewService.getMoreReviews(null, page, size);
+            model.addAttribute("type", "track");
+        } else {
+            total = albumReviewService.countAll();
+            reviews = albumReviewService.getMoreReviews(null, page, size);
+            model.addAttribute("type", "album");
+        }
+        pagination = new Pagination(page, size, 10, total);
+
+        model.addAttribute("reviews", reviews);
+        model.addAttribute("pagination", pagination);
+        model.addAttribute("pageUri", "/admin/report/review?type=" + type + "&size=" + size);
+        model.addAttribute("size", size);
+
+        return "admin/review";
+    }
+
+
+    // 블라인드/해제
+    @PostMapping("/review/{type}/{id}/blind")
+    public String blindReview(
+            @PathVariable String type,
+            @PathVariable Long id,
+            @RequestParam boolean blinded) {
+
+        log.info("리뷰 블라인드 처리: type={}, id={}, blinded={}", type, id, blinded);
+
+        if ("track".equalsIgnoreCase(type)) {
+            trackReviewService.blindReview(id, blinded);
+        } else {
+            albumReviewService.blindReview(id, blinded);
+        }
+        return "redirect:/admin/report/review?type=" + type;
+    }
+
+    // 삭제
+    @PostMapping("/review/{type}/{id}/delete")
+    public String deleteReview(
+            @PathVariable String type,
+            @PathVariable Long id) {
+
+        log.info("리뷰 삭제 요청: type={}, id={}", type, id);
+
+        if ("track".equalsIgnoreCase(type)) {
+            trackReviewService.delete(id);
+        } else {
+            albumReviewService.delete(id);
+        }
+        return "redirect:/admin/report/review?type=" + type;
+    }
 
 
 }

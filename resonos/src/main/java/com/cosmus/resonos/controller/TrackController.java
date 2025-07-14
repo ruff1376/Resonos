@@ -100,13 +100,13 @@ public class TrackController {
             model.addAttribute("isTrackLikedByUser", false);
         }
 
-        
+
         Track track = trackService.selectById(id);
         Album album = albumService.findAlbumByTrackId(id);
         List<Track> top5List = trackService.findTop5TracksInSameAlbum(id);
         Artist artist = artistService.selectArtistByTrackId(id);
         TrackScore score = trackReviewService.getTrackScore(id);
-        
+
         // List<TrackReview> reviews = trackReviewService.reviewWithReviewerByTrackId(id);
         int page = 1;
         int size = 5;
@@ -174,7 +174,7 @@ public class TrackController {
                                 @RequestParam(name = "size", defaultValue = "5") int size,
                                 Model model,
                                 @AuthenticationPrincipal CustomUser principal) throws Exception {
-                                    
+
         List<TrackReview> allReviews = trackReviewService.getMoreReviews(trackId, page, size);
         boolean hasNext = allReviews.size() > size; // ⭐ size+1개면 다음 페이지 존재
         List<TrackReview> reviews = hasNext ? allReviews.subList(0, size) : allReviews;
@@ -330,7 +330,7 @@ public class TrackController {
             .map(MoodStat::getVoteCount)
             .collect(Collectors.toList());
 
-        
+
         Map<String, Object> response = new HashMap<>();
         response.put("votedMoodId", votedMoodId);
         response.put("moods", tags);
@@ -352,4 +352,18 @@ public class TrackController {
         return ResponseEntity.ok(result);
     }
 
+    // 비동기 좋아요 한 트랙(키워드 검색)
+    @PostMapping("/search")
+    public ResponseEntity<?> searchMyTracks(
+        @RequestBody Map<String, Object> data
+    ) throws Exception {
+        Long userId = Long.valueOf(data.get("userId").toString());
+        String keyword = data.get("keyword").toString();
+
+        List<Track> trackList = trackService.likedTracks(userId, keyword);
+        if(trackList != null)
+            return new ResponseEntity<>(trackList, HttpStatus.OK);
+
+        return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

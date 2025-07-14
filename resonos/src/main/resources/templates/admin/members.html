@@ -131,7 +131,8 @@
         <th:block th:each="member, iterStat : ${members}">
           <!-- 회원 한 줄 -->
           <div class="list-group-item bg-dark text-light border-secondary mb-2 rounded-0 d-flex flex-nowrap align-items-center text-center justify-content-center" th:id="'row-' + ${member.id}">
-            <div style="flex-basis:5%;min-width:40px;" th:text="${iterStat.count}">1</div>
+            <div style="flex-basis:5%;min-width:40px;"th:text="${pagination.index + iterStat.index + 1}">1</div>
+
             <div style="flex-basis:8%;min-width:60px;">
               <img th:src="${member.profileImage != null ? member.profileImage : '@{/img/default-profile.png}'}"
                    alt="프로필"
@@ -190,6 +191,8 @@
         <div th:if="${#lists.isEmpty(members)}" class="list-group-item text-center text-secondary bg-dark">등록된 회원이 없습니다.</div>
       </div>
     </div>
+    <div th:replace="~{fragments/pagination :: pagination(pagination=${pagination}, pageUri=${pageUri})}"></div>
+
   </div>
 </main>
 <script th:inline="javascript">

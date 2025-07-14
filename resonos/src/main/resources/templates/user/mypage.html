@@ -192,7 +192,7 @@
       </th:block>
       <!-- 알림 설정 -->
       <th:block th:if="${isOwner}">
-      <a class="grid-item" href="">
+      <a class="grid-item" th:href="@{/users/alarm}">
         <div class="mypage-card alarm">
           <h3>알림 설정</h3>
           <ul>
@@ -314,7 +314,7 @@
                 icon: "warning",
                 title: result,
                 showConfirmButton: false,
-                timer: 1500,
+                timer: 800,
                 customClass: {
                   popup: 'follow-popup',
                   icon: 'success-icon',
@@ -325,7 +325,7 @@
                 sessionStorage.setItem('returnTo', location.href)
                 setTimeout(() => {
                   location.href = '/login'
-                }, 1600)
+                }, 900)
               }
               return
           }

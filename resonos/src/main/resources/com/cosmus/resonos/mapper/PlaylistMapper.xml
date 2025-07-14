@@ -14,6 +14,8 @@
     <result property="isPublic" column="is_public"/>
     <result property="createdAt" column="created_at"/>
     <result property="trackId" column="track_id"/>
+    <result property="maker" column="maker"/>
+    <result property="likeCount" column="like_count"/>
   </resultMap>
 
   <!-- 플레이리스트 + 트랙  -->
@@ -225,4 +227,233 @@
     WHERE user_id = #{loginUserId}
     AND playlist_id = #{playlistId}
   </select>
+
+  <!-- 검색 결과 메인 -->
+  <!-- <select id="searchList" resultMap="PlaylistResultMap">
+    SELECT p.*, u.nickname AS maker,
+          COUNT(DISTINCT lp.id) AS like_count
+    FROM playlist p
+    LEFT JOIN user u ON p.user_id = u.id
+    LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+    LEFT JOIN playlist_detail pd ON p.id = pd.playlist_id
+    LEFT JOIN track t ON t.id = pd.track_id
+    WHERE p.title LIKE CONCAT('%', #{keyword}, '%')
+        OR u.nickname LIKE CONCAT('%', #{keyword}, '%')
+        OR t.title LIKE CONCAT('%', #{keyword}, '%')
+    GROUP BY p.id
+    ORDER BY
+      CASE
+        WHEN p.title = #{keyword} THEN 1
+        WHEN t.title = #{keyword} THEN 2
+        WHEN u.nickname = #{keyword} THEN 3
+        WHEN p.title LIKE CONCAT(#{keyword}, '%') THEN 4
+        WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 5
+        WHEN u.nickname LIKE CONCAT(#{keyword}, '%') THEN 6
+        WHEN p.title LIKE CONCAT('%', #{keyword}, '%') THEN 7
+        WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 8
+        WHEN u.nickname LIKE CONCAT('%', #{keyword}, '%') THEN 9
+        ELSE 10
+      END,
+      like_count DESC,
+      p.title ASC,
+      u.nickname ASC
+    LIMIT 12
+  </select> -->
+  <select id="searchList" resultMap="PlaylistResultMap">
+      SELECT *
+      FROM (
+          SELECT p.*, u.nickname AS maker,
+              COUNT(DISTINCT lp.id) AS like_count,
+              MAX(t.title) AS track_title
+          FROM playlist p
+          LEFT JOIN user u ON p.user_id = u.id
+          LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+          LEFT JOIN playlist_detail pd ON p.id = pd.playlist_id
+          LEFT JOIN track t ON t.id = pd.track_id
+          WHERE p.title LIKE CONCAT('%', #{keyword}, '%')
+              OR u.nickname LIKE CONCAT('%', #{keyword}, '%')
+              OR t.title LIKE CONCAT('%', #{keyword}, '%')
+          GROUP BY p.id
+      ) sub
+      ORDER BY
+        CASE
+          WHEN title = #{keyword} THEN 1
+          WHEN track_title = #{keyword} THEN 2
+          WHEN maker = #{keyword} THEN 3
+          WHEN title LIKE CONCAT(#{keyword}, '%') THEN 4
+          WHEN track_title LIKE CONCAT(#{keyword}, '%') THEN 5
+          WHEN maker LIKE CONCAT(#{keyword}, '%') THEN 6
+          WHEN title LIKE CONCAT('%', #{keyword}, '%') THEN 7
+          WHEN track_title LIKE CONCAT('%', #{keyword}, '%') THEN 8
+          WHEN maker LIKE CONCAT('%', #{keyword}, '%') THEN 9
+          ELSE 10
+        END,
+        like_count DESC,
+        title ASC,
+        maker ASC
+      LIMIT 12
+  </select>
+
+  <!-- 검색 결과 전체 -->
+  <!-- <select id="allSearchList" resultMap="PlaylistResultMap">
+    SELECT p.*, u.nickname AS maker,
+          COUNT(DISTINCT lp.id) AS like_count
+    FROM playlist p
+    LEFT JOIN user u ON p.user_id = u.id
+    LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+    LEFT JOIN playlist_detail pd ON p.id = pd.playlist_id
+    LEFT JOIN track t ON t.id = pd.track_id
+    WHERE p.title LIKE CONCAT('%', #{keyword}, '%')
+        OR u.nickname LIKE CONCAT('%', #{keyword}, '%')
+        OR t.title LIKE CONCAT('%', #{keyword}, '%')
+    GROUP BY p.id
+    <choose>
+        <when test="sort == 'latest'">
+            ORDER BY p.created_at DESC
+        </when>
+        <when test="sort == 'popular'">
+            ORDER BY like_count DESC
+        </when>
+        <otherwise>
+            ORDER BY
+              CASE
+                WHEN p.title = #{keyword} THEN 1
+                WHEN t.title = #{keyword} THEN 2
+                WHEN u.nickname = #{keyword} THEN 3
+                WHEN p.title LIKE CONCAT(#{keyword}, '%') THEN 4
+                WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 5
+                WHEN u.nickname LIKE CONCAT(#{keyword}, '%') THEN 6
+                WHEN p.title LIKE CONCAT('%', #{keyword}, '%') THEN 7
+                WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 8
+                WHEN u.nickname LIKE CONCAT('%', #{keyword}, '%') THEN 9
+                ELSE 10
+              END,
+              like_count DESC,
+              p.title ASC,
+              u.nickname ASC
+        </otherwise>
+    </choose>
+    LIMIT #{pagination.index}, #{pagination.size}
+  </select> -->
+  <select id="allSearchList" resultMap="PlaylistResultMap">
+      SELECT *
+      FROM (
+          SELECT p.*, u.nickname AS maker,
+              COUNT(DISTINCT lp.id) AS like_count,
+              MAX(t.title) AS track_title,  -- 트랙 제목 중 하나(정렬용)
+              MAX(u.nickname) AS user_nickname -- 유저 닉네임(정렬용)
+          FROM playlist p
+          LEFT JOIN user u ON p.user_id = u.id
+          LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+          LEFT JOIN playlist_detail pd ON p.id = pd.playlist_id
+          LEFT JOIN track t ON t.id = pd.track_id
+          WHERE p.title LIKE CONCAT('%', #{keyword}, '%')
+              OR u.nickname LIKE CONCAT('%', #{keyword}, '%')
+              OR t.title LIKE CONCAT('%', #{keyword}, '%')
+          GROUP BY p.id
+      ) sub
+      <choose>
+          <when test="sort == 'latest'">
+              ORDER BY created_at DESC
+          </when>
+          <when test="sort == 'popular'">
+              ORDER BY like_count DESC
+          </when>
+          <otherwise>
+              ORDER BY
+                CASE
+                  WHEN title = #{keyword} THEN 1
+                  WHEN track_title = #{keyword} THEN 2
+                  WHEN maker = #{keyword} THEN 3
+                  WHEN title LIKE CONCAT(#{keyword}, '%') THEN 4
+                  WHEN track_title LIKE CONCAT(#{keyword}, '%') THEN 5
+                  WHEN maker LIKE CONCAT(#{keyword}, '%') THEN 6
+                  WHEN title LIKE CONCAT('%', #{keyword}, '%') THEN 7
+                  WHEN track_title LIKE CONCAT('%', #{keyword}, '%') THEN 8
+                  WHEN maker LIKE CONCAT('%', #{keyword}, '%') THEN 9
+                  ELSE 10
+                END,
+                like_count DESC,
+                title ASC,
+                maker ASC
+          </otherwise>
+      </choose>
+      LIMIT #{pagination.index}, #{pagination.size}
+  </select>
+
+  <!-- 검색 데이터 수 -->
+  <select id="searchCount" resultType="long">
+    SELECT COUNT(DISTINCT p.id)
+    FROM playlist p
+    LEFT JOIN user u ON p.user_id = u.id
+    LEFT JOIN playlist_detail pd ON p.id = pd.playlist_id
+    LEFT JOIN track t ON t.id = pd.track_id
+    WHERE p.title LIKE CONCAT('%', #{keyword}, '%')
+          OR u.nickname LIKE CONCAT('%', #{keyword}, '%')
+          OR t.title LIKE CONCAT('%', #{keyword}, '%')
+  </select>
+
+  <select id="mainNewList" resultMap="PlaylistResultMap">
+    SELECT p.*, u.nickname AS maker,
+          COUNT(DISTINCT lp.id) AS like_count
+    FROM playlist p
+    LEFT JOIN user u ON p.user_id = u.id
+    LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+    WHERE p.created_at >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+    GROUP BY p.id
+    ORDER BY p.created_at DESC
+    LIMIT 12
+  </select>
+
+  <select id="newList" resultMap="PlaylistResultMap">
+    SELECT p.*, u.nickname AS maker,
+          COUNT(DISTINCT lp.id) AS like_count
+    FROM playlist p
+    LEFT JOIN user u ON p.user_id = u.id
+    LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+    WHERE p.created_at >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+    GROUP BY p.id
+    ORDER BY p.created_at DESC
+    LIMIT #{index}, #{size}
+  </select>
+
+  <select id="mainHotList" resultMap="PlaylistResultMap">
+    SELECT p.*, u.nickname AS maker,
+          COUNT(DISTINCT lp.id) AS like_count
+    FROM playlist p
+    LEFT JOIN user u ON p.user_id = u.id
+    LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+    GROUP BY p.id
+    HAVING COUNT(lp.id) > 0
+    ORDER BY like_count DESC
+    LIMIT 12
+  </select>
+
+  <select id="hotList" resultMap="PlaylistResultMap">
+    SELECT p.*, u.nickname AS maker,
+          COUNT(DISTINCT lp.id) AS like_count
+    FROM playlist p
+    LEFT JOIN user u ON p.user_id = u.id
+    LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+    GROUP BY p.id
+    HAVING COUNT(lp.id) > 0
+    ORDER BY like_count DESC, p.created_at DESC
+    LIMIT #{index}, #{size}
+  </select>
+
+  <select id="newCount" resultType="long">
+    SELECT COUNT(*) FROM playlist
+    WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+  </select>
+
+  <select id="hotCount" resultType="long">
+    SELECT COUNT(*) FROM (
+      SELECT p.id
+      FROM playlist p
+      LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+      GROUP BY p.id
+      HAVING COUNT(lp.id) > 0
+    ) AS filtered
+  </select>
+
 </mapper>

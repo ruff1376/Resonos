@@ -200,8 +200,8 @@ public class TrackServiceImpl implements TrackService {
     }
 
     @Override
-    public List<Track> likedTracks(Long id) throws Exception {
-        return trackMapper.likedTracks(id);
+    public List<Track> likedTracks(Long id, String keyword) throws Exception {
+        return trackMapper.likedTracks(id, keyword);
     }
 
     // 페이징 전체 데이터
@@ -209,6 +209,6 @@ public class TrackServiceImpl implements TrackService {
     public List<Track> getAllTracks(Pagination pagination) throws Exception {
         return trackMapper.getAllTracks(pagination);
     }
-    
+
 
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.PlaylistDTO;
 import com.cosmus.resonos.domain.PlaylistDetail;
@@ -53,5 +54,31 @@ public interface PlaylistMapper {
     public int cancleLikePlaylist(@Param("loginUserId") Long loginUserId, @Param("playlistId") Long playlistId) throws Exception;
     // 플레이리스트 좋아요 유무
     public int alreadyLikedPlaylist(@Param("loginUserId") Long loginUserId, @Param("playlistId") Long playlistId) throws Exception;
+
+    /* 검색 */
+    // 검색 결과 목록
+    public List<Playlist> searchList(@Param("keyword") String keyword) throws Exception;
+    // 검색 결과 전체 목록
+    public List<Playlist> allSearchList(
+        @Param("keyword") String keyword,
+        @Param("pagination") Pagination pagination,
+        @Param("sort") String sort
+    ) throws Exception;
+    // 검색 데이터 수
+    public long searchCount(String keyword) throws Exception;
+
+    /* 메인 */
+    // 메인 최신
+    public List<Playlist> mainNewList() throws Exception;
+    // 메인 최신 전체
+    public List<Playlist> newList(Pagination pagination) throws Exception;
+    // 메인 인기
+    public List<Playlist> mainHotList() throws Exception;
+    // 메인 인기 전체
+    public List<Playlist> hotList(Pagination pagination) throws Exception;
+    // 최신 데이터 수
+    public long newCount() throws Exception;
+    // 인기 데이터 수
+    public long hotCount() throws Exception;
 }
 

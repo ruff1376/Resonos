@@ -79,9 +79,7 @@
             tr.created_at ASC
     </select>
 
-    <select id="selectPagedReviewsWithReviewer"
-            parameterType="map"
-            resultMap="TrackReview">
+    <select id="selectPagedReviewsWithReviewer" parameterType="map" resultMap="TrackReview">
         SELECT
             tr.id,
             tr.rating,
@@ -99,11 +97,15 @@
             (SELECT COUNT(*) FROM review_report WHERE review_id = tr.id AND review_type = 'TRACK') AS dislikes
         FROM track_review tr
         JOIN user u ON u.id = tr.user_id
-        WHERE tr.track_id = #{trackId}
-        AND tr.blinded = 0
+        <where>
+            <if test="trackId != null">
+                tr.track_id = #{trackId}
+            </if>
+        </where>
         ORDER BY tr.critic DESC, likes DESC, tr.created_at ASC
         LIMIT #{size} OFFSET #{offset}
     </select>
+
 
     <select id="getLastestReview"
             parameterType="map"
@@ -230,5 +232,10 @@
         ORDER BY created_at DESC
         LIMIT #{size} OFFSET #{offset}
     </select> -->
+
+    <!-- 전체 리뷰 수 -->
+    <select id="countAll" resultType="long">
+        SELECT COUNT(*) FROM track_review
+    </select>
 
 </mapper>

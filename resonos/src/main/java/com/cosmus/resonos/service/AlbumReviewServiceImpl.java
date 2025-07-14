@@ -137,4 +137,18 @@ class AlbumReviewServiceImpl implements AlbumReviewService {
     public AlbumReview getLastestReview(String albumId, Long userId) {
         return mapper.getLastestReview(albumId, userId);
     }
+    @Override
+    public long countAll() throws Exception {
+        return mapper.countAll();
+    }
+    @Override
+    public List<AlbumReview> getAllReviewsWithReviewer() {
+        return mapper.findAllReviewsWithReviewer();
+    }
+
+    @Override
+    public List<AlbumReview> findAllReviewsWithReviewer() throws Exception {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findAllReviewsWithReviewer'");
+    }
 }

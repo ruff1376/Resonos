@@ -31,18 +31,57 @@
 
   <!-- 마이페이지: 팔로워 조회 -->
   <select id="myFollower" resultType="Users">
-    SELECT u.id, u.nickname, u.profile_image
+    SELECT u.id, u.nickname, u.profile_image, uf.created_at
     FROM user_follow uf
       INNER JOIN user u ON uf.follower_id = u.id
     WHERE following_id = #{id}
+    <if test="keyword != null and keyword != ''">
+      AND (
+        u.nickname LIKE CONCAT('%', #{keyword}, '%')
+      )
+    </if>
+    ORDER BY
+    <choose>
+      <when test="keyword != null and keyword != ''">
+        CASE
+          WHEN u.nickname LIKE CONCAT(#{keyword}, '%') THEN 0
+          WHEN u.nickname LIKE CONCAT('%', #{keyword}, '%') THEN 1
+          ELSE 2
+        END,
+        uf.created_at DESC
+      </when>
+      <otherwise>
+        uf.created_at DESC
+      </otherwise>
+    </choose>
+
   </select>
 
   <!-- 마이페이지: 팔로우 조회 -->
   <select id="myFollow" resultType="Users">
-    SELECT u.id, u.nickname, u.profile_image
+    SELECT u.id, u.nickname, u.profile_image, uf.created_at
     FROM user_follow uf
       INNER JOIN user u ON uf.following_id = u.id
     WHERE follower_id = #{id}
+    <if test="keyword != null and keyword != ''">
+      AND (
+        u.nickname LIKE CONCAT('%', #{keyword}, '%')
+      )
+    </if>
+    ORDER BY
+    <choose>
+      <when test="keyword != null and keyword != ''">
+        CASE
+          WHEN u.nickname LIKE CONCAT(#{keyword}, '%') THEN 0
+          WHEN u.nickname LIKE CONCAT('%', #{keyword}, '%') THEN 1
+          ELSE 2
+        END,
+        uf.created_at DESC
+      </when>
+      <otherwise>
+        uf.created_at DESC
+      </otherwise>
+    </choose>
   </select>
 
   <!-- 마이페이지: 팔로우 하기 -->

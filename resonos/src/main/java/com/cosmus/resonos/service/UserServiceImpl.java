@@ -318,4 +318,19 @@ public class UserServiceImpl implements UserService {
         return userMapper.insertSnsUser(user) > 0;
     }
 
+    @Override
+        public long countByKeyword(String keyword) throws Exception {
+            return userMapper.countByKeyword(keyword);
+        }
+
+        @Override
+        public List<Users> searchByKeywordPaging(String keyword, int index, int size) throws Exception {
+            return userMapper.searchByKeywordPaging(keyword, index, size);
+        }
+
+        @Override
+        public List<Users> listPaging(int index, int size) throws Exception {
+            return userMapper.listPaging(index, size);
+        }
+
 }

@@ -1,4 +1,4 @@
--- Active: 1745889699154@@127.0.0.1@3306@resonos
+-- Active: 1750388008084@@127.0.0.1@3306@resonos
 
 -- 실행 순서
 -- 1. 테이블 삭제 DROP PROCEDURE IF EXISTS create_tables;
@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS
         board_post, playlist_detail, artist_follow, album,
         playlist, comment, chart_element, album_mood_vote, report,
         liked_playlist, liked_track, qna_answer, qna, community,
-        track_mood_vote, user_sanction, admin_log, user_role, review_like, review_report,
+        track_mood_vote, artist_mood_vote, user_sanction, admin_log, user_role, review_like, review_report,
         notice, setting, badge, policy, external_api_config, plugin,
         track, artist, user, role, tag, user_activity_log;
 
@@ -32,7 +32,7 @@ BEGIN
         board_post, playlist_detail, artist_follow, album,
         playlist, comment, chart_element, album_mood_vote, report,
         liked_playlist, liked_track, qna_answer, qna, community,
-        track_mood_vote, user_sanction, admin_log, user_role, review_like, review_report,
+        track_mood_vote, artist_mood_vote, user_sanction, admin_log, user_role, review_like, review_report,
         notice, setting, badge, policy, external_api_config, plugin,
         track, artist, user, role, tag, user_activity_log,
         badge_condition;
@@ -183,7 +183,8 @@ BEGIN
         `storytelling` INT NOT NULL,
         `cohesiveness` INT NOT NULL,
         `creativity` INT NOT NULL,
-        `album_id` VARCHAR(200) NOT NULL
+        `album_id` VARCHAR(200) NOT NULL,
+        `user_id` BIGINT NOT NULL
     );
 
     CREATE TABLE IF NOT EXISTS `comment` (
@@ -312,14 +313,25 @@ BEGIN
 
     CREATE TABLE IF NOT EXISTS `setting` (
         `id` BIGINT NOT NULL,
+        `name` VARCHAR(255) NULL,
+        `description` VARCHAR(255) NULL,
         `value` VARCHAR(100) NULL,
-        `updated_at` DATETIME NULL
+        `updated_at` DATETIME NULL,
+        `created_at` DATETIME NULL
     );
+
 
     CREATE TABLE IF NOT EXISTS `track_mood_vote` (
         `id` BIGINT NOT NULL,
         `user_id` BIGINT NOT NULL,
         `track_id` VARCHAR(200) NOT NULL,
+        `mood` BIGINT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS `artist_mood_vote` (
+        `id` BIGINT NOT NULL,
+        `user_id` BIGINT NOT NULL,
+        `artist_id` VARCHAR(200) NOT NULL,
         `mood` BIGINT NOT NULL
     );
 
@@ -448,8 +460,10 @@ BEGIN
     ALTER TABLE `user_role` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `badge` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `notification` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
-    ALTER TABLE `setting` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `setting`MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`), ADD CONSTRAINT `uk_setting_value` UNIQUE (`value`);
+
     ALTER TABLE `track_mood_vote` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `artist_mood_vote` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `track_review` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `user_activity_log` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `user_badge` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
@@ -490,6 +504,7 @@ BEGIN
     ALTER TABLE `album_mood_vote` ADD CONSTRAINT `FK_album_TO_album_mood_vote_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`) ON DELETE CASCADE;
     ALTER TABLE `album_mood_vote` ADD CONSTRAINT `FK_tag_TO_album_mood_vote_1` FOREIGN KEY (`mood`) REFERENCES `tag` (`id`);
     ALTER TABLE `chart_element` ADD CONSTRAINT `FK_album_TO_chart_element_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`) ON DELETE CASCADE;
+    ALTER TABLE `chart_element` ADD CONSTRAINT `FK_user_TO_chart_element_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
     ALTER TABLE `comment` ADD CONSTRAINT `FK_user_TO_comment_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
     ALTER TABLE `playlist` ADD CONSTRAINT `FK_user_TO_playlist_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
     ALTER TABLE `album` ADD CONSTRAINT `FK_artist_TO_album_1` FOREIGN KEY (`artist_id`) REFERENCES `artist` (`id`) ON DELETE CASCADE;
@@ -510,6 +525,9 @@ BEGIN
     ALTER TABLE `track_mood_vote` ADD CONSTRAINT `FK_user_TO_track_mood_vote_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
     ALTER TABLE `track_mood_vote` ADD CONSTRAINT `FK_track_TO_track_mood_vote_1` FOREIGN KEY (`track_id`) REFERENCES `track` (`id`);
     ALTER TABLE `track_mood_vote` ADD CONSTRAINT `FK_tag_TO_track_mood_vote_1` FOREIGN KEY (`mood`) REFERENCES `tag` (`id`);
+    ALTER TABLE `artist_mood_vote` ADD CONSTRAINT `FK_user_TO_artist_mood_vote_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+    ALTER TABLE `artist_mood_vote` ADD CONSTRAINT `FK_artist_TO_artist_mood_vote_1` FOREIGN KEY (`artist_id`) REFERENCES `artist` (`id`);
+    ALTER TABLE `artist_mood_vote` ADD CONSTRAINT `FK_tag_TO_artist_mood_vote_1` FOREIGN KEY (`mood`) REFERENCES `tag` (`id`);
     ALTER TABLE `track_review` ADD CONSTRAINT `FK_user_TO_track_review_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
     ALTER TABLE `track_review` ADD CONSTRAINT `FK_track_TO_track_review_1` FOREIGN KEY (`track_id`) REFERENCES `track` (`id`);
     ALTER TABLE `user_activity_log` ADD CONSTRAINT `FK_user_TO_user_activity_log_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

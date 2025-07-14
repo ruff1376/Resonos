@@ -74,7 +74,7 @@
                                     <a th:href="@{'/albums?id=' + ${album.id}}">
                                         <img th:src="${album.coverImage}" class="card-img-top" alt="앨범커버">
                                     </a>
-                                    <div class="card-body d-flex flex-column align-items-center p-2">
+                                    <div class="card-body">
                                         <a th:href="@{'/albums?id=' + ${album.id}}" class="card-title" th:text="${album.title}"></a>
                                         <a th:href="@{'/artists?id=' + ${album.artistId}}" class="card-artist" th:text="${album.artistName}"></a>
                                     </div>
@@ -119,7 +119,7 @@
                                     <a th:href="@{'/tracks?id=' + ${track.id}}">
                                         <img th:src="${track.coverImage}" class="card-img-top" alt="앨범커버">
                                     </a>
-                                    <div class="card-body d-flex flex-column align-items-center p-2">
+                                    <div class="card-body">
                                         <a th:href="@{'/tracks?id=' + ${track.id}}" class="card-title" th:text="${track.title}"></a>
                                         <a th:href="@{'/artists?id=' + ${track.artistId}}" class="card-artist" th:text="${track.artistName}"></a>
                                     </div>
@@ -179,6 +179,45 @@
                     </th:block>
                 </div>
             </section>
+
+            <!-- 플레이리스트 -->
+            <section class="main-section-bg w-100 py-4 mb-5">
+                <div class="d-flex flex-row align-items-center px-4 mb-3" style="height:50px;">
+                    <div class="section-title flex-grow-1">플레이리스트</div>
+                </div>
+                <th:block th:if="${ playlistSearchList == null || playlistSearchList.isEmpty() }">
+                    <div style="border-top: 1px solid #D4B97F; border-bottom: 1px solid #D4B97F; padding: 40px 0;">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <h3 style="color: #B1B1B1;">검색된 플레이리스트가 없습니다.</h3>
+                        </div>
+                    </div>
+                </th:block>
+                <th:block th:if="${ playlistSearchList != null && !playlistSearchList.isEmpty() }">
+                    <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-0 m-0 justify-content-start">
+                        <th:block th:each="playlist : ${playlistSearchList}">
+                            <!-- 플레이리스트 카드 -->
+                            <div class="col d-flex justify-content-center">
+                                <div class="card align-items-center p-3" style="width:228px; height:240px;">
+                                    <a th:href="@{'/playlists/' + ${playlist.id}}">
+                                        <img th:src="${playlist.thumbnailUrl}" class="card-img-top" alt="플레이리스트 썸네일">
+                                    </a>
+                                    <div class="card-body">
+                                        <a th:href="@{'/playlists/' + ${playlist.id}}" class="card-title" th:text="${playlist.title}"></a>
+                                        <a th:href="@{'/users/' + ${playlist.userId}}" class="card-artist" th:text="'제작자 : ' + ${playlist.maker}"></a>
+                                        <div class="card-artist" th:text="|♥ ${#numbers.formatDecimal(playlist.likeCount != null ? playlist.likeCount : 0, 0, 'COMMA', 0, 'POINT')}|"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                </th:block>
+                <div class="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style="height:50px;">
+                    <th:block th:if="${ playlistSearchCount > 12 }">
+                        <a th:href="@{'/search/playlists?q=' + ${keyword}}" class="more-link">더 보기 &gt;</a>
+                    </th:block>
+                </div>
+            </section>
+
             <div class="floating">
                 <a href="#top">
                     <i class="bi bi-caret-up-fill"></i>

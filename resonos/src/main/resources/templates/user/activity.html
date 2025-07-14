@@ -29,8 +29,8 @@
               <a th:href="@{/tracks(id = *{trackId}, reviewId = *{id})}">
                 <p class="sm-title" th:text="*{title}">앨범 or 트랙 명</p>
                 <p class="sm-content" th:text="*{content}">내용</p>
-                <span class="date" th:text="*{createdAt}">날짜</span>
-                <span class="like" th:text="*{likes}">좋아요</span>
+                <span th:text="${#temporals.format(review.createdAt, 'yyyy-MM-dd HH:mm')}">날짜</span>
+                <span class="like" th:text="|❤️ *{likes}|">좋아요</span>
               </a>
             </li>
           </th:block>
@@ -84,7 +84,7 @@
                 <p class="sm-title">게시글 제목</p>
                 <p class="sm-content">내용</p>
                 <span class="date" th:text="2025.02.02">날짜</span>
-                <span class="like" th:text="|좋아요 ${10}|">좋아요</span>
+                <span class="like" th:text="|좋아요 ${10}|">좋아요</span>❤
               </a>
             </li>
           </th:block>

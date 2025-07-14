@@ -35,6 +35,8 @@ import com.cosmus.resonos.service.TrackService;
 import com.cosmus.resonos.service.UserFollowService;
 import com.cosmus.resonos.service.UserService;
 import com.cosmus.resonos.util.UploadImage;
+import com.cosmus.resonos.validation.EmailCheck;
+import com.cosmus.resonos.validation.NicknameCheck;
 import com.cosmus.resonos.validation.PasswordCheck;
 
 import lombok.extern.slf4j.Slf4j;
@@ -159,6 +161,15 @@ public class UserController {
     List<Badge> badgeList = badgeService.recentGetBadge(id);
     // 획득 배지 수
     int badgeCount = badgeService.badgeCount(id);
+    // TODO: 차트에 넘길 데이터
+
+    /* SELECT a.genre, COUNT(*) AS like_count
+    FROM liked_track lt
+      JOIN track t ON lt.track_id = t.id
+      JOIN album a ON t.album_id = a.id
+    WHERE lt.user_id = 1
+    GROUP BY a.genre
+    ORDER BY like_count DESC; */
 
     // 자기 자신인지
     boolean isOwner = loginUser != null && loginUser.getId().equals(id);
@@ -201,7 +212,10 @@ public class UserController {
   public String edit(
     @AuthenticationPrincipal CustomUser loginUser,
     Model model,
-    @RequestParam(value = "success", required = false) String success
+    @RequestParam(value = "success", required = false) String success,
+    @RequestParam(value = "nickError", required = false) Boolean nickError,
+    @RequestParam(value = "nickDuple", required = false) Boolean nickDuple,
+    @RequestParam(value = "emailError", required = false) Boolean emailError
   ) throws Exception {
     if(loginUser == null) return "redirect:/login";
     Users user = userService.select(loginUser.getUsername());
@@ -209,6 +223,10 @@ public class UserController {
     // 배지 정보
     Badge badge = badgeService.select(user.getCurrentBadge());
     String badgeName = badge == null ? "" : badge.getName();
+
+    if(nickError != null) model.addAttribute("nickError", nickError);
+    if(nickDuple != null) model.addAttribute("nickDuple", nickDuple);
+    if(emailError != null) model.addAttribute("emailError", emailError);
 
     model.addAttribute("badgeName", badgeName);
     model.addAttribute("badgeList", badgeList);
@@ -226,12 +244,38 @@ public class UserController {
    */
   @PostMapping("/edit")
   public String editPost(
+    @Validated({EmailCheck.class, NicknameCheck.class})
     @ModelAttribute Users user,
+    BindingResult br,
     @RequestParam("profileImg") MultipartFile file,
-    @AuthenticationPrincipal CustomUser loginUser
+    @AuthenticationPrincipal CustomUser loginUser,
+    RedirectAttributes redirectAttributes
   ) throws Exception {
     log.info("회원 정보 수정 요청 user : {}", user);
+    Users reqUser = userService.selectById(loginUser.getId());
     user.setId(loginUser.getId());
+
+    // 닉네임 유효성 검사
+    if(br.hasFieldErrors("nickname")) {
+      redirectAttributes.addFlashAttribute("nickError", true);
+      return "redirect:/users/edit?nickError";
+    }
+
+    // 닉네임 중복 검사
+    boolean checkNickname = userService.findByNickname(user.getNickname());
+    if(!reqUser.getNickname().equals(user.getNickname()) && checkNickname) {
+      redirectAttributes.addFlashAttribute("nickDuple", true);
+      return "redirect:/users/edit?nickDuple";
+    }
+
+    // 이메일 유효성 검사
+    if(br.hasFieldErrors("email")) {
+      redirectAttributes.addFlashAttribute("emailError", true);
+      return "redirect:/users/edit?emailError";
+    }
+
+    // 배지 텍스트 없이 보내면
+    if(user.getCurrentBadge() == 0) user.setCurrentBadge(null);
 
     boolean checkBagde = badgeService.checkBadge(loginUser.getId(), user.getCurrentBadge());
     if(!checkBagde) user.setCurrentBadge(null);
@@ -269,11 +313,16 @@ public class UserController {
     return "user/activity";
   }
 
-  @GetMapping("/setting-alarm")
+  /**
+   * 알림 설정
+   * @param model
+   * @return
+   */
+  @GetMapping("/alarm")
   public String getMethodName(Model model) {
 
 
-    model.addAttribute("lastPath", "setting-alarm");
+    model.addAttribute("lastPath", "alarm");
     return "user/setting-alarm";
   }
 
@@ -297,8 +346,9 @@ public class UserController {
     // 자기 자신인지
     boolean isOwner = loginUser != null && loginUser.getId().equals(targetId);
     // 팔로우한 아티스트 리스트
-    List<Artist> artistList = artistService.followingArtists(targetId);
+    List<Artist> artistList = artistService.followingArtists(targetId, "");
 
+    model.addAttribute("userId", targetId);
     model.addAttribute("artistList", artistList);
     model.addAttribute("isOwner", isOwner);
 
@@ -354,10 +404,10 @@ public class UserController {
     Long targetId = (id != null) ? id : loginUser.getUser().getId();
     // 자기 자신인지
     boolean isOwner = loginUser != null && loginUser.getId().equals(targetId);
-    List<Album> likedAlbumList = albumService.likedAlbums(targetId);
-    List<Track> likedTrackList = trackService.likedTracks(targetId);
+    List<Album> likedAlbumList = albumService.likedAlbums(targetId, "");
+    List<Track> likedTrackList = trackService.likedTracks(targetId, "");
 
-
+    model.addAttribute("userId", targetId);
     model.addAttribute("lastPath", "liked-music");
     model.addAttribute("isOwner", isOwner);
     model.addAttribute("likedAlbumList", likedAlbumList);
@@ -385,9 +435,10 @@ public class UserController {
     // 자기 자신인지
     boolean isOwner = loginUser != null && loginUser.getId().equals(targetId);
     // 팔로우, 팔로워 정보
-    List<Users> myFollower = userFollowService.myFollower(targetId);
-    List<Users> myFollow = userFollowService.myFollow(targetId);
+    List<Users> myFollower = userFollowService.myFollower(targetId, "");
+    List<Users> myFollow = userFollowService.myFollow(targetId, "");
 
+    model.addAttribute("userId", targetId);
     model.addAttribute("myFollower", myFollower);
     model.addAttribute("myFollow", myFollow);
     model.addAttribute("lastPath", "user-follows");

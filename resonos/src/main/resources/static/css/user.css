@@ -284,6 +284,7 @@ input::placeholder {color: #bbb !important;}
   gap: 10px;
   flex-wrap: wrap;
 }
+.mypage-card.badge-area ul .empty-text {flex: 1;}
 .mypage-card.badge-area h4 {
   margin-bottom: 20px;
 }
@@ -701,7 +702,8 @@ textarea.form-control {
 .con-badge .info-wrapper + .info-wrapper {margin-top: 50px;}
 .con-follow .bio {flex: 1;}
 .con-follow .ul-list.follower .bio {flex: auto;}
-.con-follow .btn-outline-gold, .con-follow-art .btn-outline-gold {width: 80px; margin-bottom: 0; padding: 3px 5px; margin-left: auto !important;}
+.con-follow .btn-outline-gold, .con-follow-art .btn-outline-gold,
+.con-follow .btn-gold, .con-follow-art .btn-gold {width: 80px; margin-bottom: 0; padding: 3px 5px; margin-left: auto !important;}
 
 
 /* 아티스트 팔로우 */
@@ -782,10 +784,11 @@ button.like {background-color: inherit; border: none;}
 .search-icon {
   position: absolute;
   left: 10px;
-  font-size: 29px;
+  font-size: 1.6rem;
   color: #B1B1B1;
   pointer-events: none;
 }
+.modal-track .search-icon {font-size: 2.9rem;}
 .profile-edit-label.radio {cursor: pointer;}
 .owner-info {
   color: #fff;
@@ -949,14 +952,24 @@ button.like {background-color: inherit; border: none;}
   gap: 30px;
 }
 .modal-input {
-    border: 1px solid #B1B1B1;
-    border-radius: 10px;
-    height: 45px;
-    background: transparent;
-    color: #B1B1B1;
-    padding-left: 45px;
-    font-size: 1.6rem;
-    width: 100%;
+  border: 1px solid #B1B1B1;
+  border-radius: 10px;
+  height: 45px;
+  background: transparent;
+  color: #B1B1B1;
+  padding-left: 45px;
+  font-size: 1.6rem;
+  width: 100%;
+}
+.basic-input {
+  border: 1px solid #B1B1B1;
+  border-radius: 10px;
+  height: 30px;
+  background: transparent;
+  color: #B1B1B1;
+  padding-left: 33px;
+  font-size: 1.4rem;
+  width: 100%;
 }
 .ul-list.modall {overflow: auto;}
 .ul-list.modall .list-item {border-color: var(--silver-color);}
@@ -1041,7 +1054,7 @@ h2 + #bio {
 }
 
 /* 계정 / 보안 페이지 */
-.con.con-security .info-section {max-height: 500px; min-height: 0; height: auto;}
+.con.con-security .info-section {max-height: 500px; min-height: 350px; height: auto;}
 .con.con-security .input-area {padding: 0;}
 .con.con-security .inner {
   display: flex;
