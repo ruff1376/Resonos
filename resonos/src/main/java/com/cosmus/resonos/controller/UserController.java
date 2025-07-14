@@ -299,6 +299,7 @@ public class UserController {
     // 팔로우한 아티스트 리스트
     List<Artist> artistList = artistService.followingArtists(targetId);
 
+    model.addAttribute("userId", targetId);
     model.addAttribute("artistList", artistList);
     model.addAttribute("isOwner", isOwner);
 

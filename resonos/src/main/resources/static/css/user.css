@@ -284,6 +284,7 @@ input::placeholder {color: #bbb !important;}
   gap: 10px;
   flex-wrap: wrap;
 }
+.mypage-card.badge-area ul .empty-text {flex: 1;}
 .mypage-card.badge-area h4 {
   margin-bottom: 20px;
 }
@@ -701,7 +702,8 @@ textarea.form-control {
 .con-badge .info-wrapper + .info-wrapper {margin-top: 50px;}
 .con-follow .bio {flex: 1;}
 .con-follow .ul-list.follower .bio {flex: auto;}
-.con-follow .btn-outline-gold, .con-follow-art .btn-outline-gold {width: 80px; margin-bottom: 0; padding: 3px 5px; margin-left: auto !important;}
+.con-follow .btn-outline-gold, .con-follow-art .btn-outline-gold,
+.con-follow .btn-gold, .con-follow-art .btn-gold {width: 80px; margin-bottom: 0; padding: 3px 5px; margin-left: auto !important;}
 
 
 /* 아티스트 팔로우 */
@@ -1041,7 +1043,7 @@ h2 + #bio {
 }
 
 /* 계정 / 보안 페이지 */
-.con.con-security .info-section {max-height: 500px; min-height: 0; height: auto;}
+.con.con-security .info-section {max-height: 500px; min-height: 350px; height: auto;}
 .con.con-security .input-area {padding: 0;}
 .con.con-security .inner {
   display: flex;
