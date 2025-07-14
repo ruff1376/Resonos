@@ -657,11 +657,9 @@
             const $argVote = $('.arg-vote');
             const albumId = $argVote.data('album-id');
             const userId = $argVote.data('user-id');
-            const $form = $('#vote-form');
-            const $view = $('#vote-result-view');
-            const $actionBtn = $('#edit-btn');
             const fields = ['lyric', 'sound', 'melody', 'storytelling', 'cohesiveness', 'creativity'];
             let isUpdate = false;
+            let isEditing = false; // 폼 열림 여부
 
             function syncSliderAndInput(field) {
                 $(`#${field}-slider`).on('input', function () {
@@ -677,43 +675,51 @@
 
             fields.forEach(syncSliderAndInput);
 
-            // 항상 결과는 보이고, 폼은 초기 숨김
-            $form.hide();
-            $view.show();
+            $('#vote-result-view').hide();
+            $('#vote-form').hide();
 
             if (!userId) return;
 
-            // 유저의 이전 투표 조회
+            // 유저 평가 불러오기
             $.get('/albums/chart/user', { userId, albumId }, function (data) {
+                $('#vote-result-view').show();
+
                 if (data && data.lyric != null) {
                     isUpdate = true;
-                    $actionBtn.text('수정하기');
-
                     fields.forEach(field => {
                         $(`#${field}-view`).text(data[field]);
                         $(`#${field}-slider`).val(data[field]);
                         $(`#${field}-input`).val(data[field]);
                     });
+                    $('#edit-btn').text('수정하기');
                 } else {
-                    isUpdate = false;
-                    $actionBtn.text('투표하기');
-
-                    fields.forEach(field => {
-                        $(`#${field}-view`).text('-');
-                        $(`#${field}-slider`).val(50);
-                        $(`#${field}-input`).val(50);
-                    });
+                    $('#edit-btn').text('투표하기');
+                    fields.forEach(field => $(`#${field}-view`).text('-'));
                 }
             });
 
-            // "수정하기" 또는 "투표하기" → 슬라이드 입력 폼 표시
-            $actionBtn.on('click', function () {
-                $form.removeClass('slide-in').show();
-                void $form[0].offsetWidth; // 리플로우
-                $form.addClass('slide-in');
+            // 수정 / 취소 버튼
+            $('#edit-btn').on('click', function () {
+                const $form = $('#vote-form');
+
+                if (isEditing) {
+                    // 닫기
+                    $form.removeClass('active');
+                    $('#edit-btn').text(isUpdate ? '수정하기' : '투표하기');
+                    isEditing = false;
+
+                    // 트랜지션 끝난 후에 숨김 처리
+                    setTimeout(() => $form.hide(), 400);
+                } else {
+                    $form.show(); // 먼저 block 처리
+                    void $form[0].offsetWidth; // ✅ reflow 강제 (transition 동작 유도)
+                    $form.addClass('active');
+                    $('#edit-btn').text('취소');
+                    isEditing = true;
+                }
             });
 
-            // 저장 버튼 동작
+            // 저장
             $('#save-btn').on('click', function () {
                 const payload = { albumId, userId };
                 fields.forEach(field => {
@@ -727,15 +733,41 @@
                     data: JSON.stringify(payload),
                     success: function () {
                         const msg = isUpdate ? '수정 완료!' : '투표 완료!';
-                        Swal.fire(msg, '', 'success').then(() => location.reload());
+                        isUpdate = true;
+
+                        fields.forEach(field => {
+                            $(`#${field}-view`).text(payload[field]);
+                            $(`#${field}-slider`).val(payload[field]);
+                            $(`#${field}-input`).val(payload[field]);
+                        });
+
+                        $('#vote-result-view').show();
+
+                        // 폼 슬라이드로 닫기
+                        const $form = $('#vote-form');
+                        $form.removeClass('active');
+                        setTimeout(() => $form.hide(), 400);
+                        $('#edit-btn').text('수정하기');
+                        isEditing = false;
+
+                        // 차트 갱신
+                        $.get('/albums/chart/avg', { albumId }, function (avg) {
+                            const labels = ['가사', '사운드', '멜로디', '스토리텔링', '유기성', '독창성'];
+                            const values = [
+                                avg.lyric ?? 0, avg.sound ?? 0, avg.melody ?? 0,
+                                avg.storytelling ?? 0, avg.cohesiveness ?? 0, avg.creativity ?? 0
+                            ];
+                            renderMoodChart(labels, values);
+                        });
+
+                        Swal.fire(msg, '', 'success');
                     },
                     error: function () {
-                        Swal.fire('오류', '저장 중 문제가 발생했습니다.', 'error');
+                        Swal.fire('저장 실패', '오류가 발생했습니다.', 'error');
                     }
                 });
             });
         });
-
 
         // 앨범 좋아요
         $(document).on('click', '.like-album-btn', function () {
@@ -771,8 +803,7 @@
     </script>
 
     <!-- 육각 그래프 스크립트 -->
-    <!-- <script>
-        // 육각 차트
+    <script>
         function renderMoodChart(labels, values) {
             const ctx = document.getElementById('hexRadarChart').getContext('2d');
 
@@ -781,11 +812,8 @@
             }
 
             const maxValue = Math.max(...values);
-            const roundedMax = Math.ceil(maxValue / 10) * 10;
+            const roundedMax = Math.ceil(maxValue / 10) * 10 || 100;
 
-            // ✅ 6개로 고정 (많으면 자르고, 적으면 채우기)
-            labels = labels.slice(0, 6);
-            values = values.slice(0, 6);
             while (labels.length < 6) {
                 labels.push('');
                 values.push(0);
@@ -796,7 +824,7 @@
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Mood Votes',
+                        label: '평균 점수',
                         data: values,
                         backgroundColor: 'rgba(212, 185, 127, 0.2)',
                         borderColor: '#D4B97F',
@@ -810,9 +838,15 @@
                         r: {
                             grid: { color: '#D4B97F' },
                             angleLines: { color: '#D4B97F' },
-                            pointLabels: { color: '#D4B97F' },
+                            pointLabels: {
+                                color: '#D4B97F',
+                                font: {
+                                    size: 16, // ✅ 폰트 크기 증가
+                                    weight: 'bold'
+                                }
+                            },
                             ticks: {
-                                stepSize: Math.ceil(roundedMax / 5), // 4단계로 분할
+                                stepSize: Math.ceil(roundedMax / 5),
                                 backdropColor: 'transparent'
                             },
                             min: 0,
@@ -820,21 +854,20 @@
                         }
                     },
                     plugins: {
-                        legend: {
-                            display: false
-                        }
+                        legend: { display: false }
                     }
                 }
             });
         }
     </script>
 
+
     <script th:inline="javascript">
         const moodLabels = /*[[${moodLabels}]]*/[];
         const moodValues = /*[[${moodValues}]]*/[];
 
         renderMoodChart(moodLabels, moodValues);
-    </script> -->
+    </script>
 
 </body>
 
