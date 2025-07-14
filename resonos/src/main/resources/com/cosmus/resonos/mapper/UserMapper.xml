@@ -223,5 +223,31 @@
     WHERE u.nickname LIKE CONCAT('%', #{keyword}, '%')
   </select>
 
+  <!-- 키워드 검색 회원 수 -->
+  <select id="countByKeyword">
+      SELECT COUNT(*)
+      FROM user
+      WHERE nickname LIKE CONCAT('%', #{keyword}, '%')
+        OR email LIKE CONCAT('%', #{keyword}, '%')
+  </select>
+
+  <!-- 전체 회원 페이징 -->
+  <select id="listPaging">
+      SELECT *
+      FROM user
+      ORDER BY id DESC
+      LIMIT #{index}, #{size}
+  </select>
+
+  <!-- 키워드 검색 + 페이징 -->
+  <select id="searchByKeywordPaging">
+      SELECT *
+      FROM user
+      WHERE nickname LIKE CONCAT('%', #{keyword}, '%')
+        OR email LIKE CONCAT('%', #{keyword}, '%')
+      ORDER BY id DESC
+      LIMIT #{index}, #{size}
+  </select>
+
 
 </mapper>

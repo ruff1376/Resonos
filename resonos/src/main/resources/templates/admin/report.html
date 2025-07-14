@@ -78,27 +78,93 @@
             </div>
 
             <!-- 상세 DIV -->
-            <div th:id="'detailRow-detail-' + ${stat.index}" class="detail-row border-secondary mb-2" style="display:none;">
+          <div th:id="'detailRow-detail-' + ${stat.index}" class="detail-row border-secondary mb-2" style="display:none;">
             <div class="detail-section">
-                <h5 class="text-light-gold">상세 정보</h5>
-                <div class="row">
+              <h5 class="text-light-gold">상세 정보</h5>
+              <div class="row">
                 <div class="col-md-6">
-                    <p><strong>신고 ID:</strong> <span th:text="${report.id}"></span></p>
-                    <p><strong>유형:</strong> <span th:text="${report.targetType}"></span></p>
-                    <p><strong>대상 ID:</strong> <span th:text="${report.targetId}"></span></p>
-                    <p><strong>사유:</strong> <span th:text="${report.reason}"></span></p>
+                  <p><strong>신고 ID:</strong> <span th:text="${report.id}"></span></p>
+                  <p>
+                  <strong>유형:</strong>
+                  <span th:text="${report.targetType}"></span>
+                  <span th:if="${#strings.equalsIgnoreCase(report.targetType, 'boardPost')}">
+                    <a th:href="@{/posts/{id}(id=${report.targetId})}" target="_blank" class="btn btn-outline-gold btn-xs ms-2">게시글 바로가기</a>
+                  </span>
+                  <span th:if="${#strings.equalsIgnoreCase(report.targetType, 'comment')}">
+                    <a th:href="@{/comments/{id}(id=${report.targetId})}" target="_blank" class="btn btn-outline-gold btn-xs ms-2">댓글 바로가기</a>
+                  </span>
+                  <span th:if="${#strings.equalsIgnoreCase(report.targetType, 'user')}">
+                    <a th:href="@{/users/{id}(id=${report.targetId})}" target="_blank" class="btn btn-outline-gold btn-xs ms-2">유저 프로필</a>
+                  </span>
+                  <span th:if="${#strings.equalsIgnoreCase(report.targetType, 'review')}">
+                    <a th:href="@{/reviews/{id}(id=${report.targetId})}" target="_blank" class="btn btn-outline-gold btn-xs ms-2">리뷰 바로가기</a>
+                  </span>
+                  </p>
+                  <p><strong>대상 ID:</strong> <span th:text="${report.targetId}"></span></p>
+                  <p><strong>사유:</strong> <span th:text="${report.reason}"></span></p>
                 </div>
                 <div class="col-md-6">
-                    <p><strong>신고자:</strong> <span th:text="${report.reporterId}"></span></p>
-                    <p><strong>신고일시:</strong> <span th:text="${report.createdAt != null ? #dates.format(report.createdAt, 'yyyy-MM-dd HH:mm') : '-'}"></span></p>
-                    <p><strong>상태:</strong> <span th:text="${report.status}"></span></p>
-                    <p><strong>처리자:</strong> <span th:text="${report.processedBy ?: '-'}"></span></p>
-                    <p th:if="${report.processedAt != null}"><strong>처리일시:</strong> <span th:text="${#dates.format(report.processedAt, 'yyyy-MM-dd HH:mm')}"></span></p>
-                    <p th:if="${report.processMemo != null}"><strong>처리메모:</strong> <span th:text="${report.processMemo}"></span></p>
+                  <p><strong>신고자:</strong> <span th:text="${report.reporterId}"></span></p>
+                  <p><strong>신고일시:</strong> <span th:text="${report.createdAt != null ? #dates.format(report.createdAt, 'yyyy-MM-dd HH:mm') : '-'}"></span></p>
+                  <p>
+                    <strong>상태:</strong>
+                    <span th:text="${report.status}"></span>
+                    <!-- 상태 변경 폼 -->
+                    <form th:action="@{/admin/reports/update-status}" method="post" class="d-inline ms-2">
+                      <input type="hidden" name="id" th:value="${report.id}" />
+                      <select name="status" class="form-select form-select-sm d-inline w-auto" style="width:90px;display:inline-block;">
+                        <option value="PENDING" th:selected="${report.status == 'PENDING'}">대기</option>
+                        <option value="PROCESSED" th:selected="${report.status == 'PROCESSED'}">처리</option>
+                        <option value="REJECTED" th:selected="${report.status == 'REJECTED'}">기각</option>
+                      </select>
+                      <button type="submit" class="btn btn-gold btn-xs">변경</button>
+                    </form>
+                  </p>
+                  <p><strong>처리자:</strong> <span th:text="${report.processedBy ?: '-'}"></span></p>
+                  <p th:if="${report.processedAt != null}"><strong>처리일시:</strong> <span th:text="${#dates.format(report.processedAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+                  <p th:if="${report.processMemo != null}"><strong>처리메모:</strong> <span th:text="${report.processMemo}"></span></p>
                 </div>
+              </div>
+              <!-- 제재/블라인드/삭제 등 관리 기능 -->
+              <div class="row mt-3">
+                <div class="col text-end">
+                  <!-- 게시글 블라인드/해제 -->
+                  <span th:if="${report.targetType == 'POST'}">
+                    <form th:action="@{/admin/posts/blind}" method="post" class="d-inline">
+                      <input type="hidden" name="postId" th:value="${report.targetId}" />
+                      <input type="hidden" name="blind" th:value="${!report.targetBlinded}" />
+                      <button type="submit" class="btn btn-outline-danger btn-sm" th:text="${report.targetBlinded} ? '블라인드 해제' : '블라인드'"></button>
+                    </form>
+                    <form th:action="@{/admin/posts/delete}" method="post" class="d-inline ms-1">
+                      <input type="hidden" name="postId" th:value="${report.targetId}" />
+                      <button type="submit" class="btn btn-outline-danger btn-sm">게시글 삭제</button>
+                    </form>
+                  </span>
+                  <!-- 댓글 블라인드/해제 -->
+                  <span th:if="${report.targetType == 'COMMENT'}">
+                    <form th:action="@{/admin/comments/blind}" method="post" class="d-inline">
+                      <input type="hidden" name="commentId" th:value="${report.targetId}" />
+                      <input type="hidden" name="blind" th:value="${!report.targetBlinded}" />
+                      <button type="submit" class="btn btn-outline-danger btn-sm" th:text="${report.targetBlinded} ? '블라인드 해제' : '블라인드'"></button>
+                    </form>
+                    <form th:action="@{/admin/comments/delete}" method="post" class="d-inline ms-1">
+                      <input type="hidden" name="commentId" th:value="${report.targetId}" />
+                      <button type="submit" class="btn btn-outline-danger btn-sm">댓글 삭제</button>
+                    </form>
+                  </span>
+                  <!-- 유저 제재/해제 -->
+                  <span th:if="${report.targetType == 'USER'}">
+                    <form th:action="@{/admin/users/ban}" method="post" class="d-inline">
+                      <input type="hidden" name="userId" th:value="${report.targetId}" />
+                      <input type="hidden" name="ban" th:value="${!report.targetBanned}" />
+                      <button type="submit" class="btn btn-outline-danger btn-sm" th:text="${report.targetBanned} ? '제재 해제' : '제재'"></button>
+                    </form>
+                  </span>
                 </div>
+              </div>
             </div>
-            </div>
+          </div>
+
 
             <!-- 수정 DIV -->
             <div th:id="'detailRow-edit-' + ${stat.index}" class="detail-row border-secondary mb-2" style="display:none;">
@@ -146,19 +212,21 @@
   </div>
   
   <script>
-    function toggleDetail(type, idx) {
+function toggleDetail(type, idx) {
     // 모두 닫기
     ['detail', 'edit', 'delete'].forEach(function(t) {
         var row = document.getElementById('detailRow-' + t + '-' + idx);
         if(row) row.style.display = 'none';
     });
-    // 해당 타입만 토글
+    // 해당 타입 토글
     var target = document.getElementById('detailRow-' + type + '-' + idx);
     if(target) {
-        if(target.style.display === 'none') target.style.display = 'block';
-        else target.style.display = 'none';
+        var isVisible = window.getComputedStyle(target).display !== 'none';
+        target.style.display = isVisible ? 'none' : 'block';
     }
-    }
+}
+
+
   </script>
 </main>
 </body>
