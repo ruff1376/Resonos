@@ -26,7 +26,7 @@
                     <p th:text="${artist.name}">아티스트</p>
                 </a>
                 <a th:href="@{/albums(id=${album.id})}">
-                    <p th:text="|${album.title}💿의 ${track.trackNo}th track|">어디앨범의 몇번째곡</p>
+                    <p th:text="|${album.title}💽의 ${track.trackNo}th track|">어디앨범의 몇번째곡</p>
                 </a>
                 <div class="review-section">
                     <th:block th:replace="~{review/reviewFrag :: reviewSection(score=${score})}"></th:block>
@@ -152,7 +152,7 @@
         <div class="info-card">
             <th:block th:if="${top5List != null and #lists.size(top5List) > 0}">
                 <div class="info top5track">
-                    <p id="headline" th:text="|${album.title}💿 🔥TOP ${#lists.size(top5List)}|"></p>
+                    <p id="headline" th:text="|${album.title}💽 🔥TOP ${#lists.size(top5List)}|"></p>
                     <th:block th:each="tops, stat : ${top5List}">
                         <a th:href="@{/tracks(id=${tops.id})}">
                             <p th:text="|${stat.count}. ${tops.title}  ${tops.formattedDuration}|"></p>

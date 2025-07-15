@@ -41,7 +41,7 @@
 
             <div class="track-graphy">
                 <div class="track-header">
-                    <p id="headline" th:text="|${album.title}💿 Tracks|">수록곡</p>
+                    <p id="headline" th:text="|${album.title}💽 Tracks|">수록곡</p>
                 </div>
                 <div class="track-container">
                     <!-- 반복문 구간 -->
@@ -94,7 +94,7 @@
         <!-- 앨범 트랙리스트 분위기 뭐뭐.. -->
         <div class="info-card">
             <div class="info top5track">
-                <p id="headline" th:text="|${album.title}💿 TOP${#lists.size(top5List)}🔥|">앨범 인기 TOP 5 트랙</p>
+                <p id="headline" th:text="|${album.title}💽 TOP${#lists.size(top5List)}🔥|">앨범 인기 TOP 5 트랙</p>
                 <th:block th:each="tops, stat : ${top5List}">
                     <a th:href="@{tracks(id=${tops.id})}">
                         <p th:text="|${stat.count}. ${tops.title} ${track.formattedDuration}|"></p>

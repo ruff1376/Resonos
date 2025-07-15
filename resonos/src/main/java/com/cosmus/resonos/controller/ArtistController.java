@@ -24,6 +24,7 @@ import com.cosmus.resonos.domain.ArtistFollow;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.LikedTrack;
 import com.cosmus.resonos.domain.MoodStat;
+import com.cosmus.resonos.domain.RecentReview;
 import com.cosmus.resonos.domain.Track;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.AlbumService;
@@ -31,6 +32,7 @@ import com.cosmus.resonos.service.ArtistFollowService;
 import com.cosmus.resonos.service.ArtistMoodVoteService;
 import com.cosmus.resonos.service.ArtistService;
 import com.cosmus.resonos.service.MoodStatService;
+import com.cosmus.resonos.service.RecentReviewService;
 import com.cosmus.resonos.service.TagService;
 import com.cosmus.resonos.service.TrackService;
 
@@ -57,6 +59,8 @@ public class ArtistController {
     private MoodStatService moodStatService;
     @Autowired
     private TagService tagService;
+    @Autowired
+    private RecentReviewService recentReviewService;
 
     // 아티스트 화면
     @GetMapping
@@ -92,7 +96,8 @@ public class ArtistController {
         List<Integer> moodValues = moodStats.stream().map(MoodStat::getVoteCount).toList();
         
 
-
+        List<RecentReview> reviews = recentReviewService.getRecentReviewsByArtistId(id);
+        model.addAttribute("recentReviews", reviews);
         model.addAttribute("artist", artist);
         model.addAttribute("mv", mv_url);
         model.addAttribute("albums", albums);
