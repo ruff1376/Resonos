@@ -39,7 +39,7 @@
                         <span id="likeCount" th:text="${trackLikeCount}">0</span>
                     </button>
 
-                    <div class="btn btn-gold">저장 💾</div>
+                    <div class="btn btn-gold" id="addToPlaylistBtn" th:data-track-id="${track.id}">저장 💾</div>
                 </div>
             </div>
         </div>
@@ -190,6 +190,7 @@
     </div>
     <script th:inline="javascript">
         const isLogin = [[${ loginUser != null ? 'true' : 'false'}]];
+        const userPlaylists = /*[[${userPlaylist}]]*/[];
     </script>
 
     <!-- 로그인시 원래페이지로 -->
@@ -678,6 +679,63 @@
 
 
 
+
+    </script>
+    <!-- 플레이리스트에 추가 -->
+    <script>
+        $(document).ready(function () {
+            $('#addToPlaylistBtn').click(function () {
+                if (!userPlaylists || userPlaylists.length === 0) {
+                    Swal.fire('플레이리스트 없음', '먼저 마이페이지에서 플레이리스트를 만들어주세요.', 'info');
+                    return;
+                }
+
+                Swal.fire({
+                    title: '플레이리스트에 추가',
+                    html: `
+                <select id="playlistSelect" class="swal2-select">
+                    <option disabled selected value="">플레이리스트 선택</option>
+                    ${userPlaylists.map(p => `<option value="${p.id}">${p.title}</option>`).join('')}
+                </select>
+            `,
+                    focusConfirm: false,
+                    showCancelButton: true, // ✅ 취소 버튼 추가
+                    confirmButtonText: '추가',
+                    cancelButtonText: '취소',
+                    preConfirm: () => {
+                        const selected = $('#playlistSelect').val();
+                        if (!selected) {
+                            Swal.showValidationMessage('플레이리스트를 선택해주세요!');
+                            return false;
+                        }
+                        return selected;
+                    }
+                }).then((result) => {
+                    if (!result.isConfirmed) return;
+
+                    const playlistId = Number(result.value); // ✅ 숫자 변환
+                    const trackId = $('#addToPlaylistBtn').data('track-id');
+
+                    $.ajax({
+                        url: `/tracks/playlists/${playlistId}`,
+                        method: 'POST',
+                        data: { id: trackId },
+                        success: () => {
+                            console.log('playlistId:', playlistId);
+                            console.log('typeof playlistId:', typeof playlistId);
+                            Swal.fire('추가 완료!', '플레이리스트에 저장되었습니다.', 'success');
+                        },
+                        error: () => {
+                            console.log('playlistId:', playlistId);
+                            console.log('typeof playlistId:', typeof playlistId);
+                            console.log('trackId:', trackId);
+                            console.log('typeof trackId:', typeof trackId);
+                            Swal.fire('오류', '추가 중 문제가 발생했습니다.', 'error');
+                        }
+                    });
+                });
+            });
+        });
 
     </script>
     <!-- 해당 댓글로 스크롤 이동 -->

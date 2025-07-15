@@ -3,6 +3,8 @@ package com.cosmus.resonos.domain;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +24,8 @@ public class Playlist {
     private String trackId;
     private int likeCount;
     private String maker;
-
+    
+    // 플레이리스트 제이슨 변경시 무시
+    @JsonIgnore
     List<Track> trackList;
 }

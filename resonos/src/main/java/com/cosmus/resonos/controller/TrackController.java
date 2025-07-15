@@ -100,6 +100,8 @@ public class TrackController {
             // ✅ 좋아요 여부 체크
             boolean isTrackLiked = likedTrackService.isLikedByUser(loginUser.getId(), id);
             model.addAttribute("isTrackLikedByUser", isTrackLiked);
+            List<Playlist> userPlaylist = playlistService.usersPlaylist(loginUser.getId());
+            model.addAttribute("userPlaylist", userPlaylist);
         } else {
             // 비로그인 사용자를 위해 false로 설정
             model.addAttribute("isTrackLikedByUser", false);
@@ -173,6 +175,27 @@ public class TrackController {
             return "redirect:/artists?error=notfound";
         }
         return "review/track";
+    }
+
+    @GetMapping("/myplaylists")
+    public ResponseEntity<List<Playlist>> getMyPlaylists(@AuthenticationPrincipal CustomUser loginUser) throws Exception {
+        if (loginUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        List<Playlist> userPlaylist = playlistService.usersPlaylist(loginUser.getId());
+        return ResponseEntity.ok(userPlaylist);
+    }
+
+    @PostMapping("/playlists/{playlistId}")
+    public ResponseEntity<Void> addTrackToPlaylist(@PathVariable("playlistId") Long playlistId,
+                                                   @RequestParam("id") String id) throws Exception {
+
+        String trackId = id;
+        // 단건 추가
+        playlistService.insertSingleTrack(playlistId, trackId);
+
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}/score-fragment")

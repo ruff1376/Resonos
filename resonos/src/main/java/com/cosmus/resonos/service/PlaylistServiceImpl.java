@@ -178,4 +178,10 @@ public class PlaylistServiceImpl implements PlaylistService {
     public List<Playlist> getPlaylistsByAlbumId(String albumId) {
         return playlistMapper.getPlaylistsByAlbumId(albumId);
     }
+
+    @Override
+    public int insertSingleTrack(Long playlistId, String trackId) throws Exception {
+        int orderNo = playlistMapper.getMaxOrderNo(playlistId) + 1 ;
+        return playlistMapper.insertSingleTrack(playlistId, trackId, orderNo);
+    }
 }

@@ -84,5 +84,9 @@ public interface PlaylistService {
     List<Playlist> getPlaylistsByTrackId(String trackId);
     List<Playlist> getPlaylistsByAlbumId(String albumId);
 
+    // 트랙리뷰에서 단건 추가
+    int insertSingleTrack(@Param("playlistId") Long playlistId,
+                            @Param("trackId") String trackId) throws Exception;
     
+                            
 }
