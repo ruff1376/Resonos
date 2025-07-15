@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.cosmus.resonos.domain.GenreCount;
 import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.UserAuth;
 import com.cosmus.resonos.domain.Users;
@@ -98,10 +99,12 @@ public interface UserMapper {
 
 
     // countByKeword - 키워드 검색
-    public long countByKeyword(String keyword) throws Exception;    
+    public long countByKeyword(String keyword) throws Exception;
     // searchByKeywordPaging - 키워드 검색 페이징
     public List<Users> searchByKeywordPaging(@Param("keyword") String keyword, @Param("index") int index, @Param("size") int size) throws Exception;
-    // listPaging - 전체 페이징 
+    // listPaging - 전체 페이징
     public List<Users> listPaging(@Param("index") int index, @Param("size") int size) throws Exception;
 
+    // 선호 장르 데이터 집계
+    public List<GenreCount> likedGenreData(@Param("userId") Long userId) throws Exception;
 }

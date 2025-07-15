@@ -89,6 +89,7 @@
               <img th:src="${lpl.thumbnailUrl}" class="follow-img" />
               <div class="info">
                 <span class="name-album" th:text="${lpl.title}">좋아요 한 플레이리스트 명</span>
+                <span class="name-user" th:text="${lpl.ownerName}">좋아요 한 플레이리스트 소유자</span>
               </div>
               <th:block th:if="${isOwner}">
                 <button class="like like-button already">♥</button>
@@ -360,6 +361,7 @@
               <img src="${item.thumbnailUrl}" class="follow-img" />
               <div class="info">
                 <span class="name-album">${item.title}</span>
+                <span class="name-user">${item.ownerName}</span>
               </div>
               ${isOwner ? '<button class="like like-button already">♥</button>' : ''}
           `

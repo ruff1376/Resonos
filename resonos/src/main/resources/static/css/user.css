@@ -716,6 +716,7 @@ textarea.form-control {
 .con-music .info-wrapper + .info-wrapper {margin-top: 50px;}
 .con-music .list-item {padding: 5px 22px;}
 .name-album {font-size: 1.4rem;}
+.name-user {font-size: 1.3rem; color: #bbb;}
 .name-artist {font-size: 1.2rem; color: #B0B6BE}
 .con-music .follow-img {border-radius: 10px; width: 60px; height: 60px; border: none;}
 .con-music .like {font-size: 3rem; margin-left: auto;}

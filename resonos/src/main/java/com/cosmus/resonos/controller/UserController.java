@@ -1,6 +1,7 @@
 package com.cosmus.resonos.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,6 +22,7 @@ import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.domain.Badge;
 import com.cosmus.resonos.domain.CustomUser;
+import com.cosmus.resonos.domain.GenreCount;
 import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.Track;
@@ -34,6 +36,7 @@ import com.cosmus.resonos.service.TrackReviewService;
 import com.cosmus.resonos.service.TrackService;
 import com.cosmus.resonos.service.UserFollowService;
 import com.cosmus.resonos.service.UserService;
+import com.cosmus.resonos.util.FlattenGenreCounts;
 import com.cosmus.resonos.util.UploadImage;
 import com.cosmus.resonos.validation.EmailCheck;
 import com.cosmus.resonos.validation.NicknameCheck;
@@ -107,7 +110,10 @@ public class UserController {
     List<Badge> badgeList = badgeService.recentGetBadge(user.getId());
     // 획득 배지 수
     int badgeCount = badgeService.badgeCount(user.getId());
+    // 차트 데이터
+    Map<String, Integer> chartData = FlattenGenreCounts.execute(userService.likedGenreData(user.getId()));
 
+    model.addAttribute("chartData", chartData);
     model.addAttribute("badgeCount", badgeCount);
     model.addAttribute("badgeList", badgeList);
     model.addAttribute("currentBadge", currentBadge);
@@ -161,15 +167,8 @@ public class UserController {
     List<Badge> badgeList = badgeService.recentGetBadge(id);
     // 획득 배지 수
     int badgeCount = badgeService.badgeCount(id);
-    // TODO: 차트에 넘길 데이터
-
-    /* SELECT a.genre, COUNT(*) AS like_count
-    FROM liked_track lt
-      JOIN track t ON lt.track_id = t.id
-      JOIN album a ON t.album_id = a.id
-    WHERE lt.user_id = 1
-    GROUP BY a.genre
-    ORDER BY like_count DESC; */
+    // 차트 데이터
+    Map<String, Integer> chartData = FlattenGenreCounts.execute(userService.likedGenreData(user.getId()));
 
     // 자기 자신인지
     boolean isOwner = loginUser != null && loginUser.getId().equals(id);
@@ -182,6 +181,7 @@ public class UserController {
       model.addAttribute("user", user);
     }
 
+    model.addAttribute("chartData", chartData);
     model.addAttribute("badgeCount", badgeCount);
     model.addAttribute("badgeList", badgeList);
     model.addAttribute("currentBadge", currentBadge);
