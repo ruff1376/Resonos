@@ -149,9 +149,15 @@ public class AlbumServiceImpl implements AlbumService {
 
 
     @Override
-    public List<Album> likedAlbums(Long id, String keyword) throws Exception {
-        return albumMapper.likedAlbums(id, keyword);
+    public List<Album> likedAlbums(Long id, String keyword, int offset, int limit) throws Exception {
+        return albumMapper.likedAlbums(id, keyword, offset, limit);
     }
+
+    @Override
+    public int countLikedAlbums(Long id) throws Exception {
+        return albumMapper.countLikedAlbums(id);
+    }
+
 
     @Override
     public List<Album> korHotReviewList() throws Exception {

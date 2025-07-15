@@ -168,8 +168,8 @@ public class TrackServiceImpl implements TrackService {
     }
 
     @Override
-    public List<Track> addTrackList(String keyword) throws Exception {
-        return trackMapper.addTrackList(keyword);
+    public List<Track> addTrackList(String keyword, int offset, int limit) throws Exception {
+        return trackMapper.addTrackList(keyword, offset, limit);
     }
 
     @Override
@@ -200,8 +200,13 @@ public class TrackServiceImpl implements TrackService {
     }
 
     @Override
-    public List<Track> likedTracks(Long id, String keyword) throws Exception {
-        return trackMapper.likedTracks(id, keyword);
+    public List<Track> likedTracks(Long id, String keyword, int offset, int limit) throws Exception {
+        return trackMapper.likedTracks(id, keyword, offset, limit);
+    }
+
+    @Override
+    public int countLikedTracks(Long id) throws Exception {
+        return trackMapper.countLikedTracks(id);
     }
 
     // 페이징 전체 데이터
@@ -209,6 +214,4 @@ public class TrackServiceImpl implements TrackService {
     public List<Track> getAllTracks(Pagination pagination) throws Exception {
         return trackMapper.getAllTracks(pagination);
     }
-
-
 }

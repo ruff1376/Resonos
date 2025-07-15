@@ -35,7 +35,9 @@ public interface PlaylistMapper {
     // 특정 유저의 공개 플레이리스트 3개 조회
     public List<Playlist> publicUsersPlaylist3(Long userId) throws Exception;
     // 좋아요한 플레이리스트 조회
-    public List<Playlist> likedPlaylist(@Param("userId") Long userId, @Param("keyword") String keyword) throws Exception;
+    public List<Playlist> likedPlaylist(@Param("userId") Long userId, @Param("keyword") String keyword, @Param("offset") int offset, @Param("limit") int limit) throws Exception;
+    // 좋아요한 플레이리스트 수
+    public int countLikedPlaylist(@Param("userId") Long userId) throws Exception;
     // 플레이리스트 상세 조회
     public PlaylistDTO trackOfPlaylist(@Param("playlistId")Long playlistId, @Param("loginUserId") Long loginUserId) throws Exception;
     // oreder_no MAX 조회

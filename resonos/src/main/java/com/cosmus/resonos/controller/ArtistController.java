@@ -94,7 +94,7 @@ public class ArtistController {
         boolean isMoodEmpty = (moodStats == null || moodStats.isEmpty());
         List<String> moodLabels = moodStats.stream().map(MoodStat::getMoodName).toList();
         List<Integer> moodValues = moodStats.stream().map(MoodStat::getVoteCount).toList();
-        
+
 
         List<RecentReview> reviews = recentReviewService.getRecentReviewsByArtistId(id);
         model.addAttribute("recentReviews", reviews);
@@ -160,8 +160,10 @@ public class ArtistController {
     ) throws Exception {
         Long userId = Long.valueOf(data.get("userId").toString());
         String keyword = data.get("keyword").toString();
+        int offset = Integer.parseInt(data.get("offset").toString());
+        int limit = Integer.parseInt(data.get("limit").toString());
 
-        List<Artist> artistList = artistService.followingArtists(userId, keyword);
+        List<Artist> artistList = artistService.followingArtists(userId, keyword, offset, limit);
         if(artistList != null)
             return new ResponseEntity<>(artistList, HttpStatus.OK);
 

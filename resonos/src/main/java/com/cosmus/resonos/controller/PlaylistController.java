@@ -348,8 +348,10 @@ public class PlaylistController {
     ) throws Exception {
         Long userId = Long.valueOf(data.get("userId").toString());
         String keyword = data.get("keyword").toString();
+        int offset = Integer.parseInt(data.get("offset").toString());
+        int limit = Integer.parseInt(data.get("limit").toString());
 
-        List<Playlist> likedPlaylists = playlistService.likedPlaylist(userId, keyword);
+        List<Playlist> likedPlaylists = playlistService.likedPlaylist(userId, keyword, offset, limit);
         if(likedPlaylists != null)
             return new ResponseEntity<>(likedPlaylists, HttpStatus.OK);
 

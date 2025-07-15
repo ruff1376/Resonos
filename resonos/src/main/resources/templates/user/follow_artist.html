@@ -22,7 +22,7 @@
         <div class="title">
           <div>
             <h2 class="text-start">팔로우 아티스트</h2>
-            <span class="count" th:text="${artistList.size()}">아티스트 수</span>
+            <span class="count" th:text="${count}">아티스트 수</span>
           </div>
           <div class="text-center position-relative">
             <i class="bi bi-search search-icon position-absolute"></i>
@@ -56,8 +56,14 @@
 
       const userId = [[${userId}]]
       const isOwner = [[${isOwner}]]
-      const header = $('meta[name="_csrf_header"]').attr('content');
-      const token = $('meta[name="_csrf"]').attr('content');
+      const header = $('meta[name="_csrf_header"]').attr('content')
+      const token = $('meta[name="_csrf"]').attr('content')
+
+      let offset = 0
+      const limit = 20
+      let loading = false
+      let allLoaded = false
+      let keyword = ''
 
       /* 아티스트 상세 페이지 이동 */
       document.querySelector(".ul-list").addEventListener('click', function(event) {
@@ -74,15 +80,15 @@
           // CSRF 설정
           $.ajaxSetup({
               beforeSend: function (xhr) {
-                  xhr.setRequestHeader(header, token);
+                  xhr.setRequestHeader(header, token)
               }
-          });
+          })
           const $btn = this
           const artistId = $btn.closest('.list-item').querySelector('input[type="hidden"]').value
 
           if (!userId || userId === 0) {
-              Swal.fire('로그인이 필요합니다!');
-              return;
+              Swal.fire('로그인이 필요합니다!')
+              return
           }
 
           $.ajax({
@@ -91,7 +97,7 @@
               contentType: 'application/json',
               data: JSON.stringify({ userId: userId, artistId: artistId }),
               success: function (res) {
-                  const followed = res.followed;
+                  const followed = res.followed
                   const text = followed ? '팔로우 하였습니다.' : '언팔로우 하였습니다.'
                   Swal.fire({
                     position: "center",
@@ -104,7 +110,7 @@
                       icon: 'success-icon',
                       title: 'alert-title'
                     }
-                  });
+                  })
                   // UI 갱신
                   $btn.textContent = followed ? '언팔로우' : '팔로우'
                   if(!followed) {
@@ -116,39 +122,49 @@
                   }
               },
               error: function () {
-                  Swal.fire('좋아요 처리에 실패했습니다.');
+                  Swal.fire('좋아요 처리에 실패했습니다.')
               }
-          });
-      });
+          })
+      })
 
       function debounce(fn, delay) {
-        let timer;
+        let timer
         return function (...args) {
-          clearTimeout(timer);
-          timer = setTimeout(() => fn.apply(this, args), delay);
-        };
+          clearTimeout(timer)
+          timer = setTimeout(() => fn.apply(this, args), delay)
+        }
       }
 
       /* 요청에 딜레이 넣기 */
-      const debouncedGetArtist = debounce(getArtist, 300);
-      document.getElementById('artist-search').addEventListener('keyup', debouncedGetArtist);
+      const debouncedGetArtist = debounce(() => getArtist(true), 300)
+      document.getElementById('artist-search').addEventListener('keyup', debouncedGetArtist)
 
       /* 아티스트 키워드 검색 */
-      async function getArtist(event) {
+      async function getArtist(reset = false) {
 
+        const keywordInput = document.getElementById('artist-search')
+        keyword = keywordInput.value
         let url = `/artists/search`
 
+        if (reset) {
+          offset = 0
+          allLoaded = false
+          document.querySelector('.ul-list').innerHTML = ''
+        }
+
         const data = {
-          keyword : event.target.value,
-          userId : userId
+          keyword : keyword,
+          userId : userId,
+          offset: offset,
+          limit: limit
         }
 
         try {
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
-                    [header] : token,
-                    "Content-Type": "application/json"
+                  [header] : token,
+                  "Content-Type": "application/json"
                 },
                 body: JSON.stringify(data)
             })
@@ -160,16 +176,20 @@
           }
           // 성공시
           const result = await response.json()
-          renderArtists(result)
+          renderArtists(result, reset)
+          offset += limit
+
+          if(result.length < limit) allLoaded = true
+
         } catch (error) {
             console.log(error)
           }
       }
 
       /* 아티스트 목록 렌더링 */
-      function renderArtists(artists) {
+      function renderArtists(artists, reset = false) {
         const ulList = document.querySelector('.ul-list')
-        ulList.innerHTML = ''
+        if(reset) ulList.innerHTML = ''
 
         artists.forEach(artist => {
           const li = document.createElement('li')
@@ -186,6 +206,24 @@
           ulList.appendChild(li)
         })
       }
+
+      /* 무한 스크롤 */
+      const scrollWindow = document.querySelector(".info-section")
+
+      const debouncedScrollHandler = debounce(async () => {
+        if (loading || allLoaded) return
+
+        const nearBottom = scrollWindow.scrollTop + scrollWindow.clientHeight >= scrollWindow.scrollHeight - 100
+
+        if (nearBottom) {
+          loading = true
+          await getArtist()
+          loading = false
+        }
+      }, 200)
+
+      scrollWindow.addEventListener('scroll', debouncedScrollHandler)
+
 
     </script>
     <script th:src="@{/js/remotecontroller.js}"></script>

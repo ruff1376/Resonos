@@ -203,7 +203,7 @@ public class TrackController {
                                                         Model model) {
         return ResponseEntity.ok(playlistService.getPlaylistsByTrackId(trackId));
     }
-    
+
 
     @GetMapping("/{id}/score-fragment")
     public String scoreRefresh(@PathVariable("id") String id, Model model) {
@@ -257,9 +257,10 @@ public class TrackController {
      */
     @PostMapping(value = "/from-playlists", consumes = "application/json")
     public ResponseEntity<?> getAjaxTracks(@RequestBody Map<String, String> data) throws Exception {
-
         log.info("트랙 요청 들어옴.");
-        List<Track> trackList = trackService.addTrackList(data.get("keyword"));
+        int offset = Integer.parseInt(data.get("offset").toString());
+        int limit = Integer.parseInt(data.get("limit").toString());
+        List<Track> trackList = trackService.addTrackList(data.get("keyword"), offset, limit);
         if(trackList != null)
             return new ResponseEntity<>(trackList, HttpStatus.OK);
 
@@ -424,8 +425,10 @@ public class TrackController {
     ) throws Exception {
         Long userId = Long.valueOf(data.get("userId").toString());
         String keyword = data.get("keyword").toString();
+        int offset = Integer.parseInt(data.get("offset").toString());
+        int limit = Integer.parseInt(data.get("limit").toString());
 
-        List<Track> trackList = trackService.likedTracks(userId, keyword);
+        List<Track> trackList = trackService.likedTracks(userId, keyword, offset, limit);
         if(trackList != null)
             return new ResponseEntity<>(trackList, HttpStatus.OK);
 
