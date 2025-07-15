@@ -48,11 +48,11 @@ public class AdminBadgeController {
 
     // 배지+조건 동시 등록 (오른쪽 폼)
     @PostMapping("/insert")
-    public String insert(@RequestParam String name,
-                         @RequestParam String description,
-                         @RequestParam(required = false) String iconUrl,
-                         @RequestParam String conditionType,
-                         @RequestParam Integer conditionValue) throws Exception {
+    public String insert(@RequestParam("name") String name,
+                         @RequestParam("description") String description,
+                         @RequestParam(name="iconUrl", required = false) String iconUrl,
+                         @RequestParam ("conditionType") String conditionType,
+                         @RequestParam("conditionValue") Integer conditionValue) throws Exception {
         // 1. 배지 등록
         Badge badge = new Badge();
         badge.setName(name);
@@ -74,12 +74,12 @@ public class AdminBadgeController {
 
     // 배지 조건 수정
     @PostMapping("/update")
-    public String update(@RequestParam Long id,
-                        @RequestParam Long badgeId,
-                        @RequestParam String badgeName,
-                        @RequestParam String description,
-                        @RequestParam String conditionType,
-                        @RequestParam Integer conditionValue) throws Exception {
+    public String update(@RequestParam("id") Long id,
+                        @RequestParam("badgeId") Long badgeId,
+                        @RequestParam("badgeName") String badgeName,
+                        @RequestParam("description") String description,
+                        @RequestParam("conditionType") String conditionType,
+                        @RequestParam("conditionValue") Integer conditionValue) throws Exception {
         BadgeCondition condition = new BadgeCondition();
         condition.setId(id);
         condition.setBadgeId(badgeId);
@@ -108,14 +108,14 @@ public class AdminBadgeController {
 
     // 배지 삭제 (조건도 함께 삭제)
     @PostMapping("/delete/badge/{id}")
-    public String deleteBadge(@PathVariable Long id) throws Exception {
+    public String deleteBadge(@PathVariable("id") Long id) throws Exception {
         badgeService.delete(id);
         return "redirect:/admin/badge";
     }
 
     // 조건만 삭제 (사용 여부에 따라 필요시)
     @PostMapping("/delete/condition/{id}")
-    public String deleteCondition(@PathVariable Long id) throws Exception {
+    public String deleteCondition(@PathVariable("id") Long id) throws Exception {
         badgeConditionService.deleteCondition(id);
         return "redirect:/admin/badge";
     }
