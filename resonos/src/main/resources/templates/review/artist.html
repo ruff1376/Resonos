@@ -90,18 +90,25 @@
         <div class="info-card">
             <div class="info recent-review">
                 <p id="headline" th:text="|${artist.name} 최근 리뷰|"></p>
-                <p>이번 신곡 쩔었다</p>
-                <p>동해물과 백두산이 마르고 닳도록</p>
-                <p>동해물과 백두산이 마르고 닳도록</p>
-                <p>동해물과 백두산이 마르고 닳도록</p>
-                <p>동해물과 백두산이 마르고 닳도록</p>
-                <div>
-                    <button class="btn btn-gold">앨범 전체 보기</button>
-                </div>
+                <th:block th:if="${recentReviews == null or recentReviews.isEmpty()}">
+                    <p id="headline">아직 리뷰가 없어요</p>
+                </th:block>
+                <th:block th:if="${recentReviews != null and !recentReviews.isEmpty()}">
+                    <a th:each="review : ${recentReviews}"
+                        th:href="@{${review.type == 'TRACK' ? 'tracks?id=' + review.id : 'albums?id=' + review.id}}"
+                        class="review-line">
+                        <span class="review-icon" th:text="${review.type == 'TRACK' ? '[🎵]' : '[💽]'}"></span>
+                        <strong class="review-title" th:text="${review.name}">제목</strong>
+                        <span class="review-content" th:text="${review.content}">내용</span>
+                        <span class="review-box" th:text="|❤️ ${review.likeCount}|">❤️ 0</span>
+                        <span class="review-box"
+                            th:text="${#temporals.format(review.createdAt, 'yyyy.MM.dd HH:mm')}">날짜</span>
+                    </a>
+                </th:block>
             </div>
-            <div class="info simillar-artist">
+            <!-- <div class="info simillar-artist">
                 <p id="headline" th:text="|${artist.name}🎙와 유사한 아티스트|"></p>
-                <p>1.쩔었다</p>
+                <p>1.쩔었1다</p>
                 <p>2.동해물</p>
                 <p>3.백두산</p>
                 <p>4.마르고</p>
@@ -109,7 +116,7 @@
                 <div>
                     <button class="btn btn-gold">아티스트 더보기</button>
                 </div>
-            </div>
+            </div> -->
             <div class="info concert-schedule">
                 <p id="headline">공연/이벤트 일정</p>
                 <p>2025. 08. 25 - 우리집 안방</p>
@@ -219,13 +226,13 @@
                 Swal.fire('분위기를 선택해주세요!');
                 return;
             }
-            
+
             const $container = $('#moodVoteContainer');
             const userId = $container.data('user-id');
             const artistId = $container.data('artist-id');
             const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
             const csrfToken = $('meta[name="_csrf"]').attr('content');
-            
+
             Swal.fire({
                 title: '이 분위기로 투표할까요?',
                 icon: 'question',

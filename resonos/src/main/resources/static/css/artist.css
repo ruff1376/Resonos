@@ -1,84 +1,136 @@
-*{margin: 0; padding: 0; box-sizing: border-box;}
-.wrapper { width: 100%; display: flex; flex-direction: column; gap: 30px; align-items: center; margin-bottom: 30px;}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
 body {
     background-color: var(--background-color);
     color: white;
 }
-#headline {font-size: 2.4rem; font-weight: bold; color: var(--main-color);}
-#subtitle {font-size: 2rem;}
+
+#headline {
+    font-size: 2.4rem;
+    font-weight: bold;
+    color: var(--main-color);
+}
+
+#subtitle {
+    font-size: 2rem;
+}
 
 /* 애니메이션 */
 @keyframes spin360 {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-.album:hover {          /* 카드 확대 */
-  transform: scale(1.05);
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
 
-.album:hover .album-img img {          /* 이미지 회전 */
-  animation: spin360 6s linear infinite;
+.album:hover {
+    /* 카드 확대 */
+    transform: scale(1.05);
 }
+
+.album:hover .album-img img {
+    /* 이미지 회전 */
+    animation: spin360 6s linear infinite;
+}
+
 /* 좋아요 애니메이션 */
 .like-btn {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-  padding: 4px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    padding: 4px;
 }
 
 .pop-heart {
-  animation: pop 0.3s ease;
+    animation: pop 0.3s ease;
 }
 
 @keyframes pop {
-  0%   { transform: scale(1); }
-  50%  { transform: scale(1.6); }
-  100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.6);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
+
 /* 좋아요 끝 */
 
 /* 컨테이너 */
 .album-img {
-  position: relative;          /* 안쪽 절대좌표 기준 */
-  width: 250px; height: 250px; /* LP 크기 */
-  border-radius: 50%;
-  overflow: hidden;            /* 이미지 둥글게 자르기 */
+    position: relative;
+    /* 안쪽 절대좌표 기준 */
+    width: 250px;
+    height: 250px;
+    /* LP 크기 */
+    border-radius: 50%;
+    overflow: hidden;
+    /* 이미지 둥글게 자르기 */
 }
 
 /* LP 이미지 */
 .album-img .disc {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  animation: spin360 10s linear infinite;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: spin360 10s linear infinite;
 }
 
 /* 심(스핀들) */
 .album-img .center-pin {
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 25px; height: 25px;      /* 원 크기 */
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: var(--background-color);
-  box-shadow: 0 0 4px rgba(0,0,0,.3);
-  z-index: 2;                     /* 디스크 위로 */
-  pointer-events: none;           /* 클릭 방지 */
-  opacity: 0.95;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 25px;
+    height: 25px;
+    /* 원 크기 */
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: var(--background-color);
+    box-shadow: 0 0 4px rgba(0, 0, 0, .3);
+    z-index: 2;
+    /* 디스크 위로 */
+    pointer-events: none;
+    /* 클릭 방지 */
+    opacity: 0.95;
 }
+
 .album-img img {
-  /* 중심축(50%·50%)을 기준으로 회전 */
-  transform-origin: 50% 50%;
-  /* 선택: 이미지 크기 조절 예시 */
-  object-fit: cover;
-  animation: none;
+    /* 중심축(50%·50%)을 기준으로 회전 */
+    transform-origin: 50% 50%;
+    /* 선택: 이미지 크기 조절 예시 */
+    object-fit: cover;
+    animation: none;
 }
+
 /* 애니메이션 끝 */
 
 .btn-gold {
-    appearance: none;      /* 브라우저 기본 라디오 버튼 제거 */
+    appearance: none;
+    /* 브라우저 기본 라디오 버튼 제거 */
     border: 1px solid var(--main-color);
     color: var(--main-color);
     border-radius: 10px;
@@ -86,16 +138,19 @@ body {
     font-weight: bold;
     font-size: 1.6rem;
 }
+
 .btn-gold:hover,
 .btn-gold.selected {
     background: var(--main-color);
     color: var(--background-color);
 }
+
 canvas {
     width: 100%;
     height: 100%;
     display: block;
 }
+
 p {
     word-break: break-word;
     white-space: normal;
@@ -103,12 +158,14 @@ p {
     display: block;
     width: fit-content;
 }
+
 img {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
+
 .artist-card {
     margin-top: 50px;
     display: flex;
@@ -119,6 +176,7 @@ img {
     overflow: hidden;
     gap: 20px;
 }
+
 .artist-card .artist-overall {
     display: flex;
     padding-left: 30px;
@@ -128,9 +186,11 @@ img {
     gap: 20px;
     width: fit-content;
 }
+
 .artist-card .artist-overall p {
     white-space: nowrap;
 }
+
 .artist-card .artist-overall .artist-img {
     width: 150px;
     height: 150px;
@@ -138,26 +198,31 @@ img {
     overflow: hidden;
     border: 2px solid var(--main-color);
 }
+
 .artist-card .artist-overall .artist-info {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     min-width: 180px;
 }
+
 .artist-card .disco-graphy {
     display: flex;
     flex-direction: column;
     height: 250px;
     flex: 1;
 }
+
 .disco-graphy .graphy-header {
     padding-top: 20px;
 }
+
 .album-container {
     display: flex;
     gap: 15px;
     padding-top: 10px;
 }
+
 .album {
     padding: 10px;
     display: flex;
@@ -166,19 +231,23 @@ img {
     gap: 10px;
     border-radius: 10px;
     border: 2px solid var(--main-color);
-    transition: transform 0.3s ease;   /* 카드 확대 전용 */
+    transition: transform 0.3s ease;
+    /* 카드 확대 전용 */
     max-height: 150px;
     min-width: 220px;
 }
+
 .album-info {
     display: flex;
     flex-direction: column;
     width: fit-content;
 }
+
 .album-info p {
     margin: 0;
     white-space: nowrap;
 }
+
 .album-img {
     width: 100px;
     height: 100px;
@@ -186,6 +255,7 @@ img {
     border-radius: 50%;
     border: 2px solid var(--main-color);
 }
+
 .hottest-card {
     display: flex;
     gap: 20px;
@@ -196,26 +266,35 @@ img {
     border: 2px solid var(--main-color);
     justify-content: space-evenly;
 }
+
 .songs {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: flex-start;
 }
-.songs > p:not(:first-child) {
+
+.songs>p:not(:first-child) {
     padding-left: 10px;
 }
+
 .youtube {
     display: flex;
     border-radius: 10px;
     border: 2px solid var(--main-color);
     overflow: hidden;
 }
+.recent-review>p:first-child,
+.mood-vote p,
+.simillar-artist>p:first-child,
+.album-moods>p:first-child,
+.concert-schedule>p:first-child {
+    margin-bottom: 5px;
+    border-bottom: 1px solid var(--main-color);
+}
 .info-card {
     display: flex;
-    padding: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 10px 20px;
     max-width: 1350px;
     width: 100%;
     justify-content: space-between;
@@ -223,31 +302,82 @@ img {
     border-radius: 20px;
     border: 2px solid var(--main-color);
 }
+
 .info {
-    padding-top: 5px;
-    padding-left: 10px;
-    padding-bottom: 10px;
     display: flex;
-    flex:1 1 33%;
     flex-direction: column;
     justify-content: space-between;
     border-radius: 10px;
     border: 2px solid var(--main-color);
+    padding: 5px 10px 10px 10px;
 }
+
 .concert-schedule {
-    flex: 1 1 auto;         /* 유연하게 줄어들고 늘어남 */
-    max-width: 250px;       /* 최대 너비 제한 */
-    min-width: 100px; 
+    width: 250px;         /* ✅ 고정 너비로 설정 */
+    flex-shrink: 0;       /* ✅ 줄어들지 않도록 */
+    flex-grow: 0;         /* ✅ 늘어나지 않도록 */
+}
+
+.recent-review {
+    min-width: 630px;     /* ✅ 최소 630px */
+    flex-grow: 1;         /* ✅ 남는 공간 유연하게 차지 */
+    flex-shrink: 1;       /* ✅ 너무 작아지지 않게 최소 보장 */
+    max-width: 100%;      /* ✅ 최대 100% */
     justify-content: start;
 }
-.recent-review > p:first-child,
-.mood-vote p ,
-.simillar-artist > p:first-child, 
-.album-moods > p:first-child, 
-.concert-schedule > p:first-child {
-    margin-bottom: 5px;
-    border-bottom: 1px solid var(--main-color);
+.review-line {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+    padding: 4px 0;
 }
+
+.review-icon {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.review-title {
+    flex-shrink: 0;
+    width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 4px;
+    border-right: 2px solid var(--main-color);
+    box-sizing: border-box;
+}
+
+.review-content {
+    flex-grow: 1;
+    min-width: 0;
+    /* 중요: ellipsis 작동 조건 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 4px;
+    border-right: 2px solid var(--main-color);
+    box-sizing: border-box;
+}
+
+.review-box {
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: 0 4px;
+    border-right: 2px solid var(--main-color);
+    box-sizing: border-box;
+}
+
+/* 마지막 요소는 테두리 제거 */
+.review-box:last-child,
+.review-content:last-child {
+    border-right: none;
+}
+
 .chart {
     width: 400px;
     height: 400px;
@@ -257,6 +387,7 @@ img {
     padding: 10px;
     display: flex;
 }
+
 .mood-card {
     max-width: 1350px;
     width: 100%;
@@ -267,6 +398,7 @@ img {
     gap: 30px;
     padding-left: 20px;
 }
+
 .mood-list {
     display: flex;
     height: 100%;
@@ -276,9 +408,10 @@ img {
     justify-content: space-between;
     align-items: center;
 }
+
 .mood-vote {
     display: flex;
-    flex:1;
+    flex: 1;
     flex-direction: column;
     height: 400px;
     align-items: center;
@@ -288,29 +421,35 @@ img {
     border-radius: 20px;
     border: 2px solid var(--main-color);
 }
+
 .moods {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     height: 100%;
     width: 100%;
-    align-items:flex-start;
-    justify-content:flex-start;
+    align-items: flex-start;
+    justify-content: flex-start;
     align-content: flex-start;
 }
+
 .mood-vote button {
     width: 100%;
     max-width: 470px;
     align-items: center;
     justify-content: center;
 }
-.moods .btn{
-  flex:0 0 auto;           /* grow 0, shrink 0, basis auto */
+
+.moods .btn {
+    flex: 0 0 auto;
+    /* grow 0, shrink 0, basis auto */
 }
+
 .vote-header {
     width: 100%;
     margin-bottom: 10px;
 }
+
 .vote-header p {
     width: 100%;
     display: flex;
@@ -320,61 +459,78 @@ img {
 
 /* 드래그 슬라이드 css */
 /* ───── [A] 슬라이드·스냅·3장 노출 ───── */
-.album-container{
-    overflow-x:hidden;                 /* 스크롤바 감춤 (자동 슬라이드용)  */
-    position:relative;                 /* JS에서 폭 계산용 */
+.album-container {
+    overflow-x: hidden;
+    /* 스크롤바 감춤 (자동 슬라이드용)  */
+    position: relative;
+    /* JS에서 폭 계산용 */
 }
 
-.album-track{                          /* ➜ 트랙용 래퍼를 JS가 생성 */
-    display:flex;
-    gap:15px;
-    scroll-snap-type:x mandatory;
-    scroll-behavior:smooth;
-    -webkit-overflow-scrolling:touch;
+.album-track {
+    /* ➜ 트랙용 래퍼를 JS가 생성 */
+    display: flex;
+    gap: 15px;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
 }
 
-.album{
-    flex:0 0 calc((100% - 30px)/3);    /* gap 15*2 = 30 → 카드 3장 */
-    scroll-snap-align:start;
-    flex-shrink:0;
+.album {
+    flex: 0 0 calc((100% - 30px)/3);
+    /* gap 15*2 = 30 → 카드 3장 */
+    scroll-snap-align: start;
+    flex-shrink: 0;
 }
 
 /* ───── [B] 말줄임 처리 (길이 상관없이 3장 유지) ───── */
-.album-info p{
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
+.album-info p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* ───── [C] 드래그 중 커서 변경 ───── */
-.album-container.grabbing,.album{cursor:grabbing;}
+.album-container.grabbing,
+.album {
+    cursor: grabbing;
+}
 
 .album-container {
     padding-bottom: 30px;
-  display: flex;
-  gap: 15px;
-  padding-top: 10px;
-  overflow-x: auto;
-  max-width: calc(330px * 3 + 15px * 2); /* 3장 보여주기 */
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
+    display: flex;
+    gap: 15px;
+    padding-top: 10px;
+    overflow-x: auto;
+    max-width: calc(330px * 3 + 15px * 2);
+    /* 3장 보여주기 */
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
 }
 
 .album-container .album {
-  flex: 0 0 330px;  /* flex-grow:0, flex-shrink:0, flex-basis:330px */
-  scroll-snap-align: start;
-  flex-shrink: 0;   /* 명확하게 줄어들지 않게 */
+    flex: 0 0 330px;
+    /* flex-grow:0, flex-shrink:0, flex-basis:330px */
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    /* 명확하게 줄어들지 않게 */
 }
+
 /* 글자가 넘칠 때 ... 으로 대체 */
 .album-info p {
     min-width: 180px;
     max-width: 200px;
-  white-space: nowrap;         /* 줄 바꿈 안 함 */
-  overflow: hidden;            /* 넘치는 부분 숨김 */
-  text-overflow: ellipsis !important;     /* ... 표시 */
-  user-select: text;           /* 글자 선택 가능 (필요 시) */
+    white-space: nowrap;
+    /* 줄 바꿈 안 함 */
+    overflow: hidden;
+    /* 넘치는 부분 숨김 */
+    text-overflow: ellipsis !important;
+    /* ... 표시 */
+    user-select: text;
+    /* 글자 선택 가능 (필요 시) */
 }
+
 .album-container::-webkit-scrollbar {
-  display: none;          /* 크롬, 사파리, 오페라용 스크롤바 숨기기 */
+    display: none;
+    /* 크롬, 사파리, 오페라용 스크롤바 숨기기 */
 }

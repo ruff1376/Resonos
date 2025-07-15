@@ -44,7 +44,7 @@ public class AlbumReview {
     private Long userId;
 
     /**
-     * 트랙 FK (Spotify ID 등 문자열)
+     * 앨범 FK (Spotify ID 등 문자열)
      */
     private String albumId;
 
@@ -52,7 +52,7 @@ public class AlbumReview {
     // 좋아요누른 유저인지 확인
     private Boolean isLikedByCurrentUser;
 
-    /* 트랙 명 */
+    /* 앨범 명 */
     private String title;
 
 
