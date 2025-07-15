@@ -383,6 +383,11 @@ input::placeholder {color: #bbb !important;}
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  position: relative;
+}
+.chart-area h3 {
+  position: absolute;
+  top: -18px;
 }
 #doughnut {width: 70%;}
 a:hover > .mypage-card {
