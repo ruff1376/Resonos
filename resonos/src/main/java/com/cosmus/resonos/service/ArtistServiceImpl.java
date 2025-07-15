@@ -120,8 +120,13 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    public List<Artist> followingArtists(Long id, String keyword) throws Exception {
-        return artistMapper.followingArtists(id, keyword);
+    public List<Artist> followingArtists(Long id, String keyword, int offset, int limit) throws Exception {
+        return artistMapper.followingArtists(id, keyword, offset, limit);
+    }
+
+    @Override
+    public int countFollowingArtists(Long id) throws Exception {
+        return artistMapper.countFollowingArtists(id);
     }
 
 }

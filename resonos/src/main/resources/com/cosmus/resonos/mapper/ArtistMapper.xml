@@ -165,7 +165,14 @@
         af.created_at DESC
       </otherwise>
     </choose>
-
+    LIMIT #{offset}, #{limit}
   </select>
 
+  <!-- 마이페이지: 팔로우한 아티스트 수 조회 -->
+  <select id="countFollowingArtists" resultType="int">
+    SELECT count(*)
+    FROM artist_follow af
+      INNER JOIN artist a ON af.artist_id = a.id
+    WHERE af.user_id = #{id}
+  </select>
 </mapper>

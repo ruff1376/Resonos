@@ -64,11 +64,13 @@ public interface TrackMapper {
 
     /* 마이페이지 */
     // 플레이리스트에 추가할 트랙 목록 검색
-    public List<Track> addTrackList(@Param("keyword") String keyword) throws Exception;
+    public List<Track> addTrackList(@Param("keyword") String keyword, @Param("offset") int offset, @Param("limit") int limit) throws Exception;
     // 좋아요 한 트랙 3개 조회
     public List<Track> likedTracksTop3(@Param("id") Long id) throws Exception;
     // 좋아요 한 트랙 전체 조회
-    public List<Track> likedTracks(@Param("id") Long id, @Param("keyword") String keyword) throws Exception;
+    public List<Track> likedTracks(@Param("id") Long id, @Param("keyword") String keyword, @Param("offset") int offset, @Param("limit") int limit) throws Exception;
+    // 좋아요 한 트랙 수
+    public int countLikedTracks(@Param("id") Long id) throws Exception;
 
     // 페이징 전체 데이터
     public List<Track> getAllTracks(Pagination pagination) throws Exception;

@@ -336,7 +336,7 @@ public class AlbumController {
 
     /**
      * 비동기 좋아요 한 앨범(키워드 검색)
-     * 
+     *
      * @param data
      * @return
      * @throws Exception
@@ -346,8 +346,10 @@ public class AlbumController {
             @RequestBody Map<String, Object> data) throws Exception {
         Long userId = Long.valueOf(data.get("userId").toString());
         String keyword = data.get("keyword").toString();
+        int offset = Integer.parseInt(data.get("offset").toString());
+        int limit = Integer.parseInt(data.get("limit").toString());
 
-        List<Album> albumList = albumService.likedAlbums(userId, keyword);
+        List<Album> albumList = albumService.likedAlbums(userId, keyword, offset, limit);
         if (albumList != null)
             return new ResponseEntity<>(albumList, HttpStatus.OK);
 

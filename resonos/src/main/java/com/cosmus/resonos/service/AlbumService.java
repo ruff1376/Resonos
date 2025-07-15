@@ -61,7 +61,9 @@ public interface AlbumService {
     // 좋아요한 앨범 3개
     public List<Album> likedAlbumsTop3(Long id) throws Exception;
     // 좋아요한 앨범 전체
-    public List<Album> likedAlbums(Long id, String keyword) throws Exception;
+    public List<Album> likedAlbums(Long id, String keyword, int offset, int limit) throws Exception;
+    // 좋아요한 앨범 수
+    public int countLikedAlbums(Long id) throws Exception;
      // [추가] Spotify 앨범 동기화
     public void syncAlbumFromSpotify(String spotifyAlbumId) throws Exception;
 

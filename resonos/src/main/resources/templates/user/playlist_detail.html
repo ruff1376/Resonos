@@ -235,28 +235,54 @@
           }
       }
 
-      /* 비동기 트랙리스트 검색 요청 */
-      async function getTracks(event) {
+      /* 모달 트랙 검색 */
+      let trackOffset = 0;
+      const trackLimit = 20;
+      let trackLoading = false;
+      let trackAllLoaded = false;
+      let trackKeyword = '';
 
-        const keyword = event.target.value.trim()
-        console.log(keyword)
+      function debounce(fn, delay) {
+        let timer;
+        return function (...args) {
+          clearTimeout(timer);
+          timer = setTimeout(() => fn.apply(this, args), delay);
+        };
+      }
+
+      /* 요청에 딜레이 넣기 */
+      const debouncedGetTracks = debounce(() => getTracks(true), 300)
+      document.getElementById('track-search').addEventListener('keyup', debouncedGetTracks)
+
+      /* 비동기 트랙리스트 검색 요청 */
+      async function getTracks(reset = false) {
+
+        if(reset) {
+          trackOffset = 0
+          trackAllLoaded = false
+          document.querySelector('.ul-list.modall').innerHTML = ''
+        }
+
+        trackKeyword = document.getElementById('track-search').value.trim()
+
         const data = {
-          keyword : keyword
+          keyword : trackKeyword,
+          offset : trackOffset,
+          limit : trackLimit
         }
 
         let url = `/tracks/from-playlists`
 
         try {
-            /* Security 제공 CSRF */
 
-            const response = await fetch(url, {
-                method: "POST",
-                headers: {
-                    [header] : token,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            })
+          const response = await fetch(url, {
+            method: "POST",
+            headers: {
+              [header] : token,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+          })
 
           if (!response.ok) {
               const result = await response.text()
@@ -265,16 +291,19 @@
           }
           // 서공시
           const result = await response.json()
-          renderModalTracks(result)
+          renderModalTracks(result, reset)
+          trackOffset += trackLimit
+          if (result.length < trackLimit) trackAllLoaded = true
+
         } catch (error) {
             console.error("요청 실패:", error)
           }
       }
 
-      /* 모달 트랙 렌더링 함수 */
-      function renderModalTracks(tracks) {
+      /* 모달 트랙 렌더링 */
+      function renderModalTracks(tracks, reset = false) {
         const ulList = document.querySelector('.ul-list.modall')
-        ulList.innerHTML = ''
+        if (reset) ulList.innerHTML = ''
 
         tracks.forEach(track => {
           const li = document.createElement('li')
@@ -294,6 +323,19 @@
           ulList.appendChild(li)
         })
       }
+
+      // 스크롤 이벤트
+      const modalScrollWindow = document.querySelector('.ul-list.modall')
+
+      modalScrollWindow.addEventListener('scroll', async () => {
+        const nearBottom = modalScrollWindow.scrollTop + modalScrollWindow.clientHeight >= modalScrollWindow.scrollHeight - 150
+
+        if (nearBottom && !trackLoading && !trackAllLoaded) {
+          trackLoading = true
+          await getTracks(false)
+          trackLoading = false
+        }
+      })
 
       /* 플레이리스트 트랙 렌더링 */
       function renderTracks(tracks) {
@@ -320,18 +362,6 @@
           ulList.appendChild(li)
         })
       }
-
-      function debounce(fn, delay) {
-        let timer;
-        return function (...args) {
-          clearTimeout(timer);
-          timer = setTimeout(() => fn.apply(this, args), delay);
-        };
-      }
-
-      /* 요청에 딜레이 넣기 */
-      const debouncedGetTracks = debounce(getTracks, 300);
-      document.getElementById('track-search').addEventListener('keyup', debouncedGetTracks);
 
       /* 비동기 플레이리스트 트랙 추가 */
       async function addTracks(list) {
@@ -397,20 +427,11 @@
       const openBtn = document.getElementById('addTrack')
       const closeBtn = document.getElementById('close-modal')
 
-      // function onWindowClick(event) {
-      //   if (!event.target.closest('.modal-contents')) {
-      //     modal.classList.remove('action')
-      //     window.removeEventListener('click', onWindowClick)
-      //   }
-      // }
 
       /* 모달 띄우기 */
       if(openBtn) {
         openBtn.addEventListener('click', (event) => {
           modal.classList.add('action')
-          // 모달 열릴 때만 window 클릭 이벤트 등록
-          // window.addEventListener('click', onWindowClick)
-          // event.stopPropagation()
         })
       }
 

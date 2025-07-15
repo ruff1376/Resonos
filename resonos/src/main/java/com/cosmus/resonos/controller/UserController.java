@@ -350,8 +350,11 @@ public class UserController {
     // 자기 자신인지
     boolean isOwner = loginUser != null && loginUser.getId().equals(targetId);
     // 팔로우한 아티스트 리스트
-    List<Artist> artistList = artistService.followingArtists(targetId, "");
+    List<Artist> artistList = artistService.followingArtists(targetId, "", 0, 20);
+    // 팔로우한 아티스트 수
+    int count = artistService.countFollowingArtists(targetId);
 
+    model.addAttribute("count", count);
     model.addAttribute("userId", targetId);
     model.addAttribute("artistList", artistList);
     model.addAttribute("isOwner", isOwner);
@@ -380,7 +383,7 @@ public class UserController {
     boolean isOwner = loginUser != null && loginUser.getId().equals(targetId);
 
     List<Playlist> myPlaylists = playlistService.usersPlaylist(targetId);
-    List<Playlist> likedPlaylists = playlistService.likedPlaylist(targetId, "");
+    List<Playlist> likedPlaylists = playlistService.likedPlaylist(targetId, "", 0, 20);
 
     model.addAttribute("userId", targetId);
     model.addAttribute("isOwner", isOwner);
@@ -409,14 +412,20 @@ public class UserController {
     Long targetId = (id != null) ? id : loginUser.getUser().getId();
     // 자기 자신인지
     boolean isOwner = loginUser != null && loginUser.getId().equals(targetId);
-    List<Album> likedAlbumList = albumService.likedAlbums(targetId, "");
-    List<Track> likedTrackList = trackService.likedTracks(targetId, "");
+    // 좋아요한 앨범 + 수
+    List<Album> likedAlbumList = albumService.likedAlbums(targetId, "", 0, 20);
+    int countAlbum = albumService.countLikedAlbums(targetId);
+    // 좋아요한 트랙 + 수
+    List<Track> likedTrackList = trackService.likedTracks(targetId, "", 0, 20);
+    int countTrack = trackService.countLikedTracks(targetId);
 
     model.addAttribute("userId", targetId);
     model.addAttribute("lastPath", "liked-music");
     model.addAttribute("isOwner", isOwner);
     model.addAttribute("likedAlbumList", likedAlbumList);
+    model.addAttribute("countAlbum", countAlbum);
     model.addAttribute("likedTrackList", likedTrackList);
+    model.addAttribute("countTrack", countTrack);
     return "user/liked_music";
   }
 

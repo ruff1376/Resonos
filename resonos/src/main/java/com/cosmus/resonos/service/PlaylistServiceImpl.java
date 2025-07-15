@@ -57,8 +57,13 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public List<Playlist> likedPlaylist(Long userId, String keyword) throws Exception {
-        return playlistMapper.likedPlaylist(userId, keyword);
+    public List<Playlist> likedPlaylist(Long userId, String keyword, int offset, int limit) throws Exception {
+        return playlistMapper.likedPlaylist(userId, keyword, offset, limit);
+    }
+
+    @Override
+    public int countLikedPlaylist(Long userId) throws Exception {
+        return playlistMapper.countLikedPlaylist(userId);
     }
 
     @Override
@@ -184,4 +189,6 @@ public class PlaylistServiceImpl implements PlaylistService {
         int orderNo = playlistMapper.getMaxOrderNo(playlistId) + 1 ;
         return playlistMapper.insertSingleTrack(playlistId, trackId, orderNo);
     }
+
+
 }

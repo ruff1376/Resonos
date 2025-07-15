@@ -129,8 +129,8 @@
   <!-- 좋아요 한 플레이리스트 -->
   <select id="likedPlaylist" resultType="Playlist">
     SELECT p.*, u.nickname AS ownerName
-    FROM playlist p
-      INNER JOIN liked_playlist lp ON p.id = lp.playlist_id
+    FROM liked_playlist lp
+      INNER JOIN playlist p ON p.id = lp.playlist_id
       INNER JOIN user u ON p.user_id = u.id
     WHERE lp.user_id = #{userId}
     <if test="keyword != null and keyword != ''">
@@ -155,6 +155,16 @@
         lp.created_at DESC
       </otherwise>
     </choose>
+    LIMIT #{offset}, #{limit}
+  </select>
+
+  <!-- 좋아요 한 플레이리스트 수 -->
+  <select id="countLikedPlaylist" resultType="int">
+    SELECT COUNT(*)
+    FROM liked_playlist lp
+      INNER JOIN playlist p ON p.id = lp.playlist_id
+      INNER JOIN user u ON p.user_id = u.id
+    WHERE lp.user_id = #{userId}
   </select>
 
   <!-- 플레이리스트's 트랙 -->

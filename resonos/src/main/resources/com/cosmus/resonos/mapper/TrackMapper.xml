@@ -358,7 +358,7 @@
       END,
       t.title ASC,
       ar.name ASC
-      LIMIT 200
+      LIMIT #{offset}, #{limit}
   </select>
 
   <!-- 마이페이지: 좋아요 표시한 트랙 3개 -->
@@ -402,6 +402,14 @@
         lt.created_at DESC
       </otherwise>
     </choose>
+    LIMIT #{offset}, #{limit}
+  </select>
+
+  <!-- 마이페이지: 좋아요 표시한 트랙 수 -->
+  <select id="countLikedTracks" resultType="int">
+    SELECT COUNT(*)
+    FROM liked_track lt
+    WHERE lt.user_id = #{id}
   </select>
 
   <!-- 페이징 전체 데이터 -->
