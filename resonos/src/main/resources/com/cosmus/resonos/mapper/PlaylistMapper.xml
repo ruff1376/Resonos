@@ -499,4 +499,11 @@
       LIMIT 6
   </select>
 
+  <!-- 트랙리뷰화면에서 단건 가져오기 -->
+  <insert id="insertSingleTrack">
+    INSERT INTO playlist_detail (playlist_id, track_id, order_no)
+    VALUES (#{playlistId}, #{trackId}, #{orderNo})
+  </insert>
+
+
 </mapper>
