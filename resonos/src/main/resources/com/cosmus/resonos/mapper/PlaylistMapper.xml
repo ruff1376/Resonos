@@ -132,7 +132,25 @@
     FROM playlist p
       INNER JOIN liked_playlist lp ON p.id = lp.playlist_id
     WHERE lp.user_id = #{userId}
-    ORDER BY lp.created_at DESC
+    <if test="keyword != null and keyword != ''">
+      AND (
+        p.title LIKE CONCAT('%', #{keyword}, '%')
+      )
+    </if>
+    ORDER BY
+    <choose>
+      <when test="keyword != null and keyword != ''">
+        CASE
+          WHEN p.title LIKE CONCAT(#{keyword}, '%') THEN 0
+          WHEN p.title LIKE CONCAT('%', #{keyword}, '%') THEN 1
+          ELSE 2
+        END,
+        lp.created_at DESC
+      </when>
+      <otherwise>
+        lp.created_at DESC
+      </otherwise>
+    </choose>
   </select>
 
   <!-- 플레이리스트's 트랙 -->

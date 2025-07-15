@@ -405,7 +405,12 @@ public class TrackController {
         return ResponseEntity.ok(result);
     }
 
-    // 비동기 좋아요 한 트랙(키워드 검색)
+    /**
+     * 비동기 좋아요 한 트랙 검색
+     * @param data
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/search")
     public ResponseEntity<?> searchMyTracks(
         @RequestBody Map<String, Object> data

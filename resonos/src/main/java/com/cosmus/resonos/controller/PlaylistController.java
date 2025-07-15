@@ -335,4 +335,24 @@ public class PlaylistController {
 
         return new ResponseEntity<>("에러.", HttpStatus.BAD_REQUEST);
     }
+
+    /**
+     * 비동기 좋아요 한 플레이리스트 검색
+     * @param data
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/search")
+    public ResponseEntity<?> searchMyLikedPlaylist(
+        @RequestBody Map<String, Object> data
+    ) throws Exception {
+        Long userId = Long.valueOf(data.get("userId").toString());
+        String keyword = data.get("keyword").toString();
+
+        List<Playlist> likedPlaylists = playlistService.likedPlaylist(userId, keyword);
+        if(likedPlaylists != null)
+            return new ResponseEntity<>(likedPlaylists, HttpStatus.OK);
+
+        return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

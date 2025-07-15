@@ -57,8 +57,8 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public List<Playlist> likedPlaylist(Long userId) throws Exception {
-        return playlistMapper.likedPlaylist(userId);
+    public List<Playlist> likedPlaylist(Long userId, String keyword) throws Exception {
+        return playlistMapper.likedPlaylist(userId, keyword);
     }
 
     @Override

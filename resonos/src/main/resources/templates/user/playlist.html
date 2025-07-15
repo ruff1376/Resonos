@@ -72,13 +72,17 @@
             <h2 class="text-start">좋아요 한 플레이리스트</h2>
             <span class="count" th:text="${likedPlaylists.size()}">좋아요 한 플레이리스트 수</span>
           </div>
+          <div class="text-center position-relative">
+            <i class="bi bi-search search-icon position-absolute"></i>
+            <input id="liked-pli-search" type="text" class="basic-input" name="keyword" placeholder="키워드를 입력하세요.">
+          </div>
         </div>
         <th:block th:if="${#lists.isEmpty(likedPlaylists)}">
           <div class="empty-text">
             <p>좋아요 한 플레이리스트가 없습니다.</p>
           </div>
         </th:block>
-        <ul class="ul-list">
+        <ul class="ul-list liked-pli">
           <th:block th:each="lpl : ${likedPlaylists}">
             <li class="list-item">
               <input type="hidden" th:value="${lpl.id}" name="id">
@@ -100,9 +104,11 @@
 
       const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
       const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
+      const userId = [[${userId}]]
+      const isOwner = [[${isOwner}]]
 
       /* 플레이리스트 상세 가기 */
-      const items = document.querySelectorAll('.list-item')
+      const items = document.querySelectorAll('.ul-list')
       items.forEach(e => {
         e.addEventListener('click', (event) => {
           if(event.target.classList.contains('like-button')) {
@@ -110,8 +116,11 @@
             return
           }
           if(event.target.tagName.toLowerCase() === 'button') return
-          const id = e.querySelector('input[type="hidden"]').value
-          location.href = `/playlists/${id}`
+          if(event.target.tagName.toLowerCase() === 'li') {
+            const id = event.target.querySelector('input[type="hidden"]').value
+            location.href = `/playlists/${id}`
+            return
+          }
         })
       })
 
@@ -155,7 +164,7 @@
             icon: "success",
             title:  "삭제되었습니다.",
             showConfirmButton: false,
-            timer: 1500,
+            timer: 800,
             customClass: {
               popup: 'follow-popup',
               icon: 'success-icon',
@@ -275,7 +284,7 @@
             icon: "success",
             title: text,
             showConfirmButton: false,
-            timer: 1500,
+            timer: 800,
             customClass: {
               popup: 'follow-popup',
               icon: 'success-icon',
@@ -290,6 +299,72 @@
         } catch (error) {
             console.log("서버 에러.")
           }
+      }
+
+      /* 좋아요 한 플레이리스트 필터 검색 */
+      function debounce(fn, delay) {
+        let timer;
+        return function (...args) {
+          clearTimeout(timer);
+          timer = setTimeout(() => fn.apply(this, args), delay);
+        };
+      }
+
+      // 요청 딜레이
+      const debouncedGetLikedPli = debounce(getLikedPli, 300);
+      document.getElementById('liked-pli-search').addEventListener('keyup', debouncedGetLikedPli);
+
+      async function getLikedPli(event) {
+
+        let url = `/playlists/search`
+
+        const data = {
+          keyword : event.target.value,
+          userId : userId
+        }
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    [header] : token,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+
+          if (!response.ok) {
+              const result = await response.text()
+              console.log(result)
+              return
+          }
+          // 성공시
+          const result = await response.json()
+          renderTracks(result)
+        } catch (error) {
+            console.log(error)
+          }
+      }
+
+      /* 좋아요 한 플레이리스트 렌더링 */
+      function renderTracks(list) {
+        const ulList = document.querySelector('.ul-list.liked-pli')
+        ulList.innerHTML = ''
+
+        list.forEach(item => {
+          const li = document.createElement('li')
+          li.classList.add('list-item')
+
+          li.innerHTML = `
+              <input type="hidden" value="${item.id}" name="id">
+              <img src="${item.thumbnailUrl}" class="follow-img" />
+              <div class="info">
+                <span class="name-album">${item.title}</span>
+              </div>
+              ${isOwner ? '<button class="like like-button already">♥</button>' : ''}
+          `
+          ulList.appendChild(li)
+        })
       }
     </script>
     <script th:src="@{/js/remotecontroller.js}"></script>

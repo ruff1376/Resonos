@@ -380,8 +380,9 @@ public class UserController {
     boolean isOwner = loginUser != null && loginUser.getId().equals(targetId);
 
     List<Playlist> myPlaylists = playlistService.usersPlaylist(targetId);
-    List<Playlist> likedPlaylists = playlistService.likedPlaylist(targetId);
+    List<Playlist> likedPlaylists = playlistService.likedPlaylist(targetId, "");
 
+    model.addAttribute("userId", targetId);
     model.addAttribute("isOwner", isOwner);
     model.addAttribute("myPlaylists", myPlaylists);
     model.addAttribute("likedPlaylists", likedPlaylists);
