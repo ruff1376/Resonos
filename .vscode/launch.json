@@ -8,6 +8,17 @@
       "mainClass": "com.cosmus.resonos.ResonosApplication",
       "projectName": "resonos",
       "args": "",
+      "envFile": "${workspaceFolder}/.env",
+      "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=10298 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=resonos"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-SecurityApplication<resonos>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.cosmus.resonos.SecurityApplication",
+      "projectName": "resonos",
+      "args": "",
       "envFile": "${workspaceFolder}/.env"
     }
   ]

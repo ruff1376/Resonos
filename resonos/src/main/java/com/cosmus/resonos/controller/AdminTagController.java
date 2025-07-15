@@ -36,7 +36,7 @@ public class AdminTagController {
 
     // 태그 수정 폼
     @GetMapping("/{id}/edit")
-    public String editForm(@PathVariable Long id, Model model) throws Exception {
+    public String editForm(@PathVariable("id") Long id, Model model) throws Exception {
         Tag tag = tagService.select(id);
         if (tag == null) {
             return "redirect:/admin/tags?error=notfound";
@@ -47,7 +47,7 @@ public class AdminTagController {
 
     // 태그 수정 처리
     @PostMapping("/{id}/edit")
-    public String edit(@PathVariable Long id, @RequestParam("name") String name) throws Exception {
+    public String edit(@PathVariable("id") Long id, @RequestParam("name") String name) throws Exception {
         Tag tag = new Tag();
         tag.setId(id);
         tag.setName(name);
@@ -57,7 +57,7 @@ public class AdminTagController {
 
     // 태그 삭제 처리
     @PostMapping("/{id}/delete")
-    public String delete(@PathVariable Long id) throws Exception {
+    public String delete(@PathVariable("id") Long id) throws Exception {
         tagService.delete(id);
         return "redirect:/admin/tags";
     }
@@ -65,7 +65,7 @@ public class AdminTagController {
     // 검색기능 
     @GetMapping("/search")
     @ResponseBody
-    public List<Tag> search(@RequestParam String keyword) {
+    public List<Tag> search(@RequestParam("keyword") String keyword) {
         return tagService.searchByName(keyword);
     }
 

@@ -35,7 +35,7 @@
                 </a>
               </div>
               <div class="collapse mb-4" id="policyCreateForm">
-                <form th:action="@{/admin/PolicySetting/create}" method="post" class="border rounded p-3 bg-dark">
+                <form th:action="@{/admin/PolicySetting/policy/create}"  method="post"  class="border rounded p-3 bg-dark">
                     <div class="mb-3">
                         <label class="form-label">정책명</label>
                         <input type="text" class="form-control" name="type" th:value="${policy?.type}" required>
@@ -68,12 +68,12 @@
                 </div>
                 <pre th:text="${policy.content}" class="text-start">정책 내용</pre>
                 <div class="collapse" th:id="'editPolicy' + ${policy.id}">
-                  <form th:action="@{|/admin/PolicySetting/update/${policy.id}|}" method="post" class="policy-edit-form mt-2">
+                  <form th:action="@{|/admin/PolicySetting/policy/update/${policy.id}|}" method="post" class="policy-edit-form mt-2">
                     <div class="mb-2">
                       <label class="form-label">정책명</label>
                       <input type="text" class="form-control" name="type" th:value="${policy.type}" required>
                     </div>
-                    <div class="mb-2">
+                    <div class="mb-2">@{|/admin/PolicySetting/policy/delete/${policy.id}|}
                       <label class="form-label">버전</label>
                       <input type="text" class="form-control" name="version" th:value="${policy.version}">
                     </div>
@@ -83,7 +83,7 @@
                     </div>
                     <button class="btn btn-gold btn-sm mt-2" type="submit">저장</button>
                     <button class="btn btn-outline-danger btn-sm mt-2 ms-2"
-                            th:formaction="@{|/admin/PolicySetting/delete/${policy.id}|}" formmethod="post"
+                            th:formaction="@{|/admin/PolicySetting/policy/delete/${policy.id}|}" formmethod="post"
                             onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
                   </form>
                 </div>
@@ -101,28 +101,29 @@
                 <div class="setting-row d-flex align-items-center mb-2">
                   <span class="me-3">신규 가입 허용</span>
                   <input type="checkbox" name="allow_registration"
-                        th:checked="${settings['allow_registration'] != null and settings['allow_registration'].value == 'yes'}">
+                    th:checked="${settings != null and settings['allow_registration'] != null and settings['allow_registration'].value == 'yes'}">
+
                 </div>
 
                 <div class="setting-row d-flex align-items-center mb-2">
                   <span class="me-3">커뮤니티 게시판 활성화</span>
                   <input type="checkbox" name="community_board_enabled"
-                        th:checked="${settings['community_board_enabled'] != null and settings['community_board_enabled'].value == 'yes'}">
+                    th:checked="${settings != null and settings['community_board_enabled'] != null and settings['community_board_enabled'].value == 'yes'}">
                 </div>
 
                 <div class="setting-row d-flex align-items-center mb-2">
                   <span class="me-3">음악 데이터 외부 연동</span>
                   <input type="checkbox" name="external_music_data_sync"
-                        th:checked="${settings['external_music_data_sync'] != null and settings['external_music_data_sync'].value == 'yes'}">
+                  th:checked="${settings != null and settings['external_music_data_sync'] != null and settings['external_music_data_sync'].value == 'yes'}">
                 </div>
 
                 <div class="setting-row d-flex align-items-center mb-2">
                   <span class="me-3">기본 테마</span>
                   <select class="form-select w-auto ms-2" name="default_theme">
-                    <option value="dark"
-                            th:selected="${settings['default_theme'] != null and settings['default_theme'].value == 'dark'}">다크</option>
-                    <option value="light"
-                            th:selected="${settings['default_theme'] != null and settings['default_theme'].value == 'light'}">라이트</option>
+                  <option value="dark"
+                    th:selected="${settings != null and settings['default_theme'] != null and settings['default_theme'].value == 'dark'}">다크</option>
+                  <option value="light"
+                    th:selected="${settings != null and settings['default_theme'] != null and settings['default_theme'].value == 'light'}">라이트</option>
                   </select>
                 </div>
 
@@ -131,7 +132,7 @@
               </form>
 
               <!-- 환경설정 추가 폼 -->
-              <form class="mb-4" th:action="@{/admin/PolicySetting/setting/add}" method="post">
+              <form class="mb-4" th:action="@{/admin/PolicySetting/setting/create}" method="post">
                 <div class="row g-2 align-items-center mb-2">
                   <div class="col">
                     <input type="text" class="form-control" name="name" placeholder="설정명" required>

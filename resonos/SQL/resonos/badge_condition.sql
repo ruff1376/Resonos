@@ -1,3 +1,4 @@
+-- Active: 1751542958734@@127.0.0.1@3306@resonos
 CREATE TABLE badge_condition (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,         -- 조건 고유 번호(자동 증가, PK)
   badge_id BIGINT NOT NULL,                     -- 배지 고유 번호(외래키, badge 테이블 참조)
@@ -135,6 +136,7 @@ SELECT id, name FROM badge;
 
 -- 배지 조건 확인
 SELECT * FROM badge_condition;
+
 
 -- 게시글 수 확인
 SELECT user_id, COUNT(*) FROM board_post GROUP BY user_id;

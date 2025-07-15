@@ -32,6 +32,23 @@ public class AdminPnSController {
     @Autowired
     private SettingService settingService;
 
+
+    // 메인
+    @GetMapping
+    public String main(Model model) throws Exception {
+        List<Policy> policies = policyService.list();
+        List<Setting> settings = settingService.list();
+
+        // ✅ Null 방지를 위해 항상 Map 형태로 전환
+        Map<String, Setting> settingMap = settings.stream()
+            .collect(java.util.stream.Collectors.toMap(Setting::getName, java.util.function.Function.identity()));
+
+        model.addAttribute("policies", policies);
+        model.addAttribute("settings", settingMap);
+        return "/admin/PolicySetting";
+    }
+
+
     // 목록
     @GetMapping("/policy")
     public String list(Model model) throws Exception {
@@ -55,7 +72,8 @@ public class AdminPnSController {
 
     // 등록 폼
     @GetMapping("/policy/create")
-    public String create(Model model) {
+    public String create(@ModelAttribute Policy policy, Model model) {
+        log.info("폼으로 전달된 정책: {}", policy);
         model.addAttribute("policy", new Policy());
         return "/admin/PolicySetting"; // policy/form.html
     }

@@ -31,7 +31,26 @@
     SET description = #{description},
         value = #{value},
         updated_at = #{updatedAt}
-    WHERE id = #{id}
+    WHERE id = #{id}@PostMapping("/setting/add")
+public String addSetting(
+        @RequestParam("name") String name,
+        @RequestParam(value = "description", required = false) String description,
+        @RequestParam("value") String value,
+        Model model) throws Exception {
+
+    Setting setting = new Setting();
+    setting.setName(name);
+    setting.setValue(value);
+    setting.setDescription(description);
+    Date now = new Date();
+    setting.setCreatedAt(now);
+    setting.setUpdatedAt(now);
+
+    settingService.insert(setting);
+
+    return "redirect:/admin/PolicySetting";
+}
+
   </update>
 
   <delete id="delete">
