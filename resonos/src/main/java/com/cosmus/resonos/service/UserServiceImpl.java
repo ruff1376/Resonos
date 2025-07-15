@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cosmus.resonos.domain.GenreCount;
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.UserActivityLog;
@@ -331,6 +332,11 @@ public class UserServiceImpl implements UserService {
         @Override
         public List<Users> listPaging(int index, int size) throws Exception {
             return userMapper.listPaging(index, size);
+        }
+
+        @Override
+        public List<GenreCount> likedGenreData(Long userId) throws Exception {
+            return userMapper.likedGenreData(userId);
         }
 
 }

@@ -47,8 +47,10 @@
             <div class="d-flex flex-column justify-content-center">
               <label id="profileBtn" for="thumbnail">
                 <img th:src="@{${playlist.thumbnailUrl}}" alt="썸네일 이미지" class="profile-img edit">
-                <input type="file" name="thumbnail" id="thumbnail"/>
-                <input type="hidden" name="thumbnailUrl" th:value="${playlist.thumbnailUrl}">
+                <th:block th:if="${isOwner}">
+                  <input type="file" name="thumbnail" id="thumbnail"/>
+                  <input type="hidden" name="thumbnailUrl" th:value="${playlist.thumbnailUrl}">
+                </th:block>
               </label>
               <th:block th:if="${!isOwner}">
                 <button type="button" id="like-button" class="like top-margin"
@@ -149,20 +151,24 @@
       const playlistId = [[${playlist.id}]]
 
       /* 썸네일 바로보기 */
-      document.getElementById('thumbnail').addEventListener('change', function (event) {
-        const file = event.target.files[0]
-        const preview = document.querySelector('.profile-img.edit')
+      const thumbnail = document.getElementById('thumbnail')
+      if(thumbnail) {
+        thumbnail.addEventListener('change', function (event) {
+          const file = event.target.files[0]
+          const preview = document.querySelector('.profile-img.edit')
 
-        if (file) {
-          const reader = new FileReader()
-          reader.onload = function (e) {
-            preview.src = e.target.result
+          if (file) {
+            const reader = new FileReader()
+            reader.onload = function (e) {
+              preview.src = e.target.result
+            }
+            reader.readAsDataURL(file)
+          } else {
+            preview.src = ''
           }
-          reader.readAsDataURL(file)
-        } else {
-          preview.src = ''
-        }
-      })
+        })
+      }
+
 
       let isOwner = [[${isOwner}]]
 

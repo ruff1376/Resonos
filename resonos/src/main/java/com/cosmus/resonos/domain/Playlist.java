@@ -24,7 +24,7 @@ public class Playlist {
     private String trackId;
     private int likeCount;
     private String maker;
-    
+    private String ownerName;
     // 플레이리스트 제이슨 변경시 무시
     @JsonIgnore
     List<Track> trackList;

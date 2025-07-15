@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.cosmus.resonos.domain.GenreCount;
 import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.UserAuth;
 import com.cosmus.resonos.domain.Users;
@@ -88,12 +89,14 @@ public interface UserService {
     // 카카오 유저 회원가입
     public boolean insertSnsUser(Users user) throws Exception;
 
-    // countByKeword - 키워드 검색 
+    // countByKeword - 키워드 검색
     public long countByKeyword(String keyword) throws Exception;
     // searchByKeywordPaging - 키워드 검색 페이징
     List<Users> searchByKeywordPaging(String keyword, int index, int size) throws Exception;
     // listPaging - 전체 페이징
     public List<Users> listPaging(int index, int size) throws Exception;
 
+    // 선호 장르 데이터 집계
+    public List<GenreCount> likedGenreData(Long userId) throws Exception;
 
 }

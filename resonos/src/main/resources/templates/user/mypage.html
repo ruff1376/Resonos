@@ -217,23 +217,28 @@
   </main>
   <th:block layout:fragment="pageScript" >
     <script th:inline="javascript">
+
+      const userId = [[${user.id}]]
+      const chartData = [[${chartData}]]
+      console.log(chartData)
+      const labels = Object.keys(chartData)
+      const data = Object.values(chartData)
+      const colorList = [
+        '#82B8FF', '#FF9F82', '#82FFB8', '#FF82D1', '#FFD682', '#8C82FF',
+        '#82D1FF', '#FFB982', '#82FFC9', '#FF82B3', '#FFE082', '#9B82FF',
+        '#FF6F61', '#4DB6AC', '#FFCA28', '#6A1B9A', '#00897B', '#D81B60',
+        '#F4511E', '#558B2F'
+      ]
       document.addEventListener('DOMContentLoaded', function() {
         const ctx = document.getElementById('doughnut').getContext('2d');
         const myChart = new Chart(ctx, {
           type: 'doughnut',
           data: {
-              labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+              labels: labels,
               datasets: [{
                   label: '  ',
-                  data: [10, 20, 30, 10, 20, 10],
-                  backgroundColor: [
-                    '#82B8FF',
-                    '#FF9F82',
-                    '#82FFB8',
-                    '#FF82D1',
-                    '#FFD682',
-                    '#8C82FF'
-                  ],
+                  data: data,
+                  backgroundColor: colorList.slice(0, labels.length),
                   borderWidth: 1
               }]
           },
@@ -247,6 +252,7 @@
             maintainAspectRatio: false,
             plugins: {
               legend: {
+                display: false,
                 labels: {
                   boxWidth: 15,
                   boxHeight: 15,
@@ -269,6 +275,7 @@
           }
         });
       })
+
       const logoutBtn = document.getElementById('btn-logout')
       if(logoutBtn) {
         logoutBtn.addEventListener('click', (e) => {
@@ -291,7 +298,7 @@
 
         let method = ''
         const currentStyle = event.target.classList.contains('already')
-        let userId = [[${user.id}]]
+
         let url = `/user-follows/${userId}`
         if(currentStyle) method = 'DELETE'
         else method = 'POST'
