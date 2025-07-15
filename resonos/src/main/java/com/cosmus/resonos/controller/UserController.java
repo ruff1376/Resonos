@@ -275,7 +275,7 @@ public class UserController {
     }
 
     // 배지 텍스트 없이 보내면
-    if(user.getCurrentBadge() == 0) user.setCurrentBadge(null);
+    if(user.getCurrentBadge() == null || user.getCurrentBadge() == 0 ) user.setCurrentBadge(null);
 
     boolean checkBagde = badgeService.checkBadge(loginUser.getId(), user.getCurrentBadge());
     if(!checkBagde) user.setCurrentBadge(null);

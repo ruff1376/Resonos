@@ -62,8 +62,8 @@ public class Users {
         groups = NicknameCheck.class
     )
     @Pattern(
-        regexp = "^(?=.{2,10}$)([a-zA-Z]+[0-9]+|[0-9]+[a-zA-Z]+|[가-힣]+[0-9]+|[0-9]+[가-힣]+|[a-zA-Z]{2,10}|[가-힣]{2,10})$",
-        message = "영문 + 숫자, 한글 + 숫자, 한글, 영문 조합 2글자 이상, 10글자 이하여야 합니다.",
+        regexp = "^(?=.{2,10}$)(?=.*[a-zA-Z가-힣]).*$",
+        message = "숫자만을 제외한 조합으로 2 ~ 10글자 사이여야 합니다.",
         groups = NicknameCheck.class
     )
     private String nickname;

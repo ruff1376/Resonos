@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.cosmus.resonos.util.GlobalPrincipalAdvice;
+
 @Configuration          // 빈 등록 설정 클래스 지정
 public class WebConfig {
 
@@ -15,6 +17,11 @@ public class WebConfig {
         // BCryptPasswordEncoder        : BCrypt 해시 알고리즘을 사용하여 비밀번호 암호화
         // NoOpPasswordEncoder          : 암호화 없이 비밀번호를 저장
         // ...
+    }
+
+    @Bean
+    public GlobalPrincipalAdvice globalPrincipalAdvice() {
+        return new GlobalPrincipalAdvice();
     }
 
 }
