@@ -338,7 +338,7 @@
     WHERE t.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
   </select>
 
-  <!-- 마이페이지: 플레이 리스트 추가 -->
+  <!-- 마이페이지: 플레이리스트에 추가할 트랙 리스트 요청 -->
   <select id="addTrackList" resultMap="Track" >
     SELECT t.*, ar.name AS artist_name, al.cover_image
     FROM track t
@@ -390,10 +390,10 @@
     <choose>
       <when test="keyword != null and keyword != ''">
         CASE
-          WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 0       -- 제목이 keyword로 시작
-          WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 1  -- 제목에 keyword 포함
-          WHEN art.name LIKE CONCAT(#{keyword}, '%') THEN 2      -- 아티스트명이 keyword로 시작
-          WHEN art.name LIKE CONCAT('%', #{keyword}, '%') THEN 3 -- 아티스트명에 keyword 포함
+          WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 0
+          WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 1
+          WHEN art.name LIKE CONCAT(#{keyword}, '%') THEN 2
+          WHEN art.name LIKE CONCAT('%', #{keyword}, '%') THEN 3
           ELSE 4
         END,
         lt.created_at DESC

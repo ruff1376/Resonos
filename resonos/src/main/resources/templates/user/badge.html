@@ -49,12 +49,12 @@
             <h2 class="text-start">미획득 배지</h2>
           </div>
         </div>
+        <th:block th:if="${notHaveBadgeList == null or notHaveBadgeList.isEmpty()}">
+          <div class="empty-text">
+            <p>회원님은 전설이십니다.</p>
+          </div>
+        </th:block>
         <ul class="ul-list bl d-flex">
-          <th:block th:if="${notHaveBadgeList == null or notHaveBadgeList.isEmpty()}">
-            <div class="empty-text">
-              <p>회원님은 전설이십니다.</p>
-            </div>
-          </th:block>
           <th:block th:each="badge : ${notHaveBadgeList}">
             <li>
               <div class="bg-badge cg">

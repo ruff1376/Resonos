@@ -34,7 +34,7 @@ public interface PlaylistService {
     // 특정 유저의 공개 플레이리스트 3개 조회
     public List<Playlist> publicUsersPlaylist3(Long userId) throws Exception;
     // 좋아요한 플레이리스트 조회
-    public List<Playlist> likedPlaylist(Long userId) throws Exception;
+    public List<Playlist> likedPlaylist(Long userId, String keyword) throws Exception;
     // 플레이리스트 상세 조회
     public PlaylistDTO trackOfPlaylist(Long playlistId, Long loginUserId) throws Exception;
     // oreder_no MAX 조회
@@ -87,6 +87,6 @@ public interface PlaylistService {
     // 트랙리뷰에서 단건 추가
     int insertSingleTrack(@Param("playlistId") Long playlistId,
                             @Param("trackId") String trackId) throws Exception;
-    
-                            
+
+
 }
