@@ -49,6 +49,7 @@ import com.cosmus.resonos.service.TrackReviewService;
 import com.cosmus.resonos.service.TrackService;
 import com.cosmus.resonos.validation.ReviewForm;
 
+import groovyjarjarantlr4.v4.parse.ANTLRParser.id_return;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -194,9 +195,15 @@ public class TrackController {
         String trackId = id;
         // 단건 추가
         playlistService.insertSingleTrack(playlistId, trackId);
-
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/refreshPlaylist/{id}")
+    public ResponseEntity<List<Playlist>> refreshPlaylist(@PathVariable("id") String trackId,
+                                                        Model model) {
+        return ResponseEntity.ok(playlistService.getPlaylistsByTrackId(trackId));
+    }
+    
 
     @GetMapping("/{id}/score-fragment")
     public String scoreRefresh(@PathVariable("id") String id, Model model) {
