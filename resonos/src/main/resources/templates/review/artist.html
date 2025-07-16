@@ -68,22 +68,19 @@
                     </a>
                 </th:block>
             </div>
-            <th:block th:if="${!#strings.isEmpty(track.mvUrl)}">
-                <div class="youtube">
+            <div class="youtube">
+                <th:block th:if="${!#strings.isEmpty(track.mvUrl) and track.mvUrl != 'N/A'}">
                     <iframe width="560" height="315" th:src="|https://www.youtube.com/embed/${track.mvUrl}|"
                         title="YouTube video player" frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
                     </iframe>
-                </div>
-            </th:block>
-            <!-- ② MV URL이 없을 때 → 준비중 이미지 -->
-            <th:block th:if="${#strings.isEmpty(track.mvUrl) or track.mvUrl == 'N/A'}">
-                <div class="youtube">
+                </th:block>
+                <th:block th:if="${#strings.isEmpty(track.mvUrl) or track.mvUrl == 'N/A'}">
                     <img th:src="@{/img/wait_plz.png}" alt="뮤직비디오 준비중" width="560" height="315"
                         style="object-fit:cover;">
-                </div>
-            </th:block>
+                </th:block>
+            </div>
         </div>
         <!-- 인기곡 카드 끝 -->
         <!-- 아티스트 리뷰/일정.. -->

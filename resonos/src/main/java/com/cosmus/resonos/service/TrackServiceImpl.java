@@ -60,6 +60,30 @@ public class TrackServiceImpl implements TrackService {
         return trackMapper.selectById(id);
     }
 
+    // 트랙 단건 조회 mvUrl 업데이트 기능 추가
+    @Override
+    public Track getTrackOrUpdate(String id) throws Exception {
+        Track track = trackMapper.selectById(id);
+        Artist artist = artistMapper.selectById(track.getArtistId());
+        if (track != null) {
+            System.out.println("서비스단 track 의 mvUrl : " + track.getMvUrl());
+            if ("N/A".equals(track.getMvUrl())) {
+                System.out.println("해당 videoId는 찾을수가 없었음");
+            }
+            if (track.getMvUrl() == null || track.getMvUrl().trim().isBlank()) {
+                System.out.println("트랙의 mvUrl 이 없음");
+                String videoId = youTubeApiService.searchVideoId(track.getTitle(), artist.getName());
+                if (videoId != null) {
+                    trackMapper.updateMvUrl(track.getId(), videoId);
+                    System.out.println("업데이트 트랙id : " + track.getId() + " videoId : " + videoId);
+                    track.setMvUrl(videoId); // 리스트에 반영
+                }
+            } else
+                System.out.println("트랙 화면 mvUrl 처리 완료");
+        }
+        return track;
+    }
+
     // 트랙 등록
     @Override
     public boolean insert(Track track) throws Exception {
@@ -87,16 +111,16 @@ public class TrackServiceImpl implements TrackService {
     // 아티스트의 상위 7곡 트랙 리스트
     // 그중 첫번째 트랙객체의 mvUrl 확인 후 없으면 등록
     @Override
-    public List<Track> selectTop7TracksByArtist(String id) throws Exception {
+    public List<Track> selectTop7TracksByArtistAndFetchMv(String id) throws Exception {
         Artist artist = artistMapper.selectById(id);
         List<Track> top7List = trackMapper.selectTop7TracksByArtist(id);
         if (!top7List.isEmpty()) {
             Track topTrack = top7List.get(0);
             System.out.println("서비스단의 topTrack 의 mvUrl : " + topTrack.getMvUrl());
-            if("N/A".equals(topTrack.getMvUrl())) {
+            if ("N/A".equals(topTrack.getMvUrl())) {
                 System.out.println("해당 videoId는 찾을수가 없었음");
             }
-            if (topTrack.getMvUrl() == null || topTrack.getMvUrl().isBlank()) {
+            if (topTrack.getMvUrl() == null || topTrack.getMvUrl().trim().isBlank()) {
                 System.out.println("트랙의 mvUrl 이 없음");
                 String videoId = youTubeApiService.searchVideoId(topTrack.getTitle(), artist.getName());
                 if (videoId != null) {
@@ -104,7 +128,8 @@ public class TrackServiceImpl implements TrackService {
                     System.out.println("업데이트 트랙id : " + topTrack.getId() + " videoId : " + videoId);
                     topTrack.setMvUrl(videoId); // 리스트에 반영
                 }
-            }
+            } else
+                System.out.println("아티스트 화면 mvUrl 처리 완료");
         }
         return top7List;
     }
@@ -183,6 +208,29 @@ public class TrackServiceImpl implements TrackService {
     @Override
     public List<Track> findTop5TracksByAlbumId(String id) throws Exception {
         return trackMapper.findTop5TracksByAlbumId(id);
+    }
+
+    @Override
+    public Track topTrackByAlbumIdAndFetchMv(String id) throws Exception {
+        Track track = trackMapper.findTopTrackByAlbumId(id);
+        Artist artist = artistMapper.selectById(track.getArtistId());
+        if (track != null) {
+            System.out.println("서비스단 track 의 mvUrl : " + track.getMvUrl());
+            if ("N/A".equals(track.getMvUrl())) {
+                System.out.println("해당 videoId는 찾을수가 없었음");
+            }
+            if (track.getMvUrl() == null || track.getMvUrl().trim().isBlank()) {
+                System.out.println("트랙의 mvUrl 이 없음");
+                String videoId = youTubeApiService.searchVideoId(track.getTitle(), artist.getName());
+                if (videoId != null) {
+                    trackMapper.updateMvUrl(track.getId(), videoId);
+                    System.out.println("업데이트 트랙id : " + track.getId() + " videoId : " + videoId);
+                    track.setMvUrl(videoId); // 리스트에 반영
+                }
+            } else
+                System.out.println("앨범 화면 mvUrl 처리 완료");
+        }
+        return track;
     }
 
     @Override

@@ -86,9 +86,8 @@ public class ArtistController {
         List<Album> albums = albumService.findAlbumsByArtistId(id);
         int albumCount = albumService.countAlbumsByArtist(id);
         int trackCount = trackService.countTracksByArtist(id);
-        List<Track> top7List = trackService.selectTop7TracksByArtist(id);
+        List<Track> top7List = trackService.selectTop7TracksByArtistAndFetchMv(id);
         Track track = top7List.get(0);
-        System.out.println("컨트롤러 track.mvUrl : " + track.getMvUrl());
 
         List<MoodStat> moodStats = moodStatService.getTop6MoodsByArtistId(id);
         boolean isMoodEmpty = (moodStats == null || moodStats.isEmpty());

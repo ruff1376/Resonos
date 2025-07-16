@@ -14,12 +14,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class YouTubeApiService {
 
     private final RestTemplate restTemplate = new RestTemplate();
-    // @Value("${youtube.api.key}")
+    @Value("${youtube.api.key}")
     private String apiKey;
 
     public String searchVideoId(String title, String artist) {
         if (apiKey == null || apiKey.isBlank()) {
-            System.out.println("API 키를 설정해주세요.");
+            System.out.println("API 키를 설정하지않아 반환값이 null입니다.");
             return null;
         }
         String query = URLEncoder.encode(artist + " " + title + " official MV", StandardCharsets.UTF_8);

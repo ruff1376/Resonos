@@ -79,5 +79,8 @@ public interface TrackService {
 
     // mvUrl 업데이트
     void updateMvUrl(@Param("id") String id, @Param("mvUrl") String mvUrl);
-
+    // 조회후 mvUrl 업데이트
+    public Track getTrackOrUpdate(String id) throws Exception;
+    public Track topTrackByAlbumIdAndFetchMv(String id) throws Exception;
+    public List<Track> selectTop7TracksByArtistAndFetchMv(String id) throws Exception;
 }
