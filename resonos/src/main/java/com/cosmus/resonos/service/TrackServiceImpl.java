@@ -134,10 +134,10 @@ public class TrackServiceImpl implements TrackService {
         return top7List;
     }
     // 기존 아티스트 상위7개 트랙리스트
-    // @Override
-    // public List<Track> selectTop7TracksByArtist(String id) throws Exception {
-    // return trackMapper.selectTop7TracksByArtist(id);
-    // }
+    @Override
+    public List<Track> selectTop7TracksByArtist(String id) throws Exception {
+    return trackMapper.selectTop7TracksByArtist(id);
+    }
 
     @Override
     public int countTracksByArtist(String id) throws Exception {
@@ -301,4 +301,5 @@ public class TrackServiceImpl implements TrackService {
     @Override
     public void updateMvUrl(String id, String mvUrl) {
     }
+
 }

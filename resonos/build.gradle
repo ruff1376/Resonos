@@ -50,7 +50,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     // 소셜 로그인
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-
+    // 유튜브 검색 정규표현식
+    implementation 'org.apache.commons:commons-text:1.10.0'
 }
 
 
