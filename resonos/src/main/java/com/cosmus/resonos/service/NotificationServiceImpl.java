@@ -8,12 +8,16 @@ import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.Notification;
 import com.cosmus.resonos.mapper.NotificationMapper;
+import com.cosmus.resonos.controller.websocket.AlarmWebSocketController;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
 
     @Autowired
     private NotificationMapper notificationMapper;
+
+    @Autowired
+    private AlarmWebSocketController alarmSocketController;
 
 
     @Override
@@ -28,9 +32,13 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public boolean insert(Notification notification) throws Exception {
-        return notificationMapper.insert(notification) > 0;
+        boolean result = notificationMapper.insert(notification) > 0;
+        // DB 저장 성공 시, 실시간 푸시 호출
+        if (result) {
+            alarmSocketController.sendToUser(notification.getUserId(), notification);
+        }
+        return result;
     }
-
     @Override
     public boolean update(Notification notification) throws Exception {
         return notificationMapper.update(notification) > 0;

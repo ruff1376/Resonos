@@ -2,6 +2,7 @@ package com.cosmus.resonos.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,11 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/notifications")
 public class NotificationController {
 
-    private final NotificationService notificationService;
-
-    public NotificationController(NotificationService notificationService) {
-        this.notificationService = notificationService;
-    }
+    @Autowired
+    private NotificationService notificationService;
 
     @GetMapping("")
     // TODO: @AuthenticationPrincipal 로 출력할 리스트 나누기
@@ -38,7 +36,7 @@ public class NotificationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Notification> getNotification(@PathVariable Long id) {
+    public ResponseEntity<Notification> getNotification(@PathVariable("id") Long id) {
         try {
             Notification notification = notificationService.select(id);
             if (notification == null) {
@@ -51,7 +49,7 @@ public class NotificationController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Notification>> getNotificationsByUser(@PathVariable Long userId) {
+    public ResponseEntity<List<Notification>> getNotificationsByUser(@PathVariable("userId") Long userId) {
         try {
             List<Notification> notifications = notificationService.findByUser(userId);
             return ResponseEntity.ok(notifications);
@@ -74,7 +72,7 @@ public class NotificationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateNotification(@PathVariable Long id, @RequestBody Notification notification) {
+    public ResponseEntity<String> updateNotification(@PathVariable("id") Long id, @RequestBody Notification notification) {
         try {
             notification.setId(id);
             boolean success = notificationService.update(notification);
@@ -88,7 +86,7 @@ public class NotificationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteNotification(@PathVariable Long id) {
+    public ResponseEntity<String> deleteNotification(@PathVariable("id") Long id) {
         try {
             boolean success = notificationService.delete(id);
             if (success) {

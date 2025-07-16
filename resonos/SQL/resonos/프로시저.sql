@@ -1,4 +1,4 @@
--- Active: 1750388008084@@127.0.0.1@3306@resonos
+-- Active: 1751542958734@@127.0.0.1@3306@resonos
 
 -- 실행 순서
 -- 1. 테이블 삭제 DROP PROCEDURE IF EXISTS create_tables;

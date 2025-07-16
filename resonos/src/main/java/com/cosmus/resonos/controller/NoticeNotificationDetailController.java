@@ -24,7 +24,7 @@ public class NoticeNotificationDetailController {
 
     // 공지 상세
     @GetMapping("/notice/{id}")
-    public String noticeDetail(@PathVariable Long id, Model model) throws Exception {
+    public String noticeDetail(@PathVariable("id") Long id, Model model) throws Exception {
         Notice notice = noticeService.select(id);
         if (notice == null) {
             return "redirect:/notifications2";
@@ -36,7 +36,7 @@ public class NoticeNotificationDetailController {
     // 알림 상세
     @GetMapping("/notification/{id}")
     public String notificationDetail(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             @AuthenticationPrincipal CustomUser loginUser,
             Model model
     ) throws Exception {
