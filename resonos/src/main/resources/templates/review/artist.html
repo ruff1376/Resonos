@@ -78,7 +78,7 @@
                 </div>
             </th:block>
             <!-- ② MV URL이 없을 때 → 준비중 이미지 -->
-            <th:block th:if="${#strings.isEmpty(track.mvUrl)}">
+            <th:block th:if="${#strings.isEmpty(track.mvUrl) or track.mvUrl == 'N/A'}">
                 <div class="youtube">
                     <img th:src="@{/img/wait_plz.png}" alt="뮤직비디오 준비중" width="560" height="315"
                         style="object-fit:cover;">

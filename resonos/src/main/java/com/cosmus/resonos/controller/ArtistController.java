@@ -88,8 +88,7 @@ public class ArtistController {
         int trackCount = trackService.countTracksByArtist(id);
         List<Track> top7List = trackService.selectTop7TracksByArtist(id);
         Track track = top7List.get(0);
-        String mv_url = artistService.selectTopMvUrlByArtist(id);
-
+        System.out.println("컨트롤러 track.mvUrl : " + track.getMvUrl());
 
         List<MoodStat> moodStats = moodStatService.getTop6MoodsByArtistId(id);
         boolean isMoodEmpty = (moodStats == null || moodStats.isEmpty());

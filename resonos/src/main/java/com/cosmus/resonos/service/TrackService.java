@@ -77,4 +77,7 @@ public interface TrackService {
     // 페이징 전체 데이터
     public List<Track> getAllTracks(Pagination pagination) throws Exception;
 
+    // mvUrl 업데이트
+    void updateMvUrl(@Param("id") String id, @Param("mvUrl") String mvUrl);
+
 }
