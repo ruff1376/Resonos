@@ -108,7 +108,7 @@ public class TrackController {
             model.addAttribute("isTrackLikedByUser", false);
         }
 
-        Track track = trackService.selectById(id);
+        Track track = trackService.getTrackOrUpdate(id);
         Album album = albumService.findAlbumByTrackId(id);
         List<Track> top5List = trackService.findTop5TracksInSameAlbum(id);
         Artist artist = artistService.selectArtistByTrackId(id);

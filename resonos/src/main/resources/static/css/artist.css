@@ -279,10 +279,11 @@ img {
 }
 
 .youtube {
-    display: flex;
     border-radius: 10px;
     border: 2px solid var(--main-color);
     overflow: hidden;
+    height: 315px;
+    width: 560px;
 }
 .recent-review>p:first-child,
 .mood-vote p,

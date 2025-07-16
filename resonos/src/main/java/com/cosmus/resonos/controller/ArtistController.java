@@ -86,9 +86,8 @@ public class ArtistController {
         List<Album> albums = albumService.findAlbumsByArtistId(id);
         int albumCount = albumService.countAlbumsByArtist(id);
         int trackCount = trackService.countTracksByArtist(id);
-        List<Track> top7List = trackService.selectTop7TracksByArtist(id);
-        String mv_url = artistService.selectTopMvUrlByArtist(id);
-
+        List<Track> top7List = trackService.selectTop7TracksByArtistAndFetchMv(id);
+        Track track = top7List.get(0);
 
         List<MoodStat> moodStats = moodStatService.getTop6MoodsByArtistId(id);
         boolean isMoodEmpty = (moodStats == null || moodStats.isEmpty());
@@ -99,7 +98,7 @@ public class ArtistController {
         List<RecentReview> reviews = recentReviewService.getRecentReviewsByArtistId(id);
         model.addAttribute("recentReviews", reviews);
         model.addAttribute("artist", artist);
-        model.addAttribute("mv", mv_url);
+        model.addAttribute("track", track);
         model.addAttribute("albums", albums);
         model.addAttribute("albumCount", albumCount);
         model.addAttribute("TOP7", top7List);
