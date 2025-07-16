@@ -87,6 +87,7 @@ public class ArtistController {
         int albumCount = albumService.countAlbumsByArtist(id);
         int trackCount = trackService.countTracksByArtist(id);
         List<Track> top7List = trackService.selectTop7TracksByArtist(id);
+        Track track = top7List.get(0);
         String mv_url = artistService.selectTopMvUrlByArtist(id);
 
 
@@ -99,7 +100,7 @@ public class ArtistController {
         List<RecentReview> reviews = recentReviewService.getRecentReviewsByArtistId(id);
         model.addAttribute("recentReviews", reviews);
         model.addAttribute("artist", artist);
-        model.addAttribute("mv", mv_url);
+        model.addAttribute("track", track);
         model.addAttribute("albums", albums);
         model.addAttribute("albumCount", albumCount);
         model.addAttribute("TOP7", top7List);
