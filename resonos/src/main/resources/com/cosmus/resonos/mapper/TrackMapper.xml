@@ -172,6 +172,7 @@
           resultType="Track">
       SELECT
           title,
+          mv_url,
           duration,
           id
       FROM track
@@ -418,4 +419,11 @@
     ORDER BY popularity DESC
     LIMIT #{index}, #{size}
   </select>
+
+  <!-- mv_url 업데이트 -->
+  <update id="updateMvUrl">
+      UPDATE track SET mv_url = #{mvUrl} WHERE id = #{id}
+  </update>
+
+
 </mapper>

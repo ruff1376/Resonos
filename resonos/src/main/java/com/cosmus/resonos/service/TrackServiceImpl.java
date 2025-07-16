@@ -7,9 +7,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Track;
 import com.cosmus.resonos.external.SpotifyApiClient;
+import com.cosmus.resonos.mapper.ArtistMapper;
 // import com.cosmus.resonos.external.SpotifyApiClient;
 import com.cosmus.resonos.mapper.TrackMapper;
 
@@ -18,6 +20,10 @@ public class TrackServiceImpl implements TrackService {
 
     @Autowired
     private TrackMapper trackMapper;
+    @Autowired
+    private ArtistMapper artistMapper;
+    @Autowired
+    private YouTubeApiService youTubeApiService;
 
     // 트랙 목록 조회
     @Override
@@ -54,6 +60,30 @@ public class TrackServiceImpl implements TrackService {
         return trackMapper.selectById(id);
     }
 
+    // 트랙 단건 조회 mvUrl 업데이트 기능 추가
+    @Override
+    public Track getTrackOrUpdate(String id) throws Exception {
+        Track track = trackMapper.selectById(id);
+        Artist artist = artistMapper.selectById(track.getArtistId());
+        if (track != null) {
+            System.out.println("서비스단 track 의 mvUrl : " + track.getMvUrl());
+            if ("N/A".equals(track.getMvUrl())) {
+                System.out.println("해당 videoId는 찾을수가 없었음");
+            }
+            if (track.getMvUrl() == null || track.getMvUrl().trim().isBlank()) {
+                System.out.println("트랙의 mvUrl 이 없음");
+                String videoId = youTubeApiService.searchVideoId(track.getTitle(), artist.getName());
+                if (videoId != null) {
+                    trackMapper.updateMvUrl(track.getId(), videoId);
+                    System.out.println("업데이트 트랙id : " + track.getId() + " videoId : " + videoId);
+                    track.setMvUrl(videoId); // 리스트에 반영
+                }
+            } else
+                System.out.println("트랙 화면 mvUrl 처리 완료");
+        }
+        return track;
+    }
+
     // 트랙 등록
     @Override
     public boolean insert(Track track) throws Exception {
@@ -78,10 +108,35 @@ public class TrackServiceImpl implements TrackService {
         return trackMapper.exists(id) > 0;
     }
 
-
+    // 아티스트의 상위 7곡 트랙 리스트
+    // 그중 첫번째 트랙객체의 mvUrl 확인 후 없으면 등록
+    @Override
+    public List<Track> selectTop7TracksByArtistAndFetchMv(String id) throws Exception {
+        Artist artist = artistMapper.selectById(id);
+        List<Track> top7List = trackMapper.selectTop7TracksByArtist(id);
+        if (!top7List.isEmpty()) {
+            Track topTrack = top7List.get(0);
+            System.out.println("서비스단의 topTrack 의 mvUrl : " + topTrack.getMvUrl());
+            if ("N/A".equals(topTrack.getMvUrl())) {
+                System.out.println("해당 videoId는 찾을수가 없었음");
+            }
+            if (topTrack.getMvUrl() == null || topTrack.getMvUrl().trim().isBlank()) {
+                System.out.println("트랙의 mvUrl 이 없음");
+                String videoId = youTubeApiService.searchVideoId(topTrack.getTitle(), artist.getName());
+                if (videoId != null) {
+                    trackMapper.updateMvUrl(topTrack.getId(), videoId);
+                    System.out.println("업데이트 트랙id : " + topTrack.getId() + " videoId : " + videoId);
+                    topTrack.setMvUrl(videoId); // 리스트에 반영
+                }
+            } else
+                System.out.println("아티스트 화면 mvUrl 처리 완료");
+        }
+        return top7List;
+    }
+    // 기존 아티스트 상위7개 트랙리스트
     @Override
     public List<Track> selectTop7TracksByArtist(String id) throws Exception {
-        return trackMapper.selectTop7TracksByArtist(id);
+    return trackMapper.selectTop7TracksByArtist(id);
     }
 
     @Override
@@ -89,7 +144,7 @@ public class TrackServiceImpl implements TrackService {
         return trackMapper.countTracksByArtist(id);
     }
 
-        @Autowired
+    @Autowired
     private SpotifyApiClient spotifyApiClient;
 
     @Override
@@ -106,21 +161,26 @@ public class TrackServiceImpl implements TrackService {
         Track track = new Track();
         track.setId((String) trackData.get("id"));
         track.setTitle((String) trackData.get("name"));
-        track.setDuration(trackData.get("duration_ms") != null ? ((Number) trackData.get("duration_ms")).intValue() / 1000 : 0);
+        track.setDuration(
+                trackData.get("duration_ms") != null ? ((Number) trackData.get("duration_ms")).intValue() / 1000 : 0);
         track.setGenre(""); // 필요시
         track.setStreamingUrl((String) trackData.getOrDefault("preview_url", null));
         // 앨범 ID
         if (trackData.get("album") instanceof Map) {
-            Map<?, ?> album = (Map<?, ?>)trackData.get("album");
-            track.setAlbumId((String)album.get("id"));
+            Map<?, ?> album = (Map<?, ?>) trackData.get("album");
+            track.setAlbumId((String) album.get("id"));
         }
         // 아티스트 ID
-        if (trackData.get("artists") instanceof java.util.List && !((java.util.List<?>)trackData.get("artists")).isEmpty()) {
-            java.util.Map<?, ?> firstArtist = (java.util.Map<?, ?>)((java.util.List<?>)trackData.get("artists")).get(0);
-            track.setArtistId((String)firstArtist.get("id"));
+        if (trackData.get("artists") instanceof java.util.List
+                && !((java.util.List<?>) trackData.get("artists")).isEmpty()) {
+            java.util.Map<?, ?> firstArtist = (java.util.Map<?, ?>) ((java.util.List<?>) trackData.get("artists"))
+                    .get(0);
+            track.setArtistId((String) firstArtist.get("id"));
         }
-        track.setPopularity(trackData.get("popularity") != null ? ((Number) trackData.get("popularity")).intValue() : 0);
-        track.setTrackNo(trackData.get("track_number") != null ? ((Number) trackData.get("track_number")).intValue() : 0);
+        track.setPopularity(
+                trackData.get("popularity") != null ? ((Number) trackData.get("popularity")).intValue() : 0);
+        track.setTrackNo(
+                trackData.get("track_number") != null ? ((Number) trackData.get("track_number")).intValue() : 0);
 
         // 3. DB 저장 (존재하면 update, 없으면 insert)
         if (trackMapper.exists(track.getId()) == 0) {
@@ -129,7 +189,6 @@ public class TrackServiceImpl implements TrackService {
             trackMapper.update(track);
         }
     }
-
 
     @Override
     public List<Track> findTop5TracksInSameAlbum(String id) throws Exception {
@@ -152,10 +211,34 @@ public class TrackServiceImpl implements TrackService {
     }
 
     @Override
+    public Track topTrackByAlbumIdAndFetchMv(String id) throws Exception {
+        Track track = trackMapper.findTopTrackByAlbumId(id);
+        Artist artist = artistMapper.selectById(track.getArtistId());
+        if (track != null) {
+            System.out.println("서비스단 track 의 mvUrl : " + track.getMvUrl());
+            if ("N/A".equals(track.getMvUrl())) {
+                System.out.println("해당 videoId는 찾을수가 없었음");
+            }
+            if (track.getMvUrl() == null || track.getMvUrl().trim().isBlank()) {
+                System.out.println("트랙의 mvUrl 이 없음");
+                String videoId = youTubeApiService.searchVideoId(track.getTitle(), artist.getName());
+                if (videoId != null) {
+                    trackMapper.updateMvUrl(track.getId(), videoId);
+                    System.out.println("업데이트 트랙id : " + track.getId() + " videoId : " + videoId);
+                    track.setMvUrl(videoId); // 리스트에 반영
+                }
+            } else
+                System.out.println("앨범 화면 mvUrl 처리 완료");
+        }
+        return track;
+    }
+
+    @Override
     public Track findTopTrackByAlbumId(String id) throws Exception {
         return trackMapper.findTopTrackByAlbumId(id);
 
     }
+
     public List<Track> searchList(String keyword) throws Exception {
         return trackMapper.searchList(keyword);
     }
@@ -214,4 +297,9 @@ public class TrackServiceImpl implements TrackService {
     public List<Track> getAllTracks(Pagination pagination) throws Exception {
         return trackMapper.getAllTracks(pagination);
     }
+
+    @Override
+    public void updateMvUrl(String id, String mvUrl) {
+    }
+
 }

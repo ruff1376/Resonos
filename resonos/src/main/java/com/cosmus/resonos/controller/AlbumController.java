@@ -88,7 +88,7 @@ public class AlbumController {
         }
 
         AlbumScore score = albumReviewService.getAlbumScore(id);
-        Track topTrack = trackService.findTopTrackByAlbumId(id);
+        Track topTrack = trackService.topTrackByAlbumIdAndFetchMv(id);
         Album album = albumService.select(id);
         List<Track> top5List = trackService.findTop5TracksByAlbumId(id);
         List<Track> tracks = trackService.findTracksByAlbumId(id);
