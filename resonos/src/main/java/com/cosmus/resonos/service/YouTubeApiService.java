@@ -45,12 +45,12 @@ public class YouTubeApiService {
         String normArtist = normalize(artist);
 
         List<String> fallbackQueries = Arrays.asList(
-                artist + " - " + title + " mv",
-                artist + " " + extractKorean(title),
-                artist + " " + extractEnglish(title),
-                artist + " " + extractJapanese(title),
-                artist,
-                title
+                normArtist + " - " + normTitle + " mv",
+                normArtist + " " + extractEnglish(normTitle),
+                normArtist + " " + extractKorean(normTitle),
+                normArtist + " " + extractJapanese(normTitle),
+                normArtist,
+                normTitle
         );
 
         for (String query : fallbackQueries) {
@@ -81,13 +81,13 @@ public class YouTubeApiService {
 
                         for (String keyword : EXCLUDED_KEYWORDS) {
                             if (videoTitle.contains(normalize(keyword))) {
-                                System.out.println("🚫 제외된 영상 제목: " + videoTitleRaw + " (키워드: " + keyword + ")");
+                                // System.out.println("🚫 제외된 영상 제목: " + videoTitleRaw + " (키워드: " + keyword + ")");
                                 continue outer;
                             }
                         }
 
                         if (!(videoTitle.contains(normTitle) && videoTitle.contains(normArtist))) {
-                            System.out.println("⛔ 필수 키워드 누락: " + videoTitleRaw);
+                            // System.out.println("⛔ 필수 키워드 누락: " + videoTitleRaw);
                             continue;
                         }
 
