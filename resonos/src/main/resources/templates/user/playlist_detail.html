@@ -221,7 +221,7 @@
                   icon: 'success-icon',
                   title: 'alert-title'
                 }
-              });
+              })
               setTimeout(() => {
                 location.href = location.pathname
               }, 1001)
@@ -236,18 +236,18 @@
       }
 
       /* 모달 트랙 검색 */
-      let trackOffset = 0;
-      const trackLimit = 20;
-      let trackLoading = false;
-      let trackAllLoaded = false;
-      let trackKeyword = '';
+      let trackOffset = 20
+      const trackLimit = 20
+      let trackLoading = false
+      let trackAllLoaded = false
+      let trackKeyword = ''
 
       function debounce(fn, delay) {
-        let timer;
+        let timer
         return function (...args) {
-          clearTimeout(timer);
-          timer = setTimeout(() => fn.apply(this, args), delay);
-        };
+          clearTimeout(timer)
+          timer = setTimeout(() => fn.apply(this, args), delay)
+        }
       }
 
       /* 요청에 딜레이 넣기 */
@@ -398,7 +398,7 @@
                   icon: 'success-icon',
                   title: 'alert-title'
                 }
-              });
+              })
               return
           }
           // 성공시
@@ -416,7 +416,7 @@
               icon: 'success-icon',
               title: 'alert-title'
             }
-          });
+          })
         } catch (error) {
             console.error("요청 실패:", error)
           }
@@ -447,7 +447,7 @@
         if (e.key === "Escape") {
           modal.classList.remove('action')
         }
-      });
+      })
 
       /* 트랙리스트 선택 */
       const ulList = document.querySelector('.ul-list.modall')
@@ -483,7 +483,7 @@
               })
               addTracks(list)
             }
-          });
+          })
       })
 
       /* 플레이리스트 트랙 삭제 */
@@ -510,7 +510,7 @@
           const text = await response.text()
           console.log(text)
           if(text) {
-            const result = JSON.parse(text);
+            const result = JSON.parse(text)
             if(result.trackList && result.trackList.some(track => track.id != null)) {
               renderTracks(result.trackList)
               document.querySelector('.count').textContent = result.trackList.length
@@ -587,7 +587,7 @@
                   icon: 'success-icon',
                   title: 'alert-title'
                 }
-              });
+              })
               if(result === '로그인이 필요한 서비스입니다.') {
                 sessionStorage.setItem('returnTo', location.href)
                 setTimeout(() => {
@@ -609,7 +609,7 @@
               icon: 'success-icon',
               title: 'alert-title'
             }
-          });
+          })
           const likeBtn = document.getElementById('like-button')
           likeBtn.classList.toggle('already')
           if(likeBtn.classList.contains('already'))
@@ -626,8 +626,8 @@
           const trackId = event.target.closest('.list-item').querySelector('input[type="hidden"]').value
           console.log(trackId)
           if (!userId || userId === 0) {
-              Swal.fire('로그인이 필요합니다!');
-              return;
+              Swal.fire('로그인이 필요합니다!')
+              return
           }
 
           $.ajax({
@@ -639,7 +639,7 @@
               },
               data: JSON.stringify({ userId: userId, trackId: trackId }),
               success: function (res) {
-                  const liked = res.liked;
+                  const liked = res.liked
                   const text = liked ? '좋아요를 완료했습니다.' : '좋아요를 취소했습니다.'
                   Swal.fire({
                     position: "center",
@@ -652,14 +652,14 @@
                       icon: 'success-icon',
                       title: 'alert-title'
                     }
-                  });
+                  })
                   event.target.innerText = liked ? '♥' : '♡'
               },
               error: function () {
-                  Swal.fire('좋아요 처리에 실패했습니다.');
+                  Swal.fire('좋아요 처리에 실패했습니다.')
               }
-          });
-        });
+          })
+        })
     </script>
     <script th:src="@{/js/remotecontroller.js}"></script>
   </th:block>

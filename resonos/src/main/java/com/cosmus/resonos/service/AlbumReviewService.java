@@ -40,13 +40,20 @@ public interface AlbumReviewService {
 
     long countByAlbumId(String albumId);
 
-    List<AlbumReview> reviewWithReviewerByUserId(Long loginUserId) throws Exception;
+    // 유저의 앨범 리뷰 조회
+    public List<AlbumReview> reviewWithReviewerByUserId(Long loginUserId, String keyword, int offset, int limit) throws Exception;
+    // 유저의 앨범 리뷰 수
+    public int countAlbumReview(Long loginUserId) throws Exception;
+    // 유저의 좋아요 한 앨범 리뷰 조회
+    public List<AlbumReview> likedReviewByUserId(Long loginUserId,  String keyword, int offset, int limit) throws Exception;
+    // 유저의 좋아요 한 앨범 리뷰 수
+    public int countLikedAlbumReview(Long loginUserId) throws Exception;
 
     AlbumReview getLastestReview(@Param("albumId")String albumId, @Param("userId") Long userId);
 
     // countall
     public long countAll() throws Exception;
     public List<AlbumReview> findAllReviewsWithReviewer() throws Exception;
-    public List<AlbumReview> getAllReviewsWithReviewer() throws Exception; 
-    
+    public List<AlbumReview> getAllReviewsWithReviewer() throws Exception;
+
 }

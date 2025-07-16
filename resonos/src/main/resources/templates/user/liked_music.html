@@ -44,7 +44,7 @@
                 <span class="name-artist" th:text="${album.artistName}">아티스트 명</span>
               </div>
               <th:block th:if="${isOwner}">
-                <span class="like like-album">♥</span>
+                <button type="button" class="like like-album">♥</button>
               </th:block>
             </li>
           </th:block>
@@ -92,26 +92,29 @@
       const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
       const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
       const userId = [[${userId}]]
+      const isOwner = [[${isOwner}]]
       if(userId == null) location.href = '/login'
 
       /* 앨범 이동 */
       const albumList = document.querySelector(".info-section.album ul")
       albumList.addEventListener("click", function(event) {
         if(event.target.tagName.toLowerCase() === 'button') return
-        if(event.target.tagName.toLowerCase() === 'li') {
-          const albumId = event.target.closest('.list-item').querySelector('input[type="hidden"]').value
-          location.href = `/albums?id=${albumId}`
-        }
+        const li = event.target.closest('.list-item');
+        if (!li) return;
+
+        const albumId = li.querySelector('input[type="hidden"]').value;
+        location.href = `/albums?id=${albumId}`;
       })
 
       /* 트랙 이동 */
       const trackList = document.querySelector(".info-section.track ul")
       trackList.addEventListener("click", function(event) {
         if (event.target.tagName.toLowerCase() === 'button') return
-        if(event.target.tagName.toLowerCase() === 'li') {
-          const trackId = event.target.closest('.list-item').querySelector('input[type="hidden"]').value
-          location.href = `/tracks?id=${trackId}`
-        }
+        const li = event.target.closest('.list-item');
+        if (!li) return;
+
+        const trackId = li.querySelector('input[type="hidden"]').value;
+        location.href = `/tracks?id=${trackId}`;
       })
 
       // 트랙 좋아요
@@ -195,7 +198,7 @@
       });
 
       /* 좋아요 한 트랙 검색 */
-      let trackOffset = 0
+      let trackOffset = 20
       const trackLimit = 20
       let trackLoading = false
       let trackAllLoaded = false
@@ -217,7 +220,8 @@
       const trackScrollWindow = document.querySelector('.info-section.track')
 
       trackScrollWindow.addEventListener('scroll', async () => {
-        const nearBottom = trackScrollWindow.scrollTop + trackScrollWindow.clientHeight >= trackScrollWindow.scrollHeight - 150
+        const nearBottom = trackScrollWindow.scrollTop + trackScrollWindow.clientHeight >= trackScrollWindow.scrollHeight
+        - 150
 
         if (nearBottom && !trackLoading && !trackAllLoaded) {
           trackLoading = true
@@ -286,13 +290,14 @@
               <span class="name-album">${track.title}</span>
               <span class="name-artist">${track.artistName}</span>
             </div>
+            ${isOwner ? '<button type="button" class="like like-track">♥</button>' : ''}
           `
           ulList.appendChild(li)
         })
       }
 
       /* 좋아요 한 앨범 검색 */
-      let albumOffset = 0
+      let albumOffset = 20
       const albumLimit = 20
       let albumLoading = false
       let albumAllLoaded = false
@@ -376,6 +381,7 @@
               <span class="name-album">${album.title}</span>
               <span class="name-artist">${album.artistName}</span>
             </div>
+            ${isOwner ? '<button type="button" class="like like-album">♥</button>' : ''}
           `
           ulList.appendChild(li)
         })

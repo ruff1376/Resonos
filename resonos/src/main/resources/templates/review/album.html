@@ -283,6 +283,29 @@
         const isLogin = [[${ loginUser != null ? 'true' : 'false'}]];
     </script>
 
+    <!-- 해당 댓글로 스크롤 이동 -->
+    <script>
+        /* 해당 댓글로 스크롤 이동 */
+        document.addEventListener("DOMContentLoaded", function () {
+            const params = new URLSearchParams(window.location.search);
+            const reviewId = params.get("reviewId");
+
+            if (reviewId) {
+                const target = document.querySelector(`[data-review-id="${reviewId}"]`);
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
+                    target.style.transition = 'background 0.3s';
+                    target.style.background = 'rgba(255,255,255,0.3)';
+                    target.scroll
+                    setTimeout(() => target.style.background = '', 1500);
+                }
+            }
+        });
+    </script>
+
     <!-- 로그인시 원래페이지로 -->
     <script>
         document.getElementById('login-review').addEventListener('click', e => {

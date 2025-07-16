@@ -144,7 +144,7 @@
     </select> -->
 
 
-    <!-- 특정 유저의 트랙 리뷰 정보 -->
+    <!-- 마이페이지: 유저의 트랙 리뷰 -->
     <select id="reviewWithReviewerByUserId" parameterType="Long" resultMap="TrackReview">
         SELECT
             tr.id,
@@ -166,12 +166,39 @@
         JOIN user u ON u.id = tr.user_id
         JOIN track t ON tr.track_id = t.id
         WHERE tr.user_id = #{loginUserId}
-        ORDER BY tr.critic DESC,
-                likes DESC,
-                tr.created_at ASC
+        <if test="keyword != null and keyword != ''">
+        AND (
+            t.title LIKE CONCAT('%', #{keyword}, '%')
+            OR tr.content LIKE CONCAT('%', #{keyword}, '%')
+        )
+        </if>
+        ORDER BY
+        <choose>
+            <when test="keyword != null and keyword != ''">
+                CASE
+                WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 0
+                WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 1
+                WHEN tr.content LIKE CONCAT(#{keyword}, '%') THEN 2
+                WHEN tr.content LIKE CONCAT('%', #{keyword}, '%') THEN 3
+                ELSE 4
+                END,
+                tr.created_at DESC
+            </when>
+            <otherwise>
+                tr.created_at DESC
+            </otherwise>
+        </choose>
+        LIMIT #{offset}, #{limit}
     </select>
 
-    <!-- 특정 유저의 좋아요 한 트랙 리뷰 정보 -->
+    <!-- 마이페이지: 트랙 리뷰 수  -->
+    <select id="countTrackReview" resultType="int">
+        SELECT COUNT(*)
+        FROM track_review tr
+        WHERE tr.user_id = #{loginUserId}
+    </select>
+
+    <!-- 마이페이지: 유저의 좋아요한 트랙 리뷰 -->
     <select id="likedReviewByUserId" resultMap="TrackReview">
         SELECT
             tr.id,
@@ -194,7 +221,39 @@
         JOIN user u ON tr.user_id = u.id
         JOIN track t ON tr.track_id = t.id
         WHERE rl.user_id = #{loginUserId}
-        ORDER BY rl.created_at DESC
+        AND rl.review_type = 'TRACK'
+        <if test="keyword != null and keyword != ''">
+        AND (
+            t.title LIKE CONCAT('%', #{keyword}, '%')
+            OR tr.content LIKE CONCAT('%', #{keyword}, '%')
+            OR u.nickname LIKE CONCAT('%', #{keyword}, '%')
+        )
+        </if>
+        ORDER BY
+        <choose>
+            <when test="keyword != null and keyword != ''">
+                CASE
+                WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 0
+                WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 1
+                WHEN tr.content LIKE CONCAT(#{keyword}, '%') THEN 2
+                WHEN tr.content LIKE CONCAT('%', #{keyword}, '%') THEN 3
+                ELSE 4
+                END,
+                rl.created_at DESC
+            </when>
+            <otherwise>
+                rl.created_at DESC
+            </otherwise>
+        </choose>
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <!-- 마이페이지: 좋아요한 트랙 리뷰 수  -->
+    <select id="countLikedTrackReview" resultType="int">
+        SELECT COUNT(*)
+        FROM review_like rl
+        WHERE rl.user_id = 1
+        AND review_type = 'TRACK'
     </select>
 
     <!-- update blind status -->

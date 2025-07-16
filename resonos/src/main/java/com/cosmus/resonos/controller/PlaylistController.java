@@ -55,7 +55,7 @@ public class PlaylistController {
      * @param model
      * @return
      */
-    @GetMapping("/create")
+    @GetMapping("/new")
     public String playlistCreate(Model model) {
         model.addAttribute("playlist", Playlist.builder().isPublic(true).build());
         model.addAttribute("lastPath", "playlist");

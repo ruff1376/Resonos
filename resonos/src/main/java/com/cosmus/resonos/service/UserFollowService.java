@@ -23,9 +23,9 @@ public interface UserFollowService {
     // 팔로우 수 조회
     public int myFollowCount(Long id) throws Exception;
     // 팔로워 조회
-    public List<Users> myFollower(Long id, String keyword) throws Exception;
+    public List<Users> myFollower(Long id, String keyword, int offset, int limit) throws Exception;
     // 팔로우 조회
-    public List<Users> myFollow(Long id, String keyword) throws Exception;
+    public List<Users> myFollow(Long id, String keyword, int offset, int limit) throws Exception;
     // 이미 팔로우 체크
     public boolean checkAlreadyFollow(Long loginUserId, Long id) throws Exception;
 }

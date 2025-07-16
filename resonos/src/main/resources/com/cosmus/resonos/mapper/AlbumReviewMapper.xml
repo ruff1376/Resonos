@@ -134,7 +134,7 @@
     </select>
 
 
-    <!-- 특정 유저의 리뷰 정보 -->
+    <!-- 마이페이지: 유저의 앨범 리뷰 -->
     <select id="reviewWithReviewerByUserId"  resultMap="AlbumReview">
         SELECT
             ar.id,
@@ -156,7 +156,94 @@
         JOIN user u ON u.id = ar.user_id
         JOIN album a ON ar.album_id = a.id
         WHERE ar.user_id = #{loginUserId}
-        ORDER BY ar.critic DESC, likes DESC, ar.created_at ASC
+        <if test="keyword != null and keyword != ''">
+        AND (
+            a.title LIKE CONCAT('%', #{keyword}, '%')
+            OR ar.content LIKE CONCAT('%', #{keyword}, '%')
+        )
+        </if>
+        ORDER BY
+        <choose>
+            <when test="keyword != null and keyword != ''">
+                CASE
+                WHEN a.title LIKE CONCAT(#{keyword}, '%') THEN 0
+                WHEN a.title LIKE CONCAT('%', #{keyword}, '%') THEN 1
+                WHEN ar.content LIKE CONCAT(#{keyword}, '%') THEN 2
+                WHEN ar.content LIKE CONCAT('%', #{keyword}, '%') THEN 3
+                ELSE 4
+                END,
+                ar.created_at DESC
+            </when>
+            <otherwise>
+                ar.created_at DESC
+            </otherwise>
+        </choose>
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <!-- 마이페이지: 앨범 리뷰 수  -->
+    <select id="countAlbumReview" resultType="int">
+        SELECT COUNT(*)
+        FROM album_review ar
+        WHERE ar.user_id = #{loginUserId}
+    </select>
+
+    <!-- 마이페이지: 유저의 좋아요한 앨범 리뷰 -->
+    <select id="likedReviewByUserId" resultMap="AlbumReview">
+        SELECT
+            ar.id,
+            ar.rating,
+            ar.content,
+            ar.blinded,
+            ar.created_at,
+            ar.critic,
+            ar.user_id,
+            ar.album_id,
+            u.id AS reviewer_id,
+            u.nickname AS reviewer_nickname,
+            u.profile_image AS reviewer_profile_image,
+            u.is_pro AS reviewer_is_pro,
+            (SELECT COUNT(*) FROM review_like WHERE review_id = ar.id AND review_type = 'ALBUM') AS likes,
+            (SELECT COUNT(*) FROM review_report WHERE review_id = ar.id AND review_type = 'ALBUM') AS dislikes,
+            a.title
+        FROM review_like rl
+        JOIN album_review ar ON ar.id = rl.review_id
+        JOIN user u ON ar.user_id = u.id
+        JOIN album a ON ar.album_id = a.id
+        WHERE rl.user_id = #{loginUserId}
+        AND rl.review_type = 'ALBUM'
+        <if test="keyword != null and keyword != ''">
+        AND (
+            t.title LIKE CONCAT('%', #{keyword}, '%')
+            OR tr.content LIKE CONCAT('%', #{keyword}, '%')
+            OR u.nickname LIKE CONCAT('%', #{keyword}, '%')
+        )
+        </if>
+        ORDER BY
+        <choose>
+            <when test="keyword != null and keyword != ''">
+                CASE
+                WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 0
+                WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 1
+                WHEN tr.content LIKE CONCAT(#{keyword}, '%') THEN 2
+                WHEN tr.content LIKE CONCAT('%', #{keyword}, '%') THEN 3
+                ELSE 4
+                END,
+                rl.created_at DESC
+            </when>
+            <otherwise>
+                rl.created_at DESC
+            </otherwise>
+        </choose>
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <!-- 마이페이지: 좋아요 한 앨범 리뷰 수  -->
+    <select id="countLikedAlbumReview" resultType="int">
+        SELECT COUNT(*)
+        FROM review_like rl
+        WHERE rl.user_id = #{loginUserId}
+        AND rl.review_type = 'ALBUM'
     </select>
 
     <!-- update blind status -->
@@ -260,7 +347,7 @@
     FROM album_review ar
     JOIN user u ON u.id = ar.user_id
     ORDER BY ar.id DESC
-    </select>   
+    </select>
 
 
 </mapper>

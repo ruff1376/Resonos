@@ -20,11 +20,11 @@
     </th:block>
     <!-- 팔로워 -->
     <section class="info-wrapper" th:classappend="${ !isOwner ? 'go-center' : ''}">
-      <div class="info-section">
+      <div class="info-section follower">
         <div class="title">
           <div>
             <h2 class="text-start">팔로워</h2>
-            <span class="count" th:text="${myFollower.size()}">팔로워 수</span>
+            <span class="count" th:text="${followerCount}">팔로워 수</span>
           </div>
           <div class="text-center position-relative">
             <i class="bi bi-search search-icon position-absolute"></i>
@@ -49,11 +49,11 @@
     </section>
     <!-- 팔로우 -->
     <section class="info-wrapper" th:classappend="${ !isOwner ? 'go-center' : ''}">
-      <div class="info-section">
+      <div class="info-section follow">
         <div class="title">
           <div>
             <h2 class="text-start">팔로우</h2>
-            <span class="count" th:text="${myFollow.size()}">팔로우 수</span>
+            <span class="count" th:text="${followCount}">팔로우 수</span>
           </div>
           <div class="text-center position-relative">
             <i class="bi bi-search search-icon position-absolute"></i>
@@ -144,7 +144,7 @@
               icon: 'success-icon',
               title: 'alert-title'
             }
-          });
+          })
           const followBtn = event.target
           followBtn.classList.toggle('already')
           if(event.target.classList.contains('already')) {
@@ -157,36 +157,94 @@
           }
       }
 
-      /* 요청에 딜레이 넣기 */
+      // 팔로워
+      let followerOffset = 20
+      const followerLimit = 20
+      let followerAllLoaded = false
+      let followerKeyword = ''
+      let followerLoading = false
+
+      // 팔로우
+      let followOffset = 20
+      const followLimit = 20
+      let followAllLoaded = false
+      let followKeyword = ''
+      let followLoading = false
+
+
+       /* 요청에 딜레이 넣기 */
       function debounce(fn, delay) {
-        let timer;
+        let timer
         return function (...args) {
-          clearTimeout(timer);
-          timer = setTimeout(() => fn.apply(this, args), delay);
-        };
+          clearTimeout(timer)
+          timer = setTimeout(() => fn.apply(this, args), delay)
+        }
       }
 
-      const debouncedGetUsers = debounce(getUsers, 300);
+      const debouncedFollowSearch = debounce((e) => {
+        followKeyword = e.target.value
+        followAllLoaded = false
+        getUsers('follow', followKeyword, true)
+      }, 300)
 
-      document.getElementById('follower-search').addEventListener('keyup', debouncedGetUsers);
+      const debouncedFollowerSearch = debounce((e) => {
+        followerKeyword = e.target.value
+        followerAllLoaded = false
+        getUsers('follower', followerKeyword, true)
+      }, 300)
 
-      document.getElementById('follow-search').addEventListener('keyup', debouncedGetUsers);
+      document.getElementById('follow-search').addEventListener('keyup', debouncedFollowSearch)
+      document.getElementById('follower-search').addEventListener('keyup', debouncedFollowerSearch)
+
+      // 스크롤 이벤트
+      const followerScrollWindow = document.querySelector('.info-section.follower')
+      followerScrollWindow.addEventListener('scroll', async () => {
+        const nearBottom = followerScrollWindow.scrollTop + followerScrollWindow.clientHeight >= followerScrollWindow.scrollHeight
+        - 150
+
+        if (nearBottom && !followerLoading && !followerAllLoaded) {
+          followerLoading = true
+          await getUsers('follower', followerKeyword, false)
+          followerLoading = false
+        }
+      })
+
+      // 스크롤 이벤트
+      const followScrollWindow = document.querySelector('.info-section.follow')
+      followScrollWindow.addEventListener('scroll', async () => {
+        const nearBottom = followScrollWindow.scrollTop + followScrollWindow.clientHeight >= followScrollWindow.scrollHeight
+        - 150
+
+        if (nearBottom && !followLoading && !followAllLoaded) {
+          followLoading = true
+          await getUsers('follow', followKeyword, false)
+          followLoading = false
+        }
+      })
 
       /* 팔로워 키워드 검색 */
-      async function getUsers(event) {
-        console.log(event.target)
-        let url = `/user-follows/search`
-        let choice = ''
-        if(event.target.classList.contains('follow'))
-          choice = 'follow'
-        else choice = 'follower'
+      async function getUsers(choice, keyword, reset = false) {
+        let offset, limit, allLoaded
 
-        console.log(choice)
+        if (choice === 'follow') {
+          offset = followOffset
+          limit = followLimit
+          allLoaded = followAllLoaded
+          if (reset) offset = 0
+        } else {
+          offset = followerOffset
+          limit = followerLimit
+          allLoaded = followerAllLoaded
+          if (reset) offset = 0
+        }
 
+        const url = `/user-follows/search`
         const data = {
-          keyword : event.target.value,
+          keyword : keyword,
           userId : userId,
-          choice : choice
+          choice : choice,
+          offset : offset,
+          limit : limit
         }
 
         try {
@@ -206,19 +264,25 @@
           }
           // 성공시
           const result = await response.json()
-          if(event.target.classList.contains('follow'))
-            renderFollow(result)
-          else
-            renderFollower(result)
+          if (choice === 'follow') {
+            renderFollow(result, reset)
+            followOffset += limit
+            if (result.length < limit) followAllLoaded = true
+          } else {
+            renderFollower(result, reset)
+            followerOffset += limit
+            if (result.length < limit) followerAllLoaded = true
+          }
+
         } catch (error) {
             console.log(error)
           }
       }
 
       /* 팔로우 목록 렌더링 */
-      function renderFollow(users) {
+      function renderFollow(users, reset = false) {
         const ulList = document.querySelector('.ul-list.follow')
-        ulList.innerHTML = ''
+        if(reset) ulList.innerHTML = ''
 
         users.forEach(user => {
           const li = document.createElement('li')
@@ -237,9 +301,9 @@
       }
 
       /* 팔로워 목록 렌더링 */
-      function renderFollower(users) {
+      function renderFollower(users, reset = false) {
         const ulList = document.querySelector('.ul-list.follower')
-        ulList.innerHTML = ''
+        if(reset) ulList.innerHTML = ''
 
         users.forEach(user => {
           const li = document.createElement('li')
