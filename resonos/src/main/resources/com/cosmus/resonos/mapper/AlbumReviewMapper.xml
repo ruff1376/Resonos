@@ -214,8 +214,8 @@
         AND rl.review_type = 'ALBUM'
         <if test="keyword != null and keyword != ''">
         AND (
-            t.title LIKE CONCAT('%', #{keyword}, '%')
-            OR tr.content LIKE CONCAT('%', #{keyword}, '%')
+            a.title LIKE CONCAT('%', #{keyword}, '%')
+            OR ar.content LIKE CONCAT('%', #{keyword}, '%')
             OR u.nickname LIKE CONCAT('%', #{keyword}, '%')
         )
         </if>
@@ -223,11 +223,13 @@
         <choose>
             <when test="keyword != null and keyword != ''">
                 CASE
-                WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 0
-                WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 1
-                WHEN tr.content LIKE CONCAT(#{keyword}, '%') THEN 2
-                WHEN tr.content LIKE CONCAT('%', #{keyword}, '%') THEN 3
-                ELSE 4
+                WHEN a.title LIKE CONCAT(#{keyword}, '%') THEN 0
+                WHEN a.title LIKE CONCAT('%', #{keyword}, '%') THEN 1
+                WHEN ar.content LIKE CONCAT(#{keyword}, '%') THEN 2
+                WHEN ar.content LIKE CONCAT('%', #{keyword}, '%') THEN 3
+                WHEN u.nickname LIKE CONCAT('%', #{keyword}, '%') THEN 4
+                WHEN u.nickname LIKE CONCAT('%', #{keyword}, '%') THEN 5
+                ELSE 6
                 END,
                 rl.created_at DESC
             </when>

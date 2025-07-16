@@ -31,6 +31,7 @@ import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.Track;
 import com.cosmus.resonos.domain.TrackReview;
 import com.cosmus.resonos.domain.Users;
+import com.cosmus.resonos.domain.UsersTotalLikes;
 import com.cosmus.resonos.service.AlbumReviewService;
 import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.ArtistService;
@@ -119,7 +120,13 @@ public class UserController {
     int badgeCount = badgeService.badgeCount(user.getId());
     // 차트 데이터
     Map<String, Integer> chartData = FlattenGenreCounts.execute(userService.likedGenreData(user.getId()));
+    // 리뷰 작성 수
+    int countAllReview = albumReviewServcie.countAlbumReview(loginUser.getId()) + trackReviewService.countTrackReview(loginUser.getId());
+    // 총 리뷰 수
+    UsersTotalLikes utl = userService.usersTotalLikes(loginUser.getId());
 
+    model.addAttribute("utl", utl);
+    model.addAttribute("countAllReview", countAllReview);
     model.addAttribute("chartData", chartData);
     model.addAttribute("badgeCount", badgeCount);
     model.addAttribute("badgeList", badgeList);
@@ -176,6 +183,8 @@ public class UserController {
     int badgeCount = badgeService.badgeCount(id);
     // 차트 데이터
     Map<String, Integer> chartData = FlattenGenreCounts.execute(userService.likedGenreData(user.getId()));
+    // 리뷰 작성 수
+    int countAllReview = albumReviewServcie.countAlbumReview(loginUser.getId()) + trackReviewService.countTrackReview(loginUser.getId());
 
     // 자기 자신인지
     boolean isOwner = loginUser != null && loginUser.getId().equals(id);
@@ -188,6 +197,7 @@ public class UserController {
       model.addAttribute("user", user);
     }
 
+    model.addAttribute("countAllReview", countAllReview);
     model.addAttribute("chartData", chartData);
     model.addAttribute("badgeCount", badgeCount);
     model.addAttribute("badgeList", badgeList);

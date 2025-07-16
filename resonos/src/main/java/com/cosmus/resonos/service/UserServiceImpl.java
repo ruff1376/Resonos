@@ -23,6 +23,7 @@ import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.UserActivityLog;
 import com.cosmus.resonos.domain.UserAuth;
 import com.cosmus.resonos.domain.Users;
+import com.cosmus.resonos.domain.UsersTotalLikes;
 import com.cosmus.resonos.mapper.UserMapper;
 import com.cosmus.resonos.mapper.UserRoleMapper;
 
@@ -337,6 +338,11 @@ public class UserServiceImpl implements UserService {
         @Override
         public List<GenreCount> likedGenreData(Long userId) throws Exception {
             return userMapper.likedGenreData(userId);
+        }
+
+        @Override
+        public UsersTotalLikes usersTotalLikes(Long userId) throws Exception {
+            return userMapper.usersTotalLikes(userId);
         }
 
 }
