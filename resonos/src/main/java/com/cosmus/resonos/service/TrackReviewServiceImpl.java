@@ -171,13 +171,23 @@ public class TrackReviewServiceImpl implements TrackReviewService {
     }
 
     @Override
-    public List<TrackReview> reviewWithReviewerByUserId(Long loginUserId) throws Exception {
-        return mapper.reviewWithReviewerByUserId(loginUserId);
+    public List<TrackReview> reviewWithReviewerByUserId(Long loginUserId, String keyword, int offset, int limit) throws Exception {
+        return mapper.reviewWithReviewerByUserId(loginUserId, keyword, offset, limit);
     }
 
     @Override
-    public List<TrackReview> likedReviewByUserId(Long loginUserId) throws Exception {
-        return mapper.likedReviewByUserId(loginUserId);
+    public int countTrackReview(Long loginUserId) throws Exception {
+        return mapper.countTrackReview(loginUserId);
+    }
+
+    @Override
+    public List<TrackReview> likedReviewByUserId(Long loginUserId,  String keyword, int offset, int limit) throws Exception {
+        return mapper.likedReviewByUserId(loginUserId, keyword, offset, limit);
+    }
+
+    @Override
+    public int countLikedTrackReview(Long loginUserId) throws Exception {
+        return mapper.countLikedTrackReview(loginUserId);
     }
 
     @Override
@@ -193,4 +203,8 @@ public class TrackReviewServiceImpl implements TrackReviewService {
     public long countAll() throws Exception {
         return mapper.countAll();
     }
+
+
+
+
 }

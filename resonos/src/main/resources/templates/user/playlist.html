@@ -27,7 +27,7 @@
             <span class="count" th:text="${myPlaylists.size()}">플레이리스트 수</span>
           </div>
           <th:block th:if="${isOwner}">
-            <a th:href="@{/playlists/create}" id="addPli">추가하기<img width="20px" height="20px" th:src="@{/img/plus_circle.png}" alt="추가버튼"></a>
+            <a th:href="@{/playlists/new}" id="addPli">플레이리스트 생성<img width="20px" height="20px" th:src="@{/img/plus_circle.png}" alt="추가버튼"></a>
           </th:block>
         </div>
         <th:block th:if="${#lists.isEmpty(myPlaylists)}">

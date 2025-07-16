@@ -27,9 +27,9 @@ public interface UserFollowMapper {
     // 팔로우 수 조회
     public int myFollowCount(@Param("id") Long id) throws Exception;
     // 팔로워 조회
-    public List<Users> myFollower(@Param("id") Long id, @Param("keyword") String keyword) throws Exception;
+    public List<Users> myFollower(@Param("id") Long id, @Param("keyword") String keyword, @Param("offset") int offset, @Param("limit") int limit) throws Exception;
     // 팔로우 조회
-    public List<Users> myFollow(@Param("id") Long id, @Param("keyword") String keyword) throws Exception;
+    public List<Users> myFollow(@Param("id") Long id, @Param("keyword") String keyword, @Param("offset") int offset, @Param("limit") int limit) throws Exception;
     // 이미 팔로우 체크
     public int checkAlreadyFollow(@Param("loginUserId") Long loginUserId, @Param("id") Long id) throws Exception;
 }

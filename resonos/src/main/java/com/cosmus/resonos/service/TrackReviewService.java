@@ -35,9 +35,13 @@ public interface TrackReviewService {
     List<TrackReview> reviewWithReviewerByTrackId(@Param("trackId") String trackId);
 
     // 특정 유저의 리뷰
-    List<TrackReview> reviewWithReviewerByUserId(Long loginUserId) throws Exception;
+    List<TrackReview> reviewWithReviewerByUserId(Long loginUserId, String keyword, int offset, int limit) throws Exception;
+    // 특정 유저의 리뷰 수
+    public int countTrackReview(Long loginUserId) throws Exception;
     // 특정 유저의 좋아요 한 리뷰
-    List<TrackReview> likedReviewByUserId(Long loginUserId) throws Exception;
+    List<TrackReview> likedReviewByUserId(Long loginUserId, String keyword, int offset, int limit) throws Exception;
+    // 특정 유저의 좋아요 한 리뷰 수
+    public int countLikedTrackReview(Long loginUserId) throws Exception;
     // 리뷰 countall
     public long countAll() throws Exception;
 

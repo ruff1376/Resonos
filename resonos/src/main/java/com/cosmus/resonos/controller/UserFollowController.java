@@ -150,12 +150,14 @@ public class UserFollowController {
         Long userId = Long.valueOf(data.get("userId").toString());
         String keyword = data.get("keyword").toString();
         String choice = data.get("choice").toString();
+        int offset = Integer.parseInt(data.get("offset").toString());
+        int limit = Integer.parseInt(data.get("limit").toString());
         List<Users> userList = null;
 
         if(choice.equals("follow"))
-            userList = userFollowService.myFollow(userId, keyword);
-        else
-            userList = userFollowService.myFollower(userId, keyword);
+            userList = userFollowService.myFollow(userId, keyword, offset, limit);
+        else if(choice.equals("followwer"))
+            userList = userFollowService.myFollower(userId, keyword, offset, limit);
 
         if(userList != null)
             return new ResponseEntity<>(userList, HttpStatus.OK);

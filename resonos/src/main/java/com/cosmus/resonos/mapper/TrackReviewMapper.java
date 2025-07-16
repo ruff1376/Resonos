@@ -45,10 +45,13 @@ public interface TrackReviewMapper {
 
     /* 마이페이지 */
     // 특정 유저의 리뷰
-    List<TrackReview> reviewWithReviewerByUserId(@Param("loginUserId") Long loginUserId) throws Exception;
-
-    List<TrackReview> likedReviewByUserId(@Param("loginUserId") Long loginUserId) throws Exception;
-
+    public List<TrackReview> reviewWithReviewerByUserId(@Param("loginUserId") Long loginUserId, @Param("keyword") String keyword, @Param("offset") int offset, @Param("limit") int limit) throws Exception;
+    // 특정 유저의 리뷰 수
+    public int countTrackReview(@Param("loginUserId") Long loginUserId) throws Exception;
+    // 특정 유저의 좋아요 한 리뷰 정보
+    public List<TrackReview> likedReviewByUserId(@Param("loginUserId") Long loginUserId, @Param("keyword") String keyword, @Param("offset") int offset, @Param("limit") int limit) throws Exception;
+    // 특정 유저의 좋아요 한 리뷰 수
+    public int countLikedTrackReview(@Param("loginUserId") Long loginUserId) throws Exception;
 
     // 리뷰 countall
     public long countAll() throws Exception;

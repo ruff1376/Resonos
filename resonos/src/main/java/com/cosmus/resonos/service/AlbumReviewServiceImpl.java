@@ -129,11 +129,6 @@ class AlbumReviewServiceImpl implements AlbumReviewService {
     }
 
     @Override
-    public List<AlbumReview> reviewWithReviewerByUserId(Long loginUserId) throws Exception {
-        return mapper.reviewWithReviewerByUserId(loginUserId);
-    }
-
-    @Override
     public AlbumReview getLastestReview(String albumId, Long userId) {
         return mapper.getLastestReview(albumId, userId);
     }
@@ -148,7 +143,26 @@ class AlbumReviewServiceImpl implements AlbumReviewService {
 
     @Override
     public List<AlbumReview> findAllReviewsWithReviewer() throws Exception {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAllReviewsWithReviewer'");
+    }
+
+    @Override
+    public List<AlbumReview> reviewWithReviewerByUserId(Long loginUserId, String keyword, int offset, int limit) throws Exception {
+        return mapper.reviewWithReviewerByUserId(loginUserId, keyword, offset, limit);
+    }
+
+    @Override
+    public int countAlbumReview(Long loginUserId) throws Exception {
+        return mapper.countAlbumReview(loginUserId);
+    }
+
+    @Override
+    public List<AlbumReview> likedReviewByUserId(Long loginUserId, String keyword, int offset, int limit) throws Exception {
+        return mapper.likedReviewByUserId(loginUserId, keyword, offset, limit);
+    }
+
+    @Override
+    public int countLikedAlbumReview(Long loginUserId) throws Exception {
+        return mapper.countLikedAlbumReview(loginUserId);
     }
 }

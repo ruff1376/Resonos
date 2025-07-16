@@ -54,7 +54,7 @@
         uf.created_at DESC
       </otherwise>
     </choose>
-
+    LIMIT #{offset}, #{limit}
   </select>
 
   <!-- 마이페이지: 팔로우 조회 -->
@@ -82,6 +82,7 @@
         uf.created_at DESC
       </otherwise>
     </choose>
+    LIMIT #{offset}, #{limit}
   </select>
 
   <!-- 마이페이지: 팔로우 하기 -->

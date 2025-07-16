@@ -14,16 +14,75 @@
   <main class="con con-activity position-relative" layout:fragment="content">
     <!-- 왼쪽 리모컨 -->
     <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
+    <!-- 앨범 리뷰 -->
+    <section class="info-wrapper">
+      <div class="info-section ar">
+        <div class="title">
+          <div>
+            <h2 class="text-start">내가 쓴 앨범 리뷰</h2>
+            <span class="count" th:text="${countAReview}">92</span>
+          </div>
+          <div class="text-center position-relative">
+            <i class="bi bi-search search-icon position-absolute"></i>
+            <input id="ar-search" type="text" class="basic-input" name="keyword" placeholder="키워드를 입력하세요.">
+          </div>
+        </div>
+        <ul class="ul-list ar">
+          <th:block th:each="aReview : ${aReviewList}">
+            <li class="text-item" th:object="${aReview}">
+              <a th:href="@{/albums(id = *{albumId}, reviewId = *{id})}">
+                <p class="sm-title" th:text="*{title}">앨범 or 트랙 명</p>
+                <p class="sm-content" th:text="*{content}">내용</p>
+                <span class="date" th:text="${#temporals.format(aReview.createdAt, 'yyyy-MM-dd HH:mm')}">날짜</span>
+                <span class="like" th:text="|❤️ *{likes}|">좋아요</span>
+              </a>
+            </li>
+          </th:block>
+        </ul>
+      </div>
+    </section>
+    <!-- 좋아요 한 앨범 리뷰 -->
+    <section class="info-wrapper">
+      <div class="info-section lar">
+        <div class="title">
+          <div>
+            <h2 class="text-start">좋아요 한 앨범 리뷰</h2>
+            <span class="count" th:text="${countLaReview}">92</span>
+          </div>
+          <div class="text-center position-relative">
+            <i class="bi bi-search search-icon position-absolute"></i>
+            <input id="lar-search" type="text" class="basic-input" name="keyword" placeholder="키워드를 입력하세요.">
+          </div>
+        </div>
+        <ul class="ul-list lar">
+          <th:block th:each="laReview : ${laReviewList}">
+            <li class="text-item" th:object="${laReview}">
+              <a th:href="@{/tracks(id = *{albumId}, reviewId = *{id})}">
+                <p class="sm-title" th:text="*{title}">앨범 or 트랙 명</p>
+                <p class="sm-content" th:text="*{content}">내용</p>
+                <span class="rv-name" th:text="*{reviewer.nickname}">리뷰어 닉네임</span>
+                <span class="date" th:text="${#temporals.format(laReview.createdAt, 'yyyy-MM-dd HH:mm')}">날짜</span>
+                <span class="like" th:text="|❤️ *{likes}|">좋아요</span>
+              </a>
+            </li>
+          </th:block>
+        </ul>
+      </div>
+    </section>
     <!-- 트랙 리뷰 -->
     <section class="info-wrapper">
-      <div class="info-section">
+      <div class="info-section tr">
         <div class="title">
           <div>
             <h2 class="text-start">내가 쓴 트랙 리뷰</h2>
-            <span class="count" th:text="${tReviewList.size()}">리뷰 수</span>
+            <span class="count" th:text="${countTReview}">리뷰 수</span>
+          </div>
+          <div class="text-center position-relative">
+            <i class="bi bi-search search-icon position-absolute"></i>
+            <input id="tr-search" type="text" class="basic-input" name="keyword" placeholder="키워드를 입력하세요.">
           </div>
         </div>
-        <ul class="ul-list">
+        <ul class="ul-list tr">
           <th:block th:each="review : ${tReviewList}">
             <li class="text-item" th:object="${review}">
               <a th:href="@{/tracks(id = *{trackId}, reviewId = *{id})}">
@@ -39,14 +98,18 @@
     </section>
     <!-- 좋아요 한 트랙 리뷰 -->
     <section class="info-wrapper">
-      <div class="info-section">
+      <div class="info-section ltr">
         <div class="title">
           <div>
             <h2 class="text-start">좋아요 한 트랙 리뷰</h2>
-            <span class="count" th:text="${ltReviewList != null ? ltReviewList.size() : '0'}">92</span>
+            <span class="count" th:text="${countLtReview}">92</span>
+          </div>
+          <div class="text-center position-relative">
+            <i class="bi bi-search search-icon position-absolute"></i>
+            <input id="ltr-search" type="text" class="basic-input" name="keyword" placeholder="키워드를 입력하세요.">
           </div>
         </div>
-        <ul class="ul-list">
+        <ul class="ul-list ltr">
           <th:block th:each="ltReview : ${ltReviewList}">
             <li class="text-item" th:object="${ltReview}">
               <a th:href="@{/tracks(id = *{trackId}, reviewId = *{id})}">
@@ -61,32 +124,390 @@
         </ul>
       </div>
     </section>
-    <!-- 댓글 -->
-    <section class="info-wrapper">
-      <div class="info-section">
-        <div class="title">
-          <div>
-            <h2 class="text-start">내가 쓴 댓글</h2>
-            <span class="count">92</span>
-          </div>
-        </div>
-        <ul class="ul-list">
-          <th:block th:each="i : ${#numbers.sequence(1, 10)}">
-            <li class="text-item">
-              <a href="">
-                <p class="sm-title">게시글 제목</p>
-                <p class="sm-content">내용</p>
-                <span class="date" th:text="2025.02.02">날짜</span>
-                <span class="like" th:text="|좋아요 ${10}|">좋아요</span>❤
-              </a>
-            </li>
-          </th:block>
-        </ul>
-      </div>
-    </section>
   </main>
   <th:block layout:fragment="pageScript">
     <script th:src="@{/js/remotecontroller.js}"></script>
+    <script>
+
+      const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
+      const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
+
+      function debounce(fn, delay) {
+        let timer;
+        return function (...args) {
+          clearTimeout(timer);
+          timer = setTimeout(() => fn.apply(this, args), delay);
+        };
+      }
+
+      function formatDate(datetime) {
+        const date = new Date(datetime);
+        const pad = (n) => n.toString().padStart(2, '0');
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+      }
+
+      /* 내가 쓴 앨범 리뷰 검색 */
+      let arOffset = 20
+      const arLimit = 20
+      let arLoading = false
+      let arAllLoaded = false
+      let arKeyword = ''
+
+      // 요청 딜레이
+      const debouncedGetAr = debounce(() => getAlbumReivew(true), 300);
+      document.getElementById('ar-search').addEventListener('keyup', debouncedGetAr);
+
+      // 스크롤 이벤트
+      const arScrollWindow = document.querySelector('.info-section.ar')
+
+      arScrollWindow.addEventListener('scroll', async () => {
+        const nearBottom = arScrollWindow.scrollTop + arScrollWindow.clientHeight >= arScrollWindow.scrollHeight
+        - 150
+
+        if (nearBottom && !arLoading && !arAllLoaded) {
+          arLoading = true
+          await getAlbumReivew(false)
+          arLoading = false
+        }
+      })
+
+      // 비동기 요청
+      async function getAlbumReivew(reset = false) {
+        if(reset) {
+          arOffset = 0
+          arAllLoaded = false
+          document.querySelector('.ul-list.ar').innerHTML = ''
+        }
+
+        let url = `/users/activity`
+        arKeyword = document.getElementById('ar-search').value.trim()
+
+        const data = {
+          keyword : arKeyword,
+          offset : arOffset,
+          limit : arLimit,
+          type : 'ar'
+        }
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    [header] : token,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+
+          if (!response.ok) {
+              const result = await response.text()
+              console.log(result)
+              return
+          }
+          // 성공시
+          const result = await response.json()
+          renderTr(result, reset)
+          arOffset += arLimit
+          if (result.length < arLimit) arAllLoaded = true
+          console.log(`앨범 옵셋 : ${arOffset}`)
+        } catch (error) {
+            console.log(error)
+          }
+      }
+
+      // 앨범 리뷰 렌더링
+      function renderTr(reviews, reset = false) {
+        const ulList = document.querySelector('.info-section.ar .ul-list')
+        if (reset) ulList.innerHTML = ''
+
+        reviews.forEach(review => {
+          const li = document.createElement('li')
+          li.classList.add('text-item')
+
+          li.innerHTML = `
+              <a href="/tracks?id=${review.albumId}&reviewId=${review.id}">
+                <p class="sm-title">${review.title}</p>
+                <p class="sm-content">${review.content}</p>
+                <span class="date">${formatDate(review.createdAt)}</span>
+                <span class="like">❤️ ${review.likes}</span>
+              </a>
+          `
+          ulList.appendChild(li)
+        })
+      }
+
+      /* 좋아요 한 앨범 리뷰 검색 */
+      let larOffset = 20
+      const larLimit = 20
+      let larLoading = false
+      let larAllLoaded = false
+      let larKeyword = ''
+
+      // 요청 딜레이
+      const debouncedGetLar = debounce(() => getLikedAlbumReivew(true), 300);
+      document.getElementById('lar-search').addEventListener('keyup', debouncedGetLar);
+
+      // 스크롤 이벤트
+      const larScrollWindow = document.querySelector('.info-section.lar')
+
+      larScrollWindow.addEventListener('scroll', async () => {
+        const nearBottom = larScrollWindow.scrollTop + larScrollWindow.clientHeight >= larScrollWindow.scrollHeight
+        - 150
+
+        if (nearBottom && !larLoading && !larAllLoaded) {
+          larLoading = true
+          await getLikedAlbumReivew(false)
+          larLoading = false
+        }
+      })
+
+      // 비동기 요청
+      async function getLikedAlbumReivew(reset = false) {
+        if(reset) {
+          larOffset = 0
+          larAllLoaded = false
+          document.querySelector('.ul-list.lar').innerHTML = ''
+        }
+
+        let url = `/users/activity`
+        larKeyword = document.getElementById('lar-search').value.trim()
+
+        const data = {
+          keyword : larKeyword,
+          offset : larOffset,
+          limit : larLimit,
+          type : 'lar'
+        }
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    [header] : token,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+
+          if (!response.ok) {
+              const result = await response.text()
+              console.log(result)
+              return
+          }
+          // 성공시
+          const result = await response.json()
+          renderLtr(result, reset)
+          larOffset += larLimit
+          if (result.length < larLimit) larAllLoaded = true
+          console.log(`좋아요 한 앨범 옵셋 : ${larOffset}`)
+        } catch (error) {
+            console.log(error)
+          }
+      }
+
+      // 좋아요 한 앨범 리뷰 렌더링
+      function renderLtr(reviews, reset = false) {
+        const ulList = document.querySelector('.info-section.lar .ul-list')
+        if (reset) ulList.innerHTML = ''
+
+        reviews.forEach(review => {
+          const li = document.createElement('li')
+          li.classList.add('text-item')
+
+          li.innerHTML = `
+              <a href="/tracks?id=${review.albumId}&reviewId=${review.id}">
+                <p class="sm-title">${review.title}</p>
+                <p class="sm-content">${review.content}</p>
+                <span class="rv-name">${review.reviewer.nickname}</span>
+                <span class="date">${formatDate(review.createdAt)}</span>
+                <span class="like">❤️ ${review.likes}</span>
+              </a>
+          `
+          ulList.appendChild(li)
+        })
+      }
+
+      /* 내가 쓴 트랙 리뷰 검색 */
+      let trOffset = 20
+      const trLimit = 20
+      let trLoading = false
+      let trAllLoaded = false
+      let trKeyword = ''
+
+      // 요청 딜레이
+      const debouncedGetTr = debounce(() => getTrackReivew(true), 300);
+      document.getElementById('tr-search').addEventListener('keyup', debouncedGetTr);
+
+      // 스크롤 이벤트
+      const trScrollWindow = document.querySelector('.info-section.tr')
+
+      trScrollWindow.addEventListener('scroll', async () => {
+        const nearBottom = trScrollWindow.scrollTop + trScrollWindow.clientHeight >= trScrollWindow.scrollHeight
+        - 150
+
+        if (nearBottom && !trLoading && !trAllLoaded) {
+          trLoading = true
+          await getTrackReivew(false)
+          trLoading = false
+        }
+      })
+
+      // 비동기 요청
+      async function getTrackReivew(reset = false) {
+        if(reset) {
+          trOffset = 0
+          trAllLoaded = false
+          document.querySelector('.ul-list.tr').innerHTML = ''
+        }
+
+        let url = `/users/activity`
+        trKeyword = document.getElementById('tr-search').value.trim()
+
+        const data = {
+          keyword : trKeyword,
+          offset : trOffset,
+          limit : trLimit,
+          type : 'tr'
+        }
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    [header] : token,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+
+          if (!response.ok) {
+              const result = await response.text()
+              console.log(result)
+              return
+          }
+          // 성공시
+          const result = await response.json()
+          renderTr(result, reset)
+          trOffset += trLimit
+          if (result.length < trLimit) trAllLoaded = true
+          console.log(`트랙 옵셋 : ${trOffset}`)
+        } catch (error) {
+            console.log(error)
+          }
+      }
+
+      // 트랙 리뷰 렌더링
+      function renderTr(reviews, reset = false) {
+        const ulList = document.querySelector('.info-section.tr .ul-list')
+        if (reset) ulList.innerHTML = ''
+
+        reviews.forEach(review => {
+          const li = document.createElement('li')
+          li.classList.add('text-item')
+
+          li.innerHTML = `
+              <a href="/tracks?id=${review.trackId}&reviewId=${review.id}">
+                <p class="sm-title">${review.title}</p>
+                <p class="sm-content">${review.content}</p>
+                <span class="date">${formatDate(review.createdAt)}</span>
+                <span class="like">❤️ ${review.likes}</span>
+              </a>
+          `
+          ulList.appendChild(li)
+        })
+      }
+
+      /* 좋아요 한 트랙 리뷰 검색 */
+      let ltrOffset = 20
+      const ltrLimit = 20
+      let ltrLoading = false
+      let ltrAllLoaded = false
+      let ltrKeyword = ''
+
+      // 요청 딜레이
+      const debouncedGetLtr = debounce(() => getLikedTrackReivew(true), 300);
+      document.getElementById('ltr-search').addEventListener('keyup', debouncedGetLtr);
+
+      // 스크롤 이벤트
+      const ltrScrollWindow = document.querySelector('.info-section.ltr')
+
+      ltrScrollWindow.addEventListener('scroll', async () => {
+        const nearBottom = ltrScrollWindow.scrollTop + ltrScrollWindow.clientHeight >= ltrScrollWindow.scrollHeight
+        - 150
+
+        if (nearBottom && !ltrLoading && !ltrAllLoaded) {
+          ltrLoading = true
+          await getLikedTrackReivew(false)
+          ltrLoading = false
+        }
+      })
+
+      // 비동기 요청
+      async function getLikedTrackReivew(reset = false) {
+        if(reset) {
+          ltrOffset = 0
+          ltrAllLoaded = false
+          document.querySelector('.ul-list.ltr').innerHTML = ''
+        }
+
+        let url = `/users/activity`
+        ltrKeyword = document.getElementById('ltr-search').value.trim()
+
+        const data = {
+          keyword : ltrKeyword,
+          offset : ltrOffset,
+          limit : ltrLimit,
+          type : 'ltr'
+        }
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    [header] : token,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+
+          if (!response.ok) {
+              const result = await response.text()
+              console.log(result)
+              return
+          }
+          // 성공시
+          const result = await response.json()
+          renderLtr(result, reset)
+          ltrOffset += ltrLimit
+          if (result.length < ltrLimit) ltrAllLoaded = true
+          console.log(`좋아요 한 트랙 옵셋 : ${ltrOffset}`)
+        } catch (error) {
+            console.log(error)
+          }
+      }
+
+      // 좋아요 한 트랙 리뷰 렌더링
+      function renderLtr(reviews, reset = false) {
+        const ulList = document.querySelector('.info-section.ltr .ul-list')
+        if (reset) ulList.innerHTML = ''
+
+        reviews.forEach(review => {
+          const li = document.createElement('li')
+          li.classList.add('text-item')
+
+          li.innerHTML = `
+              <a href="/tracks?id=${review.trackId}&reviewId=${review.id}">
+                <p class="sm-title">${review.title}</p>
+                <p class="sm-content">${review.content}</p>
+                <span class="rv-name">${review.reviewer.nickname}</span>
+                <span class="date">${formatDate(review.createdAt)}</span>
+                <span class="like">❤️ ${review.likes}</span>
+              </a>
+          `
+          ulList.appendChild(li)
+        })
+      }
+    </script>
   </th:block>
 </body>
 </html>

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,21 +15,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.cosmus.resonos.domain.Album;
+import com.cosmus.resonos.domain.AlbumReview;
 import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.domain.Badge;
 import com.cosmus.resonos.domain.CustomUser;
-import com.cosmus.resonos.domain.GenreCount;
 import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.Track;
 import com.cosmus.resonos.domain.TrackReview;
 import com.cosmus.resonos.domain.Users;
+import com.cosmus.resonos.service.AlbumReviewService;
 import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.ArtistService;
 import com.cosmus.resonos.service.BadgeService;
@@ -43,6 +47,7 @@ import com.cosmus.resonos.validation.NicknameCheck;
 import com.cosmus.resonos.validation.PasswordCheck;
 
 import lombok.extern.slf4j.Slf4j;
+
 
 
 @Slf4j
@@ -65,6 +70,8 @@ public class UserController {
   @Autowired TrackService trackService;
 
   @Autowired TrackReviewService trackReviewService;
+
+  @Autowired AlbumReviewService albumReviewServcie;
 
   @Autowired BadgeService badgeService;
   /**
@@ -305,17 +312,78 @@ public class UserController {
     if(loginUser == null) return "redirect:/login";
     // 로그인 유저 정보
     Users user = userService.select(loginUser.getUsername());
-    // 유저가 쓴 리뷰 정보
-    List<TrackReview> tReviewList = trackReviewService.reviewWithReviewerByUserId(loginUser.getId());
-    // 유저가 좋아요 한 리뷰 정보
-    List<TrackReview> ltReviewList = trackReviewService.likedReviewByUserId(loginUser.getId());
+    // 유저가 쓴 앨범 리뷰 정보
+    List<AlbumReview> aReviewList = albumReviewServcie.reviewWithReviewerByUserId(loginUser.getId(), "", 0, 20);
+    int countAReview = albumReviewServcie.countAlbumReview(loginUser.getId());
+    // 유저가 좋아요 한 앨범 리뷰 정보
+    List<AlbumReview> laReviewList = albumReviewServcie.likedReviewByUserId(loginUser.getId(), "", 0, 20);
+    int countLaReview = albumReviewServcie.countLikedAlbumReview(loginUser.getId());
+    // 유저가 쓴 트랙 리뷰 정보
+    List<TrackReview> tReviewList = trackReviewService.reviewWithReviewerByUserId(loginUser.getId(), "", 0, 20);
+    int countTReview = trackReviewService.countTrackReview(loginUser.getId());
+    // 유저가 좋아요 한 트랙 리뷰 정보
+    List<TrackReview> ltReviewList = trackReviewService.likedReviewByUserId(loginUser.getId(), "", 0, 20);
+    int countLtReview = trackReviewService.countLikedTrackReview(loginUser.getId());
 
-    model.addAttribute("ltReviewList", ltReviewList);
+    model.addAttribute("aReviewList", aReviewList);
+    model.addAttribute("countAReview", countAReview);
+    model.addAttribute("laReviewList", laReviewList);
+    model.addAttribute("countLaReview", countLaReview);
     model.addAttribute("tReviewList", tReviewList);
+    model.addAttribute("countTReview", countTReview);
+    model.addAttribute("ltReviewList", ltReviewList);
+    model.addAttribute("countLtReview", countLtReview);
     model.addAttribute("user", user);
     model.addAttribute("lastPath", "activity");
     return "user/activity";
   }
+
+  /**
+   * 유저의 리뷰 추가 요청
+   * @param loingUser
+   * @param data
+   * @return
+   * @throws Exception
+   */
+  @PostMapping("/activity")
+  public ResponseEntity<?> usersTrackReview (
+      @AuthenticationPrincipal CustomUser loingUser,
+      @RequestBody Map<String, Object> data
+    ) throws Exception {
+        Long userId = loingUser.getId();
+        String keyword = data.get("keyword").toString();
+        int offset = Integer.parseInt(data.get("offset").toString());
+        int limit = Integer.parseInt(data.get("limit").toString());
+        String type = data.get("type").toString();
+
+        log.info("type : {}", type);
+
+        if(type.equals("tr")) {
+          List<TrackReview> trackReviewList = trackReviewService.reviewWithReviewerByUserId(userId, keyword, offset, limit);
+          if(trackReviewList != null)
+                return new ResponseEntity<>(trackReviewList, HttpStatus.OK);
+        }
+        else if(type.equals("ltr")) {
+          List<TrackReview> likedTrackReviewList = trackReviewService.likedReviewByUserId(userId, keyword, offset, limit);
+          if(likedTrackReviewList != null)
+                return new ResponseEntity<>(likedTrackReviewList, HttpStatus.OK);
+        }
+        else if(type.equals("ar")) {
+          List<AlbumReview> albumReviewList = albumReviewServcie.reviewWithReviewerByUserId(userId, keyword, offset, limit);
+          log.info("추가 데이터 : {}", albumReviewList);
+          if(albumReviewList != null)
+                return new ResponseEntity<>(albumReviewList, HttpStatus.OK);
+        }
+        else if(type.equals("lar")) {
+          List<AlbumReview> likedAlbumReviewList = albumReviewServcie.likedReviewByUserId(userId, keyword, offset, limit);
+          log.info("추가 데이터 : {}", likedAlbumReviewList);
+          if(likedAlbumReviewList != null)
+                return new ResponseEntity<>(likedAlbumReviewList, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 
   /**
    * 알림 설정
@@ -449,12 +517,16 @@ public class UserController {
     // 자기 자신인지
     boolean isOwner = loginUser != null && loginUser.getId().equals(targetId);
     // 팔로우, 팔로워 정보
-    List<Users> myFollower = userFollowService.myFollower(targetId, "");
-    List<Users> myFollow = userFollowService.myFollow(targetId, "");
+    List<Users> myFollower = userFollowService.myFollower(targetId, "", 0, 20);
+    int followerCount = userFollowService.myFollowerCount(targetId);
+    List<Users> myFollow = userFollowService.myFollow(targetId, "", 0, 20);
+    int followCount = userFollowService.myFollowCount(targetId);
 
     model.addAttribute("userId", targetId);
     model.addAttribute("myFollower", myFollower);
     model.addAttribute("myFollow", myFollow);
+    model.addAttribute("followerCount", followerCount);
+    model.addAttribute("followCount", followCount);
     model.addAttribute("lastPath", "user-follows");
     model.addAttribute("isOwner", isOwner);
     return "user/follow_user";

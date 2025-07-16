@@ -25,7 +25,14 @@ public interface AlbumReviewMapper {
                                                      @Param("size") int size,
                                                      @Param("offset") int offset);
 
-    List<AlbumReview> reviewWithReviewerByUserId(Long loginUserId);
+    // 유저의 앨범 리뷰 조회
+    public List<AlbumReview> reviewWithReviewerByUserId(@Param("loginUserId") Long loginUserId, @Param("keyword") String keyword, @Param("offset") int offset, @Param("limit") int limit) throws Exception;
+    // 유저의 앨범 리뷰 수
+    public int countAlbumReview(@Param("loginUserId") Long loginUserId) throws Exception;
+    // 유저의 좋아요 한 앨범 리뷰 조회
+    public List<AlbumReview> likedReviewByUserId(@Param("loginUserId") Long loginUserId,  @Param("keyword") String keyword, @Param("offset") int offset, @Param("limit") int limit) throws Exception;
+    // 유저의 좋아요 한 앨범 리뷰 수
+    public int countLikedAlbumReview(@Param("loginUserId") Long loginUserId) throws Exception;
 
     void updateBlindStatus(@Param("id") Long id, @Param("blinded") boolean blinded);
 
