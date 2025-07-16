@@ -10,6 +10,7 @@ import com.cosmus.resonos.domain.GenreCount;
 import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.UserAuth;
 import com.cosmus.resonos.domain.Users;
+import com.cosmus.resonos.domain.UsersTotalLikes;
 
 
 
@@ -92,11 +93,12 @@ public interface UserMapper {
     // 검색 데이터 수
     public long searchCount(String keyword) throws Exception;
 
-    // 카카오 로그인 유저 조회
+    // 소셜 로그인 유저 조회
     public Users findByProviderAndProviderId(@Param("provider") String provider, @Param("providerId") String providerId) throws Exception;
-    // 카카오 유저 회원가입
+    // 소셜 유저 회원가입
     public int insertSnsUser(Users user) throws Exception;
-
+    // 유저의 리뷰 전체 좋아요 수
+    public UsersTotalLikes usersTotalLikes(@Param("userId") Long userId) throws Exception;
 
     // countByKeword - 키워드 검색
     public long countByKeyword(String keyword) throws Exception;

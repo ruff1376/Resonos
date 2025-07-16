@@ -237,7 +237,9 @@
                 WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 1
                 WHEN tr.content LIKE CONCAT(#{keyword}, '%') THEN 2
                 WHEN tr.content LIKE CONCAT('%', #{keyword}, '%') THEN 3
-                ELSE 4
+                WHEN u.nickname LIKE CONCAT('%', #{keyword}, '%') THEN 4
+                WHEN u.nickname LIKE CONCAT('%', #{keyword}, '%') THEN 5
+                ELSE 6
                 END,
                 rl.created_at DESC
             </when>

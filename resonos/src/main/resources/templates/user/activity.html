@@ -206,7 +206,7 @@
           }
           // 성공시
           const result = await response.json()
-          renderTr(result, reset)
+          renderAr(result, reset)
           arOffset += arLimit
           if (result.length < arLimit) arAllLoaded = true
           console.log(`앨범 옵셋 : ${arOffset}`)
@@ -216,7 +216,7 @@
       }
 
       // 앨범 리뷰 렌더링
-      function renderTr(reviews, reset = false) {
+      function renderAr(reviews, reset = false) {
         const ulList = document.querySelector('.info-section.ar .ul-list')
         if (reset) ulList.innerHTML = ''
 
@@ -296,7 +296,7 @@
           }
           // 성공시
           const result = await response.json()
-          renderLtr(result, reset)
+          renderLar(result, reset)
           larOffset += larLimit
           if (result.length < larLimit) larAllLoaded = true
           console.log(`좋아요 한 앨범 옵셋 : ${larOffset}`)
@@ -306,7 +306,7 @@
       }
 
       // 좋아요 한 앨범 리뷰 렌더링
-      function renderLtr(reviews, reset = false) {
+      function renderLar(reviews, reset = false) {
         const ulList = document.querySelector('.info-section.lar .ul-list')
         if (reset) ulList.innerHTML = ''
 

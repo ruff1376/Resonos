@@ -63,9 +63,9 @@
           <ul>
             <th:block th:each="pl : ${playlists}">
               <li>
-                <div>
+                <div class="w-75 d-flex align-items-center">
                   <img class="cover-img" width="50px" height="50px" th:src="${pl.thumbnailUrl}" alt="커버이미지">
-                  <th:block th:text="${pl.title}">플레이리스트 이름</th:block>
+                  <span class="pli-name" th:text="${pl.title}">플레이리스트 이름</span>
                 </div>
                 <div class="like-count">
                   <span th:text="${pl.likeCount}">123</span>
@@ -146,16 +146,12 @@
           <h3>내 활동</h3>
           <ul>
             <li>
-              <span>게시글</span>
-              <p>10</p>
+              <span>작성 리뷰</span>
+              <p th:text="${countAllReview}">10</p>
             </li>
             <li>
-              <span>댓글</span>
-              <p>25</p>
-            </li>
-            <li>
-              <span>리뷰</span>
-              <p>5</p>
+              <span>받은 좋아요</span>
+              <p th:text="${utl.totalLikes}">25</p>
             </li>
           </ul>
         </div>
@@ -272,9 +268,27 @@
       if(logoutBtn) {
         logoutBtn.addEventListener('click', (e) => {
           e.preventDefault();
-          const check = confirm("로그아웃 하시겠습니까?")
-          if(!check) return
-          document.getElementById('form-logout').submit()
+          Swal.fire({
+            title: "로그아웃 하시겠습니까?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오",
+            reverseButtons: false,
+            customClass: {
+            popup: 'follow-popup',
+            icon: 'warning-icon',
+            title: 'alert-title',
+            text: 'alert-text',
+            confirmButton: 'alert-button',
+            cancelButton: 'alert-cancle-button'
+          }
+          }).then((result) => {
+            if (result.isConfirmed) {
+              document.getElementById('form-logout').submit()
+            }
+          });
+          return
         })
       }
 

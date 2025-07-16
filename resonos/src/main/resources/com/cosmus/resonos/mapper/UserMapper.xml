@@ -260,6 +260,17 @@
     ORDER BY count DESC
   </select>
 
+  <!-- 유저 리뷰의 총합 좋아요 -->
+  <select id="usersTotalLikes" resultType="UsersTotalLikes">
+    SELECT
+      SUM(CASE WHEN rl.review_type = 'TRACK' THEN 1 ELSE 0 END) AS trackLikes,
+      SUM(CASE WHEN rl.review_type = 'ALBUM' THEN 1 ELSE 0 END) AS albumLikes,
+      COUNT(*) AS totalLikes
+    FROM review_like rl
+    LEFT JOIN track_review tr ON rl.review_type = 'TRACK' AND rl.review_id = tr.id
+    LEFT JOIN album_review ar ON rl.review_type = 'ALBUM' AND rl.review_id = ar.id
+    WHERE (tr.user_id = #{userId} OR ar.user_id = #{userId});
+  </select>
 
 
 </mapper>
