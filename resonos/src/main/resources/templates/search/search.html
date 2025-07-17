@@ -70,20 +70,20 @@
                         <th:block th:each="album : ${albumSearchList}">
                             <!-- 앨범 카드 -->
                             <div class="col d-flex justify-content-center">
-                                <div class="card align-items-center p-3" style="width:228px; height:340px;">
+                                <div class="card align-items-center gap-2 mt-3" style="width:228px; height:340px;">
                                     <a th:href="@{'/albums?id=' + ${album.id}}">
                                         <img th:src="${album.coverImage}" class="card-img-top" alt="앨범커버">
                                     </a>
-                                    <div class="card-body">
+                                    <div class="card-body d-flex flex-column align-items-center">
                                         <a th:href="@{'/albums?id=' + ${album.id}}" class="card-title" th:text="${album.title}"></a>
                                         <a th:href="@{'/artists?id=' + ${album.artistId}}" class="card-artist" th:text="${album.artistName}"></a>
                                     </div>
-                                    <div class="position-relative bottom-0 mb-5">
+                                    <div class="d-flex justify-content-center mb-4">
                                         <th:block th:if="${album.avgRating != null}">
                                             <canvas class="doughnut-canvas" th:attr="data-rating=${album.avgRating}" width="50" height="50"></canvas>
                                         </th:block>
                                         <th:block th:unless="${album.avgRating != null}">
-                                            <span class="no-rating fw-bold fs-2">NR</span>
+                                            <span class="no-rating fw-bold fs-2 pb-3">NR</span>
                                         </th:block>
                                     </div>
                                 </div>
@@ -115,20 +115,20 @@
                         <th:block th:each="track : ${trackSearchList}">
                             <!-- 트랙 카드 -->
                             <div class="col d-flex justify-content-center">
-                                <div class="card align-items-center p-3" style="width:228px; height:340px;">
+                                <div class="card align-items-center gap-2 mt-3" style="width:228px; height:340px;">
                                     <a th:href="@{'/tracks?id=' + ${track.id}}">
                                         <img th:src="${track.coverImage}" class="card-img-top" alt="앨범커버">
                                     </a>
-                                    <div class="card-body">
+                                    <div class="card-body d-flex flex-column align-items-center">
                                         <a th:href="@{'/tracks?id=' + ${track.id}}" class="card-title" th:text="${track.title}"></a>
                                         <a th:href="@{'/artists?id=' + ${track.artistId}}" class="card-artist" th:text="${track.artistName}"></a>
                                     </div>
-                                    <div class="position-relative bottom-0 mb-5">
+                                    <div class="d-flex justify-content-center mb-4">
                                         <th:block th:if="${track.avgRating != null}">
                                             <canvas class="doughnut-canvas" th:attr="data-rating=${track.avgRating}" width="50" height="50"></canvas>
                                         </th:block>
                                         <th:block th:unless="${track.avgRating != null}">
-                                            <span class="no-rating fw-bold fs-2">NR</span>
+                                            <span class="no-rating fw-bold fs-2 pb-3">NR</span>
                                         </th:block>
                                     </div>
                                 </div>
