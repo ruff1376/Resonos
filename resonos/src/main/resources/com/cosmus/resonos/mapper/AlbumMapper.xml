@@ -28,12 +28,14 @@
   </select>
 
   <select id="korHotReviewList" resultMap="Album">
-    SELECT a.*, ar.name AS artist_name, COUNT(arw.id) AS review_count, ROUND(AVG(arw.rating)) AS avg_rating
+    SELECT a.*, ar.name AS artist_name, COUNT(arw.id) AS review_count, ROUND(AVG(arw_all.rating)) AS avg_rating
     FROM album a
     LEFT JOIN artist ar ON a.artist_id = ar.id
     LEFT JOIN album_review arw
       ON a.id = arw.album_id
       AND DATE(arw.created_at) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+    LEFT JOIN album_review arw_all
+      ON a.id = arw_all.album_id
     WHERE a.country = 'KOR'
     GROUP BY a.id
     ORDER BY review_count DESC
@@ -41,12 +43,14 @@
   </select>
 
   <select id="worldHotReviewList" resultMap="Album">
-    SELECT a.*, ar.name AS artist_name, COUNT(arw.id) AS review_count, ROUND(AVG(arw.rating)) AS avg_rating
+    SELECT a.*, ar.name AS artist_name, COUNT(arw.id) AS review_count, ROUND(AVG(arw_all.rating)) AS avg_rating
     FROM album a
     JOIN artist ar ON a.artist_id = ar.id
     LEFT JOIN album_review arw
       ON a.id = arw.album_id
       AND DATE(arw.created_at) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+    LEFT JOIN album_review arw_all
+      ON a.id = arw_all.album_id
     WHERE a.country IS NULL OR a.country != 'KOR'
     GROUP BY a.id
     ORDER BY review_count DESC
