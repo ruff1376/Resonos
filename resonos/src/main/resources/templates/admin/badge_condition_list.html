@@ -9,144 +9,216 @@
   <th:block th:replace="~{fragments/link::admin}"></th:block>
   <meta name="_csrf" th:content="${_csrf.token}" />
   <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <style>
+  /* 표 전체 컬럼 폭 지정: th/td 순서에 따라 강제 */
+  .badge-col-icon   { width: 48px;  min-width: 42px;   max-width:52px; }
+  .badge-col-name   { width: 170px; min-width:100px;  }
+  .badge-col-desc   { width: 230px; min-width:120px;  }
+  .badge-col-cond   { width: 120px; min-width:80px;   }
+  .badge-col-users  { width: 60px;  text-align:center;}
+  .badge-col-actions{ width:260px;  min-width:220px; text-align:right; }
+
+  /* 화면이 줄어들면 일부 유동폭 허용 */
+  @media (max-width: 1100px) {
+    .badge-col-desc   { width: 120px; }
+    .badge-col-actions{ width: 140px; min-width:112px;}
+  }
+  @media (max-width:700px) {
+    .badge-col-desc   { display:none; }
+    .badge-col-actions{ width:100px; min-width:82px;}
+  }
+
+  /* 액션 버튼 행 정렬: gap 간격 넓히기, 작은버튼은 더 작게 */
+  .badge-col-actions .btn {
+    margin-right: 6px; /* 버튼간 공백 */
+    min-width: 48px;
+    font-size: .96em;
+    line-height: 1.8;
+    padding: 3px 12px;
+  }
+  .badge-col-actions .btn:last-child {margin-right:0;}
+
+  /* 버튼 색상 대비·동작 강조, hover 시 */
+  .btn.btn-outline-secondary.btn-xs:hover { background: #e3e5ee; color:#15192f; }
+  .btn.btn-danger.btn-xs:hover            { background: #c62828; color:#fff; }
+  .btn.btn-success.btn-xs:hover           { background: #2e7d32; color:#fff; }
+  .btn.btn-info.btn-xs:hover              { background: #1861b9; color:#fff; }
+</style>
+
 </head>
+
 <th:block layout:fragment="content">
-  <div class="container admin-content d-flex" style="gap:40px;">
-    <!-- 배지 리스트 (왼쪽) -->
-    <div class="badge-list flex-grow-1">
-      <h2 class="admin-title">배지 관리</h2>
-      <div class="badge-table">
-        <div class="badge-table-header d-flex align-items-center">
-          <div class="badge-col badge-col-icon">아이콘</div>
-          <div class="badge-col badge-col-name">이름</div>
-          <div class="badge-col badge-col-desc">설명</div>
-          <div class="badge-col badge-col-cond">획득 조건</div>
-          <div class="badge-col badge-col-action">관리</div>
-        </div>
-        <div th:each="badge : ${badges}">
-          <!-- 한 줄에 배지 정보 -->
-          <div class="badge-table-row d-flex align-items-center">
-            <div class="badge-col badge-col-icon">
-              <img th:src="${badge.iconUrl != null ? badge.iconUrl : '/static/img/default-badge.png'}"
-                  alt="배지 아이콘" class="badge-icon-img">
-            </div>
-            <div class="badge-col badge-col-name" th:text="${badge.name}">배지명</div>
-            <div class="badge-col badge-col-desc" th:text="${badge.description}">설명</div>
-            <div class="badge-col badge-col-cond">
-              <span th:if="${badgeConditionsMap[badge.id]!=null and #lists.size(badgeConditionsMap[badge.id])>0}"
-                    th:text="'[' + ${badgeConditionsMap[badge.id][0].conditionType} + '] ' + ${badgeConditionsMap[badge.id][0].conditionValue}">
-                획득 조건
-              </span>
-              <span th:if="${badgeConditionsMap[badge.id]==null or #lists.size(badgeConditionsMap[badge.id])==0}" class="text-secondary">
-                없음
-              </span>
-            </div>
-            <div class="badge-col badge-col-action d-flex gap-2">
-              <button type="button"
-                      class="btn btn-outline-secondary btn-xs"
-                      th:if="${badgeConditionsMap[badge.id]!=null and #lists.size(badgeConditionsMap[badge.id])>0}"
-                      th:attr="data-badge-id=${badge.id}"
-                      onclick="showEditForm(this)">수정</button>
-              <form th:action="@{|/admin/badge/delete/badge/${badge.id}|}" method="post" style="margin:0;">
-                <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-                <button type="submit" class="btn btn-danger btn-xs"
-                        onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
-              </form>
-            </div>
+<div class="container admin-content d-flex" style="gap:40px;">
+
+  <!-- 메시지 출력 영역 -->
+  <div th:if="${msg}" class="alert alert-info" role="alert" th:text="${msg}"></div>
+
+  <!-- 배지 리스트 (왼쪽) -->
+  <div class="badge-list flex-grow-1">
+    <h2 class="admin-title">배지 관리</h2>
+    <div class="badge-table">
+      <div class="badge-table-header d-flex align-items-center">
+        <div class="badge-col badge-col-icon">아이콘</div>
+        <div class="badge-col badge-col-name">이름</div>
+        <div class="badge-col badge-col-desc">설명</div>
+        <div class="badge-col badge-col-cond">획득 조건</div>
+        <div class="badge-col badge-col-users">지급자 수</div>
+        <div class="badge-col badge-col-actions">관리</div>
+      </div>
+
+      <div th:each="badge : ${badges}">
+        <!-- 한 줄에 배지 정보 -->
+        <div class="badge-table-row d-flex align-items-center">
+          <div class="badge-col badge-col-icon">
+            <img th:src="${badge.iconUrl != null ? badge.iconUrl : '/static/img/default-badge.png'}"
+                 alt="배지 아이콘" class="badge-icon-img">
           </div>
-          <!-- 인라인 수정 폼: 각 배지 row 바로 아래에 위치 -->
-          <div class="edit-form-wrap" th:attr="id='edit-form-'+${badge.id}" style="display:none; margin-bottom:20px;">
-            <form th:if="${badgeConditionsMap[badge.id]!=null and #lists.size(badgeConditionsMap[badge.id])>0}"
-                  th:action="@{/admin/badge/update}" method="post" class="p-3 border rounded bg-dark">
-              <input type="hidden" name="id" th:value="${badgeConditionsMap[badge.id][0].id}" />
-              <input type="hidden" name="badgeId" th:value="${badge.id}" />
-              <div class="mb-2">
-                <label>배지명</label>
-                <input type="text" name="badgeName" th:value="${badge.name}" required class="form-control form-control-sm"/>
-              </div>
-              <div class="mb-2">
-                <label>설명</label>
-                <input type="text" name="description" th:value="${badge.description}" required class="form-control form-control-sm"/>
-              </div>
-              <div class="mb-2">
-                <label>조건 유형</label>
-                <select name="conditionType" class="form-control form-control-sm" required>
-                  <option value="POST_COUNT" th:selected="${badgeConditionsMap[badge.id][0].conditionType == 'POST_COUNT'}">게시글 수</option>
-                  <option value="FOLLOWER_COUNT" th:selected="${badgeConditionsMap[badge.id][0].conditionType == 'FOLLOWER_COUNT'}">팔로워 수</option>
-                  <option value="COMMENT_COUNT" th:selected="${badgeConditionsMap[badge.id][0].conditionType == 'COMMENT_COUNT'}">댓글 수</option>
-                </select>
-              </div>
-              <div class="mb-2">
-                <label>조건 값</label>
-                <input type="number" name="conditionValue" min="1"
-                      th:value="${badgeConditionsMap[badge.id][0].conditionValue}" required class="form-control form-control-sm"/>
-              </div>
-              <div class="text-end">
-                <button type="submit" class="btn btn-primary btn-xs">저장</button>
-                <button type="button" class="btn btn-secondary btn-xs" onclick="hideEditForms()">취소</button>
-              </div>
+          <div class="badge-col badge-col-name" th:text="${badge.name}">배지명</div>
+          <div class="badge-col badge-col-desc" th:text="${badge.description}">설명</div>
+          <div class="badge-col badge-col-cond">
+            <span th:if="${badgeConditionsMap[badge.id]?.size() > 0}"
+                  th:text="'[' + ${badgeConditionsMap[badge.id][0].conditionType} + '] ' + ${badgeConditionsMap[badge.id][0].conditionValue}">
+              획득 조건
+            </span>
+            <span th:if="${badgeConditionsMap[badge.id]==null or badgeConditionsMap[badge.id].size()==0}" class="text-secondary">
+              없음
+            </span>
+          </div>
+          <div class="badge-col badge-col-users" th:text="${badgeUserCount[badge.id] != null ? badgeUserCount[badge.id] : 0}">0</div>
+          <div class="badge-col badge-col-actions d-flex flex-row flex-wrap gap-2 align-items-center">
+
+            <!-- 수정 버튼 -->
+            <button type="button"
+                    class="btn btn-outline-secondary btn-xs"
+                    th:if="${badgeConditionsMap[badge.id] != null and badgeConditionsMap[badge.id].size()>0}"
+                    th:attr="data-badge-id=${badge.id}"
+                    onclick="showEditForm(this)">
+              수정
+            </button>
+
+            <!-- 삭제 폼 -->
+            <form th:action="@{|/admin/badge/delete/badge/${badge.id}|}" method="post" style="margin:0;">
+              <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+              <button type="submit" class="btn btn-danger btn-xs"
+                      onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
             </form>
-            <div th:if="${badgeConditionsMap[badge.id]==null or #lists.size(badgeConditionsMap[badge.id])==0}"
-                class="p-3 text-danger text-center">
-              조건이 없는 배지는 수정할 수 없습니다.
-            </div>
+
+            <!-- 소급 일괄 지급 폼 -->
+            <form th:action="@{/admin/badge/grant-auto}" method="post" style="margin:0;">
+              <input type="hidden" name="type"
+                     th:value="${badgeConditionsMap[badge.id]!=null && badgeConditionsMap[badge.id].size()>0 ? badgeConditionsMap[badge.id][0].conditionType : ''}" />
+              <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+              <button type="submit" class="btn btn-success btn-xs"
+                      th:disabled="${badgeConditionsMap[badge.id]==null || badgeConditionsMap[badge.id].size()==0}">
+                조건 일괄지급
+              </button>
+            </form>
+
+            <!-- 지급자 목록 링크 -->
+            <a th:href="@{/admin/badge/{id}/users(id=${badge.id})}" class="btn btn-info btn-xs">
+              지급자 목록
+            </a>
           </div>
         </div>
-        <div th:if="${#lists.isEmpty(badges)}" class="badge-table-row text-center text-secondary">
-          등록된 배지가 없습니다.
+
+        <!-- 인라인 수정 폼: 각 배지 row 바로 아래에 위치 -->
+        <div class="edit-form-wrap" th:attr="id='edit-form-'+${badge.id}" style="display:none; margin-bottom:20px;">
+          <form th:if="${badgeConditionsMap[badge.id] != null and badgeConditionsMap[badge.id].size() > 0}"
+                th:action="@{/admin/badge/update}" method="post" class="p-3 border rounded bg-dark text-white">
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+            <input type="hidden" name="id" th:value="${badgeConditionsMap[badge.id][0].id}" />
+            <input type="hidden" name="badgeId" th:value="${badge.id}" />
+
+            <div class="mb-2">
+              <label>배지명</label>
+              <input type="text" name="badgeName" th:value="${badge.name}" required class="form-control form-control-sm"/>
+            </div>
+            <div class="mb-2">
+              <label>설명</label>
+              <input type="text" name="description" th:value="${badge.description}" required class="form-control form-control-sm"/>
+            </div>
+            <div class="mb-2">
+              <label>조건 유형</label>
+              <select name="conditionType" class="form-control form-control-sm" required>
+                <option value="POST_COUNT" th:selected="${badgeConditionsMap[badge.id][0].conditionType == 'POST_COUNT'}">게시글 수</option>
+                <option value="FOLLOWER_COUNT" th:selected="${badgeConditionsMap[badge.id][0].conditionType == 'FOLLOWER_COUNT'}">팔로워 수</option>
+                <option value="COMMENT_COUNT" th:selected="${badgeConditionsMap[badge.id][0].conditionType == 'COMMENT_COUNT'}">댓글 수</option>
+              </select>
+            </div>
+            <div class="mb-2">
+              <label>조건 값</label>
+              <input type="number" name="conditionValue" min="1"
+                     th:value="${badgeConditionsMap[badge.id][0].conditionValue}" required class="form-control form-control-sm"/>
+            </div>
+
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary btn-xs">저장</button>
+              <button type="button" class="btn btn-secondary btn-xs" onclick="hideEditForms()">취소</button>
+            </div>
+          </form>
+          <div th:if="${badgeConditionsMap[badge.id]==null or badgeConditionsMap[badge.id].size()==0}"
+               class="p-3 text-danger text-center">
+            조건이 없는 배지는 수정할 수 없습니다.
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- 오른쪽: 배지 추가 폼 -->
-    <div class="badge-add-form flex-shrink-0" style="width:340px;">
-      <h4 class="mb-3">배지 및 획득 조건 등록</h4>
-      <form th:action="@{/admin/badge/insert}" method="post" autocomplete="off">
-        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-        <div class="mb-2">
-          <label for="name">배지명</label>
-          <input type="text" id="name" name="name" required placeholder="배지명 입력" class="form-control"/>
-        </div>
-        <div class="mb-2">
-          <label for="description">설명</label>
-          <input type="text" id="description" name="description" required placeholder="배지 설명 입력" class="form-control"/>
-        </div>
-        <div class="mb-2">
-          <label for="iconUrl">아이콘 URL</label>
-          <input type="text" id="iconUrl" name="iconUrl" placeholder="(선택) 이미지 URL" class="form-control"/>
-        </div>
-        <div class="mb-2">
-          <label for="conditionType">조건 유형</label>
-          <select id="conditionType" name="conditionType" required class="form-control">
-            <option value="" disabled selected>유형 선택</option>
-            <option value="POST_COUNT">게시글 수</option>
-            <option value="FOLLOWER_COUNT">팔로워 수</option>
-            <option value="COMMENT_COUNT">댓글 수</option>
-          </select>
-        </div>
-        <div class="mb-3">
-          <label for="conditionValue">조건 값</label>
-          <input type="number" id="conditionValue" name="conditionValue" min="1" required placeholder="예: 10" class="form-control"/>
-        </div>
-        <div class="d-flex justify-content-end gap-2">
-          <button type="submit" class="btn btn-primary btn-sm">등록</button>
-          <button type="reset" class="btn btn-secondary btn-sm">취소</button>
-        </div>
-      </form>
+      <div th:if="${#lists.isEmpty(badges)}" class="badge-table-row text-center text-secondary">
+        등록된 배지가 없습니다.
+      </div>
     </div>
   </div>
-  <script>
-    function showEditForm(btn) {
-      hideEditForms();
-      var badgeId = btn.getAttribute('data-badge-id');
-      var formDiv = document.getElementById('edit-form-' + badgeId);
-      if(formDiv) formDiv.style.display = 'block';
-    }
-    function hideEditForms() {
-      document.querySelectorAll('.edit-form-wrap').forEach(function(div){
-        div.style.display = 'none';
-      });
-    }
-  </script>
+
+  <!-- 오른쪽: 배지 추가 폼 -->
+  <div class="badge-add-form flex-shrink-0" style="width:340px;">
+    <h4 class="mb-3">배지 및 획득 조건 등록</h4>
+    <form th:action="@{/admin/badge/insert}" method="post" autocomplete="off">
+      <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+      <div class="mb-2">
+        <label for="name">배지명</label>
+        <input type="text" id="name" name="name" required placeholder="배지명 입력" class="form-control"/>
+      </div>
+      <div class="mb-2">
+        <label for="description">설명</label>
+        <input type="text" id="description" name="description" required placeholder="배지 설명 입력" class="form-control"/>
+      </div>
+      <div class="mb-2">
+        <label for="iconUrl">아이콘 URL</label>
+        <input type="text" id="iconUrl" name="iconUrl" placeholder="(선택) 이미지 URL" class="form-control"/>
+      </div>
+      <div class="mb-2">
+        <label for="conditionType">조건 유형</label>
+        <select id="conditionType" name="conditionType" required class="form-control">
+          <option value="" disabled selected>유형 선택</option>
+          <option value="POST_COUNT">게시글 수</option>
+          <option value="FOLLOWER_COUNT">팔로워 수</option>
+          <option value="COMMENT_COUNT">댓글 수</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="conditionValue">조건 값</label>
+        <input type="number" id="conditionValue" name="conditionValue" min="1" required placeholder="예: 10" class="form-control"/>
+      </div>
+      <div class="d-flex justify-content-end gap-2">
+        <button type="submit" class="btn btn-primary btn-sm">등록</button>
+        <button type="reset" class="btn btn-secondary btn-sm">취소</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function showEditForm(btn) {
+  hideEditForms();
+  var badgeId = btn.getAttribute('data-badge-id');
+  var formDiv = document.getElementById('edit-form-' + badgeId);
+  if(formDiv) formDiv.style.display = 'block';
+}
+function hideEditForms() {
+  document.querySelectorAll('.edit-form-wrap').forEach(function(div){
+    div.style.display = 'none';
+  });
+}
+</script>
 </th:block>
 </html>

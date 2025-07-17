@@ -1,6 +1,8 @@
 package com.cosmus.resonos.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -46,5 +48,7 @@ public interface UserBadgeMapper {
     ) throws Exception;
     
     
-    // grantPostBadgesAll
+    // Map<Long, Long> countByBadge() 
+    public List<Map<String, Object>> countByBadge() throws Exception;
+
 }

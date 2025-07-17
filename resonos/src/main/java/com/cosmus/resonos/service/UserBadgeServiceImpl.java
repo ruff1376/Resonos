@@ -1,15 +1,19 @@
 package com.cosmus.resonos.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.Badge;
 import com.cosmus.resonos.domain.UserBadge;
+import com.cosmus.resonos.domain.UserBadgeLog;
 import com.cosmus.resonos.mapper.BadgeMapper;
 import com.cosmus.resonos.mapper.BoardPostMapper;
 import com.cosmus.resonos.mapper.CommentMapper;
+import com.cosmus.resonos.mapper.UserBadgeLogMapper;
 import com.cosmus.resonos.mapper.UserBadgeMapper;
 
 @Service
@@ -162,5 +166,48 @@ public class UserBadgeServiceImpl implements UserBadgeService {
             giveBadge(ub.getUserId(), ub.getBadgeId());
         }
         */
+    }
+    @Autowired
+    private UserBadgeLogMapper userBadgeLogMapper;
+
+    // 로그 조회 및 기록
+    @Override
+    public List<UserBadgeLog> getLog(Long userId, Long badgeId) {
+        return userBadgeLogMapper.selectLogs(userId, badgeId);
+    }
+    // 로그 추가
+    @Override
+    public void addLog(Long userId, Long badgeId, String action, Long actorId, String reason) {
+        UserBadgeLog log = new UserBadgeLog();
+        log.setUserId(userId);
+        log.setBadgeId(badgeId);
+        log.setAction(action);
+        log.setActorId(actorId);
+        log.setReason(reason);
+        userBadgeLogMapper.insertLog(log);
+    }
+    // Map<Long, Long> countByBadge() 
+    @Override
+    public Map<Long, Long> countByBadge() throws Exception {
+        List<Map<String, Object>> rows = userBadgeMapper.countByBadge();
+        Map<Long, Long> map = new HashMap<>();
+        for (Map<String, Object> row : rows) {
+            // "badge_id"와 "value" 컬럼을 꺼내 사용 (타입 캐스팅 주의)
+            Long badgeId = ((Number)row.get("badge_id")).longValue();
+            Long cnt = ((Number)row.get("value")).longValue();
+            map.put(badgeId, cnt);
+        }
+        return map;
+    }
+
+    // List<UserBadge> users = userBadgeService.listByBadge(badgeId);
+    @Override
+    public List<UserBadge> listByBadge(Long badgeId) throws Exception {
+        return userBadgeMapper.findBadgesByUserId(badgeId);
+    }
+    //        List<UserBadge> badges = userBadgeService.listByUser(userId);
+    @Override
+    public List<UserBadge> listByUser(Long userId) throws Exception {
+        return userBadgeMapper.findBadgesByUserId(userId);
     }
 }

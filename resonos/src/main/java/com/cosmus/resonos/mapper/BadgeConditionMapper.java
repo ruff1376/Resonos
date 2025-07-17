@@ -17,4 +17,6 @@ public interface BadgeConditionMapper {
     public void deleteByBadgeId(Long badgeId);
     public List<Long> selectBadgeIdsForPostCount(@Param("userId") Long userId, @Param("postCount") int postCount);
     public List<Long> selectBadgeIdsForCommentCount(@Param("userId") Long userId, @Param("commentCount") int commentCount);
+    // (badgeConditionService.isConditionDuplicate(conditionType, conditionValue))
+    public int existsByTypeAndValue(@Param("conditionType") String conditionType, @Param("conditionValue") Integer conditionValue);
 }
