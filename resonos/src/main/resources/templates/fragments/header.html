@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="collapse navbar-collapse d-flex justify-content-end align-items-center header-gap mt-4 mb-4 gap-4" id="mainNav">
-                    
+
                     <form class="position-relative d-flex align-items-center mb-0" style="width:300px;" th:action="@{/search}" method="get" onsubmit="return validateSearch()">
                         <input type="search" name="q" id="searchInput" class="form-control search-box" placeholder="앨범, 트랙, 아티스트...">
                         <button type="submit" class="btn p-0 border-0 bg-transparent header-search-btn" style="position:absolute; right:10px; top:50%; transform:translateY(-50%);" tabindex="-1">
@@ -81,7 +81,7 @@
                                 </a>
                                 <ul class="dropdown-menu text-small shadow" style="background: #181C23;">
                                     <li><a class="dropdown-item" href="/users/mypage">마이페이지</a></li>
-                                    <li><a class="dropdown-item" href="/users/setting-alarm">환경설정</a></li>
+                                    <li><a class="dropdown-item" href="/users/alarm">환경설정</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li>
                                         <form th:action="@{/logout}" method="post">

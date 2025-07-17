@@ -44,7 +44,7 @@
       <div class="profile-meta">
         <div><a th:href="@{/users/{id}/follow-user(id = ${user.id})}"><b>팔로워</b><br><span id="follower-count" th:text="${followerCount}">수</span></a></div>
         <div><a th:href="@{/users/{id}/follow-user(id = ${user.id})}"><b>팔로우</b><br><span id="follow-count" th:text="${followCount}">수</span></a></div>
-        <div><a><b>배지</b><br><span th:text="${badgeCount}">배지 수</span></a></div>
+        <div><a href="#"><b>리뷰</b><br><span th:text="${countAllReview}"></span></a></div>
       </div>
     </section>
     <div class="my-middle">
@@ -85,17 +85,17 @@
       <!-- 좋아요 한 앨범 -->
       <a class="grid-item" th:href="@{/users/{id}/liked-music(id = ${user.id})}">
         <div class="mypage-card album">
-          <h3>좋아요 표시한 앨범</h3>
+          <h3>좋아요 한 앨범</h3>
           <ul>
             <th:block th:if="${albumList == null or albumList.isEmpty()}">
               <div class="empty-text">
-                <p>좋아요 표시한 앨범이 없습니다.</p>
+                <p>좋아요 한 앨범이 없습니다.</p>
               </div>
             </th:block>
             <th:block th:each="album : ${albumList}">
               <li>
                 <img width="50px" height="50px" th:src="${album.coverImage}" alt="커버이미지">
-                <p th:text="${album.title}">좋아요 표시한 앨범</p>
+                <p th:text="${album.title}">좋아요 한 앨범</p>
               </li>
             </th:block>
           </ul>
@@ -104,17 +104,17 @@
       <!-- 좋아요 한 트랙 -->
       <a class="grid-item" th:href="@{/users/{id}/liked-music(id = ${user.id})}">
         <div class="mypage-card track">
-          <h3>좋아요 표시한 트랙</h3>
+          <h3>좋아요 한 트랙</h3>
           <ul>
             <th:block th:if="${trackList == null or trackList.isEmpty()}">
               <div class="empty-text">
-                <p>좋아요 표시한 트랙 없습니다.</p>
+                <p>좋아요 한 트랙 없습니다.</p>
               </div>
             </th:block>
             <th:block th:each="track : ${trackList}">
               <li>
                 <img width="50px" height="50px" th:src="${track.coverImage}" alt="커버이미지">
-                <p th:text="${track.title}">좋아요 표시한 트랙</p>
+                <p th:text="${track.title}">좋아요 한 트랙</p>
               </li>
             </th:block>
           </ul>

@@ -14,7 +14,22 @@
   <main class="con con-activity position-relative" layout:fragment="content">
     <!-- 왼쪽 리모컨 -->
     <th:block th:replace="~{fragments/left_rc::mypage-tabs}"></th:block>
-    <!-- 앨범 리뷰 -->
+    <!-- 통계 -->
+    <section class="mypage-grid">
+      <div class="grid-item">
+        <div class="mypage-card">
+          <h3>받은 좋아요 (앨범)</h3>
+          <span class="count" th:text="${utl.albumLikes}"></span>
+        </div>
+      </div>
+      <div class="grid-item">
+        <div class="mypage-card">
+          <h3>받은 좋아요 (트랙)</h3>
+          <span class="count" th:text="${utl.trackLikes}"></span>
+        </div>
+      </div>
+      <!-- 앨범 리뷰 -->
+    </section>
     <section class="info-wrapper">
       <div class="info-section ar">
         <div class="title">

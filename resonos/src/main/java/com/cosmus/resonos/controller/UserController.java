@@ -338,7 +338,10 @@ public class UserController {
     // 유저가 좋아요 한 트랙 리뷰 정보
     List<TrackReview> ltReviewList = trackReviewService.likedReviewByUserId(loginUser.getId(), "", 0, 20);
     int countLtReview = trackReviewService.countLikedTrackReview(loginUser.getId());
+    // 총 리뷰 수, 좋아요 수
+    UsersTotalLikes utl = userService.usersTotalLikes(loginUser.getId());
 
+    model.addAttribute("utl", utl);
     model.addAttribute("aReviewList", aReviewList);
     model.addAttribute("countAReview", countAReview);
     model.addAttribute("laReviewList", laReviewList);
