@@ -92,7 +92,7 @@
                 <!-- 더보기 버튼 -->
                 <div class="d-flex justify-content-center mb-1">
                     <div class="more-box d-flex gap-3" th:if="${hasNext}">
-                        <button id="load-more-btn" data-page="1" th:data-track-id="${track.id}" class="btn btn-gold">리뷰
+                        <button id="load-more-btn" th:data-page="${size != null ? size/5 : 1}" th:data-track-id="${track.id}" class="btn btn-gold">리뷰
                             더보기</button>
 
                     </div>
