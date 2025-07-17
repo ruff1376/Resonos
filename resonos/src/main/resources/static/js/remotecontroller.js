@@ -1,6 +1,6 @@
 const remote = document.querySelector('.mypage-tabs');
 if(remote) {
-  const max = document.querySelector('.con').offsetHeight - 350
+  const max = document.querySelector('.con').offsetHeight - 300
   let targetTop = 0;
 
 

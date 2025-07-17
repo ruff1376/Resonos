@@ -156,7 +156,7 @@ input::placeholder {color: #bbb !important;}
   width: 88px;
   height: 88px;
   border-radius: 50%;
-  border: 3px solid #D4B97F;
+  border: 1px solid #D4B97F;
   object-fit: cover;
 }
 .profile-info h2 {
@@ -445,7 +445,7 @@ a:hover > .mypage-card {
   width: 150px;
   object-fit: cover;
   border-radius: 50%;
-  border: 2px solid #D4B97F;
+  border: 1px solid #D4B97F;
   background: #181C23;
 }
 .profile-img.edit + p {
@@ -680,7 +680,7 @@ textarea.form-control {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border: 1.5px solid #D4B97F;
+  border: 1px solid #D4B97F;
   object-fit: cover;
   background: #181C23;
 }
@@ -848,6 +848,9 @@ button.like {background-color: inherit; border: none;}
 .text-item.post a {display: flex; justify-content: space-between;}
 .text-item .rv-name {font-size: 1.4rem; color: var(--main-color);}
 .text-item .rv-name + .date {margin-left: 5px;}
+.con-activity .mypage-grid {margin-left: 20%; margin-bottom: 25px; grid-template-columns: repeat(2, 1fr); max-width: 1000px;}
+.con-activity .mypage-grid .mypage-card {min-height: 100px; display: flex; align-items: center; justify-content: center; flex-direction: column; border-color: var(--silver-color);}
+
 
 /* 배지 */
 .ul-list.bl {width: 100%; flex-wrap: wrap; gap: 10px; column-gap: 30px;}

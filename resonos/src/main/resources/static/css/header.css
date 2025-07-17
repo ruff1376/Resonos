@@ -126,6 +126,7 @@
     display: inline-block !important;
     vertical-align: middle;
     margin: 0;
+    border: 0.1px solid var(--main-color);
 }
 
 
