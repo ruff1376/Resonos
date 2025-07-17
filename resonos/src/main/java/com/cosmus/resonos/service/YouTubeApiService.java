@@ -57,7 +57,7 @@ public class YouTubeApiService {
             String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
             String url = "https://www.googleapis.com/youtube/v3/search"
                     + "?part=snippet&type=video"
-                    + "&maxResults=15"
+                    + "&maxResults=50"
                     + "&order=viewCount"
                     + "&q=" + encodedQuery
                     + "&key=" + apiKey;

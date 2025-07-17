@@ -131,7 +131,6 @@
 
         WHERE tr.track_id = #{trackId}
         AND tr.user_id = #{userId}
-        AND tr.blinded = 0
 
         LIMIT 1
     </select>
