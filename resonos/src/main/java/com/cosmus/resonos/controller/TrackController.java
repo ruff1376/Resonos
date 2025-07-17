@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cosmus.resonos.domain.Album;
-import com.cosmus.resonos.domain.AlbumScore;
 import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.LikedTrack;
@@ -49,7 +49,6 @@ import com.cosmus.resonos.service.TrackReviewService;
 import com.cosmus.resonos.service.TrackService;
 import com.cosmus.resonos.validation.ReviewForm;
 
-import groovyjarjarantlr4.v4.parse.ANTLRParser.id_return;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -116,15 +115,22 @@ public class TrackController {
         Artist artist = artistService.selectArtistByTrackId(id);
         TrackScore score = trackReviewService.getTrackScore(id);
 
-        // List<TrackReview> reviews = trackReviewService.reviewWithReviewerByTrackId(id);
         int page = 1;
         int size = 5;
 
+        List<TrackReview> IndexReviews = trackReviewService.reviewWithReviewerByTrackId(id);
         // 찾는 리뷰의 순서
         if(reviewId != null) {
-            int reviewNo = trackReviewService.findMyReview(reviewId);
-            size = ((reviewNo - 1) / size + 1) * size;
-            model.addAttribute("size", size);
+            int index = IntStream.range(0, IndexReviews.size())
+            .filter(i -> IndexReviews.get(i).getId().equals(reviewId))
+            .findFirst()
+            .orElse(-1);
+
+            log.info("reviewId가 위치한 인덱스: {}", index);
+            if (index != -1) {
+                size = ((index + 1 -1) / size + 1) * 5;
+                model.addAttribute("size", size);
+            }
         }
 
         List<TrackReview> reviews = trackReviewService.getMoreReviews(id, page, size);

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -99,14 +100,23 @@ public class AlbumController {
         int page = 1;
         int size = 5;
 
+        List<AlbumReview> IndexReviews = albumReviewService.reviewWithReviewerByAlbumId(id);
         // 찾는 리뷰의 순서
         if(reviewId != null) {
-            int reviewNo = albumReviewService.findMyReview(reviewId);
-            size = ((reviewNo - 1) / size + 1) * size;
-            model.addAttribute("size", size);
+            int index = IntStream.range(0, IndexReviews.size())
+            .filter(i -> IndexReviews.get(i).getId().equals(reviewId))
+            .findFirst()
+            .orElse(-1);
+
+            log.info("reviewId가 위치한 인덱스: {}", index);
+            if (index != -1) {
+                size = ((index + 1 -1) / size + 1) * 5;
+                model.addAttribute("size", size);
+            }
         }
 
         List<AlbumReview> reviews = albumReviewService.getMoreReviews(id, page, size);
+
         if (loginUser != null && reviews != null && !reviews.isEmpty()) {
             List<Long> reviewIds = reviews.stream().map(AlbumReview::getId).toList();
             List<Long> likedReviewIds = reviewLikeService.getUserLikedReviewIds("ALBUM", reviewIds, loginUser.getId());
