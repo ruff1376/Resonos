@@ -24,6 +24,16 @@
     SELECT * FROM notification WHERE id = #{id}
   </select>
 
+  <!-- 전체 읽음 권한 확인 -->
+  <select id="selectByIds" resultMap="NotificationResultMap">
+    SELECT *
+    FROM notification
+    WHERE id IN
+    <foreach item="id" collection="ids" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </select>
+
   <insert id="insert">
     INSERT INTO notification (type, message, content, is_read, created_at, target_id, user_id)
     VALUES (#{type}, #{message}, #{content}, #{isRead}, #{createdAt}, #{targetId}, #{userId})
@@ -31,23 +41,46 @@
 
   <update id="update">
     UPDATE notification
-    SET type = #{type},
-        message = #{message},
-        content = #{content},
-        is_read = #{isRead},
-        target_id = #{targetId},
-        user_id = #{userId}
+    SET is_read = 1
     WHERE id = #{id}
+  </update>
+
+  <!-- 전체 읽음 처리 -->
+  <update id="updateIsReadByIds">
+    UPDATE notification
+    SET is_read = 1
+    WHERE id IN
+    <foreach item="id" collection="ids" open="(" separator="," close=")">
+      #{id}
+    </foreach>
   </update>
 
   <delete id="delete">
     DELETE FROM notification WHERE id = #{id}
   </delete>
 
+  <!-- 전체 삭제 -->
+  <update id="deleteAll">
+    DELETE FROM notification
+    WHERE id IN
+    <foreach item="id" collection="ids" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </update>
+
+  <!-- 유저의 알림 -->
   <select id="findByUser" resultMap="NotificationResultMap">
     SELECT * FROM notification WHERE user_id = #{userId} ORDER BY created_at DESC
   </select>
-<!-- 
+
+  <!-- 읽지 않은 알림 수 -->
+  <select id="countUnread" resultType="int">
+    SELECT COUNT(*)
+    FROM notification
+    WHERE user_id = #{userId}
+    AND is_read = 0
+  </select>
+<!--
   <insert id="createPolicyViolationNotification">
     INSERT INTO notification (user_id, type, message, content, is_read, created_at, target_id)
     VALUES (#{userId}, 'POLICY_VIOLATION', '정책 위반 알림', #{banword}, FALSE, NOW(), #{targetId})

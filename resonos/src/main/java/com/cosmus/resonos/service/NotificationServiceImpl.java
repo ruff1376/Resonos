@@ -46,6 +46,26 @@ public class NotificationServiceImpl implements NotificationService {
         return notificationMapper.findByUser(userId);
     }
 
+    @Override
+    public List<Notification> selectByIds(List<Long> ids) {
+        return notificationMapper.selectByIds(ids);
+    }
+
+    @Override
+    public boolean updateIsReadByIds(List<Long> ids) {
+        return notificationMapper.updateIsReadByIds(ids) > ids.size() - 1;
+    }
+
+    @Override
+    public boolean deleteAll(List<Long> ids) throws Exception {
+        return notificationMapper.deleteAll(ids) > ids.size() - 1;
+    }
+
+    @Override
+    public int countUnread(Long userId) throws Exception {
+        return notificationMapper.countUnread(userId);
+    }
+
     // public boolean createPolicyViolationNotification(Long userId, String banword, String targetId) throws Exception {
     //     Notification notification = new Notification();
     //     notification.setUserId(userId);

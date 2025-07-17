@@ -26,6 +26,7 @@ import com.cosmus.resonos.domain.AlbumReview;
 import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.domain.Badge;
 import com.cosmus.resonos.domain.CustomUser;
+import com.cosmus.resonos.domain.Notification;
 import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.Track;
@@ -36,6 +37,7 @@ import com.cosmus.resonos.service.AlbumReviewService;
 import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.ArtistService;
 import com.cosmus.resonos.service.BadgeService;
+import com.cosmus.resonos.service.NotificationService;
 import com.cosmus.resonos.service.PlaylistService;
 import com.cosmus.resonos.service.TrackReviewService;
 import com.cosmus.resonos.service.TrackService;
@@ -75,6 +77,8 @@ public class UserController {
   @Autowired AlbumReviewService albumReviewServcie;
 
   @Autowired BadgeService badgeService;
+
+  @Autowired NotificationService notificationService;
   /**
    * 로그인 페이지 요청
    * @param param
@@ -394,6 +398,26 @@ public class UserController {
         return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+  /**
+   * 알림함 페이지 요청
+   * @param loginUser
+   * @param model
+   * @return
+   * @throws Exception
+   */
+  @GetMapping("/notifications")
+  public String notiList(
+    @AuthenticationPrincipal CustomUser loginUser,
+    Model model
+    ) throws Exception {
+      List<Notification> notiList = notificationService.findByUser(loginUser.getId());
+      int count = notificationService.countUnread(loginUser.getId());
+
+      model.addAttribute("count", count);
+      model.addAttribute("notiList", notiList);
+      model.addAttribute("lastPath", "noti");
+      return "user/notification";
+  }
 
   /**
    * 알림 설정

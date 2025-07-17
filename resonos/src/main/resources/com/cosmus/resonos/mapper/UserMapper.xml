@@ -272,5 +272,7 @@
     WHERE (tr.user_id = #{userId} OR ar.user_id = #{userId});
   </select>
 
+  <!-- 유저의 알람 -->
+
 
 </mapper>
