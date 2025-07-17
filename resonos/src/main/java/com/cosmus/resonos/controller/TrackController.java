@@ -85,7 +85,8 @@ public class TrackController {
     // 트랙 화면
     @GetMapping
     public String trackInfo(@RequestParam("id") String id, Model model,
-                            @AuthenticationPrincipal CustomUser principal
+                            @AuthenticationPrincipal CustomUser principal,
+                            @RequestParam(value = "reviewId", required = false) Long reviewId
                             ) throws Exception {
 
         Users loginUser = null;
@@ -117,6 +118,12 @@ public class TrackController {
         // List<TrackReview> reviews = trackReviewService.reviewWithReviewerByTrackId(id);
         int page = 1;
         int size = 5;
+
+        // 찾는 리뷰의 순서
+        if(reviewId != null) {
+            int reviewNo = trackReviewService.findMyReview(reviewId);
+            size = ((reviewNo - 1) / size + 1) * size;
+        }
 
         List<TrackReview> reviews = trackReviewService.getMoreReviews(id, page, size);
         if (loginUser != null && reviews != null && !reviews.isEmpty()) {

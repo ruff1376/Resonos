@@ -325,4 +325,24 @@
         SELECT COUNT(*) FROM track_review
     </select>
 
+    <!-- 찾는 리뷰가 몇 번째인지 -->
+    <select id="findMyReview" resultType="int">
+        SELECT COUNT(*)
+        FROM album_review ar
+        JOIN album_review target ON target.id = #{reviewId}
+        WHERE ar.album_id = target.album_id
+        AND (
+            (
+            (SELECT COUNT(*) FROM review_like WHERE review_id = ar.id AND review_type = 'TRACK')
+            >
+            (SELECT COUNT(*) FROM review_like WHERE review_id = target.id AND review_type = 'TRACK')
+            )
+            OR (TRACK
+            (SELECT COUNT(*) FROM review_like WHERE review_id = ar.id AND review_type = 'TRACK')
+            =
+            (SELECT COUNT(*) FROM review_like WHERE review_id = target.id AND review_type = 'TRACK')
+            AND ar.created_at &lt; target.created_at
+            )
+        )
+    </select>
 </mapper>

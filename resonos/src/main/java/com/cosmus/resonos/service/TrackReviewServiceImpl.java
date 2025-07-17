@@ -204,7 +204,8 @@ public class TrackReviewServiceImpl implements TrackReviewService {
         return mapper.countAll();
     }
 
-
-
-
+    @Override
+    public int findMyReview(Long reviewId) throws Exception {
+        return mapper.findMyReview(reviewId);
+    }
 }

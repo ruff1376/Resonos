@@ -423,13 +423,16 @@ public class UserController {
   }
 
   /**
-   * 알림 설정
+   * 알림 설정 페이지 요청
    * @param model
    * @return
    */
   @GetMapping("/alarm")
-  public String getMethodName(Model model) {
-
+  public String getMethodName(
+    @AuthenticationPrincipal CustomUser loginUser,
+    Model model
+  ) {
+    if(loginUser == null) return "redirect:/login";
 
     model.addAttribute("lastPath", "alarm");
     return "user/setting-alarm";
