@@ -278,6 +278,9 @@ input::placeholder {color: #bbb !important;}
   margin-bottom: 0;
   font-size: 2rem;
 }
+.mypage-card h4 {
+  color: var(--main-color);
+}
 .mypage-card ul {
   list-style: none;
   padding: 0;
@@ -767,9 +770,10 @@ button.like {background-color: inherit; border: none;}
 .con-noti .info-section {min-height: 800px;}
 .con-noti .list-item {justify-content: space-between; align-items: center; padding: 10px 22px; position: relative;}
 .con-noti .list-item p {margin-bottom: 0;}
+.con-noti .ul-list {margin-top: 10px;}
 .is-read {display: none;}
 .is-read + span {display: none;}
-.is-read:checked + span {
+.is-read:not(:checked) + span {
   display: block;
   color: red;
   font-size: 2.5rem;
@@ -781,6 +785,7 @@ button.like {background-color: inherit; border: none;}
 .con-noti label + label {margin-top: 14px;}
 .con-noti .title button {color: var(--main-color);}
 .con-noti .title button:last-child {color: #FF8383;}
+.con-noti .empty-text {height: 600px;}
 
 /* 플레이리스트 상세 */
 .con-pli-detail > .info-wrapper > .info-section {max-height: 1200px; height: 100%;}
