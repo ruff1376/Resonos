@@ -97,6 +97,7 @@ public class TrackController {
             .stream()
             .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
             model.addAttribute("isAdmin", isAdmin);
+            System.out.println(isAdmin);
             Long userVotedMoodId = trackMoodVoteService.getUserVotedMoodId(loginUser.getId(), id);
             model.addAttribute("userVotedMoodId", userVotedMoodId);
             // ✅ 좋아요 여부 체크
