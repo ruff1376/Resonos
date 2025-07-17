@@ -95,26 +95,34 @@
       const isOwner = [[${isOwner}]]
       if(userId == null) location.href = '/login'
 
+      function debounce(fn, delay) {
+        let timer
+        return function (...args) {
+          clearTimeout(timer)
+          timer = setTimeout(() => fn.apply(this, args), delay)
+        }
+      }
+
       /* 앨범 이동 */
       const albumList = document.querySelector(".info-section.album ul")
       albumList.addEventListener("click", function(event) {
         if(event.target.tagName.toLowerCase() === 'button') return
-        const li = event.target.closest('.list-item');
-        if (!li) return;
+        const li = event.target.closest('.list-item')
+        if (!li) return
 
-        const albumId = li.querySelector('input[type="hidden"]').value;
-        location.href = `/albums?id=${albumId}`;
+        const albumId = li.querySelector('input[type="hidden"]').value
+        location.href = `/albums?id=${albumId}`
       })
 
       /* 트랙 이동 */
       const trackList = document.querySelector(".info-section.track ul")
       trackList.addEventListener("click", function(event) {
         if (event.target.tagName.toLowerCase() === 'button') return
-        const li = event.target.closest('.list-item');
-        if (!li) return;
+        const li = event.target.closest('.list-item')
+        if (!li) return
 
-        const trackId = li.querySelector('input[type="hidden"]').value;
-        location.href = `/tracks?id=${trackId}`;
+        const trackId = li.querySelector('input[type="hidden"]').value
+        location.href = `/tracks?id=${trackId}`
       })
 
       // 트랙 좋아요
@@ -122,8 +130,8 @@
 
           const trackId = event.target.closest('.list-item').querySelector('input[type="hidden"]').value
           if (!userId || userId === 0) {
-              Swal.fire('로그인이 필요합니다!');
-              return;
+              Swal.fire('로그인이 필요합니다!')
+              return
           }
 
           $.ajax({
@@ -135,7 +143,7 @@
               },
               data: JSON.stringify({ userId: userId, trackId: trackId }),
               success: function (res) {
-                  const liked = res.liked;
+                  const liked = res.liked
                   const text = liked ? '좋아요를 완료했습니다.' : '좋아요를 취소했습니다.'
                   Swal.fire({
                     position: "center",
@@ -148,22 +156,22 @@
                       icon: 'success-icon',
                       title: 'alert-title'
                     }
-                  });
+                  })
                   event.target.innerText = liked ? '♥' : '♡'
               },
               error: function () {
-                  Swal.fire('좋아요 처리에 실패했습니다.');
+                  Swal.fire('좋아요 처리에 실패했습니다.')
               }
-          });
-        });
+          })
+        })
 
       // 앨범 좋아요
       $(document).on('click', '.like-album', function (event) {
           const albumId = event.target.closest('.list-item').querySelector('input[type="hidden"]').value
 
           if (!userId || userId === 0) {
-              Swal.fire('로그인이 필요합니다!');
-              return;
+              Swal.fire('로그인이 필요합니다!')
+              return
           }
 
           $.ajax({
@@ -175,7 +183,7 @@
               },
               data: JSON.stringify({ userId: userId, albumId: albumId }),
               success: function (res) {
-                  const liked = res.liked;
+                  const liked = res.liked
                   const text = liked ? '좋아요를 완료했습니다.' : '좋아요를 취소했습니다.'
                   Swal.fire({
                     position: "center",
@@ -188,14 +196,14 @@
                       icon: 'success-icon',
                       title: 'alert-title'
                     }
-                  });
+                  })
                   event.target.innerText = liked ? '♥' : '♡'
               },
               error: function () {
-                  Swal.fire('좋아요 처리에 실패했습니다.');
+                  Swal.fire('좋아요 처리에 실패했습니다.')
               }
-          });
-      });
+          })
+      })
 
       /* 좋아요 한 트랙 검색 */
       let trackOffset = 20
@@ -204,17 +212,9 @@
       let trackAllLoaded = false
       let trackKeyword = ''
 
-      function debounce(fn, delay) {
-        let timer;
-        return function (...args) {
-          clearTimeout(timer);
-          timer = setTimeout(() => fn.apply(this, args), delay);
-        };
-      }
-
       // 요청 딜레이
-      const debouncedGetTracks = debounce(() => getTracks(true), 300);
-      document.getElementById('track-search').addEventListener('keyup', debouncedGetTracks);
+      const debouncedGetTracks = debounce(() => getTracks(true), 300)
+      document.getElementById('track-search').addEventListener('keyup', debouncedGetTracks)
 
       // 스크롤 이벤트
       const trackScrollWindow = document.querySelector('.info-section.track')
@@ -304,8 +304,8 @@
       let albumKeyword = ''
 
       // 요청에 딜레이
-      const debouncedGetAlbum = debounce(() => getAlbums(true), 300);
-      document.getElementById('album-search').addEventListener('keyup', debouncedGetAlbum);
+      const debouncedGetAlbum = debounce(() => getAlbums(true), 300)
+      document.getElementById('album-search').addEventListener('keyup', debouncedGetAlbum)
 
       // 스크롤 이벤트
       const albumScrollWindow = document.querySelector('.info-section.album')
@@ -320,7 +320,6 @@
         }
       })
 
-      /* 좋아요 한 앨범 검색 */
       async function getAlbums(reset = false) {
 
         if(reset) {
