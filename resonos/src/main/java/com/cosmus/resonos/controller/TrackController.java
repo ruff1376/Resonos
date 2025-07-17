@@ -124,6 +124,7 @@ public class TrackController {
         if(reviewId != null) {
             int reviewNo = trackReviewService.findMyReview(reviewId);
             size = ((reviewNo - 1) / size + 1) * size;
+            model.addAttribute("size", size);
         }
 
         List<TrackReview> reviews = trackReviewService.getMoreReviews(id, page, size);
