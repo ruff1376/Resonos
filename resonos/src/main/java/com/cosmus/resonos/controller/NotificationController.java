@@ -163,7 +163,6 @@ public class NotificationController {
         }
     }
 
-<<<<<<< HEAD
     @PutMapping("/{id}")
     public ResponseEntity<String> updateNotification(@PathVariable("id") Long id, @RequestBody Notification notification) {
         try {
@@ -178,8 +177,6 @@ public class NotificationController {
         }
     }
 
-=======
->>>>>>> main
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteNotification(@PathVariable("id") Long id) {
         try {
