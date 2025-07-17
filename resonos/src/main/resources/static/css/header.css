@@ -45,7 +45,8 @@
     height: 35px;
     background: transparent;
     color: #B1B1B1;
-    padding-left: 35px;
+    padding-left: 15px;
+    padding-right: 35px;
     font-size: 12px;
 }
 
@@ -63,11 +64,23 @@
 }
 
 .site-header .search-icon {
-    position: absolute;
+    /* position: absolute; */
     left: 10px;
     font-size: 20px;
     color: #B1B1B1;
+    /* pointer-events: none; */
+}
+
+/* header.css 또는 main.css에 추가 */
+.header-search-icon {
+    font-size: 2rem;
+    color: #B1B1B1;
     pointer-events: none;
+}
+.header-search-btn {
+    background: transparent;
+    border: none;
+    padding: 0;
 }
 
 .site-header .btn-outline-gold {

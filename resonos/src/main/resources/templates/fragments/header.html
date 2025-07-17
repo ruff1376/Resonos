@@ -46,8 +46,10 @@
                 <div class="collapse navbar-collapse d-flex justify-content-end align-items-center header-gap mt-4 mb-4 gap-4" id="mainNav">
                     
                     <form class="position-relative d-flex align-items-center mb-0" style="width:300px;" th:action="@{/search}" method="get" onsubmit="return validateSearch()">
-                        <i class="bi bi-search search-icon position-absolute"></i>
                         <input type="search" name="q" id="searchInput" class="form-control search-box" placeholder="앨범, 트랙, 아티스트...">
+                        <button type="submit" class="btn p-0 border-0 bg-transparent header-search-btn" style="position:absolute; right:10px; top:50%; transform:translateY(-50%);" tabindex="-1">
+                            <i class="bi bi-search header-search-icon"></i>
+                        </button>
                     </form>
                     <div class="navbar-nav d-flex flex-row justify-content-end align-items-center header-gap gap-3">
                         <!-- 비로그인 -->
