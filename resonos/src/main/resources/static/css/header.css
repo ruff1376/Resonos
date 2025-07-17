@@ -93,7 +93,7 @@
 .site-header .submenu-item,
 .site-header .header-submenu li a {
     font-family: inherit;
-    font-size: 1.6rem;
+    font-size: 1.2rem;
 }
 
 .site-header .profile-dropdown .dropdown-toggle {
@@ -177,7 +177,7 @@
     z-index: 1000;
     border-radius: 1.5rem;
     box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.3);
-    width: 200px; /* 너비 지정 */
+    width: 100px; /* 너비 지정 */
     text-align: center; /* 전체 내부 텍스트 가운데 정렬 */
 }
 
