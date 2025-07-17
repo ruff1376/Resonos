@@ -90,4 +90,6 @@
     INSERT INTO notification (user_id, type, message, content, is_read, created_at, target_id)
     VALUES (#{userId}, #{type}, #{message}, #{content}, FALSE, NOW(), #{targetId})
   </insert> -->
+
+
 </mapper>

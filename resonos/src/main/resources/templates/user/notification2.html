@@ -14,6 +14,7 @@
     .list-item.read { opacity: 0.6; }
     .list-item.read .red-circle { display: none; }
     .red-circle { color: red; margin-right: 6px; }
+
   </style>
 </head>
 <body>
@@ -33,10 +34,21 @@
         </div>
 
         <!-- 알림/공지 개수 확인용 -->
-        <h1>개수 확인용</h1>
-        <p th:text="'알림 개수: ' + ${#lists.size(notifications)}"></p>
-        <p th:text="'공지 개수: ' + ${#lists.size(notices)}"></p>
-        <p th:text="'통합 알람 개수: ' + ${#lists.size(recentAlarms)}"></p>
+        <div class="container my-3">
+          <div class="row justify-content-center">
+            <div class="col-auto">
+              <p th:text="'알림 개수: ' + ${#lists.size(notifications)}"></p>
+            </div>
+            <div class="col-auto">
+              <p th:text="'공지 개수: ' + ${#lists.size(notices)}"></p>
+            </div>
+            <div class="col-auto">
+              <p th:text="'통합 알람 개수: ' + ${#lists.size(recentAlarms)}"></p>
+            </div>
+          </div>
+        </div>
+
+
 
         <ul class="ul-list">
           <th:block th:each="item : ${recentAlarms}">

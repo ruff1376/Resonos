@@ -1,20 +1,25 @@
 package com.cosmus.resonos.controller;
 
-import com.cosmus.resonos.domain.Badge;
-import com.cosmus.resonos.domain.BadgeCondition;
-import com.cosmus.resonos.service.BadgeConditionService;
-import com.cosmus.resonos.service.BadgeService;
-
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import com.cosmus.resonos.domain.Badge;
+import com.cosmus.resonos.domain.BadgeCondition;
+import com.cosmus.resonos.service.BadgeConditionService;
+import com.cosmus.resonos.service.BadgeService;
+import com.cosmus.resonos.service.UserBadgeService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
@@ -26,6 +31,9 @@ public class AdminBadgeController {
 
     @Autowired
     private BadgeConditionService badgeConditionService;
+
+    @Autowired
+    private UserBadgeService userBadgeService;
 
     // 배지 관리 메인 페이지
     @GetMapping
@@ -118,5 +126,18 @@ public class AdminBadgeController {
     public String deleteCondition(@PathVariable("id") Long id) throws Exception {
         badgeConditionService.deleteCondition(id);
         return "redirect:/admin/badge";
+    }
+        // 배지 지급
+    @PostMapping("/grant")
+    public String grantBadge(@RequestParam Long userId, @RequestParam Long badgeId) throws Exception {
+        userBadgeService.giveBadge(userId, badgeId);
+        return "success";
+    }
+
+    // 배지 회수
+    @PostMapping("/revoke")
+    public String revokeBadge(@RequestParam Long userId, @RequestParam Long badgeId) throws Exception {
+        userBadgeService.revokeBadge(userId, badgeId);
+        return "success";
     }
 }

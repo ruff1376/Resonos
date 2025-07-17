@@ -26,6 +26,12 @@ public interface NotificationMapper {
     public int deleteAll(@Param("ids") List<Long> ids) throws Exception;
     // 유저
     public List<Notification> findByUser(Long userId) throws Exception;
+
+    // 정책 
+    public int createPolicyViolationNotification(@Param("userId") Long userId,@Param("banword") String banword,@Param("targetId") Long targetId) throws Exception;
+    // 유저용 
+    public int createNotification(@Param("userId") Long userId,@Param("type") String type,@Param("message") String message,@Param("content") String content,@Param("targetId") Long targetId) throws Exception;
+    
     // 정책
     public int createPolicyViolationNotification(Long userId, String banword, Long targetId) throws Exception;
     // 유저용

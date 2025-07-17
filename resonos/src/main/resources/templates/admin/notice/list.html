@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>공지사항 목록</title></head>
+<body>
+<h1>공지사항</h1>
+<a th:href="@{/notices/new}">공지 등록</a>
+<table>
+  <thead>
+    <tr><th>제목</th><th>작성일</th></tr>
+  </thead>
+  <tbody>
+    <tr th:each="notice : ${notices}">
+      <td><a th:href="@{/notices/{id}(id=${notice.id})}" th:text="${notice.title}"></a></td>
+      <td th:text="${#dates.format(notice.createdAt, 'yyyy-MM-dd')}"></td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

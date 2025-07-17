@@ -109,4 +109,8 @@ public interface UserMapper {
 
     // 선호 장르 데이터 집계
     public List<GenreCount> likedGenreData(@Param("userId") Long userId) throws Exception;
+    // 유저 제재 사유banUser
+    public int banUser(@Param("id") Long id, @Param("ban") boolean ban, @Param("reason") String reason) throws Exception;
+    // 자동 정지 처리 
+    public void autoBanRepeatOffender(@Param("userId") Long userId, @Param("reason") String reason);
 }

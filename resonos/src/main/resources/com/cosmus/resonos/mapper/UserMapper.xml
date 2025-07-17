@@ -271,6 +271,19 @@
     LEFT JOIN album_review ar ON rl.review_type = 'ALBUM' AND rl.review_id = ar.id
     WHERE (tr.user_id = #{userId} OR ar.user_id = #{userId});
   </select>
+  <!-- 유저 제재 사유 banUser -->
+  <update id="banUser">
+    UPDATE user
+    SET ban = #{ban}, ban_reason = #{reason}, ban_at = NOW()
+    WHERE id = #{id}
+  </update>
+  <!-- 자동 정지 처리 -->
+  <update id="autoBanRepeatOffender">
+  UPDATE user
+  SET ban = TRUE, ban_reason = #{reason}, ban_at = NOW()
+  WHERE id = #{userId}
+</update>
+  
 
   <!-- 유저의 알람 -->
 
