@@ -2,6 +2,7 @@ package com.cosmus.resonos.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,11 +27,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/notifications")
 public class NotificationController {
 
-    private final NotificationService notificationService;
-
-    public NotificationController(NotificationService notificationService) {
-        this.notificationService = notificationService;
-    }
+    @Autowired
+    private NotificationService notificationService;
 
     /**
      * 단일 읽음 처리 요청
@@ -130,7 +128,7 @@ public class NotificationController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Notification> getNotification(@PathVariable Long id) {
+    public ResponseEntity<Notification> getNotification(@PathVariable("id") Long id) {
         try {
             Notification notification = notificationService.select(id);
             if (notification == null) {
@@ -143,7 +141,7 @@ public class NotificationController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Notification>> getNotificationsByUser(@PathVariable Long userId) {
+    public ResponseEntity<List<Notification>> getNotificationsByUser(@PathVariable("userId") Long userId) {
         try {
             List<Notification> notifications = notificationService.findByUser(userId);
             return ResponseEntity.ok(notifications);
@@ -165,8 +163,25 @@ public class NotificationController {
         }
     }
 
+<<<<<<< HEAD
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateNotification(@PathVariable("id") Long id, @RequestBody Notification notification) {
+        try {
+            notification.setId(id);
+            boolean success = notificationService.update(notification);
+            if (success) {
+                return ResponseEntity.ok("Notification updated");
+            }
+            return ResponseEntity.status(500).body("Failed to update notification");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to update notification: " + e.getMessage());
+        }
+    }
+
+=======
+>>>>>>> main
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteNotification(@PathVariable Long id) {
+    public ResponseEntity<String> deleteNotification(@PathVariable("id") Long id) {
         try {
             boolean success = notificationService.delete(id);
             if (success) {

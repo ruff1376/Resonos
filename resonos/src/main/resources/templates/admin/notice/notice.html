@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layouts/main_layout}">
+<head>
+    <meta charset="UTF-8" />
+    <title>공지 상세</title>
+    <th:block th:replace="~{fragments/link::user}"></th:block>
+</head>
+<body>
+<main class="con con-notice-detail" layout:fragment="content">
+    <section class="info-wrapper">
+        <div class="info-section">
+            <div class="title">
+                <h2 th:text="${notice.title}">공지 제목</h2>
+                <a th:href="@{/notifications2}" class="btn btn-outline-secondary btn-sm" style="float:right;">← 목록으로</a>
+            </div>
+            <div class="notice-detail">
+                <p><b>작성일:</b> <span th:text="${#dates.format(notice.createdAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+                <hr>
+                <div th:utext="${notice.content}"></div>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

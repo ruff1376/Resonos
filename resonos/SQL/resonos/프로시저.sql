@@ -1,4 +1,4 @@
--- Active: 1750388008084@@127.0.0.1@3306@resonos
+-- Active: 1751542958734@@127.0.0.1@3306@resonos
 
 -- 실행 순서
 -- 1. 테이블 삭제 DROP PROCEDURE IF EXISTS create_tables;
@@ -123,6 +123,9 @@ BEGIN
         `bio` TEXT NULL,
         `is_pro` BOOLEAN NOT NULL DEFAULT FALSE,
         `enabled` BOOLEAN NOT NULL DEFAULT TRUE,
+        `ban` BOOLEAN NOT NULL DEFAULT FALSE COMMENT '회원 제재 여부',
+        `ban_reason` VARCHAR(255) NULL COMMENT '제재 사유',
+        `ban_at` TIMESTAMP NULL DEFAULT NULL COMMENT '제재 일시',
         `provider` VARCHAR(200) NULL,
         `provider_id` VARCHAR(200) NULL,
         `current_badge` BIGINT NULL,
@@ -302,12 +305,12 @@ BEGIN
 
     CREATE TABLE IF NOT EXISTS `notification` (
         `id` BIGINT NOT NULL,
-        `type` ENUM('comment', 'mention', 'like','follow','reply','badge','qna','announcement','system') NOT NULL,
+        `type` VARCHAR(32) NOT NULL, 
         `message` TEXT NOT NULL,
         `content` TEXT NULL,
         `is_read` BOOLEAN NOT NULL,
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        `target_id` BIGINT NOT NULL,
+        `target_id` BIGINT NULL,
         `user_id` BIGINT NOT NULL
     );
 
@@ -428,6 +431,37 @@ BEGIN
         `username` VARCHAR(100) NOT NULL,
         `auth` VARCHAR(100) NOT NULL
     );
+
+    -- user_badge_log 테이블 생성
+    CREATE TABLE IF NOT EXISTS user_badge_log (
+        id BIGINT NOT NULL ,
+        user_id BIGINT NOT NULL,
+        badge_id BIGINT NOT NULL,
+        action VARCHAR(10) NOT NULL,                          -- 예: 'GRANT', 'REVOKE', 'EXPIRE'
+        actor_id BIGINT DEFAULT NULL,                                      -- 직접 지급/회수 관리자ID(자동은 NULL)
+        reason VARCHAR(255) DEFAULT NULL,
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_ubl_user_badge_created (user_id, badge_id, created_at)
+    );
+
+-- UNIQUE(필요하다면 추가, 실무에선 보통 이력성 테이블엔 unique 걸지 않음)
+
+
+-- AUTO_INCREMENT, PK 보장 (id에 이미 PK가 있다면 MODIFY만, 없다면 ADD PRIMARY KEY도 추가)
+ALTER TABLE user_badge_log
+    MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
+
+-- FK 제약조건(외래키) 추가 (이미 있다면 드롭 후 재생성 혹은 이름 구분)
+ALTER TABLE user_badge_log
+    ADD CONSTRAINT FK_ubl_user FOREIGN KEY (user_id)
+        REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    ADD CONSTRAINT FK_ubl_badge FOREIGN KEY (badge_id)
+        REFERENCES badge(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    ADD CONSTRAINT FK_ubl_actor FOREIGN KEY (actor_id)
+        REFERENCES user(id) ON DELETE SET NULL ON UPDATE CASCADE;
+
+
+
 
     -- 4. PK, AUTO_INCREMENT, UNIQUE, FK 일괄 추가
 
