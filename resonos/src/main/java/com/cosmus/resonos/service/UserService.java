@@ -102,4 +102,6 @@ public interface UserService {
     // 선호 장르 데이터 집계
     public List<GenreCount> likedGenreData(Long userId) throws Exception;
 
+    // 유저 제재 사유banUser
+    public boolean banUser(Long id, boolean ban, String reason) throws Exception;
 }

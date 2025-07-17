@@ -44,6 +44,8 @@
     VALUES (#{userId}, #{badgeId}, NOW())
   </insert>
 
+  
+
 
 
 </mapper>

@@ -345,4 +345,9 @@ public class UserServiceImpl implements UserService {
             return userMapper.usersTotalLikes(userId);
         }
 
+        @Override
+        public boolean banUser(Long id, boolean ban, String reason) throws Exception {
+            return userMapper.banUser(id, ban, reason) > 0;
+        }
+
 }

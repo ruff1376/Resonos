@@ -2,6 +2,8 @@ package com.cosmus.resonos.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.cosmus.resonos.domain.Notification;
 
 public interface NotificationService {
@@ -26,8 +28,11 @@ public interface NotificationService {
     // public boolean createNotification(@Param("userId") Long userId, @Param("type") String type,
     //     @Param("message") String message, @Param("content") String content, @Param("targetId") String targetId) throws Exception;
 
-    
+    // 알림 생성 메소드
+    // 이 메소드는 Notification 객체를 받아서 알림을 생성하고, 성공 여부
+    public boolean createNotification(Notification notification) throws Exception;
+    public void createNotification(@Param("userId") Long userId, @Param("type") String type,
+                                    @Param("message") String message, @Param("content") String content,
+                                    @Param("targetId") String targetId) throws Exception;
 
-
-    
 }

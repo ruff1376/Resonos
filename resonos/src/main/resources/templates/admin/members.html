@@ -8,23 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원 관리</title>
     <th:block th:replace="~{fragments/link::admin}"></th:block>
-    <!-- <style>
-      .detail-form label { min-width: 90px; }
-      .list-group-item .btn { min-width: 60px; }
-      .detail-row {
-        background: #23272f;
-        transition: max-height 0.35s cubic-bezier(.4,0,.2,1), opacity 0.35s;
-        overflow: hidden;
-        max-height: 0;
-        opacity: 0;
-      }
-      .detail-row.show {
-        max-height: 800px; /* 충분히 크게 */
-        opacity: 1;
-      }
-    </style> -->
-  <meta name="_csrf" th:content="${_csrf.token}"/>
-  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <th:block layout:fragment="content">
 <body class="bg-dark text-light">
@@ -131,8 +116,7 @@
         <th:block th:each="member, iterStat : ${members}">
           <!-- 회원 한 줄 -->
           <div class="list-group-item bg-dark text-light border-secondary mb-2 rounded-0 d-flex flex-nowrap align-items-center text-center justify-content-center" th:id="'row-' + ${member.id}">
-            <div style="flex-basis:5%;min-width:40px;"th:text="${pagination.index + iterStat.index + 1}">1</div>
-
+            <div style="flex-basis:5%;min-width:40px;" th:text="${pagination.index + iterStat.index + 1}">1</div>
             <div style="flex-basis:8%;min-width:60px;">
               <img th:src="${member.profileImage != null ? member.profileImage : '@{/img/default-profile.png}'}"
                    alt="프로필"
@@ -166,14 +150,21 @@
                 <input type="hidden" name="keyword" th:value="${keyword}" />
                 <button type="submit" class="btn btn-outline-gold btn-sm" th:text="${member.enabled} ? '비활성' : '활성'">활성/비활성</button>
               </form>
-              <form th:action="@{/admin/members/ban}" method="post" style="display:inline;">
-                <input type="hidden" name="id" th:value="${member.id}" />
-                <input type="hidden" name="ban" th:value="${member.ban == null or !member.ban}" />
-                <input type="hidden" name="keyword" th:value="${keyword}" />
-                <button type="submit" class="btn btn-outline-danger btn-sm"
-                th:text="${member.ban != null and member.ban} ? '제재 해제' : '제재'">제재/해제</button>
-              </form>
+              <!-- 제재/제재해제 영역 -->
+              <span th:if="${member.ban == null or !member.ban}">
+                <button
+                  type="button"
+                  class="btn btn-outline-danger btn-sm ban-btn"
+                  th:attr="data-user-id=${member.id},data-keyword=${keyword != null ? keyword : ''}"
+                >제재</button>
+              </span>
 
+              <form th:if="${member.ban != null and member.ban}" th:action="@{/admin/members/ban}" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${member.id}" />
+                <input type="hidden" name="ban" value="false" />
+                <input type="hidden" name="keyword" th:value="${keyword}" />
+                <button type="submit" class="btn btn-outline-danger btn-sm" th:text="'제재 해제'">제재 해제</button>
+              </form>
             </div>
             <div style="flex-basis:8%;min-width:60px;">
               <button type="button"
@@ -183,7 +174,7 @@
               </button>
             </div>
           </div>
-          <!-- 상세/수정 폼이 동적으로 들어갈 자리 (각 회원 row 바로 아래에 위치) -->
+          <!-- 상세/수정 폼/제재 사유 입력이 동적으로 들어갈 자리 (각 회원 row 바로 아래에 위치) -->
           <div class="detail-row">
             <div style="padding:0;" class="w-100" id="detail-area"></div>
           </div>
@@ -192,7 +183,6 @@
       </div>
     </div>
     <div th:replace="~{fragments/pagination :: pagination(pagination=${pagination}, pageUri=${pageUri})}"></div>
-
   </div>
 </main>
 <script th:inline="javascript">
@@ -260,7 +250,6 @@ document.querySelectorAll('.detail-btn').forEach(function(btn) {
                         onclick="resetPassword('${member.id}', this)">비밀번호 랜덤 초기화</button>
               </div>
             </div>
-
             <div class="row mb-3">
               <div class="col-md-6 text-start">
                 <label class="form-label">프로필 이미지 URL</label>
@@ -309,16 +298,28 @@ document.querySelectorAll('.detail-btn').forEach(function(btn) {
               <button type="button" class="btn btn-outline-danger btn-sm ms-2" onclick="deleteMember(${member.id})">삭제</button>
             </div>
           </form>
+          <!-- ban이 해제(미제재) 상태면 제재 사유 입력 폼 추가 -->
+          ${!member.ban ? `
+            <form method="POST" action="/admin/members/ban" onsubmit="return confirm('정말 제재하시겠습니까?');" class="mt-3">
+              <input type="hidden" name="_csrf" value="${csrfToken}">
+              <input type="hidden" name="id" value="${member.id}">
+              <input type="hidden" name="ban" value="true">
+              <textarea name="reason" placeholder="제재 사유를 입력하세요" required style="width:100%;height:62px;"></textarea>
+              <div class="text-end mt-2">
+                <button type="submit" class="btn btn-danger btn-sm">제재</button>
+                <button type="button" class="btn btn-outline-gold btn-sm cancel-detail-btn">취소</button>
+              </div>
+            </form>
+          ` : ''}
         `;
-
         // 취소 버튼 동작
-        var cancelBtn = detailRow.querySelector('.cancel-detail-btn');
-        if (cancelBtn) {
+        var cancelBtns = detailRow.querySelectorAll('.cancel-detail-btn');
+        cancelBtns.forEach(function(cancelBtn) {
           cancelBtn.onclick = function() {
             detailRow.classList.remove('show');
             detailRow.querySelector('#detail-area').innerHTML = '';
-          }
-        }
+          };
+        });
         setTimeout(function() {
           detailRow.scrollIntoView({behavior: "smooth", block: "center"});
         }, 100);
@@ -326,13 +327,55 @@ document.querySelectorAll('.detail-btn').forEach(function(btn) {
   });
 });
 
-// 저장(AJAX, CSRF 적용)
+// "제재" 버튼 클릭 시 동적 폼 표시(제재 해제는 기존처럼 동작)
+document.querySelectorAll('.ban-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var memberRow = btn.closest('.list-group-item');
+    var detailRow = memberRow.nextElementSibling;
+    // toggle: 이미 열려있으면 닫기
+    if (detailRow.classList.contains('show') && detailRow.querySelector('.ban-reason-form')) {
+      detailRow.classList.remove('show');
+      detailRow.querySelector('#detail-area').innerHTML = '';
+      return;
+    }
+    // 다른 폼 닫기
+    document.querySelectorAll('.detail-row.show').forEach(function(row) {
+      row.classList.remove('show');
+      row.querySelector('#detail-area').innerHTML = '';
+    });
+
+    // 폼 삽입
+    var userId = btn.getAttribute('data-user-id');
+    var keywordVal = btn.getAttribute('data-keyword') || '';
+    detailRow.classList.add('show');
+    detailRow.querySelector('#detail-area').innerHTML = `
+      <form class="ban-reason-form" method="post" action="/admin/members/ban" style="background:#222;padding:20px 15px;border-radius:7px;" onsubmit="return confirm('정말 제재하시겠습니까?');">
+        <input type="hidden" name="_csrf" value="${csrfToken}">
+        <input type="hidden" name="id" value="${userId}">
+        <input type="hidden" name="ban" value="true">
+        <input type="hidden" name="keyword" value="${keywordVal}">
+        <textarea class="form-control mb-2" name="reason" placeholder="제재 사유를 입력하세요 (필수)" required style="height:64px;"></textarea>
+        <div class="text-end">
+          <button type="submit" class="btn btn-danger btn-sm">제재</button>
+          <button type="button" class="btn btn-outline-gold btn-sm cancel-detail-btn" style="margin-left:5px;">취소</button>
+        </div>
+      </form>
+    `;
+    // 취소 동작
+    detailRow.querySelector('.cancel-detail-btn').onclick = function() {
+      detailRow.classList.remove('show');
+      detailRow.querySelector('#detail-area').innerHTML = '';
+    };
+    setTimeout(function() {
+      detailRow.scrollIntoView({behavior:"smooth", block:"center"});
+    }, 100);
+  });
+});
+
+// ==================== (이하 기존 JS 기능 유지) ====================
 function submitDetailForm(e, form) {
   e.preventDefault();
-
-  // FormData 대신 URLSearchParams로 직렬화
   const formData = new URLSearchParams(new FormData(form)).toString();
-
   fetch(form.action, {
     method: "POST",
     headers: {
@@ -350,8 +393,6 @@ function submitDetailForm(e, form) {
   });
   return false;
 }
-
-// 회원 삭제 함수 (AJAX, CSRF 적용)
 function deleteMember(id) {
   if (!confirm("정말 삭제하시겠습니까?")) return;
   fetch('/admin/members/delete', {
@@ -370,7 +411,6 @@ function deleteMember(id) {
     }
   });
 }
-// 회원 추가 폼 열기/닫기
 document.getElementById('add-member-btn').onclick = function() {
   document.getElementById('add-member-form-area').style.display = 'block';
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -379,8 +419,6 @@ document.getElementById('cancel-add-member-btn').onclick = function() {
   document.getElementById('add-member-form-area').style.display = 'none';
   document.getElementById('add-member-form').reset();
 };
-
-// 회원 추가 폼 전송 (AJAX)
 document.getElementById('add-member-form').onsubmit = function(e) {
   e.preventDefault();
   const form = e.target;
@@ -401,8 +439,6 @@ document.getElementById('add-member-form').onsubmit = function(e) {
     }
   });
 };
-
-// 비밀번호 랜덤 초기화 함수
 function resetPassword(userId, btn) {
   if (!confirm("정말 이 회원의 비밀번호를 랜덤값으로 초기화하시겠습니까?")) return;
   fetch('/admin/members/reset-password', {
@@ -421,18 +457,7 @@ function resetPassword(userId, btn) {
       }
     });
 }
-
-
-
-
 </script>
-
-
-
-
-
-
-
 </body>
 </th:block>
 </html>

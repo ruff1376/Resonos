@@ -123,6 +123,9 @@ BEGIN
         `bio` TEXT NULL,
         `is_pro` BOOLEAN NOT NULL DEFAULT FALSE,
         `enabled` BOOLEAN NOT NULL DEFAULT TRUE,
+        `ban` BOOLEAN NOT NULL DEFAULT FALSE COMMENT '회원 제재 여부',
+        `ban_reason` VARCHAR(255) NULL COMMENT '제재 사유',
+        `ban_at` TIMESTAMP NULL DEFAULT NULL COMMENT '제재 일시',
         `provider` VARCHAR(200) NULL,
         `provider_id` VARCHAR(200) NULL,
         `current_badge` BIGINT NULL,
@@ -302,12 +305,12 @@ BEGIN
 
     CREATE TABLE IF NOT EXISTS `notification` (
         `id` BIGINT NOT NULL,
-        `type` ENUM('comment', 'mention', 'like','follow','reply','badge','qna','announcement','system') NOT NULL,
+        `type` VARCHAR(32) NOT NULL, 
         `message` TEXT NOT NULL,
         `content` TEXT NULL,
         `is_read` BOOLEAN NOT NULL,
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        `target_id` BIGINT NOT NULL,
+        `target_id` BIGINT NULL,
         `user_id` BIGINT NOT NULL
     );
 

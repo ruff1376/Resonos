@@ -77,6 +77,32 @@ public class NotificationServiceImpl implements NotificationService {
     //     notification.setTargetId(targetId);
     //     return insert(notification);
     // }
+    
+
+    // 알람 메서드
+    public void createNotification(
+        Long userId,         // 알림 대상 유저 ID
+        String type,         // 알림 타입(comment, mention, like, ...)
+        String message,      // 간단 메시지(제목)
+        String content,      // 상세 내용
+        String targetId      // 관련 객체 ID(문자열)
+    ) throws Exception {
+        Notification notification = new Notification();
+        notification.setUserId(userId);
+        notification.setType(type);
+        notification.setMessage(message);        // 'title' → 'message' 필드로 매핑
+        notification.setContent(content);
+        notification.setTargetId(targetId);
+        notification.setIsRead(false);
+        notification.setCreatedAt(new Date());
+        createNotification(notification); // 단일 객체 파라미터 메서드 재호출
+    }
+
+    @Override
+    public boolean createNotification(Notification notification) throws Exception {
+        return notificationMapper.insert(notification) > 0;
+    }
+
 
 
 }
