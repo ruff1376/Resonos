@@ -2,6 +2,9 @@ package com.cosmus.resonos.service;
 
 import com.cosmus.resonos.domain.ChartElement;
 import com.cosmus.resonos.mapper.ChartElementMapper;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +18,7 @@ public class ChartElementServiceImpl implements ChartElementService {
     private ChartElementMapper chartElementMapper;
 
     @Override
-    public void saveOrUpdate(ChartElement element) {
+    public void saveOrUpdate(@Valid ChartElement element) {
         ChartElement existing = chartElementMapper.findByUserAndAlbum(element.getUserId(), element.getAlbumId());
         if (existing != null) {
             element.setId(existing.getId());
