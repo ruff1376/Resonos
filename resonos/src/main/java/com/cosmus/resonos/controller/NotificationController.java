@@ -3,9 +3,11 @@ package com.cosmus.resonos.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.ibatis.annotations.Delete;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Notification;
 import com.cosmus.resonos.service.NotificationService;
 
@@ -27,13 +30,102 @@ public class NotificationController {
     @Autowired
     private NotificationService notificationService;
 
-    @GetMapping("")
-    // TODO: @AuthenticationPrincipal 로 출력할 리스트 나누기
-    public String notiList(Model model) {
-        model.addAttribute("lastPath", "noti");
+    /**
+     * 단일 읽음 처리 요청
+     * @param loginUser
+     * @param notification
+     * @return
+     * @throws Exception
+     */
+    @PutMapping("")
+    public ResponseEntity<?> read(
+        @AuthenticationPrincipal CustomUser loginUser,
+        @RequestBody Notification notification
+    ) throws Exception {
+        Notification noti = notificationService.select(notification.getId());
+        Long ownerId = noti.getUserId();
 
-        return "user/notification";
+        if(loginUser == null || !ownerId.equals(loginUser.getId()))
+            return new ResponseEntity<>("권한이 없습니다.", HttpStatus.BAD_REQUEST);
+
+        noti.setIsRead(true);
+        boolean result = notificationService.update(noti);
+        if(result) {
+            int count = notificationService.countUnread(loginUser.getId());
+            return new ResponseEntity<>(count, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>("서버 에러", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    /**
+     * 전체 읽음 처리 요청
+     * @param loginUser
+     * @param ids
+     * @return
+     * @throws Exception
+     */
+    @PutMapping("/all")
+    public ResponseEntity<?> readAll(
+        @AuthenticationPrincipal CustomUser loginUser,
+        @RequestBody List<Long> ids
+    ) throws Exception {
+        if(ids.size() == 0) return new ResponseEntity<>("읽음 처리할 알림이 없음.", HttpStatus.BAD_REQUEST);
+        if(loginUser == null)
+            return new ResponseEntity<>("권한이 없습니다.", HttpStatus.BAD_REQUEST);
+
+        List<Notification> notifications = notificationService.selectByIds(ids);
+
+        for (Notification noti : notifications) {
+            if (!noti.getUserId().equals(loginUser.getId())) {
+                return new ResponseEntity<>("다른 유저의 알림이 포함되어 있습니다.", HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        boolean result = notificationService.updateIsReadByIds(ids);
+        if(result) {
+            int count = notificationService.countUnread(loginUser.getId());
+            return new ResponseEntity<>(count, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>("서버 에러", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * 전체 삭제 처리 요청
+     * @param loginUser
+     * @param ids
+     * @return
+     * @throws Exception
+     */
+    @DeleteMapping("/all")
+    public ResponseEntity<?> deleteAll(
+        @AuthenticationPrincipal CustomUser loginUser,
+        @RequestBody List<Long> ids
+    ) throws Exception {
+        if(ids.size() == 0) return new ResponseEntity<>("읽음 처리할 알림이 없음.", HttpStatus.BAD_REQUEST);
+        if(loginUser == null)
+            return new ResponseEntity<>("권한이 없습니다.", HttpStatus.BAD_REQUEST);
+
+        List<Notification> notifications = notificationService.selectByIds(ids);
+
+        for (Notification noti : notifications) {
+            if (!noti.getUserId().equals(loginUser.getId())) {
+                return new ResponseEntity<>("다른 유저의 알림이 포함되어 있습니다.", HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        boolean result = notificationService.deleteAll(ids);
+        if(result) {
+            int count = notificationService.countUnread(loginUser.getId());
+            return new ResponseEntity<>(count, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>("서버 에러", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Notification> getNotification(@PathVariable("id") Long id) {
@@ -71,6 +163,7 @@ public class NotificationController {
         }
     }
 
+<<<<<<< HEAD
     @PutMapping("/{id}")
     public ResponseEntity<String> updateNotification(@PathVariable("id") Long id, @RequestBody Notification notification) {
         try {
@@ -85,6 +178,8 @@ public class NotificationController {
         }
     }
 
+=======
+>>>>>>> main
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteNotification(@PathVariable("id") Long id) {
         try {

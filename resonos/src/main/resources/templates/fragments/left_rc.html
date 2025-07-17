@@ -1,7 +1,7 @@
 <!-- 왼쪽 리모컨 -->
 <section class="mypage-tabs" th:fragment="mypage-tabs">
   <a th:href="@{/users/activity}" class="tab" th:classappend="${lastPath == 'activity'} ? 'active' : ''">내 활동</a>
-  <a th:href="@{/notifications}" class="tab" th:classappend="${lastPath == 'noti'} ? 'active' : ''">알림함</a>
+  <a th:href="@{/users/notifications}" class="tab" th:classappend="${lastPath == 'noti'} ? 'active' : ''">알림함</a>
   <a th:href="@{/users/playlists}" class="tab" th:classappend="${lastPath == 'playlist'} ? 'active' : ''">플레이리스트</a>
   <a th:href="@{/users/liked-music}" class="tab" th:classappend="${lastPath == 'liked-music' ? 'active' : ''}">앨범 / 트랙</a>
   <a th:href="@{/users/follow-artist}" class="tab" th:classappend="${lastPath == 'artist-follows'} ? 'active' : ''">팔로우 아티스트</a>

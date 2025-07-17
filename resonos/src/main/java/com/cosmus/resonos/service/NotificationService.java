@@ -2,12 +2,18 @@ package com.cosmus.resonos.service;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.cosmus.resonos.domain.Notification;
 
 public interface NotificationService {
     // CRUD
     public List<Notification> list() throws Exception;
     public Notification select(Long id) throws Exception;
+    // 일부 조회
+    public List<Notification> selectByIds(List<Long> ids);
+    // 삽입
     public boolean insert(Notification notification) throws Exception;
     public boolean update(Notification notification) throws Exception;
     public boolean delete(Long id) throws Exception;
@@ -15,6 +21,18 @@ public interface NotificationService {
 
     // "알림 생성(메시지 완성 후)" 방식
     boolean createNotification(Notification notification) throws Exception;
+    // 여러 행 수정
+    public boolean updateIsReadByIds(List<Long> ids);
+    // 삭제
+    public boolean delete(Long id) throws Exception;
+    // 전체 삭제
+    public boolean deleteAll(List<Long> ids) throws Exception;
+    // 유저
+    public List<Notification> findByUser(Long userId) throws Exception;
+
+    // [추가] 정책 위반 등 알림 생성 (비즈니스 목적)
+    // public boolean createPolicyViolationNotification(@Param("userId") Long userId,
+    //     @Param("banword") String banword, @Param("targetId") String targetId) throws Exception;
 
     // "알림 생성(파라미터 조립식, 내부에서 객체 생성 호출)" 방식
     public void createNotification(
@@ -33,4 +51,6 @@ public interface NotificationService {
     //         targetId
     //     );
     // }
+    // 읽지 않은 알림 수
+    public int countUnread(Long userId) throws Exception;
 }

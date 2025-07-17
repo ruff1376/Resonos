@@ -5,19 +5,51 @@
     <header class="site-header">
         <nav class="navbar navbar-expand-lg py-0">
             <div class="container-fluid" style="max-width:1440px;">
-                <div class="d-flex justify-content-start">
+                <div class="d-flex justify-content-start align-items-center">
                     <a class="navbar-brand d-flex align-items-center" href="/list/main">
                         <img th:src="@{/img/resonosPlusLogo.png}" alt="Main Page Logo" class="header-logo-img">
                     </a>
                     <a class="navbar-brand d-flex align-items-center" href="/list/main">
                         <img th:src="@{/img/resonosLogo.png}" alt="Sub Page Logo" class="header-logo-img-sub">
                     </a>
+                    <div class="menu-group d-flex position-relative ms-5">
+
+                        <!-- 앨범 메뉴 + 하단 메뉴 -->
+                        <div class="header-menu-wrapper position-relative">
+                            <div class="d-flex justify-content-center align-items-center" style="width: 100px; height: 75px;">
+                                <a href="/list/new-albums" class="submenu-item" style="font-size: 1.6rem; color: white;">앨범</a>
+                            </div>
+                            <div class="header-submenu-container">
+                                <ul class="header-submenu d-flex flex-column justify-content-center">
+                                    <li><a href="/list/new-albums">최신 앨범</a></li>
+                                    <li><a href="/list/hot-albums">인기 앨범</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 트랙 메뉴 + 하단 메뉴 -->
+                        <div class="header-menu-wrapper position-relative">
+                            <div class="d-flex justify-content-center align-items-center" style="width: 100px; height: 75px;">
+                                <a href="/list/new-tracks" class="submenu-item" style="font-size: 1.6rem; color: white;">트랙</a>
+                            </div>
+                            <div class="header-submenu-container">
+                                <ul class="header-submenu d-flex flex-column justify-content-center">
+                                    <li><a href="/list/new-tracks">최신 트랙</a></li>
+                                    <li><a href="/list/hot-tracks">인기 트랙</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
 
                 <div class="collapse navbar-collapse d-flex justify-content-end align-items-center header-gap mt-4 mb-4 gap-4" id="mainNav">
+
                     <form class="position-relative d-flex align-items-center mb-0" style="width:300px;" th:action="@{/search}" method="get" onsubmit="return validateSearch()">
-                        <i class="bi bi-search search-icon position-absolute"></i>
                         <input type="search" name="q" id="searchInput" class="form-control search-box" placeholder="앨범, 트랙, 아티스트...">
+                        <button type="submit" class="btn p-0 border-0 bg-transparent header-search-btn" style="position:absolute; right:10px; top:50%; transform:translateY(-50%);" tabindex="-1">
+                            <i class="bi bi-search header-search-icon"></i>
+                        </button>
                     </form>
                     <div class="navbar-nav d-flex flex-row justify-content-end align-items-center header-gap gap-3">
                         <!-- 비로그인 -->
@@ -40,7 +72,7 @@
                                     <li><a class="dropdown-item" href="#">알림2</a></li>
                                     <li><a class="dropdown-item" href="#">알림3</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="/notifications">전체 알림 보기</a></li>
+                                    <li><a class="dropdown-item" href="/users/notifications">전체 알림 보기</a></li>
                                 </ul>
                             </div>
                             <div class="flex-shrink-0 dropdown profile-dropdown">
@@ -49,7 +81,7 @@
                                 </a>
                                 <ul class="dropdown-menu text-small shadow" style="background: #181C23;">
                                     <li><a class="dropdown-item" href="/users/mypage">마이페이지</a></li>
-                                    <li><a class="dropdown-item" href="/users/setting-alarm">환경설정</a></li>
+                                    <li><a class="dropdown-item" href="/users/alarm">환경설정</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li>
                                         <form th:action="@{/logout}" method="post">
@@ -65,10 +97,9 @@
 
             </div>
         </nav>
-        <div class="container-fluid" style="max-width:1440px;">
+        <!-- <div class="container-fluid" style="max-width:1440px;">
             <div class="menu-group d-flex gap-5 position-relative">
 
-                <!-- 앨범 메뉴 + 하단 메뉴 -->
                 <div class="header-menu-wrapper position-relative">
                     <div class="d-flex justify-content-center align-items-center" style="width: 200px; height: 75px;">
                         <a href="/list/new-albums" class="submenu-item" style="font-size: 2rem; color: white;">앨범</a>
@@ -81,7 +112,6 @@
                     </div>
                 </div>
 
-                <!-- 트랙 메뉴 + 하단 메뉴 -->
                 <div class="header-menu-wrapper position-relative">
                     <div class="d-flex justify-content-center align-items-center" style="width: 200px; height: 75px;">
                         <a href="/list/new-tracks" class="submenu-item" style="font-size: 2rem; color: white;">트랙</a>
@@ -95,7 +125,7 @@
                 </div>
 
             </div>
-        </div>
+        </div> -->
     </header>
     <script>
         function validateSearch() {

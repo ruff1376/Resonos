@@ -18,11 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cosmus.resonos.domain.Album;
-import com.cosmus.resonos.domain.ArtistMoodVote;
 import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.domain.ArtistFollow;
+import com.cosmus.resonos.domain.ArtistMoodVote;
 import com.cosmus.resonos.domain.CustomUser;
-import com.cosmus.resonos.domain.LikedTrack;
 import com.cosmus.resonos.domain.MoodStat;
 import com.cosmus.resonos.domain.RecentReview;
 import com.cosmus.resonos.domain.Track;
@@ -93,7 +92,6 @@ public class ArtistController {
         boolean isMoodEmpty = (moodStats == null || moodStats.isEmpty());
         List<String> moodLabels = moodStats.stream().map(MoodStat::getMoodName).toList();
         List<Integer> moodValues = moodStats.stream().map(MoodStat::getVoteCount).toList();
-
 
         List<RecentReview> reviews = recentReviewService.getRecentReviewsByArtistId(id);
         model.addAttribute("recentReviews", reviews);

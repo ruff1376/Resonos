@@ -7,7 +7,7 @@
 >
 <head>
   <meta charset="UTF-8" />
-  <title>팔로우 아티스트</title>
+  <title>알림</title>
   <th:block th:replace="~{fragments/link::user}"></th:block>
 </head>
 <body>
@@ -19,7 +19,8 @@
       <div class="info-section">
         <div class="title">
           <div>
-            <h2 class="text-start">최근 알림</h2>
+            <h2 class="text-start">미확인 알림</h2>
+            <span class="count" th:text="${count}">읽지 않은 알림 수</span>
           </div>
           <div>
             <button onclick="readAll()">전체 읽음</button>
@@ -27,15 +28,18 @@
           </div>
         </div>
         <ul class="ul-list">
-          <th:block th:each="i : ${#numbers.sequence(1,20)}">
-              <label th:for="is-read + ${i}">
-                <li class="list-item">
-                  <input class="is-read" th:id="'is-read' + ${i}" type="checkbox" th:value="'알람' + ${i} + '번'" th:checked="${i < 11}">
-                  <span class="red-circle">●</span>
-                  <p>OOO님이 회원님의 리뷰/플레이리스트를 좋아합니다.</p>
-                  <p class="date">2025.06.12 13:11:00</p>
-                </li>
-              </label>
+          <th:block th:if="${notiList == null || notiList.isEmpty()}">
+            <div class="empty-text">
+              <p>알림이 없습니다.</p>
+            </div>
+          </th:block>
+          <th:block th:each="noti : ${notiList}">
+            <li class="list-item" th:data-noti-id="${noti.id}">
+              <input class="is-read" th:id="'is-read' + ${noti.id}" type="checkbox" th:checked="${noti.isRead}">
+              <span class="red-circle">●</span>
+              <p th:text="${noti.content}">알림 내용</p>
+              <p class="date">2025.06.12 13:11:00</p>
+            </li>
           </th:block>
         </ul>
       </div>
@@ -43,26 +47,155 @@
   </main>
   <th:block layout:fragment="pageScript">
     <script>
-      const checks = document.querySelectorAll('.is-read')
-      checks.forEach((e) => {
-        e.addEventListener('change', (e) => {
-          // TODO: 읽음 처리 되고 DB 에도 저장
-          alert(e.target.value)
+      const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+      const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+      const count = document.querySelector('.count')
+      // 단일 읽기 처리
+      const items = document.querySelectorAll('.list-item')
+      items.forEach(item => {
+        item.addEventListener('click', (e) => {
+          item.querySelector('input[type="checkbox"]').checked = true
+          checkAndRead(item.dataset.notiId)
         })
       })
 
-      function readAll() {
-        checks.forEach((e) => {
-          // TODO: 전체 읽음 처리 되고 DB 에도 저장
-          e.checked = false
+      async function checkAndRead(id) {
+
+        let url = '/notifications'
+        const data = {
+          id : id
+        }
+
+        try {
+          const response = await fetch(url, {
+            method : 'PUT',
+            headers : {
+              [header] : token,
+              "Content-Type": "application/json"
+            },
+            body : JSON.stringify(data)
+          })
+
+          if(!response.ok) {
+            const result = await response.text()
+            console.log(result)
+            return
+          }
+          const result = await response.text()
+          count.textContent = result
+          console.log("읽음 처리 완료.")
+        } catch(error) {
+          console.log(error)
+        }
+      }
+
+      // 전체 읽기 처리
+      const checks = document.querySelectorAll('.is-read')
+      async function readAll() {
+        const ids = Array.from(document.querySelectorAll('li'))
+        .filter(li => {
+          const checkbox = li.querySelector('input[type="checkbox"]');
+          return checkbox && !checkbox.checked
         })
+        .map(li => li.dataset.notiId)
+
+        checks.forEach((e) => {
+          e.checked = true
+        })
+
+        let url = '/notifications/all'
+
+        try {
+          const response = await fetch(url, {
+            method : 'PUT',
+            headers : {
+              [header] : token,
+              "Content-Type": "application/json"
+            },
+            body : JSON.stringify(ids)
+          })
+
+          if(!response.ok) {
+            const result = await response.text()
+            console.log(result)
+            return
+          }
+          const result = await response.text()
+          count.textContent = result
+          console.log("전체 읽음 처리 완료.")
+        } catch(error) {
+          console.log(error)
+        }
       }
 
       function deleteAll() {
-        const check = confirm("알림을 전부 삭제하시겠습니까?")
-        if(!check) return
-        // TODO: 전체 삭제 처리 되고 DB 에도 저장
-        document.querySelector('.ul-list').innerHTML = ''
+        Swal.fire({
+          title: "정말 삭제하시겠습니까?",
+          html: '<p class="alert-text">읽음 처리된 알림 전체가 삭제됩니다.</p>',
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "삭제",
+          cancelButtonText: "취소",
+          reverseButtons: false,
+          customClass: {
+          popup: 'follow-popup',
+          icon: 'warning-icon',
+          title: 'alert-title',
+          text: 'alert-text',
+          confirmButton: 'alert-button',
+          cancelButton: 'alert-cancle-button'
+        }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            deleteAllAjax();
+          }
+          return
+        })
+      }
+
+      // 전체 삭제 처리
+      async function deleteAllAjax() {
+
+        const ids = Array.from(document.querySelectorAll('li'))
+        .filter(li => {
+          const checkbox = li.querySelector('input[type="checkbox"]');
+          return checkbox && checkbox.checked
+        })
+        .map(li => li.dataset.notiId)
+
+        const lis = Array.from(document.querySelectorAll('li'))
+        .filter(li => {
+          const checkbox = li.querySelector('input[type="checkbox"]');
+          return checkbox && checkbox.checked
+        })
+
+        lis.forEach(li => li.remove())
+
+        console.log(ids)
+
+        let url = '/notifications/all'
+
+        try {
+          const response = await fetch(url, {
+            method : 'DELETE',
+            headers : {
+              [header] : token,
+              "Content-Type": "application/json"
+            },
+            body : JSON.stringify(ids)
+          })
+
+          if(!response.ok) {
+            const result = await response.text()
+            console.log(result)
+            return
+          }
+          const result = await response.text()
+          count.textContent = result
+          console.log("전체 삭제 처리 완료.")
+        } catch(error) {
+          console.log(error)
+        }
       }
     </script>
     <script th:src="@{/js/remotecontroller.js}"></script>
