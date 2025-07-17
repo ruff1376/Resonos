@@ -17,24 +17,24 @@
                 <div class="d-flex flex-row align-items-center px-4 mb-3" style="height:50px;">
                     <div class="section-title flex-grow-1">인기 트랙</div>
                 </div>
-                <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-0 m-0 mb-5 justify-content-start">
+                <div class="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-0 m-0 justify-content-start">
                     <th:block th:each="hotTrack : ${hotTrackList}">
                         <!-- 트랙 카드 -->
                         <div class="col d-flex justify-content-center">
-                            <div class="card align-items-center p-3" style="width:228px; height:340px;">
+                            <div class="card align-items-center gap-2 mt-3" style="width:228px; height:340px;">
                                 <a th:href="@{'/tracks?id=' + ${hotTrack.id}}">
                                     <img th:src="${hotTrack.coverImage}" class="card-img-top" alt="앨범커버">
                                 </a>
-                                <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <a th:href="@{'/tracks?id=' + ${hotTrack.id}}" class="card-title" th:text="${hotTrack.title}"></a>
                                     <a th:href="@{'/artists?id=' + ${hotTrack.artistId}}" class="card-artist" th:text="${hotTrack.artistName}"></a>
                                 </div>
-                                <div class="position-relative bottom-0 mb-5">
+                                <div class="d-flex justify-content-center mb-4">
                                     <th:block th:if="${hotTrack.avgRating != null}">
                                         <canvas class="doughnut-canvas" th:attr="data-rating=${hotTrack.avgRating}" width="50" height="50"></canvas>
                                     </th:block>
                                     <th:block th:unless="${hotTrack.avgRating != null}">
-                                        <span class="no-rating fw-bold fs-2">NR</span>
+                                        <span class="no-rating fw-bold fs-2 pb-3">NR</span>
                                     </th:block>
                                 </div>
                             </div>
