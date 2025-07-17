@@ -153,7 +153,14 @@ public class TrackReviewServiceImpl implements TrackReviewService {
     @Override
     public List<TrackReview> getMoreReviews(String trackId, int page, int size) {
         int offset = (page - 1) * size;
-        return mapper.selectPagedReviewsWithReviewer(trackId, size + 1, offset);  // ⭐ 1개 더 가져옴
+        List<TrackReview> reviews = mapper.selectPagedReviewsWithReviewer(trackId, size + 1, offset);
+        for (TrackReview review : reviews) {
+            if (review.getDislikes() > 5) {
+                review.setBlinded(true);
+                mapper.updateBlindStatus(review.getId(), true);
+            }
+        }
+        return reviews;  // ⭐ 1개 더 가져옴
     }
 
 
@@ -204,7 +211,8 @@ public class TrackReviewServiceImpl implements TrackReviewService {
         return mapper.countAll();
     }
 
-
-
-
+    @Override
+    public int findMyReview(Long reviewId) throws Exception {
+        return mapper.findMyReview(reviewId);
+    }
 }

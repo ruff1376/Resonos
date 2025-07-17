@@ -12,11 +12,9 @@
   </th:block>
 </th:block>
 <th:block th:fragment="reviewItems (review)">
-  <li th:each="rv : ${review}" class="comment"
-      th:id="|rv-${rv.id}|"
-      th:data-review-id="${rv.id}"
-      th:attr="data-track-id=${reviewType == 'TRACK'} ? ${rv.trackId} : null,
-               data-album-id=${reviewType == 'ALBUM'} ? ${rv.albumId} : null">
+  <li th:each="rv, iterStat : ${review}" class="comment" th:id="|rv-${rv.id}|" th:data-review-id="${rv.id}" th:attr="data-track-id=${reviewType == 'TRACK'} ? ${rv.trackId} : null,
+               data-album-id=${reviewType == 'ALBUM'} ? ${rv.albumId} : null"
+               th:if="${iterStat.index < (size != null ? size : 5)}">
 
     <div class="name-and-score">
       <p th:text="${rv.reviewer.nickname}">닉네임</p>
@@ -24,9 +22,23 @@
       <span> 🔮<span th:text="${rv.rating}">0</span></span>
     </div>
 
-    <div class="review-content">
-      <p class="content-text" th:text="${rv.content}">내용</p>
-    </div>
+    <th:block th:if="${rv.blinded}">
+      <th:block th:if="${isAdmin == true}">
+        <div class="review-content">
+          <p class="content-text" th:text="${rv.content}">내용</p>
+        </div>
+      </th:block>
+      <th:block th:if="${isAdmin == false or loginUser == null}">
+        <div class="review-content">
+          <p class="content-text">블라인드 된 리뷰입니다.</p>
+        </div>
+      </th:block>
+    </th:block>
+    <th:block th:if="${!rv.blinded}">
+      <div class="review-content">
+        <p class="content-text" th:text="${rv.content}">내용</p>
+      </div>
+    </th:block>
 
     <form class="edit-form" style="display: none;">
       <div class="reply">
@@ -44,18 +56,14 @@
     <div class="review-util">
       <time th:text="${#temporals.format(rv.createdAt,'yyyy.MM.dd')}">날짜</time>
 
-      <button class="like-btn"
-              th:data-review-id="${rv.id}"
-              th:data-review-type="${reviewType}"
-              th:data-liked="${rv.isLikedByCurrentUser}"
-              th:text="${rv.isLikedByCurrentUser} ? '❤️' : '🤍'">❤️</button>
+      <button class="like-btn" th:data-review-id="${rv.id}" th:data-review-type="${reviewType}"
+        th:data-liked="${rv.isLikedByCurrentUser}" th:text="${rv.isLikedByCurrentUser} ? '❤️' : '🤍'">❤️</button>
       <span th:id="'like-count-' + ${rv.id}" th:text="${rv.likes}">0</span>
 
-      <button class="report-btn"
-              th:data-review-id="${rv.id}"
-              th:data-review-type="${reviewType}">🚨</button>
+      <button class="report-btn" th:data-review-id="${rv.id}" th:data-review-type="${reviewType}">🚨</button>
 
-      <span th:if="${(isAdmin != null and isAdmin) or (loginUser != null and rv != null and loginUser.id == rv.userId)}">
+      <span
+        th:if="${(isAdmin != null and isAdmin) or (loginUser != null and rv != null and loginUser.id == rv.userId)}">
         <a href="#" class="edit-btn" th:data-id="${rv.id}">수정</a>
         <a href="#" class="del-btn" th:data-id="${rv.id}">삭제</a>
       </span>
@@ -67,17 +75,17 @@
 
 <!-- 리뷰 섹션 프래그먼트 -->
 <th:block th:fragment="reviewSection(score)">
-    <div class="review-section">
-        <th:block th:if="${score == null or score.averageScore == null}">
-            <p>아직 리뷰가 없어요 😅</p>
-        </th:block>
+  <div class="review-section">
+    <th:block th:if="${score == null or score.averageScore == null}">
+      <p>아직 리뷰가 없어요 😅</p>
+    </th:block>
 
-        <th:block th:if="${score != null and score.averageScore != null}">
-            <p>
-                🔮 <span th:text="${#numbers.formatDecimal(score.averageScore, 0, 0)}">0</span>점
-                (✅리뷰 <span th:text="${score.criticCount}">0</span>개,
-                일반리뷰 <span th:text="${score.userCount}">0</span>개)
-            </p>
-        </th:block>
-    </div>
+    <th:block th:if="${score != null and score.averageScore != null}">
+      <p>
+        🔮 <span th:text="${#numbers.formatDecimal(score.averageScore, 0, 0)}">0</span>점
+        (✅리뷰 <span th:text="${score.criticCount}">0</span>개,
+        일반리뷰 <span th:text="${score.userCount}">0</span>개)
+      </p>
+    </th:block>
+  </div>
 </th:block>

@@ -66,7 +66,7 @@
     </section>
     <!-- 좋아요 한 플레이 리스트 -->
     <section class="info-wrapper" th:classappend="${ !isOwner ? 'go-center' : ''}">
-      <div class="info-section">
+      <div class="info-section lp">
         <div class="title">
           <div>
             <h2 class="text-start">좋아요 한 플레이리스트</h2>
@@ -107,6 +107,14 @@
       const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
       const userId = [[${userId}]]
       const isOwner = [[${isOwner}]]
+
+      function debounce(fn, delay) {
+        let timer;
+        return function (...args) {
+          clearTimeout(timer);
+          timer = setTimeout(() => fn.apply(this, args), delay);
+        };
+      }
 
       /* 플레이리스트 상세 가기 */
       const items = document.querySelectorAll('.ul-list')
@@ -302,26 +310,48 @@
           }
       }
 
-      /* 좋아요 한 플레이리스트 필터 검색 */
-      function debounce(fn, delay) {
-        let timer;
-        return function (...args) {
-          clearTimeout(timer);
-          timer = setTimeout(() => fn.apply(this, args), delay);
-        };
-      }
+
+      /* 좋아요 한 플레이리스트 검색 */
+      let lpOffset = 20
+      const lpLimit = 20
+      let lpLoading = false
+      let lpAllLoaded = false
+      let lpKeyword = ''
 
       // 요청 딜레이
-      const debouncedGetLikedPli = debounce(getLikedPli, 300);
+      const debouncedGetLikedPli = debounce(() => getLikedPli(true), 300);
       document.getElementById('liked-pli-search').addEventListener('keyup', debouncedGetLikedPli);
 
-      async function getLikedPli(event) {
+      // 스크롤 이벤트
+      const lpScrollWindow = document.querySelector('.info-section.lp')
+
+      lpScrollWindow.addEventListener('scroll', async () => {
+        const nearBottom = lpScrollWindow.scrollTop + lpScrollWindow.clientHeight >= lpScrollWindow.scrollHeight - 150
+
+        if (nearBottom && !lpLoading && !lpAllLoaded) {
+          lpLoading = true
+          await getLikedPli(false)
+          lpLoading = false
+        }
+      })
+
+      async function getLikedPli(reset = false) {
+
+        if(reset) {
+          lpOffset = 0
+          lpAllLoaded = false
+          document.querySelector('.ul-list.liked-pli').innerHTML = ''
+        }
+
+        lpKeyword = document.getElementById('liked-pli-search').value.trim()
 
         let url = `/playlists/search`
 
         const data = {
-          keyword : event.target.value,
-          userId : userId
+          keyword : lpKeyword,
+          userId : userId,
+          offset : lpOffset,
+          limit : lpLimit
         }
 
         try {
@@ -341,14 +371,17 @@
           }
           // 성공시
           const result = await response.json()
-          renderTracks(result)
+          renderPlaylist(result, reset)
+          lpOffset += lpLimit
+          if(result.length < lpLimit) lpAllLoaded = true
+          console.log('플레이리스트 옵셋 : ', lpOffset)
         } catch (error) {
             console.log(error)
         }
       }
 
       /* 좋아요 한 플레이리스트 렌더링 */
-      function renderTracks(list) {
+      function renderPlaylist(list, reset = false) {
         const ulList = document.querySelector('.ul-list.liked-pli')
         ulList.innerHTML = ''
 

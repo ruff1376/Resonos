@@ -45,4 +45,7 @@ public interface TrackReviewService {
     // 리뷰 countall
     public long countAll() throws Exception;
 
+    // 리뷰 몇 번째인지
+    public int findMyReview(Long reviewId) throws Exception;
+
 }

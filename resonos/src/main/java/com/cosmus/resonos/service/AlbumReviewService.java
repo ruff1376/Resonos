@@ -56,4 +56,6 @@ public interface AlbumReviewService {
     public List<AlbumReview> findAllReviewsWithReviewer() throws Exception;
     public List<AlbumReview> getAllReviewsWithReviewer() throws Exception;
 
+    // 리뷰 몇 번째인지
+    public int findMyReview(Long reviewId) throws Exception;
 }

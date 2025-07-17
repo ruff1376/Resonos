@@ -165,4 +165,9 @@ class AlbumReviewServiceImpl implements AlbumReviewService {
     public int countLikedAlbumReview(Long loginUserId) throws Exception {
         return mapper.countLikedAlbumReview(loginUserId);
     }
+
+    @Override
+    public int findMyReview(Long reviewId) throws Exception {
+        return mapper.findMyReview(reviewId);
+    }
 }

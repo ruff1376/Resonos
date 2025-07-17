@@ -55,4 +55,7 @@ public interface TrackReviewMapper {
 
     // 리뷰 countall
     public long countAll() throws Exception;
+
+    // 리뷰 몇 번째인지
+    public int findMyReview(@Param("reviewId") Long reviewId) throws Exception;
 }

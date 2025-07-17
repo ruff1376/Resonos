@@ -39,7 +39,7 @@
           </div>
           <div class="text-center position-relative">
             <i class="bi bi-search search-icon position-absolute"></i>
-            <input id="ar-search" type="text" class="basic-input" name="keyword" placeholder="키워드를 입력하세요.">
+            <input id="ar-search" type="text" class="basic-input" name="keyword" placeholder="제목, 내용">
           </div>
         </div>
         <ul class="ul-list ar">
@@ -66,13 +66,13 @@
           </div>
           <div class="text-center position-relative">
             <i class="bi bi-search search-icon position-absolute"></i>
-            <input id="lar-search" type="text" class="basic-input" name="keyword" placeholder="키워드를 입력하세요.">
+            <input id="lar-search" type="text" class="basic-input" name="keyword" placeholder="제목, 내용, 닉네임">
           </div>
         </div>
         <ul class="ul-list lar">
           <th:block th:each="laReview : ${laReviewList}">
             <li class="text-item" th:object="${laReview}">
-              <a th:href="@{/tracks(id = *{albumId}, reviewId = *{id})}">
+              <a th:href="@{/albums(id = *{albumId}, reviewId = *{id})}">
                 <p class="sm-title" th:text="*{title}">앨범 or 트랙 명</p>
                 <p class="sm-content" th:text="*{content}">내용</p>
                 <span class="rv-name" th:text="*{reviewer.nickname}">리뷰어 닉네임</span>
@@ -94,7 +94,7 @@
           </div>
           <div class="text-center position-relative">
             <i class="bi bi-search search-icon position-absolute"></i>
-            <input id="tr-search" type="text" class="basic-input" name="keyword" placeholder="키워드를 입력하세요.">
+            <input id="tr-search" type="text" class="basic-input" name="keyword" placeholder="제목, 내용">
           </div>
         </div>
         <ul class="ul-list tr">
@@ -121,7 +121,7 @@
           </div>
           <div class="text-center position-relative">
             <i class="bi bi-search search-icon position-absolute"></i>
-            <input id="ltr-search" type="text" class="basic-input" name="keyword" placeholder="키워드를 입력하세요.">
+            <input id="ltr-search" type="text" class="basic-input" name="keyword" placeholder="제목, 내용, 닉네임">
           </div>
         </div>
         <ul class="ul-list ltr">

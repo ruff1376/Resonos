@@ -351,5 +351,26 @@
     ORDER BY ar.id DESC
     </select>
 
+    <!-- 찾는 리뷰가 몇 번째인지 -->
+    <select id="findMyReview" resultType="int">
+        SELECT COUNT(*)
+        FROM album_review ar
+        JOIN album_review target ON target.id = #{reviewId}
+        WHERE ar.album_id = target.album_id
+        AND (
+            (
+            (SELECT COUNT(*) FROM review_like WHERE review_id = ar.id AND review_type = 'ALBUM')
+            >
+            (SELECT COUNT(*) FROM review_like WHERE review_id = target.id AND review_type = 'ALBUM')
+            )
+            OR (
+            (SELECT COUNT(*) FROM review_like WHERE review_id = ar.id AND review_type = 'ALBUM')
+            =
+            (SELECT COUNT(*) FROM review_like WHERE review_id = target.id AND review_type = 'ALBUM')
+            AND ar.created_at &lt; target.created_at
+            )
+        )
+    </select>
+
 
 </mapper>

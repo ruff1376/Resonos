@@ -55,4 +55,7 @@ public interface AlbumReviewMapper {
     public long countAll() throws Exception;
     public     List<AlbumReview> findAllReviewsWithReviewer();
 
+    // 리뷰 몇 번째인지
+    public int findMyReview(@Param("reviewId") Long reviewId) throws Exception;
+
 }

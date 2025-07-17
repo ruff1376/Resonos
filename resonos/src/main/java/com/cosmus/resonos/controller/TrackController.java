@@ -85,7 +85,8 @@ public class TrackController {
     // 트랙 화면
     @GetMapping
     public String trackInfo(@RequestParam("id") String id, Model model,
-                            @AuthenticationPrincipal CustomUser principal
+                            @AuthenticationPrincipal CustomUser principal,
+                            @RequestParam(value = "reviewId", required = false) Long reviewId
                             ) throws Exception {
 
         Users loginUser = null;
@@ -96,6 +97,7 @@ public class TrackController {
             .stream()
             .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
             model.addAttribute("isAdmin", isAdmin);
+            System.out.println(isAdmin);
             Long userVotedMoodId = trackMoodVoteService.getUserVotedMoodId(loginUser.getId(), id);
             model.addAttribute("userVotedMoodId", userVotedMoodId);
             // ✅ 좋아요 여부 체크
@@ -117,6 +119,13 @@ public class TrackController {
         // List<TrackReview> reviews = trackReviewService.reviewWithReviewerByTrackId(id);
         int page = 1;
         int size = 5;
+
+        // 찾는 리뷰의 순서
+        if(reviewId != null) {
+            int reviewNo = trackReviewService.findMyReview(reviewId);
+            size = ((reviewNo - 1) / size + 1) * size;
+            model.addAttribute("size", size);
+        }
 
         List<TrackReview> reviews = trackReviewService.getMoreReviews(id, page, size);
         if (loginUser != null && reviews != null && !reviews.isEmpty()) {

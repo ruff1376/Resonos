@@ -71,7 +71,9 @@ public class AlbumController {
     // 앨범
     @GetMapping
     public String albumInfo(@RequestParam("id") String id, Model model,
-            @AuthenticationPrincipal CustomUser principal) throws Exception {
+            @AuthenticationPrincipal CustomUser principal,
+            @RequestParam(value = "reviewId", required = false) Long reviewId
+            ) throws Exception {
         Users loginUser = null;
         if (principal != null) {
             model.addAttribute("loginUser", loginUser = principal.getUser());
@@ -96,6 +98,13 @@ public class AlbumController {
 
         int page = 1;
         int size = 5;
+
+        // 찾는 리뷰의 순서
+        if(reviewId != null) {
+            int reviewNo = albumReviewService.findMyReview(reviewId);
+            size = ((reviewNo - 1) / size + 1) * size;
+            model.addAttribute("size", size);
+        }
 
         List<AlbumReview> reviews = albumReviewService.getMoreReviews(id, page, size);
         if (loginUser != null && reviews != null && !reviews.isEmpty()) {
