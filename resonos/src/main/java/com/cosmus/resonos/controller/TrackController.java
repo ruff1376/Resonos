@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,14 +50,13 @@ import com.cosmus.resonos.service.TrackReviewService;
 import com.cosmus.resonos.service.TrackService;
 import com.cosmus.resonos.validation.ReviewForm;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-
 
 @Slf4j
 @Controller
 @RequestMapping("/tracks")
 public class TrackController {
-
 
     @Autowired
     private TrackService trackService;
@@ -84,17 +84,16 @@ public class TrackController {
     // 트랙 화면
     @GetMapping
     public String trackInfo(@RequestParam("id") String id, Model model,
-                            @AuthenticationPrincipal CustomUser principal,
-                            @RequestParam(value = "reviewId", required = false) Long reviewId
-                            ) throws Exception {
+            @AuthenticationPrincipal CustomUser principal,
+            @RequestParam(value = "reviewId", required = false) Long reviewId) throws Exception {
 
         Users loginUser = null;
         if (principal != null) {
             loginUser = principal.getUser();
             model.addAttribute("loginUser", loginUser);
             boolean isAdmin = principal.getAuthorities()
-            .stream()
-            .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+                    .stream()
+                    .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
             model.addAttribute("isAdmin", isAdmin);
             System.out.println(isAdmin);
             Long userVotedMoodId = trackMoodVoteService.getUserVotedMoodId(loginUser.getId(), id);
@@ -120,15 +119,15 @@ public class TrackController {
 
         List<TrackReview> IndexReviews = trackReviewService.reviewWithReviewerByTrackId(id);
         // 찾는 리뷰의 순서
-        if(reviewId != null) {
+        if (reviewId != null) {
             int index = IntStream.range(0, IndexReviews.size())
-            .filter(i -> IndexReviews.get(i).getId().equals(reviewId))
-            .findFirst()
-            .orElse(-1);
+                    .filter(i -> IndexReviews.get(i).getId().equals(reviewId))
+                    .findFirst()
+                    .orElse(-1);
 
             log.info("reviewId가 위치한 인덱스: {}", index);
             if (index != -1) {
-                size = ((index + 1 -1) / size + 1) * 5;
+                size = ((index + 1 - 1) / size + 1) * 5;
                 model.addAttribute("size", size);
             }
         }
@@ -136,11 +135,12 @@ public class TrackController {
         List<TrackReview> reviews = trackReviewService.getMoreReviews(id, page, size);
         if (loginUser != null && reviews != null && !reviews.isEmpty()) {
             List<Long> reviewIds = reviews.stream()
-                                        .map(TrackReview::getId)
-                                        .collect(Collectors.toList());
+                    .map(TrackReview::getId)
+                    .collect(Collectors.toList());
 
             if (!reviewIds.isEmpty()) {
-                List<Long> likedReviewIds = reviewLikeService.getUserLikedReviewIds("TRACK", reviewIds, loginUser.getId());
+                List<Long> likedReviewIds = reviewLikeService.getUserLikedReviewIds("TRACK", reviewIds,
+                        loginUser.getId());
 
                 for (TrackReview review : reviews) {
                     review.setIsLikedByCurrentUser(likedReviewIds.contains(review.getId()));
@@ -167,7 +167,7 @@ public class TrackController {
 
         boolean emptyPlayList = true;
         List<Playlist> playLists = null;
-        if(playlistService.getPlaylistsByTrackId(id) != null) {
+        if (playlistService.getPlaylistsByTrackId(id) != null) {
             playLists = playlistService.getPlaylistsByTrackId(id);
             emptyPlayList = false;
         }
@@ -194,7 +194,8 @@ public class TrackController {
     }
 
     @GetMapping("/myplaylists")
-    public ResponseEntity<List<Playlist>> getMyPlaylists(@AuthenticationPrincipal CustomUser loginUser) throws Exception {
+    public ResponseEntity<List<Playlist>> getMyPlaylists(@AuthenticationPrincipal CustomUser loginUser)
+            throws Exception {
         if (loginUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -205,7 +206,7 @@ public class TrackController {
 
     @PostMapping("/playlists/{playlistId}")
     public ResponseEntity<Void> addTrackToPlaylist(@PathVariable("playlistId") Long playlistId,
-                                                   @RequestParam("id") String id) throws Exception {
+            @RequestParam("id") String id) throws Exception {
 
         String trackId = id;
         // 단건 추가
@@ -215,16 +216,15 @@ public class TrackController {
 
     @GetMapping("/refreshPlaylist/{id}")
     public ResponseEntity<List<Playlist>> refreshPlaylist(@PathVariable("id") String trackId,
-                                                        Model model) {
+            Model model) {
         return ResponseEntity.ok(playlistService.getPlaylistsByTrackId(trackId));
     }
-
 
     @GetMapping("/{id}/score-fragment")
     public String scoreRefresh(@PathVariable("id") String id, Model model) {
         TrackScore score = trackReviewService.getTrackScore(id);
         model.addAttribute("score", score);
-        return "review/reviewFrag :: scoreFragment";  // Thymeleaf 조각 이름 지정
+        return "review/reviewFrag :: scoreFragment"; // Thymeleaf 조각 이름 지정
     }
 
     @GetMapping("/{id}/refresh-frag")
@@ -236,17 +236,18 @@ public class TrackController {
 
     @GetMapping("/{trackId}/reviews/more")
     public String loadMoreReviews(@PathVariable("trackId") String trackId,
-                                @RequestParam(name = "page", defaultValue = "1") int page,
-                                @RequestParam(name = "size", defaultValue = "5") int size,
-                                Model model,
-                                @AuthenticationPrincipal CustomUser principal) throws Exception {
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            Model model,
+            @AuthenticationPrincipal CustomUser principal) throws Exception {
 
         List<TrackReview> allReviews = trackReviewService.getMoreReviews(trackId, page, size);
         boolean hasNext = allReviews.size() > size; // ⭐ size+1개면 다음 페이지 존재
         List<TrackReview> reviews = hasNext ? allReviews.subList(0, size) : allReviews;
         if (principal != null && !reviews.isEmpty()) {
             List<Long> reviewIds = reviews.stream().map(TrackReview::getId).toList();
-            List<Long> likedIds = reviewLikeService.getUserLikedReviewIds("TRACK", reviewIds, principal.getUser().getId());
+            List<Long> likedIds = reviewLikeService.getUserLikedReviewIds("TRACK", reviewIds,
+                    principal.getUser().getId());
             for (TrackReview r : reviews) {
                 r.setIsLikedByCurrentUser(likedIds.contains(r.getId()));
             }
@@ -259,13 +260,14 @@ public class TrackController {
         model.addAttribute("reviewType", "TRACK");
         model.addAttribute("loginUser", principal != null ? principal.getUser() : null);
         model.addAttribute("isAdmin", principal != null && principal.getAuthorities().stream()
-            .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")));
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")));
 
         return "review/reviewFrag :: reviewItems";
     }
 
     /**
      * 플레이리스트에 추가할 트랙 리스트 요청
+     * 
      * @param entity
      * @return
      * @throws Exception
@@ -276,7 +278,7 @@ public class TrackController {
         int offset = Integer.parseInt(data.get("offset").toString());
         int limit = Integer.parseInt(data.get("limit").toString());
         List<Track> trackList = trackService.addTrackList(data.get("keyword"), offset, limit);
-        if(trackList != null)
+        if (trackList != null)
             return new ResponseEntity<>(trackList, HttpStatus.OK);
 
         return new ResponseEntity<>("리스트 요청 실패.", HttpStatus.BAD_REQUEST);
@@ -286,8 +288,8 @@ public class TrackController {
     @PostMapping
     @ResponseBody
     public ResponseEntity<?> create(@RequestParam("id") String trackId,
-                              @RequestBody ReviewForm form,
-                              @AuthenticationPrincipal CustomUser user) {
+            @RequestBody @Valid ReviewForm form,
+            @AuthenticationPrincipal CustomUser user) {
         try {
             TrackReview review = trackReviewService.write(trackId, form, user.getUser());
             return ResponseEntity.ok(review);
@@ -295,10 +297,11 @@ public class TrackController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 리뷰를 작성했습니다.");
         }
     }
+
     @GetMapping("/{trackId}/my-review-frag")
     public String getMyReviewFragment(@PathVariable("trackId") String trackId,
-                                    @AuthenticationPrincipal CustomUser principal,
-                                    Model model) throws Exception {
+            @AuthenticationPrincipal CustomUser principal,
+            Model model) throws Exception {
         Users loginUser = null;
         if (principal != null) {
             model.addAttribute("loginUser", loginUser = principal.getUser());
@@ -325,8 +328,8 @@ public class TrackController {
     @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, 'TRACK', authentication)")
     @ResponseBody
     public ResponseEntity<?> update(@PathVariable("id") String trackId,
-                              @PathVariable("reviewId") Long reviewId,
-                              @RequestBody ReviewForm form) {
+            @PathVariable("reviewId") Long reviewId,
+            @RequestBody @Valid ReviewForm form) {
         boolean success = trackReviewService.update(reviewId, form);
         if (!success) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("수정 실패");
@@ -339,21 +342,21 @@ public class TrackController {
     @DeleteMapping("/{id}/review/{reviewId}")
     @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, 'TRACK', authentication)")
     public String deleteAndRefresh(@PathVariable("id") String trackId,
-                                @PathVariable("reviewId") Long reviewId,
-                                Model model) {
+            @PathVariable("reviewId") Long reviewId,
+            Model model) {
         trackReviewService.delete(reviewId);
         TrackScore score = trackReviewService.getTrackScore(trackId);
         model.addAttribute("score", score);
-        return "review/reviewFrag :: reviewSection";  // 리뷰 섹션 프래그먼트 반환
+        return "review/reviewFrag :: reviewSection"; // 리뷰 섹션 프래그먼트 반환
     }
 
     @PostMapping("/track-reviews/{reviewId}/like")
     @ResponseBody
     public ResponseEntity<?> toggleReviewLike(@PathVariable("reviewId") Long reviewId,
-                                                @AuthenticationPrincipal CustomUser user) {
+            @AuthenticationPrincipal CustomUser user) {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                                .body("로그인이 필요합니다.");
+                    .body("로그인이 필요합니다.");
         }
         reviewLikeService.toggleLike(reviewId, user.getId(), "TRACK");
 
@@ -366,8 +369,8 @@ public class TrackController {
     @PostMapping("/reviews/{reviewType}/{reviewId}/report")
     @ResponseBody
     public ResponseEntity<?> reportReview(@PathVariable("reviewType") String reviewType,
-                                            @PathVariable("reviewId") Long reviewId,
-                                            @AuthenticationPrincipal CustomUser user) {
+            @PathVariable("reviewId") Long reviewId,
+            @AuthenticationPrincipal CustomUser user) {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("로그인이 필요합니다.");
@@ -400,12 +403,11 @@ public class TrackController {
 
         List<Tag> tags = tagService.list();
         List<String> moodLabels = moodStats.stream()
-            .map(MoodStat::getMoodName)
-            .collect(Collectors.toList());
+                .map(MoodStat::getMoodName)
+                .collect(Collectors.toList());
         List<Integer> moodValues = moodStats.stream()
-            .map(MoodStat::getVoteCount)
-            .collect(Collectors.toList());
-
+                .map(MoodStat::getVoteCount)
+                .collect(Collectors.toList());
 
         Map<String, Object> response = new HashMap<>();
         response.put("votedMoodId", votedMoodId);
@@ -415,6 +417,7 @@ public class TrackController {
 
         return ResponseEntity.ok(response);
     }
+
     @PostMapping("/toggle-like")
     @ResponseBody
     public ResponseEntity<?> toggleTrackLike(@RequestBody LikedTrack dto) throws Exception {
@@ -430,21 +433,21 @@ public class TrackController {
 
     /**
      * 비동기 좋아요 한 트랙 검색
+     * 
      * @param data
      * @return
      * @throws Exception
      */
     @PostMapping("/search")
     public ResponseEntity<?> searchMyTracks(
-        @RequestBody Map<String, Object> data
-    ) throws Exception {
+            @RequestBody Map<String, Object> data) throws Exception {
         Long userId = Long.valueOf(data.get("userId").toString());
         String keyword = data.get("keyword").toString();
         int offset = Integer.parseInt(data.get("offset").toString());
         int limit = Integer.parseInt(data.get("limit").toString());
 
         List<Track> trackList = trackService.likedTracks(userId, keyword, offset, limit);
-        if(trackList != null)
+        if (trackList != null)
             return new ResponseEntity<>(trackList, HttpStatus.OK);
 
         return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);

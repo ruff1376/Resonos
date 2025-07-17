@@ -45,6 +45,7 @@ import com.cosmus.resonos.service.ReviewLikeService;
 import com.cosmus.resonos.service.TrackService;
 import com.cosmus.resonos.validation.ReviewForm;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -256,7 +257,7 @@ public class AlbumController {
     @PostMapping
     @ResponseBody
     public ResponseEntity<?> create(@RequestParam("id") String albumId,
-            @RequestBody ReviewForm form,
+            @RequestBody @Valid ReviewForm form,
             @AuthenticationPrincipal CustomUser user) {
         try {
             AlbumReview review = albumReviewService.write(albumId, form, user.getUser());
@@ -271,7 +272,7 @@ public class AlbumController {
     @ResponseBody
     public ResponseEntity<?> update(@PathVariable("id") String albumId,
             @PathVariable("reviewId") Long reviewId,
-            @RequestBody ReviewForm form) {
+            @RequestBody @Valid ReviewForm form) {
         boolean success = albumReviewService.update(reviewId, form);
         if (!success) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("수정 실패");
