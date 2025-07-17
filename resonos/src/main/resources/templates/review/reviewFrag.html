@@ -14,7 +14,7 @@
 <th:block th:fragment="reviewItems (review)">
   <li th:each="rv, iterStat : ${review}" class="comment" th:id="|rv-${rv.id}|" th:data-review-id="${rv.id}" th:attr="data-track-id=${reviewType == 'TRACK'} ? ${rv.trackId} : null,
                data-album-id=${reviewType == 'ALBUM'} ? ${rv.albumId} : null"
-               th:if="${iterStat.index < 5}">
+               th:if="${iterStat.index < (size != null ? size : 5)}">
 
     <div class="name-and-score">
       <p th:text="${rv.reviewer.nickname}">닉네임</p>

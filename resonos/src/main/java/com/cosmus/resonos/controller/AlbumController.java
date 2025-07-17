@@ -103,6 +103,7 @@ public class AlbumController {
         if(reviewId != null) {
             int reviewNo = albumReviewService.findMyReview(reviewId);
             size = ((reviewNo - 1) / size + 1) * size;
+            model.addAttribute("size", size);
         }
 
         List<AlbumReview> reviews = albumReviewService.getMoreReviews(id, page, size);

@@ -336,7 +336,7 @@
             >
             (SELECT COUNT(*) FROM review_like WHERE review_id = target.id AND review_type = 'TRACK')
             )
-            OR (TRACK
+            OR (
             (SELECT COUNT(*) FROM review_like WHERE review_id = ar.id AND review_type = 'TRACK')
             =
             (SELECT COUNT(*) FROM review_like WHERE review_id = target.id AND review_type = 'TRACK')
