@@ -285,6 +285,7 @@ img {
     height: 315px;
     width: 560px;
 }
+
 .recent-review>p:first-child,
 .mood-vote p,
 .simillar-artist>p:first-child,
@@ -293,6 +294,7 @@ img {
     margin-bottom: 5px;
     border-bottom: 1px solid var(--main-color);
 }
+
 .info-card {
     display: flex;
     padding: 10px 20px;
@@ -314,18 +316,32 @@ img {
 }
 
 .concert-schedule {
-    width: 250px;         /* ✅ 고정 너비로 설정 */
-    flex-shrink: 0;       /* ✅ 줄어들지 않도록 */
-    flex-grow: 0;         /* ✅ 늘어나지 않도록 */
+    width: 300px;
+    /* ✅ 고정 너비로 설정 */
+    flex-shrink: 0;
+    /* ✅ 줄어들지 않도록 */
+    flex-grow: 0;
+    /* ✅ 늘어나지 않도록 */
+    max-height: 400px;
+    overflow-y: auto; /* 스크롤 되게 함 */
+    scrollbar-width: none; /* Firefox용 스크롤바 감춤 */
+    -ms-overflow-style: none; /* IE/Edge용 스크롤바 감춤 */
 }
-
+.concert-schedule::-webkit-scrollbar {
+    display: none;
+}
 .recent-review {
-    min-width: 630px;     /* ✅ 최소 630px */
-    flex-grow: 1;         /* ✅ 남는 공간 유연하게 차지 */
-    flex-shrink: 1;       /* ✅ 너무 작아지지 않게 최소 보장 */
-    max-width: 100%;      /* ✅ 최대 100% */
+    min-width: 630px;
+    /* ✅ 최소 630px */
+    flex-grow: 1;
+    /* ✅ 남는 공간 유연하게 차지 */
+    flex-shrink: 1;
+    /* ✅ 너무 작아지지 않게 최소 보장 */
+    max-width: 100%;
+    /* ✅ 최대 100% */
     justify-content: start;
 }
+
 .review-line {
     display: flex;
     align-items: center;
@@ -534,4 +550,37 @@ img {
 .album-container::-webkit-scrollbar {
     display: none;
     /* 크롬, 사파리, 오페라용 스크롤바 숨기기 */
+}
+
+/* 공연 날짜, 장소, "Track" 버튼, "Request a show" 버튼 등을 숨김 */
+.bit-widget .bit-event {
+    padding: 5px 0 !important;
+    color: white !important;
+}
+.bit-rsvp,
+.bit-upcoming-events-show-all-button {
+    display: none !important;
+}
+.bit-widget .bit-no-dates-container .bit-track-button {
+    width: 250px !important;
+}
+.bit-widget .bit-no-dates-container {
+    border-top: 1px solid rgba(124, 124, 124, .25);
+    text-align: center;
+    margin: 0px 10px 0px 10px;
+    padding: 30px 0px 30px 0px !important;
+}
+/* "Tickets" 버튼만 남기고 정렬 정리 */
+.bit-event__actions {
+    text-align: center;
+}
+.bit-venue {
+    color: var(--main-color) !important;
+}
+.bit-widget {
+    font-size: 14px;
+}
+.bit-widget .bit-offers {
+    background-color: var(--main-color) !important;
+    border: none !important;
 }

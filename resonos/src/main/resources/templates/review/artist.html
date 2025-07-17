@@ -116,13 +116,12 @@
             </div> -->
             <div class="info concert-schedule">
                 <p id="headline">공연/이벤트 일정</p>
-                <p>2025. 08. 25 - 우리집 안방</p>
-                <p>한국(서울)</p>
-                <p>2025. 08. 25 - 우리집 안방</p>
-                <p>한국(서울)</p>
-                <p>2025. 08. 25 - 우리집 안방</p>
-                <p>한국(서울)</p>
-                </p>
+                <div class="bit-widget-initializer" th:data-artist-name="${artist.name}" data-text-color="#FFF"
+                    data-background-color="transparent" data-display-local-dates="true" data-auto-style="true"
+                    data-separator-color="#DDDDDD" data-link-color="#1DB954" data-display-limit="3"
+                    data-display-lineup="false" data-display-play-my-city="false">
+                </div>
+
             </div>
         </div>
         <!-- 아티스트 리뷰/일정.. -->
@@ -160,7 +159,7 @@
     <script th:inline="javascript">
         const isLogin = [[${ loginUser != null ? 'true' : 'false'}]];
     </script>
-
+    <script src="https://widget.bandsintown.com/main.min.js"></script>
     <!-- 아티스트 팔로우 -->
     <script>
         // 트랙 좋아요
