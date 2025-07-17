@@ -4,6 +4,7 @@
 
 <mapper namespace="com.cosmus.resonos.mapper.BadgeConditionMapper">
 
+  <!-- BadgeCondition 객체 매핑 -->
   <resultMap id="BadgeConditionResultMap" type="com.cosmus.resonos.domain.BadgeCondition">
     <id property="id" column="id"/>
     <result property="badgeId" column="badge_id"/>
@@ -14,31 +15,31 @@
   </resultMap>
 
   <!-- 조건 등록 -->
-  <insert id="insert"  useGeneratedKeys="true" keyProperty="id">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO badge_condition
-      ( badge_id, badge_name, description, condition_type, condition_value)
+      (badge_id, badge_name, description, condition_type, condition_value)
     VALUES
-      ( #{badgeId}, #{badgeName}, #{description}, #{conditionType}, #{conditionValue})
+      (#{badgeId}, #{badgeName}, #{description}, #{conditionType}, #{conditionValue})
   </insert>
 
   <!-- 조건 수정 -->
-  <update id="update" >
+  <update id="update">
     UPDATE badge_condition
-    SET badge_name=#{badgeName},
-        description=#{description},
-        condition_type=#{conditionType},
-        condition_value=#{conditionValue}
-    WHERE id=#{id}
+    SET badge_name = #{badgeName},
+        description = #{description},
+        condition_type = #{conditionType},
+        condition_value = #{conditionValue}
+    WHERE id = #{id}
   </update>
 
   <!-- 조건 삭제 -->
-  <delete id="delete" >
-    DELETE FROM badge_condition WHERE id=#{id}
+  <delete id="delete">
+    DELETE FROM badge_condition WHERE id = #{id}
   </delete>
 
   <!-- 단일 조건 조회 -->
-  <select id="select"  resultMap="BadgeConditionResultMap">
-    SELECT * FROM badge_condition WHERE id=#{id}
+  <select id="select" resultMap="BadgeConditionResultMap">
+    SELECT * FROM badge_condition WHERE id = #{id}
   </select>
 
   <!-- 전체 조건 목록 -->
@@ -47,13 +48,35 @@
   </select>
 
   <!-- 특정 배지의 조건 목록 -->
-  <select id="selectByBadgeId"  resultMap="BadgeConditionResultMap">
-    SELECT * FROM badge_condition WHERE badge_id=#{badgeId}
+  <select id="selectByBadgeId" resultMap="BadgeConditionResultMap">
+    SELECT * FROM badge_condition WHERE badge_id = #{badgeId}
   </select>
-  
+
   <!-- 특정 배지의 조건 삭제 -->
-  <delete id="deleteByBadgeId" parameterType="long">
+  <delete id="deleteByBadgeId">
     DELETE FROM badge_condition WHERE badge_id = #{badgeId}
   </delete>
+
+  <!-- 사용자의 게시글 수 기준 배지 ID 조회 -->
+  <select id="selectBadgeIdsForPostCount" resultType="long">
+    <![CDATA[
+      SELECT badge_id
+        FROM badge_condition
+      WHERE condition_type = 'post_count'
+        AND condition_value <= #{postCount}
+    ]]>
+  </select>
+
+  <!-- 사용자의 댓글 수 기준 배지 ID 조회 -->
+  <select id="selectBadgeIdsForCommentCount" resultType="long">
+    <![CDATA[
+      SELECT badge_id
+        FROM badge_condition
+      WHERE condition_type = 'comment_count'
+        AND condition_value <= #{commentCount}
+    ]]>
+  </select>
+
+
 
 </mapper>

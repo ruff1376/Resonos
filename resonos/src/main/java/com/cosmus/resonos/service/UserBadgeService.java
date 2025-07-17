@@ -21,7 +21,9 @@ public interface UserBadgeService {
 
     // 유저 배지 자동 배분
     public void grantPostBadges(Long userId) throws Exception;
-    public void grantPostBadges() throws Exception;
     public void grantCommentBadges(Long userId) throws Exception;
-    public void grantCommentBadges() throws Exception;
+
+    public int grantPostBadges() throws Exception;
+    public int grantCommentBadges() throws Exception;
+
 }

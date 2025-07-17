@@ -2,6 +2,8 @@ package com.cosmus.resonos.mapper;
 
 import com.cosmus.resonos.domain.BadgeCondition;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 @Mapper
@@ -13,4 +15,6 @@ public interface BadgeConditionMapper {
     public List<BadgeCondition> selectAll();
     public List<BadgeCondition> selectByBadgeId(Long badgeId);
     public void deleteByBadgeId(Long badgeId);
+    public List<Long> selectBadgeIdsForPostCount(@Param("userId") Long userId, @Param("postCount") int postCount);
+    public List<Long> selectBadgeIdsForCommentCount(@Param("userId") Long userId, @Param("commentCount") int commentCount);
 }

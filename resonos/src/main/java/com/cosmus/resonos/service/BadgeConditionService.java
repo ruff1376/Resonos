@@ -15,4 +15,6 @@ public interface BadgeConditionService {
     public List<BadgeCondition> getAllConditions() throws Exception;
     public List<BadgeCondition> getConditionsByBadgeId(Long badgeId) throws Exception;
 
+    public List<Long> getBadgeIdsForPostCount(Long userId, int postCount) throws Exception;
+    public List<Long> getBadgeIdsForCommentCount(Long userId, int commentCount) throws Exception;
 }

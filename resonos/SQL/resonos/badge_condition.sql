@@ -1,4 +1,4 @@
--- Active: 1751542958734@@127.0.0.1@3306@resonos
+-- Active: 1751337677491@@127.0.0.1@3306@resonos
 CREATE TABLE badge_condition (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,         -- 조건 고유 번호(자동 증가, PK)
   badge_id BIGINT NOT NULL,                     -- 배지 고유 번호(외래키, badge 테이블 참조)
@@ -142,5 +142,32 @@ SELECT * FROM badge_condition;
 SELECT user_id, COUNT(*) FROM board_post GROUP BY user_id;
 
 SELECT * FROM user_badge;
+
+
+TRUNCATE TABLE user_badge;
+-- 배지, 배지 조건, 유저 배지 초기화
+TRUNCATE TABLE badge;
+TRUNCATE TABLE badge_condition;
+TRUNCATE TABLE user_badge;
+
+
+-- 7.17 배지 자동화 
+INSERT INTO `badge` (`id`, `name`, `description`, `icon_url`, `criteria`, `created_at`) VALUES
+  (1, '글 10개',   '게시글 10개 작성',    'icon_post.png',    '10회',  NOW()),
+  (2, '댓글 5개',  '댓글 5개 작성',       'icon_comment.png', '5회',   NOW()),
+  (3, '팔로우왕',  '팔로워 10명 달성',     'icon_follow.png',  '10명',  NOW());
+
+
+INSERT INTO `badge_condition` (`id`, `badge_id`, `badge_name`, `description`, `condition_type`, `condition_value`) VALUES
+  (1, 1, '글 10개',  '게시글 10개 작성', 'POST_COUNT',    10),
+  (2, 2, '댓글 5개', '댓글 5개 작성',    'COMMENT_COUNT', 5),
+  (3, 3, '팔로우왕', '팔로워 10명',      'FOLLOWER_COUNT', 10);
+
+
+-- alice가 '글 10개', '댓글 5개', charlie가 '댓글 5개'
+INSERT INTO `user_badge` (`id`, `created_at`, `user_id`, `badge_id`) VALUES
+  (1, NOW(), 1, 1),
+  (2, NOW(), 1, 2),
+  (3, NOW(), 3, 2);
 
 
