@@ -40,9 +40,21 @@ public class ChartElementServiceImpl implements ChartElementService {
         }
 
         for (Map.Entry<String, Object> entry : raw.entrySet()) {
-            result.put(entry.getKey(),
-                    entry.getValue() != null ? ((Number) entry.getValue()).intValue() : 0);
+            Object value = entry.getValue();
+            int intValue = 0;
+
+            if (value instanceof Number) {
+                intValue = ((Number) value).intValue();
+                if (intValue < 0) {
+                    intValue = 0;
+                } else if (intValue > 100) {
+                    intValue = 100;
+                }
+            }
+
+            result.put(entry.getKey(), intValue);
         }
+
         return result;
     }
 }
