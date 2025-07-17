@@ -64,8 +64,6 @@ public class ArtistController {
     private TagService tagService;
     @Autowired
     private RecentReviewService recentReviewService;
-    @Autowired
-    private BandsintownService bandsintownService;
 
     // 아티스트 화면
     @GetMapping
@@ -98,10 +96,8 @@ public class ArtistController {
         boolean isMoodEmpty = (moodStats == null || moodStats.isEmpty());
         List<String> moodLabels = moodStats.stream().map(MoodStat::getMoodName).toList();
         List<Integer> moodValues = moodStats.stream().map(MoodStat::getVoteCount).toList();
-        List<ConcertInfo> concerts = bandsintownService.getConcerts(artist.getName());
 
         List<RecentReview> reviews = recentReviewService.getRecentReviewsByArtistId(id);
-        model.addAttribute("concerts", concerts);
         model.addAttribute("recentReviews", reviews);
         model.addAttribute("artist", artist);
         model.addAttribute("track", track);

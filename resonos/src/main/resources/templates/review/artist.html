@@ -116,20 +116,11 @@
             </div> -->
             <div class="info concert-schedule">
                 <p id="headline">공연/이벤트 일정</p>
-                <!-- <th:block th:each="concert : ${conserts}">
-                    <div>
-                        <p th:text="|${concert.date} - |"></p>
-                        <p th:text="${concert.displayName}"></p>
-                    </div>
-                    <p th:text="${concert.country}">한국</p>
-                </th:block> -->
                 <div class="bit-widget-initializer" th:data-artist-name="${artist.name}" data-text-color="#FFF"
                     data-background-color="transparent" data-display-local-dates="true" data-auto-style="true"
                     data-separator-color="#DDDDDD" data-link-color="#1DB954" data-display-limit="3"
                     data-display-lineup="false" data-display-play-my-city="false">
                 </div>
-
-                <script src="https://widget.bandsintown.com/main.min.js"></script>
 
             </div>
         </div>
