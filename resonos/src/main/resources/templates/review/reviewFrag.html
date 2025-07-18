@@ -31,8 +31,16 @@
       </th:block>
       <th:block th:if="${isAdmin == false or loginUser == null}">
         <div class="review-content">
-          <p class="content-text">블라인드 된 리뷰입니다.</p>
-        </div>
+    <p class="content-text" style="color: gray;">
+      누적된 신고로 인해 블라인드 처리된 리뷰입니다.
+      <button class="btn btn-gold show-blind-btn"
+              th:data-review-id="${rv.id}"
+              style="font-size: 1.4rem;">블라인드 내용 보기</button>
+    </p>
+    <p class="blind-content" th:id="'blind-content-' + ${rv.id}"
+       th:text="${rv.content}"
+       style="display: none; color: gray; margin-top: 0.5rem;"></p>
+  </div>
       </th:block>
     </th:block>
     <th:block th:if="${!rv.blinded}">
