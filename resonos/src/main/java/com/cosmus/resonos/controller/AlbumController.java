@@ -155,7 +155,7 @@ public class AlbumController {
             playLists = playlistService.getPlaylistsByAlbumId(id);
             emptyPlayList = false;
         }
-
+        
         model.addAttribute("emptyPlayList", emptyPlayList);
         model.addAttribute("playLists", playLists);
         model.addAttribute("argLabels", argLabels);

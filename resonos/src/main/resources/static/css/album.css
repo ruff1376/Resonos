@@ -379,7 +379,7 @@ a { display: inline-block;}
     max-width: 300px;       /* 최대 너비 제한 */
     min-width: 250px;
     gap: 10px;
-    margin-left: 20px;
+    margin-left: 10px;
 }
 .top5track > p:first-child,
 .arg-vote p ,
@@ -427,10 +427,13 @@ a { display: inline-block;}
   width: 20px;
   text-align: end;
 }
-.pl-list p:first-child {
+.pl-list>p:first-child {
     font-weight: bold;
     font-size: 2.2rem !important;
     color: var(--main-color);
+}
+.pl-list a {
+  width: fit-content;
 }
 .hottest-card {
     display: flex;
@@ -495,8 +498,6 @@ a { display: inline-block;}
     padding: 5px;
     gap: 5px;
     flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
 }
 .arg-vote {
     display: flex;

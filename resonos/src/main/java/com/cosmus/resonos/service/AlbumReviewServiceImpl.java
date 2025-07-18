@@ -10,6 +10,7 @@ import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.AlbumReview;
 import com.cosmus.resonos.domain.AlbumScore;
 import com.cosmus.resonos.domain.Reviewer;
+import com.cosmus.resonos.domain.TrackReview;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.mapper.AlbumReviewMapper;
 import com.cosmus.resonos.validation.ReviewForm;
@@ -114,7 +115,16 @@ class AlbumReviewServiceImpl implements AlbumReviewService {
     @Override
     public List<AlbumReview> getMoreReviews(String albumId, int page, int size) {
         int offset = (page - 1) * size;
-        return mapper.selectPagedReviewsWithReviewer(albumId, size + 1, offset);
+        List<AlbumReview> reviews = mapper.selectPagedReviewsWithReviewer(albumId, size + 1, offset);
+        for (AlbumReview review : reviews) {
+            if(review.getBlinded() == false) {
+                if( review.getDislikes() > 5 ) {
+                    review.setBlinded(true);
+                    mapper.updateBlindStatus(review.getId(), true);
+                }
+            }
+        }
+        return reviews;
     }
 
     public boolean hasNextPage(String albumId, int page, int size) {
