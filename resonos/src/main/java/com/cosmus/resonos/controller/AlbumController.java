@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,6 +46,7 @@ import com.cosmus.resonos.service.ReviewLikeService;
 import com.cosmus.resonos.service.TrackService;
 import com.cosmus.resonos.validation.ReviewForm;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -99,14 +102,23 @@ public class AlbumController {
         int page = 1;
         int size = 5;
 
+        List<AlbumReview> IndexReviews = albumReviewService.reviewWithReviewerByAlbumId(id);
         // 찾는 리뷰의 순서
         if(reviewId != null) {
-            int reviewNo = albumReviewService.findMyReview(reviewId);
-            size = ((reviewNo - 1) / size + 1) * size;
-            model.addAttribute("size", size);
+            int index = IntStream.range(0, IndexReviews.size())
+            .filter(i -> IndexReviews.get(i).getId().equals(reviewId))
+            .findFirst()
+            .orElse(-1);
+
+            log.info("reviewId가 위치한 인덱스: {}", index);
+            if (index != -1) {
+                size = ((index + 1 -1) / size + 1) * 5;
+                model.addAttribute("size", size);
+            }
         }
 
         List<AlbumReview> reviews = albumReviewService.getMoreReviews(id, page, size);
+
         if (loginUser != null && reviews != null && !reviews.isEmpty()) {
             List<Long> reviewIds = reviews.stream().map(AlbumReview::getId).toList();
             List<Long> likedReviewIds = reviewLikeService.getUserLikedReviewIds("ALBUM", reviewIds, loginUser.getId());
@@ -246,7 +258,7 @@ public class AlbumController {
     @PostMapping
     @ResponseBody
     public ResponseEntity<?> create(@RequestParam("id") String albumId,
-            @RequestBody ReviewForm form,
+            @RequestBody @Valid ReviewForm form,
             @AuthenticationPrincipal CustomUser user) {
         try {
             AlbumReview review = albumReviewService.write(albumId, form, user.getUser());
@@ -261,7 +273,7 @@ public class AlbumController {
     @ResponseBody
     public ResponseEntity<?> update(@PathVariable("id") String albumId,
             @PathVariable("reviewId") Long reviewId,
-            @RequestBody ReviewForm form) {
+            @RequestBody @Valid ReviewForm form) {
         boolean success = albumReviewService.update(reviewId, form);
         if (!success) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("수정 실패");
@@ -324,7 +336,11 @@ public class AlbumController {
     }
 
     @PostMapping("/vote")
-    public ResponseEntity<?> saveOrUpdateVote(@RequestBody ChartElement element) {
+    public ResponseEntity<?> saveOrUpdateVote(@RequestBody @Valid ChartElement element,
+                                        BindingResult bindingResult ) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body("입력값 오류");
+        }
         chartElementService.saveOrUpdate(element);
         return ResponseEntity.ok().build();
     }

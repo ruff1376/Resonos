@@ -73,7 +73,7 @@
         FROM album_review ar
         JOIN user u ON u.id = ar.user_id
         WHERE ar.album_id = #{albumId}
-          AND ar.blinded = 0
+
         ORDER BY ar.critic DESC, likes DESC, ar.created_at ASC
     </select>
 

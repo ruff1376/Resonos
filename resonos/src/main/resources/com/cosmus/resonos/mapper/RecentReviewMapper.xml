@@ -40,7 +40,7 @@
             WHERE a.artist_id = #{artistId}
         )
         ORDER BY createdAt DESC
-        LIMIT 6
+        LIMIT 8
     </select>
 
 </mapper>
