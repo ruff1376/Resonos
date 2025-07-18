@@ -155,9 +155,11 @@ public class TrackReviewServiceImpl implements TrackReviewService {
         int offset = (page - 1) * size;
         List<TrackReview> reviews = mapper.selectPagedReviewsWithReviewer(trackId, size + 1, offset);
         for (TrackReview review : reviews) {
-            if (review.getDislikes() > 5) {
-                review.setBlinded(true);
-                mapper.updateBlindStatus(review.getId(), true);
+            if(review.getBlinded() == false) {
+                if( review.getDislikes() > 5 ) {
+                    review.setBlinded(true);
+                    mapper.updateBlindStatus(review.getId(), true);
+                }
             }
         }
         return reviews;  // ⭐ 1개 더 가져옴

@@ -117,9 +117,11 @@ class AlbumReviewServiceImpl implements AlbumReviewService {
         int offset = (page - 1) * size;
         List<AlbumReview> reviews = mapper.selectPagedReviewsWithReviewer(albumId, size + 1, offset);
         for (AlbumReview review : reviews) {
-            if( review.getDislikes() > 5 ) {
-                review.setBlinded(true);
-                mapper.updateBlindStatus(review.getId(), true);
+            if(review.getBlinded() == false) {
+                if( review.getDislikes() > 5 ) {
+                    review.setBlinded(true);
+                    mapper.updateBlindStatus(review.getId(), true);
+                }
             }
         }
         return reviews;
