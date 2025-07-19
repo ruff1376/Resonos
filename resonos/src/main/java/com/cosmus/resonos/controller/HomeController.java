@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.service.UserService;
+import com.cosmus.resonos.util.EmailService;
 import com.cosmus.resonos.util.RandomPassword;
 import com.cosmus.resonos.validation.EmailCheck;
 import com.cosmus.resonos.validation.NicknameCheck;
@@ -36,6 +38,9 @@ import lombok.extern.slf4j.Slf4j;
 public class HomeController {
 
   @Autowired private UserService userService;
+
+
+  @Autowired EmailService emailSErvice;
 
   /**
    * 로그인 화면
@@ -234,6 +239,22 @@ public class HomeController {
   }
 
   /**
+   * 인증번호 보내기
+   * @param user
+   * @param br
+   * @return
+   * @throws Exception
+   */
+  @PostMapping(value = "/send-certi", consumes = "application/json")
+  public ResponseEntity<?> sendCerti(@RequestBody Users user) throws Exception {
+    log.info("certiNo : {}", user.getCertiNo());
+    String email = user.getEmail();
+    emailSErvice.sendMail(email, "회원님의 인증 번호입니다.", user.getCertiNo());
+
+    return new ResponseEntity<>("이메일을 전송하였습니다.", HttpStatus.OK);
+  }
+
+  /**
    * 비밀번호 찾기 (아이디 검증)
    * @param user
    * @param br
@@ -244,7 +265,7 @@ public class HomeController {
   public ResponseEntity<?> findPwPost(@RequestBody Users user) throws Exception {
     Users checkUser = userService.select(user.getUsername());
 
-    if(checkUser != null) return new ResponseEntity<>(Map.of("email", checkUser.getEmail()), HttpStatus.OK);
+    if(checkUser != null) return new ResponseEntity<>("성공.", HttpStatus.OK);
 
     log.info("findPwPost : 존재하지 않는 아이디");
     return new ResponseEntity<>("존재하지 않는 아이디입니다.", HttpStatus.BAD_REQUEST);
@@ -259,16 +280,14 @@ public class HomeController {
    */
   @PostMapping(value = "/send-pw", consumes = "application/json")
   public ResponseEntity<?> sendEmailPw(@RequestBody Users user) {
-    //TODO: 이메일 전송 API
-
     try {
       Users checkUser = userService.select(user.getUsername());
       String randomPassword = RandomPassword.generateRandomPassword(10);
 
       checkUser.setPassword(randomPassword);
+      emailSErvice.sendMail(checkUser.getEmail(), "회원님의 변경된 비밀번호입니다.",randomPassword);
 
       boolean result = userService.update(checkUser);
-
       if(result) {
         log.info("임시 비밀번호 : {}", randomPassword);
         return new ResponseEntity<>("이메일이 발송되었습니다.", HttpStatus.OK);

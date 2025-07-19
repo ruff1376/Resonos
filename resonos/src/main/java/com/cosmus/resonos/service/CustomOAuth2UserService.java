@@ -90,6 +90,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                     userService.insertAuth(userAuth);
                     log.info("================== 소셜 회원가입 완료 ===================");
                     user = userService.select(randomUn);
+                    userService.basicNotiSetting(user.getId());
                 }
             }
         } catch (Exception e) {

@@ -196,7 +196,7 @@
           <h3>계정 / 보안</h3>
           <ul>
             <li>이메일: <th:block th:text="${user.email}"></th:block></li>
-            <li class="impor"><span>비밀번호 변경</span>&nbsp;/&nbsp;<span>탈퇴</span></li>
+            <li class="impor"><span>비밀번호 변경</span>&nbsp/&nbsp<span>탈퇴</span></li>
           </ul>
         </div>
       </a>
@@ -218,7 +218,7 @@
         '#F4511E', '#558B2F'
       ]
       document.addEventListener('DOMContentLoaded', function() {
-        const ctx = document.getElementById('doughnut').getContext('2d');
+        const ctx = document.getElementById('doughnut').getContext('2d')
         const myChart = new Chart(ctx, {
           type: 'doughnut',
           data: {
@@ -261,13 +261,13 @@
               }
             }
           }
-        });
+        })
       })
 
       const logoutBtn = document.getElementById('btn-logout')
       if(logoutBtn) {
         logoutBtn.addEventListener('click', (e) => {
-          e.preventDefault();
+          e.preventDefault()
           Swal.fire({
             title: "로그아웃 하시겠습니까?",
             icon: "warning",
@@ -287,7 +287,7 @@
             if (result.isConfirmed) {
               document.getElementById('form-logout').submit()
             }
-          });
+          })
           return
         })
       }
@@ -333,7 +333,7 @@
                   icon: 'success-icon',
                   title: 'alert-title'
                 }
-              });
+              })
               if(result === '로그인이 필요한 서비스입니다.') {
                 sessionStorage.setItem('returnTo', location.href)
                 setTimeout(() => {
@@ -355,7 +355,7 @@
               icon: 'success-icon',
               title: 'alert-title'
             }
-          });
+          })
           followBtn.classList.toggle('already')
           if(event.target.classList.contains('already')) {
             followBtn.textContent = '언팔로우'

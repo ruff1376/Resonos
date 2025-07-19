@@ -22,14 +22,11 @@
           <div>
             <h2 class="text-start">계정 / 보안</h2>
           </div>
+          <th:block th:if="${vali or user.provider != null}">
+            <button type="hidden" id="btn-withdrawal">회원탈퇴</button>
+          </th:block>
         </div>
         <div class="inner">
-          <th:block th:if="${qwer}">
-            <p class="success-fail"
-              th:classappend="${success == 'false' ? ' error' : ''}"
-              th:text="${success == 'false' ? '업데이트 실패하였습니다.' : '업데이트 완료되었습니다.'}">
-            </p>
-          </th:block>
           <p class="text-start mb-5">연동된 SNS : <th:block th:text="${user.provider}"></th:block></p>
           <th:block th:if="${!vali && user.provider == null}">
             <form th:action="@{/users/check-password}" method="post">
@@ -109,6 +106,83 @@
           document.body.appendChild(form);
           form.submit();
         }, 1600)
+      }
+
+      document.getElementById('btn-withdrawal').addEventListener('click', () => {
+        Swal.fire({
+            title: "정말 탈퇴하시겠습니까?",
+            html: '<p class="alert-text">회원탈퇴한 계정 정보는 복구가 어렵습니다.</p>',
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오",
+            reverseButtons: false,
+            customClass: {
+            popup: 'follow-popup',
+            icon: 'warning-icon',
+            title: 'alert-title',
+            text: 'alert-text',
+            confirmButton: 'alert-button',
+            cancelButton: 'alert-cancle-button'
+          }
+          }).then((result) => {
+            if (result.isConfirmed) {
+              withdrawal()
+            }
+          })
+      })
+
+      async function withdrawal() {
+
+        let url = '/users'
+
+        try {
+          const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
+          const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
+          const response = await fetch(url, {
+              method: "DELETE",
+              headers: {
+                  [header] : token,
+                  "Content-Type": "application/json"
+              },
+          })
+
+          if(!response) {
+            const result = await response.text()
+            console.log(result)
+            return
+          }
+          const result = await response.text()
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: result,
+            showConfirmButton: false,
+            timer: 800,
+            customClass: {
+              popup: 'follow-popup',
+              icon: 'success-icon',
+              title: 'alert-title'
+            }
+          })
+          setTimeout(() => {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/logout';
+
+            const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = '_csrf';  // 서버에 맞게 변경
+            csrfInput.value = csrfToken;
+            form.appendChild(csrfInput);
+
+            document.body.appendChild(form);
+            form.submit();
+          }, 1600)
+        } catch(e) {
+          console.error(e)
+        }
       }
     </script>
   </th:block>

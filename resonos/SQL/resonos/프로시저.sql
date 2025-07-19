@@ -305,7 +305,7 @@ BEGIN
 
     CREATE TABLE IF NOT EXISTS `notification` (
         `id` BIGINT NOT NULL,
-        `type` VARCHAR(32) NOT NULL, 
+        `type` VARCHAR(32) NOT NULL,
         `message` TEXT NOT NULL,
         `content` TEXT NULL,
         `is_read` BOOLEAN NOT NULL,
@@ -444,6 +444,12 @@ BEGIN
         INDEX idx_ubl_user_badge_created (user_id, badge_id, created_at)
     );
 
+    CREATE TABLE `user_notification` (
+    `user_id` bigint NOT NULL,
+    `type` enum('comment','mention','like','follow','reply','badge','qna','announcement','system') NOT NULL,
+    `is_enabled` tinyint(1) NOT NULL DEFAULT '1',
+    )
+
 -- UNIQUE(필요하다면 추가, 실무에선 보통 이력성 테이블엔 unique 걸지 않음)
 
 
@@ -495,7 +501,6 @@ ALTER TABLE user_badge_log
     ALTER TABLE `badge` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `notification` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `setting`MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`), ADD CONSTRAINT `uk_setting_value` UNIQUE (`value`);
-
     ALTER TABLE `track_mood_vote` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `artist_mood_vote` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `track_review` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
@@ -509,6 +514,7 @@ ALTER TABLE user_badge_log
     ALTER TABLE `review_like` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `review_report` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `user_auth` MODIFY COLUMN `no` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`no`);
+    ALTER TABLE `user_notification` ADD PRIMARY KEY (user_id, type);
 
     -- UNIQUE
     ALTER TABLE `user` ADD UNIQUE KEY `UK_username` (`username`);
@@ -578,6 +584,12 @@ ALTER TABLE user_badge_log
     ALTER TABLE `badge_condition` ADD CONSTRAINT `FK_badge_TO_badge_condition_1` FOREIGN KEY (`badge_id`) REFERENCES `badge` (`id`);
     ALTER TABLE `review_like` ADD CONSTRAINT `FK_user_TO_review_like_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
     ALTER TABLE `review_report` ADD CONSTRAINT `FK_user_TO_review_report_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+    ALTER TABLE `user_notification`
+    ADD CONSTRAINT `FK_user_TO_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+    ALTER TABLE `user`
+    ADD UNIQUE INDEX `UK_email` (`email` ASC) VISIBLE;
+;
+
 
 
     -- 5. 외래키 제약 조건 활성화

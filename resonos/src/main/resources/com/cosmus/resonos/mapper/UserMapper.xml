@@ -34,7 +34,7 @@
     </resultMap>
 
   <select id="select" resultMap="UserResultMap">
-    SELECT * FROM user WHERE username = #{username}
+    SELECT * FROM user WHERE username = #{username} AND enabled = 1
   </select>
 
   <!-- 회원가입 -->
@@ -129,13 +129,14 @@
 
   <!-- 이메일로 아이디 조회(아이디, 비번 찾기) -->
   <select id="findId" resultType="String">
-    SELECT username FROM user WHERE email = #{email}
+    SELECT username FROM user WHERE email = #{email} AND enabled = 1
   </select>
 
   <!-- 회원 활성/비활성 상태 변경 -->
   <update id="updateEnabled">
     UPDATE user SET enabled = #{enabled} WHERE id = #{id}
   </update>
+
   <!-- 회원 제재/해제 상태 변경 -->
   <update id="updateBan">
     UPDATE user SET ban = #{ban} WHERE id = #{id}
@@ -283,9 +284,33 @@
   SET ban = TRUE, ban_reason = #{reason}, ban_at = NOW()
   WHERE id = #{userId}
 </update>
-  
 
-  <!-- 유저의 알람 -->
+  <!-- 유저 알림 기본 세팅 -->
+  <insert id="basicNotiSetting">
+    INSERT INTO user_notification (user_Id, type, is_enabled)
+    VALUES
+      (#{userId}, 'comment', 1),
+      (#{userId}, 'reply', 1),
+      (#{userId}, 'like', 1),
+      (#{userId}, 'follow', 1),
+      (#{userId}, 'mention', 1),
+      (#{userId}, 'badge', 1),
+      (#{userId}, 'qna', 1),
+      (#{userId}, 'announcement', 1),
+      (#{userId}, 'system', 1)
+  </insert>
 
+  <select id="getNotiStatus" resultType="UserNoti">
+    SELECT * FROM user_notification
+    WHERE user_id = #{userId}
+  </select>
+
+  <!-- 유저 알림 on / off -->
+  <update id="changeNoti">
+    UPDATE user_notification
+    SET is_enabled = CASE WHEN is_enabled = 1 THEN 0 ELSE 1 END
+    WHERE user_id = #{userId}
+    AND type = #{type}
+  </update>
 
 </mapper>
