@@ -11,10 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,6 +33,7 @@ import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.Track;
 import com.cosmus.resonos.domain.TrackReview;
+import com.cosmus.resonos.domain.UserNoti;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.domain.UsersTotalLikes;
 import com.cosmus.resonos.service.AlbumReviewService;
@@ -43,6 +46,7 @@ import com.cosmus.resonos.service.TrackReviewService;
 import com.cosmus.resonos.service.TrackService;
 import com.cosmus.resonos.service.UserFollowService;
 import com.cosmus.resonos.service.UserService;
+import com.cosmus.resonos.util.EmailService;
 import com.cosmus.resonos.util.FlattenGenreCounts;
 import com.cosmus.resonos.util.UploadImage;
 import com.cosmus.resonos.validation.EmailCheck;
@@ -50,6 +54,7 @@ import com.cosmus.resonos.validation.NicknameCheck;
 import com.cosmus.resonos.validation.PasswordCheck;
 
 import lombok.extern.slf4j.Slf4j;
+
 
 
 
@@ -79,6 +84,7 @@ public class UserController {
   @Autowired BadgeService badgeService;
 
   @Autowired NotificationService notificationService;
+
   /**
    * 로그인 페이지 요청
    * @param param
@@ -426,16 +432,48 @@ public class UserController {
    * 알림 설정 페이지 요청
    * @param model
    * @return
+   * @throws Exception
    */
-  @GetMapping("/alarm")
+  @GetMapping("/notifications/status")
   public String getMethodName(
     @AuthenticationPrincipal CustomUser loginUser,
     Model model
-  ) {
+  ) throws Exception {
     if(loginUser == null) return "redirect:/login";
+    // 알림 리스트
+    List<UserNoti> notiList = userService.getNotiStatus(loginUser.getId());
+    // 알림 한글화
+    Map<String, String> notiType = Map.of(
+      "comment", "댓글",
+      "follow", "팔로우",
+      "like", "좋아요",
+      "reply", "답글",
+      "badge", "배지",
+      "announcement", "공지사항",
+      "system", "시스템",
+      "qna", "QnA",
+      "mention", "언급"
+    );
 
+    model.addAttribute("notiType", notiType);
+    model.addAttribute("notiList", notiList);
     model.addAttribute("lastPath", "alarm");
     return "user/setting-alarm";
+  }
+
+  @PutMapping("/notifications/status")
+  public ResponseEntity<?> putMethodName(
+    @AuthenticationPrincipal CustomUser loginUser,
+    @RequestBody UserNoti userNoti
+  ) throws Exception {
+    if(loginUser == null) return new ResponseEntity<>("권한이 없습니다.", HttpStatus.FORBIDDEN);
+    userNoti.setUserId(loginUser.getId());
+    log.info("userNOti : {}", userNoti);
+    boolean result =  userService.changeNoti(userNoti);
+    if(result)
+      return new ResponseEntity<>("알림 설정 완료.", HttpStatus.OK);
+
+    return new ResponseEntity<>("서버 에러.", HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   /**
@@ -688,6 +726,17 @@ public class UserController {
       return "redirect:/users/security?complete";
 
     return "redirect:/users/security?fail";
+  }
+
+  @DeleteMapping("")
+  public ResponseEntity<?> postMethodName(
+    @AuthenticationPrincipal CustomUser loginUser
+  ) throws Exception {
+    if(loginUser == null) return new ResponseEntity<>("권한이 없습니다.", HttpStatus.FORBIDDEN);
+    boolean result = userService.enableUser(loginUser.getId(), false);
+    if(result) return new ResponseEntity<>("회원탈퇴 처리되었습니다.", HttpStatus.OK);
+
+    return new ResponseEntity<>("서버 에러.", HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
 }

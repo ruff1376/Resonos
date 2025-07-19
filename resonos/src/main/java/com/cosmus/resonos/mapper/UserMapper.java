@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import com.cosmus.resonos.domain.GenreCount;
 import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.UserAuth;
+import com.cosmus.resonos.domain.UserNoti;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.domain.UsersTotalLikes;
 
@@ -111,6 +112,12 @@ public interface UserMapper {
     public List<GenreCount> likedGenreData(@Param("userId") Long userId) throws Exception;
     // 유저 제재 사유banUser
     public int banUser(@Param("id") Long id, @Param("ban") boolean ban, @Param("reason") String reason) throws Exception;
-    // 자동 정지 처리 
+    // 자동 정지 처리
     public void autoBanRepeatOffender(@Param("userId") Long userId, @Param("reason") String reason);
+    // 유저 기본 알림 세팅
+    public int basicNotiSetting(@Param("userId") Long id) throws Exception;
+    // 유저 알림 상태
+    public List<UserNoti> getNotiStatus(@Param("userId") Long userId) throws Exception;
+    // 유저 알림 of / off
+    public int changeNoti(UserNoti userNoti) throws Exception;
 }

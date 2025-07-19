@@ -50,7 +50,6 @@
         if(!usernameError.classList.contains('success')) return false
 
         certiNum = Math.floor(100000 + Math.random() * 900000);
-        alert("TODO: 메일 전송 API")
 
         hideCerti.classList.remove('hide')
       })
@@ -85,10 +84,9 @@
                 errorMessage.textContent = text
                 return
             }
-            const result = await response.json();
+            const result = await response.text();
             errorMessage.classList.add('success')
             errorMessage.textContent = '아이디가 확인되었습니다.'
-            username = result.username
         } catch (error) {
             console.error("요청 실패:", error);
         }
@@ -100,7 +98,6 @@
         const data = {
             username : document.getElementById('username').value
         }
-
         try {
             /* Security 제공 CSRF */
             const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
@@ -116,10 +113,22 @@
 
             if (!response.ok) {
                 const text = await response.text()
-                alert(text)
+                console.log(text)
+                return
             }
             const result = await response.text();
-            alert(result)
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: result,
+                showConfirmButton: false,
+                timer: 800,
+                customClass: {
+                  popup: 'follow-popup',
+                  icon: 'success-icon',
+                  title: 'alert-title'
+                }
+              })
         } catch (error) {
             console.error("요청 실패:", error);
         }
