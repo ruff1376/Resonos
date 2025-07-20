@@ -34,6 +34,7 @@ public class YouTubeApiService {
             "smtown", "jyp", "yg", "big hit", "bighit", "hybe", "ador", "kq", "rbw", "cube",
             "wm", "starship", "pledis", "fantagio", "woollim", "brandnew", "mnh", "mbk",
             "c9", "top media", "swing entertainment", "beat interactive", "a team", "mld",
+            "1MILLION Dance Studio",
 
             // ✅ 국내 아티스트 개인 채널
             "iu official", "taeyeon official", "zico official", "jay park", "jessi official",
@@ -64,7 +65,7 @@ public class YouTubeApiService {
             return null;
         }
 
-        String cleanedTitle = removeFeaturing(title);
+        String cleanedTitle = cleanTitle(title);
 
         String normTitle = normalize(cleanedTitle);
         String normArtist = normalize(artist);
@@ -165,9 +166,17 @@ public class YouTubeApiService {
         return "N/A";
     }
 
-    private String removeFeaturing(String title) {
-        // feat, featuring, ft (대소문자 구분 없이) 이후 텍스트 제거
-        return title.replaceAll("(?i)\\s*(feat|featuring|ft)\\s*.*", "").trim();
+    private String cleanTitle(String title) {
+        if (title == null)
+            return "";
+
+        // 1) feat, featuring, ft 뒤 내용 모두 제거 (대소문자 구분없이)
+        String removedFeat = title.replaceAll("(?i)\\s*(feat|featuring|ft)\\s*.*", "").trim();
+
+        // 2) instrumental 포함하면 instrumental부터 뒷부분 제거
+        String cleaned = removedFeat.replaceAll("(?i)\\s*instrumental.*", "").trim();
+
+        return cleaned;
     }
 
     private String normalize(String input) {
