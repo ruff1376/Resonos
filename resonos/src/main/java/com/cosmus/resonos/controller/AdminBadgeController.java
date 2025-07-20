@@ -90,8 +90,10 @@ public class AdminBadgeController {
         condition.setConditionType(conditionType);
         condition.setConditionValue(conditionValue);
         badgeConditionService.addCondition(condition);
+        String msg = "배지/조건 등록 완료";
+        String encodedMsg = URLEncoder.encode(msg, StandardCharsets.UTF_8);
+        return "redirect:/admin/badge?msg=" + encodedMsg;
 
-        return "redirect:/admin/badge?msg=배지/조건 등록 완료";
     }
 
     // --- 배지/조건 수정 ---
@@ -182,7 +184,7 @@ public class AdminBadgeController {
         model.addAttribute("users", users);
         model.addAttribute("logs", logs);
         model.addAttribute("badgeId", badgeId);
-        return "admin/badge_user_list";
+        return "admin/user_badge_list";
     }
 
     // --- 유저별 뱃지/지급·회수 이력(로그) ---

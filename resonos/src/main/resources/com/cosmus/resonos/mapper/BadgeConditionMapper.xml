@@ -77,6 +77,13 @@
     ]]>
   </select>
 
+  <!-- 조건 중복 여부 체크(중복이면 1 이상) -->
+  <select id="existsByTypeAndValue" parameterType="map" resultType="int">
+    SELECT COUNT(*) FROM badge_condition
+    WHERE condition_type = #{conditionType}
+      AND condition_value = #{conditionValue}
+  </select>
+
 
 
 </mapper>
