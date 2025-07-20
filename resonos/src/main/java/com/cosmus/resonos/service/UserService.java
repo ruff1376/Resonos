@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import com.cosmus.resonos.domain.GenreCount;
 import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.UserAuth;
+import com.cosmus.resonos.domain.UserNoti;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.domain.UsersTotalLikes;
 
@@ -104,4 +105,11 @@ public interface UserService {
 
     // 유저 제재 사유banUser
     public boolean banUser(Long id, boolean ban, String reason) throws Exception;
+
+    // 유저 기본 알림 세팅
+    public boolean basicNotiSetting(Long userId) throws Exception;
+    // 유저 알림 상태
+    public List<UserNoti> getNotiStatus(Long userId) throws Exception;
+    // 유저 알림 of / off
+    public boolean changeNoti(UserNoti userNoti) throws Exception;
 }

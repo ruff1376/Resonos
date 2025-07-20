@@ -858,7 +858,7 @@ button.like {background-color: inherit; border: none;}
 .con .bg-badge.cg {border-color: #706F6F;}
 .badge.cg {background-color: #706F6F;}
 
-/* 알람 설정 */
+/* 알림 설정 */
 .con-alaram .info-wrapper .info-section {height: 500px; text-align: start;}
 .toggle-switch {
   position: relative;
@@ -888,6 +888,7 @@ button.like {background-color: inherit; border: none;}
 }
 .toggle-switch input:checked + .slider {background-color: #4cd964;}
 .toggle-switch input:checked + .slider::before {transform: translateX(22px);}
+.type {min-width: 10%;}
 
 /* 비어 있는 경우 */
 .empty-text {
@@ -1094,6 +1095,8 @@ h2 + #bio {
 .con.con-security .input-area input {
   margin-bottom: 8px;
 }
+.con.con-security .btn-area {padding: 0 0;}
+#btn-withdrawal {color: #FF3B3B;}
 
 /* 미디어 쿼리  */
 @media screen and (max-width: 867px)  {

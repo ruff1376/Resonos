@@ -92,7 +92,8 @@
                 <!-- 더보기 버튼 -->
                 <div class="d-flex justify-content-center mb-1">
                     <div class="more-box d-flex gap-3" th:if="${hasNext}">
-                        <button id="load-more-btn" th:data-page="${size != null ? size/5 : 1}" th:data-track-id="${track.id}" class="btn btn-gold">리뷰
+                        <button id="load-more-btn" th:data-page="${size != null ? size/5 : 1}"
+                            th:data-track-id="${track.id}" class="btn btn-gold">리뷰
                             더보기</button>
 
                     </div>
@@ -166,8 +167,10 @@
                     <p>아직 아무도 분위기에 투표하지 않았어요 😅</p>
                 </th:block>
                 <th:block th:if="${moodLabels != null}">
-                    <div class="mood-list" th:each="topMoods : ${moodLabels}">
-                        <button class="btn btn-gold" th:text="|#${topMoods}|">분위기1</button>
+                    <div class="mood-list">
+                        <a th:each="topMoods : ${moodLabels}">
+                            <button class="btn btn-gold" th:text="|#${topMoods}|">분위기1</button>
+                        </a>
                     </div>
                 </th:block>
             </div>
@@ -177,9 +180,9 @@
                     <p>해당 음원을 포함한</p>
                     <p>플레이리스트를 만들어보세요! 🤩</p>
                 </th:block>
-                <th:block th:each="playList : ${playLists}">
+                <a th:each="playList : ${playLists}" th:href="@{|playlists/${playList.id}|}">
                     <p th:text="|${playList.title} ❤️${playList.likeCount}|"></p>
-                </th:block>
+                </a>
             </div>
         </div>
         <!-- 앨범 트랙리스트 분위기 뭐뭐..끝 -->
@@ -290,7 +293,7 @@
                         if (xhr.status === 409) {
                             Swal.fire({
                                 title: '중복',
-                                text: '이미 리뷰를 작성했습니다.',
+                                text: '이미 리뷰를 작성하셨습니다.',
                                 icon: 'warning',
                                 confirmButtonText: '확인'
                             });
@@ -424,15 +427,20 @@
                 });
             });
         });
+        $(document).ready(function () {
+            // body 또는 고정된 상위 요소에 위임
+            $('body').on('click', '.show-blind-btn', function () {
+                const reviewId = $(this).attr('data-review-id');
+                const contentSelector = '#blind-content-' + reviewId;
+
+                $(contentSelector).slideDown(); // 내용 표시
+                $(this).hide(); // 버튼 숨김
+            });
+        });
         // 리뷰 좋아요
         $(document).on("click", ".like-btn", function () {
             if (!isLogin) {
-                Swal.fire({
-                    title: '로그인을 해주세요',
-                    text: '로그인시 사용할 수 있는 기능입니다.',
-                    icon: 'error',
-                    confirmButtonText: '확인'
-                });
+                Swal.fire("로그인 필요", "좋아요를 남기려면 로그인이 필요합니다.", "warning");
                 return;
             }
 
@@ -458,12 +466,7 @@
                     });
                 }
             }).fail(function (xhr) {
-                Swal.fire({
-                    title: '로그인을 해주세요',
-                    text: '로그인시 사용할 수 있는 기능입니다.',
-                    icon: 'error',
-                    confirmButtonText: '확인'
-                });
+                Swal.fire("오류", "로그인이 필요하거나 예상치 못한 오류.", "error");
             });
         });
         // 신고
@@ -559,7 +562,7 @@
                         }
                     },
                     error: function () {
-                        alert('리뷰를 불러오는 중 오류가 발생했습니다.');
+                        Swal.fire("오류", "리뷰 로딩중 예기치못한 오류.", "error");
                     }
                 });
             });
@@ -674,7 +677,7 @@
             const trackId = $btn.data('track-id');
 
             if (!userId || userId === 0) {
-                Swal.fire('로그인이 필요합니다!');
+                Swal.fire("로그인 필요", "좋아요를 남기려면 로그인이 필요합니다.", "warning");
                 return;
             }
 
@@ -692,7 +695,7 @@
                     $('#likeCount').text(count);
                 },
                 error: function () {
-                    Swal.fire('좋아요 처리에 실패했습니다.');
+                    Swal.fire("오류", "좋아요 처리중 예기치못한 오류.", "error");
                 }
             });
         });

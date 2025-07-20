@@ -22,6 +22,7 @@ import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.PublicUserDto;
 import com.cosmus.resonos.domain.UserActivityLog;
 import com.cosmus.resonos.domain.UserAuth;
+import com.cosmus.resonos.domain.UserNoti;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.domain.UsersTotalLikes;
 import com.cosmus.resonos.mapper.UserMapper;
@@ -60,7 +61,14 @@ public class UserServiceImpl implements UserService {
             UserAuth userAuth = new UserAuth();
             userAuth.setUsername(user.getUsername());
             userAuth.setAuth("ROLE_USER"); // 2L = ROLE_USER, 1L = ROLE_ADMIN 등
-            userMapper.insertAuth(userAuth);
+            int authResult = userMapper.insertAuth(userAuth);
+
+            // 알림 기본 세팅
+            if(authResult > 0) {
+                Long id = userMapper.select(user.getUsername()).getId();
+                if(id != null)
+                    userMapper.basicNotiSetting(id);
+            }
         }
         return result;
     }
@@ -350,4 +358,18 @@ public class UserServiceImpl implements UserService {
             return userMapper.banUser(id, ban, reason) > 0;
         }
 
+        @Override
+        public boolean basicNotiSetting(Long userId) throws Exception {
+            return userMapper.basicNotiSetting(userId) > 0;
+        }
+
+        @Override
+        public boolean changeNoti(UserNoti userNoti) throws Exception {
+            return userMapper.changeNoti(userNoti) > 0;
+        }
+
+        @Override
+        public List<UserNoti> getNotiStatus(Long userId) throws Exception {
+            return userMapper.getNotiStatus(userId);
+        }
 }
