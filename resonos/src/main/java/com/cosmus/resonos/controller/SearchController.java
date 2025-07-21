@@ -109,10 +109,12 @@ public class SearchController {
         paramMap.put("pagination", pagination);
 
         List<Artist> allArtistSearchList = artistService.allSearchList(paramMap);
+        long artistSearchCount = artistService.searchCount(keyword);
 
         model.addAttribute("keyword", keyword);
         model.addAttribute("pagination", pagination);
         model.addAttribute("allArtistSearchList", allArtistSearchList);
+        model.addAttribute("artistSearchCount", artistSearchCount);
         
         String pageUri = UriComponentsBuilder.fromPath("/search/artists")
                                             .queryParam("q", keyword)
@@ -121,6 +123,9 @@ public class SearchController {
                                             .build()
                                             .toUriString();
         model.addAttribute("pageUri", pageUri);
+
+        log.info("artistSearchCount : " + artistSearchCount);
+
         return "search/search_artist";
     }
 
@@ -145,11 +150,13 @@ public class SearchController {
         // paramMap.put("pagination", pagination);
 
         List<Album> allAlbumSearchList = albumService.allSearchList(keyword, pagination, sort);
+        long albumSearchCount = albumService.searchCount(keyword);
 
         model.addAttribute("keyword", keyword);
         model.addAttribute("pagination", pagination);
         model.addAttribute("allAlbumSearchList", allAlbumSearchList);
         model.addAttribute("sort", sort);
+        model.addAttribute("albumSearchCount", albumSearchCount);
         
         String pageUri = UriComponentsBuilder.fromPath("/search/albums")
                                             .queryParam("q", keyword)
@@ -159,6 +166,9 @@ public class SearchController {
                                             .build()
                                             .toUriString();
         model.addAttribute("pageUri", pageUri);
+
+        log.info("albumSearchCount : " + albumSearchCount);
+
         return "search/search_album";
     }
 
@@ -183,11 +193,13 @@ public class SearchController {
         // paramMap.put("pagination", pagination);
 
         List<Track> allTrackSearchList = trackService.allSearchList(keyword, pagination, sort);
+        long trackSearchCount = trackService.searchCount(keyword);
 
         model.addAttribute("keyword", keyword);
         model.addAttribute("pagination", pagination);
         model.addAttribute("allTrackSearchList", allTrackSearchList);
         model.addAttribute("sort", sort);
+        model.addAttribute("trackSearchCount", trackSearchCount);
         
         String pageUri = UriComponentsBuilder.fromPath("/search/tracks")
                                             .queryParam("q", keyword)
@@ -197,6 +209,9 @@ public class SearchController {
                                             .build()
                                             .toUriString();
         model.addAttribute("pageUri", pageUri);
+
+        log.info("trackSearchCount : " + trackSearchCount);
+
         return "search/search_track";
     }
     
@@ -220,10 +235,12 @@ public class SearchController {
         paramMap.put("pagination", pagination);
 
         List<Users> allUserSearchList = userService.allSearchList(paramMap);
+        long userSearchCount = userService.searchCount(keyword);
 
         model.addAttribute("keyword", keyword);
         model.addAttribute("pagination", pagination);
         model.addAttribute("allUserSearchList", allUserSearchList);
+        model.addAttribute("userSearchCount", userSearchCount);
         
         String pageUri = UriComponentsBuilder.fromPath("/search/users")
                                             .queryParam("q", keyword)
@@ -232,6 +249,9 @@ public class SearchController {
                                             .build()
                                             .toUriString();
         model.addAttribute("pageUri", pageUri);
+
+        log.info("userSearchCount : " + userSearchCount);
+
         return "search/search_user";
     }
 
@@ -256,11 +276,13 @@ public class SearchController {
         // paramMap.put("pagination", pagination);
 
         List<Playlist> allPlaylistSearchList = playlistService.allSearchList(keyword, pagination, sort);
+        long playlistSearchCount = playlistService.searchCount(keyword);
 
         model.addAttribute("keyword", keyword);
         model.addAttribute("pagination", pagination);
         model.addAttribute("allPlaylistSearchList", allPlaylistSearchList);
         model.addAttribute("sort", sort);
+        model.addAttribute("playlistSearchCount", playlistSearchCount);
         
         String pageUri = UriComponentsBuilder.fromPath("/search/playlists")
                                             .queryParam("q", keyword)
@@ -270,6 +292,9 @@ public class SearchController {
                                             .build()
                                             .toUriString();
         model.addAttribute("pageUri", pageUri);
+
+        log.info("playlistSearchCount : " + playlistSearchCount);
+        
         return "search/search_playlist";
     }
     
