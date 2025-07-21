@@ -13,7 +13,7 @@
         <div class="container-fluid d-flex flex-column align-items-center px-0" style="max-width:1440px; padding-top:150px; gap:50px;">
             <!-- 검색 결과 : "OOO" -->
             <div class="d-flex flex-row mb-5 w-100" style="max-width:1440px; margin:10px auto; gap:10px;">
-                <h1 style="color: white; margin-left: 3rem;">검색 결과 : "<span th:text="${keyword}">검색어</span>"</h1>
+                <h1 style="color: white; margin-left: 3rem;">검색 결과 : "<span th:text="${keyword}">검색어</span>" (<span th:text="${trackSearchCount} ?: 0"></span>건)</h1>
             </div>
     
             <!-- 트랙 -->
