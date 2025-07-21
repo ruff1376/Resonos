@@ -168,7 +168,7 @@
                 </th:block>
                 <th:block th:if="${moodLabels != null}">
                     <div class="mood-list">
-                        <a th:each="topMoods : ${moodLabels}">
+                        <a th:each="topMoods : ${moodLabels}" th:href="@{/search(q=${'#' + topMoods})}">
                             <button class="btn btn-gold" th:text="|#${topMoods}|">분위기1</button>
                         </a>
                     </div>
