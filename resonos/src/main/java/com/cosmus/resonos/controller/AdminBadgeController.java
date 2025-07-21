@@ -1,5 +1,7 @@
 package com.cosmus.resonos.controller;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -12,9 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cosmus.resonos.domain.Badge;
 import com.cosmus.resonos.domain.BadgeCondition;
+import com.cosmus.resonos.domain.UserBadge;
+import com.cosmus.resonos.domain.UserBadgeLog;
 import com.cosmus.resonos.service.BadgeConditionService;
 import com.cosmus.resonos.service.BadgeService;
 import com.cosmus.resonos.service.UserBadgeService;
@@ -35,52 +40,63 @@ public class AdminBadgeController {
     @Autowired
     private UserBadgeService userBadgeService;
 
-    // 배지 관리 메인 페이지
+    // --- 메인: 배지+조건 현황 ---
     @GetMapping
-    public String badgePage(Model model) throws Exception {
-        List<Badge> badges = badgeService.list(); // 항상 DB에서 select
-        List<BadgeCondition> conditions = badgeConditionService.getAllConditions(); // 항상 DB에서 select
-
+    public String badgePage(@RequestParam(value="msg",required = false) String msg, Model model) throws Exception {
+        List<Badge> badges = badgeService.list();
+        List<BadgeCondition> conditions = badgeConditionService.getAllConditions();
         Map<Long, List<BadgeCondition>> badgeConditionsMap = conditions.stream()
-                .collect(Collectors.groupingBy(BadgeCondition::getBadgeId));
+            .collect(Collectors.groupingBy(BadgeCondition::getBadgeId));
+
+        // 각 배지별 현재 지급자 수 카운트 (보유자)
+        Map<Long, Long> badgeUserCount = userBadgeService.countByBadge();
 
         model.addAttribute("badges", badges);
         model.addAttribute("badgeConditionsMap", badgeConditionsMap);
-        // 로그로 데이터 출력 
-        log.info("[AdminBadgeController] 뱃지 목록: {}", badges);
-        log.info("[AdminBadgeController] 뱃지 조건 맵: {}", badgeConditionsMap);
+        model.addAttribute("badgeUserCount", badgeUserCount);
+        model.addAttribute("msg", msg);
+
+        log.info("[AdminBadgeController] 배지 목록: {}", badges);
 
         return "admin/badge_condition_list";
     }
 
-
-    // 배지+조건 동시 등록 (오른쪽 폼)
+    // --- 배지+조건 등록 ---
     @PostMapping("/insert")
     public String insert(@RequestParam("name") String name,
                          @RequestParam("description") String description,
                          @RequestParam(name="iconUrl", required = false) String iconUrl,
                          @RequestParam ("conditionType") String conditionType,
-                         @RequestParam("conditionValue") Integer conditionValue) throws Exception {
-        // 1. 배지 등록
+                         @RequestParam("conditionValue") Integer conditionValue,
+                         Model model) throws Exception {
+
+        // 중복 조건 체크
+        if(badgeConditionService.isConditionDuplicate(conditionType, conditionValue)) {
+            return "redirect:/admin/badge?msg=동일 조건의 배지가 이미 존재합니다";
+        }
+
+        // 배지 등록
         Badge badge = new Badge();
         badge.setName(name);
         badge.setDescription(description);
         badge.setIconUrl(iconUrl);
         badgeService.insert(badge);
 
-        // 2. 조건 등록
+        // 조건 등록
         BadgeCondition condition = new BadgeCondition();
         condition.setBadgeId(badge.getId());
-        condition.setBadgeName(badge.getName());
-        condition.setDescription(badge.getDescription());
+        condition.setBadgeName(name);
+        condition.setDescription(description);
         condition.setConditionType(conditionType);
         condition.setConditionValue(conditionValue);
         badgeConditionService.addCondition(condition);
+        String msg = "배지/조건 등록 완료";
+        String encodedMsg = URLEncoder.encode(msg, StandardCharsets.UTF_8);
+        return "redirect:/admin/badge?msg=" + encodedMsg;
 
-        return "redirect:/admin/badge";
     }
 
-    // 배지 조건 수정
+    // --- 배지/조건 수정 ---
     @PostMapping("/update")
     public String update(@RequestParam("id") Long id,
                         @RequestParam("badgeId") Long badgeId,
@@ -98,46 +114,101 @@ public class AdminBadgeController {
 
         badgeConditionService.updateCondition(condition);
 
-        
         Badge badge = new Badge();
         badge.setId(badgeId);
         badge.setName(badgeName);
         badge.setDescription(description);
-        badgeService.update(badge); // BadgeService에 update 메서드 필요
+        badgeService.update(badge);
 
-
-
-
-
-        log.info("condition:, {}", condition);
-
-        return "redirect:/admin/badge";
+        return "redirect:/admin/badge?msg=수정완료";
     }
 
-    // 배지 삭제 (조건도 함께 삭제)
+    // --- 배지/조건 삭제 ---
     @PostMapping("/delete/badge/{id}")
     public String deleteBadge(@PathVariable("id") Long id) throws Exception {
         badgeService.delete(id);
-        return "redirect:/admin/badge";
-    }
+        String msg = "삭제완료";
+        String encodedMsg = URLEncoder.encode(msg, StandardCharsets.UTF_8);
+        return "redirect:/admin/badge?msg=" + encodedMsg;
 
-    // 조건만 삭제 (사용 여부에 따라 필요시)
+    }
     @PostMapping("/delete/condition/{id}")
     public String deleteCondition(@PathVariable("id") Long id) throws Exception {
         badgeConditionService.deleteCondition(id);
-        return "redirect:/admin/badge";
-    }
-        // 배지 지급
-    @PostMapping("/grant")
-    public String grantBadge(@RequestParam Long userId, @RequestParam Long badgeId) throws Exception {
-        userBadgeService.giveBadge(userId, badgeId);
-        return "success";
+        String msg = "삭제완료";
+        String encodedMsg = URLEncoder.encode(msg, StandardCharsets.UTF_8);
+        return "redirect:/admin/badge?msg=" + encodedMsg;
+
     }
 
-    // 배지 회수
-    @PostMapping("/revoke")
-    public String revokeBadge(@RequestParam Long userId, @RequestParam Long badgeId) throws Exception {
-        userBadgeService.revokeBadge(userId, badgeId);
-        return "success";
+    // --- 배지 지급(수동), 성공/실패 메시지 반환(ajax도 가능) ---
+    @PostMapping("/grant")
+    @ResponseBody
+    public String grantBadge(@RequestParam("userId") Long userId, @RequestParam("badgeId") Long badgeId) throws Exception {
+        try {
+            userBadgeService.giveBadge(userId, badgeId);
+            return "success";
+        } catch(Exception ex) {
+            return "실패:" + ex.getMessage();
+        }
     }
+
+    // --- 배지 회수(수동) ---
+    @PostMapping("/revoke")
+    @ResponseBody
+    public String revokeBadge(@RequestParam("userId") Long userId, @RequestParam("badgeId") Long badgeId) throws Exception {
+        try {
+            userBadgeService.revokeBadge(userId, badgeId);
+            return "success";
+        } catch(Exception ex) {
+            return "실패:" + ex.getMessage();
+        }
+    }
+
+    // --- 일괄(소급) 지급 ---
+    @PostMapping("/grant-auto")
+    public String grantBadgesAuto(@RequestParam(value = "type", required = false) String type) throws Exception {
+        int count = 0;
+        // ... 지급 로직 생략 ...
+        String msg = count + "건 지급";
+        // 아래처럼 반드시 인코딩!!
+        String encodedMsg = URLEncoder.encode(msg, StandardCharsets.UTF_8);
+        return "redirect:/admin/badge?msg=" + encodedMsg;
+    }
+
+    // --- 뱃지별 지급자(보유자) 리스트 ---
+    @GetMapping("/badge/{badgeId}/users")
+    public String badgeGivenUsersPage(@PathVariable("badgeId") Long badgeId, Model model) throws Exception {
+        List<UserBadge> users = userBadgeService.listByBadge(badgeId);
+        List<UserBadgeLog> logs = userBadgeService.getLog(null, badgeId);
+        model.addAttribute("users", users);
+        model.addAttribute("logs", logs);
+        model.addAttribute("badgeId", badgeId);
+        return "admin/user_badge_list";
+    }
+
+    // --- 유저별 뱃지/지급·회수 이력(로그) ---
+    @GetMapping("/user/{userId}")
+    public String userBadgePage(@PathVariable("userId") Long userId, Model model) throws Exception {
+        List<UserBadge> badges = userBadgeService.listByUser(userId);
+        List<UserBadgeLog> logs = userBadgeService.getLog(userId, null);
+        model.addAttribute("userBadges", badges);
+        model.addAttribute("logs", logs);
+        model.addAttribute("userId", userId);
+        return "admin/user_badge_list";
+    }
+
+    // --- 지급/회수 이력 전체 관리 ---
+    @GetMapping("/log")
+    public String badgeLogPage(@RequestParam(value = "userId", required = false) Long userId,
+                               @RequestParam(value = "badgeId", required = false) Long badgeId,
+                               Model model) throws Exception {
+        List<UserBadgeLog> logs = userBadgeService.getLog(userId, badgeId);
+        model.addAttribute("logs", logs);
+        model.addAttribute("filterUserId", userId);
+        model.addAttribute("filterBadgeId", badgeId);
+        return "admin/badge_log_list";
+    }
+
+    // (확장) 유저, 배지 검색 지원을 위한 Ajax/Search API 추가도 가능
 }

@@ -1,9 +1,10 @@
 package com.cosmus.resonos.service;
 
-import com.cosmus.resonos.domain.BadgeCondition;
-import com.cosmus.resonos.domain.UserActivitySummary;
-
 import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.cosmus.resonos.domain.BadgeCondition;
 
 public interface BadgeConditionService {
     // 배지 CRUD
@@ -15,4 +16,7 @@ public interface BadgeConditionService {
     public List<BadgeCondition> getAllConditions() throws Exception;
     public List<BadgeCondition> getConditionsByBadgeId(Long badgeId) throws Exception;
 
+    public List<Long> getBadgeIdsForPostCount(@Param("userId") Long userId, int postCount) throws Exception;
+    public List<Long> getBadgeIdsForCommentCount(@Param("userId") Long userId, int commentCount) throws Exception;
+    public boolean isConditionDuplicate(@Param("conditionType") String conditionType, @Param("conditionValue") Integer conditionValue) throws Exception;
 }

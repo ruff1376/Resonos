@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layouts/admin_layout}">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="'배지 지급자 목록 - ' + ${badgeId}">배지 지급자 목록</title>
+</head>
+<th:block layout:fragment="content">
+<div class="container py-4">
+  <h2 class="mb-4">배지 지급자 목록 <span style="color:#4fc3f7;">(Badge ID: [[${badgeId}]])</span></h2>
+  <div class="mb-3">
+    <a th:href="@{/admin/badge}" class="btn btn-outline-primary btn-sm">&laquo; 배지 관리로</a>
+  </div>
+
+  <!-- 지급자(보유자) 테이블 -->
+  <div class="card shadow mb-4">
+    <div class="card-header fw-semibold bg-light">지급/보유자 현황</div>
+    <div class="card-body p-0">
+      <table class="table table-hover mb-0 align-middle text-center">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>유저ID</th>
+            <th>유저명</th>
+            <th>지급일시</th>
+            <th>액션</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="user, iterStat : ${users}">
+            <td th:text="${iterStat.count}">1</td>
+            <td th:text="${user.userId}">101</td>
+            <td th:text="${user.userName}">닉네임</td>
+            <td th:text="${#dates.format(user.grantedAt, 'yyyy-MM-dd HH:mm')}">2025-01-01 12:34</td>
+            <td>
+              <a th:href="@{/admin/badge/user/{userId}(userId=${user.userId})}" class="btn btn-info btn-xs">유저 배지 이력</a>
+            </td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(users)}">
+            <td colspan="5" class="text-secondary py-3">아직 해당 배지를 보유한 사용자가 없습니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 지급/회수 이력 테이블 -->
+  <div class="card shadow mb-4">
+    <div class="card-header fw-semibold bg-light">이 배지의 지급/회수 이력</div>
+    <div class="card-body p-0">
+      <table class="table table-sm table-striped mb-0 align-middle text-center">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>유저ID</th>
+            <th>액션</th>
+            <th>담당자</th>
+            <th>사유</th>
+            <th>일시</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="log, iterStat : ${logs}">
+            <td th:text="${iterStat.count}">1</td>
+            <td th:text="${log.userId}">101</td>
+            <td>
+              <span th:switch="${log.action}">
+                <span th:case="'GRANT'" class="badge bg-success">지급</span>
+                <span th:case="'REVOKE'" class="badge bg-danger">회수</span>
+                <span th:default class="badge bg-secondary">기타</span>
+              </span>
+            </td>
+            <td th:text="${log.actorId} ?: '-자동-'">-자동-</td>
+            <td th:text="${log.reason}">-</td>
+            <td th:text="${#dates.format(log.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(logs)}">
+            <td colspan="6" class="text-secondary py-3">이 배지 지급/회수 이력이 없습니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</th:block>
+</html>

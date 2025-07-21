@@ -46,4 +46,19 @@ public class BadgeConditionServiceImpl implements BadgeConditionService {
     public List<BadgeCondition> getConditionsByBadgeId(Long badgeId) throws Exception {
         return badgeConditionMapper.selectByBadgeId(badgeId);
     }
+
+    @Override
+    public List<Long> getBadgeIdsForPostCount(Long userId, int postCount) throws Exception {
+        return badgeConditionMapper.selectBadgeIdsForPostCount(userId, postCount);
+    }
+
+    @Override
+    public List<Long> getBadgeIdsForCommentCount(Long userId, int commentCount) throws Exception {
+        return badgeConditionMapper.selectBadgeIdsForCommentCount(userId, commentCount);
+    }
+    @Override
+    public boolean isConditionDuplicate(String conditionType, Integer conditionValue) throws Exception {
+        return badgeConditionMapper.existsByTypeAndValue(conditionType, conditionValue) > 0;
+    }
+    
 }

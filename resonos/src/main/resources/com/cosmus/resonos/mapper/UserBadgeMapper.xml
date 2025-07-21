@@ -118,10 +118,21 @@
     WHERE f.follow_count >= bc.condition_value
       AND ub.id IS NULL
   </insert>
+  <!-- countByBadge -->
+  <select id="countByBadge" resultType="map">
+    SELECT badge_id, COUNT(*) AS value
+    FROM user_badge
+    GROUP BY badge_id
+  </select>
+  <!-- findBadgesByUserId -->
+  <select id="findBadgesByUserId" resultType="map">
+    SELECT ub.badge_id, COUNT(*) AS value
+    FROM user_badge ub
+    WHERE ub.user_id = #{userId}
+    GROUP BY ub.badge_id
+  </select>
 
 
-
-  
 
 
 

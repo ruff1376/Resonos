@@ -16,8 +16,6 @@ public interface NotificationService {
     // 삽입
     public boolean insert(Notification notification) throws Exception;
     public boolean update(Notification notification) throws Exception;
-    public boolean delete(Long id) throws Exception;
-    public List<Notification> findByUser(Long userId) throws Exception;
 
     // "알림 생성(메시지 완성 후)" 방식
     boolean createNotification(Notification notification) throws Exception;

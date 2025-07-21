@@ -15,8 +15,10 @@ public class AutomationScheduler {
     // @Autowired private UserLevelService userLevelService;
     // 추가 자동화 서비스들
 
-    @Scheduled(cron = "0 0 3 * * *") // 매일 새벽 3시
+    // @Scheduled(cron = "0 0 3 * * *") // 매일 새벽 3시
+    @Scheduled(cron = "0 */5 * * * *") // 5분마다 0초에 실행 
     public void dailyAutomationTasks() throws Exception {
+        log.info("[자동화] 일일 자동화 작업 시작");
         int b1 = userBadgeService.grantPostBadges();
         int b2 = userBadgeService.grantCommentBadges();
         // int lvlUp = userLevelService.autoGrantLevelUp(); // 레벨 시스템 구현 후 추가 미구현

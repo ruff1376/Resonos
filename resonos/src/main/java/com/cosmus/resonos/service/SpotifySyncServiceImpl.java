@@ -133,6 +133,10 @@ public class SpotifySyncServiceImpl implements SpotifySyncService {
             try {
                 String albumId = (String) albumStub.get("id");
                 if (albumId == null) continue;
+
+                // -- 딜레이 (앨범 상세 요청 전) --
+                safeSleep(200); // 200ms 대기
+
                 Map<String, Object> albumDetail = spotifyApiClient.getAlbum(albumId, accessToken);
                 // 상세값 merge (상세필드 우선) - 기본+상세 별도로 들어오니 putAll
                 if (albumDetail != null) albumStub.putAll(albumDetail);
@@ -144,6 +148,10 @@ public class SpotifySyncServiceImpl implements SpotifySyncService {
                     try {
                         String trackId = (String) trackStub.get("id");
                         if (trackId == null) continue;
+
+                        // -- 딜레이 (트랙 상세 요청 전) --
+                        safeSleep(200); // 200ms 대기
+
                         Map<String, Object> trackDetail = spotifyApiClient.getTrack(trackId, accessToken);
                         if (trackDetail != null) trackStub.putAll(trackDetail);
                         saveTrackIfNotExists(trackStub, albumId, spotifyArtistId);
@@ -157,6 +165,11 @@ public class SpotifySyncServiceImpl implements SpotifySyncService {
         }
     }
 
+    // 안전한 Thread.sleep 헬퍼
+    private static void safeSleep(long millis) {
+        try { Thread.sleep(millis); } catch (InterruptedException ignore) {}
+    }
+    
     /** Spotify release_date(String) → java.sql.Date 변환 유틸 */
     private static java.sql.Date parseSpotifyDateToSqlDate(String dateStr) {
         if (dateStr == null) return null;

@@ -1,6 +1,8 @@
 package com.cosmus.resonos.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,8 +25,8 @@ public interface UserBadgeMapper {
     public List<Long> findBadgeIdsByUserId(@Param("userId") Long userId);
     public void grantBadge(@Param("userId") Long userId, @Param("badgeId") Long badgeId);
 
-    public void grantPostBadgesAll();       // 전체 유저 자동 지급(게시글)
-    public void grantCommentBadgesAll();    // 전체 유저 자동 지급(댓글)
+    public int grantPostBadgesAll();       // 전체 유저 자동 지급(게시글)
+    public int grantCommentBadgesAll();    // 전체 유저 자동 지급(댓글)
     public void grantLikeBadgesAll();       // 전체 유저 자동 지급(좋아요)
     public void grantFollowBadgesAll();     // 전체 유저 자동 지급(팔로우)
     
@@ -36,5 +38,17 @@ public interface UserBadgeMapper {
     public List<UserBadge> findBadgesByUserId(@Param("userId") Long userId) throws Exception;
     // 유저 배지 삭제
     public int deleteByUserAndBadge(@Param("userId") Long userId, @Param("badgeId") Long badgeId) throws Exception;
+    // insertBadgeLog
+    public int insertBadgeLog(
+        @Param("userId") Long userId,
+        @Param("badgeId") Long badgeId,
+        @Param("action") String action,
+        @Param("actorId") Long actorId,
+        @Param("reason") String reason
+    ) throws Exception;
     
+    
+    // Map<Long, Long> countByBadge() 
+    public List<Map<String, Object>> countByBadge() throws Exception;
+
 }
