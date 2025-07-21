@@ -133,6 +133,7 @@
       INNER JOIN playlist p ON p.id = lp.playlist_id
       INNER JOIN user u ON p.user_id = u.id
     WHERE lp.user_id = #{userId}
+    AND p.is_public = 1
     <if test="keyword != null and keyword != ''">
       AND (
         p.title LIKE CONCAT('%', #{keyword}, '%')
