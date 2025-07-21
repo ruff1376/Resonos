@@ -414,15 +414,20 @@ img {
     gap: 30px;
     padding-left: 20px;
 }
-
+.album-moods {
+    border: 2px solid var(--main-color);
+    border-radius: 20px;
+    padding: 10px;
+    padding-top: 0;
+}
 .mood-list {
     display: flex;
-    height: 100%;
     padding: 5px;
     gap: 5px;
     flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
+}
+.mood-list a {
+    display: flex;
 }
 
 .mood-vote {
@@ -549,6 +554,11 @@ img {
 .album-container::-webkit-scrollbar {
     display: none;
     /* 크롬, 사파리, 오페라용 스크롤바 숨기기 */
+}
+@media (max-width: 1230px) {
+  .album-moods {
+    display: none !important;
+  }
 }
 
 /* 공연 날짜, 장소, "Track" 버튼, "Request a show" 버튼 등을 숨김 */

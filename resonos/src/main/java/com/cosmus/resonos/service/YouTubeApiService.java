@@ -16,7 +16,7 @@ public class YouTubeApiService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    @Value("${youtube.api.key}")
+    // @Value("${youtube.api.key}")
     private String apiKey;
 
     private static final List<String> EXCLUDED_KEYWORDS = List.of(
@@ -45,13 +45,21 @@ public class YouTubeApiService {
             "smtown", "jyp", "yg", "big hit", "bighit", "hybe", "ador", "kq", "rbw", "cube",
             "wm", "starship", "pledis", "fantagio", "woollim", "brandnew", "mnh", "mbk",
             "c9", "top media", "swing entertainment", "beat interactive", "a team", "mld",
-            "1million dance studio", "m2", "genie original",
-
+            "1million dance studio", "m2", "genie original", "jyp entertainment", "hybe labels",
+            "smtown",
             // 국내 아티스트 개인 채널
             "iu official", "taeyeon official", "zico official", "jay park", "jessi official",
             "bts official", "blackpink", "twice official", "exo official", "red velvet official",
             "stray kids official", "itzy official", "got7 official", "seventeen official",
-            "mamamoo official", "chung ha_official",
+            "mamamoo official", "chung ha_official", "ive", "ROSÉ", "aespa", "stayc", "kepler", "g-idle",
+            "ive official", "le sserafim", "newjeans official", "itzy", "twice",
+            "dreamcatcher official", "loona", "taeyeon", "jessi official",
+            "lee hi", "heize official", "bb girls", "viviz",
+            "bts official", "exo", "nct", "nct dream", "nct 127", "super junior", "shinee",
+            "taemin", "kai", "got7", "jackson wang", "stray kids", "the boyz", "ateez", "txt",
+            "enhypen", "seventeen", "astro", "monsta x", "btob", "highlight",
+            "jay park", "crush", "penomeco", "gray official", "loco official", "paul kim",
+            "lee mujin", "baekhyun", "wonho", "kard",
 
             // 해외 메이저 레이블 및 배급사
             "sony music", "sony music korea", "워너뮤직코리아", "warner music", "warner music korea",
@@ -61,11 +69,13 @@ public class YouTubeApiService {
             "smej", "king records",
 
             // 글로벌 아티스트/뮤직 플랫폼/브랜드 채널
+            "vevo", "avicii", "dua lipa", "coldplay", "shawn mendes", "beyoncé", "bruno mars",
+            "doja cat", "billie eilish", "the weeknd", "drake", "eminem", "post malone",
             "t-series", "zee music company", "tips official", "trap nation", "monstercat",
             "no-copyright-sounds", "chill nation", "ukf", "colorsxstudios", "sofar sounds",
-            "lyrical lemonade", "armada music", "bbc radio 1", "wave music", "ncs",
-            "monstercat uncaged", "epic music world", "comfy music channel",
-            "lofi hip hop", "colors – live sessions");
+            "lyrical lemonade", "armada music", "bbc radio 1", "wave music", "ncs", "justin bieber",
+            "monstercat uncaged", "epic music world", "Rihanna", "comfy music channel",
+            "lofi hip hop", "colors – live sessions", "es sheeran", "lady gaga");
 
     private static final List<String> PRIORITY_TITLE_KEYWORDS = List.of(
             "official music video", "mv", "m/v", "performance video", "official performance",
