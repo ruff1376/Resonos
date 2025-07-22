@@ -16,7 +16,7 @@ public class YouTubeApiService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    @Value("${youtube.api.key}")
+    // @Value("${youtube.api.key}")
     private String apiKey;
 
     private static final List<String> EXCLUDED_KEYWORDS = List.of(
@@ -195,7 +195,7 @@ public class YouTubeApiService {
             score += 3;
         if (videoTitle.contains(normTitle) && videoTitle.contains(normArtist))
             score += 2; // 제목-아티스트 완전 포함시 보너스
-            
+
         for (String priority : PRIORITY_TITLE_KEYWORDS) {
             if (videoTitle.contains(normalize(priority))) {
                 score += 5;
