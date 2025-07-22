@@ -1055,6 +1055,11 @@ h2 + #bio {
 .alert-text {
   font-size: 1.4rem;
 }
+.welcome-text {
+  position: relative;
+  top: 70px;
+  font-size: 2rem;
+}
 .warning-icon {
   margin-top: 60px !important;
 }
@@ -1064,6 +1069,12 @@ h2 + #bio {
   height: 40px;
   border-radius: 10px;
   margin-left: 20px;
+}
+.welcome-button {
+  background-color: var(--main-color);
+  width: 100px;
+  height: 40px;
+  border-radius: 10px;
 }
 .alert-button:hover {
   background-color: #fff;

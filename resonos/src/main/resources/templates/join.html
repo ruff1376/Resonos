@@ -54,6 +54,7 @@
       let samePw = false
       let duplId = false
       let duplNick = false
+      let duplEmail = false
 
       // 비동기 유효성 검사
       async function checkField(event, field) {
@@ -110,24 +111,28 @@
             });
 
             if (!response.ok) {
-                const errorArray = await response.json();
-                errorArray.forEach(e => {
-                    let field = e.field;
-                    if(e.key) field = e.key
-                    let message = e.defaultMessage;
-                    const errorElement = document.getElementById(`${field}Error`)
-                    if (errorElement) {
-                      if(e.value) message = e.value
-                      errorElement.textContent = message
-                      errorElement.classList.remove('success')
-                    }
-                    if(field == 'username') duplId = false
-                    if(field == 'nickname') duplNick = false
-                });
-                return
+              const errorArray = await response.json();
+              console.log(errorArray)
+              errorArray.forEach(e => {
+                let field = e.field;
+                if(e.key) field = e.key
+                let message = e.defaultMessage;
+                const errorElement = document.getElementById(`${field}Error`)
+                if (errorElement) {
+                  if(e.value) message = e.value
+                  errorElement.textContent = message
+                  errorElement.classList.remove('success')
+                }
+                if(field == 'username') duplId = false
+                if(field == 'nickname') duplNick = false
+                if(field == 'email') duplEmail = false
+              });
+              return
             }
+
             if(field == 'username') duplId = true
             if(field == 'nickname') duplNick = true
+            if(field == 'email') duplEmail = true
             const result = await response.text();
             errorMessage.classList.add('success')
             errorMessage.innerText = result
@@ -138,9 +143,38 @@
 
       function formCheck(e) {
         e.preventDefault()
-        if(samePw && duplId && duplNick) {
-          alert(`${document.getElementById('nickname').value} 님 환영합니다. 😊`)
-          document.getElementById('form').submit()
+        if(samePw && duplId && duplNick && duplEmail) {
+          Swal.fire({
+            title: '',
+            html: `<p class="welcome-text">${document.getElementById('nickname').value} 님 환영합니다. 😊</p>`,
+            confirmButtonText: "확인",
+            reverseButtons: false,
+            customClass: {
+              popup: 'follow-popup',
+              icon: 'warning-icon',
+              title: 'alert-title',
+              text: 'alert-text',
+              confirmButton: 'welcome-button',
+              cancelButton: 'alert-cancle-button'
+            }
+          }).then((result) => {
+            if (result.isConfirmed) {
+              document.getElementById('form').submit()
+            }
+          })
+        } else {
+          Swal.fire({
+            position: "center",
+            icon: "warning",
+            title:  "정보를 올바르게 입력해주세요.",
+            showConfirmButton: false,
+            timer: 1000,
+            customClass: {
+              popup: 'follow-popup',
+              icon: 'success-icon',
+              title: 'alert-title'
+              }
+          });
         }
       }
 

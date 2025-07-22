@@ -305,7 +305,7 @@ BEGIN
 
     CREATE TABLE IF NOT EXISTS `notification` (
         `id` BIGINT NOT NULL,
-        `type` VARCHAR(32) NOT NULL, 
+        `type` VARCHAR(32) NOT NULL,
         `message` TEXT NOT NULL,
         `content` TEXT NULL,
         `is_read` BOOLEAN NOT NULL,
@@ -443,11 +443,10 @@ CREATE TABLE IF NOT EXISTS user_badge_log (
     INDEX idx_ubl_user_badge_created (user_id, badge_id, created_at)
 );
 
-CREATE TABLE IF NOT EXISTS user_notification (
-    id BIGINT NOT NULL,
-    user_id BIGINT NOT NULL,
-    type VARCHAR(32) NOT NULL,
-    is_enabled TINYINT(1) NOT NULL DEFAULT 1
+CREATE TABLE IF NOT EXISTS  `user_notification` (
+    `user_id` BIGINT NOT NULL,
+    `type` enum('comment','mention','like','follow','reply','badge','qna','announcement','system') NOT NULL,
+    `is_enabled` tinyint(1) NOT NULL DEFAULT '1'
 );
 
 
@@ -483,6 +482,7 @@ CREATE TABLE IF NOT EXISTS user_notification (
     ALTER TABLE `badge` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `notification` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `setting`MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`), ADD CONSTRAINT `uk_setting_value` UNIQUE (`value`);
+    ALTER TABLE user_notification MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
 
     ALTER TABLE `track_mood_vote` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `artist_mood_vote` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
@@ -507,6 +507,7 @@ CREATE TABLE IF NOT EXISTS user_notification (
     ALTER TABLE `track_review` ADD UNIQUE KEY `uniq_user_track` (`user_id`, `track_id`);
     ALTER TABLE `review_like` ADD UNIQUE (review_id, user_id, review_type);
     ALTER TABLE `review_report` ADD UNIQUE (review_id, user_id, review_type);
+    ALTER TABLE `user_notification` ADD UNIQUE `UK_user_type` (`user_id`, `type`);
 
     -- FK
     ALTER TABLE `notice` ADD CONSTRAINT `FK_user_TO_notice_1` FOREIGN KEY (`author_id`) REFERENCES `user` (`id`);
@@ -566,6 +567,7 @@ CREATE TABLE IF NOT EXISTS user_notification (
     ALTER TABLE `badge_condition` ADD CONSTRAINT `FK_badge_TO_badge_condition_1` FOREIGN KEY (`badge_id`) REFERENCES `badge` (`id`);
     ALTER TABLE `review_like` ADD CONSTRAINT `FK_user_TO_review_like_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
     ALTER TABLE `review_report` ADD CONSTRAINT `FK_user_TO_review_report_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+    ALTER TABLE `user_notification` ADD CONSTRAINT `FK_user_TO_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 
 -- 2. id 컬럼에 PK + AUTO_INCREMENT 추가 (이미 PK면 MODIFY 만)
 ALTER TABLE user_badge_log
@@ -580,15 +582,6 @@ ALTER TABLE user_badge_log
         REFERENCES badge(id) ON DELETE CASCADE ON UPDATE CASCADE,
     ADD CONSTRAINT FK_ubl_actor FOREIGN KEY (actor_id)
         REFERENCES user(id) ON DELETE SET NULL ON UPDATE CASCADE;
-
-
-ALTER TABLE user_notification
-    MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT,
-    ADD PRIMARY KEY (id);
-
-ALTER TABLE user_notification
-    ADD CONSTRAINT FK_un_user FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE;
-
 
     -- 5. 외래키 제약 조건 활성화
     SET FOREIGN_KEY_CHECKS = 1;
