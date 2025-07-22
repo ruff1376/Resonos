@@ -96,7 +96,12 @@
                 <p id="headline" th:text="|${album.title}💽 TOP${#lists.size(top5List)}🔥|">앨범 인기 TOP 5 트랙</p>
                 <th:block th:each="tops, stat : ${top5List}">
                     <a th:href="@{tracks(id=${tops.id})}">
-                        <p th:text="|${stat.count}. ${tops.title} ${track.formattedDuration}|"></p>
+                        <div class="d-flex gap-1" style="max-height: fit-content;">
+                            <p th:text="|${stat.count}. ${tops.title} |"
+                                style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+                            </p>
+                            <span th:text="${track.formattedDuration}"></span>
+                        </div>
                     </a>
                 </th:block>
             </div>
@@ -134,9 +139,9 @@
                     <p>해당 음원을 포함한</p>
                     <p>플레이리스트를 만들어보세요! 🤩</p>
                 </th:block>
-                <th:block th:each="playList : ${playLists}">
+                <a th:each="playList : ${playLists}" th:href="@{|playlists/${playList.id}|}">
                     <p th:text="|${playList.title} ❤️${playList.likeCount}|"></p>
-                </th:block>
+                </a>
             </div>
         </div>
         <!-- 앨범 트랙리스트 분위기 뭐뭐..끝 -->
@@ -165,7 +170,8 @@
                 <!-- 더보기 버튼 -->
                 <div class="d-flex justify-content-center mb-1">
                     <div class="more-box d-flex gap-3" th:if="${hasNext}">
-                        <button id="load-more-btn" th:data-page="${size != null ? size/5 : 1}" th:data-album-id="${album.id}" class="btn btn-gold">리뷰
+                        <button id="load-more-btn" th:data-page="${size != null ? size/5 : 1}"
+                            th:data-album-id="${album.id}" class="btn btn-gold">리뷰
                             더보기</button>
                     </div>
                 </div>
@@ -469,7 +475,7 @@
                     },
                     error: function (xhr) {
                         if (xhr.status === 409) {
-                            Swal.fire('중복', '이미 리뷰를 작성했습니다.', 'warning');
+                            Swal.fire('중복', '이미 리뷰를 작성하셨습니다.', 'warning');
                         } else {
                             Swal.fire('오류', '리뷰 등록 중 오류 발생.', 'error');
                         }
@@ -576,7 +582,16 @@
                 });
             });
         });
+        $(document).ready(function () {
+            // body 또는 고정된 상위 요소에 위임
+            $('body').on('click', '.show-blind-btn', function () {
+                const reviewId = $(this).attr('data-review-id');
+                const contentSelector = '#blind-content-' + reviewId;
 
+                $(contentSelector).slideDown(); // 내용 표시
+                $(this).hide(); // 버튼 숨김
+            });
+        });
     </script>
 
     <!-- 리뷰 좋아요, 신고 비동기 -->
@@ -860,7 +875,7 @@
                         Swal.fire(msg, '', 'success');
                     },
                     error: function () {
-                        Swal.fire('저장 실패', '오류가 발생했습니다.', 'error');
+                        Swal.fire('저장 실패', '범위내의 값이 아니거나 예기치 않은 오류발생.', 'error');
                     }
                 });
             });
@@ -873,7 +888,7 @@
             const albumId = $btn.data('album-id');
 
             if (!userId || userId === 0) {
-                Swal.fire('로그인이 필요합니다!');
+                Swal.fire("로그인 필요", "좋아요를 남기려면 로그인이 필요합니다.", "warning");
                 return;
             }
 

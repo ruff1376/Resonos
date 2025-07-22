@@ -62,8 +62,8 @@ public class Users {
         groups = NicknameCheck.class
     )
     @Pattern(
-        regexp = "^(?=.{2,10}$)(?=.*[a-zA-Z가-힣]).*$",
-        message = "숫자만을 제외한 조합으로 2 ~ 10글자 사이여야 합니다.",
+        regexp = "^(?=.{2,10}$)(?=.*[a-zA-Z가-힣])[a-zA-Z가-힣0-9]+$",
+        message = "숫자만을 제외한 조합, 특수문자 제외 2 ~ 10글자 사이여야 합니다.",
         groups = NicknameCheck.class
     )
     private String nickname;
@@ -84,6 +84,7 @@ public class Users {
     private List<UserAuth> authList;
 
 
-
+    // 인증 번호
+    private String certiNo;
 
 }

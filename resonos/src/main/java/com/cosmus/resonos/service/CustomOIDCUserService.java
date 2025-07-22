@@ -76,6 +76,7 @@ public class CustomOIDCUserService extends OidcUserService {
                     userService.insertAuth(userAuth);
                     log.info("================== 구글 회원가입 완료 (OIDC) ===================");
                     user = userService.select(randomUn);
+                    userService.basicNotiSetting(user.getId());
                 }
             }
         } catch (Exception e) {

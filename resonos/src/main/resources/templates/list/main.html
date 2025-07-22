@@ -98,22 +98,22 @@
                     <th:block th:each="newAlbum : ${newAlbumList}">
                         <!-- 앨범 카드 -->
                         <div class="col d-flex justify-content-center">
-                            <div class="card align-items-center p-3" style="width:228px; height:340px;">
+                            <div class="card align-items-center gap-2 mt-3" style="width:228px; height:340px;">
                                 <a th:href="@{'/albums?id=' + ${newAlbum.id}}">
                                     <img th:src="${newAlbum.coverImage}" class="card-img-top" alt="앨범커버">
                                 </a>
-                                <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <!-- 앨범 제목 클릭 시 이동 -->
                                     <a th:href="@{'/albums?id=' + ${newAlbum.id}}" class="card-title" th:text="${newAlbum.title}"></a>
                                     <!-- 아티스트 이름 클릭 시 이동 -->
                                     <a th:href="@{'/artists?id=' + ${newAlbum.artistId}}" class="card-artist" th:text="${newAlbum.artistName}"></a>
                                 </div>
-                                <div class="position-relative bottom-0 mb-5">
+                                <div class="d-flex justify-content-center mb-4">
                                     <th:block th:if="${newAlbum.avgRating != null}">
                                         <canvas class="doughnut-canvas" th:attr="data-rating=${newAlbum.avgRating}" width="50" height="50"></canvas>
                                     </th:block>
                                     <th:block th:unless="${newAlbum.avgRating != null}">
-                                        <span class="no-rating fw-bold fs-2">NR</span>
+                                        <span class="no-rating fw-bold fs-2 pb-3">NR</span>
                                     </th:block>
                                 </div>
                             </div>
@@ -136,22 +136,22 @@
                     <th:block th:each="hotAlbum : ${hotAlbumList}">
                         <!-- 앨범 카드 -->
                         <div class="col d-flex justify-content-center">
-                            <div class="card align-items-center p-3" style="width:228px; height:340px;">
+                            <div class="card align-items-center gap-2 mt-3" style="width:228px; height:340px;">
                                 <a th:href="@{'/albums?id=' + ${hotAlbum.id}}">
                                     <img th:src="${hotAlbum.coverImage}" class="card-img-top" alt="앨범커버">
                                 </a>
-                                <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <!-- 앨범 제목 클릭 시 이동 -->
                                     <a th:href="@{'/albums?id=' + ${hotAlbum.id}}" class="card-title" th:text="${hotAlbum.title}"></a>
                                     <!-- 아티스트 이름 클릭 시 이동 -->
                                     <a th:href="@{'/artists?id=' + ${hotAlbum.artistId}}" class="card-artist" th:text="${hotAlbum.artistName}"></a>
                                 </div>
-                                <div class="position-relative bottom-0 mb-5">
+                                <div class="d-flex justify-content-center mb-4">
                                     <th:block th:if="${hotAlbum.avgRating != null}">
                                         <canvas class="doughnut-canvas" th:attr="data-rating=${hotAlbum.avgRating}" width="50" height="50"></canvas>
                                     </th:block>
                                     <th:block th:unless="${hotAlbum.avgRating != null}">
-                                        <span class="no-rating fw-bold fs-2">NR</span>
+                                        <span class="no-rating fw-bold fs-2 pb-3">NR</span>
                                     </th:block>
                                 </div>
                             </div>
@@ -174,20 +174,20 @@
                     <th:block th:each="newTrack : ${newTrackList}">
                         <!-- 트랙 카드 -->
                         <div class="col d-flex justify-content-center">
-                            <div class="card align-items-center p-3" style="width:228px; height:340px;">
+                            <div class="card align-items-center gap-2 mt-3" style="width:228px; height:340px;">
                                 <a th:href="@{'/tracks?id=' + ${newTrack.id}}">
                                     <img th:src="${newTrack.coverImage}" class="card-img-top" alt="앨범커버">
                                 </a>
-                                <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <a th:href="@{'/tracks?id=' + ${newTrack.id}}" class="card-title" th:text="${newTrack.title}"></a>
                                     <a th:href="@{'/artists?id=' + ${newTrack.artistId}}" class="card-artist" th:text="${newTrack.artistName}"></a>
                                 </div>
-                                <div class="position-relative bottom-0 mb-5">
+                                <div class="d-flex justify-content-center mb-4">
                                     <th:block th:if="${newTrack.avgRating != null}">
                                         <canvas class="doughnut-canvas" th:attr="data-rating=${newTrack.avgRating}" width="50" height="50"></canvas>
                                     </th:block>
                                     <th:block th:unless="${newTrack.avgRating != null}">
-                                        <span class="no-rating fw-bold fs-2">NR</span>
+                                        <span class="no-rating fw-bold fs-2 pb-3">NR</span>
                                     </th:block>
                                 </div>
                             </div>
@@ -210,20 +210,20 @@
                     <th:block th:each="hotTrack : ${hotTrackList}">
                         <!-- 트랙 카드 -->
                         <div class="col d-flex justify-content-center">
-                            <div class="card align-items-center p-3" style="width:228px; height:340px;">
+                            <div class="card align-items-center gap-2 mt-3" style="width:228px; height:340px;">
                                 <a th:href="@{'/tracks?id=' + ${hotTrack.id}}">
                                     <img th:src="${hotTrack.coverImage}" class="card-img-top" alt="앨범커버">
                                 </a>
-                                <div class="card-body d-flex flex-column align-items-center p-2">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <a th:href="@{'/tracks?id=' + ${hotTrack.id}}" class="card-title" th:text="${hotTrack.title}"></a>
                                     <a th:href="@{'/artists?id=' + ${hotTrack.artistId}}" class="card-artist" th:text="${hotTrack.artistName}"></a>
                                 </div>
-                                <div class="position-relative bottom-0 mb-5">
+                                <div class="d-flex justify-content-center mb-4">
                                     <th:block th:if="${hotTrack.avgRating != null}">
                                         <canvas class="doughnut-canvas" th:attr="data-rating=${hotTrack.avgRating}" width="50" height="50"></canvas>
                                     </th:block>
                                     <th:block th:unless="${hotTrack.avgRating != null}">
-                                        <span class="no-rating fw-bold fs-2">NR</span>
+                                        <span class="no-rating fw-bold fs-2 pb-3">NR</span>
                                     </th:block>
                                 </div>
                             </div>
@@ -250,7 +250,7 @@
                                 <a th:href="@{'/playlists/' + ${newPlaylist.id}}">
                                     <img th:src="${newPlaylist.thumbnailUrl}" class="card-img-top" alt="플레이리스트 썸네일">
                                 </a>
-                                <div class="card-body">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <a th:href="@{'/playlists/' + ${newPlaylist.id}}" class="card-title" th:text="${newPlaylist.title}"></a>
                                     <a th:href="@{'/users/' + ${newPlaylist.userId}}" class="card-artist" th:text="'제작자 : ' + ${newPlaylist.maker}"></a>
                                     <div class="card-artist" th:text="|♥ ${#numbers.formatDecimal(newPlaylist.likeCount != null ? newPlaylist.likeCount : 0, 0, 'COMMA', 0, 'POINT')}|"></div>
@@ -279,7 +279,7 @@
                                 <a th:href="@{'/playlists/' + ${hotPlaylist.id}}">
                                     <img th:src="${hotPlaylist.thumbnailUrl}" class="card-img-top" alt="플레이리스트 썸네일">
                                 </a>
-                                <div class="card-body">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <a th:href="@{'/playlists/' + ${hotPlaylist.id}}" class="card-title" th:text="${hotPlaylist.title}"></a>
                                     <a th:href="@{'/users/' + ${hotPlaylist.userId}}" class="card-artist" th:text="'제작자 : ' + ${hotPlaylist.maker}"></a>
                                     <div class="card-artist" th:text="|♥ ${#numbers.formatDecimal(hotPlaylist.likeCount != null ? hotPlaylist.likeCount : 0, 0, 'COMMA', 0, 'POINT')}|"></div>
@@ -301,6 +301,19 @@
                 </a>
             </div>
         </div>
+        <script>
+            document.querySelectorAll('.card').forEach(card => {
+                const img = card.querySelector('.card-img-top');
+                const title = card.querySelector('.card-title');
+
+                img.addEventListener('mouseenter', () => {
+                    title.style.setProperty('text-decoration', 'underline', 'important');
+                });
+                img.addEventListener('mouseleave', () => {
+                    title.style.setProperty('text-decoration', 'none', 'important');
+                });
+            });
+        </script>
     </th:block>
     <th:block layout:fragment="pageScript">
         <script th:src="@{/js/rating_chart.js}"></script>

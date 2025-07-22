@@ -66,12 +66,55 @@
       // 인증번호 전송
       document.getElementById('certi-button').addEventListener('click', () => {
         if(!emailError.classList.contains('success')) return false
-
-        certiNum = Math.floor(100000 + Math.random() * 900000);
-        alert("TODO: 메일 전송 API, 임시 인증 : " + certiNum)
-
+        sendMail()
         hideCerti.classList.remove('hide')
       })
+
+      // 인증번호 전송
+      async function sendMail() {
+
+        let url = '/send-certi'
+        certiNum = Math.floor(100000 + Math.random() * 900000);
+
+        const data = {
+            email : document.getElementById('email').value,
+            certiNo : certiNum
+        }
+
+        try {
+            /* Security 제공 CSRF */
+            const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    [header] : token,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                const text = await response.text()
+                return
+            }
+            const result = await response.text();
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: result,
+                showConfirmButton: false,
+                timer: 800,
+                customClass: {
+                  popup: 'follow-popup',
+                  icon: 'success-icon',
+                  title: 'alert-title'
+                }
+              })
+        } catch (error) {
+            console.error("요청 실패:", error);
+        }
+      }
 
       // 인증번호 입력
       certiInput.addEventListener('change', function() {
