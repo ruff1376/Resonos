@@ -49,10 +49,10 @@
           </div>
           <label class="profile-edit-label" for="nickname">닉네임</label>
           <input type="text" class="form-control" th:field="*{nickname}">
-          <p class="fail-vali text-start" th:text="${nickError != null ? '숫자만을 제외한 조합, 특수문자 제외 2 ~ 10글자 사이여야 합니다.' : nickDuple != null ? '사용중인 닉네임 입니다.' : ''}">닉네임 형식이 올바르지 않습니다.</p>
+          <p class="fail-vali text-start" th:text="${nickError != null ? '숫자만을 제외한 조합, 특수문자 제외 2 ~ 10글자 사이여야 합니다.' : nickDuple != null ? '사용중인 닉네임입니다.' : ''}">닉네임 형식이 올바르지 않습니다.</p>
           <label class="profile-edit-label" for="email">이메일</label>
           <input type="email" class="form-control" th:field="*{email}">
-          <p class="fail-vali text-start"  th:text="${emailError != null ? '유효한 형식의 이메일을 입력해주세요.' : ''}">이메일 형식이 올바르지 않습니다.</p>
+          <p class="fail-vali text-start"  th:text="${emailError != null ? '유효한 형식의 이메일을 입력해주세요.' : emailDuple != null ? '사용중인 이메일입니다.' : ''}">이메일 형식이 올바르지 않습니다.</p>
           <label class="profile-edit-label" for="bio">자기소개</label>
           <textarea class="form-control" th:field="*{bio}" rows="2" placeholder="자기소개를 입력하세요.">음악과 우주, 그리고 커뮤니티를 사랑합니다.</textarea>
         </div>

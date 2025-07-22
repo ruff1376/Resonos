@@ -46,10 +46,10 @@
               <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
               <div class="input-area">
                 <label class="profile-edit-label" for="password">변경할 비밀번호</label>
-                <input type="password" class="form-control" id="password" name="password">
+                <input onkeyup="checkPw2()" type="password" class="form-control" id="password" name="password">
                 <p class="fail-vali main hide text-start">특수문자, 영문자를 포함한 8글자 이상이어야 합니다.</p>
                 <label class="profile-edit-label" for="password2">비밀번호 확인</label>
-                <input type="password" class="form-control" id="password2" name="password2">
+                <input onkeyup="checkPw2()" type="password" class="form-control" id="password2" name="password2">
                 <p class="fail-vali sub hide text-start">비밀번호가 일치하지 않습니다.</p>
               </div>
               <div class="btn-area">
@@ -65,7 +65,7 @@
     <script>
       const params = new URLSearchParams(location.search);
 
-      const diff = params.get('diff');
+      const diff = params.get('diff')
       if(diff != null)
         document.querySelector('.fail-vali.sub').classList.remove('hide')
 
@@ -182,6 +182,20 @@
           }, 1600)
         } catch(e) {
           console.error(e)
+        }
+      }
+
+      function checkPw2() {
+        let input = document.getElementById('password2')
+        let pw2 = document.querySelector('.fail-vali.sub')
+        if(input.value === document.getElementById('password').value) {
+          pw2.classList.add('success')
+          pw2.classList.remove('hide')
+          pw2.textContent = '비밀번호가 일치합니다.'
+        } else {
+          pw2.classList.remove('success')
+          pw2.classList.remove('hide')
+          pw2.textContent = '비밀번호가 일치하지 않습니다.'
         }
       }
     </script>

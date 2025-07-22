@@ -1,4 +1,4 @@
--- Active: 1751337677491@@127.0.0.1@3306@resonos
+-- Active: 1751625569683@@127.0.0.1@3306@resonos
 
 -- 실행 순서
 -- 1. 테이블 삭제 DROP PROCEDURE IF EXISTS create_tables;
@@ -9,8 +9,8 @@ DROP PROCEDURE IF EXISTS create_tables;
 DROP TABLE IF EXISTS
         user_auth, liked_album, album_review, user_follow, user_badge,
         track_review, notification, chart_entry, persistent_logins,
-        board_post, playlist_detail, artist_follow, album,
-        playlist, comment, chart_element, album_mood_vote, report,
+        board_post, playlist_detail, artist_follow, album, badge_condition, user_badge_log, user_notification,
+        playlist, comment, chart_element, report,
         liked_playlist, liked_track, qna_answer, qna, community,
         track_mood_vote, artist_mood_vote, user_sanction, admin_log, user_role, review_like, review_report,
         notice, setting, badge, policy, external_api_config, plugin,
@@ -30,7 +30,7 @@ BEGIN
         user_auth, liked_album, album_review, user_follow, user_badge,
         track_review, notification, chart_entry,
         board_post, playlist_detail, artist_follow, album,
-        playlist, comment, chart_element, album_mood_vote, report,
+        playlist, comment, chart_element, report,
         liked_playlist, liked_track, qna_answer, qna, community,
         track_mood_vote, artist_mood_vote, user_sanction, admin_log, user_role, review_like, review_report,
         notice, setting, badge, policy, external_api_config, plugin,
@@ -119,7 +119,7 @@ BEGIN
         `email` VARCHAR(100) NOT NULL,
         `password` VARCHAR(100) NOT NULL,
         `nickname` VARCHAR(100) NOT NULL,
-        `profile_image` VARCHAR(200) NOT NULL DEFAULT '/img/resonosLogo.png',
+        `profile_image` VARCHAR(200) NOT NULL DEFAULT '/img/profileImg.png',
         `bio` TEXT NULL,
         `is_pro` BOOLEAN NOT NULL DEFAULT FALSE,
         `enabled` BOOLEAN NOT NULL DEFAULT TRUE,
@@ -171,13 +171,6 @@ BEGIN
         `process_memo` TEXT NULL
     );
 
-    CREATE TABLE IF NOT EXISTS `album_mood_vote` (
-        `id` BIGINT NOT NULL,
-        `user_id` BIGINT NOT NULL,
-        `album_id` VARCHAR(200) NOT NULL,
-        `mood` BIGINT NOT NULL
-    );
-
     CREATE TABLE IF NOT EXISTS `chart_element` (
         `id` BIGINT NOT NULL,
         `lyric` INT NOT NULL,
@@ -204,7 +197,7 @@ BEGIN
         `user_id` BIGINT NOT NULL,
         `title` VARCHAR(200) NOT NULL,
         `description` TEXT NULL,
-        `thumbnail_url` VARCHAR(200) NOT NULL DEFAULT '/img/resonosLogo.png',
+        `thumbnail_url` VARCHAR(200) NOT NULL DEFAULT '/img/profileImg.png',
         `is_public` BOOLEAN NOT NULL,
         `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
@@ -250,8 +243,7 @@ BEGIN
         `id` BIGINT NOT NULL,
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `user_id` BIGINT NOT NULL,
-        `artist_id` VARCHAR(200) NOT NULL,
-        UNIQUE(user_id, artist_id)
+        `artist_id` VARCHAR(200) NOT NULL
     );
 
     CREATE TABLE IF NOT EXISTS `playlist_detail` (
@@ -407,7 +399,7 @@ BEGIN
 
     CREATE TABLE IF NOT EXISTS `album_review` (
         `id` BIGINT NOT NULL,
-        `rating` FLOAT NOT NULL,
+        `rating` INT NOT NULL,
         `content` TEXT NOT NULL,
         `blinded` BOOLEAN NOT NULL,
         `likes` INT NOT NULL DEFAULT 0,
@@ -422,8 +414,7 @@ BEGIN
         `id` BIGINT NOT NULL,
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `user_id` BIGINT NOT NULL,
-        `album_id` VARCHAR(200) NOT NULL,
-        UNIQUE (user_id, album_id)
+        `album_id` VARCHAR(200) NOT NULL
     );
 
     CREATE TABLE IF NOT EXISTS `user_auth` (
@@ -466,7 +457,6 @@ CREATE TABLE IF NOT EXISTS  `user_notification` (
     ALTER TABLE `external_api_config` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `liked_playlist` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `report` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
-    ALTER TABLE `album_mood_vote` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `chart_element` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `comment` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `playlist` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
@@ -483,8 +473,6 @@ CREATE TABLE IF NOT EXISTS  `user_notification` (
     ALTER TABLE `notification` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `setting`MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`), ADD CONSTRAINT `uk_setting_value` UNIQUE (`value`);
     ALTER TABLE `user_notification` ADD PRIMARY KEY (user_id, type);
-
-
     ALTER TABLE `track_mood_vote` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `artist_mood_vote` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `track_review` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
@@ -501,14 +489,21 @@ CREATE TABLE IF NOT EXISTS  `user_notification` (
 
     -- UNIQUE
     ALTER TABLE `user` ADD UNIQUE KEY `UK_username` (`username`);
+    ALTER TABLE `user_notification` ADD UNIQUE `UK_user_type` (`user_id`, `type`);
     ALTER TABLE `liked_playlist` ADD CONSTRAINT UK_user_playlist UNIQUE (user_id, playlist_id);
     ALTER TABLE `user_badge` ADD UNIQUE KEY uk_user_badge (user_id, badge_id);
     ALTER TABLE `playlist_detail` ADD CONSTRAINT UK_track_playlist UNIQUE (track_id, playlist_id);
     ALTER TABLE `user_follow` ADD CONSTRAINT UK_following_and_follower UNIQUE (follower_id, following_id);
     ALTER TABLE `track_review` ADD UNIQUE KEY `uniq_user_track` (`user_id`, `track_id`);
+    ALTER TABLE `album_review` ADD UNIQUE (user_id, album_id);
     ALTER TABLE `review_like` ADD UNIQUE (review_id, user_id, review_type);
     ALTER TABLE `review_report` ADD UNIQUE (review_id, user_id, review_type);
-    ALTER TABLE `user_notification` ADD UNIQUE `UK_user_type` (`user_id`, `type`);
+    ALTER TABLE `artist_follow` ADD UNIQUE (user_id, artist_id);
+    ALTER TABLE `artist_mood_vote` ADD UNIQUE (user_id, artist_id);
+    ALTER TABLE `chart_element` ADD UNIQUE(user_id, album_id);
+    ALTER TABLE `liked_album` ADD UNIQUE(user_id, album_id);
+    ALTER TABLE `liked_track` ADD UNIQUE(user_id, track_id);
+    ALTER TABLE `track_mood_vote` ADD UNIQUE(user_id, track_id);
 
     -- FK
     ALTER TABLE `notice` ADD CONSTRAINT `FK_user_TO_notice_1` FOREIGN KEY (`author_id`) REFERENCES `user` (`id`);
@@ -524,9 +519,6 @@ CREATE TABLE IF NOT EXISTS  `user_notification` (
     ALTER TABLE `liked_playlist` ADD CONSTRAINT `FK_playlist_TO_liked_playlist_1` FOREIGN KEY (`playlist_id`) REFERENCES `playlist` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
     ALTER TABLE `report` ADD CONSTRAINT `FK_user_TO_report_1` FOREIGN KEY (`reporter_id`) REFERENCES `user` (`id`);
     -- ALTER TABLE `report` ADD CONSTRAINT `FK_user_TO_report_2` FOREIGN KEY (`target_id`) REFERENCES `user` (`id`); -- target_id는 다양한 타입일 수 있으니 주석 처리
-    ALTER TABLE `album_mood_vote` ADD CONSTRAINT `FK_user_TO_album_mood_vote_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-    ALTER TABLE `album_mood_vote` ADD CONSTRAINT `FK_album_TO_album_mood_vote_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`) ON DELETE CASCADE;
-    ALTER TABLE `album_mood_vote` ADD CONSTRAINT `FK_tag_TO_album_mood_vote_1` FOREIGN KEY (`mood`) REFERENCES `tag` (`id`);
     ALTER TABLE `chart_element` ADD CONSTRAINT `FK_album_TO_chart_element_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`) ON DELETE CASCADE;
     ALTER TABLE `chart_element` ADD CONSTRAINT `FK_user_TO_chart_element_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
     ALTER TABLE `comment` ADD CONSTRAINT `FK_user_TO_comment_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
