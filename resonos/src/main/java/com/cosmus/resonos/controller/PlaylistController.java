@@ -79,7 +79,7 @@ public class PlaylistController {
         playlist.setUserId(loginUser.getUser().getId());
         // 썸네일 설정 안했으면 기본 로고로
         if(playlist.getThumbnailUrl() == null)
-            playlist.setThumbnailUrl("/img/resonosLogo.png");
+            playlist.setThumbnailUrl("/img/profileImg.png");
         // 이미지 파일 저장
         if (!file.isEmpty()) {
             UploadImage.uploadThumbnailImage(file, playlist);

@@ -20,7 +20,7 @@
         <form th:action="@{/playlists}" method="post" class="profile-edit-box" th:object="${playlist}" enctype="multipart/form-data">
           <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
           <label id="profileBtn" for="thumbnail">
-            <img th:src="@{/img/resonosLogo.png}" alt="프로필 이미지" class="profile-img edit">
+            <img th:src="@{/img/profileImg.png}" alt="프로필 이미지" class="profile-img edit">
             <input type="file" name="thumbnail" id="thumbnail">
           </label>
           <div class="input-area">

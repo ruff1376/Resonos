@@ -507,7 +507,6 @@ CREATE TABLE IF NOT EXISTS  `user_notification` (
     ALTER TABLE `track_review` ADD UNIQUE KEY `uniq_user_track` (`user_id`, `track_id`);
     ALTER TABLE `review_like` ADD UNIQUE (review_id, user_id, review_type);
     ALTER TABLE `review_report` ADD UNIQUE (review_id, user_id, review_type);
-    ALTER TABLE `user_notification` ADD UNIQUE `UK_user_type` (`user_id`, `type`);
 
     -- FK
     ALTER TABLE `notice` ADD CONSTRAINT `FK_user_TO_notice_1` FOREIGN KEY (`author_id`) REFERENCES `user` (`id`);
