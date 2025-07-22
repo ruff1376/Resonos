@@ -83,4 +83,7 @@ public interface TrackService {
     public Track getTrackOrUpdate(String id) throws Exception;
     public Track topTrackByAlbumIdAndFetchMv(String id) throws Exception;
     public List<Track> selectTop7TracksByArtistAndFetchMv(String id) throws Exception;
+
+    // 태그로 트랙 검색
+    public List<Track> searchTracksByTag(@Param("tagName") String tagName) throws Exception;
 }

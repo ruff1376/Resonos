@@ -302,4 +302,9 @@ public class TrackServiceImpl implements TrackService {
     public void updateMvUrl(String id, String mvUrl) {
     }
 
+    @Override
+    public List<Track> searchTracksByTag(String tagName) throws Exception {
+        return trackMapper.searchTracksByTag(tagName);
+    }
+
 }

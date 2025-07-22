@@ -77,4 +77,7 @@ public interface TrackMapper {
 
     // mvUrl 업데이트
     void updateMvUrl(@Param("id") String id, @Param("mvUrl") String mvUrl);
+
+    // 태그로 트랙 검색
+    public List<Track> searchTracksByTag(@Param("tagName") String tagName) throws Exception;
 }

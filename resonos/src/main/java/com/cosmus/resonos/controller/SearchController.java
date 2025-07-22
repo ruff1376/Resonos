@@ -54,6 +54,14 @@ public class SearchController {
     ) throws Exception {
         keyword = keyword.trim();
 
+        if (keyword.startsWith("#")) {
+            String tagName = keyword.substring(1);
+            List<Track> searchTracksByTagList = trackService.searchTracksByTag(tagName);
+            model.addAttribute("searchTracksByTagList", searchTracksByTagList);
+            model.addAttribute("keyword", keyword);
+            return "search/search";
+        }
+
         List<Artist> artistSearchList = artistService.searchList(keyword);
         List<Album> albumSearchList = albumService.searchList(keyword);
         List<Track> trackSearchList = trackService.searchList(keyword);
