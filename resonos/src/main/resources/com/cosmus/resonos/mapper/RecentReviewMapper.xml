@@ -5,42 +5,63 @@
 
 <mapper namespace="com.cosmus.resonos.mapper.RecentReviewMapper">
 
-    <select id="findRecentReviewsByArtistId" resultType="com.cosmus.resonos.domain.RecentReview">
-        (
-            SELECT
-                tr.track_id AS id,
-                t.title AS name,
-                tr.content,
-                COALESCE((
-                    SELECT COUNT(*) 
-                    FROM review_like rl 
-                    WHERE rl.review_id = tr.id AND rl.review_type = 'TRACK'
-                ), 0) AS likeCount,
-                tr.created_at AS createdAt,
-                'TRACK' AS type
-            FROM track_review tr
-            JOIN track t ON tr.track_id = t.id
-            WHERE t.artist_id = #{artistId}
-        )
-        UNION ALL
-        (
-            SELECT
-                ar.album_id AS id,
-                a.title AS name,
-                ar.content,
-                COALESCE((
-                    SELECT COUNT(*) 
-                    FROM review_like rl 
-                    WHERE rl.review_id = ar.id AND rl.review_type = 'ALBUM'
-                ), 0) AS likeCount,
-                ar.created_at AS createdAt,
-                'ALBUM' AS type
-            FROM album_review ar
-            JOIN album a ON ar.album_id = a.id
-            WHERE a.artist_id = #{artistId}
-        )
-        ORDER BY createdAt DESC
-        LIMIT 8
-    </select>
+<select id="findRecentReviewsByArtistId" resultType="com.cosmus.resonos.domain.RecentReview">
+    (
+        SELECT
+            tr.track_id AS id,
+            t.title AS name,
+            tr.content,
+            COALESCE((
+                SELECT COUNT(*) 
+                FROM review_like rl 
+                WHERE rl.review_id = tr.id AND rl.review_type = 'TRACK'
+            ), 0) AS likeCount,
+            tr.created_at AS createdAt,
+            'TRACK' AS type
+        FROM (
+            SELECT *
+            FROM track_review tr1
+            WHERE tr1.id = (
+                SELECT tr2.id
+                FROM track_review tr2
+                WHERE tr2.track_id = tr1.track_id
+                ORDER BY tr2.created_at DESC
+                LIMIT 1
+            )
+        ) tr
+        JOIN track t ON tr.track_id = t.id
+        WHERE t.artist_id = #{artistId}
+    )
+    UNION ALL
+    (
+        SELECT
+            ar.album_id AS id,
+            a.title AS name,
+            ar.content,
+            COALESCE((
+                SELECT COUNT(*) 
+                FROM review_like rl 
+                WHERE rl.review_id = ar.id AND rl.review_type = 'ALBUM'
+            ), 0) AS likeCount,
+            ar.created_at AS createdAt,
+            'ALBUM' AS type
+        FROM (
+            SELECT *
+            FROM album_review ar1
+            WHERE ar1.id = (
+                SELECT ar2.id
+                FROM album_review ar2
+                WHERE ar2.album_id = ar1.album_id
+                ORDER BY ar2.created_at DESC
+                LIMIT 1
+            )
+        ) ar
+        JOIN album a ON ar.album_id = a.id
+        WHERE a.artist_id = #{artistId}
+    )
+    ORDER BY createdAt DESC
+    LIMIT 8
+</select>
+
 
 </mapper>
