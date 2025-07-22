@@ -17,7 +17,9 @@
                th:if="${iterStat.index < (size != null ? size : 5)}">
 
     <div class="name-and-score">
-      <p th:text="${rv.reviewer.nickname}">닉네임</p>
+      <a th:href="@{/users/{id}(id=${rv.reviewer.id})}">
+        <p th:text="${rv.reviewer.nickname}">닉네임</p>
+      </a>
       <span th:if="${rv.critic}">✅</span>
       <span> 🔮<span th:text="${rv.rating}">0</span></span>
     </div>
