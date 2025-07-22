@@ -64,7 +64,8 @@
                 <!-- 반복문 인기곡 -->
                 <th:block th:each="tops, stat : ${TOP7}">
                     <a th:href="@{/tracks(id=${tops.id})}">
-                        <p th:text="|${stat.count}. ${tops.title}  ${tops.formattedDuration}|"></p>
+                        <p th:text="|${stat.count}. ${tops.title}  |"></p>
+                        <span th:text="${tops.formattedDuration}"></span>
                     </a>
                 </th:block>
             </div>
