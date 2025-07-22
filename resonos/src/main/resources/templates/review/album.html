@@ -96,7 +96,7 @@
                 <p id="headline" th:text="|${album.title}💽 TOP${#lists.size(top5List)}🔥|">앨범 인기 TOP 5 트랙</p>
                 <th:block th:each="tops, stat : ${top5List}">
                     <a th:href="@{tracks(id=${tops.id})}">
-                        <div class="d-flex gap-1" style="max-height: fit-content;">
+                        <div class="d-flex gap-3" style="max-height: fit-content;">
                             <p th:text="|${stat.count}. ${tops.title} |"
                                 style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
                             </p>

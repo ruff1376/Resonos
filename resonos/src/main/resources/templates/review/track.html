@@ -621,11 +621,13 @@
                             $albumMoods.html(`
                             <p id="headline">분위기로 노래찾기</p>
                             <p>아직 아무도 분위기에 투표하지 않았어요 😅</p>
-                        `);
+                        `); 
                         } else {
                             const moodButtons = labels.map(label => `
                             <div class="mood-list">
-                                <button class="btn btn-gold">#${label}</button>
+                                <a href="/search?q=%23${encodeURIComponent(label)}">
+                                    <button class="btn btn-gold">#${label}</button>
+                                </a>
                             </div>
                         `).join('');
 

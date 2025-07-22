@@ -408,6 +408,7 @@ a { display: inline-block;}
     margin: 0;
 }
 .top5track {
+  display: flex;
   align-items: flex-start
 }
 .score-info {

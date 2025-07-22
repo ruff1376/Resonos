@@ -298,6 +298,27 @@
                             $container.append(html);
                         });
 
+                        const $albumMoods = $('.album-moods');
+                        $albumMoods.empty();
+                        if (!labels || labels.length === 0) {
+                            $albumMoods.html(`
+            <p id="headline">분위기로 노래찾기</p>
+            <p style="color: var(--main-color);">아직 아무도 분위기에 투표하지 않았어요 😅</p>
+        `);
+                        } else {
+                            const moodButtons = labels.map(label => `
+            <a href="/search?q=%23${encodeURIComponent(label)}">
+                <button class="btn btn-gold">#${label}</button>
+            </a>
+        `).join('');
+                            $albumMoods.html(`
+            <p id="headline">분위기로 노래찾기</p>
+            <div class="mood-list">
+                ${moodButtons}
+            </div>
+        `);
+                        }
+
                         // ✅ 차트 갱신
                         const $chartArea = $('.chart');
                         if (!Array.isArray(values) || values.length === 0) {
