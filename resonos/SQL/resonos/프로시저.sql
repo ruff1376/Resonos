@@ -305,6 +305,8 @@ BEGIN
         `target_id` BIGINT NULL,
         `user_id` BIGINT NOT NULL
     );
+    
+    
 
     CREATE TABLE IF NOT EXISTS `setting` (
         `id` BIGINT NOT NULL,
