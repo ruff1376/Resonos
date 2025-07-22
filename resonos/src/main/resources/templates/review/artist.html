@@ -103,17 +103,6 @@
                     </a>
                 </th:block>
             </div>
-            <!-- <div class="info simillar-artist">
-                <p id="headline" th:text="|${artist.name}🎙와 유사한 아티스트|"></p>
-                <p>1.쩔었1다</p>
-                <p>2.동해물</p>
-                <p>3.백두산</p>
-                <p>4.마르고</p>
-                <p>4.마르고</p>
-                <div>
-                    <button class="btn btn-gold">아티스트 더보기</button>
-                </div>
-            </div> -->
             <div class="info concert-schedule">
                 <p id="headline">공연/이벤트 일정</p>
                 <div class="bit-widget-initializer" th:data-artist-name="${artist.name}" data-text-color="#FFF"
@@ -155,7 +144,7 @@
             <div class="album-moods">
                 <p id="headline">분위기로 노래찾기</p>
                 <th:block th:if="${moodLabels == null || moodLabels.isEmpty()}">
-                    <p>아직 아무도 분위기에 투표하지 않았어요 😅</p>
+                    <p style="color: var(--main-color);">아직 아무도 분위기에 투표하지 않았어요 😅</p>
                 </th:block>
                 <th:block th:if="${moodLabels != null}">
                     <div class="mood-list">
@@ -173,6 +162,32 @@
         const isLogin = [[${ loginUser != null ? 'true' : 'false'}]];
     </script>
     <script src="https://widget.bandsintown.com/main.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            setTimeout(() => {
+                const container = document.querySelector(".bit-widget-container");
+
+                // 렌더링된 위젯 내부 div 기준 검사
+                const inner = container?.querySelector("div");
+                const isEmpty = !inner || inner.children.length === 0;
+
+                if (isEmpty) {
+                    console.log("❌ Bandsintown: 아티스트 미등록 또는 공연 없음");
+
+                    // 사용자 안내 메시지 삽입
+                    container.innerHTML = `
+                <p style="color: var(--main-color); font-size: 1.2rem;">
+                    등록된 공연 정보가 없습니다.
+                </p>
+                 `;
+                } else {
+                    console.log("✅ Bandsintown: 아티스트 및 공연 정보 렌더링됨");
+                }
+            }, 3000); // 3초 기다린 뒤 체크 (렌더링 대기 시간)
+        });
+    </script>
+
+
     <!-- 아티스트 팔로우 -->
     <script>
         // 트랙 좋아요
