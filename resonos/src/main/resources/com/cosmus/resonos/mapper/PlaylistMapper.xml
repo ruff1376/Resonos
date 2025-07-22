@@ -303,9 +303,11 @@
           LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
           LEFT JOIN playlist_detail pd ON p.id = pd.playlist_id
           LEFT JOIN track t ON t.id = pd.track_id
-          WHERE p.title LIKE CONCAT('%', #{keyword}, '%')
+          WHERE p.is_public = 1 AND (
+              p.title LIKE CONCAT('%', #{keyword}, '%')
               OR u.nickname LIKE CONCAT('%', #{keyword}, '%')
               OR t.title LIKE CONCAT('%', #{keyword}, '%')
+          )
           GROUP BY p.id
       ) sub
       ORDER BY
@@ -380,9 +382,11 @@
           LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
           LEFT JOIN playlist_detail pd ON p.id = pd.playlist_id
           LEFT JOIN track t ON t.id = pd.track_id
-          WHERE p.title LIKE CONCAT('%', #{keyword}, '%')
+          WHERE p.is_public = 1 AND (
+              p.title LIKE CONCAT('%', #{keyword}, '%')
               OR u.nickname LIKE CONCAT('%', #{keyword}, '%')
               OR t.title LIKE CONCAT('%', #{keyword}, '%')
+          )
           GROUP BY p.id
       ) sub
       <choose>
@@ -421,9 +425,11 @@
     LEFT JOIN user u ON p.user_id = u.id
     LEFT JOIN playlist_detail pd ON p.id = pd.playlist_id
     LEFT JOIN track t ON t.id = pd.track_id
-    WHERE p.title LIKE CONCAT('%', #{keyword}, '%')
+    WHERE p.is_public = 1 AND (
+          p.title LIKE CONCAT('%', #{keyword}, '%')
           OR u.nickname LIKE CONCAT('%', #{keyword}, '%')
           OR t.title LIKE CONCAT('%', #{keyword}, '%')
+    )
   </select>
 
   <select id="mainNewList" resultMap="PlaylistResultMap">
@@ -433,6 +439,7 @@
     LEFT JOIN user u ON p.user_id = u.id
     LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
     WHERE p.created_at >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+      AND p.is_public = 1
     GROUP BY p.id
     ORDER BY p.created_at DESC
     LIMIT 12
@@ -445,6 +452,7 @@
     LEFT JOIN user u ON p.user_id = u.id
     LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
     WHERE p.created_at >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+      AND p.is_public = 1
     GROUP BY p.id
     ORDER BY p.created_at DESC
     LIMIT #{index}, #{size}
@@ -456,6 +464,7 @@
     FROM playlist p
     LEFT JOIN user u ON p.user_id = u.id
     LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+    WHERE p.is_public = 1
     GROUP BY p.id
     HAVING COUNT(lp.id) > 0
     ORDER BY like_count DESC
@@ -468,6 +477,7 @@
     FROM playlist p
     LEFT JOIN user u ON p.user_id = u.id
     LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+    WHERE p.is_public = 1
     GROUP BY p.id
     HAVING COUNT(lp.id) > 0
     ORDER BY like_count DESC, p.created_at DESC
@@ -477,6 +487,7 @@
   <select id="newCount" resultType="long">
     SELECT COUNT(*) FROM playlist
     WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+      AND is_public = 1
   </select>
 
   <select id="hotCount" resultType="long">
@@ -484,6 +495,7 @@
       SELECT p.id
       FROM playlist p
       LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+      WHERE p.is_public = 1
       GROUP BY p.id
       HAVING COUNT(lp.id) > 0
     ) AS filtered
