@@ -274,8 +274,17 @@ img {
     align-items: flex-start;
 }
 
-.songs>p:not(:first-child) {
+.songs a p {
     padding-left: 10px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.songs a {
+    max-width: 330px;
+    display: flex;
+    gap: 5px;
 }
 
 .youtube {
@@ -323,13 +332,18 @@ img {
     flex-grow: 0;
     /* ✅ 늘어나지 않도록 */
     max-height: 400px;
-    overflow-y: auto; /* 스크롤 되게 함 */
-    scrollbar-width: none; /* Firefox용 스크롤바 감춤 */
-    -ms-overflow-style: none; /* IE/Edge용 스크롤바 감춤 */
+    overflow-y: auto;
+    /* 스크롤 되게 함 */
+    scrollbar-width: none;
+    /* Firefox용 스크롤바 감춤 */
+    -ms-overflow-style: none;
+    /* IE/Edge용 스크롤바 감춤 */
 }
+
 .concert-schedule::-webkit-scrollbar {
     display: none;
 }
+
 .recent-review {
     min-width: 500px;
     /* ✅ 최소 630px */
@@ -402,6 +416,8 @@ img {
     overflow: hidden;
     padding: 10px;
     display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .mood-card {
@@ -414,18 +430,21 @@ img {
     gap: 30px;
     padding-left: 20px;
 }
+
 .album-moods {
     border: 2px solid var(--main-color);
     border-radius: 20px;
     padding: 10px;
     padding-top: 0;
 }
+
 .mood-list {
     display: flex;
     padding: 5px;
     gap: 5px;
     flex-wrap: wrap;
 }
+
 .mood-list a {
     display: flex;
 }
@@ -555,10 +574,11 @@ img {
     display: none;
     /* 크롬, 사파리, 오페라용 스크롤바 숨기기 */
 }
+
 @media (max-width: 1230px) {
-  .album-moods {
-    display: none !important;
-  }
+    .album-moods {
+        display: none !important;
+    }
 }
 
 /* 공연 날짜, 장소, "Track" 버튼, "Request a show" 버튼 등을 숨김 */
@@ -566,68 +586,83 @@ img {
     padding: 5px 0 !important;
     color: white !important;
 }
+
 .bit-rsvp,
 .bit-upcoming-events-show-all-button {
     display: none !important;
 }
+
 .bit-widget .bit-no-dates-container .bit-track-button {
     width: 250px !important;
 }
+
 .bit-widget .bit-no-dates-container {
     border-top: 1px solid rgba(124, 124, 124, .25);
     text-align: center;
     margin: 0px 10px 0px 10px;
     padding: 30px 0px 30px 0px !important;
 }
+
 /* "Tickets" 버튼만 남기고 정렬 정리 */
 .bit-event__actions {
     text-align: center;
 }
+
 .bit-venue {
     color: var(--main-color) !important;
 }
+
 .bit-widget {
     font-size: 14px;
 }
+
 .bit-widget .bit-offers {
     background-color: var(--main-color) !important;
     border: none !important;
 }
+
 /* 스윗 얼럿 css */
 .swal2-popup {
-  background: var(--background-color) !important;
-  padding: 20px !important;
-  border-radius: 20px !important;
-  border : 2px solid var(--main-color) !important;
+    background: var(--background-color) !important;
+    padding: 20px !important;
+    border-radius: 20px !important;
+    border: 2px solid var(--main-color) !important;
 }
+
 .swal2-title {
-  color: var(--main-color) !important;
-  font-size: 2.0rem !important;
-  margin-bottom: 20px !important;
+    color: var(--main-color) !important;
+    font-size: 2.0rem !important;
+    margin-bottom: 20px !important;
 }
+
 .swal2-confirm {
-  background-color: var(--main-color) !important;
-  color: var(--background-color) !important;
-  font-size: 1.6rem !important;
-  font-weight: bold !important;
+    background-color: var(--main-color) !important;
+    color: var(--background-color) !important;
+    font-size: 1.6rem !important;
+    font-weight: bold !important;
 }
+
 .swal2-cancel {
-  background-color: var(--main-color) !important;
-  color: var(--background-color) !important;
-  font-size: 1.6rem !important;
-  font-weight: bold !important;
+    background-color: var(--main-color) !important;
+    color: var(--background-color) !important;
+    font-size: 1.6rem !important;
+    font-weight: bold !important;
 }
+
 .swal2-content {
-  color: white !important;
+    color: white !important;
 }
+
 .swal2-html-container {
-  color: white !important;
-  font-weight: bold !important;
-  font-size: 1.3rem !important;
+    color: white !important;
+    font-weight: bold !important;
+    font-size: 1.3rem !important;
 }
+
 .swal2-select {
-  background-color: var(--background-color) !important;
+    background-color: var(--background-color) !important;
 }
+
 .swal2-icon {
-  margin-top: 10px !important;
+    margin-top: 10px !important;
 }
