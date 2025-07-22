@@ -438,7 +438,7 @@ a:hover > .mypage-card {
 .profile-edit-box label {
   font-size: 1.6rem;
 }
-.profile-edit-box > h3 {margin-bottom: 20px;}
+.profile-edit-box > h3 {margin: 20px 0 20px;}
 .profile-img.edit {
   margin-right: 0;
   height: 150px;

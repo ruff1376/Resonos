@@ -242,7 +242,8 @@ public class UserController {
     @RequestParam(value = "success", required = false) String success,
     @RequestParam(value = "nickError", required = false) Boolean nickError,
     @RequestParam(value = "nickDuple", required = false) Boolean nickDuple,
-    @RequestParam(value = "emailError", required = false) Boolean emailError
+    @RequestParam(value = "emailError", required = false) Boolean emailError,
+    @RequestParam(value = "emailDuple", required = false) Boolean emailDuple
   ) throws Exception {
     if(loginUser == null) return "redirect:/login";
     Users user = userService.select(loginUser.getUsername());
@@ -254,6 +255,7 @@ public class UserController {
     if(nickError != null) model.addAttribute("nickError", nickError);
     if(nickDuple != null) model.addAttribute("nickDuple", nickDuple);
     if(emailError != null) model.addAttribute("emailError", emailError);
+    if(emailDuple != null) model.addAttribute("emailDuple", emailDuple);
 
     model.addAttribute("badgeName", badgeName);
     model.addAttribute("badgeList", badgeList);
@@ -299,6 +301,13 @@ public class UserController {
     if(br.hasFieldErrors("email")) {
       redirectAttributes.addFlashAttribute("emailError", true);
       return "redirect:/users/edit?emailError";
+    }
+
+    // 이메일 중복 검사
+    String checkEmail = userService.findId(user.getEmail());
+    if(checkEmail != null) {
+      redirectAttributes.addFlashAttribute("emailDuple", true);
+      return "redirect:/users/edit?emailDuple";
     }
 
     // 배지 텍스트 없이 보내면
