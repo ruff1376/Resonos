@@ -16,18 +16,18 @@ public class YouTubeApiService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    // @Value("${youtube.api.key}")
+    @Value("${youtube.api.key}")
     private String apiKey;
 
     private static final List<String> EXCLUDED_KEYWORDS = List.of(
             // 기존 제외 키워드
             "reaction", "리액션", "fanmade", "teaser", "remix", "mix", "loop", "cover", "커버", "edit",
-            "fan cam", "직캠", "응원법", "응원", "lyrics", "lyric", "가사", "소리만", "소리", "asmr",
+            "fan cam", "직캠", "응원법", "응원", "가사", "소리만", "소리", "asmr",
             "instrumental", "inst", "highlight", "shorts", "short", "mv teaser", "피아노",
             "dance practice", "dance ver", "live", "뮤뱅", "뮤직뱅크", "인기가요", "쇼챔피언",
             "음중", "엠카", "음방", "방청", "선공개", "미공개", "뮤비해석", "vlog", "study", "study with me",
             "reaction mashup", "edit audio", "edit version", "first time", "my first time", "listening to",
-            "react", "respond", "reacted", "i cried", "emotional", "review",
+            "react", "respond", "reacted", "i cried", "emotional", "review", "실사화", "mash", "mashup",
 
             // 다국어 리액션/반응 키워드
             "реакция", "реакция на", // 러시아어
@@ -66,7 +66,7 @@ public class YouTubeApiService {
             "universal music", "universal music group", "universal music japan",
             "atlantic records", "columbia records", "capitol records", "interscope",
             "republic records", "rca records", "avex", "jstorm", "toho animation",
-            "smej", "king records",
+            "smej", "king records", "Sony Pictures Animation",
 
             // 글로벌 아티스트/뮤직 플랫폼/브랜드 채널
             "vevo", "avicii", "dua lipa", "coldplay", "shawn mendes", "beyoncé", "bruno mars",
@@ -79,7 +79,7 @@ public class YouTubeApiService {
 
     private static final List<String> PRIORITY_TITLE_KEYWORDS = List.of(
             "official music video", "mv", "m/v", "performance video", "official performance",
-            "official mv", "studio choom", "relay dance");
+            "official mv", "official", "studio choom", "relay dance");
 
     public String searchVideoId(String title, String artist) {
         if (apiKey == null || apiKey.isBlank()) {
@@ -138,9 +138,22 @@ public class YouTubeApiService {
                         String videoTitle = normalize(videoTitleRaw);
                         String channelTitle = normalize(channelTitleRaw);
 
-                        int penalty = calculatePenalty(videoTitle);
-                        if (penalty >= 10)
+                        boolean isOfficialChannel = OFFICIAL_CHANNEL_KEYWORDS.stream()
+                                .anyMatch(keyword -> channelTitle.contains(normalize(keyword)));
+
+                        if (!videoTitle.contains(normArtist) && !channelTitle.contains(normArtist)
+                                && !isOfficialChannel) {
+                            System.out.println("⛔ 제외된 영상: [" + videoTitleRaw + "] by [" + channelTitleRaw
+                                    + "] → 이유: 아티스트명 미포함 (" + normArtist + ")");
                             continue;
+                        }
+
+                        int penalty = calculatePenalty(videoTitle);
+                        if (penalty >= 10) {
+                            System.out.println("⛔ 제외된 영상: [" + videoTitleRaw + "] by [" + channelTitleRaw
+                                    + "] → 이유: penalty " + penalty);
+                            continue;
+                        }
 
                         int score = calculateScore(videoTitle, channelTitle, normTitle, normArtist) - penalty;
 
@@ -177,10 +190,12 @@ public class YouTubeApiService {
         int score = 0;
 
         if (videoTitle.contains(normTitle))
-            score += 3;
+            score += 2;
         if (videoTitle.contains(normArtist))
             score += 3;
-
+        if (videoTitle.contains(normTitle) && videoTitle.contains(normArtist))
+            score += 2; // 제목-아티스트 완전 포함시 보너스
+            
         for (String priority : PRIORITY_TITLE_KEYWORDS) {
             if (videoTitle.contains(normalize(priority))) {
                 score += 5;
@@ -190,7 +205,7 @@ public class YouTubeApiService {
 
         for (String official : OFFICIAL_CHANNEL_KEYWORDS) {
             if (channelTitle.contains(normalize(official))) {
-                score += 5;
+                score += 15;
                 break;
             }
         }
