@@ -723,12 +723,11 @@ public class UserController {
     log.info("password : {}", password);
     redirectAttributes.addFlashAttribute("success", true);
 
-    if(br.hasErrors()) {
+    if(br.hasErrors())
       return "redirect:/users/security?error";
-    }
 
     if(!password.equals(password2))
-    return "redirect:/users/security?diff";
+      return "redirect:/users/security?diff";
 
     boolean result = userService.changePassword(password, loginUser.getId());
     if(result)
