@@ -13,6 +13,7 @@ import com.cosmus.resonos.service.ExternalApiConfigService;
 import com.cosmus.resonos.service.PluginService;
 
 import lombok.extern.slf4j.Slf4j;
+// 어드민 계정만 접근할 수 있는 컨트롤러
 
 @Slf4j
 @Controller
