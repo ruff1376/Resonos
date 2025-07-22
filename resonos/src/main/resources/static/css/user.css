@@ -831,6 +831,10 @@ button.like {background-color: inherit; border: none;}
   object-fit: cover;
   background: #181C23;
 }
+.con-pli-detail .success-fail {
+  position: static;
+  width: auto;
+}
 
 
 /* 내 활동 */
@@ -940,11 +944,6 @@ button.like {background-color: inherit; border: none;}
   width: 100%;
   left: 30px;
   top: 0;
-}
-.success-fail.middle {
-  border-radius: 0;
-  top: 60px;
-  z-index: 99;
 }
 .success-fail.error {
   background-color: #FF3B3B;
