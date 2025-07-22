@@ -102,7 +102,7 @@ BEGIN
 
     CREATE TABLE IF NOT EXISTS `track` (
         `id` VARCHAR(200) NOT NULL,
-        `title` VARCHAR(100) NOT NULL,
+        `title` TEXT NOT NULL,
         `duration` INT NOT NULL,
         `genre` VARCHAR(64) NULL,
         `streaming_url` VARCHAR(200) NULL,
