@@ -72,7 +72,7 @@
       <button class="report-btn" th:data-review-id="${rv.id}" th:data-review-type="${reviewType}">🚨</button>
       <th:block th:if="${isAdmin != null and isAdmin}">
         <span th:text="${rv.dislikes}" style="color: red;">0</span>
-      </th:blo>
+      </th:block>
       <span
         th:if="${(isAdmin != null and isAdmin) or (loginUser != null and rv != null and loginUser.id == rv.userId)}">
         <a href="#" class="edit-btn" th:data-id="${rv.id}">수정</a>
