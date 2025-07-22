@@ -4,11 +4,13 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
@@ -81,20 +83,30 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 user.setEmail(email);
                 user.setProvider(provider);
                 user.setProviderId(providerId);
-
-                boolean result = userService.insertSnsUser(user);
-                if(result) {
-                    UserAuth userAuth = new UserAuth();
-                    userAuth.setUsername(user.getUsername());
-                    userAuth.setAuth("ROLE_USER");
-                    userService.insertAuth(userAuth);
-                    log.info("================== 소셜 회원가입 완료 ===================");
-                    user = userService.select(randomUn);
-                    userService.basicNotiSetting(user.getId());
+                try {
+                    boolean result = userService.insertSnsUser(user);
+                    if(result) {
+                        UserAuth userAuth = new UserAuth();
+                        userAuth.setUsername(user.getUsername());
+                        userAuth.setAuth("ROLE_USER");
+                        userService.insertAuth(userAuth);
+                        log.info("================== 소셜 회원가입 완료 ===================");
+                        user = userService.select(randomUn);
+                        userService.basicNotiSetting(user.getId());
+                    }
+                } catch(DuplicateKeyException e) {
+                    throw new OAuth2AuthenticationException(
+                        new OAuth2Error("duplicate_email", "이미 가입된 이메일입니다", null)
+                    );
                 }
             }
-        } catch (Exception e) {
+        }
+        catch(OAuth2AuthenticationException e) {
+            throw e;
+        }
+        catch (Exception e) {
             e.printStackTrace();
+            throw new OAuth2AuthenticationException("internal_error");
         }
 
         return new CustomUser(user, attributes);

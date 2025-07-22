@@ -17,6 +17,8 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import com.cosmus.resonos.security.CustomAccessDeniedHandler;
 import com.cosmus.resonos.security.LoginFailureHandler;
 import com.cosmus.resonos.security.LoginSuccessHandler;
+import com.cosmus.resonos.security.OAuth2FailureHandler;
+import com.cosmus.resonos.security.OAuth2SuccessHandler;
 import com.cosmus.resonos.service.CustomOAuth2UserService;
 import com.cosmus.resonos.service.CustomOIDCUserService;
 import com.cosmus.resonos.service.UserDetailServiceImpl;
@@ -54,6 +56,12 @@ public class SecurityConfig {
     @Autowired
     private CustomAccessDeniedHandler customAccessDeniedHandler;
 
+    @Autowired
+    private OAuth2FailureHandler oauth2FailureHandler;
+
+    @Autowired
+    private OAuth2SuccessHandler oauth2SuccessHandler;
+
 
     // 🔐 스프링 시큐리티 설정 메소드
 	@Bean
@@ -88,9 +96,11 @@ public class SecurityConfig {
         http.oauth2Login(login -> login
                                     .loginPage("/login")
                                     .userInfoEndpoint(userInfo -> userInfo
-                                        .oidcUserService(customOidcUserService)
-                                        .userService(customOAuth2UserService)
+                                    .oidcUserService(customOidcUserService)
+                                    .userService(customOAuth2UserService)
                                     )
+                                    .successHandler(oauth2SuccessHandler)
+                                    .failureHandler(oauth2FailureHandler)
                                 );
         // 🔐 인증 요청 경로 설정
         http.exceptionHandling( exception -> exception

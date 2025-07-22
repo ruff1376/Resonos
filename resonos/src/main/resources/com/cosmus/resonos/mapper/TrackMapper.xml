@@ -22,6 +22,7 @@
     <result property="followerCount" column="follower_count"/>
     <result property="popularityScore" column="popularity_score"/>
     <result property="avgRating" column="avg_rating"/>
+    <result property="voteCount" column="vote_count"/>
   </resultMap>
 
   <select id="selectAll" resultMap="Track">
@@ -425,5 +426,17 @@
       UPDATE track SET mv_url = #{mvUrl} WHERE id = #{id}
   </update>
 
+  <select id="searchTracksByTag" resultMap="Track">
+    SELECT t.*, COUNT(tmv.id) AS vote_count, ar.name AS artist_name, al.cover_image, tg.name AS tag
+    FROM track_mood_vote tmv
+    JOIN tag tg ON tmv.mood = tg.id
+    JOIN track t ON t.id = tmv.track_id
+    JOIN artist ar ON ar.id = t.artist_id
+    JOIN album al ON t.album_id = al.id
+    WHERE tg.name = #{tagName}
+    GROUP BY t.id
+    ORDER BY vote_count DESC
+    LIMIT 6
+  </select>
 
 </mapper>

@@ -22,7 +22,7 @@
         <input th:value="${username}" name="username" type="text" class="form-control mb-3" placeholder="아이디" required>
         <input name="password" type="password" class="form-control mb-3" placeholder="비밀번호" required>
         <th:block th:if="${param.error}">
-          <p class="fail-vali">아이디 또는 비밀번호가 잘못되었습니다.</p>
+          <p class="fail-vali" th:text="${param.error[0] eq 'duplicate_email'} ? '이미 가입된 이메일입니다.' : '아이디 또는 비밀번호가 잘못되었습니다.'">아이디 또는 비밀번호가 잘못되었습니다.</p>
         </th:block>
         <div class="form-check text-start my-5 d-flex justify-content-evenly">
           <div class="item">
