@@ -305,7 +305,7 @@ public class UserController {
 
     // 이메일 중복 검사
     String checkEmail = userService.findId(user.getEmail());
-    if(checkEmail != null) {
+    if(!reqUser.getEmail().equals(user.getEmail()) && checkEmail != null) {
       redirectAttributes.addFlashAttribute("emailDuple", true);
       return "redirect:/users/edit?emailDuple";
     }

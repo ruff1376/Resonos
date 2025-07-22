@@ -119,7 +119,7 @@ BEGIN
         `email` VARCHAR(100) NOT NULL,
         `password` VARCHAR(100) NOT NULL,
         `nickname` VARCHAR(100) NOT NULL,
-        `profile_image` VARCHAR(200) NOT NULL DEFAULT '/img/resonosLogo.png',
+        `profile_image` VARCHAR(200) NOT NULL DEFAULT '/img/profileImg.png',
         `bio` TEXT NULL,
         `is_pro` BOOLEAN NOT NULL DEFAULT FALSE,
         `enabled` BOOLEAN NOT NULL DEFAULT TRUE,
@@ -204,7 +204,7 @@ BEGIN
         `user_id` BIGINT NOT NULL,
         `title` VARCHAR(200) NOT NULL,
         `description` TEXT NULL,
-        `thumbnail_url` VARCHAR(200) NOT NULL DEFAULT '/img/resonosLogo.png',
+        `thumbnail_url` VARCHAR(200) NOT NULL DEFAULT '/img/profileImg.png',
         `is_public` BOOLEAN NOT NULL,
         `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
