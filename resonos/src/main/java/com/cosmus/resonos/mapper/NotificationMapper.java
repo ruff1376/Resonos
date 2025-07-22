@@ -33,4 +33,20 @@ public interface NotificationMapper {
     public int createNotification(Long userId, String type, String message, String content, Long targetId) throws Exception;
     // 읽지 않은 알림 수
     public int countUnread(@Param("userId") Long userId) throws Exception;
+
+    // countByKeyword
+    public long countByKeyword(@Param("keyword") String keyword) throws Exception;
+    // countAll
+    public long countAll() throws Exception;
+    // searchByKeywordPaging
+    public List<Notification> searchByKeywordPaging(
+        @Param("keyword") String keyword,
+        @Param("index") long index,
+        @Param("size") long size
+    ) throws Exception;
+    // listPaging
+    public List<Notification> listPaging(
+        @Param("index") long index,
+        @Param("size") long size
+    ) throws Exception;
 }

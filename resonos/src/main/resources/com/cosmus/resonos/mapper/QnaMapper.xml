@@ -42,4 +42,12 @@
     DELETE FROM qna WHERE id = #{id}
   </delete>
 
+  <select id="listAnswered" resultMap="QnaResultMap">
+    SELECT * FROM qna WHERE status = 'ANSWERED' ORDER BY created_at DESC
+  </select>
+  <select id="listNoAnswer" resultMap="QnaResultMap">
+    SELECT * FROM qna WHERE status = 'NO_ANSWER' ORDER BY created_at DESC
+  </select>
+
+
 </mapper>

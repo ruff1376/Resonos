@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layouts/admin_layout}">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>관리자 - 알림 관리</title>
+    <th:block th:replace="~{fragments/link::admin}"></th:block>
+</head>
+
+<th:block layout:fragment="content">
+<body class="bg-dark text-light">
+<main class="py-5 bg-resonos-dark">
+    <div class="container" style="max-width: 1100px;">
+        <h2 class="mb-4 text-light-gold">알림 관리</h2>
+
+        <!-- 에러 메시지 표시 -->
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+        <!-- 새 알림 등록 폼 -->
+        <section class="mb-5 resonos-card p-4 bg-resonos-dark rounded-3">
+            <h4 class="mb-3">새 알림 등록</h4>
+            <form th:action="@{/admin/notifications}" th:object="${notification}" method="post" class="row g-3">
+                <div class="col-md-3">
+                    <label for="userId" class="form-label">수신자 회원ID</label>
+                    <input type="number" th:field="*{userId}" id="userId" class="form-control" required />
+                </div>
+                <div class="col-md-3">
+                    <label for="type" class="form-label">종류</label>
+                    <select th:field="*{type}" id="type" class="form-select" required>
+                        <option value="system">시스템 알림</option>
+                        <option value="push">푸시 알림</option>
+                        <option value="announcement">공지</option>
+                        <!-- 필요시 타입 추가 -->
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="message" class="form-label">제목 (Message)</label>
+                    <input type="text" th:field="*{message}" id="message" class="form-control" required />
+                </div>
+                <div class="col-md-12">
+                    <label for="content" class="form-label">상세 내용</label>
+                    <textarea th:field="*{content}" id="content" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label for="targetId" class="form-label">연결 대상 ID (선택)</label>
+                    <input type="text" th:field="*{targetId}" id="targetId" class="form-control" />
+                </div>
+                <div class="col-md-6 d-flex align-items-end justify-content-end">
+                    <button type="submit" class="btn btn-gold">등록 및 발송</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- 알림 리스트 -->
+        <section>
+            <h4 class="mb-3">알림 리스트</h4>
+            <div class="table-responsive resonos-card p-3 bg-resonos-dark rounded-3">
+                <table class="table table-dark table-striped mb-0 text-light align-middle">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>수신자 회원ID</th>
+                            <th>종류</th>
+                            <th>제목</th>
+                            <th>내용</th>
+                            <th>연결 대상ID</th>
+                            <th>읽음 여부</th>
+                            <th>등록일</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="noti : ${notifications}">
+                            <td th:text="${noti.id}">1</td>
+                            <td th:text="${noti.userId}">1001</td>
+                            <td th:text="${noti.type}">system</td>
+                            <td th:text="${noti.message}">제목</td>
+                            <td th:text="${noti.content}">내용</td>
+                            <td th:text="${noti.targetId}">target123</td>
+                            <td>
+                                <span th:text="${noti.isRead} ? '읽음' : '읽지 않음'">읽지 않음</span>
+                            </td>
+                            <td th:text="${#dates.format(noti.createdAt, 'yyyy-MM-dd HH:mm')}">2025-07-23 02:00</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(notifications)}">
+                            <td colspan="8" class="text-center text-secondary">등록된 알림이 없습니다.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- 알림 리스트 테이블 하단 또는 적절한 위치에 삽입 -->
+<div th:replace="~{fragments/pagination :: pagination(pagination=${pagination}, pageUri=${pageUri})}"></div>
+
+        </section>
+
+    </div>
+</main>
+</body>
+</th:block>
+</html>

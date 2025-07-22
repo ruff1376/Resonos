@@ -51,4 +51,21 @@ public interface NotificationService {
     // }
     // 읽지 않은 알림 수
     public int countUnread(Long userId) throws Exception;
+
+    // countByKeyword
+    public long countByKeyword(String keyword) throws Exception;
+    // countAll
+    public long countAll() throws Exception;
+    // searchByKeywordPaging
+    public List<Notification> searchByKeywordPaging(
+        @Param("keyword") String keyword,
+        @Param("index") long index,
+        @Param("size") long size
+    ) throws Exception;
+    // listPaging
+    public List<Notification> listPaging(
+        @Param("index") long index,
+        @Param("size") long size
+    ) throws Exception;
+
 }

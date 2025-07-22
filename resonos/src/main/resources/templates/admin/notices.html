@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{/layouts/admin_layout}">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>관리자 공지 관리</title>
+  <th:block th:replace="~{fragments/link::admin}"></th:block>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<th:block layout:fragment="content">
+<body class="bg-dark text-light">
+<main class="py-5 bg-resonos-dark" style="min-height: 80vh;">
+  <div class="container" style="max-width: 1200px;">
+
+    <h2 class="mb-4 text-light-gold fw-bold">공지 관리</h2>
+
+    <div class="row gx-4">
+
+      <!-- 좌측: 공지 목록 -->
+      <div class="col-md-6">
+        <div class="resonos-card p-3 bg-secondary bg-opacity-10 rounded-3" style="max-height: 70vh; overflow-y: auto;">
+          <h4 class="mb-3">공지 목록</h4>
+          <table class="table table-dark table-striped align-middle">
+            <thead>
+            <tr>
+              <th style="width:5%;">#</th>
+              <th>제목</th>
+              <th style="width:15%;">작성일</th>
+              <th style="width:10%;">상태</th>
+              <th style="width:15%;">시작일</th>
+              <th style="width:15%;">종료일</th>
+              <th style="width:20%;">관리</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="notice, iterStat : ${notices}">
+              <td th:text="${iterStat.count}">1</td>
+              <td th:text="${notice.title}">공지 제목</td>
+              <td th:text="${#dates.format(notice.createdAt, 'yyyy-MM-dd HH:mm')}">2025-07-23 03:21</td>
+              <td>
+                <span th:text="${notice.isActive} ? '활성' : '비활성'" 
+                      th:classappend="${notice.isActive} ? 'text-success' : 'text-secondary'">활성</span>
+              </td>
+              <td th:text="${notice.startAt != null} ? ${#dates.format(notice.startAt, 'yyyy-MM-dd')} : '-'">시작일</td>
+              <td th:text="${notice.endAt != null} ? ${#dates.format(notice.endAt, 'yyyy-MM-dd')} : '-'">종료일</td>
+              <td>
+                <a th:href="@{/admin/notices(id=${notice.id})}" class="btn btn-sm btn-outline-primary me-1">수정</a>
+                <form th:action="@{/admin/notices/{id}/delete(id=${notice.id})}" method="post" class="d-inline"
+                      onsubmit="return confirm('공지 \'[[${notice.title}]]\' 을(를) 삭제하시겠습니까?');">
+                  <button type="submit" class="btn btn-sm btn-outline-danger">삭제</button>
+                </form>
+              </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(notices)}">
+              <td colspan="7" class="text-center text-muted">등록된 공지가 없습니다.</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 우측: 공지 등록/수정 폼 -->
+      <div class="col-md-6">
+        <div class="resonos-card p-4 bg-secondary bg-opacity-10 rounded-3" style="max-height: 70vh; overflow-y: auto;">
+          <h4 th:text="${notice.id != null} ? '공지 수정' : '공지 등록'">공지 등록</h4>
+ <form th:action="@{/admin/notices/save}" th:object="${notice}" method="post">
+  <input type="hidden" th:field="*{id}" />
+  
+  <div class="mb-3">
+    <label for="title" class="form-label">제목</label>
+    <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="공지 제목을 입력하세요" required />
+  </div>
+
+  <div class="mb-3">
+    <label for="content" class="form-label">내용</label>
+    <textarea id="content" th:field="*{content}" class="form-control" rows="6" placeholder="공지 내용을 입력하세요" required></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label for="isActive" class="form-label">활성 여부</label>
+    <select id="isActive" th:field="*{isActive}" class="form-select" required>
+      <option th:value="true" th:text="'활성'"></option>
+      <option th:value="false" th:text="'비활성'"></option>
+    </select>
+  </div>
+
+  <div class="mb-3 row">
+    <div class="col">
+      <label for="startAt" class="form-label">시작일</label>
+      <input type="date" id="startAt" th:field="*{startAt}" class="form-control" />
+    </div>
+    <div class="col">
+      <label for="endAt" class="form-label">종료일</label>
+      <input type="date" id="endAt" th:field="*{endAt}" class="form-control" />
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end">
+    <button type="submit" class="btn btn-gold px-4">저장</button>
+    <a href="/admin/notices" class="btn btn-secondary px-4 ms-3">초기화</a>
+  </div>
+</form>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</main>
+</body>
+</th:block>
+</html>

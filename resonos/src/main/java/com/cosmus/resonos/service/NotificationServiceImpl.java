@@ -115,6 +115,26 @@ public class NotificationServiceImpl implements NotificationService {
         createNotification(notification); // 위의 객체 기반 메서드 호출
     }
 
+    @Override
+    public long countByKeyword(String keyword) throws Exception {
+        return notificationMapper.countByKeyword(keyword);
+    }
+
+    @Override
+    public long countAll() throws Exception {
+        return notificationMapper.countAll();
+    }
+
+    @Override
+    public List<Notification> searchByKeywordPaging(String keyword, long index, long size) throws Exception {
+        return notificationMapper.searchByKeywordPaging(keyword, index, size);
+    }
+
+    @Override
+    public List<Notification> listPaging(long index, long size) throws Exception {
+        return notificationMapper.listPaging(index, size);
+    }
+
     // [선택] 비즈니스 목적(예: 정책위반 등) 전용 notify 메서드는 필요시만 추가
     /*
     @Override
