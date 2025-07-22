@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Users;
@@ -206,17 +205,22 @@ public class HomeController {
    * @param user
    * @param br
    * @return
+   * @throws Exception
    */
   @PostMapping(value = "/check-email", consumes = "application/json")
-  public ResponseEntity<?> checkEmail(@Validated(EmailCheck.class) @RequestBody Users user, BindingResult br) {
+  public ResponseEntity<?> checkEmail(@Validated(EmailCheck.class) @RequestBody Users user, BindingResult br) throws Exception {
 
     if (br.hasErrors()) {
       log.info("유효성 검사 실패");
       br.getFieldErrors().forEach(fe ->
-        log.info("Field: {}, Message: {}", fe.getField(), fe.getDefaultMessage())
-    );
+      log.info("Field: {}, Message: {}", fe.getField(), fe.getDefaultMessage())
+      );
       return ResponseEntity.badRequest().body(br.getFieldErrors());
     }
+
+    String result = userService.findId(user.getEmail());
+    if(result != null)
+      return ResponseEntity.badRequest().body(List.of(Map.of("value", "중복된 이메일입니다.", "key", "email")));
 
     return new ResponseEntity<>("유효한 이메일입니다.", HttpStatus.OK);
   }

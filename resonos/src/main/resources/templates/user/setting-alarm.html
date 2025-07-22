@@ -20,12 +20,12 @@
     <section class="info-wrapper">
       <div class="info-section">
         <div class="title">
-          <div>
+          <div>-
             <h2 class="text-start">알림 설정</h2>
           </div>
         </div>
         <ul class="ul-list">
-          <li class="list-item" th:each="noti : ${notiList}">
+          <li class="list-item  justify-content-between" th:each="noti : ${notiList}">
             <span class="type" th:text="${notiType.get(noti.type)}"></span>
             <input type="hidden" class="type-name" th:value="${noti.type}"/>
             <label class="toggle-switch">
