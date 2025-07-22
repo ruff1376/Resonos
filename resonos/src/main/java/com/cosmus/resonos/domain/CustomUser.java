@@ -14,7 +14,9 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Getter
 public class CustomUser implements UserDetails, OAuth2User, OidcUser  {
     private final Users user;
@@ -45,7 +47,7 @@ public class CustomUser implements UserDetails, OAuth2User, OidcUser  {
     @Override public boolean isAccountNonExpired() { return true; }
     @Override public boolean isAccountNonLocked() { return true; }
     @Override public boolean isCredentialsNonExpired() { return true; }
-    @Override public boolean isEnabled() { return user.isEnabled(); }
+    @Override public boolean isEnabled() { log.info("isEnabled() : {}", user.isEnabled()); return user.isEnabled();}
     // ADMIN 권한 여부 확인 메서드 추가
     public boolean isAdmin() {
         return authList.stream()
