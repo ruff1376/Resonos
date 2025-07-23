@@ -503,11 +503,12 @@ public class UserController {
     @PathVariable(value = "id", required = false) Long id,
     Model model
   ) throws Exception {
-    // 관리자 체크
-    boolean isAdimin = userService.selectById(id).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
-    if(isAdimin) return "redirect:/";
 
     if(id == null && loginUser == null) return "redirect:/login";
+
+    // 관리자 체크
+    boolean isAdimin = userService.selectById(id != null ? id : loginUser.getId()).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
+    if(isAdimin) return "redirect:/";
 
     // PathVariable 검사
     Long targetId = (id != null) ? id : loginUser.getUser().getId();
@@ -531,7 +532,7 @@ public class UserController {
    * 플레이리스트 페이지 요청
    * @param model
    * @return
-   * @throws Exception
+  * @throws Exception
    */
   @GetMapping({"playlists", "/{id}/playlists"})
   public String playlist(
@@ -539,11 +540,12 @@ public class UserController {
       @PathVariable(value = "id", required = false) Long id,
       Model model
   ) throws Exception {
-    // 관리자 체크
-    boolean isAdimin = userService.selectById(id).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
-    if(isAdimin) return "redirect:/";
 
     if(id == null && loginUser == null) return "redirect:/login";
+
+    // 관리자 체크
+    boolean isAdimin = userService.selectById(id != null ? id : loginUser.getId()).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
+    if(isAdimin) return "redirect:/";
 
     // PathVariable 검사
     Long targetId = (id != null) ? id : loginUser.getUser().getId();
@@ -575,11 +577,11 @@ public class UserController {
     Model model
   ) throws Exception {
 
-    // 관리자 체크
-    boolean isAdimin = userService.selectById(id).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
-    if(isAdimin) return "redirect:/";
-
     if(id == null && loginUser == null) return "redirect:/login";
+
+    // 관리자 체크
+    boolean isAdimin = userService.selectById(id != null ? id : loginUser.getId()).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
+    if(isAdimin) return "redirect:/";
 
     // PathVariable 검사
     Long targetId = (id != null) ? id : loginUser.getUser().getId();
@@ -616,11 +618,11 @@ public class UserController {
     @PathVariable(value = "id", required = false) Long id
   ) throws Exception {
 
-    // 관리자 체크
-    boolean isAdimin = userService.selectById(id).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
-    if(isAdimin) return "redirect:/";
-
     if(id == null && loginUser == null) return "redirect:/login";
+
+    // 관리자 체크
+    boolean isAdimin = userService.selectById(id != null ? id : loginUser.getId()).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
+    if(isAdimin) return "redirect:/";
 
     // PathVariable 검사
     Long targetId = (id != null) ? id : loginUser.getUser().getId();
