@@ -53,18 +53,41 @@
                 </iframe>
             </div>
             <div class="youtube">
+                <!-- 유효한 mvUrl인 경우 -->
                 <th:block th:if="${!#strings.isEmpty(track.mvUrl) and track.mvUrl != 'N/A'}">
-                    <iframe width="560" height="315" th:src="|https://www.youtube.com/embed/${track.mvUrl}|"
-                        title="YouTube video player" frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-                    </iframe>
+                    <div id="video-container" th:attr="data-video-id=${track.mvUrl}">
+                        <iframe id="yt-frame" width="560" height="315"
+                            th:src="|https://www.youtube.com/embed/${track.mvUrl}|" title="YouTube video player"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen
+                            onerror="handleIframeError(this)">
+                        </iframe>
+                    </div>
                 </th:block>
+
+                <!-- mvUrl이 없거나 N/A일 때 -->
                 <th:block th:if="${#strings.isEmpty(track.mvUrl) or track.mvUrl == 'N/A'}">
                     <img th:src="@{/img/wait_plz.png}" alt="뮤직비디오 준비중" width="560" height="315"
                         style="object-fit:cover;">
                 </th:block>
             </div>
+
+            <script>
+                function handleIframeError(iframe) {
+                    const container = iframe.parentElement;
+                    const videoId = container.getAttribute("data-video-id");
+
+                    container.innerHTML = `
+        <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" rel="noopener noreferrer">
+            <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" 
+                 alt="유튜브 썸네일" width="560" height="315" style="cursor:pointer; object-fit:cover;">
+            <p style="text-align:center; font-weight:bold;">🔗 유튜브에서 영상 보기</p>
+        </a>
+    `;
+                }
+            </script>
+
         </div>
         <!-- iframe 카드 끝 -->
 
@@ -621,7 +644,7 @@
                             $albumMoods.html(`
                             <p id="headline">분위기로 노래찾기</p>
                             <p>아직 아무도 분위기에 투표하지 않았어요 😅</p>
-                        `); 
+                        `);
                         } else {
                             const moodButtons = labels.map(label => `
                             <div class="mood-list">
