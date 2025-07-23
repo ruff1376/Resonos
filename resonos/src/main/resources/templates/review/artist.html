@@ -77,8 +77,7 @@
                             th:src="|https://www.youtube.com/embed/${track.mvUrl}|" title="YouTube video player"
                             frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowfullscreen
-                            onerror="handleIframeError(this)">
+                            allowfullscreen onerror="handleIframeError(this)">
                         </iframe>
                     </div>
                 </th:block>
@@ -168,12 +167,12 @@
             <div class="album-moods">
                 <p id="headline">분위기로 노래찾기</p>
                 <th:block th:if="${moodLabels == null || moodLabels.isEmpty()}">
-                    <p style="color: var(--main-color);">아직 아무도 분위기에 투표하지 않았어요 😅</p>
+                    <p style="color: var(--main-color);" id="noVoteMessage">아직 아무도 분위기에 투표하지 않았어요 😅</p>
                 </th:block>
                 <th:block th:if="${moodLabels != null}">
                     <div class="mood-list">
-                        <a th:each="topMoods : ${moodLabels}" th:href="@{/search(q=${'#' + topMoods})}">
-                            <button class="btn btn-gold" th:text="|#${topMoods}|">분위기1</button>
+                        <a th:each="topMoods : ${moodLabels}" th:href="@{/search(q=${'#' + topMoods})}"
+                            class="btn btn-gold" th:text="|#${topMoods}|">
                         </a>
                     </div>
                 </th:block>
@@ -257,17 +256,12 @@
     <!-- 분위기, 앨범 관련 투표 -->
     <script>
         // 라디오버튼 체크시
-        $(document).on('change', 'input[name="moodVote"]', function () {
-
-            $('.mood-option').removeClass('selected pop-heart'); // 모든 버튼 초기화
-
-            const $selected = $(this).closest('.mood-option');
-            $selected.addClass('selected pop-heart'); // 선택된 버튼에 클래스 추가
-
-            setTimeout(() => $selected.removeClass('pop-heart'), 300);
+        // 라디오 버튼 스타일 토글
+        $(document).on('click', '.mood-option', function () {
+            $('.mood-option').removeClass('selected');
+            $(this).addClass('selected');
         });
 
-        // 분위기 투표
         $(document).on('click', '#submitMoodVote', function () {
             const selectedMood = $('input[name="moodVote"]:checked').val();
             if (!selectedMood) {
@@ -313,36 +307,35 @@
                         tags.forEach(tag => {
                             const selected = (tag.id === votedMoodId);
                             const html = `
-                        <label class="btn btn-gold mood-option ${selected ? 'selected pop-heart' : ''}">
-                            <input type="radio" name="moodVote" value="${tag.id}" ${selected ? 'checked' : ''} hidden />
-                            <span>${tag.name}</span>
-                        </label>
-                    `;
+                    <label class="btn btn-gold mood-option ${selected ? 'selected pop-heart' : ''}">
+                        <input type="radio" name="moodVote" value="${tag.id}" ${selected ? 'checked' : ''} hidden />
+                        <span>${tag.name}</span>
+                    </label>
+                `;
                             $container.append(html);
                         });
 
+                        // ✅ 분위기 라벨 영역 갱신 (track.html 방식으로 통일)
                         const $albumMoods = $('.album-moods');
-                        $albumMoods.empty();
                         if (!labels || labels.length === 0) {
                             $albumMoods.html(`
-            <p id="headline">분위기로 노래찾기</p>
-            <p style="color: var(--main-color);">아직 아무도 분위기에 투표하지 않았어요 😅</p>
-        `);
+                        <p id="headline">분위기로 노래찾기</p>
+                        <p style="color: var(--main-color);">아직 아무도 분위기에 투표하지 않았어요 😅</p>
+                    `);
                         } else {
                             const moodButtons = labels.map(label => `
-            <a href="/search?q=%23${encodeURIComponent(label)}">
-                <button class="btn btn-gold">#${label}</button>
-            </a>
-        `).join('');
+                        <a href="/search?q=%23${encodeURIComponent(label)}" class="btn btn-gold">#${label}</a>
+                    `).join('');
+
                             $albumMoods.html(`
-            <p id="headline">분위기로 노래찾기</p>
-            <div class="mood-list">
-                ${moodButtons}
-            </div>
-        `);
+                        <p id="headline">분위기로 노래찾기</p>
+                        <div class="mood-list">
+                            ${moodButtons}
+                        </div>
+                    `);
                         }
 
-                        // ✅ 차트 갱신
+                        // ✅ 차트 영역 갱신
                         const $chartArea = $('.chart');
                         if (!Array.isArray(values) || values.length === 0) {
                             $chartArea.html(`<p id="headline">아직 아무도 분위기에 투표하지 않았어요 😅</p>`);
@@ -351,6 +344,7 @@
                             renderMoodChart(labels, values);
                         }
 
+                        // ✅ 효과 클래스 제거 타이머
                         setTimeout(() => {
                             $('.mood-option').removeClass('pop-heart');
                         }, 300);
