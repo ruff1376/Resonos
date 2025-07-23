@@ -100,7 +100,7 @@
                             <p th:text="|${stat.count}. ${tops.title} |"
                                 style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
                             </p>
-                            <span th:text="${track.formattedDuration}"></span>
+                            <span th:text="${tops.formattedDuration}"></span>
                         </div>
                     </a>
                 </th:block>
@@ -898,13 +898,14 @@
                 contentType: 'application/json',
                 data: JSON.stringify({ userId: userId, albumId: albumId }),
                 success: function (res) {
-                    console.log('응답:', res, '현재 버튼:', $btn);
                     const liked = res.liked
                     const count = res.count;
 
                     // 클릭한 버튼 내부의 like-text와 like-count만 변경
                     $btn.find('.like-text').text(liked ? '좋아요❤️' : '좋아요🤍');
                     $btn.find('.like-count').text(count);
+                    $btn.addClass("pop-heart");
+                    setTimeout(() => $btn.removeClass("pop-heart"), 300);
                 },
                 error: function () {
                     Swal.fire('좋아요 처리에 실패했습니다.');

@@ -695,6 +695,8 @@
                     // UI 갱신
                     $('#likeText').text(liked ? '좋아요❤️' : '좋아요🤍');
                     $('#likeCount').text(count);
+                    $btn.addClass("pop-heart");
+                    setTimeout(() => $btn.removeClass("pop-heart"), 300);
                 },
                 error: function () {
                     Swal.fire("오류", "좋아요 처리중 예기치못한 오류.", "error");
