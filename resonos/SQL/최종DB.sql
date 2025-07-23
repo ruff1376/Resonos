@@ -1,3 +1,4 @@
+-- Active: 1751337677491@@127.0.0.1@3306@resonos
 -- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: resonos

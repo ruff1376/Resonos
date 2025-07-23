@@ -14,4 +14,7 @@ public interface QnaService {
     public boolean update(Qna qna) throws Exception;
     // 삭제
     public boolean delete(Long id) throws Exception;
+
+    List<Qna> listAnswered() throws Exception;  // 답변이 있는 QnA 목록
+    List<Qna> listNoAnswer() throws Exception;  // 답변이 없는 QnA 목록
 }

@@ -40,7 +40,7 @@ public class SpotifySyncServiceImpl implements SpotifySyncService {
             List<?> genres = (List<?>) artistData.get("genres");
             artist.setGenres(!genres.isEmpty()
                 ? String.join(",", genres.stream().map(Object::toString).toArray(String[]::new))
-                : null);
+                : "pop");
         } else {
             artist.setGenres(null);
         }

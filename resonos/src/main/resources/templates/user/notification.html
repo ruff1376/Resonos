@@ -37,7 +37,7 @@
             <li class="list-item" th:data-noti-id="${noti.id}">
               <input class="is-read" th:id="'is-read' + ${noti.id}" type="checkbox" th:checked="${noti.isRead}">
               <span class="red-circle">●</span>
-              <p th:text="${noti.content}">알림 내용</p>
+              <p th:text="${noti.message}">알림 내용</p>
               <p class="date">2025.06.12 13:11:00</p>
             </li>
           </th:block>

@@ -16,4 +16,8 @@ public interface QnaMapper {
     public int update(Qna qna) throws Exception;
     // 삭제
     public int delete(Long id) throws Exception;
+    // 답변이 있는 QnA 목록
+    public List<Qna> listAnswered() throws Exception;
+    // 답변이 없는 QnA 목록
+    public List<Qna> listNoAnswer() throws Exception;
 }
