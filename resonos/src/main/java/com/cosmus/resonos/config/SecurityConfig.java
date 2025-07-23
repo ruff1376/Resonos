@@ -10,8 +10,10 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import com.cosmus.resonos.security.CustomAccessDeniedHandler;
@@ -59,13 +61,9 @@ public class SecurityConfig {
     @Autowired
     private OAuth2FailureHandler oauth2FailureHandler;
 
-    @Autowired
-    private OAuth2SuccessHandler oauth2SuccessHandler;
-
-
     // 🔐 스프링 시큐리티 설정 메소드
 	@Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, OAuth2SuccessHandler oauth2SuccessHandler) throws Exception {
 
         // http.userDetailsService(userDetailServiceImpl);
         // // ✅ 인가 설정
@@ -208,6 +206,16 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    @Bean
+    public PersistentTokenBasedRememberMeServices rememberMeServices(UserDetailsService userDetailsService, PersistentTokenRepository tokenRepository) {
+        PersistentTokenBasedRememberMeServices services =
+            new PersistentTokenBasedRememberMeServices("resonos-remember-me-key", userDetailsService, tokenRepository);
+            services.setAlwaysRemember(true);
+        return services;
+    }
 
-
+    @Bean
+    public OAuth2SuccessHandler oauth2SuccessHandler(PersistentTokenBasedRememberMeServices rememberMeServices) {
+        return new OAuth2SuccessHandler(rememberMeServices);
+    }
 }
