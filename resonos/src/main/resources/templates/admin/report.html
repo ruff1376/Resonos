@@ -110,7 +110,7 @@
                     <strong>상태:</strong>
                     <span th:text="${report.status}"></span>
                     <!-- 상태 변경 폼 -->
-                    <form th:action="@{/admin/reports/update-status}" method="post" class="d-inline ms-2">
+                    <form th:action="@{/admin/report/updateStatus}" method="post" class="d-inline ms-2">
                       <input type="hidden" name="id" th:value="${report.id}" />
                       <select name="status" class="form-select form-select-sm d-inline w-auto" style="width:90px;display:inline-block;">
                         <option value="PENDING" th:selected="${report.status == 'PENDING'}">대기</option>
@@ -177,10 +177,11 @@
                 <input type="hidden" name="size" th:value="${pagination.size}" />
                 <div class="input-group">
                     <select name="status" class="form-select form-select-sm">
-                    <option value="PENDING" th:selected="${report.status == 'PENDING'}">대기</option>
-                    <option value="DONE" th:selected="${report.status == 'DONE'}">완료</option>
-                    <option value="REJECTED" th:selected="${report.status == 'REJECTED'}">반려</option>
+                        <option value="PENDING" th:selected="${report.status == 'PENDING'}">대기</option>
+                        <option value="DONE" th:selected="${report.status == 'DONE'}">완료</option>
+                        <option value="REJECTED" th:selected="${report.status == 'REJECTED'}">반려</option>
                     </select>
+
                     <input type="text" name="processMemo" class="form-control form-control-sm" th:value="${report.processMemo}" placeholder="처리 메모" />
                     <button type="submit" class="btn btn-outline-gold btn-sm">수정</button>
                 </div>
@@ -193,6 +194,7 @@
             <div class="detail-section">
                 <h5 class="text-danger">정말로 삭제하시겠습니까?</h5>
             <form th:action="@{/admin/report/delete}" method="post" style="display:inline;">
+              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <input type="hidden" name="id" th:value="${report.id}" />
                 <input type="hidden" name="tab" th:value="${tab}" />
                 <input type="hidden" name="page" th:value="${pagination.page}" />

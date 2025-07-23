@@ -1,14 +1,21 @@
 package com.cosmus.resonos.controller;
 
+import com.cosmus.resonos.domain.Notice;
+import com.cosmus.resonos.service.NoticeService;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.*;
 
-import com.cosmus.resonos.domain.Notice;
-import com.cosmus.resonos.service.NoticeService;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+@Slf4j
 @Controller
 @RequestMapping("/admin/notices")
 public class AdminNoticeController {
@@ -17,12 +24,15 @@ public class AdminNoticeController {
     private NoticeService noticeService;
 
     /**
-     * 공지 목록 및 (id 지정 시) 수정할 공지 정보 전달.
-     * @param id 공지 수정 시 선택된 공지 ID (optional)
-     * @param model
-     * @return 단일 페이지 'admin/notices' 뷰
-     * @throws Exception
+     * 날짜 문자열을 java.util.Date로 변환해 주는 바인더 등록
      */
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setLenient(false); // 엄격한 형식 적용
+        binder.registerCustomEditor(Date.class, new org.springframework.beans.propertyeditors.CustomDateEditor(sdf, true));
+    }
+
     @GetMapping
     public String list(@RequestParam(value = "id", required = false) Long id, Model model) throws Exception {
         model.addAttribute("notices", noticeService.list());
@@ -37,41 +47,45 @@ public class AdminNoticeController {
         } else {
             model.addAttribute("notice", new Notice());
         }
-        return "admin/notices"; // 작성하신 notices.html 템플릿 경로에 해당
+        return "admin/notices";
     }
 
-    /**
-     * 공지 등록 및 수정 저장 처리
-     * @param notice 공지 도메인 객체
-     * @param result 유효성 검사 결과
-     * @param model
-     * @return 저장 후 공지 목록 페이지(리다이렉트)
-     * @throws Exception
-     */
     @PostMapping("/save")
     public String save(@ModelAttribute Notice notice, BindingResult result, Model model) throws Exception {
+        log.info("Received notice to save: {}", notice);
+
         if (result.hasErrors()) {
+            log.warn("Validation errors while saving notice: {}", result.getAllErrors());
             model.addAttribute("notices", noticeService.list());
             return "admin/notices";
         }
 
+        boolean success;
         if (notice.getId() == null) {
-            noticeService.insert(notice);
+            success = noticeService.insert(notice);
+            log.info("Insert notice result: {}", success);
         } else {
-            noticeService.update(notice);
+            success = noticeService.update(notice);
+            log.info("Update notice result: {}", success);
         }
+
+        if (!success) {
+            log.error("Failed to save notice: {}", notice);
+            model.addAttribute("errorMessage", "공지 저장에 실패했습니다.");
+            model.addAttribute("notices", noticeService.list());
+            return "admin/notices";
+        }
+
         return "redirect:/admin/notices";
     }
 
-    /**
-     * 공지 삭제 처리
-     * @param id 삭제할 공지 ID
-     * @return 삭제 후 공지 목록 페이지(리다이렉트)
-     * @throws Exception
-     */
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable("id") Long id) throws Exception {
-        noticeService.delete(id);
+        boolean success = noticeService.delete(id);
+        if (!success) {
+            log.error("Failed to delete notice id={}", id);
+            // 에러 페이지 처리 가능
+        }
         return "redirect:/admin/notices";
     }
 }

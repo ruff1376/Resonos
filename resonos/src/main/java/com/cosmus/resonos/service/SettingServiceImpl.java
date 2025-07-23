@@ -36,4 +36,15 @@ public class SettingServiceImpl implements SettingService {
     public boolean delete(Long id) throws Exception {
         return settingMapper.delete(id) > 0;
     }
+
+    @Override
+    public Setting selectByValue(String value) throws Exception {
+        return settingMapper.selectByValue(value);
+
+    }
+
+    @Override
+    public Setting selectByName(String name) throws Exception {
+        return settingMapper.selectByName(name);
+    }
 }

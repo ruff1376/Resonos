@@ -312,5 +312,19 @@
     WHERE user_id = #{userId}
     AND type = #{type}
   </update>
+  
+  <!-- countAllUsers -->
+  <select id="countAllUsers" resultType="long">
+    SELECT COUNT(*) FROM user
+  </select>
+
+  <!-- listPaging -->
+  <select id="listPagingA" resultMap="UserResultMap">
+    SELECT * FROM user
+    ORDER BY id DESC
+    LIMIT #{index}, #{size}
+  </select>
+
+
 
 </mapper>

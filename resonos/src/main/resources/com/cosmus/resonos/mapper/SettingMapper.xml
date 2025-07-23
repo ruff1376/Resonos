@@ -26,35 +26,30 @@
     VALUES (#{id}, #{name}, #{description}, #{value}, #{updatedAt}, #{createdAt})
   </insert>
 
-  <update id="update">
-    UPDATE setting
-    SET description = #{description},
-        value = #{value},
-        updated_at = #{updatedAt}
-    WHERE id = #{id}@PostMapping("/setting/add")
-public String addSetting(
-        @RequestParam("name") String name,
-        @RequestParam(value = "description", required = false) String description,
-        @RequestParam("value") String value,
-        Model model) throws Exception {
+ <update id="update">
+  UPDATE setting
+  SET description = #{description},
+      value = #{value},
+      updated_at = #{updatedAt}
+  WHERE id = #{id}
+</update>
 
-    Setting setting = new Setting();
-    setting.setName(name);
-    setting.setValue(value);
-    setting.setDescription(description);
-    Date now = new Date();
-    setting.setCreatedAt(now);
-    setting.setUpdatedAt(now);
 
-    settingService.insert(setting);
-
-    return "redirect:/admin/PolicySetting";
-}
-
-  </update>
 
   <delete id="delete">
     DELETE FROM setting WHERE id = #{id}
   </delete>
+  <!-- selectByValue(value) -->
+  <select id="selectByValue" resultMap="SettingResultMap">
+    SELECT id, name, description, value, updated_at, created_at FROM setting WHERE value = #{value}
+  </select>
+
+  <!-- SettingMapper.xml -->
+<select id="selectByName" resultMap="SettingResultMap">
+    SELECT id, name, description, value, updated_at, created_at
+    FROM setting
+    WHERE name = #{name}
+</select>
+
 
 </mapper>

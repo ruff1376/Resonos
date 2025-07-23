@@ -35,5 +35,22 @@
     SELECT * FROM tag WHERE name LIKE CONCAT('%', #{keyword}, '%')
   </select>
 
+  <!-- countAll -->
+  <select id="countAll" resultType="long">
+    SELECT COUNT(*) FROM tag
+  </select>
+
+  <!-- countByKeyword -->
+  <select id="countByKeyword" resultType="long">
+    SELECT COUNT(*) FROM tag WHERE name LIKE CONCAT('%', #{keyword}, '%')
+  </select>
+  <!-- listPaging -->
+  <select id="listPaging" resultMap="TagResultMap">
+    SELECT * FROM tag ORDER BY name LIMIT #{offset}, #{size} 
+  </select>
+  <!-- searchByNamePaging -->
+  <select id="searchByNamePaging" resultMap="TagResultMap">
+    SELECT * FROM tag WHERE name LIKE CONCAT('%', #{keyword}, '%') ORDER BY name LIMIT #{offset}, #{size} 
+  </select>
 
 </mapper>

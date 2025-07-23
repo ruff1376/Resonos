@@ -14,7 +14,7 @@ public interface ReportMapper {
     public List<Report> findByTargetId(Long targetId)throws Exception;
     public List<Report> findByTargetTypeAndTargetId(String targetType, Long targetId)throws Exception;
     public List<Report> findAll()throws Exception;
-    public void updateStatus(Long id, String status, Long processedBy, String processMemo) throws Exception;
+    public void updateStatus(@Param("id") Long id,@Param("status") String status,@Param("processedBy") Long processedBy,@Param("processMemo") String processMemo) throws Exception;
     // 전체 조회
     public List<Report> list() throws Exception;
     // 조회
