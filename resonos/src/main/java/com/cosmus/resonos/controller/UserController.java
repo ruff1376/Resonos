@@ -168,6 +168,10 @@ public class UserController {
     @AuthenticationPrincipal CustomUser loginUser,
     Model model) throws Exception {
 
+    // 관리자 체크
+    boolean isAdimin = userService.selectById(id).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
+    if(isAdimin) return "redirect:/";
+
     // 보려는 다른 회원
     PublicUserDto user = userService.publicSelectById(id);
     // 팔로워 수
@@ -499,6 +503,10 @@ public class UserController {
     @PathVariable(value = "id", required = false) Long id,
     Model model
   ) throws Exception {
+    // 관리자 체크
+    boolean isAdimin = userService.selectById(id).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
+    if(isAdimin) return "redirect:/";
+
     if(id == null && loginUser == null) return "redirect:/login";
 
     // PathVariable 검사
@@ -531,6 +539,10 @@ public class UserController {
       @PathVariable(value = "id", required = false) Long id,
       Model model
   ) throws Exception {
+    // 관리자 체크
+    boolean isAdimin = userService.selectById(id).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
+    if(isAdimin) return "redirect:/";
+
     if(id == null && loginUser == null) return "redirect:/login";
 
     // PathVariable 검사
@@ -562,6 +574,11 @@ public class UserController {
     @PathVariable(value = "id", required = false) Long id,
     Model model
   ) throws Exception {
+
+    // 관리자 체크
+    boolean isAdimin = userService.selectById(id).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
+    if(isAdimin) return "redirect:/";
+
     if(id == null && loginUser == null) return "redirect:/login";
 
     // PathVariable 검사
@@ -598,6 +615,11 @@ public class UserController {
     @AuthenticationPrincipal CustomUser loginUser,
     @PathVariable(value = "id", required = false) Long id
   ) throws Exception {
+
+    // 관리자 체크
+    boolean isAdimin = userService.selectById(id).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
+    if(isAdimin) return "redirect:/";
+
     if(id == null && loginUser == null) return "redirect:/login";
 
     // PathVariable 검사
