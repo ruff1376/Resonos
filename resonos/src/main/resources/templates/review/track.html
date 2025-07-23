@@ -187,12 +187,12 @@
             <div class="info album-moods">
                 <p id="headline">분위기로 노래찾기</p>
                 <th:block th:if="${moodLabels == null || moodLabels.isEmpty()}">
-                    <p>아직 아무도 분위기에 투표하지 않았어요 😅</p>
+                    <p id="noVoteMessage">아직 아무도 분위기에 투표하지 않았어요 😅</p>
                 </th:block>
                 <th:block th:if="${moodLabels != null}">
                     <div class="mood-list">
-                        <a th:each="topMoods : ${moodLabels}" th:href="@{/search(q=${'#' + topMoods})}">
-                            <button class="btn btn-gold" th:text="|#${topMoods}|">분위기1</button>
+                        <a th:each="topMoods : ${moodLabels}" th:href="@{/search(q=${'#' + topMoods})}"
+                            class="btn btn-gold" th:text="|#${topMoods}|">
                         </a>
                     </div>
                 </th:block>
@@ -637,27 +637,22 @@
                         const values = data.values;
                         const labels = data.labels;
                         // ✅ .album-moods UI 갱신
+                        const $moodList = $('.mood-list'); // div.mood-list만 선택
                         const $albumMoods = $('.album-moods');
-                        $albumMoods.empty(); // 기존 내용 제거
+                        $moodList.empty(); // 기존 내용 제거
 
                         if (!labels || labels.length === 0) {
                             $albumMoods.html(`
                             <p id="headline">분위기로 노래찾기</p>
-                            <p>아직 아무도 분위기에 투표하지 않았어요 😅</p>
+                            <p id="noVoteMessage">아직 아무도 분위기에 투표하지 않았어요 😅</p>
                         `);
                         } else {
+                            $('#noVoteMessage').remove();
                             const moodButtons = labels.map(label => `
-                            <div class="mood-list">
-                                <a href="/search?q=%23${encodeURIComponent(label)}">
-                                    <button class="btn btn-gold">#${label}</button>
-                                </a>
-                            </div>
-                        `).join('');
+                                <a href="/search?q=%23${encodeURIComponent(label)}" class="btn btn-gold">#${label}</a>
+                            `).join('');
 
-                            $albumMoods.html(`
-                            <p id="headline">분위기로 노래찾기</p>
-                            ${moodButtons}
-                        `);
+                            $moodList.html(moodButtons);
                         }
                         // ✅ 무드 버튼 UI 갱신
                         $container.empty();
