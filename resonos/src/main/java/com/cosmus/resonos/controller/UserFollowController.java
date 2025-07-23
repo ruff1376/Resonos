@@ -156,12 +156,13 @@ public class UserFollowController {
 
         if(choice.equals("follow"))
             userList = userFollowService.myFollow(userId, keyword, offset, limit);
-        else if(choice.equals("followwer"))
+        else if(choice.equals("follower"))
             userList = userFollowService.myFollower(userId, keyword, offset, limit);
 
         if(userList != null)
             return new ResponseEntity<>(userList, HttpStatus.OK);
 
+        log.info("뭐지? : {}", userList);
         return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

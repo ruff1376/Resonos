@@ -194,7 +194,9 @@ public class UserController {
     // 차트 데이터
     Map<String, Integer> chartData = FlattenGenreCounts.execute(userService.likedGenreData(user.getId()));
     // 리뷰 작성 수
-    int countAllReview = albumReviewServcie.countAlbumReview(loginUser.getId()) + trackReviewService.countTrackReview(loginUser.getId());
+    int countAllReview = albumReviewServcie.countAlbumReview(id) + trackReviewService.countTrackReview(id);
+    // 총 리뷰 수
+    UsersTotalLikes utl = userService.usersTotalLikes(id);
 
     // 자기 자신인지
     boolean isOwner = loginUser != null && loginUser.getId().equals(id);
@@ -207,6 +209,7 @@ public class UserController {
       model.addAttribute("user", user);
     }
 
+    model.addAttribute("utl", utl);
     model.addAttribute("countAllReview", countAllReview);
     model.addAttribute("chartData", chartData);
     model.addAttribute("badgeCount", badgeCount);
@@ -402,13 +405,11 @@ public class UserController {
         }
         else if(type.equals("ar")) {
           List<AlbumReview> albumReviewList = albumReviewServcie.reviewWithReviewerByUserId(userId, keyword, offset, limit);
-          log.info("추가 데이터 : {}", albumReviewList);
           if(albumReviewList != null)
                 return new ResponseEntity<>(albumReviewList, HttpStatus.OK);
         }
         else if(type.equals("lar")) {
           List<AlbumReview> likedAlbumReviewList = albumReviewServcie.likedReviewByUserId(userId, keyword, offset, limit);
-          log.info("추가 데이터 : {}", likedAlbumReviewList);
           if(likedAlbumReviewList != null)
                 return new ResponseEntity<>(likedAlbumReviewList, HttpStatus.OK);
         }
