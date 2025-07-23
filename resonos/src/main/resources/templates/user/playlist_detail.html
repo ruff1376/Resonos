@@ -169,7 +169,6 @@
         })
       }
 
-
       let isOwner = [[${isOwner}]]
 
       if(isOwner) {
@@ -188,6 +187,9 @@
               orderNo: index + 1
             }))
             changeOrder(newOrder)
+            Array.from(dragList.children).forEach((li, index) => {
+              li.querySelector('.order-no').textContent = index + 1
+            })
           },
         })
       }
@@ -482,6 +484,7 @@
                 list.push(trackId)
               })
               addTracks(list)
+              items.forEach(e => e.classList.remove('select'))
             }
           })
       })

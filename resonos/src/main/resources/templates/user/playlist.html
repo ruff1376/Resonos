@@ -383,7 +383,7 @@
       /* 좋아요 한 플레이리스트 렌더링 */
       function renderPlaylist(list, reset = false) {
         const ulList = document.querySelector('.ul-list.liked-pli')
-        ulList.innerHTML = ''
+        if(reset) ulList.innerHTML = ''
 
         list.forEach(item => {
           const li = document.createElement('li')
