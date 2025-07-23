@@ -91,5 +91,44 @@
     VALUES (#{userId}, #{type}, #{message}, #{content}, FALSE, NOW(), #{targetId})
   </insert> -->
 
+<!-- public long countByKeyword(@Param("keyword") String keyword) throws Exception; -->
+  <select id="countByKeyword" resultType="long">
+    SELECT COUNT(*)
+    FROM notification
+    WHERE message LIKE CONCAT('%', #{keyword}, '%')
+    OR content LIKE CONCAT('%', #{keyword}, '%')
+  </select>
+
+<!--     public long countAll() throws Exception; -->
+  <select id="countAll" resultType="long">
+    SELECT COUNT(*)
+    FROM notification
+  </select>
+   <!--     public List<Notification> searchByKeywordPaging(
+        @Param("keyword") String keyword,
+        @Param("index") long index,
+        @Param("size") long size
+    ) throws Exception; -->
+  <select id="searchByKeywordPaging" resultMap="NotificationResultMap">
+    SELECT *
+    FROM notification
+    WHERE message LIKE CONCAT('%', #{keyword}, '%')
+    OR content LIKE CONCAT('%', #{keyword}, '%')
+    ORDER BY created_at DESC
+    LIMIT #{index}, #{size}
+  </select>
+
+<!--    public List<Notification> listPaging(
+        @Param("index") long index,
+        @Param("size") long size
+    ) throws Exception; -->
+  <select id="listPaging" resultMap="NotificationResultMap">
+    SELECT *
+    FROM notification
+    ORDER BY created_at DESC
+    LIMIT #{index}, #{size}
+  </select>
+
+
 
 </mapper>

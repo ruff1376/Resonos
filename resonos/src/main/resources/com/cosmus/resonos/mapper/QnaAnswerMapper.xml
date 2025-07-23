@@ -21,10 +21,11 @@
     SELECT * FROM qna_answer WHERE id = #{id}
   </select>
 
-  <insert id="insert" >
+  <insert id="insert">
     INSERT INTO qna_answer (content, answered_at, qna_id, admin_id)
-    VALUES (#{content}, #{answeredAt}, #{qnaId}, #{adminId})
+    VALUES (#{content}, NOW(), #{qnaId}, #{adminId})
   </insert>
+
 
   <update id="update" >
     UPDATE qna_answer

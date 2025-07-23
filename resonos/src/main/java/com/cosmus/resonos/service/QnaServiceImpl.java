@@ -38,4 +38,14 @@ public class QnaServiceImpl implements QnaService {
     public boolean delete(Long id) throws Exception {
         return qnaMapper.delete(id) > 0;
     }
+
+    @Override
+    public List<Qna> listAnswered() throws Exception {
+        return qnaMapper.listAnswered();
+    }
+
+    @Override
+    public List<Qna> listNoAnswer() throws Exception {
+        return qnaMapper.listNoAnswer();
+    }
 }
