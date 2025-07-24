@@ -730,8 +730,13 @@
     <script>
         $(document).ready(function () {
             $('#addToPlaylistBtn').click(function () {
+                if (!isLogin) {
+                    Swal.fire("로그인 필요", "플레이리스트에 추가하려면 로그인이 필요합니다.", "warning");
+                    return;
+                }
+
                 if (!userPlaylists || userPlaylists.length === 0) {
-                    Swal.fire('플레이리스트 없음', '먼저 마이페이지에서 플레이리스트를 만들어주세요.', 'info');
+                    Swal.fire('플레이리스트 찾을수 없음', '로그인을 하시거나 플레이리스트를 만들어주세요.', 'info');
                     return;
                 }
 
