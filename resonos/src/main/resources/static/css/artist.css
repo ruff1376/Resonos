@@ -402,6 +402,10 @@ img {
     box-sizing: border-box;
 }
 
+.review-rating {
+    width: 65px;
+}
+
 /* 마지막 요소는 테두리 제거 */
 .review-box:last-child,
 .review-content:last-child {

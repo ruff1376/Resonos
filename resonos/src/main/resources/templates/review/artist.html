@@ -120,7 +120,7 @@
                         <span class="review-icon" th:text="${review.type == 'TRACK' ? '[🎵]' : '[💽]'}"></span>
                         <strong class="review-title" th:text="${review.name}">제목</strong>
                         <span class="review-content" th:text="${review.content}">내용</span>
-                        <span class="review-box" th:text="|🔮 ${review.rating}|">점수 0</span>
+                        <span class="review-box review-rating" th:text="|🔮 ${review.rating}|">점수 0</span>
                         <span class="review-box"
                             th:text="${#temporals.format(review.createdAt, 'yyyy.MM.dd HH:mm')}">날짜</span>
                     </a>
