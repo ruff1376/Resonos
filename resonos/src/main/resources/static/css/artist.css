@@ -331,7 +331,7 @@ img {
     /* ✅ 줄어들지 않도록 */
     flex-grow: 0;
     /* ✅ 늘어나지 않도록 */
-    max-height: 400px;
+    max-height: 317px;
     overflow-y: auto;
     /* 스크롤 되게 함 */
     scrollbar-width: none;
@@ -400,6 +400,10 @@ img {
     padding: 0 4px;
     border-right: 2px solid var(--main-color);
     box-sizing: border-box;
+}
+
+.review-rating {
+    width: 65px;
 }
 
 /* 마지막 요소는 테두리 제거 */
