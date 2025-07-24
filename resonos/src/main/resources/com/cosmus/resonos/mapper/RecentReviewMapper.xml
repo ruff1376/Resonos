@@ -11,11 +11,7 @@
             tr.track_id AS id,
             t.title AS name,
             tr.content,
-            COALESCE((
-                SELECT COUNT(*) 
-                FROM review_like rl 
-                WHERE rl.review_id = tr.id AND rl.review_type = 'TRACK'
-            ), 0) AS likeCount,
+            tr.rating,
             tr.created_at AS createdAt,
             'TRACK' AS type
         FROM (
@@ -38,11 +34,7 @@
             ar.album_id AS id,
             a.title AS name,
             ar.content,
-            COALESCE((
-                SELECT COUNT(*) 
-                FROM review_like rl 
-                WHERE rl.review_id = ar.id AND rl.review_type = 'ALBUM'
-            ), 0) AS likeCount,
+            ar.rating,
             ar.created_at AS createdAt,
             'ALBUM' AS type
         FROM (
@@ -62,6 +54,5 @@
     ORDER BY createdAt DESC
     LIMIT 8
 </select>
-
 
 </mapper>
