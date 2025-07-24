@@ -156,7 +156,7 @@ public class UserFollowController {
 
         if(choice.equals("follow"))
             userList = userFollowService.myFollow(userId, keyword, offset, limit);
-        else if(choice.equals("followwer"))
+        else if(choice.equals("follower"))
             userList = userFollowService.myFollower(userId, keyword, offset, limit);
 
         if(userList != null)

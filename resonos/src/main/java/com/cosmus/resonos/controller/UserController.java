@@ -168,6 +168,10 @@ public class UserController {
     @AuthenticationPrincipal CustomUser loginUser,
     Model model) throws Exception {
 
+    // 관리자 체크
+    boolean isAdimin = userService.selectById(id).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
+    if(isAdimin) return "redirect:/";
+
     // 보려는 다른 회원
     PublicUserDto user = userService.publicSelectById(id);
     // 팔로워 수
@@ -194,7 +198,9 @@ public class UserController {
     // 차트 데이터
     Map<String, Integer> chartData = FlattenGenreCounts.execute(userService.likedGenreData(user.getId()));
     // 리뷰 작성 수
-    int countAllReview = albumReviewServcie.countAlbumReview(loginUser.getId()) + trackReviewService.countTrackReview(loginUser.getId());
+    int countAllReview = albumReviewServcie.countAlbumReview(id) + trackReviewService.countTrackReview(id);
+    // 총 리뷰 수
+    UsersTotalLikes utl = userService.usersTotalLikes(id);
 
     // 자기 자신인지
     boolean isOwner = loginUser != null && loginUser.getId().equals(id);
@@ -207,6 +213,7 @@ public class UserController {
       model.addAttribute("user", user);
     }
 
+    model.addAttribute("utl", utl);
     model.addAttribute("countAllReview", countAllReview);
     model.addAttribute("chartData", chartData);
     model.addAttribute("badgeCount", badgeCount);
@@ -402,13 +409,11 @@ public class UserController {
         }
         else if(type.equals("ar")) {
           List<AlbumReview> albumReviewList = albumReviewServcie.reviewWithReviewerByUserId(userId, keyword, offset, limit);
-          log.info("추가 데이터 : {}", albumReviewList);
           if(albumReviewList != null)
                 return new ResponseEntity<>(albumReviewList, HttpStatus.OK);
         }
         else if(type.equals("lar")) {
           List<AlbumReview> likedAlbumReviewList = albumReviewServcie.likedReviewByUserId(userId, keyword, offset, limit);
-          log.info("추가 데이터 : {}", likedAlbumReviewList);
           if(likedAlbumReviewList != null)
                 return new ResponseEntity<>(likedAlbumReviewList, HttpStatus.OK);
         }
@@ -498,7 +503,12 @@ public class UserController {
     @PathVariable(value = "id", required = false) Long id,
     Model model
   ) throws Exception {
+
     if(id == null && loginUser == null) return "redirect:/login";
+
+    // 관리자 체크
+    boolean isAdimin = userService.selectById(id != null ? id : loginUser.getId()).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
+    if(isAdimin) return "redirect:/";
 
     // PathVariable 검사
     Long targetId = (id != null) ? id : loginUser.getUser().getId();
@@ -522,7 +532,7 @@ public class UserController {
    * 플레이리스트 페이지 요청
    * @param model
    * @return
-   * @throws Exception
+  * @throws Exception
    */
   @GetMapping({"playlists", "/{id}/playlists"})
   public String playlist(
@@ -530,7 +540,12 @@ public class UserController {
       @PathVariable(value = "id", required = false) Long id,
       Model model
   ) throws Exception {
+
     if(id == null && loginUser == null) return "redirect:/login";
+
+    // 관리자 체크
+    boolean isAdimin = userService.selectById(id != null ? id : loginUser.getId()).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
+    if(isAdimin) return "redirect:/";
 
     // PathVariable 검사
     Long targetId = (id != null) ? id : loginUser.getUser().getId();
@@ -561,7 +576,12 @@ public class UserController {
     @PathVariable(value = "id", required = false) Long id,
     Model model
   ) throws Exception {
+
     if(id == null && loginUser == null) return "redirect:/login";
+
+    // 관리자 체크
+    boolean isAdimin = userService.selectById(id != null ? id : loginUser.getId()).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
+    if(isAdimin) return "redirect:/";
 
     // PathVariable 검사
     Long targetId = (id != null) ? id : loginUser.getUser().getId();
@@ -597,7 +617,12 @@ public class UserController {
     @AuthenticationPrincipal CustomUser loginUser,
     @PathVariable(value = "id", required = false) Long id
   ) throws Exception {
+
     if(id == null && loginUser == null) return "redirect:/login";
+
+    // 관리자 체크
+    boolean isAdimin = userService.selectById(id != null ? id : loginUser.getId()).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
+    if(isAdimin) return "redirect:/";
 
     // PathVariable 검사
     Long targetId = (id != null) ? id : loginUser.getUser().getId();
