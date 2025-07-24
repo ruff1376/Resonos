@@ -65,15 +65,15 @@ public class SecurityConfig {
 	@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, OAuth2SuccessHandler oauth2SuccessHandler) throws Exception {
 
-        http.userDetailsService(userDetailServiceImpl);
-        // ✅ 인가 설정
+        // http.userDetailsService(userDetailServiceImpl);
+        // // ✅ 인가 설정
 
-        http.authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/admin", "/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/user", "/user/**").hasAnyRole("USER","ADMIN")
-                                .requestMatchers("/**").permitAll()
-                                .anyRequest().permitAll()
-                                );
+        // http.authorizeHttpRequests(auth -> auth
+        //                         .requestMatchers("/admin", "/admin/**").hasRole("ADMIN")
+        //                         .requestMatchers("/user", "/user/**").hasAnyRole("USER","ADMIN")
+        //                         .requestMatchers("/**").permitAll()
+        //                         .anyRequest().permitAll()
+        //                         );
 
 
 
