@@ -96,6 +96,9 @@ public class AdminBadgeController {
 
     }
 
+
+
+    
     // --- 배지/조건 수정 ---
     @PostMapping("/update")
     public String update(@RequestParam("id") Long id,
@@ -104,6 +107,8 @@ public class AdminBadgeController {
                         @RequestParam("description") String description,
                         @RequestParam("conditionType") String conditionType,
                         @RequestParam("conditionValue") Integer conditionValue) throws Exception {
+
+        // 조건 업데이트
         BadgeCondition condition = new BadgeCondition();
         condition.setId(id);
         condition.setBadgeId(badgeId);
@@ -111,17 +116,20 @@ public class AdminBadgeController {
         condition.setDescription(description);
         condition.setConditionType(conditionType);
         condition.setConditionValue(conditionValue);
-
         badgeConditionService.updateCondition(condition);
 
+        // 배지 정보 업데이트
         Badge badge = new Badge();
         badge.setId(badgeId);
         badge.setName(badgeName);
         badge.setDescription(description);
         badgeService.update(badge);
 
-        return "redirect:/admin/badge?msg=수정완료";
+        // ✅ Location header에 넣을 파라미터 URL 인코딩 수행
+        String msg = URLEncoder.encode("수정완료", StandardCharsets.UTF_8.toString());
+        return "redirect:/admin/badge?msg=" + msg;
     }
+
 
     // --- 배지/조건 삭제 ---
     @PostMapping("/delete/badge/{id}")
