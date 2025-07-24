@@ -120,4 +120,8 @@ public interface UserMapper {
     public List<UserNoti> getNotiStatus(@Param("userId") Long userId) throws Exception;
     // 유저 알림 of / off
     public int changeNoti(UserNoti userNoti) throws Exception;
+    // countAllUsers
+    public long countAllUsers() throws Exception;
+    // listPaging
+    public List<Users> listPagingA(@Param("index") long index, @Param("size") long size) throws Exception;
 }

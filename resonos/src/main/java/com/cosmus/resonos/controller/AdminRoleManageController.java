@@ -1,13 +1,17 @@
 package com.cosmus.resonos.controller;
 
+import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Users;
 import com.cosmus.resonos.domain.UserAuth;
 import com.cosmus.resonos.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -18,15 +22,38 @@ public class AdminRoleManageController {
     @Autowired
     private UserService userService;
 
-    // 권한 관리 페이지
+    // 권한 관리 페이지 (페이징 추가)
     @GetMapping
-    public String roleManagePage(Model model) throws Exception {
-        List<Users> members = userService.list();
+    public String roleManagePage(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            Model model) throws Exception {
+        
+        // 페이지 번호/사이즈 검증
+        if(page < 1) page = 1;
+        if(size < 1) size = 10;
+        
+        // 전체 유저 수 조회
+        long total = userService.countAllUsers();
+        
+        // Pagination 객체 생성 (현재 페이지, 사이즈, 네비게이션 수, 전체 개수)
+        Pagination pagination = new Pagination(page, size, 10, total);
+
+        // 페이지 단위로 회원 목록 조회 (offset에서 시작, size만큼 가져옴)
+        List<Users> members = userService.listPagingA(pagination.getIndex(), pagination.getSize());
+
+        // 모델에 데이터 세팅
         model.addAttribute("members", members);
-        return "admin/role"; // /admin/role.html
+        model.addAttribute("pagination", pagination);
+
+        // 페이징 URI: 페이지를 이동할 때 size 파라미터 유지
+        String pageUri = "/admin/role?size=" + size;
+        model.addAttribute("pageUri", pageUri);
+
+        return "admin/role";  // thymeleaf 뷰 위치
     }
 
-    // 권한 조회
+    // 권한 조회 (기존 유지)
     @GetMapping("/auth/{username}")
     public String getAuth(@PathVariable("username") String username, Model model) throws Exception {
         List<UserAuth> authList = userService.selectAuthByUsername(username);
@@ -34,9 +61,11 @@ public class AdminRoleManageController {
         return "admin/role";
     }
 
+    // 권한 추가 (기존 유지)
     @PostMapping("/auth/add")
-    public String addAuth(@RequestParam("username") String username, @RequestParam("auth") String auth, Model model) throws Exception {
-        // 이미 권한이 있는지 체크
+    public String addAuth(@RequestParam("username") String username,
+                          @RequestParam("auth") String auth,
+                          Model model) throws Exception {
         boolean exists = userService.hasAuth(username, auth);
         if (!exists) {
             UserAuth userAuth = new UserAuth();
@@ -50,33 +79,31 @@ public class AdminRoleManageController {
         return "redirect:/admin/role";
     }
 
-
-    // 권한 삭제 (특정 권한만)
+    // 권한 삭제 (기존 유지)
     @PostMapping("/auth/delete")
-    public String deleteAuth(@RequestParam("username") String username, @RequestParam("auth") String auth) throws Exception {
-        userService.deleteSpecificAuth(username, auth); // 특정 권한만 삭제
+    public String deleteAuth(@RequestParam("username") String username,
+                             @RequestParam("auth") String auth) throws Exception {
+        userService.deleteSpecificAuth(username, auth);
         return "redirect:/admin/role";
     }
 
-    // 권한 일괄 수정 (전부 교체가 필요할 때만 사용, 예: 체크박스 일괄 변경)
+    // 권한 일괄 수정 (기존 유지)
     @PostMapping("/auth/update")
-    public String updateAuth(
-            @RequestParam("username") String username,
-            @RequestParam(value = "auths", required = false) List<String> auths // 여러 권한
-    ) throws Exception {
-        userService.deleteAuthByUsername(username); // 기존 권한 모두 삭제
+    public String updateAuth(@RequestParam("username") String username,
+                             @RequestParam(value = "auths", required = false) List<String> auths) throws Exception {
+        userService.deleteAuthByUsername(username);
         if (auths != null) {
             for (String auth : auths) {
                 UserAuth userAuth = new UserAuth();
                 userAuth.setUsername(username);
                 userAuth.setAuth(auth);
-                userService.insertAuth(userAuth); // 새로운 권한들 추가
+                userService.insertAuth(userAuth);
             }
         }
         return "redirect:/admin/role";
     }
 
-    // 권한 토글 (예: ROLE_ADMIN만 토글)
+    // 권한 토글 (기존 유지)
     @PostMapping("/auth/toggle")
     @ResponseBody
     public String toggleAdminRole(@RequestBody Map<String, Object> payload) throws Exception {
@@ -92,4 +119,5 @@ public class AdminRoleManageController {
         }
         return "ok";
     }
+
 }

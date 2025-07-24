@@ -112,4 +112,8 @@ public interface UserService {
     public List<UserNoti> getNotiStatus(Long userId) throws Exception;
     // 유저 알림 of / off
     public boolean changeNoti(UserNoti userNoti) throws Exception;
+    // countAllUsers
+    public long countAllUsers() throws Exception;
+    // listPaging
+    public List<Users> listPagingA(@Param("index") long index,@Param("size") long size) throws Exception;
 }

@@ -45,5 +45,25 @@ public class TagServiceImpl implements TagService {
     public List<Tag> searchByName(String keyword) {
         return tagMapper.searchByName(keyword);
     }
+
+    @Override
+    public long countAll() {
+        return tagMapper.countAll();
+    }
+
+    @Override
+    public long countByKeyword(String keyword) {
+        return tagMapper.countByKeyword(keyword);
+    }
+
+    @Override
+    public List<Tag> listPaging(long offset, long size) {
+        return tagMapper.listPaging(offset, size);
+    }
+
+    @Override
+    public List<Tag> searchByNamePaging(String keyword, long offset, long size) {
+        return tagMapper.searchByNamePaging(keyword, offset, size);
+    }
     
 }

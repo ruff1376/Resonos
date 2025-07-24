@@ -372,4 +372,14 @@ public class UserServiceImpl implements UserService {
         public List<UserNoti> getNotiStatus(Long userId) throws Exception {
             return userMapper.getNotiStatus(userId);
         }
+
+        @Override
+        public long countAllUsers() throws Exception {
+            return userMapper.countAllUsers();
+        }
+
+        @Override
+        public List<Users> listPagingA(long index, long size) throws Exception {
+            return userMapper.listPagingA(index, size);
+        }
 }

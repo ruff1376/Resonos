@@ -14,4 +14,8 @@ public interface SettingService {
     public boolean update(Setting setting) throws Exception;
     // 삭제
     public boolean delete(Long id) throws Exception;
+    // selectByValue(value)
+    public Setting selectByValue(String value) throws Exception;
+    // selectByName(name)
+    public Setting selectByName(String name) throws Exception;
 }

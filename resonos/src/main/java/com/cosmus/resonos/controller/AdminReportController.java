@@ -107,43 +107,40 @@ public class AdminReportController {
 
     // get방식, 상세, /detail?id=
     @GetMapping("/detail/{id}")
-    public String reportDetail(@PathVariable Long id, Model model) throws Exception {
+    public String reportDetail(@PathVariable("id") Long id, Model model) throws Exception {
         Report report = reportService.select(id);
         model.addAttribute("report", report);
         return "admin/report";
     }
     
 
+@PostMapping("/delete")
+public String reportDelete(
+    @RequestParam("id") Long id,
+    @RequestParam(value = "tab", defaultValue = "all") String tab,
+    @RequestParam(value = "page", defaultValue = "1") long page,
+    @RequestParam(value = "size", defaultValue = "10") long size
+) throws Exception {
+    reportService.delete(id);
+    return "redirect:/admin/report?tab=" + tab + "&page=" + page + "&size=" + size;
+}
 
-    // post방식, 삭제, /delete
-    @PostMapping("/delete")
-    public String reportDelete(
-        Long id,
-        @RequestParam(defaultValue = "all") String tab,
-        @RequestParam(defaultValue = "1") long page,
-        @RequestParam(defaultValue = "10") long size
-    ) throws Exception {
-        reportService.delete(id);
-        return "redirect:/admin/report?tab=" + tab + "&page=" + page + "&size=" + size;
-    }
 
-    
-    // 수정 
-    @PostMapping("/updateStatus")
-    public String updateStatus(
-        Long id,
-        String status,
-        String processMemo,
-        @RequestParam(defaultValue = "all") String tab,
-        @RequestParam(defaultValue = "1") long page,
-        @RequestParam(defaultValue = "10") long size,
-        @AuthenticationPrincipal CustomUser loginUser
-    ) throws Exception {
-        Long processedBy = (loginUser != null) ? loginUser.getUser().getId() : null;
-        reportService.updateStatus(id, status, processedBy, processMemo);
-        // 리다이렉트 시 파라미터 반영
-        return "redirect:/admin/report?tab=" + tab + "&page=" + page + "&size=" + size;
-    }
+@PostMapping("/updateStatus")
+public String updateStatus(
+    @RequestParam("id") Long id,
+    @RequestParam("status") String status,
+    @RequestParam(value = "processMemo", required = false) String processMemo,
+    @RequestParam(value = "tab", defaultValue = "all") String tab,
+    @RequestParam(value = "page", defaultValue = "1") long page,
+    @RequestParam(value = "size", defaultValue = "10") long size,
+    @AuthenticationPrincipal CustomUser loginUser
+) throws Exception {
+    Long processedBy = (loginUser != null) ? loginUser.getUser().getId() : null;
+    reportService.updateStatus(id, status, processedBy, processMemo);
+    return "redirect:/admin/report?tab=" + tab + "&page=" + page + "&size=" + size;
+}
+
 
 
 
@@ -194,9 +191,9 @@ public class AdminReportController {
     // 블라인드/해제
     @PostMapping("/review/{type}/{id}/blind")
     public String blindReview(
-            @PathVariable String type,
-            @PathVariable Long id,
-            @RequestParam boolean blinded) {
+            @PathVariable("type") String type,
+            @PathVariable("id") Long id,
+            @RequestParam("blinded") boolean blinded) {
 
         log.info("리뷰 블라인드 처리: type={}, id={}, blinded={}", type, id, blinded);
 
@@ -211,8 +208,8 @@ public class AdminReportController {
     // 삭제
     @PostMapping("/review/{type}/{id}/delete")
     public String deleteReview(
-            @PathVariable String type,
-            @PathVariable Long id) {
+            @PathVariable("type") String type,
+            @PathVariable("id") Long id) {
 
         log.info("리뷰 삭제 요청: type={}, id={}", type, id);
 
