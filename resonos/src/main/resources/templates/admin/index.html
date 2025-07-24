@@ -10,6 +10,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>어드민 메인</title>
     <th:block th:replace="~{fragments/link::admin}"></th:block>
+    <style>
+      .card-sm-title{ 
+        font-size: 2.4rem;;
+      }
+      .btn-outline-gold { 
+        font-size: 1.6rem;;
+      }
+
+
+    </style>
 </head>
 <th:block layout:fragment="content">
 <body class="bg-dark text-light">
@@ -119,7 +129,7 @@
           </div>
           <div class="col-md-3">
             <div class="resonos-card">
-              <div class="card-sm-title card-title">트랙, 앨범, 아티스트 투표 관리</div>
+              <div class="card-sm-title card-title">투표 관리</div>
               <a th:href="@{/admin/vote}" class="btn btn-sm mt-2 btn-outline-gold">태그 확인</a>
             </div>
           </div>
