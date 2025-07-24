@@ -178,6 +178,8 @@ public class AdminBadgeController {
     public String grantBadgesAuto(@RequestParam(value = "type", required = false) String type) throws Exception {
         int count = 0;
         // ... 지급 로직 생략 ...
+        // 지급 로직 
+        
         String msg = count + "건 지급";
         // 아래처럼 반드시 인코딩!!
         String encodedMsg = URLEncoder.encode(msg, StandardCharsets.UTF_8);
