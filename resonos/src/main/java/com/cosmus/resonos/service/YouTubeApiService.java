@@ -16,7 +16,7 @@ public class YouTubeApiService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    // @Value("${youtube.api.key}")
+    @Value("${youtube.api.key}")
     private String apiKey;
 
     private static final List<String> EXCLUDED_KEYWORDS = List.of(
