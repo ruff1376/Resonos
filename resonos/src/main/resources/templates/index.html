@@ -8,6 +8,77 @@
     <title>RESONOS</title>
     <link rel="stylesheet" href="/css/welcome.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <style>
+        /* sweet alert */
+        :root {
+            /* 메인 컬러 */
+            --main-color: #D4B97F;
+            /* 실버 컬러 */
+            --silver-color: #fffbe6;
+            /* 백그라운드 컬러 */
+            --background-color : #181C23;
+            /* 컨테이너 크기 */
+            --container : 1440px;
+        }
+        .follow-popup {
+        border: 1px solid var(--main-color) !important;
+        background-color: var(--background-color);
+        border-radius: 10px;
+        width: 500px;
+        height: 300px;
+        color: var(--main-color)
+        }
+        .success-icon {
+        margin-top: 80px !important;
+        }
+        .alert-title {
+        margin-top: 0 !important;
+        }
+        .alert-title.no-icon {
+        margin-top: 100px !important;
+        }
+        .alert-text {
+        font-size: 1.4rem;
+        }
+        .welcome-text {
+        position: relative;
+        top: 70px;
+        font-size: 2rem;
+        }
+        .warning-icon {
+        margin-top: 60px !important;
+        }
+        .alert-button {
+        background-color: var(--main-color);
+        width: 100px;
+        height: 40px;
+        border-radius: 10px;
+        margin-left: 20px;
+        }
+        .welcome-button {
+        background-color: var(--main-color);
+        width: 100px;
+        height: 40px;
+        border-radius: 10px;
+        }
+        .alert-button:hover {
+        background-color: #fff;
+        color: var(--main-color);
+        }
+        .alert-cancle-button {
+        background-color: inherit;
+        border: 1px solid var(--main-color);
+        color: var(--main-color);
+        width: 100px;
+        height: 40px;
+        border-radius: 10px;
+        margin-right: 20px;
+        }
+        .alert-cancle-button:hover {
+        background-color: var(--main-color);
+        color: #fff;
+        }
+    </style>
 </head>
 
 <body class="bg">
@@ -27,7 +98,7 @@
             </div>
         </section>
         <section class="main-cards">
-            <a href="/list/main" style="text-decoration:none; color:inherit;">
+            <a id="free" href="/list/main" style="text-decoration:none; color:inherit;">
                 <div class="main-card">
                     <img src="/img/resonosLogo.png" alt="main">
                     <h2>자유 커뮤니티</h2>
@@ -54,7 +125,24 @@
                 sessionStorage.removeItem('returnTo');
                 location.href = returnTo;
             }
+
+            document.getElementById('free').addEventListener('click', (e) => {
+                e.preventDefault()
+                Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: '준비중인 페이지입니다.',
+                showConfirmButton: false,
+                timer: 1000,
+                customClass: {
+                    popup: 'follow-popup',
+                    icon: 'success-icon',
+                    title: 'alert-title'
+                }
+                })
+            })
         </script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.22.2/dist/sweetalert2.all.min.js"></script>
     </th:block>
 </body>
 
