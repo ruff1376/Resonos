@@ -28,3 +28,7 @@ for tbl, fname in [('track','track.txt'),('artist','artist.txt'),('album','album
         for (idval,) in cur.fetchall():
             f.write(str(idval) + '\n')
 conn.close()
+
+
+
+
