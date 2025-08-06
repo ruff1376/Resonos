@@ -1,3 +1,9 @@
+
+/* tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* 기본 폰트 사이즈 */
 html {font-size: 62.5%;}
 body {font-size: 1.6rem;}
@@ -374,6 +380,5 @@ ul.custom-pagination span {
 
 
 /* 기본 + 헤더 + 푸터 + 페이지네이션 */
-
 
 
