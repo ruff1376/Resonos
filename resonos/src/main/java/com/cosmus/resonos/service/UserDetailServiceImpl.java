@@ -9,8 +9,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.CustomUser;
-import com.cosmus.resonos.domain.Users;
-import com.cosmus.resonos.mapper.UserMapper;
+import com.cosmus.resonos.domain.user.Users;
+import com.cosmus.resonos.mapper.user.UserMapper;
 
 import lombok.extern.slf4j.Slf4j;
 

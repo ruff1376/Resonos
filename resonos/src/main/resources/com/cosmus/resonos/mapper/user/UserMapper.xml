@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.user.UserMapper">
+
+  <resultMap id="UserResultMap" type="com.cosmus.resonos.domain.user.Users">
+    <id property="id" column="id"/>
+
+    <result property="username" column="username"/>
+    <result property="email" column="email"/>
+    <result property="password" column="password"/>
+    <result property="nickname" column="nickname"/>
+    <result property="profileImage" column="profile_image"/>
+    <result property="bio" column="bio"/>
+    <result property="isPro" column="is_pro"/>
+    <result property="enabled" column="enabled"/>
+    <result property="provider" column="provider"/>
+    <result property="providerId" column="provider_id"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="followerCount" column="follower_count"/>
+    <result property="currentBadge" column="current_badge"/>
+
+    <collection property="authList" ofType="com.cosmus.resonos.domain.user.UserAuth"
+            select="selectAuth"
+            column="username"></collection>
+
+  </resultMap>
+
+    <resultMap id="AuthMap" type="com.cosmus.resonos.domain.user.UserAuth">
+        <result property="id" column="id" />
+        <result property="username" column="username" />
+        <result property="auth" column="auth" />
+    </resultMap>
+
+  <select id="select" resultMap="UserResultMap">
+    SELECT * FROM user WHERE username = #{username} AND enabled = 1
+  </select>
+
+  <!-- 회원가입 -->
+  <insert id="join" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO user
+      (id, username, email, password, nickname)
+    VALUES
+      (#{id}, #{username}, #{email}, #{password}, #{nickname})
+  </insert>
+
+  <update id="update">
+    UPDATE user
+    SET username = #{username},
+        email = #{email},
+        password = #{password},
+        nickname = #{nickname},
+        profile_image = #{profileImage},
+        bio = #{bio},
+        is_pro = #{isPro},
+        enabled = #{enabled},
+        provider = #{provider},
+        provider_id = #{providerId}
+    WHERE id = #{id}
+  </update>
+
+  <!-- selectPasswordById -->
+  <select id="selectPasswordById" resultType="string" parameterType="Long">
+    SELECT password FROM user WHERE id = #{id}
+  </select>
+
+  <!-- 유저가 프로필 업데이트 -->
+  <update id="updateFromUser">
+    UPDATE user
+    SET email = #{email},
+        nickname = #{nickname},
+        profile_image = #{profileImage},
+        bio = #{bio},
+        current_badge = #{currentBadge}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete" >
+    DELETE FROM user WHERE id = #{id}
+  </delete>
+
+  <insert id="insertAuth">
+      INSERT INTO user_auth ( username, auth )
+      VALUES ( #{username}, #{auth} )
+  </insert>
+
+  <select id="selectAuth"  resultMap="AuthMap">
+    SELECT * FROM user_auth WHERE username = #{username}
+  </select>
+
+  <select id="list" resultMap="UserResultMap">
+    SELECT * FROM user
+  </select>
+
+  <select id="countAll" resultType="int">
+      SELECT COUNT(*) FROM user
+  </select>
+
+  <!-- 권한 삭제 -->
+  <delete id="deleteAuthByUsername">
+  DELETE FROM user_auth WHERE username = #{username}
+  </delete>
+  <!-- 권한 수정 -->
+  <update id="updateAuth">
+      UPDATE user_auth
+      SET auth = #{auth}
+      WHERE username = #{username} AND id = #{id}
+  </update>
+  <!-- 권한 조회 -->
+  <select id="selectAuthByUsername" resultMap="AuthMap">
+      SELECT * FROM user_auth WHERE username = #{username}
+  </select>
+  <!-- 키워드로 회원 검색 -->
+  <select id="searchByKeyword" resultMap="UserResultMap">
+      SELECT * FROM user WHERE nickname LIKE CONCAT('%', #{keyword}, '%')
+         OR email LIKE CONCAT('%', #{keyword}, '%')
+  </select>
+
+  <!-- 아이디 중복 -->
+  <select id="findByUsername" resultType="String">
+    SELECT username FROM user WHERE username = #{username}
+  </select>
+
+  <!-- 닉네임 중복 -->
+  <select id="findByNickname" resultType="String">
+    SELECT nickname FROM user WHERE nickname = #{nickname}
+  </select>
+
+  <!-- 이메일로 아이디 조회(아이디, 비번 찾기) -->
+  <select id="findId" resultType="String">
+    SELECT username FROM user WHERE email = #{email} AND enabled = 1
+  </select>
+
+  <!-- 회원 활성/비활성 상태 변경 -->
+  <update id="updateEnabled">
+    UPDATE user SET enabled = #{enabled} WHERE id = #{id}
+  </update>
+
+  <!-- 회원 제재/해제 상태 변경 -->
+  <update id="updateBan">
+    UPDATE user SET ban = #{ban} WHERE id = #{id}
+  </update>
+  <!-- 특정 권한만 삭제 -->
+  <delete id="deleteSpecificAuth">
+    DELETE FROM user_auth WHERE username = #{username} AND auth = #{auth}
+  </delete>
+  <!-- 권한 중복 조회 -->
+  <select id="hasAuth" resultType="int">
+      SELECT COUNT(*) FROM user_auth WHERE username = #{username} AND auth = #{auth}
+  </select>
+  <!-- 비밀번호 초기화 -->
+  <update id="updatePassword">
+  UPDATE user SET password = #{password} WHERE id = #{id}
+  </update>
+  <!-- 회원 아이디로 조회 -->
+  <select id="selectById" resultMap="UserResultMap">
+    SELECT * FROM user WHERE id = #{id}
+  </select>
+
+  <!-- 회원 아이디로 공개 정보 조회 -->
+  <select id="publicSelectById" resultType="PublicUserDto">
+    SELECT * FROM user WHERE id = #{id}
+  </select>
+
+  <!-- 회원 비밀번호 체크 -->
+  <select id="checkPassword" resultType="String">
+    SELECT username FROM user WHERE password = #{password}
+  </select>
+
+  <!-- 비밀번호 변경 -->
+  <update id="changePassword">
+    UPDATE user SET password = #{newPassword}
+    WHERE id = #{loginUserId}
+  </update>
+
+  <!-- 카카오 로그인 사용자 조회 -->
+  <select id="findByProviderAndProviderId" resultMap="UserResultMap">
+    SELECT * FROM user WHERE provider = #{provider} AND provider_id = #{providerId}
+  </select>
+
+  <insert id="insertSnsUser" parameterType="Users">
+        INSERT INTO user (username, password, nickname, email, provider, provider_id)
+        VALUES (#{username}, #{password}, #{nickname}, #{email}, #{provider}, #{providerId})
+  </insert>
+
+  <select id="searchList" resultMap="UserResultMap">
+    SELECT u.*, COUNT(uf.id) AS follower_count,
+          CASE
+              WHEN u.nickname = #{keyword} THEN 1
+              WHEN u.nickname LIKE CONCAT(#{keyword}, '%') THEN 2
+              WHEN u.nickname LIKE CONCAT('%', #{keyword}, '%') THEN 3
+              ELSE 4
+          END AS sort_order
+    FROM user u
+    LEFT JOIN user_follow uf ON u.id = uf.following_id
+    WHERE u.nickname LIKE CONCAT('%', #{keyword}, '%')
+    GROUP BY u.id
+    ORDER BY sort_order, follower_count DESC, u.nickname ASC
+    LIMIT 0, 6
+  </select>
+
+
+  <select id="allSearchList" resultMap="UserResultMap">
+      SELECT u.*, COUNT(uf.id) AS follower_count,
+            CASE
+                WHEN u.nickname = #{keyword} THEN 1
+                WHEN u.nickname LIKE CONCAT(#{keyword}, '%') THEN 2
+                WHEN u.nickname LIKE CONCAT('%', #{keyword}, '%') THEN 3
+                ELSE 4
+            END AS sort_order
+      FROM user u
+      LEFT JOIN user_follow uf ON u.id = uf.following_id
+      WHERE u.nickname LIKE CONCAT('%', #{keyword}, '%')
+      GROUP BY u.id
+      ORDER BY sort_order, follower_count DESC, u.nickname ASC
+      LIMIT #{index}, #{size}
+  </select>
+
+
+  <select id="searchCount" resultType="long">
+    SELECT IFNULL(COUNT(DISTINCT u.id), 0)
+    FROM user u
+    WHERE u.nickname LIKE CONCAT('%', #{keyword}, '%')
+  </select>
+
+  <!-- 키워드 검색 회원 수 -->
+  <select id="countByKeyword">
+      SELECT COUNT(*)
+      FROM user
+      WHERE nickname LIKE CONCAT('%', #{keyword}, '%')
+        OR email LIKE CONCAT('%', #{keyword}, '%')
+  </select>
+
+  <!-- 전체 회원 페이징 -->
+  <select id="listPaging">
+      SELECT *
+      FROM user
+      ORDER BY id DESC
+      LIMIT #{index}, #{size}
+  </select>
+
+  <!-- 키워드 검색 + 페이징 -->
+  <select id="searchByKeywordPaging">
+      SELECT *
+      FROM user
+      WHERE nickname LIKE CONCAT('%', #{keyword}, '%')
+        OR email LIKE CONCAT('%', #{keyword}, '%')
+      ORDER BY id DESC
+      LIMIT #{index}, #{size}
+  </select>
+
+  <!-- 선호 장르 차트 데이터 집계 -->
+  <select id="likedGenreData" resultType="GenreCount">
+    SELECT art.genres, COUNT(*) AS count
+    FROM liked_track lt
+      JOIN track t ON lt.track_id = t.id
+      JOIN artist art ON t.artist_id = art.id
+    WHERE lt.user_id = #{userId}
+    GROUP BY art.genres
+    ORDER BY count DESC
+  </select>
+
+  <!-- 유저 리뷰의 총합 좋아요 -->
+  <select id="usersTotalLikes" resultType="UsersTotalLikes">
+    SELECT
+      SUM(CASE WHEN rl.review_type = 'TRACK' THEN 1 ELSE 0 END) AS trackLikes,
+      SUM(CASE WHEN rl.review_type = 'ALBUM' THEN 1 ELSE 0 END) AS albumLikes,
+      COUNT(*) AS totalLikes
+    FROM review_like rl
+    LEFT JOIN track_review tr ON rl.review_type = 'TRACK' AND rl.review_id = tr.id
+    LEFT JOIN album_review ar ON rl.review_type = 'ALBUM' AND rl.review_id = ar.id
+    WHERE (tr.user_id = #{userId} OR ar.user_id = #{userId});
+  </select>
+  <!-- 유저 제재 사유 banUser -->
+  <update id="banUser">
+    UPDATE user
+    SET ban = #{ban}, ban_reason = #{reason}, ban_at = NOW()
+    WHERE id = #{id}
+  </update>
+  <!-- 자동 정지 처리 -->
+  <update id="autoBanRepeatOffender">
+  UPDATE user
+  SET ban = TRUE, ban_reason = #{reason}, ban_at = NOW()
+  WHERE id = #{userId}
+</update>
+
+  <!-- 유저 알림 기본 세팅 -->
+  <insert id="basicNotiSetting">
+    INSERT INTO user_notification (user_Id, type, is_enabled)
+    VALUES
+      (#{userId}, 'comment', 1),
+      (#{userId}, 'reply', 1),
+      (#{userId}, 'like', 1),
+      (#{userId}, 'follow', 1),
+      (#{userId}, 'mention', 1),
+      (#{userId}, 'badge', 1),
+      (#{userId}, 'qna', 1),
+      (#{userId}, 'announcement', 1),
+      (#{userId}, 'system', 1)
+  </insert>
+
+  <select id="getNotiStatus" resultType="UserNoti">
+    SELECT * FROM user_notification
+    WHERE user_id = #{userId}
+  </select>
+
+  <!-- 유저 알림 on / off -->
+  <update id="changeNoti">
+    UPDATE user_notification
+    SET is_enabled = CASE WHEN is_enabled = 1 THEN 0 ELSE 1 END
+    WHERE user_id = #{userId}
+    AND type = #{type}
+  </update>
+
+  <!-- countAllUsers -->
+  <select id="countAllUsers" resultType="long">
+    SELECT COUNT(*) FROM user
+  </select>
+
+  <!-- listPaging -->
+  <select id="listPagingA" resultMap="UserResultMap">
+    SELECT * FROM user
+    ORDER BY id DESC
+    LIMIT #{index}, #{size}
+  </select>
+
+
+
+</mapper>

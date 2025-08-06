@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.admin.RoleMapper">
+
+  <resultMap id="RoleResultMap" type="com.cosmus.resonos.domain.admin.Role">
+    <id property="id" column="id"/>
+    <result property="name" column="name"/>
+    <result property="description" column="description"/>
+  </resultMap>
+
+  <select id="list" resultMap="RoleResultMap">
+    SELECT * FROM role
+  </select>
+
+  <select id="select" resultMap="RoleResultMap">
+    SELECT * FROM role WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO role (id, name, description)
+    VALUES (#{id}, #{name}, #{description})
+  </insert>
+
+  <update id="update">
+    UPDATE role
+    SET name = #{name},
+        description = #{description}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM role WHERE id = #{id}
+  </delete>
+
+</mapper>

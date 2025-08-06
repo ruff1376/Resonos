@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.badge.BadgeMapper">
+
+  <resultMap id="BadgeResultMap" type="com.cosmus.resonos.domain.badge.Badge">
+    <id property="id" column="id"/>
+    <result property="name" column="name"/>
+    <result property="description" column="description"/>
+    <result property="iconUrl" column="icon_url"/>
+    <result property="criteria" column="criteria"/>
+    <result property="createdAt" column="created_at"/>
+  </resultMap>
+
+  <select id="list" resultMap="BadgeResultMap">
+    SELECT * FROM badge ORDER BY created_at DESC
+  </select>
+
+  <select id="select" resultMap="BadgeResultMap">
+    SELECT * FROM badge WHERE id = #{id}
+  </select>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO badge (name, description, icon_url, criteria, created_at)
+    VALUES ( #{name}, #{description}, #{iconUrl}, #{criteria}, #{createdAt})
+  </insert>
+
+  <update id="update">
+    UPDATE badge
+    SET name = #{name},
+        description = #{description},
+        icon_url = #{iconUrl},
+        criteria = #{criteria},
+        created_at = #{createdAt}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM badge WHERE id = #{id}
+  </delete>
+
+  <!-- 획득 배지 출력 -->
+  <select id="haveBadge" resultMap="BadgeResultMap">
+    SELECT *
+    FROM badge b
+    WHERE EXISTS (
+      SELECT 1
+      FROM user_badge ub
+      WHERE ub.user_id = #{loginUserId}
+      AND ub.badge_id = b.id
+    )
+  </select>
+
+  <!-- 미획득 배지 조회 -->
+  <select id="doesNotHaveBadge" resultMap="BadgeResultMap">
+    SELECT *
+    FROM badge b
+    WHERE NOT EXISTS (
+      SELECT 1
+      FROM user_badge ub
+      WHERE ub.user_id = #{loginUserId}
+      AND ub.badge_id = b.id
+    )
+  </select>
+
+  <!-- 배지 소유 여부 체크 -->
+  <select id="checkBadge" resultType="int">
+    SELECT COUNT(*)
+    FROM user_badge
+    WHERE user_id = #{loginUserId}
+    AND badge_id = #{badgeId}
+  </select>
+
+  <!-- 최근 획득한 배지 -->
+  <select id="recentGetBadge" resultMap="BadgeResultMap">
+      SELECT *
+      FROM user_badge ub
+        INNER JOIN badge b ON ub.badge_id = b.id
+      WHERE user_id = #{id}
+      ORDER BY ub.created_at DESC
+      LIMIT 10
+  </select>
+
+  <!-- 획득 배지 수 조회 -->
+  <select id="badgeCount" resultType="int">
+    SELECT COUNT(*)
+    FROM user_badge
+    WHERE user_id = #{id}
+  </select>
+</mapper>

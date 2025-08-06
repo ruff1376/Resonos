@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.admin.ExternalApiConfigMapper">
+
+  <resultMap id="ExternalApiConfigResultMap" type="com.cosmus.resonos.domain.admin.ExternalApiConfig">
+    <id property="id" column="id"/>
+    <result property="provider" column="provider"/>
+    <result property="apiKey" column="apiKey"/>
+    <result property="secret" column="secret"/>
+    <result property="enabled" column="enabled"/>
+    <result property="createdAt" column="created_at"/>
+  </resultMap>
+
+  <select id="list" resultMap="ExternalApiConfigResultMap">
+    SELECT * FROM external_api_config ORDER BY created_at DESC
+  </select>
+
+  <select id="select" resultMap="ExternalApiConfigResultMap">
+    SELECT * FROM external_api_config WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO external_api_config (id, provider, apiKey, secret)
+    VALUES (#{id}, #{provider}, #{apiKey}, #{secret})
+  </insert>
+
+  <update id="update">
+    UPDATE external_api_config
+    SET provider = #{provider},
+        enabled = NOT enabled,
+        apiKey = #{apiKey},
+        secret = #{secret}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM external_api_config WHERE id = #{id}
+  </delete>
+
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cosmus.resonos.mapper.review.MoodStatMapper">
+
+    <resultMap id="MoodStatMap" type="com.cosmus.resonos.domain.review.MoodStat">
+        <result property="moodName" column="mood_name"/>
+        <result property="voteCount" column="vote_count"/>
+    </resultMap>
+
+    <!-- 트랙아이디로 무드 상위6개 -->
+    <select id="getTop6MoodsByTrackId" resultMap="MoodStatMap">
+        SELECT
+            tg.name AS mood_name,
+            COUNT(*) AS vote_count
+        FROM track_mood_vote t
+        JOIN tag tg ON t.mood = tg.id
+        WHERE t.track_id = #{trackId}
+        GROUP BY tg.name
+        ORDER BY vote_count DESC
+        LIMIT 6
+    </select>
+
+    <!-- 아티스트아이디로 무드 상위6개 -->
+    <select id="getTop6MoodsByArtistId" resultMap="MoodStatMap">
+        SELECT
+            tg.name AS mood_name,
+            COUNT(*) AS vote_count
+        FROM artist_mood_vote a
+        JOIN tag tg ON a.mood = tg.id
+        WHERE a.artist_id = #{artistId}
+        GROUP BY tg.name
+        ORDER BY vote_count DESC
+        LIMIT 6
+    </select>
+    <!-- 아티스트아이디로 무드 상위6개 -->
+
+</mapper>

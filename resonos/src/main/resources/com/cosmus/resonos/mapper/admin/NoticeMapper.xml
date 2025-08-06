@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.admin.NoticeMapper">
+
+  <resultMap id="NoticeResultMap" type="com.cosmus.resonos.domain.admin.Notice">
+    <id property="id" column="id"/>
+    <result property="title" column="title"/>
+    <result property="content" column="content"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="updatedAt" column="updated_at"/>
+    <result property="isActive" column="is_active"/>
+    <result property="startAt" column="start_at"/>
+    <result property="endAt" column="end_at"/>
+    <result property="authorId" column="author_id"/>
+  </resultMap>
+
+  <select id="list" resultMap="NoticeResultMap">
+    SELECT * FROM notice ORDER BY created_at DESC
+  </select>
+
+  <select id="select" resultMap="NoticeResultMap">
+    SELECT * FROM notice WHERE id = #{id}
+  </select>
+
+<insert id="insert">
+    INSERT INTO notice
+    (title, content, created_at, updated_at, is_active, start_at, end_at, author_id)
+    VALUES
+    (#{title}, #{content}, NOW(), NOW(), 1, #{startAt}, #{endAt}, 1)
+</insert>
+
+
+
+
+  <update id="update">
+    UPDATE notice
+    SET title = #{title},
+        content = #{content},
+        updated_at = #{updatedAt},
+        is_active = #{isActive},
+        start_at = #{startAt},
+        end_at = #{endAt},
+        author_id = #{authorId}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM notice WHERE id = #{id}
+  </delete>
+
+  <select id="listActive" resultMap="NoticeResultMap">
+      SELECT * FROM notice
+      WHERE is_active = TRUE
+        AND (start_at IS NULL OR start_at &lt;= NOW())
+        AND (end_at IS NULL OR end_at &gt;= NOW())
+      ORDER BY created_at DESC
+  </select>
+
+</mapper>

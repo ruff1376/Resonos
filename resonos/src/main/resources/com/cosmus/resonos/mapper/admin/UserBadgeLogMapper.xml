@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.admin.UserBadgeLogMapper">
+
+  <resultMap id="userBadgeLogResult" type="com.cosmus.resonos.domain.admin.UserBadgeLog">
+    <id property="id" column="id"/>
+    <result property="userId" column="user_id"/>
+    <result property="badgeId" column="badge_id"/>
+    <result property="action" column="action"/>
+    <result property="actorId" column="actor_id"/>
+    <result property="reason" column="reason"/>
+    <result property="createdAt" column="created_at"/>
+  </resultMap>
+
+  <!-- 전체/필터 로그 조회 -->
+  <select id="selectLogs" resultMap="userBadgeLogResult">
+    SELECT *
+    FROM user_badge_log
+    <where>
+      <if test="userId != null">
+        AND user_id = #{userId}
+      </if>
+      <if test="badgeId != null">
+        AND badge_id = #{badgeId}
+      </if>
+    </where>
+    ORDER BY created_at DESC
+  </select>
+
+  <!-- 신규 로그 입력 -->
+  <insert id="insertLog" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO user_badge_log
+      (user_id, badge_id, action, actor_id, reason, created_at)
+    VALUES
+      (#{userId}, #{badgeId}, #{action}, #{actorId}, #{reason}, NOW())
+  </insert>
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.review.LikedAlbumMapper">
+
+  <resultMap id="LikedAlbumResultMap" type="com.cosmus.resonos.domain.review.LikedAlbum">
+    <id property="id" column="id"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="userId" column="user_id"/>
+    <result property="albumId" column="album_id"/>
+  </resultMap>
+
+  <select id="list" resultMap="LikedAlbumResultMap">
+    SELECT * FROM liked_album ORDER BY created_at DESC
+  </select>
+
+  <select id="select" resultMap="LikedAlbumResultMap">
+    SELECT * FROM liked_album WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO liked_album (id, created_at, user_id, album_id)
+    VALUES (#{id}, #{createdAt}, #{userId}, #{albumId})
+  </insert>
+
+  <update id="update">
+    UPDATE liked_album
+    SET created_at = #{createdAt},
+        user_id = #{userId},
+        album_id = #{albumId}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="deleteById">
+    DELETE FROM liked_album WHERE id = #{id}
+  </delete>
+
+  <select id="findByUserAndAlbum" resultMap="LikedAlbumResultMap">
+    SELECT * FROM liked_album WHERE user_id = #{userId} AND album_id = #{albumId}
+  </select>
+
+  <select id="countByAlbumId" resultType="int">
+    SELECT COUNT(*) FROM liked_album WHERE album_id = #{albumId}
+  </select>
+</mapper>

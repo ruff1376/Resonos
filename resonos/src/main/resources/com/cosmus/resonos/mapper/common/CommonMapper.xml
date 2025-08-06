@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cosmus.resonos.mapper.common.CommonMapper">
+
+    <!-- 저장 프로시저 'create_sample_tables'를 호출하여 테이블을 생성합니다. -->
+    <!-- 프로시저가 DDL을 수행하므로 <update> 태그를 사용합니다. -->
+    <update id="createTable">
+        CALL create_tables()
+    </update>
+
+</mapper>

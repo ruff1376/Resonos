@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.user.ArtistFollowMapper">
+
+  <resultMap id="ArtistFollowResultMap" type="com.cosmus.resonos.domain.review.ArtistFollow">
+    <id property="id" column="id"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="userId" column="user_id"/>
+    <result property="artistId" column="artist_id"/>
+  </resultMap>
+
+  <select id="list" resultMap="ArtistFollowResultMap">
+    SELECT * FROM artist_follow ORDER BY created_at DESC
+  </select>
+
+  <select id="select" resultMap="ArtistFollowResultMap">
+    SELECT * FROM artist_follow WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO artist_follow (id, created_at, user_id, artist_id)
+    VALUES (#{id}, #{createdAt}, #{userId}, #{artistId})
+  </insert>
+
+  <update id="update">
+    UPDATE artist_follow
+    SET created_at = #{createdAt},
+        user_id = #{userId},
+        artist_id = #{artistId}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM artist_follow WHERE id = #{id}
+  </delete>
+
+  <select id="findByUserAndArtist" resultMap="ArtistFollowResultMap">
+    SELECT * FROM artist_follow WHERE user_id = #{userId} AND artist_id = #{artistId}
+  </select>
+
+  <select id="countByArtistId" resultType="int">
+    SELECT COUNT(*) FROM artist_follow WHERE artist_id = #{artistId}
+  </select>
+
+</mapper>

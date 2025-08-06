@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.badge.UserBadgeMapper">
+
+  <resultMap id="UserBadgeResultMap" type="com.cosmus.resonos.domain.badge.UserBadge">
+    <id property="id" column="id"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="userId" column="user_id"/>
+    <result property="badgeId" column="badge_id"/>
+  </resultMap>
+
+  <select id="list" resultMap="UserBadgeResultMap">
+    SELECT * FROM user_badge ORDER BY created_at DESC
+  </select>
+
+  <select id="select" resultMap="UserBadgeResultMap">
+    SELECT * FROM user_badge WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO user_badge (id, created_at, user_id, badge_id)
+    VALUES (#{id}, #{createdAt}, #{userId}, #{badgeId})
+  </insert>
+
+  <update id="update">
+    UPDATE user_badge
+    SET created_at = #{createdAt},
+        user_id = #{userId},
+        badge_id = #{badgeId}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM user_badge WHERE id = #{id}
+  </delete>
+
+  <select id="findBadgeIdsByUserId" resultType="long">
+    SELECT badge_id FROM user_badge WHERE user_id = #{userId}
+  </select>
+  <insert id="grantBadge">
+    INSERT INTO user_badge (user_id, badge_id, created_at)
+    VALUES (#{userId}, #{badgeId}, NOW())
+  </insert>
+
+  <!-- 수동 회수 -->
+  <delete id="revokeBadge" parameterType="map">
+      DELETE FROM user_badge
+      WHERE user_id = #{userId} AND badge_id = #{badgeId}
+  </delete>
+
+  <!-- 지급 여부 단일 조회 -->
+  <select id="hasBadge" parameterType="map" resultType="boolean">
+      SELECT EXISTS(
+          SELECT 1 FROM user_badge
+          WHERE user_id = #{userId} AND badge_id = #{badgeId}
+      ) as result
+  </select>
+  <!-- 수동 지급: 이미 있으면 무시 -->
+<insert id="giveBadge" parameterType="map">
+    INSERT IGNORE INTO user_badge (user_id, badge_id, created_at)
+    VALUES (#{userId}, #{badgeId}, NOW())
+</insert>
+  <!-- (A) 게시글 자동 지급: POST_COUNT -->
+  <insert id="grantPostBadgesAll">
+    INSERT INTO user_badge (user_id, badge_id, created_at)
+    SELECT u.id, bc.badge_id, NOW()
+    FROM user u
+    JOIN badge_condition bc ON bc.condition_type = 'POST_COUNT'
+    LEFT JOIN user_badge ub ON ub.user_id = u.id AND ub.badge_id = bc.badge_id
+    JOIN (
+        SELECT user_id, COUNT(*) as post_count
+        FROM board_post GROUP BY user_id
+    ) p ON p.user_id = u.id
+    WHERE p.post_count >= bc.condition_value
+      AND ub.id IS NULL
+  </insert>
+  <!-- (B) 댓글 자동 지급: COMMENT_COUNT -->
+  <insert id="grantCommentBadgesAll">
+    INSERT INTO user_badge (user_id, badge_id, created_at)
+    SELECT u.id, bc.badge_id, NOW()
+    FROM user u
+    JOIN badge_condition bc ON bc.condition_type = 'COMMENT_COUNT'
+    LEFT JOIN user_badge ub ON ub.user_id = u.id AND ub.badge_id = bc.badge_id
+    JOIN (
+        SELECT user_id, COUNT(*) as comment_count
+        FROM board_comment GROUP BY user_id
+    ) c ON c.user_id = u.id
+    WHERE c.comment_count >= bc.condition_value
+      AND ub.id IS NULL
+  </insert>
+  <!-- (C) 좋아요 자동 지급: LIKE_COUNT -->
+  <insert id="grantLikeBadgesAll">
+    INSERT INTO user_badge (user_id, badge_id, created_at)
+    SELECT u.id, bc.badge_id, NOW()
+    FROM user u
+    JOIN badge_condition bc ON bc.condition_type = 'LIKE_COUNT'
+    LEFT JOIN user_badge ub ON ub.user_id = u.id AND ub.badge_id = bc.badge_id
+    JOIN (
+        SELECT user_id, COUNT(*) as like_count
+        FROM board_like GROUP BY user_id
+    ) l ON l.user_id = u.id
+    WHERE l.like_count >= bc.condition_value
+      AND ub.id IS NULL
+  </insert>
+  <!-- (D) 팔로우 자동 지급: FOLLOW_COUNT -->
+  <insert id="grantFollowBadgesAll">
+    INSERT INTO user_badge (user_id, badge_id, created_at)
+    SELECT u.id, bc.badge_id, NOW()
+    FROM user u
+    JOIN badge_condition bc ON bc.condition_type = 'FOLLOW_COUNT'
+    LEFT JOIN user_badge ub ON ub.user_id = u.id AND ub.badge_id = bc.badge_id
+    JOIN (
+        SELECT follower_id, COUNT(*) as follow_count
+        FROM user_follow GROUP BY follower_id
+    ) f ON f.follower_id = u.id
+    WHERE f.follow_count >= bc.condition_value
+      AND ub.id IS NULL
+  </insert>
+  <!-- countByBadge -->
+  <select id="countByBadge" resultType="map">
+    SELECT badge_id, COUNT(*) AS value
+    FROM user_badge
+    GROUP BY badge_id
+  </select>
+  <!-- findBadgesByUserId -->
+  <select id="findBadgesByUserId" resultType="map">
+    SELECT ub.badge_id, COUNT(*) AS value
+    FROM user_badge ub
+    WHERE ub.user_id = #{userId}
+    GROUP BY ub.badge_id
+  </select>
+
+
+
+
+
+</mapper>

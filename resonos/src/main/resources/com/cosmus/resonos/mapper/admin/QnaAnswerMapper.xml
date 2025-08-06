@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.admin.QnaAnswerMapper">
+
+  <resultMap id="QnaAnswerResultMap" type="com.cosmus.resonos.domain.admin.QnaAnswer">
+    <id property="id" column="id"/>
+    <result property="content" column="content"/>
+    <result property="answeredAt" column="answered_at"/>
+    <result property="qnaId" column="qna_id"/>
+    <result property="adminId" column="admin_id"/>
+  </resultMap>
+
+  <select id="list" resultMap="QnaAnswerResultMap">
+    SELECT * FROM qna_answer ORDER BY answered_at DESC
+  </select>
+
+  <select id="select" resultMap="QnaAnswerResultMap">
+    SELECT * FROM qna_answer WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO qna_answer (content, answered_at, qna_id, admin_id)
+    VALUES (#{content}, NOW(), #{qnaId}, #{adminId})
+  </insert>
+
+
+  <update id="update" >
+    UPDATE qna_answer
+    SET content = #{content},
+        answered_at = #{answeredAt},
+        qna_id = #{qnaId},
+        admin_id = #{adminId}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM qna_answer WHERE id = #{id}
+  </delete>
+
+  <select id="findByQnaId" resultMap="QnaAnswerResultMap">
+    SELECT * FROM qna_answer WHERE qna_id = #{qnaId} ORDER BY answered_at DESC
+  </select>
+
+</mapper>
