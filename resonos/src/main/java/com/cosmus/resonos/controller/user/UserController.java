@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -53,13 +53,14 @@ import com.cosmus.resonos.validation.EmailCheck;
 import com.cosmus.resonos.validation.NicknameCheck;
 import com.cosmus.resonos.validation.PasswordCheck;
 
+import io.micrometer.core.ipc.http.HttpSender.Response;
 import lombok.extern.slf4j.Slf4j;
 
 
 
 
 @Slf4j
-@RestController
+@Controller
 @RequestMapping("/users")
 public class UserController {
 
@@ -91,7 +92,7 @@ public class UserController {
    * @return
    */
   // @PostMapping("/login")
-  // public String login(@RequestParam String param) {
+  // public ResponseEntity<?> login(@RequestParam String param) {
   //     return new String();
   // }
 
@@ -103,9 +104,10 @@ public class UserController {
    */
   @GetMapping("/mypage")
   public ResponseEntity<?> mypage(
+    Model model,
     @AuthenticationPrincipal CustomUser loginUser
     ) throws Exception {
-    if(loginUser == null) return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
+    if(loginUser == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     // 유저 정보
     Users user = userService.select(loginUser.getUsername());
     // 내 플레이 리스트
@@ -133,7 +135,7 @@ public class UserController {
     int countAllReview = albumReviewServcie.countAlbumReview(loginUser.getId()) + trackReviewService.countTrackReview(loginUser.getId());
     // 총 리뷰 수
     UsersTotalLikes utl = userService.usersTotalLikes(loginUser.getId());
-
+    // 응답 객체
     Map<String, Object> response = new HashMap<>();
 
     response.put("utl", utl);
@@ -165,14 +167,14 @@ public class UserController {
    * @throws Exception
    */
   @GetMapping("/{id}")
-  public String userPage(
+  public ResponseEntity<?> userPage(
     @PathVariable("id") Long id,
     @AuthenticationPrincipal CustomUser loginUser,
     Model model) throws Exception {
 
     // 관리자 체크
-    boolean isAdimin = userService.selectById(id).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
-    if(isAdimin) return "redirect:/";
+    boolean isAdmin = userService.selectById(id).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
+    if(isAdmin) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
     // 보려는 다른 회원
     PublicUserDto user = userService.publicSelectById(id);
@@ -204,74 +206,69 @@ public class UserController {
     // 총 리뷰 수
     UsersTotalLikes utl = userService.usersTotalLikes(id);
 
+    Map<String, Object> response = new HashMap<>();
+
     // 자기 자신인지
     boolean isOwner = loginUser != null && loginUser.getId().equals(id);
     if(isOwner) {
       Users me = userService.selectById(id);
-      model.addAttribute("user", me);
+      response.put("user", me);
     } else {
       // 자기 자신이 아니면 공개 플레이리스트만
       playlists = playlistService.publicUsersPlaylist3(id);
-      model.addAttribute("user", user);
+      response.put("user", user);
     }
 
-    model.addAttribute("utl", utl);
-    model.addAttribute("countAllReview", countAllReview);
-    model.addAttribute("chartData", chartData);
-    model.addAttribute("badgeCount", badgeCount);
-    model.addAttribute("badgeList", badgeList);
-    model.addAttribute("currentBadge", currentBadge);
-    model.addAttribute("alreadyFollow", alreadyFollow);
-    model.addAttribute("artistList", artistList);
-    model.addAttribute("trackList", trackList);
-    model.addAttribute("albumList", albumList);
-    model.addAttribute("followerCount", followerCount);
-    model.addAttribute("followCount", followCount);
-    model.addAttribute("playlists", playlists);
-    model.addAttribute("isOwner", isOwner);
+    response.put("utl", utl);
+    response.put("alreadyFollow", alreadyFollow);
+    response.put("countAllReview", countAllReview);
+    response.put("chartData", chartData);
+    response.put("badgeCount", badgeCount);
+    response.put("badgeList", badgeList);
+    response.put("currentBadge", currentBadge);
+    response.put("artistList", artistList);
+    response.put("trackList", trackList);
+    response.put("albumList", albumList);
+    response.put("loginUser", loginUser);
+    response.put("user", user);
+    response.put("followerCount", followerCount);
+    response.put("followCount", followCount);
+    response.put("playlists", playlists);
+    response.put("isOwner", isOwner);
 
     if (loginUser != null) {
-      model.addAttribute("loginUser", loginUser.getUser());
+      response.put("loginUser", loginUser.getUser());
     }
 
-    return "user/mypage";
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   /**
-   * 회웑 정보 수정 페이지 요청
+   * 회원 정보 요청
    * @param model
    * @return
    * @throws Exception
    *
    */
   @GetMapping("/edit")
-  public String edit(
-    @AuthenticationPrincipal CustomUser loginUser,
-    Model model,
-    @RequestParam(value = "success", required = false) String success,
-    @RequestParam(value = "nickError", required = false) Boolean nickError,
-    @RequestParam(value = "nickDuple", required = false) Boolean nickDuple,
-    @RequestParam(value = "emailError", required = false) Boolean emailError,
-    @RequestParam(value = "emailDuple", required = false) Boolean emailDuple
+  public ResponseEntity<?> edit(
+    @AuthenticationPrincipal CustomUser loginUser
   ) throws Exception {
-    if(loginUser == null) return "redirect:/login";
+    if(loginUser == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
     Users user = userService.select(loginUser.getUsername());
     List<Badge> badgeList = badgeService.haveBadge(loginUser.getId());
     // 배지 정보
     Badge badge = badgeService.select(user.getCurrentBadge());
     String badgeName = badge == null ? "" : badge.getName();
 
-    if(nickError != null) model.addAttribute("nickError", nickError);
-    if(nickDuple != null) model.addAttribute("nickDuple", nickDuple);
-    if(emailError != null) model.addAttribute("emailError", emailError);
-    if(emailDuple != null) model.addAttribute("emailDuple", emailDuple);
+    Map<String, Object> response = new HashMap<>();
 
-    model.addAttribute("badgeName", badgeName);
-    model.addAttribute("badgeList", badgeList);
-    model.addAttribute("user", user);
-    model.addAttribute("success", success);
+    response.put("badgeName", badgeName);
+    response.put("badgeList", badgeList);
+    response.put("user", user);
 
-    return "user/edit";
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   /**
@@ -280,8 +277,8 @@ public class UserController {
    * @return
    * @throws Exception
    */
-  @PostMapping("/edit")
-  public String editPost(
+  @PutMapping("/edit")
+  public ResponseEntity<?> editPost(
     @Validated({EmailCheck.class, NicknameCheck.class})
     @ModelAttribute Users user,
     BindingResult br,
@@ -293,30 +290,32 @@ public class UserController {
     Users reqUser = userService.selectById(loginUser.getId());
     user.setId(loginUser.getId());
 
+    Map<String, Object> response = new HashMap<>();
+
     // 닉네임 유효성 검사
-    if(br.hasFieldErrors("nickname")) {
-      redirectAttributes.addFlashAttribute("nickError", true);
-      return "redirect:/users/edit?nickError";
+    if (br.hasFieldErrors("nickname")) {
+        response.put("nickError", true);
+        return ResponseEntity.ok(response);
     }
 
     // 닉네임 중복 검사
-    boolean checkNickname = userService.findByNickname(user.getNickname());
-    if(!reqUser.getNickname().equals(user.getNickname()) && checkNickname) {
-      redirectAttributes.addFlashAttribute("nickDuple", true);
-      return "redirect:/users/edit?nickDuple";
+    boolean isNicknameDuplicated = userService.findByNickname(user.getNickname());
+    if (!reqUser.getNickname().equals(user.getNickname()) && isNicknameDuplicated) {
+        response.put("nickDuple", true);
+        return ResponseEntity.ok(response);
     }
 
     // 이메일 유효성 검사
-    if(br.hasFieldErrors("email")) {
-      redirectAttributes.addFlashAttribute("emailError", true);
-      return "redirect:/users/edit?emailError";
+    if (br.hasFieldErrors("email")) {
+        response.put("emailError", true);
+        return ResponseEntity.ok(response);
     }
 
     // 이메일 중복 검사
-    String checkEmail = userService.findId(user.getEmail());
-    if(!reqUser.getEmail().equals(user.getEmail()) && checkEmail != null) {
-      redirectAttributes.addFlashAttribute("emailDuple", true);
-      return "redirect:/users/edit?emailDuple";
+    String existingUserId = userService.findId(user.getEmail());
+    if (!reqUser.getEmail().equals(user.getEmail()) && existingUserId != null) {
+        response.put("emailDuple", true);
+        return ResponseEntity.ok(response);
     }
 
     // 배지 텍스트 없이 보내면
@@ -331,9 +330,9 @@ public class UserController {
     }
 
     boolean result = userService.updateFromUser(user);
-    if(result) return "redirect:/users/edit?success=true";
+    if(result) return new ResponseEntity<>(response, HttpStatus.OK);
 
-    return "redirect:/users/edit?fail=true";
+    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
 
   /**
@@ -343,11 +342,11 @@ public class UserController {
    * @throws Exception
    */
   @GetMapping("/activity")
-  public String activity(
+  public ResponseEntity<?> activity(
     @AuthenticationPrincipal CustomUser loginUser,
     Model model
     ) throws Exception {
-    if(loginUser == null) return "redirect:/login";
+    if(loginUser == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     // 로그인 유저 정보
     Users user = userService.select(loginUser.getUsername());
     // 유저가 쓴 앨범 리뷰 정보
@@ -365,18 +364,21 @@ public class UserController {
     // 총 리뷰 수, 좋아요 수
     UsersTotalLikes utl = userService.usersTotalLikes(loginUser.getId());
 
-    model.addAttribute("utl", utl);
-    model.addAttribute("aReviewList", aReviewList);
-    model.addAttribute("countAReview", countAReview);
-    model.addAttribute("laReviewList", laReviewList);
-    model.addAttribute("countLaReview", countLaReview);
-    model.addAttribute("tReviewList", tReviewList);
-    model.addAttribute("countTReview", countTReview);
-    model.addAttribute("ltReviewList", ltReviewList);
-    model.addAttribute("countLtReview", countLtReview);
-    model.addAttribute("user", user);
-    model.addAttribute("lastPath", "activity");
-    return "user/activity";
+    Map<String, Object> response = new HashMap<>();
+
+    response.put("utl", utl);
+    response.put("aReviewList", aReviewList);
+    response.put("countAReview", countAReview);
+    response.put("laReviewList", laReviewList);
+    response.put("countLaReview", countLaReview);
+    response.put("tReviewList", tReviewList);
+    response.put("countTReview", countTReview);
+    response.put("ltReviewList", ltReviewList);
+    response.put("countLtReview", countLtReview);
+    response.put("user", user);
+    response.put("lastPath", "activity");
+
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   /**
@@ -431,17 +433,18 @@ public class UserController {
    * @throws Exception
    */
   @GetMapping("/notifications")
-  public String notiList(
+  public ResponseEntity<?> notiList(
     @AuthenticationPrincipal CustomUser loginUser,
     Model model
     ) throws Exception {
       List<Notification> notiList = notificationService.findByUser(loginUser.getId());
       int count = notificationService.countUnread(loginUser.getId());
+      Map<String, Object> response = new HashMap<>();
 
-      model.addAttribute("count", count);
-      model.addAttribute("notiList", notiList);
-      model.addAttribute("lastPath", "noti");
-      return "user/notification";
+      response.put("count", count);
+      response.put("notiList", notiList);
+      response.put("lastPath", "noti");
+      return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   /**
@@ -451,11 +454,11 @@ public class UserController {
    * @throws Exception
    */
   @GetMapping("/notifications/status")
-  public String getMethodName(
+  public ResponseEntity<?> getMethodName(
     @AuthenticationPrincipal CustomUser loginUser,
     Model model
   ) throws Exception {
-    if(loginUser == null) return "redirect:/login";
+    if(loginUser == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     // 알림 리스트
     List<UserNoti> notiList = userService.getNotiStatus(loginUser.getId());
     // 알림 한글화
@@ -469,12 +472,14 @@ public class UserController {
       "system", "시스템",
       "qna", "QnA",
       "mention", "언급"
-    );
+      );
 
-    model.addAttribute("notiType", notiType);
-    model.addAttribute("notiList", notiList);
-    model.addAttribute("lastPath", "alarm");
-    return "user/setting-alarm";
+    Map<String, Object> response = new HashMap<>();
+
+    response.put("notiType", notiType);
+    response.put("notiList", notiList);
+    response.put("lastPath", "alarm");
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @PutMapping("/notifications/status")
@@ -500,17 +505,17 @@ public class UserController {
    * @throws Exception
    */
   @GetMapping({"follow-artist", "/{id}/follow-artist"})
-  public String followArtists(
+  public ResponseEntity<?> followArtists(
     @AuthenticationPrincipal CustomUser loginUser,
     @PathVariable(value = "id", required = false) Long id,
     Model model
   ) throws Exception {
 
-    if(id == null && loginUser == null) return "redirect:/login";
+    if(id == null && loginUser == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
     // 관리자 체크
     boolean isAdimin = userService.selectById(id != null ? id : loginUser.getId()).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));
-    if(isAdimin) return "redirect:/";
+    if(isAdimin) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
     // PathVariable 검사
     Long targetId = (id != null) ? id : loginUser.getUser().getId();
@@ -521,13 +526,15 @@ public class UserController {
     // 팔로우한 아티스트 수
     int count = artistService.countFollowingArtists(targetId);
 
-    model.addAttribute("count", count);
-    model.addAttribute("userId", targetId);
-    model.addAttribute("artistList", artistList);
-    model.addAttribute("isOwner", isOwner);
+    Map<String, Object> response = new HashMap<>();
 
-    model.addAttribute("lastPath", "artist-follows");
-    return "user/follow_artist";
+    response.put("count", count);
+    response.put("userId", targetId);
+    response.put("artistList", artistList);
+    response.put("isOwner", isOwner);
+
+    response.put("lastPath", "artist-follows");
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   /**
@@ -537,7 +544,7 @@ public class UserController {
   * @throws Exception
    */
   @GetMapping({"playlists", "/{id}/playlists"})
-  public String playlist(
+  public ResponseEntity<?> playlist(
       @AuthenticationPrincipal CustomUser loginUser,
       @PathVariable(value = "id", required = false) Long id,
       Model model
@@ -557,11 +564,11 @@ public class UserController {
     List<Playlist> myPlaylists = playlistService.usersPlaylist(targetId);
     List<Playlist> likedPlaylists = playlistService.likedPlaylist(targetId, "", 0, 20);
 
-    model.addAttribute("userId", targetId);
-    model.addAttribute("isOwner", isOwner);
-    model.addAttribute("myPlaylists", myPlaylists);
-    model.addAttribute("likedPlaylists", likedPlaylists);
-    model.addAttribute("lastPath", "playlist");
+    response.put("userId", targetId);
+    response.put("isOwner", isOwner);
+    response.put("myPlaylists", myPlaylists);
+    response.put("likedPlaylists", likedPlaylists);
+    response.put("lastPath", "playlist");
     return "user/playlist";
   }
 
@@ -573,7 +580,7 @@ public class UserController {
    * @throws Exception
    */
   @GetMapping({"liked-music", "/{id}/liked-music"})
-  public String likedMusic(
+  public ResponseEntity<?> likedMusic(
     @AuthenticationPrincipal CustomUser loginUser,
     @PathVariable(value = "id", required = false) Long id,
     Model model
@@ -596,13 +603,13 @@ public class UserController {
     List<Track> likedTrackList = trackService.likedTracks(targetId, "", 0, 20);
     int countTrack = trackService.countLikedTracks(targetId);
 
-    model.addAttribute("userId", targetId);
-    model.addAttribute("lastPath", "liked-music");
-    model.addAttribute("isOwner", isOwner);
-    model.addAttribute("likedAlbumList", likedAlbumList);
-    model.addAttribute("countAlbum", countAlbum);
-    model.addAttribute("likedTrackList", likedTrackList);
-    model.addAttribute("countTrack", countTrack);
+    response.put("userId", targetId);
+    response.put("lastPath", "liked-music");
+    response.put("isOwner", isOwner);
+    response.put("likedAlbumList", likedAlbumList);
+    response.put("countAlbum", countAlbum);
+    response.put("likedTrackList", likedTrackList);
+    response.put("countTrack", countTrack);
     return "user/liked_music";
   }
 
@@ -614,7 +621,7 @@ public class UserController {
    * @throws Exception
    */
   @GetMapping({"follow-user", "/{id}/follow-user"})
-  public String followUsers(
+  public ResponseEntity<?> followUsers(
     Model model,
     @AuthenticationPrincipal CustomUser loginUser,
     @PathVariable(value = "id", required = false) Long id
@@ -636,13 +643,13 @@ public class UserController {
     List<Users> myFollow = userFollowService.myFollow(targetId, "", 0, 20);
     int followCount = userFollowService.myFollowCount(targetId);
 
-    model.addAttribute("userId", targetId);
-    model.addAttribute("myFollower", myFollower);
-    model.addAttribute("myFollow", myFollow);
-    model.addAttribute("followerCount", followerCount);
-    model.addAttribute("followCount", followCount);
-    model.addAttribute("lastPath", "user-follows");
-    model.addAttribute("isOwner", isOwner);
+    response.put("userId", targetId);
+    response.put("myFollower", myFollower);
+    response.put("myFollow", myFollow);
+    response.put("followerCount", followerCount);
+    response.put("followCount", followCount);
+    response.put("lastPath", "user-follows");
+    response.put("isOwner", isOwner);
     return "user/follow_user";
   }
 
@@ -654,7 +661,7 @@ public class UserController {
    * @throws Exception
    */
   @GetMapping("/badge")
-  public String badge(
+  public ResponseEntity<?> badge(
     @AuthenticationPrincipal CustomUser loginUser,
     Model model
   ) throws Exception {
@@ -666,9 +673,9 @@ public class UserController {
     // 미획득 배지 리스트
     List<Badge> notHaveBadgeList = badgeService.doesNotHaveBadge(loginUser.getId());
 
-    model.addAttribute("lastPath", "badge");
-    model.addAttribute("haveBagdeList", haveBagdeList);
-    model.addAttribute("notHaveBadgeList", notHaveBadgeList);
+    response.put("lastPath", "badge");
+    response.put("haveBagdeList", haveBagdeList);
+    response.put("notHaveBadgeList", notHaveBadgeList);
     return "user/badge";
   }
 
@@ -680,7 +687,7 @@ public class UserController {
    * @throws Exception
    */
   @GetMapping("/security")
-  public String security(
+  public ResponseEntity<?> security(
     @AuthenticationPrincipal CustomUser loginUser,
     Model model
   ) throws Exception {
@@ -689,12 +696,12 @@ public class UserController {
     Boolean success = (Boolean) model.asMap().get("success");
     log.info("success : {}", success);
     if(success != null) {
-      model.addAttribute("vali", success);
+      response.put("vali", success);
     } else {
-      model.addAttribute("vali", false);
+      response.put("vali", false);
     }
-    model.addAttribute("lastPath", "security");
-    model.addAttribute("user", user);
+    response.put("lastPath", "security");
+    response.put("user", user);
     return "user/security";
   }
 
@@ -707,7 +714,7 @@ public class UserController {
    * @throws Exception
    */
   @PostMapping("/check-password")
-  public String checkPassword(
+  public ResponseEntity<?> checkPassword(
     @AuthenticationPrincipal CustomUser loginUser,
     @RequestParam("password") String password,
     RedirectAttributes redirectAttributes,
@@ -737,7 +744,7 @@ public class UserController {
    * @throws Exception
    */
   @PostMapping("/change-password")
-  public String changePassword(
+  public ResponseEntity<?> changePassword(
     @AuthenticationPrincipal CustomUser loginUser,
     @Validated(PasswordCheck.class) @ModelAttribute Users user,
     BindingResult br,
