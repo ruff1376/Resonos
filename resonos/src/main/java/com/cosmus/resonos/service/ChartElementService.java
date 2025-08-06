@@ -1,8 +1,8 @@
 package com.cosmus.resonos.service;
 
-import com.cosmus.resonos.domain.ChartElement;
-
 import java.util.Map;
+
+import com.cosmus.resonos.domain.Vote.ChartElement;
 
 public interface ChartElementService {
 

@@ -7,8 +7,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.domain.Pagination;
+import com.cosmus.resonos.domain.Artist.Artist;
 import com.cosmus.resonos.mapper.ArtistMapper;
 
 @Service

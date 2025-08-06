@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cosmus.resonos.domain.Album;
-import com.cosmus.resonos.domain.Artist;
 import com.cosmus.resonos.domain.Pagination;
-import com.cosmus.resonos.domain.Track;
+import com.cosmus.resonos.domain.Album.Album;
+import com.cosmus.resonos.domain.Artist.Artist;
+import com.cosmus.resonos.domain.Track.Track;
 import com.cosmus.resonos.external.SpotifyApiClient;
 import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.ArtistService;

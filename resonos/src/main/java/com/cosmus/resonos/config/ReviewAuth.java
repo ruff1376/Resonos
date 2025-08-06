@@ -4,6 +4,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import com.cosmus.resonos.domain.*;
+import com.cosmus.resonos.domain.Album.AlbumReview;
+import com.cosmus.resonos.domain.Track.TrackReview;
 import com.cosmus.resonos.mapper.AlbumReviewMapper;
 import com.cosmus.resonos.mapper.TrackReviewMapper;
 

@@ -1,9 +1,9 @@
 package com.cosmus.resonos.service;
 
-import com.cosmus.resonos.domain.ArtistMoodVote;
-
 import java.util.List;
 import java.util.Map;
+
+import com.cosmus.resonos.domain.Artist.ArtistMoodVote;
 
 public interface ArtistMoodVoteService {
 

@@ -1,4 +1,4 @@
-package com.cosmus.resonos.domain;
+package com.cosmus.resonos.domain.Artist;
 
 import java.util.Date;
 import lombok.Data;

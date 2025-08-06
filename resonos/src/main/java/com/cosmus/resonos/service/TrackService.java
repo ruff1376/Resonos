@@ -1,12 +1,11 @@
 package com.cosmus.resonos.service;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
 import com.cosmus.resonos.domain.Pagination;
-import com.cosmus.resonos.domain.Track;
+import com.cosmus.resonos.domain.Track.Track;
 public interface TrackService {
     // 목록
     public List<Track> list() throws Exception;

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.cosmus.resonos.domain.MoodStat;
+import com.cosmus.resonos.domain.Vote.MoodStat;
 
 @Mapper
 public interface MoodStatMapper {

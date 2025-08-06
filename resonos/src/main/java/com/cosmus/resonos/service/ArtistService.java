@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.cosmus.resonos.domain.Artist;
+import com.cosmus.resonos.domain.Artist.Artist;
 
 public interface ArtistService {
     // 목록

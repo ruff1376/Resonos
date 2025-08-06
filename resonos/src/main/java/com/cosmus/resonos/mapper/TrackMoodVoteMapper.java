@@ -6,7 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.cosmus.resonos.domain.TrackMoodVote;
+import com.cosmus.resonos.domain.Track.TrackMoodVote;
 @Mapper
 public interface TrackMoodVoteMapper {
     // 트랙별 태그/분위기 투표 현황 (trackId, mood, count)

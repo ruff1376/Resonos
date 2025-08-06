@@ -3,6 +3,7 @@ package com.cosmus.resonos.domain;
 import java.util.Date;
 import java.util.List;
 
+import com.cosmus.resonos.domain.Track.Track;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;

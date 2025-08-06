@@ -1,6 +1,8 @@
-package com.cosmus.resonos.domain;
+package com.cosmus.resonos.domain.Album;
 
 import java.time.LocalDateTime;
+
+import com.cosmus.resonos.domain.Review.Reviewer;
 
 import lombok.*;
 

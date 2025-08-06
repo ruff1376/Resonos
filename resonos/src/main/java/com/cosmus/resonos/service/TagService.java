@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.cosmus.resonos.domain.Tag;
+import com.cosmus.resonos.domain.Vote.Tag;
 
 public interface TagService {
     // 전체 조회

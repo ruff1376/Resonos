@@ -1,8 +1,9 @@
 package com.cosmus.resonos.mapper;
 
-import com.cosmus.resonos.domain.ChartElement;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import com.cosmus.resonos.domain.Vote.ChartElement;
 
 import java.util.Map;
 

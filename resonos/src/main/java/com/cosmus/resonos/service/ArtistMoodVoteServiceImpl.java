@@ -1,6 +1,6 @@
 package com.cosmus.resonos.service;
 
-import com.cosmus.resonos.domain.ArtistMoodVote;
+import com.cosmus.resonos.domain.Artist.ArtistMoodVote;
 import com.cosmus.resonos.mapper.ArtistMoodVoteMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,8 +1,15 @@
-package com.cosmus.resonos.domain;
+package com.cosmus.resonos.domain.Track;
 
 import java.time.LocalDateTime;
 
-import lombok.*;
+import com.cosmus.resonos.domain.Review.Reviewer;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter

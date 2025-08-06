@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.cosmus.resonos.domain.ChartEntry;
+import com.cosmus.resonos.domain.Vote.ChartEntry;
 import com.cosmus.resonos.service.ChartEntryService;
 
 import lombok.extern.slf4j.Slf4j;
