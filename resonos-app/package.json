@@ -20,7 +20,10 @@
     "axios": "^1.11.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.0",
-    "react-router-dom": "^7.7.1"
+    "react-router-dom": "^7.7.1",
+    "js-cookie": "^3.0.5",
+    "sweetalert2": "^11.22.2",
+    "sweetalert2-react-content": "^5.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",
