@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.LikedPlaylistMapper">
+<mapper namespace="com.cosmus.resonos.mapper.review.LikedPlaylistMapper">
 
-  <resultMap id="LikedPlaylistResultMap" type="com.cosmus.resonos.domain.LikedPlaylist">
+  <resultMap id="LikedPlaylistResultMap" type="com.cosmus.resonos.domain.review.LikedPlaylist">
     <id property="id" column="id"/>
     <result property="createdAt" column="created_at"/>
     <result property="userId" column="user_id"/>

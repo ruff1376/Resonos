@@ -3,7 +3,7 @@ package com.cosmus.resonos.mapper.review;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.cosmus.resonos.domain.Artist.ArtistMoodVote;
+import com.cosmus.resonos.domain.review.ArtistMoodVote;
 
 import java.util.List;
 import java.util.Map;

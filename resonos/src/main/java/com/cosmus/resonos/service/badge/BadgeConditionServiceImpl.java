@@ -1,11 +1,12 @@
 package com.cosmus.resonos.service.badge;
 
-import com.cosmus.resonos.domain.BadgeCondition;
-import com.cosmus.resonos.mapper.admin.BadgeConditionMapper;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
+
+import com.cosmus.resonos.domain.badge.BadgeCondition;
+import com.cosmus.resonos.mapper.admin.BadgeConditionMapper;
 
 @Service
 public class BadgeConditionServiceImpl implements BadgeConditionService {

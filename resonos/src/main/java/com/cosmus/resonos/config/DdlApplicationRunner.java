@@ -6,7 +6,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import com.cosmus.resonos.mapper.CommonMapper;
+import com.cosmus.resonos.mapper.common.CommonMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,7 +22,7 @@ public class DdlApplicationRunner implements ApplicationRunner {
         try {
             // Mapper 인터페이스를 통해 DDL 실행
             if( init ) {
-                log.info("######################### [ DDL ] #########################");      
+                log.info("######################### [ DDL ] #########################");
                 log.info("### : DDL 초기화");
                 commonMapper.createTable();
             }

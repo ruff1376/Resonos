@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.UserActivityLogMapper">
+<mapper namespace="com.cosmus.resonos.mapper.admin.UserActivityLogMapper">
 
-  <resultMap id="UserActivityLogResultMap" type="com.cosmus.resonos.domain.UserActivityLog">
+  <resultMap id="UserActivityLogResultMap" type="com.cosmus.resonos.domain.admin.UserActivityLog">
     <id property="id" column="id"/>
     <result property="action" column="action"/>
     <result property="targetType" column="target_type"/>

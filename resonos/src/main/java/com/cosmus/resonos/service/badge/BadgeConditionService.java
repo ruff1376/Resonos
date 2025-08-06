@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.cosmus.resonos.domain.admin.BadgeCondition;
+import com.cosmus.resonos.domain.badge.BadgeCondition;
 
 public interface BadgeConditionService {
     // 배지 CRUD

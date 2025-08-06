@@ -3,9 +3,9 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.QnaMapper">
+<mapper namespace="com.cosmus.resonos.mapper.user.QnaMapper">
 
-  <resultMap id="QnaResultMap" type="com.cosmus.resonos.domain.Qna">
+  <resultMap id="QnaResultMap" type="com.cosmus.resonos.domain.user.Qna">
     <id property="id" column="id"/>
     <result property="type" column="type"/>
     <result property="title" column="title"/>

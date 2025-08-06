@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cosmus.resonos.domain.Pagination;
-import com.cosmus.resonos.domain.Album.Album;
-import com.cosmus.resonos.domain.Artist.Artist;
-import com.cosmus.resonos.domain.Track.Track;
+import com.cosmus.resonos.domain.review.Album;
+import com.cosmus.resonos.domain.review.Artist;
+import com.cosmus.resonos.domain.review.Track;
 import com.cosmus.resonos.external.SpotifyApiClient;
 import com.cosmus.resonos.service.admin.SpotifySyncService;
 import com.cosmus.resonos.service.review.AlbumService;

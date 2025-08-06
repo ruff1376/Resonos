@@ -3,9 +3,9 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.ArtistMoodVoteMapper">
+<mapper namespace="com.cosmus.resonos.mapper.review.ArtistMoodVoteMapper">
 
-    <resultMap id="ArtistMoodVoteMap" type="com.cosmus.resonos.domain.ArtistMoodVote">
+    <resultMap id="ArtistMoodVoteMap" type="com.cosmus.resonos.domain.review.ArtistMoodVote">
         <id property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="artistId" column="artist_id"/>
@@ -13,10 +13,10 @@
     </resultMap>
 
     <select id="getArtistMoodStats" resultType="map">
-        SELECT 
-            a.artist_id, 
-            ar.name AS artist_name, 
-            tg.name AS mood_name, 
+        SELECT
+            a.artist_id,
+            ar.name AS artist_name,
+            tg.name AS mood_name,
             COUNT(*) AS vote_count
         FROM artist_mood_vote a
         JOIN tag tg ON a.mood = tg.id
@@ -45,12 +45,12 @@
         LIMIT 1
     </select>
 
-    <insert id="insert" parameterType="com.cosmus.resonos.domain.ArtistMoodVote">
+    <insert id="insert" parameterType="com.cosmus.resonos.domain.review.ArtistMoodVote">
         INSERT INTO artist_mood_vote (user_id, artist_id, mood)
         VALUES (#{userId}, #{artistId}, #{mood})
     </insert>
 
-    <update id="update" parameterType="com.cosmus.resonos.domain.ArtistMoodVote">
+    <update id="update" parameterType="com.cosmus.resonos.domain.review.ArtistMoodVote">
         UPDATE artist_mood_vote
         SET mood = #{mood}
         WHERE user_id = #{userId} AND artist_id = #{artistId}

@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.NoticeMapper">
+<mapper namespace="com.cosmus.resonos.mapper.admin.NoticeMapper">
 
-  <resultMap id="NoticeResultMap" type="com.cosmus.resonos.domain.Notice">
+  <resultMap id="NoticeResultMap" type="com.cosmus.resonos.domain.admin.Notice">
     <id property="id" column="id"/>
     <result property="title" column="title"/>
     <result property="content" column="content"/>

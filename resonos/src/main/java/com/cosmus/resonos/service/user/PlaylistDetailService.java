@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.cosmus.resonos.domain.Track.Track;
+import com.cosmus.resonos.domain.review.Track;
 import com.cosmus.resonos.domain.user.PlaylistDetail;
 
 public interface PlaylistDetailService {

@@ -3,9 +3,9 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.TagMapper">
+<mapper namespace="com.cosmus.resonos.mapper.admin.TagMapper">
 
-  <resultMap id="TagResultMap" type="com.cosmus.resonos.domain.Tag">
+  <resultMap id="TagResultMap" type="com.cosmus.resonos.domain.admin.Tag">
     <id property="id" column="id"/>
     <result property="name" column="name"/>
   </resultMap>
@@ -46,11 +46,11 @@
   </select>
   <!-- listPaging -->
   <select id="listPaging" resultMap="TagResultMap">
-    SELECT * FROM tag ORDER BY name LIMIT #{offset}, #{size} 
+    SELECT * FROM tag ORDER BY name LIMIT #{offset}, #{size}
   </select>
   <!-- searchByNamePaging -->
   <select id="searchByNamePaging" resultMap="TagResultMap">
-    SELECT * FROM tag WHERE name LIKE CONCAT('%', #{keyword}, '%') ORDER BY name LIMIT #{offset}, #{size} 
+    SELECT * FROM tag WHERE name LIKE CONCAT('%', #{keyword}, '%') ORDER BY name LIMIT #{offset}, #{size}
   </select>
 
 </mapper>

@@ -2,7 +2,7 @@ package com.cosmus.resonos.service.admin;
 
 import java.util.List;
 
-import com.cosmus.resonos.domain.user.UserSanction;
+import com.cosmus.resonos.domain.admin.UserSanction;
 
 public interface UserSanctionService {
     // 전체 조회

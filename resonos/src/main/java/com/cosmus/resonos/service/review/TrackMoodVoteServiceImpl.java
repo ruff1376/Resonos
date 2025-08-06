@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cosmus.resonos.domain.Track.TrackMoodVote;
+import com.cosmus.resonos.domain.review.TrackMoodVote;
 import com.cosmus.resonos.mapper.review.TrackMoodVoteMapper;
 
 @Service

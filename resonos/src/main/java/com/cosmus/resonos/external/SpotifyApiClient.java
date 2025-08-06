@@ -11,16 +11,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.cosmus.resonos.domain.Album.Album;
-import com.cosmus.resonos.domain.Artist.Artist;
-import com.cosmus.resonos.domain.Track.Track;
+import com.cosmus.resonos.domain.review.Album;
+import com.cosmus.resonos.domain.review.Artist;
+import com.cosmus.resonos.domain.review.Track;
 
 @Component
 public class SpotifyApiClient {
 
-    @Value("${spotify.client-id}")
+    // @Value("${spotify.client-id}")
     private String clientId;
-    @Value("${spotify.client-secret}")
+    // @Value("${spotify.client-secret}")
     private String clientSecret;
 
     private final WebClient webClient = WebClient.create("https://api.spotify.com/v1");

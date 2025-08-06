@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.Pagination;
-import com.cosmus.resonos.domain.admin.Report;
+import com.cosmus.resonos.domain.community.Report;
 import com.cosmus.resonos.mapper.admin.ReportMapper;
 
 

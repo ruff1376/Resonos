@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cosmus.resonos.domain.Track.LikedTrack;
+import com.cosmus.resonos.domain.review.LikedTrack;
 import com.cosmus.resonos.mapper.review.LikedTrackMapper;
 
 @Service

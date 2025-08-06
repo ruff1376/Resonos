@@ -3,9 +3,9 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.QnaAnswerMapper">
+<mapper namespace="com.cosmus.resonos.mapper.admin.QnaAnswerMapper">
 
-  <resultMap id="QnaAnswerResultMap" type="com.cosmus.resonos.domain.QnaAnswer">
+  <resultMap id="QnaAnswerResultMap" type="com.cosmus.resonos.domain.admin.QnaAnswer">
     <id property="id" column="id"/>
     <result property="content" column="content"/>
     <result property="answeredAt" column="answered_at"/>

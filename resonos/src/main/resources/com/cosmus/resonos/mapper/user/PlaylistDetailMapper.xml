@@ -3,9 +3,9 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.PlaylistDetailMapper">
+<mapper namespace="com.cosmus.resonos.mapper.user.PlaylistDetailMapper">
 
-  <resultMap id="PlaylistDetailResultMap" type="com.cosmus.resonos.domain.PlaylistDetail">
+  <resultMap id="PlaylistDetailResultMap" type="com.cosmus.resonos.domain.user.PlaylistDetail">
     <id property="id" column="id"/>
     <result property="trackId" column="track_id"/>
     <result property="playlistId" column="playlist_id"/>

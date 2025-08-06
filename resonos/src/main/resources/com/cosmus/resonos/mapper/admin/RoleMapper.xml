@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.RoleMapper">
+<mapper namespace="com.cosmus.resonos.mapper.admin.RoleMapper">
 
-  <resultMap id="RoleResultMap" type="com.cosmus.resonos.domain.Role">
+  <resultMap id="RoleResultMap" type="com.cosmus.resonos.domain.admin.Role">
     <id property="id" column="id"/>
     <result property="name" column="name"/>
     <result property="description" column="description"/>

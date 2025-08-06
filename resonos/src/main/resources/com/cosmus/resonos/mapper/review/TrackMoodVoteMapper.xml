@@ -6,7 +6,7 @@
 <mapper namespace="com.cosmus.resonos.mapper.review.TrackMoodVoteMapper">
 
     <!-- TrackMoodVote 도메인 매핑 -->
-    <resultMap id="TrackMoodVoteMap" type="com.cosmus.resonos.domain.Track.TrackMoodVote">
+    <resultMap id="TrackMoodVoteMap" type="com.cosmus.resonos.domain.review.TrackMoodVote">
         <id property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="trackId" column="track_id"/>

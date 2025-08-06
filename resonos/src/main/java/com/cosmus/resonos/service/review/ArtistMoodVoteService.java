@@ -3,7 +3,7 @@ package com.cosmus.resonos.service.review;
 import java.util.List;
 import java.util.Map;
 
-import com.cosmus.resonos.domain.Artist.ArtistMoodVote;
+import com.cosmus.resonos.domain.review.ArtistMoodVote;
 
 public interface ArtistMoodVoteService {
 

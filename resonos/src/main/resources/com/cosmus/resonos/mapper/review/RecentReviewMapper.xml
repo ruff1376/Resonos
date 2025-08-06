@@ -3,9 +3,9 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.RecentReviewMapper">
+<mapper namespace="com.cosmus.resonos.mapper.review.RecentReviewMapper">
 
-<select id="findRecentReviewsByArtistId" resultType="com.cosmus.resonos.domain.RecentReview">
+<select id="findRecentReviewsByArtistId" resultType="com.cosmus.resonos.domain.review.RecentReview">
     (
         SELECT
             tr.track_id AS id,

@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.cosmus.resonos.domain.Pagination;
-import com.cosmus.resonos.domain.Vote.Tag;
+import com.cosmus.resonos.domain.admin.Tag;
 import com.cosmus.resonos.service.admin.TagService;
 
 @Controller

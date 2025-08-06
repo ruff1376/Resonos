@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.UserMapper">
+<mapper namespace="com.cosmus.resonos.mapper.user.UserMapper">
 
-  <resultMap id="UserResultMap" type="Users">
+  <resultMap id="UserResultMap" type="com.cosmus.resonos.domain.user.Users">
     <id property="id" column="id"/>
 
     <result property="username" column="username"/>
@@ -21,13 +21,13 @@
     <result property="followerCount" column="follower_count"/>
     <result property="currentBadge" column="current_badge"/>
 
-    <collection property="authList" ofType="UserAuth"
+    <collection property="authList" ofType="com.cosmus.resonos.domain.user.UserAuth"
             select="selectAuth"
             column="username"></collection>
 
   </resultMap>
 
-    <resultMap id="AuthMap" type="UserAuth">
+    <resultMap id="AuthMap" type="com.cosmus.resonos.domain.user.UserAuth">
         <result property="id" column="id" />
         <result property="username" column="username" />
         <result property="auth" column="auth" />
@@ -312,7 +312,7 @@
     WHERE user_id = #{userId}
     AND type = #{type}
   </update>
-  
+
   <!-- countAllUsers -->
   <select id="countAllUsers" resultType="long">
     SELECT COUNT(*) FROM user

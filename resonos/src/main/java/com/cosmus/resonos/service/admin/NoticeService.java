@@ -2,7 +2,7 @@ package com.cosmus.resonos.service.admin;
 
 import java.util.List;
 
-import com.cosmus.resonos.domain.user.Notice;
+import com.cosmus.resonos.domain.admin.Notice;
 
 public interface NoticeService {
     // 목록

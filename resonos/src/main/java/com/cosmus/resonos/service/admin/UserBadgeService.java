@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.cosmus.resonos.domain.user.UserBadge;
-import com.cosmus.resonos.domain.user.UserBadgeLog;
+import com.cosmus.resonos.domain.admin.UserBadgeLog;
+import com.cosmus.resonos.domain.badge.UserBadge;
 
 public interface UserBadgeService {
     // 전체 조회

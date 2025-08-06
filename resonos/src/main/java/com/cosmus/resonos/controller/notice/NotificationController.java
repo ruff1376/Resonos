@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cosmus.resonos.domain.CustomUser;
-import com.cosmus.resonos.domain.user.Notification;
+import com.cosmus.resonos.domain.admin.Notification;
 import com.cosmus.resonos.service.admin.NotificationService;
 
 import lombok.extern.slf4j.Slf4j;

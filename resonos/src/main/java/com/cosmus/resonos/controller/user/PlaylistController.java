@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cosmus.resonos.domain.CustomUser;
-import com.cosmus.resonos.domain.Track.Track;
+import com.cosmus.resonos.domain.review.Track;
 import com.cosmus.resonos.domain.user.Playlist;
 import com.cosmus.resonos.domain.user.PlaylistDTO;
 import com.cosmus.resonos.domain.user.PlaylistDetail;

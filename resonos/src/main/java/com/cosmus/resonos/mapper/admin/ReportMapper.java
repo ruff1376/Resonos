@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.cosmus.resonos.domain.Pagination;
-import com.cosmus.resonos.domain.admin.Report;
+import com.cosmus.resonos.domain.community.Report;
 
 @Mapper
 public interface ReportMapper {

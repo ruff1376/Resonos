@@ -18,13 +18,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cosmus.resonos.domain.Pagination;
+import com.cosmus.resonos.domain.admin.UserActivityLog;
+import com.cosmus.resonos.domain.admin.UsersTotalLikes;
 import com.cosmus.resonos.domain.user.GenreCount;
 import com.cosmus.resonos.domain.user.PublicUserDto;
-import com.cosmus.resonos.domain.user.UserActivityLog;
 import com.cosmus.resonos.domain.user.UserAuth;
 import com.cosmus.resonos.domain.user.UserNoti;
 import com.cosmus.resonos.domain.user.Users;
-import com.cosmus.resonos.domain.user.UsersTotalLikes;
 import com.cosmus.resonos.mapper.admin.UserRoleMapper;
 import com.cosmus.resonos.mapper.user.UserMapper;
 import com.cosmus.resonos.service.admin.UserActivityLogService;

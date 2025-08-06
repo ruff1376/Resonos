@@ -3,9 +3,9 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.ArtistVoteStatsMapper">
+<mapper namespace="com.cosmus.resonos.mapper.review.ArtistVoteStatsMapper">
 <select id="getArtistMoodVoteStats" resultType="map">
-    SELECT 
+    SELECT
         a.id AS artist_id,
         a.name AS artist_name,
         tg.name AS mood_name,
@@ -17,7 +17,7 @@
         JOIN track t ON tmv.track_id = t.id
         JOIN tag tg ON tmv.mood = tg.id
         GROUP BY t.artist_id, tg.id
-        
+
         -- 앨범 투표 부분 삭제 (album_mood_vote 테이블 없음)
         -- UNION ALL
         -- SELECT al.artist_id, tg.id AS tag_id, COUNT(*) AS vote_count

@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cosmus.resonos.domain.user.LikedPlaylist;
+import com.cosmus.resonos.domain.review.LikedPlaylist;
 import com.cosmus.resonos.mapper.user.LikedPlaylistMapper;
 
 @Service

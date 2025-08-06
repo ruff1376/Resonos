@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cosmus.resonos.domain.Pagination;
-import com.cosmus.resonos.domain.user.Notification;
+import com.cosmus.resonos.domain.admin.Notification;
 import com.cosmus.resonos.service.admin.NotificationService;
 
 @Controller

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
-import com.cosmus.resonos.domain.admin.Badge;
+import com.cosmus.resonos.domain.badge.Badge;
 import com.cosmus.resonos.mapper.badge.BadgeMapper;
 
 @Service

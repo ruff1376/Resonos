@@ -1,6 +1,6 @@
 package com.cosmus.resonos.service.review;
 
-import com.cosmus.resonos.domain.Vote.ChartElement;
+import com.cosmus.resonos.domain.review.ChartElement;
 import com.cosmus.resonos.mapper.review.ChartElementMapper;
 
 import jakarta.validation.Valid;

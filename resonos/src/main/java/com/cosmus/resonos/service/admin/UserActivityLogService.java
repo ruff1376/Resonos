@@ -2,7 +2,7 @@ package com.cosmus.resonos.service.admin;
 
 import java.util.List;
 
-import com.cosmus.resonos.domain.user.UserActivityLog;
+import com.cosmus.resonos.domain.admin.UserActivityLog;
 
 public interface UserActivityLogService {
     // 전체 조회

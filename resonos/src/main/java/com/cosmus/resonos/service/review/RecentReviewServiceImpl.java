@@ -1,6 +1,6 @@
 package com.cosmus.resonos.service.review;
 
-import com.cosmus.resonos.domain.Review.RecentReview;
+import com.cosmus.resonos.domain.review.RecentReview;
 import com.cosmus.resonos.mapper.review.RecentReviewMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;

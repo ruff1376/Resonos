@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.Pagination;
-import com.cosmus.resonos.domain.Track.Track;
+import com.cosmus.resonos.domain.review.Track;
 import com.cosmus.resonos.domain.user.Playlist;
 import com.cosmus.resonos.domain.user.PlaylistDTO;
 import com.cosmus.resonos.domain.user.PlaylistDetail;

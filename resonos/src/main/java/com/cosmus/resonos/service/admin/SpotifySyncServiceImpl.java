@@ -1,11 +1,11 @@
 package com.cosmus.resonos.service.admin;
 
-import com.cosmus.resonos.domain.Album.Album;
-import com.cosmus.resonos.domain.Artist.Artist;
-import com.cosmus.resonos.domain.Track.Track;
 import com.cosmus.resonos.mapper.review.AlbumMapper;
 import com.cosmus.resonos.mapper.review.ArtistMapper;
 import com.cosmus.resonos.mapper.review.TrackMapper;
+import com.cosmus.resonos.domain.review.Album;
+import com.cosmus.resonos.domain.review.Artist;
+import com.cosmus.resonos.domain.review.Track;
 import com.cosmus.resonos.external.SpotifyApiClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

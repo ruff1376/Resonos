@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.cosmus.resonos.domain.user.Notice;
+import com.cosmus.resonos.domain.admin.Notice;
 
 @Mapper
 public interface NoticeMapper {

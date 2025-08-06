@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.cosmus.resonos.domain.Review.RecentReview;
+import com.cosmus.resonos.domain.review.RecentReview;
 
 @Mapper
 public interface RecentReviewMapper {

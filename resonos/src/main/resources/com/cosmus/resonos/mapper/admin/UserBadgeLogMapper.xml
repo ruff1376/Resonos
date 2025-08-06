@@ -3,9 +3,9 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.UserBadgeLogMapper">
-  
-  <resultMap id="userBadgeLogResult" type="com.cosmus.resonos.domain.UserBadgeLog">
+<mapper namespace="com.cosmus.resonos.mapper.admin.UserBadgeLogMapper">
+
+  <resultMap id="userBadgeLogResult" type="com.cosmus.resonos.domain.admin.UserBadgeLog">
     <id property="id" column="id"/>
     <result property="userId" column="user_id"/>
     <result property="badgeId" column="badge_id"/>

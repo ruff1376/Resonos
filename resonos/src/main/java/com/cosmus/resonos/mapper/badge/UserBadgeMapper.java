@@ -6,7 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.cosmus.resonos.domain.user.UserBadge;
+import com.cosmus.resonos.domain.badge.UserBadge;
 
 @Mapper
 public interface UserBadgeMapper {

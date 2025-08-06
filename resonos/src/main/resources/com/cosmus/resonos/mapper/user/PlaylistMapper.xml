@@ -3,9 +3,9 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.PlaylistMapper">
+<mapper namespace="com.cosmus.resonos.mapper.user.PlaylistMapper">
 
-  <resultMap id="PlaylistResultMap" type="com.cosmus.resonos.domain.Playlist">
+  <resultMap id="PlaylistResultMap" type="com.cosmus.resonos.domain.user.Playlist">
     <id property="id" column="id"/>
     <result property="userId" column="user_id"/>
     <result property="title" column="title"/>
@@ -19,7 +19,7 @@
   </resultMap>
 
   <!-- 플레이리스트 + 트랙  -->
-  <resultMap id="trackOfPlaylistMap" type="PlaylistDTO">
+  <resultMap id="trackOfPlaylistMap" type="com.cosmus.resonos.domain.user.PlaylistDTO">
     <id column="id" property="id"/>
     <result column="title" property="title"/>
     <result column="user_id" property="userId"/>
@@ -29,7 +29,7 @@
     <result column="created_at" property="createdAt"/>
     <result column="likeCount" property="likeCount"/>
 
-    <collection property="trackList" ofType="Track">
+    <collection property="trackList" ofType="com.cosmus.resonos.domain.review.Track">
       <id column="trackId" property="id"/>
       <result column="trackTitle" property="title"/>
       <result column="cover_image" property="coverImage"/>

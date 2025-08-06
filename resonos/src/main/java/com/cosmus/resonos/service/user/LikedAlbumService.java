@@ -2,7 +2,7 @@ package com.cosmus.resonos.service.user;
 
 import java.util.List;
 
-import com.cosmus.resonos.domain.Album.LikedAlbum;
+import com.cosmus.resonos.domain.review.LikedAlbum;
 
 public interface LikedAlbumService {
     // 전체 조회

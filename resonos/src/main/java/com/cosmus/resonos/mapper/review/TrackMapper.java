@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.cosmus.resonos.domain.Pagination;
-import com.cosmus.resonos.domain.Track.Track;
+import com.cosmus.resonos.domain.review.Track;
 
 @Mapper
 public interface TrackMapper {

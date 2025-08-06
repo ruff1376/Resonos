@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.BadgeConditionMapper">
+<mapper namespace="com.cosmus.resonos.mapper.badge.BadgeConditionMapper">
 
   <!-- BadgeCondition 객체 매핑 -->
-  <resultMap id="BadgeConditionResultMap" type="com.cosmus.resonos.domain.BadgeCondition">
+  <resultMap id="BadgeConditionResultMap" type="com.cosmus.resonos.domain.badge.BadgeCondition">
     <id property="id" column="id"/>
     <result property="badgeId" column="badge_id"/>
     <result property="badgeName" column="badge_name"/>

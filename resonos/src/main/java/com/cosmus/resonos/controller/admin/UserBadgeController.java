@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.cosmus.resonos.domain.user.UserBadge;
+import com.cosmus.resonos.domain.badge.UserBadge;
 import com.cosmus.resonos.service.admin.UserBadgeService;
 import com.cosmus.resonos.service.badge.BadgeGrantService;
 

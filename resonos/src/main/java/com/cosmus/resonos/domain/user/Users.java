@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.validation.annotation.Validated;
 
+import com.cosmus.resonos.domain.admin.UserActivityLog;
 import com.cosmus.resonos.validation.EmailCheck;
 import com.cosmus.resonos.validation.NicknameCheck;
 import com.cosmus.resonos.validation.PasswordCheck;

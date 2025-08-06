@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.cosmus.resonos.domain.user.UserSanction;
+import com.cosmus.resonos.domain.admin.UserSanction;
 import com.cosmus.resonos.service.admin.UserSanctionService;
 
 import lombok.extern.slf4j.Slf4j;

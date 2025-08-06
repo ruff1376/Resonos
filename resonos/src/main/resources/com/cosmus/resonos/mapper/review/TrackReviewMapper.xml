@@ -2,10 +2,10 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cosmus.resonos.mapper.TrackReviewMapper">
+<mapper namespace="com.cosmus.resonos.mapper.review.TrackReviewMapper">
 
     <!-- ─────────────────────── TrackReview → 도메인 매핑 -->
-    <resultMap id="TrackReview" type="com.cosmus.resonos.domain.TrackReview">
+    <resultMap id="TrackReview" type="com.cosmus.resonos.domain.review.TrackReview">
         <id     property="id"        column="id"/>
         <result property="rating"    column="rating"/>
         <result property="content"   column="content"/>
@@ -17,7 +17,7 @@
         <result property="userId"    column="user_id"/>
         <result property="trackId"   column="track_id"/>
         <result property="title"     column="title"/>
-            <association property="reviewer" javaType="com.cosmus.resonos.domain.Reviewer">
+            <association property="reviewer" javaType="com.cosmus.resonos.domain.review.Reviewer">
                 <id property="id" column="reviewer_id"/>
                 <result property="nickname" column="reviewer_nickname"/>
                 <result property="profileImage" column="reviewer_profile_image"/>
@@ -26,7 +26,7 @@
     </resultMap>
 
     <!-- ─────────────────────── TrackScore → 집계 매핑 -->
-    <resultMap id="TrackScore" type="com.cosmus.resonos.domain.TrackScore">
+    <resultMap id="TrackScore" type="com.cosmus.resonos.domain.review.TrackScore">
         <id property="trackId"      column="track_id"/>
         <result property="averageScore" column="avg_score"/>
         <result property="criticCount"  column="critic_count"/>

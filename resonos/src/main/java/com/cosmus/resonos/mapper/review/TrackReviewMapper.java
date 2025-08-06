@@ -1,7 +1,7 @@
 package com.cosmus.resonos.mapper.review;
 
-import com.cosmus.resonos.domain.Track.TrackReview;
-import com.cosmus.resonos.domain.Track.TrackScore;
+import com.cosmus.resonos.domain.review.TrackReview;
+import com.cosmus.resonos.domain.review.TrackScore;
 import com.cosmus.resonos.domain.user.Users;
 import com.cosmus.resonos.validation.ReviewForm;
 

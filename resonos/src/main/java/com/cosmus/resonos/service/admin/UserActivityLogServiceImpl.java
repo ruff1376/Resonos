@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.cosmus.resonos.domain.user.UserActivityLog;
+import com.cosmus.resonos.domain.admin.UserActivityLog;
 import com.cosmus.resonos.mapper.admin.UserActivityLogMapper;
 
 @Service

@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.CommunityMapper">
+<mapper namespace="com.cosmus.resonos.mapper.community.CommunityMapper">
 
-  <resultMap id="CommunityResultMap" type="com.cosmus.resonos.domain.Community">
+  <resultMap id="CommunityResultMap" type="com.cosmus.resonos.domain.community.Community">
     <id property="id" column="id"/>
     <result property="name" column="name"/>
     <result property="description" column="description"/>

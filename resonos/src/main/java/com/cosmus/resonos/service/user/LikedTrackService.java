@@ -2,7 +2,7 @@ package com.cosmus.resonos.service.user;
 
 import java.util.List;
 
-import com.cosmus.resonos.domain.Track.LikedTrack;
+import com.cosmus.resonos.domain.review.LikedTrack;
 
 public interface LikedTrackService {
     // 전체 조회

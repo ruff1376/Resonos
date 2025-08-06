@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cosmus.resonos.domain.Review.Reviewer;
-import com.cosmus.resonos.domain.Track.TrackReview;
-import com.cosmus.resonos.domain.Track.TrackScore;
+import com.cosmus.resonos.domain.review.Reviewer;
+import com.cosmus.resonos.domain.review.TrackReview;
+import com.cosmus.resonos.domain.review.TrackScore;
 import com.cosmus.resonos.domain.user.Users;
 import com.cosmus.resonos.mapper.review.TrackMapper;
 import com.cosmus.resonos.mapper.review.TrackReviewMapper;

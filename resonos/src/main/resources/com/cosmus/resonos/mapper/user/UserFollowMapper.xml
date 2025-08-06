@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.UserFollowMapper">
+<mapper namespace="com.cosmus.resonos.mapper.user.UserFollowMapper">
 
-  <resultMap id="UserFollowResultMap" type="com.cosmus.resonos.domain.UserFollow">
+  <resultMap id="UserFollowResultMap" type="com.cosmus.resonos.domain.user.UserFollow">
     <id property="id" column="id"/>
     <result property="createdAt" column="created_at"/>
     <result property="followerId" column="follower_id"/>

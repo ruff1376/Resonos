@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.cosmus.resonos.domain.Album.LikedAlbum;
+import com.cosmus.resonos.domain.review.LikedAlbum;
 
 
 @Mapper

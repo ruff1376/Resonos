@@ -1,8 +1,8 @@
 package com.cosmus.resonos.service.badge;
 
 
-import com.cosmus.resonos.domain.admin.BadgeCondition;
-import com.cosmus.resonos.domain.user.UserActivitySummary;
+import com.cosmus.resonos.domain.admin.UserActivitySummary;
+import com.cosmus.resonos.domain.badge.BadgeCondition;
 import com.cosmus.resonos.mapper.badge.UserBadgeMapper;
 import com.cosmus.resonos.mapper.community.BoardPostMapper;
 import com.cosmus.resonos.mapper.community.CommentMapper;

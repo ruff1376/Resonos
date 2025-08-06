@@ -2,7 +2,7 @@ package com.cosmus.resonos.service.admin;
 
 import java.util.List;
 
-import com.cosmus.resonos.domain.user.UserRole;
+import com.cosmus.resonos.domain.admin.UserRole;
 
 public interface UserRoleService {
     // 전체 조회

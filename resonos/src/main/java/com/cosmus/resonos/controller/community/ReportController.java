@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.cosmus.resonos.domain.admin.Report;
+import com.cosmus.resonos.domain.community.Report;
 import com.cosmus.resonos.service.admin.ReportService;
 
 import lombok.extern.slf4j.Slf4j;

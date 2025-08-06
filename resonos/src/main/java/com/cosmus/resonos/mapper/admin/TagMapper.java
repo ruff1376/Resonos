@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.cosmus.resonos.domain.Vote.Tag;
+import com.cosmus.resonos.domain.admin.Tag;
 
 @Mapper
 public interface TagMapper {

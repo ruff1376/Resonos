@@ -1,6 +1,6 @@
 package com.cosmus.resonos.service.review;
 
-import com.cosmus.resonos.domain.Artist.ArtistMoodVote;
+import com.cosmus.resonos.domain.review.ArtistMoodVote;
 import com.cosmus.resonos.mapper.review.ArtistMoodVoteMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;

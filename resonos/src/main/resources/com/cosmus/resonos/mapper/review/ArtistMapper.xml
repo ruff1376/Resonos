@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.ArtistMapper">
+<mapper namespace="com.cosmus.resonos.mapper.review.ArtistMapper">
 
-  <resultMap id="ArtistResultMap" type="com.cosmus.resonos.domain.Artist">
+  <resultMap id="ArtistResultMap" type="com.cosmus.resonos.domain.review.Artist">
     <id property="id" column="id"/>
     <result property="name" column="name"/>
     <result property="profileImage" column="profile_image"/>

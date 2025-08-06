@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.cosmus.resonos.domain.admin.Badge;
+import com.cosmus.resonos.domain.badge.Badge;
 
 public interface BadgeService {
     // 전체 조회

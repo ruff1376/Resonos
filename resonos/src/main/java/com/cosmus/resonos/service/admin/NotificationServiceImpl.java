@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.controller.websocket.AlarmWebSocketController;
-import com.cosmus.resonos.domain.user.Notification;
+import com.cosmus.resonos.domain.admin.Notification;
 import com.cosmus.resonos.mapper.admin.NotificationMapper;
 
 @Service

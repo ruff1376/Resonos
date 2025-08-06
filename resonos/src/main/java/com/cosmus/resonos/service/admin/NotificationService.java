@@ -3,7 +3,7 @@ package com.cosmus.resonos.service.admin;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
-import com.cosmus.resonos.domain.user.Notification;
+import com.cosmus.resonos.domain.admin.Notification;
 
 import org.apache.ibatis.annotations.Param;
 

@@ -3,7 +3,7 @@ package com.cosmus.resonos.mapper.user;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
-import com.cosmus.resonos.domain.user.LikedPlaylist;
+import com.cosmus.resonos.domain.review.LikedPlaylist;
 
 @Mapper
 public interface LikedPlaylistMapper {

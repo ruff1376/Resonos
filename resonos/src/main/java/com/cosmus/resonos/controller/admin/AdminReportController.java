@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Pagination;
-import com.cosmus.resonos.domain.Album.AlbumReview;
-import com.cosmus.resonos.domain.Track.TrackReview;
-import com.cosmus.resonos.domain.admin.Report;
+import com.cosmus.resonos.domain.community.Report;
+import com.cosmus.resonos.domain.review.AlbumReview;
+import com.cosmus.resonos.domain.review.TrackReview;
 import com.cosmus.resonos.service.admin.ReportService;
 import com.cosmus.resonos.service.review.AlbumReviewService;
 import com.cosmus.resonos.service.review.TrackReviewService;

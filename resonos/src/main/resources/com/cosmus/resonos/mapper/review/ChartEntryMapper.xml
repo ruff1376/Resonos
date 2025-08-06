@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.ChartEntryMapper">
+<mapper namespace="com.cosmus.resonos.mapper.review.ChartEntryMapper">
 
-  <resultMap id="ChartEntryResultMap" type="com.cosmus.resonos.domain.ChartEntry">
+  <resultMap id="ChartEntryResultMap" type="com.cosmus.resonos.domain.review.ChartEntry">
     <id property="id" column="id"/>
     <result property="type" column="type"/>
     <result property="rank" column="rank"/>

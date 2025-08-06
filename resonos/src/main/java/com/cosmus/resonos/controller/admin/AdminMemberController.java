@@ -26,9 +26,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Pagination;
-import com.cosmus.resonos.domain.user.UserActivityLog;
+import com.cosmus.resonos.domain.admin.UserActivityLog;
+import com.cosmus.resonos.domain.admin.UserSanction;
 import com.cosmus.resonos.domain.user.UserAuth;
-import com.cosmus.resonos.domain.user.UserSanction;
 import com.cosmus.resonos.domain.user.Users;
 import com.cosmus.resonos.service.admin.UserActivityLogService;
 import com.cosmus.resonos.service.admin.UserSanctionService;

@@ -1,7 +1,7 @@
 package com.cosmus.resonos.service.badge;
 
-import com.cosmus.resonos.domain.admin.BadgeCondition;
-import com.cosmus.resonos.domain.user.UserActivitySummary;
+import com.cosmus.resonos.domain.admin.UserActivitySummary;
+import com.cosmus.resonos.domain.badge.BadgeCondition;
 
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;

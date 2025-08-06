@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.cosmus.resonos.domain.Pagination;
-import com.cosmus.resonos.domain.Track.Track;
+import com.cosmus.resonos.domain.review.Track;
 public interface TrackService {
     // 목록
     public List<Track> list() throws Exception;

@@ -1,4 +1,4 @@
-package com.cosmus.resonos.domain.Review;
+package com.cosmus.resonos.domain.review;
 
 import java.time.LocalDateTime;
 

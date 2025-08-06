@@ -3,7 +3,7 @@ package com.cosmus.resonos.mapper.admin;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
-import com.cosmus.resonos.domain.user.UserActivityLog;
+import com.cosmus.resonos.domain.admin.UserActivityLog;
 
 @Mapper
 public interface UserActivityLogMapper {

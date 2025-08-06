@@ -3,7 +3,7 @@ package com.cosmus.resonos.service.review;
 import java.util.List;
 import java.util.Map;
 
-import com.cosmus.resonos.domain.Track.TrackMoodVote;
+import com.cosmus.resonos.domain.review.TrackMoodVote;
 
 public interface TrackMoodVoteService {
     List<Map<String, Object>> getTrackMoodStats();

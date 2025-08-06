@@ -9,11 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.cosmus.resonos.domain.user.Notice;
-import com.cosmus.resonos.domain.user.Notification;
 import com.cosmus.resonos.service.admin.NoticeService;
 import com.cosmus.resonos.service.admin.NotificationService;
 import com.cosmus.resonos.domain.CustomUser;
+import com.cosmus.resonos.domain.admin.Notice;
+import com.cosmus.resonos.domain.admin.Notification;
 
 import lombok.extern.slf4j.Slf4j;
 

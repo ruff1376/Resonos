@@ -7,9 +7,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cosmus.resonos.domain.admin.Badge;
-import com.cosmus.resonos.domain.user.UserBadge;
-import com.cosmus.resonos.domain.user.UserBadgeLog;
+import com.cosmus.resonos.domain.admin.UserBadgeLog;
+import com.cosmus.resonos.domain.badge.Badge;
+import com.cosmus.resonos.domain.badge.UserBadge;
 import com.cosmus.resonos.mapper.admin.UserBadgeLogMapper;
 import com.cosmus.resonos.mapper.badge.BadgeMapper;
 import com.cosmus.resonos.mapper.badge.UserBadgeMapper;

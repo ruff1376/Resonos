@@ -3,7 +3,7 @@ package com.cosmus.resonos.mapper.admin;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.cosmus.resonos.domain.admin.BadgeCondition;
+import com.cosmus.resonos.domain.badge.BadgeCondition;
 
 import java.util.List;
 

@@ -3,7 +3,7 @@ package com.cosmus.resonos.mapper.admin;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
-import com.cosmus.resonos.domain.user.UserRole;
+import com.cosmus.resonos.domain.admin.UserRole;
 
 @Mapper
 public interface UserRoleMapper {

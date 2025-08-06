@@ -3,9 +3,9 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.BoardPostMapper">
+<mapper namespace="com.cosmus.resonos.mapper.community.BoardPostMapper">
 
-  <resultMap id="BoardPostResultMap" type="com.cosmus.resonos.domain.BoardPost">
+  <resultMap id="BoardPostResultMap" type="com.cosmus.resonos.domain.community.BoardPost">
     <id property="id" column="id"/>
     <result property="title" column="title"/>
     <result property="content" column="content"/>

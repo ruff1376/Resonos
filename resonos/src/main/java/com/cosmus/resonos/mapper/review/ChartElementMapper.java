@@ -3,7 +3,7 @@ package com.cosmus.resonos.mapper.review;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.cosmus.resonos.domain.Vote.ChartElement;
+import com.cosmus.resonos.domain.review.ChartElement;
 
 import java.util.Map;
 

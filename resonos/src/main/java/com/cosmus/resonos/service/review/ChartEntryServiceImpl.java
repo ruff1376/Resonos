@@ -1,40 +1,41 @@
-package com.cosmus.resonos.service.review;
+// package com.cosmus.resonos.service.review;
 
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+// import java.util.List;
 
-import com.cosmus.resonos.domain.Vote.ChartEntry;
-import com.cosmus.resonos.mapper.ChartEntryMapper;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.stereotype.Service;
 
-@Service
-public class ChartEntryServiceImpl implements ChartEntryService {
+// import com.cosmus.resonos.domain.Vote.ChartEntry;
+// import com.cosmus.resonos.mapper.ChartEntryMapper;
 
-    @Autowired
-    private ChartEntryMapper chartEntryMapper;
+// @Service
+// public class ChartEntryServiceImpl implements ChartEntryService {
 
-    @Override
-    public List<ChartEntry> list() throws Exception {
-        return chartEntryMapper.list();
-    }
+//     @Autowired
+//     private ChartEntryMapper chartEntryMapper;
 
-    @Override
-    public ChartEntry select(Long id) throws Exception {
-        return chartEntryMapper.select(id);
-    }
+//     @Override
+//     public List<ChartEntry> list() throws Exception {
+//         return chartEntryMapper.list();
+//     }
 
-    @Override
-    public boolean insert(ChartEntry entry) throws Exception {
-        return chartEntryMapper.insert(entry) > 0;
-    }
+//     @Override
+//     public ChartEntry select(Long id) throws Exception {
+//         return chartEntryMapper.select(id);
+//     }
 
-    @Override
-    public boolean update(ChartEntry entry) throws Exception {
-        return chartEntryMapper.update(entry) > 0;
-    }
+//     @Override
+//     public boolean insert(ChartEntry entry) throws Exception {
+//         return chartEntryMapper.insert(entry) > 0;
+//     }
 
-    @Override
-    public boolean delete(Long id) throws Exception {
-        return chartEntryMapper.delete(id) > 0;
-    }
-}
+//     @Override
+//     public boolean update(ChartEntry entry) throws Exception {
+//         return chartEntryMapper.update(entry) > 0;
+//     }
+
+//     @Override
+//     public boolean delete(Long id) throws Exception {
+//         return chartEntryMapper.delete(id) > 0;
+//     }
+// }

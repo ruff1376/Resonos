@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cosmus.resonos.domain.admin.Badge;
-import com.cosmus.resonos.domain.admin.BadgeCondition;
-import com.cosmus.resonos.domain.user.UserBadge;
-import com.cosmus.resonos.domain.user.UserBadgeLog;
+import com.cosmus.resonos.domain.admin.UserBadgeLog;
+import com.cosmus.resonos.domain.badge.Badge;
+import com.cosmus.resonos.domain.badge.BadgeCondition;
+import com.cosmus.resonos.domain.badge.UserBadge;
 import com.cosmus.resonos.service.admin.UserBadgeService;
 import com.cosmus.resonos.service.badge.BadgeConditionService;
 import com.cosmus.resonos.service.badge.BadgeService;
