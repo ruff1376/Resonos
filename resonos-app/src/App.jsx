@@ -3,15 +3,20 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AdminIndex from './pages/admin/Index';
 import Tailwindtest from './tailwind/test';
 import './styles/index.css'
+import LoginContextProvider from './contexts/LoginContextProvider';
+import Login from './pages/Login';
 
 const App = () => {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path='/admin' element={ <AdminIndex/>} />
-        <Route path='/test' element={ <Tailwindtest/>} />
-      </Routes>
+        <LoginContextProvider>
+          <Routes>
+            <Route path='/admin' element={ <AdminIndex/>} />
+            <Route path='/test' element={ <Tailwindtest/>} />
+            <Route path='/login' element={ <Login/>} />
+          </Routes>
+      </LoginContextProvider>
     </BrowserRouter>
   )
 }

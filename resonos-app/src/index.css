@@ -37,6 +37,8 @@ body::before {
   opacity: 0.1;
 }
 
+button {cursor: pointer;}
+
 
 .site-header,
 .site-header .submenu-item,
