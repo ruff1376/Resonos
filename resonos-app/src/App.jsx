@@ -12,12 +12,12 @@ const App = () => {
   return (
     <BrowserRouter>
       <LoginContextProvider>
-         <Routes>
-            <Route path='/' element={ <Home/>} />
-            <Route path='/admin' element={ <AdminIndex/>} />
-            <Route path='/test' element={ <Tailwindtest/>} />
-            <Route path='/login' element={ <Login/>} />
-         </Routes>
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/admin' element={<AdminIndex />} />
+          <Route path='/test' element={<Tailwindtest />} />
+          <Route path='/login' element={<Login />} />
+        </Routes>
       </LoginContextProvider>
     </BrowserRouter>
   )
