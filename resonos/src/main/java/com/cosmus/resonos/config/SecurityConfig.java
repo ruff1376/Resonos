@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -21,6 +22,9 @@ import com.cosmus.resonos.security.LoginFailureHandler;
 import com.cosmus.resonos.security.LoginSuccessHandler;
 import com.cosmus.resonos.security.OAuth2FailureHandler;
 import com.cosmus.resonos.security.OAuth2SuccessHandler;
+import com.cosmus.resonos.security.filter.JwtAuthenticationFilter;
+import com.cosmus.resonos.security.filter.JwtRequestFilter;
+import com.cosmus.resonos.security.provider.JwtProvider;
 import com.cosmus.resonos.service.CustomOAuth2UserService;
 import com.cosmus.resonos.service.CustomOIDCUserService;
 import com.cosmus.resonos.service.UserDetailServiceImpl;
@@ -61,9 +65,12 @@ public class SecurityConfig {
     @Autowired
     private OAuth2FailureHandler oauth2FailureHandler;
 
+    @Autowired
+    private JwtProvider jwtProvider;
+
     // 🔐 스프링 시큐리티 설정 메소드
 	@Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, OAuth2SuccessHandler oauth2SuccessHandler) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, OAuth2SuccessHandler oauth2SuccessHandler, AuthenticationManager authenticationManager) throws Exception {
 
         // http.userDetailsService(userDetailServiceImpl);
         // // ✅ 인가 설정
@@ -75,21 +82,36 @@ public class SecurityConfig {
         //                         .anyRequest().permitAll()
         //                         );
 
+        // 폼 기반 로그인 비활성화
+		http.formLogin(login ->login.disable());
 
+		// HTTP 기본 인증 비활성화
+		http.httpBasic(basic ->basic.disable());
+
+		// CSRF(Cross-Site Request Forgery) 공격 방어 기능 비활성화
+		http.csrf(csrf ->csrf.disable());
+
+        // 필터 설정
+		// ✅ JWT 요청 필터 설정 1️⃣
+		// ✅ JWT 인증 필터 설정 2️⃣
+		http.addFilterAt( new JwtAuthenticationFilter(authenticationManager, jwtProvider)
+                        , UsernamePasswordAuthenticationFilter.class )
+            .addFilterBefore(new JwtRequestFilter(authenticationManager, jwtProvider)
+                        , UsernamePasswordAuthenticationFilter.class);
 
         // 🔐 폼 로그인
         // http.formLogin(login -> login.permitAll());
 
         // ✅ 커스텀 로그인 페이지
-        http.formLogin(login -> login
-                                    .usernameParameter("username")
-                                    .passwordParameter("password")
-                                    .loginPage("/login")                   // 로그인 페이지 경로
-                                    .loginProcessingUrl("/login") // 로그인 요청 경로
-                                    .successHandler(loginSuccessHandler)      // 로그인 성공 핸들러 설정
-                                    .failureHandler(loginFailureHandler)      // 로그인 실패 핸들러 설정
+        // http.formLogin(login -> login
+        //                             .usernameParameter("username")
+        //                             .passwordParameter("password")
+        //                             .loginPage("/login")                   // 로그인 페이지 경로
+        //                             .loginProcessingUrl("/login") // 로그인 요청 경로
+        //                             .successHandler(loginSuccessHandler)      // 로그인 성공 핸들러 설정
+        //                             .failureHandler(loginFailureHandler)      // 로그인 실패 핸들러 설정
 
-                        );
+        //                 );
 
         http.oauth2Login(login -> login
                                     .loginPage("/login")

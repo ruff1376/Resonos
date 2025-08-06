@@ -5,8 +5,13 @@ export const join = data => api.post('/users', data);
 
 // 로그인
 export const login = (username, password) => {
-  return api.get(`/login?username=${username}&password=${password}`)
-}
+  const data = { username, password }
+  return api.post('/login', data, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+};
 
 // 회원 정보
 export const info = () => api.get(`/users/info`)
