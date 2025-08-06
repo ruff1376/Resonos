@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import '/public/css/header.css'; // or adjust path according to setup
+import './Header.css'; // or adjust path according to setup
 
 const Header = ({ isAuthenticated = false, currentUser = {} }) => {
     const location = useLocation();
