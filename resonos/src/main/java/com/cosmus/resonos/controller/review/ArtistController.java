@@ -62,7 +62,7 @@ public class ArtistController {
 
     @GetMapping
     public ResponseEntity<?> artistInfo(@RequestParam("id") String artistId) {
-
+        // TODO : JWT 에서 유저 아이디 LONG 값 가져와서 파라미터로 넣어야함
         ArtistPageDTO artistPageDTO = combinedArtistService.artistPageGet(artistId, 1L);
 
         return new ResponseEntity<>(artistPageDTO, HttpStatus.OK);

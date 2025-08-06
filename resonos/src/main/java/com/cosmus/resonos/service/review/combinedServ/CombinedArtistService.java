@@ -1,6 +1,7 @@
 package com.cosmus.resonos.service.review.combinedServ;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,6 +93,12 @@ public class CombinedArtistService {
         }
 
         return ArtistPageDTO;
+    }
+
+    // 아티스트 페이지 좋아요 토글
+    public Map<String,Object> toggleArtistLike(Long userId, String artistId) {
+        // TODO : 여기부터
+        return null;
     }
 
 }
