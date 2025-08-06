@@ -1,6 +1,35 @@
-import React from 'react'
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import '/public/css/header.css'; // or adjust path according to setup
 
 const Header = ({ isAuthenticated = false, currentUser = {} }) => {
+    const location = useLocation();
+
+    // 로그인 버튼 클릭 시 현재 페이지 기억
+    useEffect(() => {
+        const loginButton = document.getElementById('login');
+        if (loginButton) {
+            loginButton.addEventListener('click', e => {
+                e.preventDefault();
+                sessionStorage.setItem('returnTo', location.pathname + location.search);
+                window.location.href = '/login';
+            });
+        }
+    }, [location]);
+
+    // 검색 유효성 검사
+    const handleSearchSubmit = (e) => {
+        const input = document.getElementById("searchInput");
+        const trimmed = input.value.trim();
+
+        if (trimmed.length === 0) {
+            e.preventDefault();
+            alert("검색어를 입력하세요.");
+        } else {
+            input.value = trimmed;
+        }
+    };
+
     return (
         <header className="site-header">
             <nav className="navbar navbar-expand-lg py-0">
@@ -98,7 +127,6 @@ const Header = ({ isAuthenticated = false, currentUser = {} }) => {
                             )}
                         </div>
                     </div>
-
                 </div>
             </nav>
         </header>
