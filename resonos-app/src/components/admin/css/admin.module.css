@@ -1,0 +1,227 @@
+/* 퀵 네비 */
+.nav-text { 
+  color: var(--main-color);
+  font-size: 1.6rem;
+}
+
+/* 헤더 내비 */
+.navbar {
+  background: #181C23 !important;
+  border-bottom: 1px solid #222;
+}
+.navbar-brand span {
+  color: #D4B97F;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+.navbar-nav .nav-link {
+  color: #D4B97F !important;
+}
+.navbar-nav .nav-link.active, .navbar-nav .nav-link:focus, .navbar-nav .nav-link:hover {
+  color: #fffbe6 !important;
+}
+
+
+/* 카드 공통 스타일 */
+.resonos-card {
+  background: var(--background-color);
+  border: 1.5px solid var(--main-color);
+  border-radius: 1.6rem;
+  padding: 2rem;
+  color: #fffbe6;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* 카드 안의 타이틀 텍스트 (골드색) */
+.card-title {
+  color: var(--main-color);
+  font-size: 2.0rem;
+}
+/* 카드 안의 타이틀 텍스트(작은거) */
+.card-sm-title { 
+    color: var(--main-color);
+  font-size: 1.6rem;
+}
+
+/* 카드 안의 숫자 텍스트 */
+.card-value {
+  font-size: 2.4rem;
+  font-weight: bold;
+  color: #fffbe6;
+}
+
+/* 공통 버튼 - 골드 배경 */
+.btn-gold {
+  background: var(--main-color);
+  color: #181C23;
+  font-weight: bold;
+  border-radius: 30px;
+  border: none;
+  padding: 0.4rem 1.2rem;
+}
+
+/* 공통 버튼 - 골드 테두리 */
+.btn-outline-gold {
+  background: none;
+  color: var(--main-color);
+  border: 1.5px solid var(--main-color);
+  font-weight: bold;
+  border-radius: 30px;
+  padding: 0.4rem 1.2rem;
+}
+
+/* 공통 배경 다크 카드 */
+.bg-resonos-dark {
+  background: var(--background-color);
+}
+
+/* 공통 글자색 - 연금색 */
+.text-light-gold {
+  color: #fffbe6 !important;
+}
+.api-key-input {
+  background: var(--background-color);
+  color: #fffbe6;
+  border: 1.5px solid var(--main-color);
+  border-radius: 12px;
+  padding: 10px 16px;
+  margin-bottom: 8px;
+  width: 320px;
+  display: inline-block;
+}
+
+.admin-content {
+  display: flex;
+  gap: 40px;
+  padding: 20px 0;
+}
+.badge-list {
+  flex-grow: 1;
+}
+.badge-add-form {
+  width: 340px;
+  background: #23262e;
+  border-radius: 12px;
+  padding: 24px 20px 20px 20px;
+  color: #fffbe6;
+  box-shadow: 0 2px 16px rgba(24,28,35,0.08);
+}
+.edit-form-wrap {
+  background: #23262e;
+  border-radius: 10px;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 16px rgba(24,28,35,0.08);
+  padding: 12px 16px 8px 16px;
+}
+.btn-xs {
+  font-size: 0.92em;
+  padding: 4px 12px;
+}
+
+.badge-table {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #23262e;
+  margin-bottom: 32px;
+  box-shadow: 0 2px 16px rgba(24,28,35,0.08);
+}
+
+.badge-table-header, .badge-table-row {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  border-bottom: 1px solid #292d36;
+  padding: 0 12px;
+}
+.badge-table-header {
+  background: #191c22;
+  color: #D4B97F;
+  font-weight: bold;
+  font-size: 1.09em;
+}
+.badge-table-row:last-child {
+  border-bottom: none;
+}
+.badge-table-row {
+  background: #23262e;
+  color: #fffbe6;
+  transition: background 0.15s;
+}
+.badge-table-row:hover {
+  background: #262a32;
+}
+.badge-col {
+  padding: 8px 6px;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.badge-col-icon { flex-basis: 54px; min-width: 54px; max-width: 54px; }
+.badge-col-name { flex-basis: 18%; min-width: 90px; }
+.badge-col-desc { flex-basis: 32%; min-width: 140px; }
+.badge-col-cond { flex-basis: 18%; min-width: 80px; }
+.badge-col-action { flex-basis: 18%; min-width: 110px; }
+.badge-icon-img {
+  width: 40px; height: 40px; object-fit: contain; border-radius: 8px; background: #181C23;
+  border: 1px solid #292d36;
+}
+.text-secondary {
+  color: #888 !important;
+}
+
+
+/* 투표 통계 테이블 스타일 (vote_stats_track) */
+.vote-table-header, .vote-table-row {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+.vote-table-header {
+  background: #444;
+  color: #ffde7a;
+  font-weight: bold;
+  border-radius: 8px 8px 0 0;
+  padding: 10px 0;
+}
+.vote-table-row {
+  background: #222;
+  color: #fff;
+  border-bottom: 1px solid #333;
+  padding: 10px 0;
+  transition: background 0.2s;
+}
+.track-group-start {
+  border-top: 2px solid #D4B97F;
+  margin-top: 16px;
+  background: #2a2320;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 2px 6px #0002;
+}
+.track-group-start.first-track {
+  margin-top: 0;
+  border-radius: 8px 8px 0 0;
+}
+.vote-table-row:last-child {
+  border-radius: 0 0 8px 8px;
+  border-bottom: none;
+}
+.vote-col-id    { flex-basis: 22%; min-width: 120px; }
+.vote-col-title { flex-basis: 28%; min-width: 100px; }
+.vote-col-mood  { flex-basis: 30%; min-width: 90px; }
+.vote-col-count { flex-basis: 10%; min-width: 60px; }
+.vote-col-more  { flex-basis: 10%; min-width: 60px; text-align: right; }
+.more-moods { display: none; flex-direction: column; background: #191818; }
+.vote-table-row .btn-more { font-size: 13px; padding: 2px 7px; margin-left: 8px; }
+.text-secondary {
+  color: #888 !important;
+}
+
+
+
+
+
+/*  */
