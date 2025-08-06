@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.review.TrackMoodVoteMapper">
+
+    <!-- TrackMoodVote 도메인 매핑 -->
+    <resultMap id="TrackMoodVoteMap" type="com.cosmus.resonos.domain.Track.TrackMoodVote">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="trackId" column="track_id"/>
+        <result property="mood" column="mood"/>
+    </resultMap>
+
+    <!-- 트랙별 태그/분위기 투표 현황 (trackId, mood, count) -->
+    <select id="getTrackMoodStats" resultType="map">
+        SELECT
+            t.track_id,
+            tr.title AS track_title,
+            tg.name AS mood_name,
+            COUNT(*) AS vote_count
+        FROM track_mood_vote t
+        JOIN tag tg ON t.mood = tg.id
+        JOIN track tr ON t.track_id = tr.id
+        GROUP BY t.track_id, tr.title, tg.name
+        ORDER BY t.track_id, vote_count DESC
+    </select>
+
+    <!-- 트랙 투표 목록 (TrackMoodVote 도메인 객체로 반환) -->
+    <select id="findAll" resultMap="TrackMoodVoteMap">
+        SELECT id, user_id, track_id, mood
+        FROM track_mood_vote
+        ORDER BY id DESC
+    </select>
+
+    <!-- 트랙별 투표 상세 (TrackMoodVote 도메인 객체로 반환) -->
+    <select id="findByTrackId" resultMap="TrackMoodVoteMap">
+        SELECT id, user_id, track_id, mood
+        FROM track_mood_vote
+        WHERE track_id = #{trackId}
+        ORDER BY id DESC
+    </select>
+
+    <select id="findByUserAndTrack" resultMap="TrackMoodVoteMap">
+        SELECT * FROM track_mood_vote
+        WHERE user_id = #{userId} AND track_id = #{trackId}
+        LIMIT 1
+    </select>
+
+    <insert id="insert" parameterType="TrackMoodVote">
+        INSERT INTO track_mood_vote (user_id, track_id, mood)
+        VALUES (#{userId}, #{trackId}, #{mood})
+    </insert>
+
+    <update id="update" parameterType="TrackMoodVote">
+        UPDATE track_mood_vote
+        SET mood = #{mood}
+        WHERE user_id = #{userId} AND track_id = #{trackId}
+    </update>
+
+</mapper>

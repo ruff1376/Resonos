@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
-import com.cosmus.resonos.domain.Notification;
-import com.cosmus.resonos.domain.Notice;
+import com.cosmus.resonos.domain.user.Notice;
+import com.cosmus.resonos.domain.user.Notification;
 
 @Controller
 public class AlarmWebSocketController {

@@ -6,8 +6,9 @@ import org.springframework.stereotype.Component;
 import com.cosmus.resonos.domain.*;
 import com.cosmus.resonos.domain.Album.AlbumReview;
 import com.cosmus.resonos.domain.Track.TrackReview;
-import com.cosmus.resonos.mapper.AlbumReviewMapper;
-import com.cosmus.resonos.mapper.TrackReviewMapper;
+import com.cosmus.resonos.domain.user.Users;
+import com.cosmus.resonos.mapper.review.AlbumReviewMapper;
+import com.cosmus.resonos.mapper.review.TrackReviewMapper;
 
 import lombok.extern.slf4j.Slf4j;
 

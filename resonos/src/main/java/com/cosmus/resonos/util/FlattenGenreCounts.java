@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.cosmus.resonos.domain.GenreCount;
+import com.cosmus.resonos.domain.user.GenreCount;
 
 public class FlattenGenreCounts {
 

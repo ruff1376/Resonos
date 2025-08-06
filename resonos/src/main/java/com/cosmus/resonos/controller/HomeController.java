@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.cosmus.resonos.domain.CustomUser;
-import com.cosmus.resonos.domain.Users;
-import com.cosmus.resonos.service.UserService;
+import com.cosmus.resonos.domain.user.Users;
+import com.cosmus.resonos.service.user.UserService;
 import com.cosmus.resonos.util.EmailService;
 import com.cosmus.resonos.util.RandomPassword;
 import com.cosmus.resonos.validation.EmailCheck;
