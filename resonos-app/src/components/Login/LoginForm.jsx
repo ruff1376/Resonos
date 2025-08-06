@@ -1,10 +1,16 @@
 import { useContext } from 'react'
 import { LoginContext } from '../../contexts/LoginContextProvider'
+import { useLocation, useParams } from 'react-router-dom'
+import './LoginForm.css'
 
 const LoginForm = () => {
 
   // 🚚 LoginContext - 로그인 함수
   const {login} = useContext(LoginContext)
+
+  const location = useLocation()
+  const query = new URLSearchParams(location.search)
+  const error = query.get("error")
 
   const onLogin = e => {
     e.preventDefault()
@@ -29,7 +35,7 @@ const LoginForm = () => {
         <input
           type="text"
           name="username"
-          className="form-control mb-3"
+          className="form-control mb-3 w-80"
           placeholder="아이디"
           required
         />
@@ -37,20 +43,22 @@ const LoginForm = () => {
         <input
           type="password"
           name="password"
-          className="form-control mb-3"
+          className="form-control mb-3 w-80"
           placeholder="비밀번호"
           required
         />
 
-        {/* {error && (
+        {error && (
           <p className="fail-vali">
             {error === 'duplicate_email'
               ? '이미 가입된 이메일입니다.'
-              : '아이디 또는 비밀번호가 잘못되었습니다.'}
+              : error === 'true'
+              ? '아이디 또는 비밀번호가 잘못되었습니다.'
+              : ''}
           </p>
-        )} */}
+        )}
 
-        <div className="form-check text-start my-5 d-flex justify-content-evenly">
+        <div className="checkbox-area">
           <div className="item">
             <input
               className="form-check-input"
@@ -80,7 +88,7 @@ const LoginForm = () => {
           로그인
         </button>
 
-        <div className="d-flex justify-content-center column-gap-4">
+        <div className="find-area">
           <a href="/find-id" className="login-link d-block mt-2">
             아이디 찾기
           </a>
@@ -93,21 +101,21 @@ const LoginForm = () => {
 
         <button
           type="button"
-          className="btn social-btn w-100 mb-2"
+          className="btn social-btn"
           onClick={() => (window.location.href = '/oauth2/authorization/google')}
         >
           Google로 로그인
         </button>
         <button
           type="button"
-          className="btn social-btn w-100 mb-2"
+          className="btn social-btn"
           onClick={() => (window.location.href = '/oauth2/authorization/kakao')}
         >
           Kakao로 로그인
         </button>
         <button
           type="button"
-          className="btn social-btn w-100 mb-3"
+          className="btn social-btn"
           onClick={() => (window.location.href = '/oauth2/authorization/naver')}
         >
           Naver로 로그인

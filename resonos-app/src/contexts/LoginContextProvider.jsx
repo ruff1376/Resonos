@@ -63,8 +63,7 @@ const LoginContextProvider = ({children}) => {
         Swal.alert(`로그인 성공`, `메인 화면으로 이동합니다.`, `success`, () => {navigate('/')})
       }
     } catch (e) {
-      console.error(e)
-      Swal.alert(`로그인 실패`, `아이디 또는 비밀번호가 일치하지 않습니다.`, `error`, console.log('로그인 실패'))
+      navigate('/login?error=true')
     }
   }
 
