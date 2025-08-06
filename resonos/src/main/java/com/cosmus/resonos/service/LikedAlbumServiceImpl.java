@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cosmus.resonos.domain.LikedAlbum;
+import com.cosmus.resonos.domain.Album.LikedAlbum;
 import com.cosmus.resonos.mapper.LikedAlbumMapper;
 
 import lombok.RequiredArgsConstructor;

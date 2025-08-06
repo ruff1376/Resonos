@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.cosmus.resonos.domain.LikedTrack;
+import com.cosmus.resonos.domain.Track.LikedTrack;
 import com.cosmus.resonos.service.LikedTrackService;
 
 import lombok.extern.slf4j.Slf4j;

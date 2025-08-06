@@ -6,12 +6,12 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cosmus.resonos.domain.Album;
-import com.cosmus.resonos.domain.AlbumReview;
-import com.cosmus.resonos.domain.AlbumScore;
-import com.cosmus.resonos.domain.Reviewer;
-import com.cosmus.resonos.domain.TrackReview;
 import com.cosmus.resonos.domain.Users;
+import com.cosmus.resonos.domain.Album.Album;
+import com.cosmus.resonos.domain.Album.AlbumReview;
+import com.cosmus.resonos.domain.Album.AlbumScore;
+import com.cosmus.resonos.domain.Review.Reviewer;
+import com.cosmus.resonos.domain.Track.TrackReview;
 import com.cosmus.resonos.mapper.AlbumReviewMapper;
 import com.cosmus.resonos.validation.ReviewForm;
 

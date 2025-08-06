@@ -1,8 +1,8 @@
 package com.cosmus.resonos.mapper;
 
-import com.cosmus.resonos.domain.TrackReview;
-import com.cosmus.resonos.domain.TrackScore;
 import com.cosmus.resonos.domain.Users;
+import com.cosmus.resonos.domain.Track.TrackReview;
+import com.cosmus.resonos.domain.Track.TrackScore;
 import com.cosmus.resonos.validation.ReviewForm;
 
 import org.apache.ibatis.annotations.Mapper;

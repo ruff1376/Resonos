@@ -11,9 +11,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.cosmus.resonos.domain.Album;
-import com.cosmus.resonos.domain.Artist;
-import com.cosmus.resonos.domain.Track;
+import com.cosmus.resonos.domain.Album.Album;
+import com.cosmus.resonos.domain.Artist.Artist;
+import com.cosmus.resonos.domain.Track.Track;
 
 @Component
 public class SpotifyApiClient {

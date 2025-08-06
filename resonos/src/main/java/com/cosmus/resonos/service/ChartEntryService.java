@@ -1,7 +1,8 @@
 package com.cosmus.resonos.service;
 
 import java.util.List;
-import com.cosmus.resonos.domain.ChartEntry;
+
+import com.cosmus.resonos.domain.Vote.ChartEntry;
 
 public interface ChartEntryService {
     // 전체 조회

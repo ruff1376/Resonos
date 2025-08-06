@@ -2,7 +2,8 @@ package com.cosmus.resonos.mapper;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
-import com.cosmus.resonos.domain.ChartEntry;
+
+import com.cosmus.resonos.domain.Vote.ChartEntry;
 
 @Mapper
 public interface ChartEntryMapper {

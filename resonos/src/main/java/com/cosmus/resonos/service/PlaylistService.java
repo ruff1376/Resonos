@@ -9,7 +9,7 @@ import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.PlaylistDTO;
 import com.cosmus.resonos.domain.PlaylistDetail;
-import com.cosmus.resonos.domain.Track;
+import com.cosmus.resonos.domain.Track.Track;
 
 public interface PlaylistService {
     // 전체 조회

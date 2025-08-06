@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.cosmus.resonos.domain.Tag;
+import com.cosmus.resonos.domain.Vote.Tag;
 import com.cosmus.resonos.mapper.TagMapper;
 
 @Service

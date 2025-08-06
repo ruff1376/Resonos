@@ -1,4 +1,4 @@
-package com.cosmus.resonos.domain;
+package com.cosmus.resonos.domain.Vote;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

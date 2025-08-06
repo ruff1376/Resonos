@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.cosmus.resonos.domain.ArtistFollow;
+import com.cosmus.resonos.domain.Artist.ArtistFollow;
 import com.cosmus.resonos.service.ArtistFollowService;
 import com.cosmus.resonos.service.ArtistService;
 

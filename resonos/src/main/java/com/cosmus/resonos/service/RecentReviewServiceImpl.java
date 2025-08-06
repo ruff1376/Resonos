@@ -1,6 +1,6 @@
 package com.cosmus.resonos.service;
 
-import com.cosmus.resonos.domain.RecentReview;
+import com.cosmus.resonos.domain.Review.RecentReview;
 import com.cosmus.resonos.mapper.RecentReviewMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

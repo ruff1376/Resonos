@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.cosmus.resonos.domain.Album;
 import com.cosmus.resonos.domain.CustomUser;
-import com.cosmus.resonos.domain.LikedAlbum;
-import com.cosmus.resonos.domain.Track;
+import com.cosmus.resonos.domain.Album.Album;
+import com.cosmus.resonos.domain.Album.LikedAlbum;
+import com.cosmus.resonos.domain.Track.Track;
 import com.cosmus.resonos.service.AlbumService;
 import com.cosmus.resonos.service.LikedAlbumService;
 import com.cosmus.resonos.service.TrackService;

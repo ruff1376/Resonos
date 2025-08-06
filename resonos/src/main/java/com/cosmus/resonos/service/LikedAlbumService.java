@@ -1,7 +1,8 @@
 package com.cosmus.resonos.service;
 
 import java.util.List;
-import com.cosmus.resonos.domain.LikedAlbum;
+
+import com.cosmus.resonos.domain.Album.LikedAlbum;
 
 public interface LikedAlbumService {
     // 전체 조회

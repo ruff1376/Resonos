@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.cosmus.resonos.domain.PlaylistDetail;
-import com.cosmus.resonos.domain.Track;
+import com.cosmus.resonos.domain.Track.Track;
 
 public interface PlaylistDetailService {
     // 전체 조회

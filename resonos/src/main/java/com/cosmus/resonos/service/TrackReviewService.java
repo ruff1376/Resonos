@@ -5,9 +5,9 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
-import com.cosmus.resonos.domain.TrackReview;
-import com.cosmus.resonos.domain.TrackScore;
 import com.cosmus.resonos.domain.Users;
+import com.cosmus.resonos.domain.Track.TrackReview;
+import com.cosmus.resonos.domain.Track.TrackScore;
 import com.cosmus.resonos.validation.ReviewForm;
 
 @Service

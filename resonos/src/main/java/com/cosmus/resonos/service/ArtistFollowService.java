@@ -1,7 +1,8 @@
 package com.cosmus.resonos.service;
 
 import java.util.List;
-import com.cosmus.resonos.domain.ArtistFollow;
+
+import com.cosmus.resonos.domain.Artist.ArtistFollow;
 
 public interface ArtistFollowService {
     // 전체 조회

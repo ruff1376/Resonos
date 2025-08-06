@@ -4,7 +4,8 @@ import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.cosmus.resonos.domain.ArtistFollow;
+
+import com.cosmus.resonos.domain.Artist.ArtistFollow;
 import com.cosmus.resonos.mapper.ArtistFollowMapper;
 
 @Service

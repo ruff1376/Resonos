@@ -1,4 +1,4 @@
-package com.cosmus.resonos.domain;
+package com.cosmus.resonos.domain.Track;
 
 import java.util.Date;
 import lombok.Data;

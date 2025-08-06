@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.cosmus.resonos.domain.AlbumReview;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.Report;
-import com.cosmus.resonos.domain.TrackReview;
+import com.cosmus.resonos.domain.Album.AlbumReview;
+import com.cosmus.resonos.domain.Track.TrackReview;
 import com.cosmus.resonos.service.ReportService;
 import com.cosmus.resonos.service.TrackReviewService;
 

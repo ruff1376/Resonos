@@ -2,7 +2,7 @@ package com.cosmus.resonos.service;
 
 import java.util.List;
 
-import com.cosmus.resonos.domain.MoodStat;
+import com.cosmus.resonos.domain.Vote.MoodStat;
 
 public interface MoodStatService {
     

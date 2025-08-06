@@ -31,7 +31,7 @@ import com.cosmus.resonos.domain.Playlist;
 import com.cosmus.resonos.domain.PlaylistDTO;
 import com.cosmus.resonos.domain.PlaylistDetail;
 import com.cosmus.resonos.domain.PublicUserDto;
-import com.cosmus.resonos.domain.Track;
+import com.cosmus.resonos.domain.Track.Track;
 import com.cosmus.resonos.service.PlaylistService;
 import com.cosmus.resonos.service.UserService;
 import com.cosmus.resonos.util.UploadImage;

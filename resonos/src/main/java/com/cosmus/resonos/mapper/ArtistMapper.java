@@ -6,7 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.cosmus.resonos.domain.Artist;
+import com.cosmus.resonos.domain.Artist.Artist;
 
 @Mapper
 public interface ArtistMapper {
