@@ -1,5 +1,6 @@
 package com.cosmus.resonos.controller.user;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -46,7 +47,6 @@ import com.cosmus.resonos.service.review.TrackService;
 import com.cosmus.resonos.service.user.PlaylistService;
 import com.cosmus.resonos.service.user.UserFollowService;
 import com.cosmus.resonos.service.user.UserService;
-import com.cosmus.resonos.util.EmailService;
 import com.cosmus.resonos.util.FlattenGenreCounts;
 import com.cosmus.resonos.util.UploadImage;
 import com.cosmus.resonos.validation.EmailCheck;
@@ -59,7 +59,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/users")
 public class UserController {
 
@@ -102,11 +102,10 @@ public class UserController {
    * @throws Exception
    */
   @GetMapping("/mypage")
-  public String mypage(
-    Model model,
+  public ResponseEntity<?> mypage(
     @AuthenticationPrincipal CustomUser loginUser
     ) throws Exception {
-    if(loginUser == null) return "redirect:/login";
+    if(loginUser == null) return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
     // 유저 정보
     Users user = userService.select(loginUser.getUsername());
     // 내 플레이 리스트
@@ -135,23 +134,26 @@ public class UserController {
     // 총 리뷰 수
     UsersTotalLikes utl = userService.usersTotalLikes(loginUser.getId());
 
-    model.addAttribute("utl", utl);
-    model.addAttribute("countAllReview", countAllReview);
-    model.addAttribute("chartData", chartData);
-    model.addAttribute("badgeCount", badgeCount);
-    model.addAttribute("badgeList", badgeList);
-    model.addAttribute("currentBadge", currentBadge);
-    model.addAttribute("artistList", artistList);
-    model.addAttribute("trackList", trackList);
-    model.addAttribute("albumList", albumList);
-    model.addAttribute("loginUser", loginUser);
-    model.addAttribute("playlists", playlists);
-    model.addAttribute("user", user);
-    model.addAttribute("followerCount", followerCount);
-    model.addAttribute("followCount", followCount);
-    model.addAttribute("email", user.getEmail());
-    model.addAttribute("isOwner", true);
-    return "user/mypage";
+    Map<String, Object> response = new HashMap<>();
+
+    response.put("utl", utl);
+    response.put("countAllReview", countAllReview);
+    response.put("chartData", chartData);
+    response.put("badgeCount", badgeCount);
+    response.put("badgeList", badgeList);
+    response.put("currentBadge", currentBadge);
+    response.put("artistList", artistList);
+    response.put("trackList", trackList);
+    response.put("albumList", albumList);
+    response.put("loginUser", loginUser);
+    response.put("playlists", playlists);
+    response.put("user", user);
+    response.put("followerCount", followerCount);
+    response.put("followCount", followCount);
+    response.put("email", user.getEmail());
+    response.put("isOwner", true);
+
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   /**
