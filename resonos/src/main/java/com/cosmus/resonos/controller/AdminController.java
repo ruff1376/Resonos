@@ -1,22 +1,19 @@
 package com.cosmus.resonos.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.cosmus.resonos.service.BoardPostService;
 import com.cosmus.resonos.service.ReportService;
 import com.cosmus.resonos.service.UserService;
 
-import groovy.util.logging.Slf4j;
+import java.util.HashMap;
+import java.util.Map;
 
-
-
-@Slf4j
-@Controller
-@RequestMapping("/admin")
+@RestController
+@RequestMapping("/api/admin")
 public class AdminController {
 
     @Autowired
@@ -24,22 +21,19 @@ public class AdminController {
     @Autowired private UserService userService;
     @Autowired private BoardPostService boardPostService;
 
-    @GetMapping({"", "/"})
-    public String adminMain(Model model) throws Exception {
-        int memberCount = userService.countAll(); // 실제 값
-        int postCount = boardPostService.countAll(); // 실제 값
-        int reportCount = reportService.countAll(); // 실제 값
-        int blindCount = reportService.countByBlind(); // 실제 값
+    @GetMapping("/stats")
+    public Map<String, Integer> getAdminStats() throws Exception {
+        int memberCount = userService.countAll();
+        int postCount = boardPostService.countAll();
+        int reportCount = reportService.countAll();
+        int blindCount = reportService.countByBlind();
 
-        model.addAttribute("memberCount", memberCount); 
-        model.addAttribute("postCount", postCount);
-        model.addAttribute("reportCount", reportCount); // 나중에 board post의 status로 변경 필요
-        model.addAttribute("blindCount", blindCount);
+        Map<String, Integer> stats = new HashMap<>();
+        stats.put("memberCount", memberCount);
+        stats.put("postCount", postCount);
+        stats.put("reportCount", reportCount);
+        stats.put("blindCount", blindCount);
 
-        return "admin/index";
+        return stats;
     }
-
-
-
-
 }
