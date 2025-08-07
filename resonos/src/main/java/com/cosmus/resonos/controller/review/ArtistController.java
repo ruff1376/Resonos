@@ -7,25 +7,19 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.cosmus.resonos.domain.CustomUser;
-import com.cosmus.resonos.domain.review.Album;
 import com.cosmus.resonos.domain.review.Artist;
 import com.cosmus.resonos.domain.review.ArtistFollow;
 import com.cosmus.resonos.domain.review.ArtistMoodVote;
 import com.cosmus.resonos.domain.review.MoodStat;
-import com.cosmus.resonos.domain.review.RecentReview;
-import com.cosmus.resonos.domain.review.Track;
-import com.cosmus.resonos.domain.user.Users;
+import com.cosmus.resonos.domain.review.responseDTO.ArtistPageDTO;
 import com.cosmus.resonos.service.admin.TagService;
 import com.cosmus.resonos.service.review.AlbumService;
 import com.cosmus.resonos.service.review.ArtistMoodVoteService;
@@ -33,13 +27,14 @@ import com.cosmus.resonos.service.review.ArtistService;
 import com.cosmus.resonos.service.review.MoodStatService;
 import com.cosmus.resonos.service.review.RecentReviewService;
 import com.cosmus.resonos.service.review.TrackService;
+import com.cosmus.resonos.service.review.combinedServ.CombinedArtistService;
 import com.cosmus.resonos.service.user.ArtistFollowService;
 
 import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/artists")
 public class ArtistController {
 
@@ -61,56 +56,69 @@ public class ArtistController {
     @Autowired
     private RecentReviewService recentReviewService;
 
-    // 아티스트 화면
+    @Autowired
+    private CombinedArtistService combinedArtistService;
+
+
     @GetMapping
-    public String artistsInfo(@RequestParam("id") String id, Model model,
-                                @AuthenticationPrincipal CustomUser user) throws Exception {
-        Users loginUser = null;
-        if( user != null ) {
-            // 로그인시에 유저정보 가져오기
-            loginUser = user.getUser();
-            model.addAttribute("loginUser", loginUser);
-            // 팔로우 여부 체크
-            boolean isArtistFollowed = artistFollowService.isLikedByUser(loginUser.getId(), id);
-            model.addAttribute("isArtistFollowed", isArtistFollowed);
-            Long userVotedMoodId = artistMoodVoteService.getUserVotedMoodId(loginUser.getId(), id);
-            model.addAttribute("userVotedMoodId", userVotedMoodId);
-        } else {
-            model.addAttribute("isArtistFollowed", false);
-        }
+    public ResponseEntity<?> artistInfo(@RequestParam("id") String artistId) {
+        // TODO : JWT 에서 유저 아이디 LONG 값 가져와서 파라미터로 넣어야함
+        ArtistPageDTO artistPageDTO = combinedArtistService.artistPageGet(artistId, 1L);
 
-        Integer followCount = artistFollowService.getArtistFollowCount(id);
-        model.addAttribute("followCount", followCount);
-        Artist artist = artistService.selectById(id);
-        List<Album> albums = albumService.findAlbumsByArtistId(id);
-        int albumCount = albumService.countAlbumsByArtist(id);
-        int trackCount = trackService.countTracksByArtist(id);
-        List<Track> top7List = trackService.selectTop7TracksByArtistAndFetchMv(id);
-        Track track = top7List.get(0);
-
-        List<MoodStat> moodStats = moodStatService.getTop6MoodsByArtistId(id);
-        boolean isMoodEmpty = (moodStats == null || moodStats.isEmpty());
-        List<String> moodLabels = moodStats.stream().map(MoodStat::getMoodName).toList();
-        List<Integer> moodValues = moodStats.stream().map(MoodStat::getVoteCount).toList();
-
-        List<RecentReview> reviews = recentReviewService.getRecentReviewsByArtistId(id);
-        model.addAttribute("recentReviews", reviews);
-        model.addAttribute("artist", artist);
-        model.addAttribute("track", track);
-        model.addAttribute("albums", albums);
-        model.addAttribute("albumCount", albumCount);
-        model.addAttribute("TOP7", top7List);
-        model.addAttribute("trackCount", trackCount);
-        model.addAttribute("isMoodEmpty", isMoodEmpty);
-        model.addAttribute("moodLabels", moodLabels);
-        model.addAttribute("moodValues", moodValues);
-        model.addAttribute("tags", tagService.list());
-
-        if (artist == null) {
-            return "redirect:/artists?error=notfound";
-        }
-        return "review/artist";  // templates/artists/detail.html 뷰 렌더링
+        return new ResponseEntity<>(artistPageDTO, HttpStatus.OK);
     }
+    
+
+    // 아티스트 화면
+    // @GetMapping
+    // public String artistsInfo(@RequestParam("id") String id, Model model,
+    //                             @AuthenticationPrincipal CustomUser user) throws Exception {
+    //     Users loginUser = null;
+    //     if( user != null ) {
+    //         // 로그인시에 유저정보 가져오기
+    //         loginUser = user.getUser();
+    //         model.addAttribute("loginUser", loginUser);
+    //         // 팔로우 여부 체크
+    //         boolean isArtistFollowed = artistFollowService.isLikedByUser(loginUser.getId(), id);
+    //         model.addAttribute("isArtistFollowed", isArtistFollowed);
+    //         Long userVotedMoodId = artistMoodVoteService.getUserVotedMoodId(loginUser.getId(), id);
+    //         model.addAttribute("userVotedMoodId", userVotedMoodId);
+    //     } else {
+    //         model.addAttribute("isArtistFollowed", false);
+    //     }
+
+    //     Integer followCount = artistFollowService.getArtistFollowCount(id);
+    //     model.addAttribute("followCount", followCount);
+    //     Artist artist = artistService.selectById(id);
+    //     List<Album> albums = albumService.findAlbumsByArtistId(id);
+    //     int albumCount = albumService.countAlbumsByArtist(id);
+    //     int trackCount = trackService.countTracksByArtist(id);
+    //     List<Track> top7List = trackService.selectTop7TracksByArtistAndFetchMv(id);
+    //     Track track = top7List.get(0);
+
+    //     List<MoodStat> moodStats = moodStatService.getTop6MoodsByArtistId(id);
+    //     boolean isMoodEmpty = (moodStats == null || moodStats.isEmpty());
+    //     List<String> moodLabels = moodStats.stream().map(MoodStat::getMoodName).toList();
+    //     List<Integer> moodValues = moodStats.stream().map(MoodStat::getVoteCount).toList();
+
+    //     List<RecentReview> reviews = recentReviewService.getRecentReviewsByArtistId(id);
+    //     model.addAttribute("recentReviews", reviews);
+    //     model.addAttribute("artist", artist);
+    //     model.addAttribute("track", track);
+    //     model.addAttribute("albums", albums);
+    //     model.addAttribute("albumCount", albumCount);
+    //     model.addAttribute("TOP7", top7List);
+    //     model.addAttribute("trackCount", trackCount);
+    //     model.addAttribute("isMoodEmpty", isMoodEmpty);
+    //     model.addAttribute("moodLabels", moodLabels);
+    //     model.addAttribute("moodValues", moodValues);
+    //     model.addAttribute("tags", tagService.list());
+
+    //     if (artist == null) {
+    //         return "redirect:/artists?error=notfound";
+    //     }
+    //     return "review/artist";  // templates/artists/detail.html 뷰 렌더링
+    // }
 
     @PostMapping("/toggle-like")
     @ResponseBody

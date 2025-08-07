@@ -16,7 +16,7 @@ import com.cosmus.resonos.service.user.LikedTrackService;
 import com.cosmus.resonos.service.user.PlaylistDetailService;
 import com.cosmus.resonos.service.user.PlaylistService;
 
-public class CombinedTrack {
+public class CombinedTrackService {
 
     @Autowired
     private TrackService trackService;
@@ -41,6 +41,5 @@ public class CombinedTrack {
     @Autowired
     private PlaylistService playlistService;
 
-    // Track track = trackService.getTrackOrUpdate(id);
 
 }
