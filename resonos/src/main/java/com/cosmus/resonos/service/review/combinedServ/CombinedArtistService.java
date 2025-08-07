@@ -21,7 +21,10 @@ import com.cosmus.resonos.service.review.RecentReviewService;
 import com.cosmus.resonos.service.review.TrackService;
 import com.cosmus.resonos.service.user.ArtistFollowService;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class CombinedArtistService {
 
     private final ArtistService artistService;
@@ -33,19 +36,6 @@ public class CombinedArtistService {
     private final TagService tagService;
     private final RecentReviewService recentReviewService;
     
-    public CombinedArtistService(ArtistService artistService, AlbumService albumService, TrackService trackService,
-            ArtistFollowService artistFollowService, ArtistMoodVoteService artistMoodVoteService,
-            MoodStatService moodStatService, TagService tagService, RecentReviewService recentReviewService) {
-        this.artistService = artistService;
-        this.albumService = albumService;
-        this.trackService = trackService;
-        this.artistFollowService = artistFollowService;
-        this.artistMoodVoteService = artistMoodVoteService;
-        this.moodStatService = moodStatService;
-        this.tagService = tagService;
-        this.recentReviewService = recentReviewService;
-    }
-
 
     // ArtistPageDTO
     public ArtistPageDTO artistPageGet(String ArtistId, Long UserId) {
