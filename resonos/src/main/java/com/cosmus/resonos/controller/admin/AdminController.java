@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.cosmus.resonos.service.admin.ReportService;
 import com.cosmus.resonos.service.community.BoardPostService;
@@ -12,6 +13,7 @@ import com.cosmus.resonos.service.user.UserService;
 import java.util.HashMap;
 import java.util.Map;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/admin")
 public class AdminController {

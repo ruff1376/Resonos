@@ -1,28 +1,49 @@
-import axios from 'axios'
+import axios from 'axios';
 
-axios.defaults.baseURL= "/api"
+axios.defaults.baseURL = '/api';
 
 // admin - index 요청 페이지
 export const getAdminIndex = async () => {
-    return await axios.get("/admin");
-}
+  return await axios.get('/admin/stats');
+};
 
-// admin - user 관리 페이지
-export const getUserList = async (cri) => {
-    return await axios.post("/admin/user", cri);
-}
+// admin - 유저(members) 관리 페이지
 
-export const getUser = async (u_id) => {
-    return await axios.get(`/admin/user/${u_id}`);
-}
+const membersPath = '/admin/members';
 
-export const updateUser = async (user) => {
-    return await axios.put("/admin/user", user);
-}
+// 목록 (page, size, keyword를 쿼리 파라미터로 전달)
+export const list = (page = 1, size = 10, keyword = '') =>
+  axios.get(`${membersPath}`, {
+    params: { page, size, keyword }
+  });
 
-export const deleteUser = async (u_id) => {
-    return await axios.delete(`/admin/user/${u_id}`);
-}
+// 조회
+export const select = (id) => axios.get(`${membersPath}/${id}`);
+
+// 등록
+export const insert = (data, headers) => axios.post(membersPath, data, headers);
+
+// 수정
+export const update = (data, headers) => axios.put(membersPath, data, headers);
+
+// 삭제
+export const remove = (id) => axios.delete(`${membersPath}/${id}`);
+
+// 활성/비활성 토글 (POST /enable?id=...&enabled=...)
+export const toggleEnable = (id, enabled) =>
+  axios.post(`${membersPath}/enable`, null, { params: { id, enabled } });
+
+// 밴/해제 (POST /ban?id=...&ban=...&reason=...)
+export const banUser = (id, ban = true, reason = '') =>
+  axios.post(`${membersPath}/ban`, null, { params: { id, ban, reason } });
+
+// 비밀번호 랜덤 초기화 (POST /reset-password?id=...)
+export const resetPassword = (id) =>
+  axios.post(`${membersPath}/reset-password`, null, { params: { id } });
+
+
+
+
 
 // admin - item 관리 페이지
 export const getItemList = async (cri) => {
