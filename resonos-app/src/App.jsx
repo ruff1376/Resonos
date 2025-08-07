@@ -9,6 +9,8 @@ import Login from './pages/Login';
 import Main from './pages/list/Main';
 import Mypage from './pages/user/Mypage';
 import Edit from './pages/user/Edit';
+import JoinForm from './components/Login/JoinForm';
+import Join from './pages/Join';
 
 const App = () => {
 
@@ -28,6 +30,7 @@ const App = () => {
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/users/:id" element={<Mypage />} />
           <Route path="/users/edit" element={<Edit />} />
+          <Route path="/join" element={<Join />} />
         </Routes>
       </LoginContextProvider>
     </BrowserRouter>

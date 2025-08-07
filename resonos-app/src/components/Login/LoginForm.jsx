@@ -102,21 +102,21 @@ const LoginForm = () => {
         <button
           type="button"
           className="btn social-btn"
-          onClick={() => (window.location.href = '/oauth2/authorization/google')}
+          onClick={() => (window.location.href = '/api/oauth2/authorization/google')}
         >
           Google로 로그인
         </button>
         <button
           type="button"
           className="btn social-btn"
-          onClick={() => (window.location.href = '/oauth2/authorization/kakao')}
+          onClick={() => (window.location.href = '/api/oauth2/authorization/kakao')}
         >
           Kakao로 로그인
         </button>
         <button
           type="button"
           className="btn social-btn"
-          onClick={() => (window.location.href = '/oauth2/authorization/naver')}
+          onClick={() => (window.location.href = '/api/oauth2/authorization/naver')}
         >
           Naver로 로그인
         </button>
