@@ -3,8 +3,9 @@ import React, { useState, useEffect } from 'react';
 import AddMemberForm from '../../components/admin/second/AddMemberForm';
 import SearchForm from '../../components/admin/first/SearchForm';
 import TableColumnHeader from '../../components/admin/first/TableColumnHeader';
-import TableContent from '../../components/admin/first/TableContent';
-import { list, insert, update, toggleEnable, banUser, remove, select } from '../../apis/admin'; // 필요한 API 함수 imports
+import TableContent from '../../components/admin/first/TableContent'; // 수정 예정
+import { list, insert, update, toggleEnable, banUser, remove, select } from '../../apis/admin';
+import MemberDetailForm from '../../components/admin/second/MemberDetailForm';
 
 const AdminMembersContainer = () => {
   const [members, setMembers] = useState([]);
@@ -17,9 +18,8 @@ const AdminMembersContainer = () => {
   const [detailMemberId, setDetailMemberId] = useState(null);
   const [detailMemberData, setDetailMemberData] = useState(null);
 
-  // 제재 폼 나타낼 멤버 ID, 제재 사유 상태
-  const [banFormUserId, setBanFormUserId] = useState(null);
-  const [banReason, setBanReason] = useState('');
+  // 제재 폼 상태는 TableContent 내부로 이전 예정
+  // const [banFormUserId, setBanFormUserId] = useState(null);
 
   const columns = [
     { label: '번호', style: { flexBasis: '5%', minWidth: '40px' } },
@@ -126,65 +126,18 @@ const AdminMembersContainer = () => {
   const handleToggleEnable = async (memberId, newEnabled) => {
     try {
       await toggleEnable(memberId, newEnabled);
-      fetchMembers(pagination.index + 1, 10, keyword);
+      setMembers(prev =>
+        prev.map(m => (m.id === memberId ? { ...m, enabled: newEnabled } : m))
+      );
     } catch (error) {
       console.error('활성/비활성 토글 실패', error);
     }
   };
-
-  // 제재 폼 토글 함수
-  const toggleBanForm = (userId) => {
-    if (banFormUserId === userId) {
-      setBanFormUserId(null);
-      setBanReason('');
-    } else {
-      setBanFormUserId(userId);
-      setBanReason('');
-    }
-  };
-
-  const handleBanReasonChange = (e) => {
-    setBanReason(e.target.value);
-  };
-
-  // 제재 폼 제출
-  const handleBanSubmit = async (e, userId) => {
-    e.preventDefault();
-    if (!banReason.trim()) {
-      alert('제재 사유를 입력하세요.');
-      return;
-    }
-    if (!window.confirm('정말 제재하시겠습니까?')) return;
-
-    try {
-      await banUser(userId, true, banReason);
-      alert('제재 처리되었습니다.');
-      setBanFormUserId(null);
-      setBanReason('');
-      fetchMembers(pagination.index + 1, 10, keyword);
-    } catch (error) {
-      alert('제재 처리 실패: ' + (error.message || error));
-    }
-  };
-
-  const handleBanCancel = () => {
-    setBanFormUserId(null);
-    setBanReason('');
-  };
-
-  const handleBanToggle = async (memberId, ban) => {
-    try {
-      await banUser(memberId, ban);
-      fetchMembers(pagination.index + 1, 10, keyword);
-    } catch (error) {
-      console.error('제재 토글 실패', error);
-    }
-  };
-
+  // 검색 키워드 감지
   const handleKeywordChange = (kw) => {
     setKeyword(kw);
   };
-
+  // 회원 추가
   const handleAddSubmit = async (formData) => {
     try {
       await insert(formData);
@@ -199,6 +152,29 @@ const AdminMembersContainer = () => {
     setShowAddForm((prev) => !prev);
   };
 
+    // 추가: 제재 토글 핸들러
+  const handleBanToggle = async (memberId, ban, reason = '') => {
+    try {
+      // banUser API 호출
+      await banUser(memberId, ban, reason);
+      
+      // 상태 업데이트: ban 상태 최신화
+      setMembers(prev =>
+        prev.map(m => (m.id === memberId ? { ...m, ban } : m))
+      );
+      
+      alert(ban ? '제재 처리 되었습니다.' : '제재 해제 되었습니다.');
+      
+      // 필요한 경우 목록 다시 받기
+      fetchMembers(pagination.index + 1, 10, keyword);
+
+      // 제재 폼 닫기 등의 추가 상태 처리 필요 시 여기에
+    } catch (error) {
+      alert('제재 처리 실패: ' + (error.response?.data || error.message || error));
+      console.error('banToggle error', error);
+    }
+  };
+
   return (
     <div>
       {!showAddForm && (
@@ -208,6 +184,7 @@ const AdminMembersContainer = () => {
       )}
       {showAddForm && <AddMemberForm onSubmit={handleAddSubmit} onCancel={handleAddToggle} />}
       <SearchForm onSearch={handleKeywordChange} />
+
       {loading ? (
         <div>로딩중...</div>
       ) : (
@@ -215,236 +192,22 @@ const AdminMembersContainer = () => {
           <TableColumnHeader columns={columns} />
           <TableContent
             members={members}
+            setMembers={setMembers}
             pagination={pagination}
             keyword={keyword}
             onToggleEnable={handleToggleEnable}
-            onBanToggle={handleBanToggle}
             onShowDetail={handleShowDetail}
-            renderExtraActions={(member) => (
-              <div>
-                <button
-                  className="btn btn-danger btn-sm mb-2"
-                  onClick={() => toggleBanForm(member.id)}
-                >
-                  제재
-                </button>
-                {banFormUserId === member.id && (
-                  <form
-                    onSubmit={(e) => handleBanSubmit(e, member.id)}
-                    style={{
-                      background: '#222',
-                      padding: '20px 15px',
-                      borderRadius: '7px',
-                      marginBottom: '15px',
-                    }}
-                  >
-                    <textarea
-                      className="form-control mb-2"
-                      placeholder="제재 사유를 입력하세요 (필수)"
-                      required
-                      value={banReason}
-                      onChange={handleBanReasonChange}
-                      style={{ height: '64px', color: 'white', background: '#333' }}
-                    />
-                    <div className="text-end">
-                      <button type="submit" className="btn btn-danger btn-sm me-2">
-                        제재
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-outline-gold btn-sm"
-                        onClick={handleBanCancel}
-                      >
-                        취소
-                      </button>
-                    </div>
-                  </form>
-                )}
-              </div>
-            )}
+            onBanToggle={handleBanToggle}
+            detailMemberId={detailMemberId}
+            detailMemberData={detailMemberData}
+            onDetailChange={handleDetailChange}
+            onDetailSubmit={handleDetailSubmit}
+            onDelete={handleDelete}
+            onCloseDetail={() => {
+              setDetailMemberId(null);
+              setDetailMemberData(null);
+            }}
           />
-
-          {detailMemberData && detailMemberId && (
-            <div className="detail-info mt-3 p-3 border rounded bg-light text-dark">
-              <h5>회원 상세 정보</h5>
-              <form onSubmit={handleDetailSubmit}>
-                <div className="mb-2">
-                  <label>아이디:</label>
-                  <input
-                    type="text"
-                    name="username"
-                    value={detailMemberData.username || ''}
-                    onChange={handleDetailChange}
-                    required
-                    autoComplete="off"
-                  />
-                </div>
-                <div className="mb-2">
-                  <label>닉네임:</label>
-                  <input
-                    type="text"
-                    name="nickname"
-                    value={detailMemberData.nickname || ''}
-                    onChange={handleDetailChange}
-                    required
-                    autoComplete="off"
-                  />
-                </div>
-                <div className="mb-2">
-                  <label>이메일:</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={detailMemberData.email || ''}
-                    onChange={handleDetailChange}
-                    required
-                    autoComplete="off"
-                  />
-                </div>
-                <div className="mb-2">
-                  <label>비밀번호 (변경시만 입력):</label>
-                  <input
-                    type="password"
-                    name="password"
-                    value={detailMemberData.password || ''}
-                    onChange={handleDetailChange}
-                    placeholder="변경할 비밀번호를 입력하세요"
-                    autoComplete="new-password"
-                  />
-                </div>
-                <div className="mb-2">
-                  <label>프로필 이미지 URL:</label>
-                  <input
-                    type="text"
-                    name="profileImage"
-                    value={detailMemberData.profileImage || ''}
-                    onChange={handleDetailChange}
-                    autoComplete="off"
-                  />
-                  {detailMemberData.profileImage && (
-                    <img
-                      src={detailMemberData.profileImage}
-                      alt="프로필"
-                      style={{ maxWidth: '100px', marginTop: '5px' }}
-                    />
-                  )}
-                </div>
-                <div className="mb-2">
-                  <label>소개(Bio):</label>
-                  <textarea
-                    name="bio"
-                    value={detailMemberData.bio || ''}
-                    onChange={handleDetailChange}
-                    rows={3}
-                    style={{ width: '100%' }}
-                    placeholder="간단한 소개를 입력하세요"
-                  />
-                </div>
-                <div className="mb-2">
-                  <label>전문가 여부(isPro):</label>
-                  <select
-                    name="isPro"
-                    value={detailMemberData.isPro ? 'true' : 'false'}
-                    onChange={(e) =>
-                      setDetailMemberData((prev) => ({
-                        ...prev,
-                        isPro: e.target.value === 'true',
-                      }))
-                    }
-                  >
-                    <option value="true">예</option>
-                    <option value="false">아니오</option>
-                  </select>
-                </div>
-                <div className="mb-2">
-                  <label>상태:</label>
-                  <select
-                    name="enabled"
-                    value={detailMemberData.enabled ? 'true' : 'false'}
-                    onChange={(e) =>
-                      setDetailMemberData((prev) => ({
-                        ...prev,
-                        enabled: e.target.value === 'true',
-                      }))
-                    }
-                  >
-                    <option value="true">정상</option>
-                    <option value="false">휴면</option>
-                  </select>
-                </div>
-                <div className="mb-2">
-                  <label>권한:</label>
-                  <select
-                    name="auth"
-                    value={detailMemberData.auth || ''}
-                    onChange={handleDetailChange}
-                  >
-                    <option value="ROLE_USER">일반</option>
-                    <option value="ROLE_ADMIN">운영자</option>
-                  </select>
-                </div>
-                <div className="mb-2">
-                  <label>Provider:</label>
-                  <input
-                    type="text"
-                    name="provider"
-                    value={detailMemberData.provider || ''}
-                    onChange={handleDetailChange}
-                    autoComplete="off"
-                  />
-                </div>
-                <div className="mb-2">
-                  <label>Provider ID:</label>
-                  <input
-                    type="text"
-                    name="providerId"
-                    value={detailMemberData.providerId || ''}
-                    onChange={handleDetailChange}
-                    autoComplete="off"
-                  />
-                </div>
-
-                {/* 제재 내역 출력 (있으면 리스트로) */}
-                <div className="mb-2">
-                  <label>제재 내역:</label>
-                  {detailMemberData.sanctions && detailMemberData.sanctions.length > 0 ? (
-                    <ul style={{ maxHeight: '150px', overflowY: 'auto', paddingLeft: '20px' }}>
-                      {detailMemberData.sanctions.map((sanction, idx) => (
-                        <li key={idx}>
-                          {sanction.reason} ({new Date(sanction.date).toLocaleDateString()})
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p>제재 내역이 없습니다.</p>
-                  )}
-                </div>
-
-                <div className="text-end">
-                  <button type="submit" className="btn btn-gold btn-sm me-2">
-                    저장
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-outline-secondary btn-sm me-2"
-                    onClick={() => {
-                      setDetailMemberId(null);
-                      setDetailMemberData(null);
-                    }}
-                  >
-                    닫기
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-outline-danger btn-sm"
-                    onClick={handleDelete}
-                  >
-                    삭제
-                  </button>
-                </div>
-              </form>
-            </div>
-          )}
         </>
       )}
     </div>

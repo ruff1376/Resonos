@@ -1,10 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
+import BanMemberForm from '../second/BanMemberForm';
+import MemberDetailForm from '../second/MemberDetailForm';
 
-const columns = (onToggleEnable, onBanToggle, onShowDetail, keyword) => [
+const columns = (
+  onToggleEnable,
+  onBanToggle,
+  onShowDetail,
+  keyword,
+  banFormUserId,
+  setBanFormUserId,
+  detailMemberId,
+  detailMemberData,
+  setDetailMemberId,
+  setDetailMemberData,
+  onDetailChange,
+  onDetailSubmit,
+  onDelete,
+  onCloseDetail
+) => [
   {
     label: '번호',
     style: { flexBasis: '5%', minWidth: '40px' },
-    render: (member, index, pagination) => (pagination.index ?? 0) + index + 1,
+    render: (member, index, pagination) => (pagination.index ?? 0) * 10 + index + 1,
   },
   {
     label: '프로필',
@@ -98,7 +115,13 @@ const columns = (onToggleEnable, onBanToggle, onShowDetail, keyword) => [
             <button
               type="button"
               className="btn btn-outline-danger btn-sm ban-btn"
-              onClick={() => onBanToggle(member.id, true, keyword)}
+              onClick={() => {
+                if (banFormUserId === member.id) {
+                  setBanFormUserId(null);
+                } else {
+                  setBanFormUserId(member.id);
+                }
+              }}
               style={{ marginLeft: 6 }}
             >
               제재
@@ -135,29 +158,56 @@ const columns = (onToggleEnable, onBanToggle, onShowDetail, keyword) => [
   },
 ];
 
-/**
- * @param {Array} members 멤버 데이터 배열
- * @param {Object} pagination 페이지네이션 정보
- * @param {string} keyword 검색 키워드
- * @param {Function} onToggleEnable 활성/비활성 토글 함수
- * @param {Function} onBanToggle 제재/해제 토글 함수
- * @param {Function} onShowDetail 상세 보기 함수
- */
 const TableContent = ({
   members = [],
+  setMembers,
   pagination = {},
   keyword = '',
   onToggleEnable,
   onBanToggle,
   onShowDetail,
+  detailMemberId,
+  detailMemberData,
+  onDetailChange,
+  onDetailSubmit,
+  onDelete,
+  onCloseDetail,
 }) => {
-  const cols = columns(onToggleEnable, onBanToggle, onShowDetail, keyword);
+  const [banFormUserId, setBanFormUserId] = useState(null);
 
-  return (
-    <>
-      {members.map((member, index) => (
+  // BanMemberForm 완료 시 호출되는 함수
+  const handleBanComplete = (userId) => {
+    // 멤버 상태 ban 값 true로 업데이트
+    setMembers(prevMembers =>
+      prevMembers.map(m => (m.id === userId ? { ...m, ban: true } : m))
+    );
+    setBanFormUserId(null);
+  };
+
+  // columns 정의 시 onComplete 핸들러 전달에서 handleBanComplete 연결
+
+  const cols = columns(
+    onToggleEnable,
+    onBanToggle,
+    onShowDetail,
+    keyword,
+    banFormUserId,
+    setBanFormUserId,
+    detailMemberId,
+    detailMemberData,
+    setBanFormUserId,
+    setBanFormUserId,
+    onDetailChange,
+    onDetailSubmit,
+    onDelete,
+    onCloseDetail
+  );
+
+return (
+  <>
+    {members.map((member, index) => (
+      <React.Fragment key={member.id}>
         <div
-          key={member.id}
           id={`row-${member.id}`}
           className="list-group-item bg-dark text-light border-secondary mb-2 rounded-0 d-flex flex-nowrap align-items-center text-center justify-content-center"
         >
@@ -167,9 +217,42 @@ const TableContent = ({
             </div>
           ))}
         </div>
-      ))}
-    </>
-  );
-};
+
+        {/* 제재 폼 */}
+        {banFormUserId === member.id && (
+          <div style={{ marginLeft: '5%', marginBottom: '20px' }}>
+            <BanMemberForm
+              userId={member.id}
+              onCancel={() => setBanFormUserId(null)}
+              onComplete={() => {
+                setBanFormUserId(null);
+                // 멤버 리스트 상태에서 제재 상태 업데이트
+                setMembers(prev =>
+                  prev.map(m => (m.id === member.id ? { ...m, ban: true } : m))
+                );
+                // 필요시 목록 다시 불러오는 함수 호출 가능
+                // fetchMembers(pagination.index + 1, 10, keyword);
+              }}
+            />
+          </div>
+        )}
+
+        {/* 상세 폼 */}
+        {detailMemberId === member.id && detailMemberData && (
+          <div style={{ marginLeft: '5%', marginBottom: '20px' }}>
+            <MemberDetailForm
+              detailMemberData={detailMemberData}
+              onChange={onDetailChange}
+              onSubmit={onDetailSubmit}
+              onDelete={onDelete}
+              onClose={onCloseDetail}
+            />
+          </div>
+        )}
+      </React.Fragment>
+    ))}
+  </>
+);
+}
 
 export default TableContent;
