@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Header.css';
+import { LoginContext } from '../../contexts/LoginContextProvider';
 
-const Header = ({ isAuthenticated = false, currentUser = {} }) => {
+const Header = ({ currentUser = {} }) => {
     const location = useLocation();
+    const { isLogin } = useContext(LoginContext)
 
     // 로그인 버튼 클릭 시 현재 페이지 기억
     useEffect(() => {
@@ -74,7 +76,7 @@ const Header = ({ isAuthenticated = false, currentUser = {} }) => {
                         </div>
                     </div>
 
-                    <div className="collapse navbar-collapse d-flex justify-content-end align-items-center header-gap mt-4 mb-4 gap-4" id="mainNav">
+                    <div className="d-flex justify-content-end align-items-center header-gap mt-4 mb-4 gap-4" id="mainNav">
 
                         <form className="position-relative d-flex align-items-center mb-0" style={{ width: '300px' }} method="get" action="/search">
                             <input type="search" name="q" id="searchInput" className="form-control search-box" placeholder="앨범, 트랙, 아티스트..." />
@@ -85,18 +87,18 @@ const Header = ({ isAuthenticated = false, currentUser = {} }) => {
                         </form>
 
                         <div className="navbar-nav d-flex flex-row justify-content-end align-items-center header-gap gap-3">
-                            {!isAuthenticated ? (
-                                // 로그인
+                            {!isLogin ? (
+                                // 비로그인 상태
                                 <>
-                                    <li className="nav-item ms-lg-2">
+                                    <div className="nav-item ms-lg-2">
                                         <a id="login" href="/login" className="btn btn-outline-gold">로그인</a>
-                                    </li>
-                                    <li className="nav-item ms-2">
+                                    </div>
+                                    <div className="nav-item ms-2">
                                         <a href="/join" className="btn btn-outline-gold">회원가입</a>
-                                    </li>
+                                    </div>
                                 </>
                             ) : (
-                                // 비로그인
+                                // 로그인 상태
                                 <>
                                     <div className="dropdown">
                                         <a href="#" className="nav-link p-0" data-bs-toggle="dropdown" aria-expanded="false" style={{ lineHeight: 0 }}>
