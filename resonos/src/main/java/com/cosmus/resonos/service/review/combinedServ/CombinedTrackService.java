@@ -7,18 +7,26 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.admin.Tag;
 import com.cosmus.resonos.domain.review.LikedTrack;
 import com.cosmus.resonos.domain.review.MoodStat;
+import com.cosmus.resonos.domain.review.Track;
 import com.cosmus.resonos.domain.review.TrackMoodVote;
 import com.cosmus.resonos.domain.review.TrackReview;
 import com.cosmus.resonos.domain.review.TrackScore;
 import com.cosmus.resonos.domain.review.responseDTO.TrackPageDTO;
 import com.cosmus.resonos.domain.user.Playlist;
+import com.cosmus.resonos.domain.user.Users;
 import com.cosmus.resonos.mapper.review.TrackReviewMapper;
 import com.cosmus.resonos.service.admin.TagService;
 import com.cosmus.resonos.service.review.AlbumService;
@@ -31,6 +39,7 @@ import com.cosmus.resonos.service.review.TrackService;
 import com.cosmus.resonos.service.user.LikedTrackService;
 import com.cosmus.resonos.service.user.PlaylistService;
 import com.cosmus.resonos.validation.ReviewForm;
+import com.nimbusds.oauth2.sdk.http.HTTPResponse;
 
 import lombok.AllArgsConstructor;
 
@@ -146,6 +155,30 @@ public class CombinedTrackService {
             return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    // 리뷰등록시 리뷰를 비동기로 반환
+    public ResponseEntity<?> getMyReviewFragment(String trackId, CustomUser user) {
+        // Map<String,?> myReview = new HashMap<>();
+        if (user != null) {
+            // model.addAttribute("loginUser", loginUser = user.getUser());
+            // boolean isAdmin = user.getAuthorities()
+            //         .stream()
+            //         .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+            // myReview.put("isAdmin",isAdmin);
+
+        }
+        TrackReview myReview = trackReviewService.getLastestReview(trackId, user.getId());
+        // Track track = trackService.selectById(trackId);
+        if (myReview == null) {
+            return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        // myreview.put("reviewType", "TRACK");
+        // myreview.put("track", track);
+        // myreview.put("review", List.of(myReview)); // 리스트 형태로 전달
+        // myreview.put("hasNext", false); // 의미 없지만 구조 유지
+        return new ResponseEntity<>(myReview, HttpStatus.OK);
+    }
+
     // 트랙 리뷰 수정
     public ResponseEntity<?> reviewUpdate(Long reviewId, ReviewForm f, String trackId) {
         boolean success = trackReviewService.update(reviewId, f);
@@ -202,6 +235,32 @@ public class CombinedTrackService {
         }
     }
 
+    // 리뷰 더보기
+    public ResponseEntity<?> loadMoreReviews(String trackId, int page, int size, CustomUser principal) {
+
+        List<TrackReview> allReviews = trackReviewService.getMoreReviews(trackId, page, size);
+        boolean hasNext = allReviews.size() > size; // ⭐ size+1개면 다음 페이지 존재
+        List<TrackReview> reviews = hasNext ? allReviews.subList(0, size) : allReviews;
+        if (principal != null && !reviews.isEmpty()) {
+            List<Long> reviewIds = reviews.stream().map(TrackReview::getId).toList();
+            List<Long> likedIds = reviewLikeService.getUserLikedReviewIds("TRACK", reviewIds,
+                    principal.getUser().getId());
+            for (TrackReview r : reviews) {
+                r.setIsLikedByCurrentUser(likedIds.contains(r.getId()));
+            }
+        }
+        // 💡 여기서도 모델 변수명은 review
+        // model.addAttribute("hasNext", hasNext);
+        // model.addAttribute("track", track);
+        // model.addAttribute("review", reviews);
+        // model.addAttribute("reviewType", "TRACK");
+        // model.addAttribute("loginUser", principal != null ? principal.getUser() : null);
+        // model.addAttribute("isAdmin", principal != null && principal.getAuthorities().stream()
+        //         .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")));
+
+        return new ResponseEntity<>(reviews, HttpStatus.OK);
+    }
+
     // 트랙 분위기 투표
     public ResponseEntity<?> voteMood(@RequestBody TrackMoodVote request) {
         // 저장 또는 수정
@@ -256,6 +315,48 @@ public class CombinedTrackService {
             e.printStackTrace();
             return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+
+    // 트랙에서 플레이리스트 추가시 플레이리스트 조회
+    public ResponseEntity<?> getMyPlaylists(@AuthenticationPrincipal CustomUser loginUser) {
+        if (loginUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("User is null");
+        }
+        try {
+            List<Playlist> userPlaylist = playlistService.usersPlaylist(loginUser.getId());
+            return ResponseEntity.ok(userPlaylist);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
     }
+
+    // 플레이리스트에 해당 트랙 추가
+    public ResponseEntity<?> addTrackToPlaylist(Long playlistId, String id) {
+
+        String trackId = id;
+        try {
+            playlistService.insertSingleTrack(playlistId, trackId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 플레이리스트 비동기 갱신
+    public ResponseEntity<?> refreshPlaylist(String trackId) {
+        try {
+            return ResponseEntity.ok(playlistService.getPlaylistsByTrackId(trackId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        
+    }
+
+
 }

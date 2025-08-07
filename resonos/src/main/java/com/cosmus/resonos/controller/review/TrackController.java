@@ -102,6 +102,23 @@ public class TrackController {
         return combinedTrackService.reviewPost(trackId, f, user);
     }
 
+    // 리뷰등록시 리뷰를 비동기로 반환
+    @GetMapping("/myreview")
+    public ResponseEntity<?> getMyReviewFragment(@RequestParam("trackId") String trackId,
+                                    @AuthenticationPrincipal CustomUser user) throws Exception {
+        return combinedTrackService.getMyReviewFragment(trackId, user);
+    }
+
+    // 리뷰 더보기
+    @GetMapping("/more")
+    public ResponseEntity<?> loadMoreReviews(@RequestParam("trackId") String trackId,
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size,
+            @AuthenticationPrincipal CustomUser principal) {
+
+        return combinedTrackService.loadMoreReviews(trackId, page, size, principal);
+    }
+
     // 리뷰 수정
     @PutMapping("/reviews")
     public ResponseEntity<?> reviewUpdate(@RequestParam("id") String trackId, @RequestBody @Valid ReviewForm form) {
@@ -143,6 +160,27 @@ public class TrackController {
     public ResponseEntity<?> toggleTrackLike(@RequestBody LikedTrack dto) {
         return combinedTrackService.toggleTrackLike(dto);
     }
+
+    // 트랙에서 플레이리스트 추가시 플레이리스트 조회
+    @GetMapping("/playlists")
+    public ResponseEntity<?> getMyPlaylists(@AuthenticationPrincipal CustomUser loginUser) {
+        return combinedTrackService.getMyPlaylists(loginUser);
+    }
+
+    // 플레이리스트에 해당 트랙 추가
+    @PostMapping("/playlists")
+    public ResponseEntity<?> addTrackToPlaylist(@RequestBody Long playlistId, @RequestParam("id") String id) {
+
+        return combinedTrackService.addTrackToPlaylist(playlistId, id);
+    }
+
+    // 플레이리스트 비동기 갱신
+    @GetMapping("/refreshPlaylist")
+    public ResponseEntity<?> refreshPlaylist(@RequestParam("id") String id ) {
+        return combinedTrackService.refreshPlaylist(id);
+    }
+
+    
 
     // 트랙 화면
     // @GetMapping
@@ -256,32 +294,32 @@ public class TrackController {
     //     return "review/track";
     // }
 
-    @GetMapping("/myplaylists")
-    public ResponseEntity<List<Playlist>> getMyPlaylists(@AuthenticationPrincipal CustomUser loginUser)
-            throws Exception {
-        if (loginUser == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    // @GetMapping("/myplaylists")
+    // public ResponseEntity<List<Playlist>> getMyPlaylists(@AuthenticationPrincipal CustomUser loginUser)
+    //         throws Exception {
+    //     if (loginUser == null) {
+    //         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    //     }
 
-        List<Playlist> userPlaylist = playlistService.usersPlaylist(loginUser.getId());
-        return ResponseEntity.ok(userPlaylist);
-    }
+    //     List<Playlist> userPlaylist = playlistService.usersPlaylist(loginUser.getId());
+    //     return ResponseEntity.ok(userPlaylist);
+    // }
 
-    @PostMapping("/playlists/{playlistId}")
-    public ResponseEntity<Void> addTrackToPlaylist(@PathVariable("playlistId") Long playlistId,
-            @RequestParam("id") String id) throws Exception {
+    // @PostMapping("/playlists/{playlistId}")
+    // public ResponseEntity<Void> addTrackToPlaylist(@PathVariable("playlistId") Long playlistId,
+    //         @RequestParam("id") String id) throws Exception {
 
-        String trackId = id;
-        // 단건 추가
-        playlistService.insertSingleTrack(playlistId, trackId);
-        return ResponseEntity.ok().build();
-    }
+    //     String trackId = id;
+    //     // 단건 추가
+    //     playlistService.insertSingleTrack(playlistId, trackId);
+    //     return ResponseEntity.ok().build();
+    // }
 
-    @GetMapping("/refreshPlaylist/{id}")
-    public ResponseEntity<List<Playlist>> refreshPlaylist(@PathVariable("id") String trackId,
-            Model model) {
-        return ResponseEntity.ok(playlistService.getPlaylistsByTrackId(trackId));
-    }
+    // @GetMapping("/refreshPlaylist/{id}")
+    // public ResponseEntity<List<Playlist>> refreshPlaylist(@PathVariable("id") String trackId,
+    //         Model model) {
+    //     return ResponseEntity.ok(playlistService.getPlaylistsByTrackId(trackId));
+    // }
 
     // @GetMapping("/{id}/score-fragment")
     // public String scoreRefresh(@PathVariable("id") String id, Model model) {
@@ -297,55 +335,36 @@ public class TrackController {
     //     return "review/reviewFrag :: reviewSection";
     // }
 
-    @GetMapping("/{trackId}/reviews/more")
-    public String loadMoreReviews(@PathVariable("trackId") String trackId,
-            @RequestParam(name = "page", defaultValue = "1") int page,
-            @RequestParam(name = "size", defaultValue = "5") int size,
-            Model model,
-            @AuthenticationPrincipal CustomUser principal) throws Exception {
+    // @GetMapping("/{trackId}/reviews/more")
+    // public String loadMoreReviews(@PathVariable("trackId") String trackId,
+    //         @RequestParam(name = "page", defaultValue = "1") int page,
+    //         @RequestParam(name = "size", defaultValue = "5") int size,
+    //         Model model,
+    //         @AuthenticationPrincipal CustomUser principal) throws Exception {
 
-        List<TrackReview> allReviews = trackReviewService.getMoreReviews(trackId, page, size);
-        boolean hasNext = allReviews.size() > size; // ⭐ size+1개면 다음 페이지 존재
-        List<TrackReview> reviews = hasNext ? allReviews.subList(0, size) : allReviews;
-        if (principal != null && !reviews.isEmpty()) {
-            List<Long> reviewIds = reviews.stream().map(TrackReview::getId).toList();
-            List<Long> likedIds = reviewLikeService.getUserLikedReviewIds("TRACK", reviewIds,
-                    principal.getUser().getId());
-            for (TrackReview r : reviews) {
-                r.setIsLikedByCurrentUser(likedIds.contains(r.getId()));
-            }
-        }
-        Track track = trackService.selectById(trackId);
-        // 💡 여기서도 모델 변수명은 review
-        model.addAttribute("hasNext", hasNext);
-        model.addAttribute("track", track);
-        model.addAttribute("review", reviews);
-        model.addAttribute("reviewType", "TRACK");
-        model.addAttribute("loginUser", principal != null ? principal.getUser() : null);
-        model.addAttribute("isAdmin", principal != null && principal.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")));
+    //     List<TrackReview> allReviews = trackReviewService.getMoreReviews(trackId, page, size);
+    //     boolean hasNext = allReviews.size() > size; // ⭐ size+1개면 다음 페이지 존재
+    //     List<TrackReview> reviews = hasNext ? allReviews.subList(0, size) : allReviews;
+    //     if (principal != null && !reviews.isEmpty()) {
+    //         List<Long> reviewIds = reviews.stream().map(TrackReview::getId).toList();
+    //         List<Long> likedIds = reviewLikeService.getUserLikedReviewIds("TRACK", reviewIds,
+    //                 principal.getUser().getId());
+    //         for (TrackReview r : reviews) {
+    //             r.setIsLikedByCurrentUser(likedIds.contains(r.getId()));
+    //         }
+    //     }
+    //     Track track = trackService.selectById(trackId);
+    //     // 💡 여기서도 모델 변수명은 review
+    //     model.addAttribute("hasNext", hasNext);
+    //     model.addAttribute("track", track);
+    //     model.addAttribute("review", reviews);
+    //     model.addAttribute("reviewType", "TRACK");
+    //     model.addAttribute("loginUser", principal != null ? principal.getUser() : null);
+    //     model.addAttribute("isAdmin", principal != null && principal.getAuthorities().stream()
+    //             .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")));
 
-        return "review/reviewFrag :: reviewItems";
-    }
-
-    /**
-     * 플레이리스트에 추가할 트랙 리스트 요청
-     *
-     * @param entity
-     * @return
-     * @throws Exception
-     */
-    @PostMapping(value = "/from-playlists", consumes = "application/json")
-    public ResponseEntity<?> getAjaxTracks(@RequestBody Map<String, String> data) throws Exception {
-        log.info("트랙 요청 들어옴.");
-        int offset = Integer.parseInt(data.get("offset").toString());
-        int limit = Integer.parseInt(data.get("limit").toString());
-        List<Track> trackList = trackService.addTrackList(data.get("keyword"), offset, limit);
-        if (trackList != null)
-            return new ResponseEntity<>(trackList, HttpStatus.OK);
-
-        return new ResponseEntity<>("리스트 요청 실패.", HttpStatus.BAD_REQUEST);
-    }
+    //     return "review/reviewFrag :: reviewItems";
+    // }
 
     /* ── ① 등록 ────────────────────────────── */
     // @PostMapping
@@ -362,30 +381,30 @@ public class TrackController {
     // }
 
     // 등록한 리뷰를 비동기로 반환
-    @GetMapping("/{trackId}/my-review-frag")
-    public String getMyReviewFragment(@PathVariable("trackId") String trackId,
-            @AuthenticationPrincipal CustomUser principal,
-            Model model) throws Exception {
-        Users loginUser = null;
-        if (principal != null) {
-            model.addAttribute("loginUser", loginUser = principal.getUser());
-            boolean isAdmin = principal.getAuthorities()
-                    .stream()
-                    .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-            model.addAttribute("isAdmin", isAdmin);
-        }
-        TrackReview myReview = trackReviewService.getLastestReview(trackId, loginUser.getId());
-        Track track = trackService.selectById(trackId);
-        if (myReview == null) {
-            return "review/reviewFrag :: empty"; // 아무것도 없는 프래그먼트로 대응 가능
-        }
+    // @GetMapping("/{trackId}/my-review-frag")
+    // public String getMyReviewFragment(@PathVariable("trackId") String trackId,
+    //         @AuthenticationPrincipal CustomUser principal,
+    //         Model model) throws Exception {
+    //     Users loginUser = null;
+    //     if (principal != null) {
+    //         model.addAttribute("loginUser", loginUser = principal.getUser());
+    //         boolean isAdmin = principal.getAuthorities()
+    //                 .stream()
+    //                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+    //         model.addAttribute("isAdmin", isAdmin);
+    //     }
+    //     TrackReview myReview = trackReviewService.getLastestReview(trackId, loginUser.getId());
+    //     Track track = trackService.selectById(trackId);
+    //     if (myReview == null) {
+    //         return "review/reviewFrag :: empty"; // 아무것도 없는 프래그먼트로 대응 가능
+    //     }
 
-        model.addAttribute("reviewType", "TRACK");
-        model.addAttribute("track", track);
-        model.addAttribute("review", List.of(myReview)); // 리스트 형태로 전달
-        model.addAttribute("hasNext", false); // 의미 없지만 구조 유지
-        return "review/reviewFrag :: reviewItems";
-    }
+    //     model.addAttribute("reviewType", "TRACK");
+    //     model.addAttribute("track", track);
+    //     model.addAttribute("review", List.of(myReview)); // 리스트 형태로 전달
+    //     model.addAttribute("hasNext", false); // 의미 없지만 구조 유지
+    //     return "review/reviewFrag :: reviewItems";
+    // }
 
     /* ── ② 수정 ────────────────────────────── */
     // @PutMapping("/{id}/review/{reviewId}")
@@ -515,5 +534,24 @@ public class TrackController {
             return new ResponseEntity<>(trackList, HttpStatus.OK);
 
         return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * 플레이리스트에 추가할 트랙 리스트 요청
+     *
+     * @param entity
+     * @return
+     * @throws Exception
+     */
+    @PostMapping(value = "/from-playlists", consumes = "application/json")
+    public ResponseEntity<?> getAjaxTracks(@RequestBody Map<String, String> data) throws Exception {
+        log.info("트랙 요청 들어옴.");
+        int offset = Integer.parseInt(data.get("offset").toString());
+        int limit = Integer.parseInt(data.get("limit").toString());
+        List<Track> trackList = trackService.addTrackList(data.get("keyword"), offset, limit);
+        if (trackList != null)
+            return new ResponseEntity<>(trackList, HttpStatus.OK);
+
+        return new ResponseEntity<>("리스트 요청 실패.", HttpStatus.BAD_REQUEST);
     }
 }
