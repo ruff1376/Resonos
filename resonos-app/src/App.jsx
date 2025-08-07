@@ -8,6 +8,7 @@ import LoginContextProvider from './contexts/LoginContextProvider';
 import Login from './pages/Login';
 import Main from './pages/list/Main';
 import Mypage from './pages/user/Mypage';
+import NewAlbum from './pages/list/NewAlbum';
 
 const App = () => {
 
@@ -21,7 +22,8 @@ const App = () => {
           <Route path='/login' element={<Login />} />
           <Route path="/list/main" element={<Main />} />
 
-
+          {/* 컨텐츠 목록 */}
+          <Route path="/list/new-albums" element={<NewAlbum />} />
 
           {/* 유저 */}
           <Route path="/mypage" element={<Mypage />} />
