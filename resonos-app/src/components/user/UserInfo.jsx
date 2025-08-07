@@ -1,15 +1,10 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-const UserInfo = ({
-  user,
-  isOwner,
-  alreadyFollow,
-  currentBadge,
-  followerCount,
-  followCount,
-  countAllReview,
-  onFollowToggle
-}) => {
+const UserInfo = ({currentBadge, followCount, followerCount, user, isOwner, countAllReview}) => {
+
+  const alreadyFollow = false
+
   return (
     <>
       <section className="profile-section">
@@ -19,7 +14,7 @@ const UserInfo = ({
           <button
             id="btn-follow"
             className={`btn-gold ${alreadyFollow ? 'already' : ''}`}
-            onClick={onFollowToggle}
+            // onClick={onFollowToggle}
           >
             {alreadyFollow ? '언팔로우' : '팔로우'}
           </button>
@@ -35,9 +30,9 @@ const UserInfo = ({
 
         {isOwner && (
           <div className="profile-actions">
-            <a href="/users/edit" className="mybtn-gold">
+            <Link to="/users/edit" className="mybtn-gold">
               프로필 편집
-            </a>
+            </Link>
             <form action="/logout" id="form-logout" method="post">
               <button
                 id="btn-logout"

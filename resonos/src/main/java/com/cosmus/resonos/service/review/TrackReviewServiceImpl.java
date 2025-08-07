@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,51 +34,47 @@ public class TrackReviewServiceImpl implements TrackReviewService {
     @Autowired
     private UserMapper userMapper;
 
-
     /**
      * 평점(0~100) 유효성 검증 후 저장
      */
     // @Override
     // @Transactional
     // public TrackReview writeReview(TrackReview review) {
-    //     if (review.getRating() < 0 || review.getRating() > 100) {
-    //         throw new IllegalArgumentException("rating must be 0~100");
-    //     }
-    //     review.setCreatedAt(LocalDateTime.now());
-    //     review.setBlinded(false);
-    //     review.setLikes(0);
-    //     review.setDislikes(0);
-    //     mapper.insert(review);
-
-    //     // 1. 트랙 소유자(아티스트) ID
-    //     Track track = trackMapper.selectById(review.getTrackId());        // 아티스트 ID가 String이므로 Long으로 변환
-    //     // Long ownerId = Long.valueOf(track.getArtistId());
-    //     // Long ownerId = track.getArtistId(); // 임시로 변환
-    //     Long ownerId = Long.valueOf(track.getArtistId());
-
-
-    //     // 2. 리뷰 작성자 닉네임
-    //     Users reviewer = userMapper.selectById(review.getUserId());
-    //     String reviewerName = reviewer.getNickname();
-
-    //     // 3. 리뷰 대상 타입 및 ID
-    //     String targetType = "트랙";
-    //     String targetId = review.getTrackId();
-
-    //     // 4. 알림 전송
-    //     notificationService.createNotification(
-    //         ownerId,
-    //         "review",
-    //         "새 리뷰가 작성되었습니다.",
-    //         reviewerName + "님이 " + targetType + "에 리뷰를 남겼습니다.",
-    //         targetId
-    //     );
-
-    //     return review;
+    // if (review.getRating() < 0 || review.getRating() > 100) {
+    // throw new IllegalArgumentException("rating must be 0~100");
     // }
+    // review.setCreatedAt(LocalDateTime.now());
+    // review.setBlinded(false);
+    // review.setLikes(0);
+    // review.setDislikes(0);
+    // mapper.insert(review);
 
+    // // 1. 트랙 소유자(아티스트) ID
+    // Track track = trackMapper.selectById(review.getTrackId()); // 아티스트 ID가
+    // String이므로 Long으로 변환
+    // // Long ownerId = Long.valueOf(track.getArtistId());
+    // // Long ownerId = track.getArtistId(); // 임시로 변환
+    // Long ownerId = Long.valueOf(track.getArtistId());
 
+    // // 2. 리뷰 작성자 닉네임
+    // Users reviewer = userMapper.selectById(review.getUserId());
+    // String reviewerName = reviewer.getNickname();
 
+    // // 3. 리뷰 대상 타입 및 ID
+    // String targetType = "트랙";
+    // String targetId = review.getTrackId();
+
+    // // 4. 알림 전송
+    // notificationService.createNotification(
+    // ownerId,
+    // "review",
+    // "새 리뷰가 작성되었습니다.",
+    // reviewerName + "님이 " + targetType + "에 리뷰를 남겼습니다.",
+    // targetId
+    // );
+
+    // return review;
+    // }
 
     @Override
     public List<TrackReview> getReviewsForTrack(String trackId) {
@@ -112,15 +110,8 @@ public class TrackReviewServiceImpl implements TrackReviewService {
     }
 
     @Transactional
-    public TrackReview write(String trackId, ReviewForm f, Users u){
-        // 중복 확인
-        boolean exists = mapper.existsByUserAndTrack(u.getId(), trackId);
-        if (exists) {
-            throw new IllegalStateException("이미 해당 트랙에 리뷰를 작성하셨습니다.");
-        }
-        System.out.println("작성자 ID: " + u.getId());
-        System.out.println("작성자 isPro: " + u.isPro());
-            TrackReview r = TrackReview.builder()
+    public TrackReview write(String trackId, ReviewForm f, Users u) {
+        TrackReview r = TrackReview.builder()
                 .trackId(trackId)
                 .userId(u.getId())
                 .critic(u.isPro())
@@ -131,48 +122,45 @@ public class TrackReviewServiceImpl implements TrackReviewService {
                 .createdAt(LocalDateTime.now())
                 .reviewer(new Reviewer(u.getId(), u.getNickname(), u.getProfileImage(), u.isPro()))
                 .build();
-            mapper.insert(r);
-            return r;
+        mapper.insert(r);
+        return r;
     }
 
     @Transactional
-    public boolean update(Long id, ReviewForm form){
+    public boolean update(Long id, ReviewForm form) {
         return mapper.update(id, form.getRating(), form.getContent());
     }
 
     @Transactional
-    public void delete(Long id){ mapper.delete(id); }
-
+    public boolean delete(Long id) {
+        return mapper.delete(id) > 0;
+    }
 
     @Override
     public TrackReview findById(Long id) {
         return mapper.findById(id);
     }
 
-
     @Override
     public List<TrackReview> getMoreReviews(String trackId, int page, int size) {
         int offset = (page - 1) * size;
         List<TrackReview> reviews = mapper.selectPagedReviewsWithReviewer(trackId, size + 1, offset);
         for (TrackReview review : reviews) {
-            if(review.getBlinded() == false) {
-                if( review.getDislikes() > 5 ) {
+            if (review.getBlinded() == false) {
+                if (review.getDislikes() > 5) {
                     review.setBlinded(true);
                     mapper.updateBlindStatus(review.getId(), true);
                 }
             }
         }
-        return reviews;  // ⭐ 1개 더 가져옴
+        return reviews; // ⭐ 1개 더 가져옴
     }
 
-
     public boolean hasNextPage(String trackId, int page, int size) {
-        int totalCount = (int)mapper.countByTrackId(trackId);
+        int totalCount = (int) mapper.countByTrackId(trackId);
         int shownCount = page * size; // page=2면 offset=10
         return totalCount > shownCount;
     }
-
-
 
     @Override
     public long countByTrackId(String trackId) {
@@ -180,7 +168,8 @@ public class TrackReviewServiceImpl implements TrackReviewService {
     }
 
     @Override
-    public List<TrackReview> reviewWithReviewerByUserId(Long loginUserId, String keyword, int offset, int limit) throws Exception {
+    public List<TrackReview> reviewWithReviewerByUserId(Long loginUserId, String keyword, int offset, int limit)
+            throws Exception {
         return mapper.reviewWithReviewerByUserId(loginUserId, keyword, offset, limit);
     }
 
@@ -190,7 +179,8 @@ public class TrackReviewServiceImpl implements TrackReviewService {
     }
 
     @Override
-    public List<TrackReview> likedReviewByUserId(Long loginUserId,  String keyword, int offset, int limit) throws Exception {
+    public List<TrackReview> likedReviewByUserId(Long loginUserId, String keyword, int offset, int limit)
+            throws Exception {
         return mapper.likedReviewByUserId(loginUserId, keyword, offset, limit);
     }
 
@@ -204,10 +194,12 @@ public class TrackReviewServiceImpl implements TrackReviewService {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'writeReview'");
     }
+
     @Override
     public TrackReview getLastestReview(String trackId, Long userId) {
         return mapper.getLastestReview(trackId, userId);
     }
+
     @Override
     public long countAll() throws Exception {
         return mapper.countAll();

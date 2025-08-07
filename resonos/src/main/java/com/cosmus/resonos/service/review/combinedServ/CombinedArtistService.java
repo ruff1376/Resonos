@@ -38,7 +38,7 @@ public class CombinedArtistService {
     
 
     // ArtistPageDTO
-    public ArtistPageDTO artistPageGet(String ArtistId, Long UserId) {
+    public ResponseEntity<?> artistPageGet(String ArtistId, Long UserId) {
 
         ArtistPageDTO ArtistPageDTO = new ArtistPageDTO();
         try {
@@ -89,17 +89,17 @@ public class CombinedArtistService {
 
         } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return ArtistPageDTO;
+        return ResponseEntity.ok(ArtistPageDTO);
     }
 
     // 아티스트 페이지 좋아요 토글
-    // TODO : ArtistFollow 객체로 유저아이디, 아티스트아이디 받아오기
     public ResponseEntity<?> toggleArtistLike(Long userId, String artistId) {
 
         if(userId == null) {
-            return new ResponseEntity<>("userId is null", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("User is null", HttpStatus.UNAUTHORIZED);
         } else {
             // ArtistFollow artistFollow = new ArtistFollow();
             // artistFollow.setUserId(userId);
@@ -125,7 +125,7 @@ public class CombinedArtistService {
     public ResponseEntity<?> voteMood(ArtistMoodVote request) {
         // 로그인 안했을때
         if(request.getUserId() == null) {
-            return new ResponseEntity<>("userId is null", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("User is null", HttpStatus.UNAUTHORIZED);
         }
         // 내부오류
         if (request.getArtistId() == null || request.getMood() == null) {

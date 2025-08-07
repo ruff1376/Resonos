@@ -19,7 +19,7 @@ public interface TrackReviewService {
     void dislike(Long id);
     public TrackReview write(String trackId, ReviewForm f, Users u);
     public boolean update(Long reviewId, ReviewForm form);
-    public void delete(Long id);
+    public boolean delete(Long id);
     TrackReview findById(Long id);
 
     // 페이지네이션 관련

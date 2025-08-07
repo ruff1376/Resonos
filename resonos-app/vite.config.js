@@ -17,6 +17,14 @@ export default defineConfig({
         target: 'http://localhost:8080',
         changeOrigin: true,
       },
+      '/profile_img': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+      },
+      '/thumbnail': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+      },
     }
   }
 })

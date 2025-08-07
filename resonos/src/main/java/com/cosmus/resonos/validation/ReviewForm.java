@@ -7,6 +7,9 @@ import lombok.Data;
 
 @Data
 public class ReviewForm {
+
+    private Long id;
+
     /** 0‒100 점 */
     @Min(0) @Max(100)
     private Integer rating;
