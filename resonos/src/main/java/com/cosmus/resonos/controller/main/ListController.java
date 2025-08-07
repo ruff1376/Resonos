@@ -79,6 +79,96 @@ public class ListController {
 
     //     return "list/main";
     // }
+    
+    // @GetMapping("/new-albums")
+    // public String newAlbumList(Model model, @RequestParam(value = "size", defaultValue = "30") int size, Pagination pagination) throws Exception {
+    //     pagination.setSize(size);
+    //     List<Album> newAlbumList = albumService.newList(pagination);
+    //     model.addAttribute("pagination", pagination);
+    //     model.addAttribute("newAlbumList", newAlbumList);
+    //     String pageUri = UriComponentsBuilder.fromPath("/list/new-albums")
+    //                                         .queryParam("size", pagination.getSize())
+    //                                         .queryParam("count", pagination.getCount())
+    //                                         .build()
+    //                                         .toUriString();
+    //     model.addAttribute("pageUri", pageUri);
+    //     return "list/new_album";
+    // }
+    
+    // @GetMapping("/hot-albums")
+    // public String hotAlbumList(Model model, @RequestParam(value = "size", defaultValue = "30") int size, Pagination pagination) throws Exception {
+    //     pagination.setSize(size);
+    //     List<Album> hotAlbumList = albumService.hotList(pagination);
+    //     model.addAttribute("pagination", pagination);
+    //     model.addAttribute("hotAlbumList", hotAlbumList);
+    //     String pageUri = UriComponentsBuilder.fromPath("/list/hot-albums")
+    //                                         .queryParam("size", pagination.getSize())
+    //                                         .queryParam("count", pagination.getCount())
+    //                                         .build()
+    //                                         .toUriString();
+    //     model.addAttribute("pageUri", pageUri);
+    //     return "list/hot_album";
+    // }
+    
+    // @GetMapping("/new-tracks")
+    // public String newTrackList(Model model, @RequestParam(value = "size", defaultValue = "30") int size, Pagination pagination) throws Exception {
+    //     pagination.setSize(size);
+    //     List<Track> newTrackList = trackService.newList(pagination);
+    //     model.addAttribute("pagination", pagination);
+    //     model.addAttribute("newTrackList", newTrackList);
+    //     String pageUri = UriComponentsBuilder.fromPath("/list/new-tracks")
+    //                                         .queryParam("size", pagination.getSize())
+    //                                         .queryParam("count", pagination.getCount())
+    //                                         .build()
+    //                                         .toUriString();
+    //     model.addAttribute("pageUri", pageUri);
+    //     return "list/new_track";
+    // }
+    
+    // @GetMapping("/hot-tracks")
+    // public String hotTrackList(Model model, @RequestParam(value = "size", defaultValue = "30") int size, Pagination pagination) throws Exception {
+    //     pagination.setSize(size);
+    //     List<Track> hotTrackList = trackService.hotList(pagination);
+    //     model.addAttribute("pagination", pagination);
+    //     model.addAttribute("hotTrackList", hotTrackList);
+    //     String pageUri = UriComponentsBuilder.fromPath("/list/hot-tracks")
+    //                                         .queryParam("size", pagination.getSize())
+    //                                         .queryParam("count", pagination.getCount())
+    //                                         .build()
+    //                                         .toUriString();
+    //     model.addAttribute("pageUri", pageUri);
+    //     return "list/hot_track";
+    // }
+    
+    // @GetMapping("/new-playlists")
+    // public String newPlaylistList(Model model, @RequestParam(value = "size", defaultValue = "30") int size, Pagination pagination) throws Exception {
+    //     pagination.setSize(size);
+    //     List<Playlist> newPlaylistList = playlistService.newList(pagination);
+    //     model.addAttribute("pagination", pagination);
+    //     model.addAttribute("newPlaylistList", newPlaylistList);
+    //     String pageUri = UriComponentsBuilder.fromPath("/list/new-playlists")
+    //                                         .queryParam("size", pagination.getSize())
+    //                                         .queryParam("count", pagination.getCount())
+    //                                         .build()
+    //                                         .toUriString();
+    //     model.addAttribute("pageUri", pageUri);
+    //     return "list/new_playlist";
+    // }
+    
+    // @GetMapping("/hot-playlists")
+    // public String hotPlaylistList(Model model, @RequestParam(value = "size", defaultValue = "30") int size, Pagination pagination) throws Exception {
+    //     pagination.setSize(size);
+    //     List<Playlist> hotPlaylistList = playlistService.hotList(pagination);
+    //     model.addAttribute("pagination", pagination);
+    //     model.addAttribute("hotPlaylistList", hotPlaylistList);
+    //     String pageUri = UriComponentsBuilder.fromPath("/list/hot-playlists")
+    //                                         .queryParam("size", pagination.getSize())
+    //                                         .queryParam("count", pagination.getCount())
+    //                                         .build()
+    //                                         .toUriString();
+    //     model.addAttribute("pageUri", pageUri);
+    //     return "list/hot_playlist";
+    // }
 
     @GetMapping("/main")
     public ResponseEntity<Map<String, Object>> mainAlbumTrackList() throws Exception {
@@ -103,21 +193,6 @@ public class ListController {
         return ResponseEntity.ok(result);
     }
 
-    // @GetMapping("/new-albums")
-    // public String newAlbumList(Model model, @RequestParam(value = "size", defaultValue = "30") int size, Pagination pagination) throws Exception {
-    //     pagination.setSize(size);
-    //     List<Album> newAlbumList = albumService.newList(pagination);
-    //     model.addAttribute("pagination", pagination);
-    //     model.addAttribute("newAlbumList", newAlbumList);
-    //     String pageUri = UriComponentsBuilder.fromPath("/list/new-albums")
-    //                                         .queryParam("size", pagination.getSize())
-    //                                         .queryParam("count", pagination.getCount())
-    //                                         .build()
-    //                                         .toUriString();
-    //     model.addAttribute("pageUri", pageUri);
-    //     return "list/new_album";
-    // }
-
     @GetMapping("/new-albums")
     public ResponseEntity<Map<String, Object>> newAlbumList(
         @RequestParam(value = "size", defaultValue = "30") int size,
@@ -131,21 +206,6 @@ public class ListController {
         response.put("newAlbumList", list);
         return ResponseEntity.ok(response);
     }
-
-    // @GetMapping("/hot-albums")
-    // public String hotAlbumList(Model model, @RequestParam(value = "size", defaultValue = "30") int size, Pagination pagination) throws Exception {
-    //     pagination.setSize(size);
-    //     List<Album> hotAlbumList = albumService.hotList(pagination);
-    //     model.addAttribute("pagination", pagination);
-    //     model.addAttribute("hotAlbumList", hotAlbumList);
-    //     String pageUri = UriComponentsBuilder.fromPath("/list/hot-albums")
-    //                                         .queryParam("size", pagination.getSize())
-    //                                         .queryParam("count", pagination.getCount())
-    //                                         .build()
-    //                                         .toUriString();
-    //     model.addAttribute("pageUri", pageUri);
-    //     return "list/hot_album";
-    // }
 
     @GetMapping("/hot-albums")
     public ResponseEntity<Map<String, Object>> hotAlbumList(
@@ -161,21 +221,6 @@ public class ListController {
         return ResponseEntity.ok(response);
     }
 
-    // @GetMapping("/new-tracks")
-    // public String newTrackList(Model model, @RequestParam(value = "size", defaultValue = "30") int size, Pagination pagination) throws Exception {
-    //     pagination.setSize(size);
-    //     List<Track> newTrackList = trackService.newList(pagination);
-    //     model.addAttribute("pagination", pagination);
-    //     model.addAttribute("newTrackList", newTrackList);
-    //     String pageUri = UriComponentsBuilder.fromPath("/list/new-tracks")
-    //                                         .queryParam("size", pagination.getSize())
-    //                                         .queryParam("count", pagination.getCount())
-    //                                         .build()
-    //                                         .toUriString();
-    //     model.addAttribute("pageUri", pageUri);
-    //     return "list/new_track";
-    // }
-
     @GetMapping("/new-tracks")
     public ResponseEntity<Map<String, Object>> newTrackList(
         @RequestParam(value = "size", defaultValue = "30") int size,
@@ -189,21 +234,6 @@ public class ListController {
         response.put("newTrackList", list);
         return ResponseEntity.ok(response);
     }
-
-    // @GetMapping("/hot-tracks")
-    // public String hotTrackList(Model model, @RequestParam(value = "size", defaultValue = "30") int size, Pagination pagination) throws Exception {
-    //     pagination.setSize(size);
-    //     List<Track> hotTrackList = trackService.hotList(pagination);
-    //     model.addAttribute("pagination", pagination);
-    //     model.addAttribute("hotTrackList", hotTrackList);
-    //     String pageUri = UriComponentsBuilder.fromPath("/list/hot-tracks")
-    //                                         .queryParam("size", pagination.getSize())
-    //                                         .queryParam("count", pagination.getCount())
-    //                                         .build()
-    //                                         .toUriString();
-    //     model.addAttribute("pageUri", pageUri);
-    //     return "list/hot_track";
-    // }
 
     @GetMapping("/hot-tracks")
     public ResponseEntity<Map<String, Object>> hotTrackList(
@@ -219,21 +249,6 @@ public class ListController {
         return ResponseEntity.ok(response);
     }
 
-    // @GetMapping("/new-playlists")
-    // public String newPlaylistList(Model model, @RequestParam(value = "size", defaultValue = "30") int size, Pagination pagination) throws Exception {
-    //     pagination.setSize(size);
-    //     List<Playlist> newPlaylistList = playlistService.newList(pagination);
-    //     model.addAttribute("pagination", pagination);
-    //     model.addAttribute("newPlaylistList", newPlaylistList);
-    //     String pageUri = UriComponentsBuilder.fromPath("/list/new-playlists")
-    //                                         .queryParam("size", pagination.getSize())
-    //                                         .queryParam("count", pagination.getCount())
-    //                                         .build()
-    //                                         .toUriString();
-    //     model.addAttribute("pageUri", pageUri);
-    //     return "list/new_playlist";
-    // }
-
     @GetMapping("/new-playlists")
     public ResponseEntity<Map<String, Object>> newPlaylistList(
         @RequestParam(value = "size", defaultValue = "30") int size,
@@ -247,21 +262,6 @@ public class ListController {
         response.put("newPlaylistList", list);
         return ResponseEntity.ok(response);
     }
-
-    // @GetMapping("/hot-playlists")
-    // public String hotPlaylistList(Model model, @RequestParam(value = "size", defaultValue = "30") int size, Pagination pagination) throws Exception {
-    //     pagination.setSize(size);
-    //     List<Playlist> hotPlaylistList = playlistService.hotList(pagination);
-    //     model.addAttribute("pagination", pagination);
-    //     model.addAttribute("hotPlaylistList", hotPlaylistList);
-    //     String pageUri = UriComponentsBuilder.fromPath("/list/hot-playlists")
-    //                                         .queryParam("size", pagination.getSize())
-    //                                         .queryParam("count", pagination.getCount())
-    //                                         .build()
-    //                                         .toUriString();
-    //     model.addAttribute("pageUri", pageUri);
-    //     return "list/hot_playlist";
-    // }
 
     @GetMapping("/hot-playlists")
     public ResponseEntity<Map<String, Object>> hotPlaylistList(
