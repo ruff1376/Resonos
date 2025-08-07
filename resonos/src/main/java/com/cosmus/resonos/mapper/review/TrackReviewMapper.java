@@ -23,7 +23,7 @@ public interface TrackReviewMapper {
     public boolean update(@Param("id") Long id,
                                 @Param("rating") Integer rating,
                                 @Param("content") String content);
-    public void delete(Long id);
+    public int delete(Long id);
 
     // ───────── Aggregation ─────────
     TrackScore findScoreByTrackId(@Param("trackId") String trackId);

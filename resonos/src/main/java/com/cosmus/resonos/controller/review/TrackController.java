@@ -86,19 +86,63 @@ public class TrackController {
     @Autowired
     private CombinedTrackService combinedTrackService;
 
+    // 트랙 화면
     @GetMapping
+    // TODO : 유저아이디 파라미터 추가해야함
     public ResponseEntity<?> trackInfo(@RequestParam("id") String trackId) {
-        ResponseEntity<?> trackPage = null;
-        trackPage = combinedTrackService.trackPage(trackId, 76L);
 
-        if(trackPage.getBody().equals("FAIL")) {
-            return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        else return new ResponseEntity<>(trackPage, HttpStatus.OK);
-
+        return combinedTrackService.trackPage(trackId, 76L);
     }
-    
 
+    // 트랙 리뷰 작성
+    @PostMapping
+    public ResponseEntity<?> trackReviewPost(@RequestParam("id") String trackId, ReviewForm f,
+                        @AuthenticationPrincipal CustomUser user) {
+            
+        return combinedTrackService.reviewPost(trackId, f, user);
+    }
+
+    // 리뷰 수정
+    @PutMapping("/reviews")
+    public ResponseEntity<?> reviewUpdate(@RequestParam("id") String trackId, @RequestBody @Valid ReviewForm form) {
+        // 폼의 아이디는 리뷰아이디
+        return combinedTrackService.reviewUpdate(form.getId(), form, trackId);
+    }
+
+    // 리뷰 삭제
+    @DeleteMapping("/reviews")
+    public ResponseEntity<?> deleteAndRefresh(@RequestParam("id") String trackId, @RequestBody Long reviewId ) {
+        
+        return combinedTrackService.reviewDelete(reviewId, trackId);
+    }
+
+    // 트랙 리뷰 좋아요
+    @PostMapping("/reviews/{reviewId}")
+    public ResponseEntity<?> toggleReviewLike(@PathVariable("reviewId") Long reviewId
+                                , @AuthenticationPrincipal CustomUser user) {
+        return combinedTrackService.reviewLike(reviewId, user);
+    }
+
+    // 트랙 리뷰 신고
+    @PostMapping("/report/{reviewId}")
+    public ResponseEntity<?> reportReview(@PathVariable("reviewId") Long reviewId
+                                , @AuthenticationPrincipal CustomUser user) {
+
+        return combinedTrackService.reportReview(reviewId, user);
+    }
+
+    // 트랙 분위기 투표
+    @PostMapping("/vote")
+    public ResponseEntity<?> voteMood(@RequestBody TrackMoodVote request) {
+
+        return combinedTrackService.voteMood(request);
+    }
+
+    // 트랙 좋아요
+    @PostMapping("/like")
+    public ResponseEntity<?> toggleTrackLike(@RequestBody LikedTrack dto) {
+        return combinedTrackService.toggleTrackLike(dto);
+    }
 
     // 트랙 화면
     // @GetMapping
@@ -239,19 +283,19 @@ public class TrackController {
         return ResponseEntity.ok(playlistService.getPlaylistsByTrackId(trackId));
     }
 
-    @GetMapping("/{id}/score-fragment")
-    public String scoreRefresh(@PathVariable("id") String id, Model model) {
-        TrackScore score = trackReviewService.getTrackScore(id);
-        model.addAttribute("score", score);
-        return "review/reviewFrag :: scoreFragment"; // Thymeleaf 조각 이름 지정
-    }
+    // @GetMapping("/{id}/score-fragment")
+    // public String scoreRefresh(@PathVariable("id") String id, Model model) {
+    //     TrackScore score = trackReviewService.getTrackScore(id);
+    //     model.addAttribute("score", score);
+    //     return "review/reviewFrag :: scoreFragment"; // Thymeleaf 조각 이름 지정
+    // }
 
-    @GetMapping("/{id}/refresh-frag")
-    public String reivewRefresh(@PathVariable("id") String id, Model model) {
-        TrackScore score = trackReviewService.getTrackScore(id);
-        model.addAttribute("score", score);
-        return "review/reviewFrag :: reviewSection";
-    }
+    // @GetMapping("/{id}/refresh-frag")
+    // public String reivewRefresh(@PathVariable("id") String id, Model model) {
+    //     TrackScore score = trackReviewService.getTrackScore(id);
+    //     model.addAttribute("score", score);
+    //     return "review/reviewFrag :: reviewSection";
+    // }
 
     @GetMapping("/{trackId}/reviews/more")
     public String loadMoreReviews(@PathVariable("trackId") String trackId,
@@ -304,19 +348,20 @@ public class TrackController {
     }
 
     /* ── ① 등록 ────────────────────────────── */
-    @PostMapping
-    @ResponseBody
-    public ResponseEntity<?> create(@RequestParam("id") String trackId,
-            @RequestBody @Valid ReviewForm form,
-            @AuthenticationPrincipal CustomUser user) {
-        try {
-            TrackReview review = trackReviewService.write(trackId, form, user.getUser());
-            return ResponseEntity.ok(review);
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 리뷰를 작성했습니다.");
-        }
-    }
+    // @PostMapping
+    // @ResponseBody
+    // public ResponseEntity<?> create(@RequestParam("id") String trackId,
+    //         @RequestBody @Valid ReviewForm form,
+    //         @AuthenticationPrincipal CustomUser user) {
+    //     try {
+    //         TrackReview review = trackReviewService.write(trackId, form, user.getUser());
+    //         return ResponseEntity.ok(review);
+    //     } catch (IllegalStateException e) {
+    //         return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 리뷰를 작성했습니다.");
+    //     }
+    // }
 
+    // 등록한 리뷰를 비동기로 반환
     @GetMapping("/{trackId}/my-review-frag")
     public String getMyReviewFragment(@PathVariable("trackId") String trackId,
             @AuthenticationPrincipal CustomUser principal,
@@ -343,112 +388,112 @@ public class TrackController {
     }
 
     /* ── ② 수정 ────────────────────────────── */
-    @PutMapping("/{id}/review/{reviewId}")
-    @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, 'TRACK', authentication)")
-    @ResponseBody
-    public ResponseEntity<?> update(@PathVariable("id") String trackId,
-            @PathVariable("reviewId") Long reviewId,
-            @RequestBody @Valid ReviewForm form) {
-        boolean success = trackReviewService.update(reviewId, form);
-        if (!success) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("수정 실패");
-        }
-        TrackReview updatedReview = trackReviewService.findById(reviewId);
-        return ResponseEntity.ok(updatedReview);
-    }
+    // @PutMapping("/{id}/review/{reviewId}")
+    // @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, 'TRACK', authentication)")
+    // @ResponseBody
+    // public ResponseEntity<?> update(@PathVariable("id") String trackId,
+    //         @PathVariable("reviewId") Long reviewId,
+    //         @RequestBody @Valid ReviewForm form) {
+    //     boolean success = trackReviewService.update(reviewId, form);
+    //     if (!success) {
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("수정 실패");
+    //     }
+    //     TrackReview updatedReview = trackReviewService.findById(reviewId);
+    //     return ResponseEntity.ok(updatedReview);
+    // }
 
-    /* ── ③ 삭제 ────────────────────────────── */
-    @DeleteMapping("/{id}/review/{reviewId}")
-    @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, 'TRACK', authentication)")
-    public String deleteAndRefresh(@PathVariable("id") String trackId,
-            @PathVariable("reviewId") Long reviewId,
-            Model model) {
-        trackReviewService.delete(reviewId);
-        TrackScore score = trackReviewService.getTrackScore(trackId);
-        model.addAttribute("score", score);
-        return "review/reviewFrag :: reviewSection"; // 리뷰 섹션 프래그먼트 반환
-    }
+    // /* ── ③ 삭제 ────────────────────────────── */
+    // @DeleteMapping("/{id}/review/{reviewId}")
+    // @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, 'TRACK', authentication)")
+    // public String deleteAndRefresh(@PathVariable("id") String trackId,
+    //         @PathVariable("reviewId") Long reviewId,
+    //         Model model) {
+    //     trackReviewService.delete(reviewId);
+    //     TrackScore score = trackReviewService.getTrackScore(trackId);
+    //     model.addAttribute("score", score);
+    //     return "review/reviewFrag :: reviewSection"; // 리뷰 섹션 프래그먼트 반환
+    // }
 
-    @PostMapping("/track-reviews/{reviewId}/like")
-    @ResponseBody
-    public ResponseEntity<?> toggleReviewLike(@PathVariable("reviewId") Long reviewId,
-            @AuthenticationPrincipal CustomUser user) {
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("로그인이 필요합니다.");
-        }
-        reviewLikeService.toggleLike(reviewId, user.getId(), "TRACK");
+    // @PostMapping("/track-reviews/{reviewId}/like")
+    // @ResponseBody
+    // public ResponseEntity<?> toggleReviewLike(@PathVariable("reviewId") Long reviewId,
+    //         @AuthenticationPrincipal CustomUser user) {
+    //     if (user == null) {
+    //         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+    //                 .body("로그인이 필요합니다.");
+    //     }
+    //     reviewLikeService.toggleLike(reviewId, user.getId(), "TRACK");
 
-        int likeCount = reviewLikeService.countLikes(reviewId, "TRACK");
-        boolean liked = reviewLikeService.isLiked(reviewId, user.getId(), "TRACK");
+    //     int likeCount = reviewLikeService.countLikes(reviewId, "TRACK");
+    //     boolean liked = reviewLikeService.isLiked(reviewId, user.getId(), "TRACK");
 
-        return ResponseEntity.ok(Map.of("likeCount", likeCount, "liked", liked));
-    }
+    //     return ResponseEntity.ok(Map.of("likeCount", likeCount, "liked", liked));
+    // }
 
-    @PostMapping("/reviews/{reviewType}/{reviewId}/report")
-    @ResponseBody
-    public ResponseEntity<?> reportReview(@PathVariable("reviewType") String reviewType,
-            @PathVariable("reviewId") Long reviewId,
-            @AuthenticationPrincipal CustomUser user) {
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("로그인이 필요합니다.");
-        }
-        try {
-            reviewLikeService.reportReview(reviewId, user.getId(), reviewType);
-            int reportCount = reviewLikeService.countReports(reviewId, reviewType);
-            return ResponseEntity.ok(Map.of("reportCount", reportCount));
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
-                    .body("이미 신고한 리뷰입니다.");
-        }
-    }
+    // @PostMapping("/reviews/{reviewType}/{reviewId}/report")
+    // @ResponseBody
+    // public ResponseEntity<?> reportReview(@PathVariable("reviewType") String reviewType,
+    //         @PathVariable("reviewId") Long reviewId,
+    //         @AuthenticationPrincipal CustomUser user) {
+    //     if (user == null) {
+    //         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+    //                 .body("로그인이 필요합니다.");
+    //     }
+    //     try {
+    //         reviewLikeService.reportReview(reviewId, user.getId(), reviewType);
+    //         int reportCount = reviewLikeService.countReports(reviewId, reviewType);
+    //         return ResponseEntity.ok(Map.of("reportCount", reportCount));
+    //     } catch (IllegalStateException e) {
+    //         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+    //                 .body("이미 신고한 리뷰입니다.");
+    //     }
+    // }
 
-    @PostMapping("/vote-mood")
-    @ResponseBody
-    public ResponseEntity<?> voteMood(@RequestBody TrackMoodVote request) throws Exception {
-        // 저장 또는 수정
-        trackMoodVoteService.saveOrUpdateVote(request.getUserId(), request.getTrackId(), request.getMood());
+    // @PostMapping("/vote-mood")
+    // @ResponseBody
+    // public ResponseEntity<?> voteMood(@RequestBody TrackMoodVote request) throws Exception {
+    //     // 저장 또는 수정
+    //     trackMoodVoteService.saveOrUpdateVote(request.getUserId(), request.getTrackId(), request.getMood());
 
-        System.out.println("🔥 요청 도착: " + request);
+    //     System.out.println("🔥 요청 도착: " + request);
 
-        if (request.getUserId() == null || request.getTrackId() == null || request.getMood() == null) {
-            return ResponseEntity.badRequest().body("필수 데이터 누락");
-        }
-        // 응답 데이터 구성
-        Long votedMoodId = trackMoodVoteService.getUserVotedMoodId(request.getUserId(), request.getTrackId());
-        // 투표 저장 후 최신 mood 데이터 조회
-        List<MoodStat> moodStats = moodStatService.getTop6MoodsByTrackId(request.getTrackId());
+    //     if (request.getUserId() == null || request.getTrackId() == null || request.getMood() == null) {
+    //         return ResponseEntity.badRequest().body("필수 데이터 누락");
+    //     }
+    //     // 응답 데이터 구성
+    //     Long votedMoodId = trackMoodVoteService.getUserVotedMoodId(request.getUserId(), request.getTrackId());
+    //     // 투표 저장 후 최신 mood 데이터 조회
+    //     List<MoodStat> moodStats = moodStatService.getTop6MoodsByTrackId(request.getTrackId());
 
-        List<Tag> tags = tagService.list();
-        List<String> moodLabels = moodStats.stream()
-                .map(MoodStat::getMoodName)
-                .collect(Collectors.toList());
-        List<Integer> moodValues = moodStats.stream()
-                .map(MoodStat::getVoteCount)
-                .collect(Collectors.toList());
+    //     List<Tag> tags = tagService.list();
+    //     List<String> moodLabels = moodStats.stream()
+    //             .map(MoodStat::getMoodName)
+    //             .collect(Collectors.toList());
+    //     List<Integer> moodValues = moodStats.stream()
+    //             .map(MoodStat::getVoteCount)
+    //             .collect(Collectors.toList());
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("votedMoodId", votedMoodId);
-        response.put("moods", tags);
-        response.put("labels", moodLabels);
-        response.put("values", moodValues);
+    //     Map<String, Object> response = new HashMap<>();
+    //     response.put("votedMoodId", votedMoodId);
+    //     response.put("moods", tags);
+    //     response.put("labels", moodLabels);
+    //     response.put("values", moodValues);
 
-        return ResponseEntity.ok(response);
-    }
+    //     return ResponseEntity.ok(response);
+    // }
 
-    @PostMapping("/toggle-like")
-    @ResponseBody
-    public ResponseEntity<?> toggleTrackLike(@RequestBody LikedTrack dto) throws Exception {
-        boolean liked = likedTrackService.toggleLike(dto.getUserId(), dto.getTrackId());
-        int count = likedTrackService.getTrackLikeCount(dto.getTrackId());
+    // @PostMapping("/toggle-like")
+    // @ResponseBody
+    // public ResponseEntity<?> toggleTrackLike(@RequestBody LikedTrack dto) throws Exception {
+    //     boolean liked = likedTrackService.toggleLike(dto.getUserId(), dto.getTrackId());
+    //     int count = likedTrackService.getTrackLikeCount(dto.getTrackId());
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("liked", liked);
-        result.put("count", count);
+    //     Map<String, Object> result = new HashMap<>();
+    //     result.put("liked", liked);
+    //     result.put("count", count);
 
-        return ResponseEntity.ok(result);
-    }
+    //     return ResponseEntity.ok(result);
+    // }
 
     /**
      * 비동기 좋아요 한 트랙 검색

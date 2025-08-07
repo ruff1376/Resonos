@@ -64,25 +64,20 @@ public class ArtistController {
     @GetMapping
     public ResponseEntity<?> artistInfo(@RequestParam("id") String artistId) {
         // TODO : JWT 에서 유저 아이디 LONG 값 가져와서 파라미터로 넣어야함
-        ArtistPageDTO artistPageDTO = combinedArtistService.artistPageGet(artistId, 1L);
 
-        return new ResponseEntity<>(artistPageDTO, HttpStatus.OK);
+        return combinedArtistService.artistPageGet(artistId, 1L);
     }
 
     @PostMapping("/toggle-like")
     public ResponseEntity<?> toggleArtistLike(@RequestBody ArtistFollow dto) throws Exception {
         
-        ResponseEntity<?> result = combinedArtistService.toggleArtistLike(dto.getUserId(), dto.getArtistId());
-
-        return result;
+        return combinedArtistService.toggleArtistLike(dto.getUserId(), dto.getArtistId());
     }
 
     @PostMapping("/vote-mood")
     public ResponseEntity<?> voteMood(@RequestBody ArtistMoodVote request) throws Exception {
         
-        ResponseEntity<?> result = combinedArtistService.voteMood(request);
-
-        return result;
+        return combinedArtistService.voteMood(request);
     }
     
 
