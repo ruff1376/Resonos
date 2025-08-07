@@ -2,12 +2,13 @@ import axios from 'axios';
 
 axios.defaults.baseURL = '/api';
 
-// admin - index 요청 페이지
+// admin - index 요청 페이지 ######################################################################################################
+
 export const getAdminIndex = async () => {
   return await axios.get('/admin/stats');
 };
 
-// admin - 유저(members) 관리 페이지
+// admin - 유저(members) 관리 페이지 상단 ##########################################################################################
 
 const membersPath = '/admin/members';
 
@@ -41,8 +42,7 @@ export const banUser = (id, ban = true, reason = '') =>
 export const resetPassword = (id) =>
   axios.post(`${membersPath}/reset-password`, null, { params: { id } });
 
-
-
+// admin - 유저(members) 관리 페이지 하단 ##########################################################################################
 
 
 // admin - item 관리 페이지

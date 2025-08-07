@@ -136,20 +136,67 @@ public class UserServiceImpl implements UserService {
                                     .anyMatch(role -> role.equals("ROLE_ADMIN"));
     }
 
-    /* 회원 정보 수정 */
+    /* 회원 정보 수정 - 기존 */
+    // @Override
+    // public boolean update(Users user) throws Exception {
+    //     // 비밀번호 입력값이 있을 때만 변경
+    //     if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+    //         String encodedPassword = passwordEncoder.encode(user.getPassword());
+    //         user.setPassword(encodedPassword);
+    //     } else {
+    //         // 기존 비밀번호 유지: DB에서 조회해서 set
+    //         String currentPassword = userMapper.selectPasswordById(user.getId());
+    //         user.setPassword(currentPassword);
+    //     }
+    //     return userMapper.update(user) > 0;
+    // }
+
+
+    // react에서 회원 정보 수정을 위해서 새롭게 작성 됨 
+    @Transactional
     @Override
     public boolean update(Users user) throws Exception {
-        // 비밀번호 입력값이 있을 때만 변경
-        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
-            String encodedPassword = passwordEncoder.encode(user.getPassword());
-            user.setPassword(encodedPassword);
-        } else {
-            // 기존 비밀번호 유지: DB에서 조회해서 set
-            String currentPassword = userMapper.selectPasswordById(user.getId());
-            user.setPassword(currentPassword);
+        // 기존 회원 정보 조회
+        Users existingUser = userMapper.selectById(user.getId());
+
+    // 비밀번호 처리
+    if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+    } else {
+        String currentPassword = userMapper.selectPasswordById(user.getId());
+        user.setPassword(currentPassword);
+    }
+
+    // username 변경 체크
+    if (!existingUser.getUsername().equals(user.getUsername())) {
+        // 1. 기존 권한 삭제 (user_auth에서 기존 username 참조 row 삭제)
+        userMapper.deleteAuthByUsername(existingUser.getUsername());
+
+        // 2. 회원 업데이트 (user 테이블의 username 변경)
+        userMapper.update(user);
+
+        // 3. 새로운 username으로 권한 재등록
+        if(user.getAuthList() != null) {
+            for(UserAuth auth : user.getAuthList()) {
+                auth.setUsername(user.getUsername());
+                userMapper.insertAuth(auth);
+            }
         }
+        return true;
+    } else {
+        // 변경 없으면 권한 수정 처리 등 필요 시 여기서
+        if(user.getAuthList() != null) {
+            for(UserAuth auth : user.getAuthList()) {
+                userMapper.updateAuth(auth);
+            }
+        }
+        // 회원 업데이트
         return userMapper.update(user) > 0;
     }
+    }
+
+
 
 
     @Override

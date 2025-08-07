@@ -8,6 +8,8 @@ import LoginContextProvider from './contexts/LoginContextProvider';
 import Login from './pages/Login';
 import Main from './pages/list/Main';
 import Mypage from './pages/user/Mypage';
+import AdminMembers from './pages/admin/AdminMembersPage';
+import AdminMemberDetail from './pages/admin/AdminMemberDetail';
 
 const App = () => {
 
@@ -26,6 +28,11 @@ const App = () => {
           {/* 유저 */}
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/users/:id" element={<Mypage />} />
+
+          {/* 관리자 - 유저 관리 경로 */}
+          <Route path="/admin/members" element={<AdminMembers />} />
+          <Route path="/admin/members/:id" element={<AdminMemberDetail />} />
+          
         </Routes>
       </LoginContextProvider>
     </BrowserRouter>
