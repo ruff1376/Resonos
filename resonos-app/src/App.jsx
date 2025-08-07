@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import LoginContextProvider from './contexts/LoginContextProvider';
 import Login from './pages/Login';
 import Main from './pages/list/Main';
+import Mypage from './pages/user/Mypage';
 
 const App = () => {
 
@@ -19,6 +20,12 @@ const App = () => {
           <Route path='/test' element={<Tailwindtest />} />
           <Route path='/login' element={<Login />} />
           <Route path="/list/main" element={<Main />} />
+
+
+
+          {/* 유저 */}
+          <Route path="/mypage" element={<Mypage />} />
+          <Route path="/users/:id" element={<Mypage />} />
         </Routes>
       </LoginContextProvider>
     </BrowserRouter>
