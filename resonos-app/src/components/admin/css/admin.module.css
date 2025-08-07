@@ -224,4 +224,26 @@
 
 
 
-/*  */
+/* index - statusCard */
+/* admin.module.css 예시 */
+/* .col-md-3 {
+  flex: 0 0 25%;
+  max-width: 25%;
+  padding-right: 15px;  
+  padding-left: 15px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .col-md-3 {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+} */
+
+
+
+/* 컨테이너 기본 크기 */
+.container {width: 100% !important; max-width: var(--container) !important; margin: auto !important; padding: 0 !important;}
+a {text-decoration: none !important; color: inherit;}
+

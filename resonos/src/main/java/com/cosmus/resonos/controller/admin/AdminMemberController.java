@@ -13,18 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.bind.annotation.*;
 
-import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.admin.UserActivityLog;
 import com.cosmus.resonos.domain.admin.UserSanction;
@@ -36,10 +26,10 @@ import com.cosmus.resonos.service.user.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
-
 @Slf4j
-@Controller
-@RequestMapping("/admin/members")
+@CrossOrigin("*")
+@RestController
+@RequestMapping("/api/admin/members")
 public class AdminMemberController {
 
     @Autowired
@@ -51,194 +41,175 @@ public class AdminMemberController {
     @Autowired
     private UserSanctionService userSanctionService;
 
+    // 회원 목록 조회 (page, size, keyword)
+    @GetMapping
+    public ResponseEntity<?> getMembers(
+            @RequestParam(value = "page", defaultValue = "1") long page,
+            @RequestParam(value = "size", defaultValue = "10") long size,
+            @RequestParam(value = "keyword", defaultValue = "") String keyword) throws Exception{
+        try {
+            if (page < 1) page = 1;
+            if (size < 1) size = 10;
 
-@GetMapping
-public String members(
-    @RequestParam(value = "page", defaultValue = "1") long page,
-    @RequestParam(value = "size", defaultValue = "10") long size,
-    @RequestParam(value = "keyword", required = false) String keyword,
-    Model model
-) throws Exception {
-    // 1. 파라미터 보정 (최소값 보장)
-    if (page < 1) page = 1;
-    if (size < 1) size = 10;
+            long total = keyword.isBlank()
+                    ? userService.countAll()
+                    : userService.countByKeyword(keyword);
 
-    // 2. keyword 비어있을 때 ""로 보정 (폼, data-keyword 등에서 안전)
-    if (keyword == null) keyword = "";
+            Pagination pagination = new Pagination(page, size, 10, total);
 
-    // 3. 전체 회원 수
-    long total = (!keyword.isBlank())
-        ? userService.countByKeyword(keyword)
-        : userService.countAll();
+            List<Users> members = keyword.isBlank()
+                    ? userService.listPaging((int) pagination.getIndex(), (int) pagination.getSize())
+                    : userService.searchByKeywordPaging(keyword, (int) pagination.getIndex(), (int) pagination.getSize());
 
-    // 4. Pagination 객체 생성
-    Pagination pagination = new Pagination(page, size, 10, total);
+            members.forEach(member -> {
+                try {
+                    List<UserActivityLog> logs = userActivityLogService.getLogsByUserId(member.getId());
+                    if (logs == null)
+                        member.setLogs(List.of());
+                    else if (logs.size() > 3)
+                        member.setLogs(logs.subList(0, 3));
+                    else
+                        member.setLogs(logs);
+                } catch (Exception ex) {
+                    log.error("유저 활동 로그 조회 실패 (userId: " + member.getId() + ")", ex);
+                    member.setLogs(List.of());
+                }
+            });
 
-    // 5. 회원 목록 조회
-    List<Users> members = (!keyword.isBlank())
-        ? userService.searchByKeywordPaging(keyword, (int)pagination.getIndex(), (int)pagination.getSize())
-        : userService.listPaging((int)pagination.getIndex(), (int)pagination.getSize());
+            Map<String, Object> response = new HashMap<>();
+            response.put("members", members);
+            response.put("pagination", pagination);
+            response.put("keyword", keyword);
+            String pageUri = "/api/admin/members?size=" + size;
+            if (!keyword.isBlank())
+                pageUri += "&keyword=" + URLEncoder.encode(keyword, StandardCharsets.UTF_8);
+            response.put("pageUri", pageUri);
 
-    // 6. 각 회원의 최근 로그(최신 3개까지) 조회
-    for (Users member : members) {
-        List<UserActivityLog> logs = userActivityLogService.getLogsByUserId(member.getId());
-        if (logs == null) {
-            member.setLogs(List.of());
-        } else if (logs.size() > 3) {
-            member.setLogs(logs.subList(0, 3));
-        } else {
-            member.setLogs(logs);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("회원 목록 조회 실패", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "회원 목록 조회 실패"));
         }
     }
 
-    // 7. Model에 데이터 전달 (keyword 파라미터 누락/불능 방지)
-    model.addAttribute("members", members);
-    model.addAttribute("pagination", pagination);
-    model.addAttribute("keyword", keyword); // null 보정됨
-    String pageUri = "/admin/members?size=" + size;
-    if (!keyword.isBlank()) {
-        pageUri += "&keyword=" + URLEncoder.encode(keyword, StandardCharsets.UTF_8);
-    }
-    model.addAttribute("pageUri", pageUri);
+    // 회원 상세 조회
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getMember(@PathVariable("id") Long id) {
+        try {
+            Users member = userService.selectById(id);
+            if (member == null)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "회원이 존재하지 않습니다."));
 
-    return "admin/members";
-}
+            Map<String, Object> result = new HashMap<>();
+            result.put("username", member.getUsername());
+            result.put("id", member.getId());
+            result.put("nickname", member.getNickname());
+            result.put("email", member.getEmail());
+            result.put("enabled", member.isEnabled());
+            result.put("profileImage", member.getProfileImage());
+            result.put("authList", member.getAuthList().stream().map(UserAuth::getAuth).collect(Collectors.toList()));
+            List<UserSanction> sanctions = userSanctionService.getSanctionsByUserId(id);
+            result.put("sanctions", sanctions);
 
-
-
-    // 회원 활성/비활성 토글
-    @RequestMapping("/enable")
-    public String enableMember(@RequestParam("id") Long id, @RequestParam("enabled") boolean enabled, @RequestParam(value = "keyword", required = false) String keyword, Model model) throws Exception {
-        userService.enableUser(id, enabled);
-        return "redirect:/admin/members" + (keyword != null && !keyword.isBlank() ? ("?keyword=" + keyword) : "");
-    }
-
-
-
-    // 관리자만 접근 가능하게 권한 어노테이션 적용
-    @PostMapping("/ban")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String banMember(
-        @RequestParam("id") Long userId,
-        @RequestParam(value = "ban", required = false, defaultValue = "true") boolean ban,
-        @RequestParam(value = "reason", required = false) String reason,
-        @RequestParam(value = "keyword", required = false) String keyword,
-        Authentication auth
-    ) throws Exception {
-        // 인증 객체가 null일 수 있으므로 반드시 null 체크
-        if (auth == null || auth.getPrincipal() == null) {
-            // 인증 실패 또는 세션 만료 시 처리 (에러 페이지 안내 등)
-            throw new IllegalStateException("관리자 인증이 필요합니다. 다시 로그인 후 시도해주세요.");
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            log.error("회원 상세 조회 실패", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "회원 상세 조회 실패"));
         }
-        Long adminId = ((CustomUser) auth.getPrincipal()).getId();
-        // ban = true(제재), ban = false(해제) 분기
-        if (ban) {
-            userSanctionService.banUser(userId, reason, adminId);
-        } else {
-            userSanctionService.unbanUser(userId, adminId);
+    }
+
+    // 회원 생성
+    @PostMapping
+    public ResponseEntity<?> createMember(@RequestBody Users user) {
+        try {
+            userService.join(user);
+            return new ResponseEntity<>("SUCCESS", HttpStatus.CREATED);
+        } catch (Exception e) {
+            log.error("회원 생성 실패", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("회원 등록 실패: " + e.getMessage());
         }
-        return "redirect:/admin/members" +
-            (keyword != null && !keyword.isBlank() ? ("?keyword=" + keyword) : "");
     }
 
-
-
-
-    // 회원 전체 로그
-    @RequestMapping("/logs")
-    public String memberLogs(@RequestParam("userId") Long userId, Model model) throws Exception {
-        List<UserActivityLog> logs = userActivityLogService.getLogsByUserId(userId);
-        model.addAttribute("logs", logs);
-        return "admin/member_log";
-    }
-    // 회원 상세 정보 페이지
-    @GetMapping("/{id}/detail-json")
-    @ResponseBody
-    public Map<String, Object> memberDetailJson(@PathVariable("id") Long id) throws Exception {
-        Users member = userService.selectById(id);
-        if (member == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "회원 정보를 찾을 수 없습니다.");
-        }
-        Map<String, Object> result = new HashMap<>();
-        result.put("username", member.getUsername());
-        result.put("id", member.getId());
-        result.put("nickname", member.getNickname());
-        result.put("email", member.getEmail());
-        result.put("enabled", member.isEnabled());
-        result.put("profileImage", member.getProfileImage());
-        result.put("authList", member.getAuthList().stream().map(UserAuth::getAuth).collect(Collectors.toList()));
-        List<UserSanction> sanctions = userSanctionService.getSanctionsByUserId(id);
-        result.put("sanctions", sanctions);
-        return result;
-    }
-
-
-    // 회원 정보 수정 (업데이트)
-    @PostMapping("/update")
-    @ResponseBody
-    public ResponseEntity<?> updateMember(@ModelAttribute Users user) {
-        log.info("수정 요청: {}", user); // Users 객체 모든 값 로그로 확인
+    // 회원 수정
+    @PutMapping
+    public ResponseEntity<?> updateMember(@RequestBody Users user) {
         try {
             userService.update(user);
-            return ResponseEntity.ok("success");
+            return ResponseEntity.ok("SUCCESS");
         } catch (Exception e) {
-            log.error("회원 수정 오류", e);
-            return ResponseEntity.status(500).body("업데이트 실패: " + e.getMessage());
+            log.error("회원 수정 실패", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("업데이트 실패: " + e.getMessage());
         }
     }
-    // 회원 비밀번호 랜덤 초기화
-    @PostMapping("/reset-password")
-    @ResponseBody
-    public Map<String, Object> resetPassword(@RequestParam Long id) {
-        Map<String, Object> result = new HashMap<>();
-        try {
-            String randomPw = RandomStringUtils.randomAlphanumeric(10); // org.apache.commons.lang3
-            userService.updatePassword(id, randomPw); // 비밀번호 암호화 후 저장
-            result.put("success", true);
-            result.put("password", randomPw);
-        } catch (Exception e) {
-            result.put("success", false);
-            result.put("message", e.getMessage());
-        }
-        return result;
-    }
-
-
 
     // 회원 삭제
-    @PostMapping("/delete")
-    @ResponseBody
-    public ResponseEntity<?> deleteMember(@RequestParam("id") Long id) {
-        log.info("Deleting user: {}", id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteMember(@PathVariable Long id) {
         try {
-            userService.delete(id); // 실제 삭제 로직
-            return ResponseEntity.ok("success");
+            userService.delete(id);
+            return ResponseEntity.ok("SUCCESS");
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("삭제 실패: " + e.getMessage());
+            log.error("회원 삭제 실패", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("삭제 실패: " + e.getMessage());
         }
     }
 
-
-    // 회원 추가
-    @PostMapping("/create")
-    @ResponseBody
-    public ResponseEntity<?> createMember(@ModelAttribute Users user) throws Exception {
+    // 회원 활성/비활성 토글
+    @PostMapping("/enable")
+    public ResponseEntity<?> enableMember(@RequestParam("id") Long id, @RequestParam("enabled") boolean enabled) {
         try {
-            userService.join(user); // auth(권한)도 저장
-            return ResponseEntity.ok("success");
+            userService.enableUser(id, enabled);
+            return ResponseEntity.ok(Map.of("success", true));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("회원 등록 실패: " + e.getMessage());
+            log.error("활성/비활성 토글 실패", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "회원 활성/비활성 변경 실패"));
         }
     }
 
+    // 회원 밴/해제 (관리자 권한 필요)
+    @PostMapping("/ban")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> banMember(
+            @RequestParam("id") Long userId,
+            @RequestParam(value = "ban", defaultValue = "true") boolean ban,
+            @RequestParam(value = "reason", required = false) String reason,
+            Authentication auth) {
+        try {
+            if (auth == null || auth.getPrincipal() == null)
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("관리자 인증 필요");
 
+            Long adminId = ((com.cosmus.resonos.domain.CustomUser) auth.getPrincipal()).getId();
+            if (ban) {
+                userSanctionService.banUser(userId, reason, adminId);
+            } else {
+                userSanctionService.unbanUser(userId, adminId);
+            }
+            return ResponseEntity.ok(Map.of("success", true));
+        } catch (Exception e) {
+            log.error("회원 밴/해제 실패", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "회원 제재 변경 실패"));
+        }
+    }
 
-
-
-
-
+    // 비밀번호 랜덤 초기화
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestParam Long id) {
+        try {
+            String randomPw = RandomStringUtils.randomAlphanumeric(10);
+            userService.updatePassword(id, randomPw);
+            return ResponseEntity.ok(Map.of("success", true, "password", randomPw));
+        } catch (Exception e) {
+            log.error("비밀번호 초기화 실패", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("success", false, "message", e.getMessage()));
+        }
+    }
 
 }
-
-
-
