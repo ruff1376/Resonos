@@ -133,6 +133,7 @@ public class UserController {
       @AuthenticationPrincipal CustomUser loginUser
     ) throws Exception {
     if(loginUser == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    log.info("요청한 유저 아이디 : {}", loginUser.getUsername());
     try {
 
       // 유저 정보
@@ -155,7 +156,7 @@ public class UserController {
       // 최근 획득 배지
       List<Badge> badgeList = badgeService.recentGetBadge(user.getId());
       // 획득 배지 수
-      int badgeCount = badgeService.badgeCount(user.getId());
+      // int badgeCount = badgeService.badgeCount(user.getId());
       // 차트 데이터
       Map<String, Integer> chartData = FlattenGenreCounts.execute(userService.likedGenreData(user.getId()));
       // 리뷰 작성 수
@@ -168,18 +169,16 @@ public class UserController {
       response.put("utl", utl);
       response.put("countAllReview", countAllReview);
       response.put("chartData", chartData);
-      response.put("badgeCount", badgeCount);
+      // response.put("badgeCount", badgeCount);
       response.put("badgeList", badgeList);
       response.put("currentBadge", currentBadge);
       response.put("artistList", artistList);
       response.put("trackList", trackList);
       response.put("albumList", albumList);
-      response.put("loginUser", loginUser);
       response.put("playlists", playlists);
       response.put("user", user);
       response.put("followerCount", followerCount);
       response.put("followCount", followCount);
-      response.put("email", user.getEmail());
       response.put("isOwner", true);
 
       return new ResponseEntity<>(response, HttpStatus.OK);
@@ -323,9 +322,8 @@ public class UserController {
     @Validated({EmailCheck.class, NicknameCheck.class})
     @ModelAttribute Users user,
     BindingResult br,
-    @RequestParam("profileImg") MultipartFile file,
-    @AuthenticationPrincipal CustomUser loginUser,
-    RedirectAttributes redirectAttributes
+    @RequestParam(value = "profileImg", required = false) MultipartFile file,
+    @AuthenticationPrincipal CustomUser loginUser
   ) throws Exception {
     log.info("회원 정보 수정 요청 user : {}", user);
 
@@ -339,27 +337,27 @@ public class UserController {
       // 닉네임 유효성 검사
       if (br.hasFieldErrors("nickname")) {
           response.put("nickError", true);
-          return ResponseEntity.ok(response);
+          return ResponseEntity.badRequest().body(response);
       }
 
       // 닉네임 중복 검사
       boolean isNicknameDuplicated = userService.findByNickname(user.getNickname());
       if (!reqUser.getNickname().equals(user.getNickname()) && isNicknameDuplicated) {
           response.put("nickDuple", true);
-          return ResponseEntity.ok(response);
+          return ResponseEntity.badRequest().body(response);
       }
 
       // 이메일 유효성 검사
       if (br.hasFieldErrors("email")) {
           response.put("emailError", true);
-          return ResponseEntity.ok(response);
+          return ResponseEntity.badRequest().body(response);
       }
 
       // 이메일 중복 검사
       String existingUserId = userService.findId(user.getEmail());
       if (!reqUser.getEmail().equals(user.getEmail()) && existingUserId != null) {
           response.put("emailDuple", true);
-          return ResponseEntity.ok(response);
+          return ResponseEntity.badRequest().body(response);
       }
 
       // 배지 텍스트 없이 보내면
@@ -369,11 +367,13 @@ public class UserController {
       if(!checkBagde) user.setCurrentBadge(null);
 
       // 이미지 파일 저장
-      if (!file.isEmpty()) {
+      if (file != null && !file.isEmpty()) {
         UploadImage.uploadProfileImage(file, user);
       }
 
       boolean result = userService.updateFromUser(user);
+      response.put("user", user);
+      response.put("success", true);
       if(result) return new ResponseEntity<>(response, HttpStatus.OK);
     } catch(Exception e) {
       e.printStackTrace();

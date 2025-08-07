@@ -8,6 +8,7 @@ import LoginContextProvider from './contexts/LoginContextProvider';
 import Login from './pages/Login';
 import Main from './pages/list/Main';
 import Mypage from './pages/user/Mypage';
+import Edit from './pages/user/Edit';
 
 const App = () => {
 
@@ -26,6 +27,7 @@ const App = () => {
           {/* 유저 */}
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/users/:id" element={<Mypage />} />
+          <Route path="/users/edit" element={<Edit />} />
         </Routes>
       </LoginContextProvider>
     </BrowserRouter>
