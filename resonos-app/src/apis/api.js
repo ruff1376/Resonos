@@ -5,5 +5,6 @@ const api = axios.create()
 
 // 기본 URL 설정
 api.defaults.baseURL = '/api'
+api.defaults.withCredentials = true
 
 export default api;

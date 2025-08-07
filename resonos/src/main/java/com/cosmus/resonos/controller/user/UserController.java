@@ -87,6 +87,33 @@ public class UserController {
   @Autowired NotificationService notificationService;
 
   /**
+   * 사용자 정보 조회
+   * @param customUser
+   * @return
+   */
+  @GetMapping("/info")
+  public ResponseEntity<?> userInfo(
+      @AuthenticationPrincipal CustomUser customUser
+  ) {
+      log.info("::::: 사용자 정보 조회 :::::");
+      log.info("customUser : " + customUser);
+
+      if( customUser == null ) {
+          return new ResponseEntity<>("UNAUTHORIZED", HttpStatus.UNAUTHORIZED);
+      }
+
+      Users user = customUser.getUser();
+      log.info("user : " + user);
+
+      // 인증된 사용자 정보
+      if( user != null ) {
+          return new ResponseEntity<>(user, HttpStatus.OK);
+      }
+      // 인증 되지 않은 경우
+      return new ResponseEntity<>("UNAUTHORIZED", HttpStatus.UNAUTHORIZED);
+  }
+
+  /**
    * 로그인 페이지 요청
    * @param param
    * @return

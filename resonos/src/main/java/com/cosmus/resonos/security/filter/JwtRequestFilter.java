@@ -12,6 +12,7 @@ import com.cosmus.resonos.security.provider.JwtProvider;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -41,20 +42,21 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                   HttpServletResponse response,
                                   FilterChain filterChain)
       throws ServletException, IOException {
-    // 1. JWT 추출
-    String authorization = request.getHeader( SecurityConstants.TOKEN_HEADER ); // Authorization
-    log.info("authorization : " + authorization);
-
-    // 💍 "Bearer {jwt}" 체크
-    // 헤더가 없거나 올바르지 않으면 다음 필터로 진행
-    if( authorization == null || authorization.length() == 0 || !authorization.startsWith( SecurityConstants.TOKEN_PREFIX ) ) {
-        filterChain.doFilter(request, response);
-        return;
+    // 1. JWT 추출 (Authorization 헤더 대신 쿠키에서)
+    String jwt = null;
+    if(request.getCookies() != null) {
+      for(Cookie cookie : request.getCookies()) {
+        if("jwt".equals(cookie.getName())) {
+          jwt = cookie.getValue();
+          break;
+        }
+      }
     }
 
-    // 💍 JWT
-    // : "Bearer {jwt}" ➡ "Bearer " 제거 = JWT
-    String jwt = authorization.replace( SecurityConstants.TOKEN_PREFIX, "");
+    if(jwt == null || jwt.isEmpty()) {
+      filterChain.doFilter(request, response);
+      return;
+    }
 
     // 2. 인증 시도
     Authentication authentication = jwtProvider.getAuthenticationToken(jwt);
