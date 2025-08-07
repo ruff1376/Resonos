@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Pagination;
@@ -34,6 +35,7 @@ import com.cosmus.resonos.domain.review.Track;
 import com.cosmus.resonos.domain.review.TrackMoodVote;
 import com.cosmus.resonos.domain.review.TrackReview;
 import com.cosmus.resonos.domain.review.TrackScore;
+import com.cosmus.resonos.domain.review.responseDTO.TrackPageDTO;
 import com.cosmus.resonos.domain.user.Playlist;
 import com.cosmus.resonos.domain.user.Users;
 import com.cosmus.resonos.service.admin.TagService;
@@ -44,6 +46,7 @@ import com.cosmus.resonos.service.review.ReviewLikeService;
 import com.cosmus.resonos.service.review.TrackMoodVoteService;
 import com.cosmus.resonos.service.review.TrackReviewService;
 import com.cosmus.resonos.service.review.TrackService;
+import com.cosmus.resonos.service.review.combinedServ.CombinedTrackService;
 import com.cosmus.resonos.service.user.LikedTrackService;
 import com.cosmus.resonos.service.user.PlaylistDetailService;
 import com.cosmus.resonos.service.user.PlaylistService;
@@ -53,7 +56,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/tracks")
 public class TrackController {
 
@@ -80,118 +83,134 @@ public class TrackController {
     @Autowired
     private PlaylistService playlistService;
 
+    @Autowired
+    private CombinedTrackService combinedTrackService;
+
+    @GetMapping
+    public ResponseEntity<?> trackInfo(@RequestParam("id") String trackId) {
+        ResponseEntity<?> trackPage = null;
+        trackPage = combinedTrackService.trackPage(trackId, 76L);
+
+        if(trackPage.getBody().equals("FAIL")) {
+            return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        else return new ResponseEntity<>(trackPage, HttpStatus.OK);
+
+    }
+    
+
 
     // 트랙 화면
-    @GetMapping
-    public String trackInfo(@RequestParam("id") String id, Model model,
-            @AuthenticationPrincipal CustomUser principal,
-            @RequestParam(value = "reviewId", required = false) Long reviewId) throws Exception {
+    // @GetMapping
+    // public String trackInfo(@RequestParam("id") String id, Model model,
+    //         @AuthenticationPrincipal CustomUser principal,
+    //         @RequestParam(value = "reviewId", required = false) Long reviewId) throws Exception {
 
-        Users loginUser = null;
-        if (principal != null) {
-            loginUser = principal.getUser();
-            model.addAttribute("loginUser", loginUser);
-            boolean isAdmin = principal.getAuthorities()
-                    .stream()
-                    .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-            model.addAttribute("isAdmin", isAdmin);
-            System.out.println(isAdmin);
-            Long userVotedMoodId = trackMoodVoteService.getUserVotedMoodId(loginUser.getId(), id);
-            model.addAttribute("userVotedMoodId", userVotedMoodId);
-            // ✅ 좋아요 여부 체크
-            boolean isTrackLiked = likedTrackService.isLikedByUser(loginUser.getId(), id);
-            model.addAttribute("isTrackLikedByUser", isTrackLiked);
-            List<Playlist> userPlaylist = playlistService.usersPlaylist(loginUser.getId());
-            model.addAttribute("userPlaylist", userPlaylist);
-        } else {
-            // 비로그인 사용자를 위해 false로 설정
-            model.addAttribute("isTrackLikedByUser", false);
-        }
+    //     Users loginUser = null;
+    //     if (principal != null) {
+    //         loginUser = principal.getUser();
+    //         model.addAttribute("loginUser", loginUser);
+    //         boolean isAdmin = principal.getAuthorities()
+    //                 .stream()
+    //                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+    //         model.addAttribute("isAdmin", isAdmin);
+    //         System.out.println(isAdmin);
+    //         Long userVotedMoodId = trackMoodVoteService.getUserVotedMoodId(loginUser.getId(), id);
+    //         model.addAttribute("userVotedMoodId", userVotedMoodId);
+    //         // ✅ 좋아요 여부 체크
+    //         boolean isTrackLiked = likedTrackService.isLikedByUser(loginUser.getId(), id);
+    //         model.addAttribute("isTrackLikedByUser", isTrackLiked);
+    //         List<Playlist> userPlaylist = playlistService.usersPlaylist(loginUser.getId());
+    //         model.addAttribute("userPlaylist", userPlaylist);
+    //     } else {
+    //         // 비로그인 사용자를 위해 false로 설정
+    //         model.addAttribute("isTrackLikedByUser", false);
+    //     }
 
-        Track track = trackService.getTrackOrUpdate(id);
-        Album album = albumService.findAlbumByTrackId(id);
-        List<Track> top5List = trackService.findTop5TracksInSameAlbum(id);
-        Artist artist = artistService.selectArtistByTrackId(id);
-        TrackScore score = trackReviewService.getTrackScore(id);
+    //     Track track = trackService.getTrackOrUpdate(id);
+    //     Album album = albumService.findAlbumByTrackId(id);
+    //     List<Track> top5List = trackService.findTop5TracksInSameAlbum(id);
+    //     Artist artist = artistService.selectArtistByTrackId(id);
+    //     TrackScore score = trackReviewService.getTrackScore(id);
 
-        int page = 1;
-        int size = 5;
+    //     int page = 1;
+    //     int size = 5;
 
-        List<TrackReview> IndexReviews = trackReviewService.reviewWithReviewerByTrackId(id);
-        // 찾는 리뷰의 순서
-        if (reviewId != null) {
-            int index = IntStream.range(0, IndexReviews.size())
-                    .filter(i -> IndexReviews.get(i).getId().equals(reviewId))
-                    .findFirst()
-                    .orElse(-1);
+    //     List<TrackReview> IndexReviews = trackReviewService.reviewWithReviewerByTrackId(id);
+    //     // 찾는 리뷰의 순서
+    //     if (reviewId != null) {
+    //         int index = IntStream.range(0, IndexReviews.size())
+    //                 .filter(i -> IndexReviews.get(i).getId().equals(reviewId))
+    //                 .findFirst()
+    //                 .orElse(-1);
 
-            log.info("reviewId가 위치한 인덱스: {}", index);
-            if (index != -1) {
-                size = ((index + 1 - 1) / size + 1) * 5;
-                model.addAttribute("size", size);
-            }
-        }
+    //         log.info("reviewId가 위치한 인덱스: {}", index);
+    //         if (index != -1) {
+    //             size = ((index + 1 - 1) / size + 1) * 5;
+    //             model.addAttribute("size", size);
+    //         }
+    //     }
 
-        List<TrackReview> reviews = trackReviewService.getMoreReviews(id, page, size);
-        if (loginUser != null && reviews != null && !reviews.isEmpty()) {
-            List<Long> reviewIds = reviews.stream()
-                    .map(TrackReview::getId)
-                    .collect(Collectors.toList());
+    //     List<TrackReview> reviews = trackReviewService.getMoreReviews(id, page, size);
+    //     if (loginUser != null && reviews != null && !reviews.isEmpty()) {
+    //         List<Long> reviewIds = reviews.stream()
+    //                 .map(TrackReview::getId)
+    //                 .collect(Collectors.toList());
 
-            if (!reviewIds.isEmpty()) {
-                List<Long> likedReviewIds = reviewLikeService.getUserLikedReviewIds("TRACK", reviewIds,
-                        loginUser.getId());
+    //         if (!reviewIds.isEmpty()) {
+    //             List<Long> likedReviewIds = reviewLikeService.getUserLikedReviewIds("TRACK", reviewIds,
+    //                     loginUser.getId());
 
-                for (TrackReview review : reviews) {
-                    review.setIsLikedByCurrentUser(likedReviewIds.contains(review.getId()));
-                }
-            }
-        }
-        // ⭐ 페이징 객체 만들어서 더보기 여부 판단용
-        long totalCount = trackReviewService.countByTrackId(id);
-        Pagination pagination = new Pagination(page, size, 10, totalCount);
-        boolean hasNext = pagination.getLast() > page;
-        // 상위 6개 분위기
-        List<MoodStat> moodStats = moodStatService.getTop6MoodsByTrackId(id);
-        boolean isMoodEmpty = (moodStats == null || moodStats.isEmpty());
-        // moodName과 voteCount 리스트로 나누기
-        List<String> moodLabels = moodStats.stream()
-                .map(MoodStat::getMoodName)
-                .collect(Collectors.toList());
+    //             for (TrackReview review : reviews) {
+    //                 review.setIsLikedByCurrentUser(likedReviewIds.contains(review.getId()));
+    //             }
+    //         }
+    //     }
+    //     // ⭐ 페이징 객체 만들어서 더보기 여부 판단용
+    //     long totalCount = trackReviewService.countByTrackId(id);
+    //     Pagination pagination = new Pagination(page, size, 10, totalCount);
+    //     boolean hasNext = pagination.getLast() > page;
+    //     // 상위 6개 분위기
+    //     List<MoodStat> moodStats = moodStatService.getTop6MoodsByTrackId(id);
+    //     boolean isMoodEmpty = (moodStats == null || moodStats.isEmpty());
+    //     // moodName과 voteCount 리스트로 나누기
+    //     List<String> moodLabels = moodStats.stream()
+    //             .map(MoodStat::getMoodName)
+    //             .collect(Collectors.toList());
 
-        List<Integer> moodValues = moodStats.stream()
-                .map(MoodStat::getVoteCount)
-                .collect(Collectors.toList());
-        // ✅ 좋아요 수 조회
-        int likeCount = likedTrackService.getTrackLikeCount(id);
+    //     List<Integer> moodValues = moodStats.stream()
+    //             .map(MoodStat::getVoteCount)
+    //             .collect(Collectors.toList());
+    //     // ✅ 좋아요 수 조회
+    //     int likeCount = likedTrackService.getTrackLikeCount(id);
 
-        boolean emptyPlayList = true;
-        List<Playlist> playLists = null;
-        if (playlistService.getPlaylistsByTrackId(id) != null) {
-            playLists = playlistService.getPlaylistsByTrackId(id);
-            emptyPlayList = false;
-        }
+    //     boolean emptyPlayList = true;
+    //     List<Playlist> playLists = null;
+    //     if (playlistService.getPlaylistsByTrackId(id) != null) {
+    //         playLists = playlistService.getPlaylistsByTrackId(id);
+    //         emptyPlayList = false;
+    //     }
 
-        model.addAttribute("emptyPlayList", emptyPlayList);
-        model.addAttribute("playLists", playLists);
-        model.addAttribute("trackLikeCount", likeCount);
-        model.addAttribute("isMoodEmpty", isMoodEmpty);
-        model.addAttribute("moodLabels", moodLabels);
-        model.addAttribute("moodValues", moodValues);
-        model.addAttribute("tags", tagService.list());
-        model.addAttribute("track", track);
-        model.addAttribute("album", album);
-        model.addAttribute("top5List", top5List);
-        model.addAttribute("artist", artist);
-        model.addAttribute("score", score);
-        model.addAttribute("review", reviews);
-        model.addAttribute("hasNext", hasNext);
-        model.addAttribute("reviewType", "TRACK");
-        if (track == null) {
-            return "redirect:/artists?error=notfound";
-        }
-        return "review/track";
-    }
+    //     model.addAttribute("emptyPlayList", emptyPlayList);
+    //     model.addAttribute("playLists", playLists);
+    //     model.addAttribute("trackLikeCount", likeCount);
+    //     model.addAttribute("isMoodEmpty", isMoodEmpty);
+    //     model.addAttribute("moodLabels", moodLabels);
+    //     model.addAttribute("moodValues", moodValues);
+    //     model.addAttribute("tags", tagService.list());
+    //     model.addAttribute("track", track);
+    //     model.addAttribute("album", album);
+    //     model.addAttribute("top5List", top5List);
+    //     model.addAttribute("artist", artist);
+    //     model.addAttribute("score", score);
+    //     model.addAttribute("review", reviews);
+    //     model.addAttribute("hasNext", hasNext);
+    //     model.addAttribute("reviewType", "TRACK");
+    //     if (track == null) {
+    //         return "redirect:/artists?error=notfound";
+    //     }
+    //     return "review/track";
+    // }
 
     @GetMapping("/myplaylists")
     public ResponseEntity<List<Playlist>> getMyPlaylists(@AuthenticationPrincipal CustomUser loginUser)

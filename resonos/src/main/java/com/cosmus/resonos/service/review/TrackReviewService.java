@@ -10,7 +10,6 @@ import com.cosmus.resonos.domain.review.TrackScore;
 import com.cosmus.resonos.domain.user.Users;
 import com.cosmus.resonos.validation.ReviewForm;
 
-@Service
 public interface TrackReviewService {
     TrackReview writeReview(TrackReview review);
     List<TrackReview> getReviewsForTrack(String trackId);
