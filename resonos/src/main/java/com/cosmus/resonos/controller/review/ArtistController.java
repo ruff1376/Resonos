@@ -30,6 +30,7 @@ import com.cosmus.resonos.service.review.TrackService;
 import com.cosmus.resonos.service.review.combinedServ.CombinedArtistService;
 import com.cosmus.resonos.service.user.ArtistFollowService;
 
+import io.micrometer.core.ipc.http.HttpSender.Response;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -66,6 +67,22 @@ public class ArtistController {
         ArtistPageDTO artistPageDTO = combinedArtistService.artistPageGet(artistId, 1L);
 
         return new ResponseEntity<>(artistPageDTO, HttpStatus.OK);
+    }
+
+    @PostMapping("/toggle-like")
+    public ResponseEntity<?> toggleArtistLike(@RequestBody ArtistFollow dto) throws Exception {
+        
+        ResponseEntity<?> result = combinedArtistService.toggleArtistLike(dto.getUserId(), dto.getArtistId());
+
+        return result;
+    }
+
+    @PostMapping("/vote-mood")
+    public ResponseEntity<?> voteMood(@RequestBody ArtistMoodVote request) throws Exception {
+        
+        ResponseEntity<?> result = combinedArtistService.voteMood(request);
+
+        return result;
     }
     
 
@@ -120,38 +137,38 @@ public class ArtistController {
     //     return "review/artist";  // templates/artists/detail.html 뷰 렌더링
     // }
 
-    @PostMapping("/toggle-like")
-    @ResponseBody
-    public ResponseEntity<?> toggleTrackLike(@RequestBody ArtistFollow dto) throws Exception {
-        boolean followed = artistFollowService.toggleLike(dto.getUserId(), dto.getArtistId());
-        Integer count = artistFollowService.getArtistFollowCount(dto.getArtistId());
+    // @PostMapping("/toggle-like")
+    // @ResponseBody
+    // public ResponseEntity<?> toggleTrackLike(@RequestBody ArtistFollow dto) throws Exception {
+    //     boolean followed = artistFollowService.toggleLike(dto.getUserId(), dto.getArtistId());
+    //     Integer count = artistFollowService.getArtistFollowCount(dto.getArtistId());
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("followed", followed);
-        result.put("count", count);
+    //     Map<String, Object> result = new HashMap<>();
+    //     result.put("followed", followed);
+    //     result.put("count", count);
 
-        return ResponseEntity.ok(result);
-    }
+    //     return ResponseEntity.ok(result);
+    // }
 
 
-    @PostMapping("/vote-mood")
-    @ResponseBody
-    public ResponseEntity<?> voteMood(@RequestBody ArtistMoodVote request) throws Exception {
-        artistMoodVoteService.saveOrUpdateVote(request.getUserId(), request.getArtistId(), request.getMood());
-        if (request.getUserId() == null || request.getArtistId() == null || request.getMood() == null) {
-            return ResponseEntity.badRequest().body("필수 데이터 누락");
-        }
-        Long votedMoodId = artistMoodVoteService.getUserVotedMoodId(request.getUserId(), request.getArtistId());
-        List<MoodStat> moodStats = moodStatService.getTop6MoodsByArtistId(request.getArtistId());
-        List<String> moodLabels = moodStats.stream().map(MoodStat::getMoodName).toList();
-        List<Integer> moodValues = moodStats.stream().map(MoodStat::getVoteCount).toList();
-        Map<String, Object> response = new HashMap<>();
-        response.put("votedMoodId", votedMoodId);
-        response.put("labels", moodLabels);
-        response.put("values", moodValues);
-        response.put("moods", tagService.list());
-        return ResponseEntity.ok(response);
-    }
+    // @PostMapping("/vote-mood")
+    // @ResponseBody
+    // public ResponseEntity<?> voteMood(@RequestBody ArtistMoodVote request) throws Exception {
+    //     artistMoodVoteService.saveOrUpdateVote(request.getUserId(), request.getArtistId(), request.getMood());
+    //     if (request.getUserId() == null || request.getArtistId() == null || request.getMood() == null) {
+    //         return ResponseEntity.badRequest().body("필수 데이터 누락");
+    //     }
+    //     Long votedMoodId = artistMoodVoteService.getUserVotedMoodId(request.getUserId(), request.getArtistId());
+    //     List<MoodStat> moodStats = moodStatService.getTop6MoodsByArtistId(request.getArtistId());
+    //     List<String> moodLabels = moodStats.stream().map(MoodStat::getMoodName).toList();
+    //     List<Integer> moodValues = moodStats.stream().map(MoodStat::getVoteCount).toList();
+    //     Map<String, Object> response = new HashMap<>();
+    //     response.put("votedMoodId", votedMoodId);
+    //     response.put("labels", moodLabels);
+    //     response.put("values", moodValues);
+    //     response.put("moods", tagService.list());
+    //     return ResponseEntity.ok(response);
+    // }
 
     /**
      * 비동기 팔로우 아티스트 검색
