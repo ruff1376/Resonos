@@ -21,22 +21,28 @@ import com.cosmus.resonos.service.user.ArtistFollowService;
 @Service
 public class CombinedArtistService {
 
-    @Autowired
-    private ArtistService artistService;
-    @Autowired
-    private AlbumService albumService;
-    @Autowired
-    private TrackService trackService;
-    @Autowired
-    private ArtistFollowService artistFollowService;
-    @Autowired
-    private ArtistMoodVoteService artistMoodVoteService;
-    @Autowired
-    private MoodStatService moodStatService;
-    @Autowired
-    private TagService tagService;
-    @Autowired
-    private RecentReviewService recentReviewService;
+    private final ArtistService artistService;
+    private final AlbumService albumService;
+    private final TrackService trackService;
+    private final ArtistFollowService artistFollowService;
+    private final ArtistMoodVoteService artistMoodVoteService;
+    private final MoodStatService moodStatService;
+    private final TagService tagService;
+    private final RecentReviewService recentReviewService;
+    
+    public CombinedArtistService(ArtistService artistService, AlbumService albumService, TrackService trackService,
+            ArtistFollowService artistFollowService, ArtistMoodVoteService artistMoodVoteService,
+            MoodStatService moodStatService, TagService tagService, RecentReviewService recentReviewService) {
+        this.artistService = artistService;
+        this.albumService = albumService;
+        this.trackService = trackService;
+        this.artistFollowService = artistFollowService;
+        this.artistMoodVoteService = artistMoodVoteService;
+        this.moodStatService = moodStatService;
+        this.tagService = tagService;
+        this.recentReviewService = recentReviewService;
+    }
+
 
     // ArtistPageDTO
     public ArtistPageDTO artistPageGet(String ArtistId, Long UserId) {
@@ -97,7 +103,7 @@ public class CombinedArtistService {
 
     // 아티스트 페이지 좋아요 토글
     public Map<String,Object> toggleArtistLike(Long userId, String artistId) {
-        // TODO : 여기부터
+        
         return null;
     }
 
