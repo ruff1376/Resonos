@@ -1,11 +1,14 @@
 package com.cosmus.resonos.service.review.combinedServ;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.cosmus.resonos.domain.review.ArtistMoodVote;
 import com.cosmus.resonos.domain.review.MoodStat;
 import com.cosmus.resonos.domain.review.RecentReview;
 import com.cosmus.resonos.domain.review.responseDTO.ArtistPageDTO;
@@ -102,9 +105,63 @@ public class CombinedArtistService {
     }
 
     // 아티스트 페이지 좋아요 토글
-    public Map<String,Object> toggleArtistLike(Long userId, String artistId) {
+    // TODO : ArtistFollow 객체로 유저아이디, 아티스트아이디 받아오기
+    public ResponseEntity<?> toggleArtistLike(Long userId, String artistId) {
+
+        if(userId == null) {
+            return new ResponseEntity<>("userId is null", HttpStatus.BAD_REQUEST);
+        } else {
+            // ArtistFollow artistFollow = new ArtistFollow();
+            // artistFollow.setUserId(userId);
+            // artistFollow.setArtistId(artistId);
+            try {
+                // 팔로우여부 확인 후에 현재 팔로우 카운트 가져옴
+                boolean followed = artistFollowService.toggleLike(userId, artistId);
+                Integer count = artistFollowService.getArtistFollowCount(artistId);
+                Map<String, Object> result = new HashMap<>();
+                result.put("followed", followed);
+                result.put("count", count);
+                return new ResponseEntity<>(result, HttpStatus.OK);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            
+        }
         
-        return null;
+    }
+
+    // 아티스트 분위기 투표
+    public ResponseEntity<?> voteMood(ArtistMoodVote request) {
+        // 로그인 안했을때
+        if(request.getUserId() == null) {
+            return new ResponseEntity<>("userId is null", HttpStatus.BAD_REQUEST);
+        }
+        // 내부오류
+        if (request.getArtistId() == null || request.getMood() == null) {
+            return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        else {
+            // 첫투표 혹은 수정
+            artistMoodVoteService.saveOrUpdateVote(request.getUserId(), request.getArtistId(), request.getMood());
+            // 자신이 투표한 분위기 아이디 가져오기
+            Long votedMoodId = artistMoodVoteService.getUserVotedMoodId(request.getUserId(), request.getArtistId());
+            // 분위기 새로 가져오기
+            List<MoodStat> moodStats = moodStatService.getTop6MoodsByArtistId(request.getArtistId());
+            List<String> moodLabels = moodStats.stream().map(MoodStat::getMoodName).toList();
+            List<Integer> moodValues = moodStats.stream().map(MoodStat::getVoteCount).toList();
+            Map<String, Object> response = new HashMap<>();
+            try {
+                response.put("votedMoodId", votedMoodId);
+                response.put("labels", moodLabels);
+                response.put("values", moodValues);
+                response.put("moods", tagService.list());
+                return ResponseEntity.ok(response);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
     }
 
 }
