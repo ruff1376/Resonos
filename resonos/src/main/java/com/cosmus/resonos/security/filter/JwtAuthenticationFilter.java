@@ -2,9 +2,12 @@ package com.cosmus.resonos.security.filter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -102,8 +105,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     // 💍 JWT 생성
     String jwt = jwtProvider.createToken(String.valueOf(id), username, roles);
 
+    // JWT 쿠키에 저장
+    ResponseCookie cookie = ResponseCookie.from("jwt", jwt)
+                                          .httpOnly(true)
+                                          .secure(true)
+                                          .path("/")
+                                          .maxAge(Duration.ofDays(5))
+                                          .sameSite("Strict")
+                                          .build();
+    response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+
     // Authorization 응답 헤더 세팅
-    response.addHeader("Authorization", SecurityConstants.TOKEN_PREFIX + jwt);
     response.setStatus(200);
 
     // 👩‍💼 사용자 정보 body 세팅
@@ -116,6 +128,4 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     printWriter.write(jsonString);
     printWriter.flush();
   }
-
-
 }
