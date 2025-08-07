@@ -76,7 +76,7 @@ const UserEditForm = ({badgeList, badgeName, user, onSubmit, result, success}) =
         className="profile-edit-box"
         encType="multipart/form-data"
       >
-        {(
+        {success != null && (
           <p
             className={`success-fail${success === false ? ' error' : ''}`}
           >

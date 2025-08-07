@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import UserInfo from '../../components/user/UserInfo'
 import UserResource from '../../components/user/UserResource'
 import * as ur from '../../apis/user'
+import Header from '../../components/Header/Header'
+import Footer from '../../components/Footer/Footer'
 
 const MypageContainer = () => {
 
@@ -51,6 +53,7 @@ const MypageContainer = () => {
 
   return (
     <div className="container">
+      <Header />
       <div className="con con-mypage">
         <UserInfo
           currentBadge={currentBadge}
@@ -73,6 +76,7 @@ const MypageContainer = () => {
           chartData={chartData}
         />
       </div>
+      {/* <Footer /> */}
     </div>
   )
 }

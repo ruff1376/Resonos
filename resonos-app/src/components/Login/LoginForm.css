@@ -39,9 +39,6 @@ body {
   font-family: 'Segoe UI', 'Pretendard', sans-serif;
   color: #D4B97F;
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 .con {margin: 120px 0 200px; padding: 0 10px;}
 .con-mypage a {color: #fff !important;}
