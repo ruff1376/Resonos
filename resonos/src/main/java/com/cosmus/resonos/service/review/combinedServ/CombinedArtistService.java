@@ -96,7 +96,6 @@ public class CombinedArtistService {
     }
 
     // 아티스트 페이지 좋아요 토글
-    // TODO : ArtistFollow 객체로 유저아이디, 아티스트아이디 받아오기
     public ResponseEntity<?> toggleArtistLike(Long userId, String artistId) {
 
         if(userId == null) {
