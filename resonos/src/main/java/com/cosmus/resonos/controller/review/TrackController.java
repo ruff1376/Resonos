@@ -41,10 +41,10 @@ public class TrackController {
     @GetMapping
     public ResponseEntity<?> trackInfo(@RequestParam("id") String trackId, @AuthenticationPrincipal CustomUser user) {
 
-        return combinedTrackService.trackPage(trackId, user.getId());
+        return combinedTrackService.trackPage(trackId, user);
     }
 
-    // 트랙 리뷰 작성
+    // 트랙 리뷰 작성 후 리뷰와 점수 리턴
     @PostMapping
     public ResponseEntity<?> trackReviewPost(@RequestParam("id") String trackId, ReviewForm f,
                         @AuthenticationPrincipal CustomUser user) {
@@ -52,12 +52,12 @@ public class TrackController {
         return combinedTrackService.reviewPost(trackId, f, user);
     }
 
-    // 리뷰등록시 리뷰를 비동기로 반환
-    @GetMapping("/myreview")
-    public ResponseEntity<?> getMyReviewFragment(@RequestParam("trackId") String trackId,
-                                    @AuthenticationPrincipal CustomUser user) throws Exception {
-        return combinedTrackService.getMyReviewFragment(trackId, user);
-    }
+    // 리뷰등록시 리뷰를 비동기로 리턴
+    // @GetMapping("/myreview")
+    // public ResponseEntity<?> getMyReviewFragment(@RequestParam("trackId") String trackId,
+    //                                 @AuthenticationPrincipal CustomUser user) throws Exception {
+    //     return combinedTrackService.getMyReviewFragment(trackId, user);
+    // }
 
     // 리뷰 더보기
     @GetMapping("/more")
@@ -69,28 +69,28 @@ public class TrackController {
         return combinedTrackService.loadMoreReviews(trackId, page, size, principal);
     }
 
-    // 리뷰 수정
+    // 리뷰 수정시 업데이트된 리뷰와 점수리턴
     @PutMapping("/reviews")
     public ResponseEntity<?> reviewUpdate(@RequestParam("id") String trackId, @RequestBody @Valid ReviewForm form) {
         // 폼의 아이디는 리뷰아이디
         return combinedTrackService.reviewUpdate(form.getId(), form, trackId);
     }
 
-    // 리뷰 삭제
+    // 리뷰 삭제시 트랙 점수 새로 리턴
     @DeleteMapping("/reviews")
     public ResponseEntity<?> deleteAndRefresh(@RequestParam("id") String trackId, @RequestBody Long reviewId ) {
         
         return combinedTrackService.reviewDelete(reviewId, trackId);
     }
 
-    // 트랙 리뷰 좋아요
+    // 트랙 리뷰 좋아요시 좋아요 여부와 좋아요 수 리턴
     @PostMapping("/reviews/{reviewId}")
     public ResponseEntity<?> toggleReviewLike(@PathVariable("reviewId") Long reviewId
                                 , @AuthenticationPrincipal CustomUser user) {
         return combinedTrackService.reviewLike(reviewId, user);
     }
 
-    // 트랙 리뷰 신고
+    // 트랙 리뷰 신고시 신고수 리턴
     @PostMapping("/report/{reviewId}")
     public ResponseEntity<?> reportReview(@PathVariable("reviewId") Long reviewId
                                 , @AuthenticationPrincipal CustomUser user) {
@@ -105,16 +105,16 @@ public class TrackController {
         return combinedTrackService.voteMood(request);
     }
 
-    // 트랙 좋아요
+    // 트랙 좋아요시 좋아요 여부와 좋아요 수 리턴
     @PostMapping("/like")
     public ResponseEntity<?> toggleTrackLike(@RequestBody LikedTrack dto) {
         return combinedTrackService.toggleTrackLike(dto);
     }
 
-    // 트랙에서 플레이리스트 추가시 플레이리스트 조회
+    // 트랙에서 플레이리스트 추가시 플레이리스트 새로 조회후 리턴
     @GetMapping("/playlists")
-    public ResponseEntity<?> getMyPlaylists(@AuthenticationPrincipal CustomUser loginUser) {
-        return combinedTrackService.getMyPlaylists(loginUser);
+    public ResponseEntity<?> getPlaylists(@AuthenticationPrincipal CustomUser loginUser) {
+        return combinedTrackService.getPlaylists(loginUser);
     }
 
     // 플레이리스트에 해당 트랙 추가
@@ -330,7 +330,7 @@ public class TrackController {
     //     }
     // }
 
-    // 등록한 리뷰를 비동기로 반환
+    // 등록한 리뷰를 비동기로 리턴
     // @GetMapping("/{trackId}/my-review-frag")
     // public String getMyReviewFragment(@PathVariable("trackId") String trackId,
     //         @AuthenticationPrincipal CustomUser principal,
@@ -380,7 +380,7 @@ public class TrackController {
     //     trackReviewService.delete(reviewId);
     //     TrackScore score = trackReviewService.getTrackScore(trackId);
     //     model.addAttribute("score", score);
-    //     return "review/reviewFrag :: reviewSection"; // 리뷰 섹션 프래그먼트 반환
+    //     return "review/reviewFrag :: reviewSection"; // 리뷰 섹션 프래그먼트 리턴
     // }
 
     // @PostMapping("/track-reviews/{reviewId}/like")

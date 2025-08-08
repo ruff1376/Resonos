@@ -20,6 +20,7 @@ import com.cosmus.resonos.domain.review.TrackReview;
 import com.cosmus.resonos.domain.review.TrackScore;
 import com.cosmus.resonos.domain.review.responseDTO.TrackPageDTO;
 import com.cosmus.resonos.domain.user.Playlist;
+import com.cosmus.resonos.domain.user.Users;
 import com.cosmus.resonos.mapper.review.TrackReviewMapper;
 import com.cosmus.resonos.service.admin.TagService;
 import com.cosmus.resonos.service.review.AlbumService;
@@ -52,15 +53,13 @@ public class CombinedTrackService {
     private final TrackReviewMapper trackReviewMapper;
 
     // TrackPageDTO
-    public ResponseEntity<?> trackPage(String trackId, Long userId) {
+    public ResponseEntity<?> trackPage(String trackId, CustomUser user) {
         TrackPageDTO trackPageDTO = new TrackPageDTO();
 
         int page = 1;
         int size = 10;
 
         try {
-            // 어드민 여부
-
             // 트랙 상세 정보
             trackPageDTO.setTrack(trackService.getTrackOrUpdate(trackId));
             // 트랙의 앨범
@@ -73,26 +72,11 @@ public class CombinedTrackService {
             trackPageDTO.setScore(trackReviewService.getTrackScore(trackId));
             // 트랙의 리뷰 초기 로딩
             List<TrackReview> reviews = trackReviewService.getMoreReviews(trackId, page, size);
-            // 리뷰들 중에 유저가 좋아요한 리뷰찾아서 좋아요 여부 설정
-            if (userId != null && reviews != null && !reviews.isEmpty()) {
-                // 리뷰 아이디 들로 리스트 생성
-                List<Long> reviewIds = reviews.stream()
-                        .map(TrackReview::getId)
-                        .collect(Collectors.toList());
 
-                if (!reviewIds.isEmpty()) {
-                    // 리뷰아이디로 해당 유저가 좋아요 했을시 좋아요 여부 표시
-                    List<Long> likedReviewIds = reviewLikeService.getUserLikedReviewIds("TRACK", reviewIds, userId);
-                    reviews.forEach(review -> review.setIsLikedByCurrentUser(likedReviewIds.contains(review.getId())));
-                }
-                trackPageDTO.setReviews(reviews);
-            }
             // 트랙의 리뷰 더보기 여부
             trackPageDTO.setHasNext(trackReviewService.hasNextPage(trackId, page, size));
             // 트랙의 좋아요 수
             trackPageDTO.setTrackLikeCount(likedTrackService.getTrackLikeCount(trackId));
-            // 유저의 트랙 좋아요 유무
-            trackPageDTO.setTrackLikedByUser(likedTrackService.isLikedByUser(userId, trackId));
             // 트랙이 포함된 재생목록
             List<Playlist> playlists = playlistService.getPlaylistsByTrackId(trackId);
             // 트랙이 포함된 재생목록 유무 확인
@@ -115,8 +99,6 @@ public class CombinedTrackService {
 
             // 트랙의 분위기 투표가 비어있지 않으면
             if (!trackPageDTO.isMoodEmpty()) {
-                // 트랙의 분위기 투표했을시 분위기 id
-                trackPageDTO.setUserVotedMoodId(trackMoodVoteService.getUserVotedMoodId(userId, trackId));
                 trackPageDTO.setMoodLabels(moodStatService.getTop6MoodsByTrackId(trackId).stream()
                         .map(moodStat -> moodStat.getMoodName()).toList());
                 trackPageDTO.setMoodValues(moodStatService.getTop6MoodsByTrackId(trackId).stream()
@@ -124,6 +106,31 @@ public class CombinedTrackService {
             }
             // 모든 태그정보
             trackPageDTO.setTags(tagService.list());
+
+            // 유저 로그인시 상호작용들 여부
+            Users loginUser = null;
+            if (user != null) {
+                loginUser = user.getUser();
+                // 리뷰들 중에 유저가 좋아요한 리뷰찾아서 좋아요 여부 설정
+                if (loginUser != null && reviews != null && !reviews.isEmpty()) {
+                    // 리뷰 아이디 들로 리스트 생성
+                    List<Long> reviewIds = reviews.stream()
+                            .map(TrackReview::getId)
+                            .collect(Collectors.toList());
+
+                    if (!reviewIds.isEmpty()) {
+                        // 리뷰아이디로 해당 유저가 좋아요 했을시 좋아요 여부 표시
+                        List<Long> likedReviewIds = reviewLikeService.getUserLikedReviewIds("TRACK", reviewIds, loginUser.getId());
+                        reviews.forEach(
+                                review -> review.setIsLikedByCurrentUser(likedReviewIds.contains(review.getId())));
+                    }
+                    trackPageDTO.setReviews(reviews);
+                }
+                // 트랙의 분위기 투표했을시 분위기 id
+                trackPageDTO.setUserVotedMoodId(trackMoodVoteService.getUserVotedMoodId(loginUser.getId(), trackId));
+                // 유저의 트랙 좋아요 유무
+                trackPageDTO.setTrackLikedByUser(likedTrackService.isLikedByUser(loginUser.getId(), trackId));
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -142,34 +149,35 @@ public class CombinedTrackService {
         }
         TrackReview reivew = trackReviewService.write(trackId, f, u.getUser());
         if (reivew != null) {
-            return new ResponseEntity<>(reivew, HttpStatus.OK);
+            TrackScore score = trackReviewService.getTrackScore(trackId);
+            return new ResponseEntity<>(Map.of("review", reivew, "score", score), HttpStatus.OK);
         } else
             return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // 리뷰등록시 리뷰를 비동기로 반환
-    public ResponseEntity<?> getMyReviewFragment(String trackId, CustomUser user) {
-        // Map<String,?> myReview = new HashMap<>();
-        if (user != null) {
-            // model.addAttribute("loginUser", loginUser = user.getUser());
-            // boolean isAdmin = user.getAuthorities()
-            //         .stream()
-            //         .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-            // myReview.put("isAdmin",isAdmin);
+    // public ResponseEntity<?> getMyReviewFragment(String trackId, CustomUser user) {
+    //     // Map<String,?> myReview = new HashMap<>();
+    //     if (user != null) {
+    //         // model.addAttribute("loginUser", loginUser = user.getUser());
+    //         // boolean isAdmin = user.getAuthorities()
+    //         // .stream()
+    //         // .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+    //         // myReview.put("isAdmin",isAdmin);
 
-        }
-        TrackReview myReview = trackReviewService.getLastestReview(trackId, user.getId());
-        // Track track = trackService.selectById(trackId);
-        if (myReview == null) {
-            return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    //     }
+    //     TrackReview myReview = trackReviewService.getLastestReview(trackId, user.getId());
+    //     // Track track = trackService.selectById(trackId);
+    //     if (myReview == null) {
+    //         return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
 
-        // myreview.put("reviewType", "TRACK");
-        // myreview.put("track", track);
-        // myreview.put("review", List.of(myReview)); // 리스트 형태로 전달
-        // myreview.put("hasNext", false); // 의미 없지만 구조 유지
-        return new ResponseEntity<>(myReview, HttpStatus.OK);
-    }
+    //     // myreview.put("reviewType", "TRACK");
+    //     // myreview.put("track", track);
+    //     // myreview.put("review", List.of(myReview)); // 리스트 형태로 전달
+    //     // myreview.put("hasNext", false); // 의미 없지만 구조 유지
+    //     return new ResponseEntity<>(myReview, HttpStatus.OK);
+    // }
 
     // 트랙 리뷰 수정
     public ResponseEntity<?> reviewUpdate(Long reviewId, ReviewForm f, String trackId) {
@@ -246,9 +254,11 @@ public class CombinedTrackService {
         // model.addAttribute("track", track);
         // model.addAttribute("review", reviews);
         // model.addAttribute("reviewType", "TRACK");
-        // model.addAttribute("loginUser", principal != null ? principal.getUser() : null);
-        // model.addAttribute("isAdmin", principal != null && principal.getAuthorities().stream()
-        //         .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")));
+        // model.addAttribute("loginUser", principal != null ? principal.getUser() :
+        // null);
+        // model.addAttribute("isAdmin", principal != null &&
+        // principal.getAuthorities().stream()
+        // .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")));
 
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
@@ -300,18 +310,17 @@ public class CombinedTrackService {
             Map<String, Object> result = new HashMap<>();
             result.put("liked", liked);
             result.put("count", count);
-    
+
             return ResponseEntity.ok(result);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-
     // 트랙에서 플레이리스트 추가시 플레이리스트 조회
-    public ResponseEntity<?> getMyPlaylists(@AuthenticationPrincipal CustomUser loginUser) {
+    public ResponseEntity<?> getPlaylists(@AuthenticationPrincipal CustomUser loginUser) {
         if (loginUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("User is null");
@@ -347,8 +356,7 @@ public class CombinedTrackService {
             e.printStackTrace();
             return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        
-    }
 
+    }
 
 }

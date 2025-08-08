@@ -46,7 +46,7 @@ public interface AlbumReviewMapper {
 
     void update(AlbumReview review);
 
-    void delete(Long id);
+    int delete(Long id);
 
     boolean existsByUserAndAlbum(@Param("userId") Long userId, @Param("albumId") String albumId);
 

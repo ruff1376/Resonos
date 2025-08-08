@@ -8,7 +8,7 @@ import com.cosmus.resonos.domain.review.Album;
 import com.cosmus.resonos.domain.review.AlbumReview;
 import com.cosmus.resonos.domain.review.AlbumScore;
 import com.cosmus.resonos.domain.review.Artist;
-import com.cosmus.resonos.domain.review.MoodStat;
+import com.cosmus.resonos.domain.review.ChartElement;
 import com.cosmus.resonos.domain.review.Track;
 import com.cosmus.resonos.domain.user.Playlist;
 
@@ -32,24 +32,24 @@ public class AlbumPageDTO {
     private List<AlbumReview> reviews;
     // 앨범의 평점 정보
     private AlbumScore score;
-    // 리뷰 더보기 여부
-    private boolean hasNext;
     // 앨범 좋아요 수
     private int albumLikeCount;
+    // 앨범 좋아요 여부
+    private boolean isAlbumLikedByUser = false; // 비로그인시 false
+    // 앨범의 트랙이 포함된 플레이리스트의 여부
+    private boolean emptyPlayList = true;
+    // 앨범의 트랙이 포함된 플레이리스트
+    private List<Playlist> playLists;
+    // 리뷰 더보기 여부
+    private boolean hasNext;
 
-    // 로그인 유저의 투표 무드 ID
-    private Long userVotedMoodId;
-    // 상위 6개 분위기
-    private List<MoodStat> moodStats;
-    // 분위기 이름 목록 (상위 6개)
-    private List<String> moodLabels;
-    // 분위기 투표 수 (상위 6개)
-    private List<Integer> moodValues;
-    // 분위기 통계 유무
-    private boolean isMoodEmpty;
-
+    // 앨범 6요소 null 여부
+    private boolean isArgEmpty = true;
     // 앨범의 6요소
-    Map<String, Integer> argValues;
+    private Map<String, Integer> argValues;
+    // 유저가 투표한 6요소
+    private ChartElement userVote;
+
 
 
     // 전체 태그 목록
@@ -57,8 +57,6 @@ public class AlbumPageDTO {
 
     // 유저 관련 항목
     private boolean isAdmin;
-    // 유저 플레이리스트
-    private List<Playlist> userPlaylist;
 
     // 리뷰 타입
     private final String reviewType = "ALBUM";
