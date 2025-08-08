@@ -1,15 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import MypageTab from './MypageTab'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import MyPlaylistCard from './card/MyPlaylistCard'
+import LikedPlaylistCard from './card/LikedPlaylistCard'
 
-const Playlist = ({likedPlaylists, myPlaylists, lastPath, isOwner}) => {
+const Playlist = ({likedPlaylists, myPlaylists, lastPath, isOwner, handleLike, handleDelete, handleNavigate}) => {
+
   return (
     <main className="con con-music position-relative">
       {/* 왼쪽 리모컨 */}
       {
         isOwner
         ?
-        <MypageTab />
+        <MypageTab lastPath={lastPath} />
         :
         <></>
       }
@@ -41,35 +44,17 @@ const Playlist = ({likedPlaylists, myPlaylists, lastPath, isOwner}) => {
               <p>플레이리스트가 없습니다.</p>
             </div>
           )}
-
           <ul id="myPlaylist" className="ul-list">
             {myPlaylists.map((mpl) =>
               (mpl.isPublic || isOwner) && (
-                <li className="list-item" key={mpl.id}>
-                  <input type="hidden" value={mpl.id} name="id" />
-                  <img
-                    src={mpl.thumbnailUrl}
-                    alt="GalaxiNote"
-                    className="follow-img"
-                  />
-                  <div className="info">
-                    <span className="name-playlist">{mpl.title}</span>
-                  </div>
-                  {isOwner && (
-                    <span className="is-public">
-                      {mpl.isPublic ? "공개" : "비공개"}
-                    </span>
-                  )}
-                  <div className="right">
-                    <div className="like-area">
-                      <span className="like">♥</span>
-                      <span className="count">{mpl.likeCount}</span>
-                    </div>
-                    {isOwner && (
-                      <button className="btn btn-danger">삭제</button>
-                    )}
-                  </div>
-                </li>
+                <MyPlaylistCard
+                  mpl={mpl}
+                  isOwner={isOwner}
+                  onLike={handleLike}
+                  onDelete={handleDelete}
+                  onNavigate={handleNavigate}
+                  key={mpl.id}
+                />
               )
             )}
           </ul>
@@ -104,21 +89,13 @@ const Playlist = ({likedPlaylists, myPlaylists, lastPath, isOwner}) => {
 
           <ul className="ul-list liked-pli">
             {likedPlaylists.map((lpl) => (
-              <li className="list-item" key={lpl.id}>
-                <input type="hidden" value={lpl.id} name="id" />
-                <img
-                  src={lpl.thumbnailUrl}
-                  className="follow-img"
-                  alt={lpl.title}
-                />
-                <div className="info">
-                  <span className="name-album">{lpl.title}</span>
-                  <span className="name-user">{lpl.ownerName}</span>
-                </div>
-                {isOwner && (
-                  <button className="like like-button already">♥</button>
-                )}
-              </li>
+              <LikedPlaylistCard
+                lpl={lpl}
+                isOwner={isOwner}
+                onLike={handleLike}
+                onNavigate={handleNavigate}
+                key={lpl.id}
+              />
             ))}
           </ul>
         </div>
