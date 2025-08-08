@@ -96,7 +96,7 @@ const LoginContextProvider = ({children}) => {
       console.log('response :', response)
 
     } catch(e) {
-      console.error(`error123 : ${e}`)
+      console.error(`error : ${e}`)
       return
     }
 

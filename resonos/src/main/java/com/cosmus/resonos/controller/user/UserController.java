@@ -201,7 +201,7 @@ public class UserController {
       @PathVariable("id") Long id,
       @AuthenticationPrincipal CustomUser loginUser
     ) throws Exception {
-
+      log.info("요청 들어옴.");
     try {
       // 관리자 체크
       boolean isAdmin = userService.selectById(id).getAuthList().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuth()));

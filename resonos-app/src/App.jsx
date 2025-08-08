@@ -13,6 +13,8 @@ import Edit from './pages/user/Edit';
 import JoinForm from './components/Login/JoinForm';
 import Join from './pages/Join';
 import HotPlsylist from './pages/list/HotPlaylist';
+import Playlist from './pages/user/Playlist';
+import NewPlaylist from './pages/user/NewPlaylist';
 
 const App = () => {
 
@@ -31,10 +33,13 @@ const App = () => {
           <Route path="/list/hot-playlists" element={<HotPlsylist />} />
 
           {/* 유저 */}
+          <Route path="/join" element={<Join />} />
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/users/:id" element={<Mypage />} />
           <Route path="/users/edit" element={<Edit />} />
-          <Route path="/join" element={<Join />} />
+          <Route path="/users/:id/playlists" element={<Playlist />} />
+          <Route path="/users/playlists" element={<Playlist />} />
+          <Route path="/playlists/new" element={<NewPlaylist />} />
         </Routes>
       </LoginContextProvider>
     </BrowserRouter>

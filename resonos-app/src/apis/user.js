@@ -116,3 +116,64 @@ export const changePassword = async (formData) => {
 export const withdrawUser = async () => {
   return await api.delete("/users")
 }
+
+// 플레이리스트 생성 (multipart/form-data)
+export const createPlaylist = async (formData) => {
+  return await api.post('/playlists', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
+}
+
+// 플레이리스트 상세 조회
+export const getPlaylistDetail = async (id) => {
+  return await api.get(`/playlists/${id}`)
+}
+
+// 트랙 순서 변경
+export const changeTrackOrder = async (playlistId, orderList) => {
+  return await api.put(`/playlists/${playlistId}/tracks/order`, orderList)
+}
+
+// 플레이리스트 트랙 추가 (JSON)
+export const insertTracks = async (playlistId, trackIdList) => {
+  return await api.post(`/playlists/${playlistId}/tracks`, { list: trackIdList }, {
+    headers: { 'Content-Type': 'application/json' }
+  })
+}
+
+// 플레이리스트 트랙 삭제
+export const deleteTrackByOrderNo = async (playlistId, orderNo) => {
+  return await api.delete(`/playlists/${playlistId}/tracks/${orderNo}`)
+}
+
+// 플레이리스트 수정 (multipart/form-data)
+export const updatePlaylist = async (id, formData) => {
+  return await api.put(`/playlists/${id}`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
+}
+
+// 플레이리스트 삭제
+export const deletePlaylist = async (id) => {
+  return await api.delete(`/playlists/${id}`)
+}
+
+// 플레이리스트 좋아요
+export const likePlaylist = async (playlistId) => {
+  return await api.post(`/playlists/${playlistId}/like`)
+}
+
+// 플레이리스트 좋아요 취소
+export const cancelLikePlaylist = async (playlistId) => {
+  return await api.delete(`/playlists/${playlistId}/like`)
+}
+
+// 비동기 좋아요한 플레이리스트 검색
+export const searchMyLikedPlaylist = async ({ userId, keyword, offset, limit }) => {
+  return await api.post('/playlists/search', {
+    userId,
+    keyword,
+    offset,
+    limit
+  })
+}
