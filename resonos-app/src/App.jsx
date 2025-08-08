@@ -12,6 +12,7 @@ import NewAlbum from './pages/list/NewAlbum';
 import Edit from './pages/user/Edit';
 import JoinForm from './components/Login/JoinForm';
 import Join from './pages/Join';
+import HotPlsylist from './pages/list/HotPlaylist';
 
 const App = () => {
 
@@ -27,6 +28,7 @@ const App = () => {
 
           {/* 컨텐츠 목록 */}
           <Route path="/list/new-albums" element={<NewAlbum />} />
+          <Route path="/list/hot-playlists" element={<HotPlsylist />} />
 
           {/* 유저 */}
           <Route path="/mypage" element={<Mypage />} />

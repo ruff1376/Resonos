@@ -51,7 +51,7 @@ export default function Pagination({
 
                 {/* [번호] */}
                 {pageNumbers.map((p) => (
-                    <li key={p}>
+                    <li key={p} className={page === p ? 'active' : ''}>
                         <button onClick={() => onPageChange(p)}>{p}</button>
                     </li>
                 ))}

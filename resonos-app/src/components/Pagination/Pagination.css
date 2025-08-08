@@ -4,13 +4,13 @@ ul.custom-pagination {
     justify-content: center;
     align-items: center;
     padding: 0;
-    margin: 0;
+    margin-top: 30px;
     list-style: none;
 }
 ul.custom-pagination li {
     display: inline;
 }
-ul.custom-pagination a {
+ul.custom-pagination button {
     color: #B1B1B1;
     font-size: 2.4rem;
     text-decoration: none;
@@ -24,7 +24,7 @@ ul.custom-pagination a {
     border-radius: 0;
     outline: none;
 }
-ul.custom-pagination li.active a {
+ul.custom-pagination li.active button {
     color: var(--main-color);
     font-weight: bold;
     pointer-events: none;

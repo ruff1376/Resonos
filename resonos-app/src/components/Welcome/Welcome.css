@@ -1,4 +1,4 @@
-body::before {
+.welcome body::before {
     content: '';
     height: 100vh;
     /* 브라우저 창 높이에 딱 맞게 */
@@ -14,7 +14,7 @@ body::before {
     opacity: 0.15;
 }
 
-body.bg {
+.welcome body.bg {
     background: #181C23;
     color: #D4B97F;
     font-family: 'Segoe UI', 'Pretendard', sans-serif;
@@ -22,30 +22,30 @@ body.bg {
     min-height: 100vh;
 }
 
-main {
+.welcome main {
     margin-bottom: 300px;
 }
 
-.logo {
+.welcome .logo {
     display: flex;
     align-items: center;
 }
 
-.logo-img {
+.welcome .logo-img {
     height: 40px;
     margin-right: 16px;
     border-radius: 6px;
     background: #181C23;
 }
 
-.logo-text {
+.welcome .logo-text {
     font-size: 2rem;
     font-weight: bold;
     color: #D4B97F;
     letter-spacing: 2px;
 }
 
-nav a {
+.welcome nav a {
     color: #D4B97F;
     text-decoration: none;
     margin: 0 18px;
@@ -53,28 +53,28 @@ nav a {
     transition: color 0.2s;
 }
 
-nav a:hover {
+.welcome nav a:hover {
     color: #fffbe6;
 }
 
-.hero {
+.welcome .hero {
     text-align: center;
     margin: 80px 0 40px 0;
 }
 
-.hero h1 {
+.welcome .hero h1 {
     font-size: 2.7rem;
     color: #fffbe6;
     margin-bottom: 0.7em;
 }
 
-.hero p {
+.welcome .hero p {
     color: #D4B97F;
     font-size: 1.2rem;
     margin-bottom: 2em;
 }
 
-.btn-gold {
+.welcome .btn-gold {
     width: 150px;
     background: #D4B97F;
     color: #181C23;
@@ -88,12 +88,12 @@ nav a:hover {
     transition: background 0.2s, color 0.2s;
 }
 
-.btn-gold:hover {
+.welcome .btn-gold:hover {
     background: #fffbe6;
     color: #181C23;
 }
 
-.main-cards {
+.welcome .main-cards {
     display: flex;
     justify-content: center;
     gap: 5rem;
@@ -101,7 +101,7 @@ nav a:hover {
     overflow: visible;
 }
 
-.main-card {
+.welcome .main-card {
     width: 400px;
     height: 450px;
     background: rgba(24, 28, 35, 0.85);
@@ -124,7 +124,7 @@ nav a:hover {
     will-change: transform;
 }
 
-.main-card img {
+.welcome .main-card img {
     width: 300px;
     height: 200px;
     display: block;
@@ -132,7 +132,7 @@ nav a:hover {
     margin-right: auto;
 }
 
-.main-card:hover {
+.welcome .main-card:hover {
     transform: translateY(-8px) scale(1.04);
     border-color: #fffbe6;
     box-shadow: 0 8px 32px rgba(212, 185, 127, 0.18);
@@ -140,7 +140,7 @@ nav a:hover {
     z-index: 1;
 }
 
-footer {
+.welcome footer {
     height: 200px;
     text-align: center;
     color: #B0B6BE;
@@ -150,7 +150,7 @@ footer {
     border-top: 1px solid #D4B97F;
 }
 
-.footer-navbar {
+.welcome .footer-navbar {
     border-top: 1px solid var(--main-color);
 }
 
@@ -166,36 +166,36 @@ footer {
     }
 }
 
-main,
-.hero,
-.main-cards,
-.main-card,
-.btn-gold {
+.welcome main,
+.welcome .hero,
+.welcome .main-cards,
+.welcome .main-card,
+.welcome .btn-gold {
     opacity: 0;
     animation: fadeInUp 0.9s cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }
 
 /* 순차적 딜레이 */
-main {
+.welcome main {
     animation-delay: 0.1s;
 }
 
-.hero {
+.welcome .hero {
     animation-delay: 0.2s;
 }
 
-.main-cards {
+.welcome .main-cards {
     animation-delay: 0.3s;
 }
 
-.main-card {
+.welcome .main-card {
     animation-delay: 0.4s;
 }
 
-.main-card:nth-child(2) {
+.welcome .main-card:nth-child(2) {
     animation-delay: 0.55s;
 }
 
-.btn-gold {
+.welcome .btn-gold {
     animation-delay: 0.6s;
 }

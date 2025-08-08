@@ -75,7 +75,13 @@ export default function NewAlbumForm({
 
     return (
         <div className="container-fluid d-flex flex-column align-items-center px-0" style={{ maxWidth: 1440, paddingTop: 50, gap: 50 }}>
-            <GridSection title="최신 앨범" albumList={newAlbumList} count={newAlbumCount} />
+            <GridSection
+                title="최신 앨범"
+                albumList={newAlbumList}
+                count={newAlbumCount}
+                pagination={pagination}
+                onPageChange={onPageChange}
+            />
 
             <div className="floating">
                 <a href="#">
