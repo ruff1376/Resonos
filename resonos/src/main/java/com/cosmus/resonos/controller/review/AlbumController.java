@@ -45,7 +45,7 @@ public class AlbumController {
         return combinedAlbumService.albumInfo(albumId, user);
     }
 
-    // 앨범 좋아요
+    // 앨범 좋아요시 좋아요 여부와 좋아요 수 리턴
     @PostMapping("/like")
     public ResponseEntity<?> toggleAlbumLike(@RequestBody LikedAlbum dto) throws Exception {
         
@@ -80,7 +80,7 @@ public class AlbumController {
         return combinedAlbumService.update(albumId, form.getId(), form);
     }
 
-    // 리뷰 삭제
+    // 리뷰 삭제 삭제 후 변경된 점수 리턴
     @DeleteMapping("/reviews/{reviewId}")
     // @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, 'ALBUM', authentication)")
     public ResponseEntity<?> delete(@RequestParam("id") String albumId,
@@ -89,7 +89,7 @@ public class AlbumController {
         return combinedAlbumService.delete(albumId, reviewId);
     }
 
-    // 리뷰 좋아요
+    // 리뷰 좋아요 좋아요 시 변경된 값 리턴
     @PostMapping("/reviews/{reviewId}")
     public ResponseEntity<?> toggleReviewLike(@PathVariable("reviewId") Long reviewId,
             @AuthenticationPrincipal CustomUser user) {
@@ -97,14 +97,14 @@ public class AlbumController {
         return combinedAlbumService.toggleReviewLike(reviewId, user);
     }
 
-    // 리뷰 신고
+    // 리뷰 신고 신고후 신고 누적수 리턴
     @PostMapping("/report/{reviewId}")
     public ResponseEntity<?> reportReview(@PathVariable("reviewId") Long reviewId
                                 , @AuthenticationPrincipal CustomUser user) {
         return combinedAlbumService.reportReview(reviewId, user);
     }
 
-    // 6요소 투표
+    // 6요소 투표, 6요소의 평균값, 유저의 투표 값 리턴
     @PostMapping("/vote")
     public ResponseEntity<?> saveOrUpdateVote(@RequestParam("id") String albumId ,@RequestBody ChartElement element,
                                     @AuthenticationPrincipal CustomUser user) {

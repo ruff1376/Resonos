@@ -9,7 +9,6 @@ import com.cosmus.resonos.domain.review.AlbumReview;
 import com.cosmus.resonos.domain.review.AlbumScore;
 import com.cosmus.resonos.domain.review.Artist;
 import com.cosmus.resonos.domain.review.ChartElement;
-import com.cosmus.resonos.domain.review.MoodStat;
 import com.cosmus.resonos.domain.review.Track;
 import com.cosmus.resonos.domain.user.Playlist;
 

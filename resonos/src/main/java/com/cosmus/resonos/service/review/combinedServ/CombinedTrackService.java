@@ -149,34 +149,35 @@ public class CombinedTrackService {
         }
         TrackReview reivew = trackReviewService.write(trackId, f, u.getUser());
         if (reivew != null) {
-            return new ResponseEntity<>(reivew, HttpStatus.OK);
+            TrackScore score = trackReviewService.getTrackScore(trackId);
+            return new ResponseEntity<>(Map.of("review", reivew, "score", score), HttpStatus.OK);
         } else
             return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // 리뷰등록시 리뷰를 비동기로 반환
-    public ResponseEntity<?> getMyReviewFragment(String trackId, CustomUser user) {
-        // Map<String,?> myReview = new HashMap<>();
-        if (user != null) {
-            // model.addAttribute("loginUser", loginUser = user.getUser());
-            // boolean isAdmin = user.getAuthorities()
-            // .stream()
-            // .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-            // myReview.put("isAdmin",isAdmin);
+    // public ResponseEntity<?> getMyReviewFragment(String trackId, CustomUser user) {
+    //     // Map<String,?> myReview = new HashMap<>();
+    //     if (user != null) {
+    //         // model.addAttribute("loginUser", loginUser = user.getUser());
+    //         // boolean isAdmin = user.getAuthorities()
+    //         // .stream()
+    //         // .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+    //         // myReview.put("isAdmin",isAdmin);
 
-        }
-        TrackReview myReview = trackReviewService.getLastestReview(trackId, user.getId());
-        // Track track = trackService.selectById(trackId);
-        if (myReview == null) {
-            return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    //     }
+    //     TrackReview myReview = trackReviewService.getLastestReview(trackId, user.getId());
+    //     // Track track = trackService.selectById(trackId);
+    //     if (myReview == null) {
+    //         return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
 
-        // myreview.put("reviewType", "TRACK");
-        // myreview.put("track", track);
-        // myreview.put("review", List.of(myReview)); // 리스트 형태로 전달
-        // myreview.put("hasNext", false); // 의미 없지만 구조 유지
-        return new ResponseEntity<>(myReview, HttpStatus.OK);
-    }
+    //     // myreview.put("reviewType", "TRACK");
+    //     // myreview.put("track", track);
+    //     // myreview.put("review", List.of(myReview)); // 리스트 형태로 전달
+    //     // myreview.put("hasNext", false); // 의미 없지만 구조 유지
+    //     return new ResponseEntity<>(myReview, HttpStatus.OK);
+    // }
 
     // 트랙 리뷰 수정
     public ResponseEntity<?> reviewUpdate(Long reviewId, ReviewForm f, String trackId) {
@@ -319,7 +320,7 @@ public class CombinedTrackService {
     }
 
     // 트랙에서 플레이리스트 추가시 플레이리스트 조회
-    public ResponseEntity<?> getMyPlaylists(@AuthenticationPrincipal CustomUser loginUser) {
+    public ResponseEntity<?> getPlaylists(@AuthenticationPrincipal CustomUser loginUser) {
         if (loginUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("User is null");

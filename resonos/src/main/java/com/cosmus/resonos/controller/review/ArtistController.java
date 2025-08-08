@@ -35,17 +35,20 @@ public class ArtistController {
     private final CombinedArtistService combinedArtistService;
 
 
+    // 아티스트 초기 화면
     @GetMapping
     public ResponseEntity<?> artistInfo(@RequestParam("id") String artistId, @AuthenticationPrincipal CustomUser user) {
         return combinedArtistService.artistPageGet(artistId, user);
     }
 
+    // 아티스트 좋아요시 좋아요여부와 좋아요 수 리턴
     @PostMapping("/toggle-like")
     public ResponseEntity<?> toggleArtistLike(@RequestBody ArtistFollow dto) throws Exception {
         
         return combinedArtistService.toggleArtistLike(dto.getUserId(), dto.getArtistId());
     }
 
+    // 분위기 투표 유저 투표태그아이디 값과 분위기들 리턴
     @PostMapping("/vote-mood")
     public ResponseEntity<?> voteMood(@RequestBody ArtistMoodVote request) throws Exception {
         
