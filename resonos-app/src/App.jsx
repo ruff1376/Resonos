@@ -12,7 +12,11 @@ import NewAlbum from './pages/list/NewAlbum';
 import Edit from './pages/user/Edit';
 import JoinForm from './components/Login/JoinForm';
 import Join from './pages/Join';
-import HotPlsylist from './pages/list/HotPlaylist';
+import HotPlaylist from './pages/list/HotPlaylist';
+import HotAlbum from './pages/list/HotAlbum';
+import NewTrack from './pages/list/NewTrack';
+import HotTrack from './pages/list/HotTrack';
+import NewPlaylist from './pages/list/NewPlaylist';
 import Playlist from './pages/user/Playlist';
 import NewPlaylist from './pages/user/NewPlaylist';
 
@@ -30,7 +34,11 @@ const App = () => {
 
           {/* 컨텐츠 목록 */}
           <Route path="/list/new-albums" element={<NewAlbum />} />
-          <Route path="/list/hot-playlists" element={<HotPlsylist />} />
+          <Route path="/list/hot-albums" element={<HotAlbum />} />
+          <Route path="/list/new-tracks" element={<NewTrack />} />
+          <Route path="/list/hot-tracks" element={<HotTrack />} />
+          <Route path="/list/new-playlists" element={<NewPlaylist />} />
+          <Route path="/list/hot-playlists" element={<HotPlaylist />} />
 
           {/* 유저 */}
           <Route path="/join" element={<Join />} />

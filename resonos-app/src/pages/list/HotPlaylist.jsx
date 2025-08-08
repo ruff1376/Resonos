@@ -5,7 +5,7 @@ import api from '../../apis/api'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import HotPlaylistForm from '../../components/List/HotPlaylistForm'
 
-const HotPlsylist = () => {
+const HotPlaylist = () => {
     const [hotPlaylistList, setHotPlaylistList] = useState([]);
     const [hotPlaylistCount, setHotPlaylistCount] = useState({});
     const [pagination, setPagination] = useState({});
@@ -46,4 +46,4 @@ const HotPlsylist = () => {
     )
 }
 
-export default HotPlsylist
+export default HotPlaylist

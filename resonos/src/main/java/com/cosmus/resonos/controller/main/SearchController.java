@@ -98,17 +98,17 @@ public class SearchController {
 
         if (keyword.startsWith("#")) {
             String tagName = keyword.substring(1);
-            List<Track> tracks = trackService.searchTracksByTag(tagName);
-            result.put("tracksByTag", tracks);
+            List<Track> searchTracksByTagList = trackService.searchTracksByTag(tagName);
+            result.put("searchTracksByTagList", searchTracksByTagList);
             result.put("keyword", keyword);
             return result;
         }
 
-        result.put("artists", artistService.searchList(keyword));
-        result.put("albums", albumService.searchList(keyword));
-        result.put("tracks", trackService.searchList(keyword));
-        result.put("users", userService.searchList(keyword));
-        result.put("playlists", playlistService.searchList(keyword));
+        result.put("artistSearchList", artistService.searchList(keyword));
+        result.put("albumSearchList", albumService.searchList(keyword));
+        result.put("trackSearchList", trackService.searchList(keyword));
+        result.put("userSearchList", userService.searchList(keyword));
+        result.put("playlistSearchList", playlistService.searchList(keyword));
 
         result.put("artistCount", artistService.searchCount(keyword));
         result.put("albumCount", albumService.searchCount(keyword));

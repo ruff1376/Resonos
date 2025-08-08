@@ -10,18 +10,18 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './MainForm.css'
 import Pagination from '../Pagination/Pagination';
 
-export default function HotPlaylistForm({
-    hotPlaylistList = [],
-    hotPlaylistCount = 0,
+export default function NewPlaylistForm({
+    newPlaylistList = [],
+    newPlaylistCount = 0,
     pagination = [],
     onPageChange = () => {}
 }) {
     return (
         <div className="container-fluid d-flex flex-column align-items-center px-0" style={{ maxWidth: 1440, paddingTop: 50, gap: 50 }}>
             <GridSection
-                title="인기 플레이리스트"
-                playlistList={hotPlaylistList}
-                count={hotPlaylistCount}
+                title="최신 플레이리스트"
+                playlistList={newPlaylistList}
+                count={newPlaylistCount}
                 pagination={pagination}
                 onPageChange={onPageChange}
             />
