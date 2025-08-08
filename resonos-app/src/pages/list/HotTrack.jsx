@@ -3,11 +3,11 @@ import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
 import api from '../../apis/api'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import NewAlbumForm from '../../components/List/NewAlbumForm'
+import HotTrackForm from '../../components/List/HotTrackForm'
 
-const NewAlbum = () => {
-    const [newAlbumList, setNewAlbumList] = useState([]);
-    const [newAlbumCount, setNewAlbumCount] = useState({});
+const HotTrack = () => {
+    const [hotTrackList, setHotTrackList] = useState([]);
+    const [hotTrackCount, setHotTrackCount] = useState({});
     const [pagination, setPagination] = useState({});
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
@@ -15,12 +15,12 @@ const NewAlbum = () => {
     const page = parseInt(searchParams.get('page')) || 1;
 
     useEffect(() => {
-        api.get(`/list/new-albums?page=${page}`)
+        api.get(`/list/hot-tracks?page=${page}`)
             .then((res) => {
                 const data = res.data;
                 console.log('받은 데이터:', data);
-                setNewAlbumList(data.newAlbumList);
-                setNewAlbumCount(data.newAlbumCount);
+                setHotTrackList(data.hotTrackList);
+                setHotTrackCount(data.hotTrackCount);
                 setPagination(data.pagination);
             })
             .catch((error) => {
@@ -35,9 +35,9 @@ const NewAlbum = () => {
     return (
         <>
             <Header />
-            <NewAlbumForm
-                newAlbumList={newAlbumList}
-                newAlbumCount={newAlbumCount}
+            <HotTrackForm
+                hotTrackList={hotTrackList}
+                hotTrackCount={hotTrackCount}
                 pagination={pagination}
                 onPageChange={handlePageChange}
             />
@@ -46,4 +46,4 @@ const NewAlbum = () => {
     )
 }
 
-export default NewAlbum
+export default HotTrack

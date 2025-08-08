@@ -3,11 +3,11 @@ import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
 import api from '../../apis/api'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import NewAlbumForm from '../../components/List/NewAlbumForm'
+import NewPlaylistForm from '../../components/List/NewPlaylistForm '
 
-const NewAlbum = () => {
-    const [newAlbumList, setNewAlbumList] = useState([]);
-    const [newAlbumCount, setNewAlbumCount] = useState({});
+const NewPlaylist = () => {
+    const [newPlaylistList, setNewPlaylistList] = useState([]);
+    const [newPlaylistCount, setNewPlaylistCount] = useState({});
     const [pagination, setPagination] = useState({});
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
@@ -15,12 +15,12 @@ const NewAlbum = () => {
     const page = parseInt(searchParams.get('page')) || 1;
 
     useEffect(() => {
-        api.get(`/list/new-albums?page=${page}`)
+        api.get(`/list/new-playlists?page=${page}`)
             .then((res) => {
                 const data = res.data;
                 console.log('받은 데이터:', data);
-                setNewAlbumList(data.newAlbumList);
-                setNewAlbumCount(data.newAlbumCount);
+                setNewPlaylistList(data.newPlaylistList);
+                setNewPlaylistCount(data.newPlaylistCount);
                 setPagination(data.pagination);
             })
             .catch((error) => {
@@ -35,9 +35,9 @@ const NewAlbum = () => {
     return (
         <>
             <Header />
-            <NewAlbumForm
-                newAlbumList={newAlbumList}
-                newAlbumCount={newAlbumCount}
+            <NewPlaylistForm
+                newPlaylistList={newPlaylistList}
+                newPlaylistCount={newPlaylistCount}
                 pagination={pagination}
                 onPageChange={handlePageChange}
             />
@@ -46,4 +46,4 @@ const NewAlbum = () => {
     )
 }
 
-export default NewAlbum
+export default NewPlaylist
