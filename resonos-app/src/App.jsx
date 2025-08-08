@@ -17,6 +17,8 @@ import HotAlbum from './pages/list/HotAlbum';
 import NewTrack from './pages/list/NewTrack';
 import HotTrack from './pages/list/HotTrack';
 import NewPlaylist from './pages/list/NewPlaylist';
+import Playlist from './pages/user/Playlist';
+import NewPlaylist from './pages/user/NewPlaylist';
 
 const App = () => {
 
@@ -39,10 +41,13 @@ const App = () => {
           <Route path="/list/hot-playlists" element={<HotPlaylist />} />
 
           {/* 유저 */}
+          <Route path="/join" element={<Join />} />
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/users/:id" element={<Mypage />} />
           <Route path="/users/edit" element={<Edit />} />
-          <Route path="/join" element={<Join />} />
+          <Route path="/users/:id/playlists" element={<Playlist />} />
+          <Route path="/users/playlists" element={<Playlist />} />
+          <Route path="/playlists/new" element={<NewPlaylist />} />
         </Routes>
       </LoginContextProvider>
     </BrowserRouter>

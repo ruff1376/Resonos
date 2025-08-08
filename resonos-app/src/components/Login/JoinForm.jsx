@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import * as ur from '../../apis/user'
+import * as Swal from '../../apis/alert'
+import { useNavigate } from 'react-router-dom'
 
 function JoinForm() {
 
@@ -18,6 +20,8 @@ function JoinForm() {
     password: '',
     password2: '',
   })
+
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -114,8 +118,26 @@ function JoinForm() {
   const onSubmit = async (formData) => {
     try {
       const response = await ur.join(formData)
-      if(response.status === 200)
-        alert('환영')
+      if(response.status >= 200 && response.status < 300) {
+        Swal.MySwal.fire({
+          title: '',
+          html: `<p class="welcome-text">${formData.nickname} 님 환영합니다. 😊</p>`,
+          confirmButtonText: "확인",
+          reverseButtons: false,
+          customClass: {
+            popup: 'follow-popup',
+            icon: 'warning-icon',
+            title: 'alert-title',
+            text: 'alert-text',
+            confirmButton: 'welcome-button',
+            cancelButton: 'alert-cancle-button'
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate('/list/main')
+          }
+        })
+      }
     } catch(e) {
       console.error(e)
     }

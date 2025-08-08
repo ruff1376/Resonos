@@ -1,7 +1,7 @@
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 
-const MySwal = withReactContent(Swal)
+export const MySwal = withReactContent(Swal)
 
 // 기본 alert
 export const alert = (title, text, icon, callback) => {

@@ -1,11 +1,9 @@
 package com.cosmus.resonos.controller.user;
 
-import java.io.File;
-import java.net.http.HttpRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cosmus.resonos.domain.CustomUser;
@@ -41,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequestMapping("/playlists")
-@Controller
+@RestController
 @EnableMethodSecurity
 public class PlaylistController {
 
@@ -51,46 +49,35 @@ public class PlaylistController {
     private UserService userService;
 
     /**
-     * 플레이리스트 생성 페이지 요청
-     * @param model
-     * @return
-     */
-    @GetMapping("/new")
-    public String playlistCreate(Model model) {
-        model.addAttribute("playlist", Playlist.builder().isPublic(true).build());
-        model.addAttribute("lastPath", "playlist");
-
-        return "user/create_playlist";
-    }
-
-    /**
      * 플레이리스트 생성 요청
      * @param playlist
      * @return
      * @throws Exception
      */
     @PostMapping("")
-    public String createPlaylist(
+    public ResponseEntity<?> createPlaylist(
         @ModelAttribute Playlist playlist,
         @AuthenticationPrincipal CustomUser loginUser,
-        @RequestParam("thumbnail") MultipartFile file
+        @RequestParam(value = "thumbnail", required = false) MultipartFile file
     ) throws Exception {
+
+        log.info("playlist : {}", playlist);
 
         playlist.setUserId(loginUser.getUser().getId());
         // 썸네일 설정 안했으면 기본 로고로
         if(playlist.getThumbnailUrl() == null)
             playlist.setThumbnailUrl("/img/profileImg.png");
         // 이미지 파일 저장
-        if (!file.isEmpty()) {
+        if (file != null && !file.isEmpty()) {
             UploadImage.uploadThumbnailImage(file, playlist);
         }
 
         boolean result = playlistService.insert(playlist);
         if(result) {
-            return "redirect:/users/playlists";
+            return new ResponseEntity<>(HttpStatus.CREATED);
         }
 
-        return "redirect:/playlists/create?fail=true";
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -101,7 +88,7 @@ public class PlaylistController {
      * @throws Exception
      */
     @GetMapping("/{id}")
-    public String playlistDetail(
+    public ResponseEntity<?> playlistDetail(
         Model model,
         @PathVariable("id") Long id,
         @RequestParam(value = "success", required = false) String success,
@@ -114,20 +101,23 @@ public class PlaylistController {
         // 자기 자신인지
         boolean isOwner = loginUser != null && loginUser.getId().equals(ownerId);
         // 비공개 + 주인X 조회 불가능
-        if(!playlist.getIsPublic() && !isOwner) return "redirect:/playlists";
+        if(!playlist.getIsPublic() && !isOwner) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         // 플레이리스트 주인 정보
         PublicUserDto owner = userService.publicSelectById(ownerId);
         // 좋아요 눌렀는지
         boolean alreadyLiked = loginUser != null ? playlistService.alreadyLikedPlaylist(loginUser.getId(), id) : false;
 
-        model.addAttribute("userId", ownerId);
-        model.addAttribute("alreadyLiked", alreadyLiked);
-        model.addAttribute("owner", owner);
-        model.addAttribute("playlist", playlist);
-        model.addAttribute("isOwner", isOwner);
-        model.addAttribute("success", success);
-        model.addAttribute("lastPath", "playlist");
-        return "user/playlist_detail";
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("userId", ownerId);
+        response.put("alreadyLiked", alreadyLiked);
+        response.put("owner", owner);
+        response.put("playlist", playlist);
+        response.put("isOwner", isOwner);
+        response.put("success", success);
+        response.put("lastPath", "playlist");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
@@ -237,8 +227,8 @@ public class PlaylistController {
      * @throws Exception
      */
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/{id}")
-    public String updatePlaylist(
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatePlaylist(
         @PathVariable("id") Long id,
         @ModelAttribute Playlist playlist,
         @AuthenticationPrincipal CustomUser loginUser,
@@ -252,17 +242,17 @@ public class PlaylistController {
 
         Playlist currentPlaylist = playlistService.select(id);
         if(!currentPlaylist.getUserId().equals(loginUser.getUser().getId()))
-            return "redirect:/playlists/" + id + "?owner=false";
+            return new ResponseEntity<>("success", HttpStatus.UNAUTHORIZED);
         else {
             playlist.setId(id);
             playlist.setUserId(loginUser.getUser().getId());
             boolean success = playlistService.update(playlist);
             if (success)  {
                 log.info("updatePlaylist : 플레이리스트 업데이트 성공");
-                return "redirect:/playlists/" + id + "?success=true";
+                return new ResponseEntity<>(HttpStatus.OK);
             }
         }
-        return "redirect:/playlists/" + id + "?fail=true";
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
