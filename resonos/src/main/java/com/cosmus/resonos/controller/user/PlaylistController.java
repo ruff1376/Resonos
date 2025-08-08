@@ -30,6 +30,7 @@ import com.cosmus.resonos.domain.user.Playlist;
 import com.cosmus.resonos.domain.user.PlaylistDTO;
 import com.cosmus.resonos.domain.user.PlaylistDetail;
 import com.cosmus.resonos.domain.user.PublicUserDto;
+import com.cosmus.resonos.service.review.TrackService;
 import com.cosmus.resonos.service.user.PlaylistService;
 import com.cosmus.resonos.service.user.UserService;
 import com.cosmus.resonos.util.UploadImage;
@@ -47,6 +48,8 @@ public class PlaylistController {
     private PlaylistService playlistService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private TrackService trackService;
 
     /**
      * 플레이리스트 생성 요청
@@ -91,7 +94,6 @@ public class PlaylistController {
     public ResponseEntity<?> playlistDetail(
         Model model,
         @PathVariable("id") Long id,
-        @RequestParam(value = "success", required = false) String success,
         @AuthenticationPrincipal CustomUser loginUser
     ) throws Exception {
         // 플레이리스트 소유자
@@ -114,10 +116,28 @@ public class PlaylistController {
         response.put("owner", owner);
         response.put("playlist", playlist);
         response.put("isOwner", isOwner);
-        response.put("success", success);
         response.put("lastPath", "playlist");
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * 플레이리스트에 추가할 트랙 리스트 요청
+     *
+     * @param entity
+     * @return
+     * @throws Exception
+     */
+    @PostMapping(value = "/tracks", consumes = "application/json")
+    public ResponseEntity<?> getAjaxTracks(@RequestBody Map<String, String> data) throws Exception {
+        log.info("트랙 요청 들어옴.");
+        int offset = Integer.parseInt(data.get("offset").toString());
+        int limit = Integer.parseInt(data.get("limit").toString());
+        List<Track> trackList = trackService.addTrackList(data.get("keyword"), offset, limit);
+        if (trackList != null)
+            return new ResponseEntity<>(trackList, HttpStatus.OK);
+        log.info("trackList : {}", trackList);
+        return new ResponseEntity<>("리스트 요청 실패.", HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -232,11 +252,11 @@ public class PlaylistController {
         @PathVariable("id") Long id,
         @ModelAttribute Playlist playlist,
         @AuthenticationPrincipal CustomUser loginUser,
-        @RequestParam("thumbnail") MultipartFile file
+        @RequestParam(value = "thumbnail", required = false) MultipartFile file
     ) throws Exception {
 
         // 이미지 파일 저장
-        if (!file.isEmpty()) {
+        if (file != null && !file.isEmpty()) {
             UploadImage.uploadThumbnailImage(file, playlist);
         }
 
