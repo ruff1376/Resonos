@@ -14,6 +14,7 @@ import NewAlbum from './pages/list/NewAlbum';
 import Edit from './pages/user/Edit';
 import JoinForm from './components/Login/JoinForm';
 import Join from './pages/Join';
+import AdminTest from './pages/admin/TestContainer'
 
 const App = () => {
 
@@ -36,7 +37,8 @@ const App = () => {
 
           {/* 관리자 - 유저 관리 경로 */}
           <Route path="/admin/members" element={<AdminMembers />} />
-          <Route path="/admin/members/:id" element={<AdminMemberDetail />} />
+          <Route path="/admin/members/logs/" element={<AdminMemberDetail />} />
+          <Route path="/admin/test/" element={<AdminTest />} />
           
           <Route path="/users/edit" element={<Edit />} />
           <Route path="/join" element={<Join />} />

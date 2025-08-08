@@ -67,8 +67,13 @@ const columns = (
   {
     label: '권한',
     style: { flexBasis: '8%', minWidth: '60px' },
-    render: (member) =>
-      member.authList?.map((auth, idx) => {
+    render: (member) => {
+      if (!member.authList || member.authList.length === 0) {
+        return (
+          <span className="badge" style={{ background: '#d9534f', color: '#fff' }}>없음</span>
+        );
+      }
+      return member.authList.map((auth, idx) => {
         const isAdmin = auth.auth === 'ROLE_ADMIN';
         return (
           <span
@@ -79,7 +84,8 @@ const columns = (
             {isAdmin ? '운영자' : '일반'}
           </span>
         );
-      }),
+      });
+    },
   },
   {
     label: '활동 로그',

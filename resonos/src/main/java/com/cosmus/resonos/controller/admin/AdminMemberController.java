@@ -46,7 +46,7 @@ public class AdminMemberController {
     public ResponseEntity<?> getMembers(
             @RequestParam(value = "page", defaultValue = "1") long page,
             @RequestParam(value = "size", defaultValue = "10") long size,
-            @RequestParam(value = "keyword", defaultValue = "") String keyword) throws Exception{
+            @RequestParam(value = "keyword", defaultValue = "") String keyword) throws Exception {
         try {
             if (page < 1) page = 1;
             if (size < 1) size = 10;
@@ -62,6 +62,7 @@ public class AdminMemberController {
                     : userService.searchByKeywordPaging(keyword, (int) pagination.getIndex(), (int) pagination.getSize());
 
             members.forEach(member -> {
+                // 기존 활동 로그 세팅 유지
                 try {
                     List<UserActivityLog> logs = userActivityLogService.getLogsByUserId(member.getId());
                     if (logs == null)
@@ -74,12 +75,22 @@ public class AdminMemberController {
                     log.error("유저 활동 로그 조회 실패 (userId: " + member.getId() + ")", ex);
                     member.setLogs(List.of());
                 }
+
+                // 권한(authList) 정보 추가
+                try {
+                    List<UserAuth> authObjs = userService.selectAuthByUsername(member.getUsername());
+                    member.setAuthList(authObjs);
+                } catch (Exception ex) {
+                    log.error("유저 권한(auth) 조회 실패 (username: " + member.getUsername() + ")", ex);
+                    member.setAuthList(List.of());
+                }
             });
 
             Map<String, Object> response = new HashMap<>();
             response.put("members", members);
             response.put("pagination", pagination);
             response.put("keyword", keyword);
+
             String pageUri = "/api/admin/members?size=" + size;
             if (!keyword.isBlank())
                 pageUri += "&keyword=" + URLEncoder.encode(keyword, StandardCharsets.UTF_8);
@@ -92,6 +103,7 @@ public class AdminMemberController {
                     .body(Map.of("error", "회원 목록 조회 실패"));
         }
     }
+
 
     // 회원 상세 조회
     @GetMapping("/{id}")
@@ -220,5 +232,20 @@ public class AdminMemberController {
                     .body(Map.of("success", false, "message", e.getMessage()));
         }
     }
-
+    // 특정 회원의 전체 활동 로그 조회 (REST API)
+    @GetMapping("/logs")
+    public ResponseEntity<?> getMemberLogs(@RequestParam("userId") Long userId) {
+        try {
+            List<UserActivityLog> logs = userActivityLogService.getLogsByUserId(userId);
+            if (logs == null || logs.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("활동 로그가 없습니다spring.");
+            }
+            return ResponseEntity.ok(logs);
+        } catch (Exception e) {
+            // 로그 기록
+            log.error("[AdminMemberRestController] 회원 활동 로그 조회 실패 - userId: {}", userId, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body(Map.of("error", "회원 활동 로그 조회 실패"));
+        }
+    }
 }

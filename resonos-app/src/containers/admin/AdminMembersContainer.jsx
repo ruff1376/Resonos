@@ -7,6 +7,8 @@ import TableContent from '../../components/admin/first/TableContent'; // 수정 
 import { list, insert, update, toggleEnable, banUser, remove, select } from '../../apis/admin';
 import MemberDetailForm from '../../components/admin/second/MemberDetailForm';
 
+import Pagination from '../../components/admin/Pagination';
+
 const AdminMembersContainer = () => {
   const [members, setMembers] = useState([]);
   const [pagination, setPagination] = useState({ index: 0 });
@@ -17,6 +19,34 @@ const AdminMembersContainer = () => {
   // 상세보기 관련 상태
   const [detailMemberId, setDetailMemberId] = useState(null);
   const [detailMemberData, setDetailMemberData] = useState(null);
+  // 상세 - 수정시 일부만 업데이트 처리 
+  const [originalDetailMemberData, setOriginalDetailMemberData] = useState(null);
+  // 일부 수정 확인 컬럼 들 
+  const requiredFields = [
+    'username',
+    'email',
+    'password',      // 비밀번호도 null이면 안 되면 포함
+    'nickname',
+    'profileImage',  // DB 컬럼명이 profile_image라면 JS에서는 profileImage
+    'bio',
+    'isPro',         // is_pro
+    'enabled',
+    'provider',
+    'providerId'     // provider_id
+  ];
+
+  // 페이지네이션
+  const [page, setPage] = useState(1);
+  const startPage = Math.max(1, page - 4);
+  const endPage = Math.min(pagination.totalPages || 1, page + 5);
+  const pageUri = `/admin/members?keyword=${encodeURIComponent(keyword)}`;
+
+
+ const onPageChange = (newPage) => {
+  if (newPage === page) return; // 동일 페이지 요청 방지
+  setPage(newPage);
+  fetchMembers(newPage, 10, keyword);
+};
 
   // 제재 폼 상태는 TableContent 내부로 이전 예정
   // const [banFormUserId, setBanFormUserId] = useState(null);
@@ -34,21 +64,40 @@ const AdminMembersContainer = () => {
     { label: '상세', style: { flexBasis: '8%', minWidth: '60px' } },
   ];
 
-  const fetchMembers = async (page = 1, size = 10, kw = '') => {
-    setLoading(true);
-    try {
-      const response = await list(page, size, kw);
-      const data = response.data;
-      setMembers(data.content || data.members || []);
-      setPagination({ index: data.number || page - 1, totalPages: data.totalPages });
-    } catch (error) {
-      console.error('멤버 목록 조회 실패', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+const fetchMembers = async (page = 1, size = 10, kw = '') => {
+  setLoading(true);
+  try {
+    const response = await list(page, size, kw);
+    const data = response.data;
+    
+    console.log('멤버 목록 API 응답:', data); // 응답 전체 확인용
+    
+    // members 배열 설정 (members 또는 content 키 중 존재하는 값으로)
+    setMembers(data.members || data.content || []);
+    
+    // pagination 정보가 data.pagination 안에 있으므로 해당 필드 활용
+    const p = data.pagination || {};
+    
+    // totalPages 계산: total(전체 항목수) / size(페이지당 개수)
+    const totalPages = p.size && p.total ? Math.ceil(p.total / p.size) : 1;
+    
+    setPagination({
+      page: typeof p.page === 'number' ? p.page : page, // API가 1-based 인지 확인 필요
+      size: typeof p.size === 'number' ? p.size : size,
+      total: typeof p.total === 'number' ? p.total : 0,
+      totalPages: totalPages,
+    });
+  } catch (error) {
+    console.error('멤버 목록 조회 실패', error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
 
   useEffect(() => {
+    setPage(1);  // 검색어 변경 시 page 1로 초기화
     fetchMembers(1, 10, keyword);
   }, [keyword]);
 
@@ -56,6 +105,7 @@ const AdminMembersContainer = () => {
     if (detailMemberId === memberId) {
       setDetailMemberId(null);
       setDetailMemberData(null);
+      setOriginalDetailMemberData(null);      // 상세 닫는 경우 원본 초기화
     } else {
       try {
         const response = await select(memberId);
@@ -63,11 +113,25 @@ const AdminMembersContainer = () => {
         detail.auth = detail.authList && detail.authList.length > 0 ? detail.authList[0] : '';
         setDetailMemberId(memberId);
         setDetailMemberData(detail);
+        setOriginalDetailMemberData(detail);  // 상세 열 때 원본 저장
       } catch (e) {
         alert('회원 정보를 찾을 수 없습니다.');
       }
     }
   };
+
+  // 상세 - 변경된 필드만 추출 함수
+  const getChangedFields = (original, current) => {
+  const changed = {};
+  Object.keys(current).forEach(key => {
+    if (JSON.stringify(current[key]) !== JSON.stringify(original[key])) {
+      changed[key] = current[key];
+    }
+  });
+  return changed;
+};
+
+
 
   const handleDetailChange = (e) => {
     const { name, value } = e.target;
@@ -90,25 +154,46 @@ const AdminMembersContainer = () => {
     }
   };
 
-  const handleDetailSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const payload = {
-        ...detailMemberData,
-        authList:
-          detailMemberData.authList && detailMemberData.authList.length > 0
-            ? detailMemberData.authList
-            : [{ auth: 'ROLE_USER' }],
-      };
-      await update(payload);
-      alert('저장되었습니다.');
-      setDetailMemberId(null);
-      setDetailMemberData(null);
-      fetchMembers(pagination.index + 1, 10, keyword);
-    } catch (e) {
-      alert('저장 실패: ' + (e.response?.data || e.message));
+
+const handleDetailSubmit = async (e) => {
+  e.preventDefault();
+  if (!originalDetailMemberData) return;
+
+  const changedFields = getChangedFields(originalDetailMemberData, detailMemberData);
+
+  // 필수 필드는 항상 포함
+  requiredFields.forEach(field => {
+    if (!(field in changedFields)) {
+      changedFields[field] = detailMemberData[field] ?? originalDetailMemberData[field];
     }
-  };
+  });
+
+  if (Object.keys(changedFields).length === 0) {
+    alert('변경된 내용이 없습니다.');
+    return;
+  }
+
+  if ('auth' in changedFields) {
+    // user_auth 테이블은 username, auth만 필요 (UserMapper.xml updateAuth 참고)
+    changedFields.authList = [{
+      username: detailMemberData.username,
+      auth: changedFields.auth
+    }];
+    delete changedFields.auth;
+  }
+
+  try {
+    await update({ id: detailMemberData.id, ...changedFields });
+    alert('저장되었습니다.');
+    setDetailMemberId(null);
+    setDetailMemberData(null);
+    setOriginalDetailMemberData(null);
+    fetchMembers(pagination.index + 1, 10, keyword);
+  } catch (e) {
+    alert('저장 실패: ' + (e.response?.data || e.message));
+  }
+};
+
 
   const handleDelete = async () => {
     if (!window.confirm('정말 삭제하시겠습니까?')) return;
@@ -206,8 +291,20 @@ const AdminMembersContainer = () => {
             onCloseDetail={() => {
               setDetailMemberId(null);
               setDetailMemberData(null);
+              setOriginalDetailMemberData(null);
             }}
           />
+            <Pagination
+              page={page}
+              first={1}
+              last={pagination.totalPages || 1}             // totalPages가 유효하지 않을 시 1로 기본
+              prev={page > 1 ? page - 1 : 1}
+              next={page < (pagination.totalPages || 1) ? page + 1 : (pagination.totalPages || 1)}
+              start={startPage}
+              end={endPage}
+              pageUri={pageUri}
+              onPageChange={onPageChange}
+            />
         </>
       )}
     </div>

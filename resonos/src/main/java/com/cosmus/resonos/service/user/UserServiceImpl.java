@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.admin.UserActivityLog;
+import com.cosmus.resonos.domain.admin.UserSanction;
 import com.cosmus.resonos.domain.admin.UsersTotalLikes;
 import com.cosmus.resonos.domain.user.GenreCount;
 import com.cosmus.resonos.domain.user.PublicUserDto;
@@ -28,6 +29,7 @@ import com.cosmus.resonos.domain.user.Users;
 import com.cosmus.resonos.mapper.admin.UserRoleMapper;
 import com.cosmus.resonos.mapper.user.UserMapper;
 import com.cosmus.resonos.service.admin.UserActivityLogService;
+import com.cosmus.resonos.service.admin.UserSanctionService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -199,9 +201,27 @@ public class UserServiceImpl implements UserService {
 
 
 
+    @Autowired
+    private UserSanctionService userSanctionService;
+    // react - 어드민 - 유저 삭제시 USER 테이블 외래키 오류로 인해서 수정함
     @Override
+    @Transactional
     public boolean delete(Long id) throws Exception {
-        return userMapper.delete(id) > 0;
+        Users user = userMapper.selectById(id);
+        if (user != null) {
+            // 1. 권한 정보 먼저 삭제
+            userMapper.deleteAuthByUsername(user.getUsername());
+            // 2. 제재 기록 삭제
+            List<UserSanction> sanctions = userSanctionService.getSanctionsByUserId(id);
+            if (sanctions != null) {
+                for (UserSanction sanction : sanctions) {
+                    userSanctionService.delete(sanction.getId());
+                }
+            }
+            // 3. user 삭제
+            return userMapper.delete(id) > 0;
+        }
+        return false;
     }
 
     @Override
