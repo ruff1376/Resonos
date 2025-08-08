@@ -1,19 +1,11 @@
 package com.cosmus.resonos.controller.review;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,30 +14,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cosmus.resonos.domain.CustomUser;
-import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.review.Album;
-import com.cosmus.resonos.domain.review.AlbumReview;
-import com.cosmus.resonos.domain.review.AlbumScore;
-import com.cosmus.resonos.domain.review.Artist;
 import com.cosmus.resonos.domain.review.ChartElement;
 import com.cosmus.resonos.domain.review.LikedAlbum;
-import com.cosmus.resonos.domain.review.Track;
-import com.cosmus.resonos.domain.review.TrackScore;
-import com.cosmus.resonos.domain.user.Playlist;
-import com.cosmus.resonos.domain.user.Users;
-import com.cosmus.resonos.service.review.AlbumReviewService;
 import com.cosmus.resonos.service.review.AlbumService;
-import com.cosmus.resonos.service.review.ArtistService;
-import com.cosmus.resonos.service.review.ChartElementService;
-import com.cosmus.resonos.service.review.ReviewLikeService;
-import com.cosmus.resonos.service.review.TrackService;
 import com.cosmus.resonos.service.review.combinedServ.CombinedAlbumService;
-import com.cosmus.resonos.service.user.LikedAlbumService;
-import com.cosmus.resonos.service.user.PlaylistService;
 import com.cosmus.resonos.validation.ReviewForm;
 
 import jakarta.validation.Valid;
@@ -58,23 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class AlbumController {
 
-    @Autowired
-    private TrackService trackService;
-    @Autowired
-    private AlbumService albumService;
-    @Autowired
-    private AlbumReviewService albumReviewService;
-    @Autowired
-    private ArtistService artistService;
-    @Autowired
-    private ReviewLikeService reviewLikeService;
-    @Autowired
-    private LikedAlbumService likedAlbumService;
-    @Autowired
-    private ChartElementService chartElementService;
-    @Autowired
-    private PlaylistService playlistService;
-
+    private final AlbumService albumService;
     private final CombinedAlbumService combinedAlbumService;
 
     // 앨범 초기페이지 로딩
