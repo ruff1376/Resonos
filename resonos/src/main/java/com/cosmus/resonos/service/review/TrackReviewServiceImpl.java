@@ -111,24 +111,31 @@ public class TrackReviewServiceImpl implements TrackReviewService {
 
     @Transactional
     public TrackReview write(String trackId, ReviewForm f, Users u) {
-        TrackReview r = TrackReview.builder()
-                .trackId(trackId)
-                .userId(u.getId())
-                .critic(u.isPro())
-                .rating(f.getRating())
-                .content(f.getContent())
-                .blinded(false)
-                .likes(0).dislikes(0)
-                .createdAt(LocalDateTime.now())
-                .reviewer(new Reviewer(u.getId(), u.getNickname(), u.getProfileImage(), u.isPro()))
-                .build();
-        mapper.insert(r);
-        return r;
+        if(f.getRating() >= 0 && f.getRating() <= 100 && f.getContent() != null){
+            TrackReview r = TrackReview.builder()
+                    .trackId(trackId)
+                    .userId(u.getId())
+                    .critic(u.isPro())
+                    .rating(f.getRating())
+                    .content(f.getContent())
+                    .blinded(false)
+                    .likes(0).dislikes(0)
+                    .createdAt(LocalDateTime.now())
+                    .reviewer(new Reviewer(u.getId(), u.getNickname(), u.getProfileImage(), u.isPro()))
+                    .build();
+            mapper.insert(r);
+            return r;
+        }
+        else return null;
     }
 
     @Transactional
     public boolean update(Long id, ReviewForm form) {
-        return mapper.update(id, form.getRating(), form.getContent());
+        // form 의 rating가 0~100점 사이인지 content가 null 이아니라면 수행
+        if(form.getRating() >= 0 && form.getRating() <= 100 && form.getContent() != null) {
+            return mapper.update(id, form.getRating(), form.getContent());
+        }
+        else return false;
     }
 
     @Transactional

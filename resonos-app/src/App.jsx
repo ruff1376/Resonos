@@ -10,7 +10,6 @@ import Main from './pages/list/Main';
 import Mypage from './pages/user/Mypage';
 import NewAlbum from './pages/list/NewAlbum';
 import Edit from './pages/user/Edit';
-import JoinForm from './components/Login/JoinForm';
 import Join from './pages/Join';
 import HotPlaylist from './pages/list/HotPlaylist';
 import HotAlbum from './pages/list/HotAlbum';
@@ -22,7 +21,8 @@ import Search from './pages/search/Search';
 import ArtistSearch from './pages/search/ArtistSearch';
 import AlbumSearch from './pages/search/AlbumSearch';
 import TrackSearch from './pages/search/TrackSearch';
-import NewPlaylist from './pages/user/NewPlaylist';
+import PlaylistDetail from './pages/user/PlaylistDetail';
+import CreatePlaylist from './pages/user/CreatePlaylist';
 
 const App = () => {
 
@@ -57,7 +57,8 @@ const App = () => {
           <Route path="/users/edit" element={<Edit />} />
           <Route path="/users/:id/playlists" element={<Playlist />} />
           <Route path="/users/playlists" element={<Playlist />} />
-          <Route path="/playlists/new" element={<NewPlaylist />} />
+          <Route path="/playlists/new" element={<CreatePlaylist />} />
+          <Route path="/playlists/:id" element={<PlaylistDetail />} />
         </Routes>
       </LoginContextProvider>
     </BrowserRouter>

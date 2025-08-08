@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import DoughnutChart from './DoughnutChart'
+import { Link } from 'react-router-dom'
 
 const UserResource = ({albumList, artistList, badgeList, chartData, playlists, trackList, utl, user, isOwner, countAllReview}) => {
 
@@ -12,7 +13,7 @@ const UserResource = ({albumList, artistList, badgeList, chartData, playlists, t
     <>
       <div className="my-middle">
         {/* 플레이리스트 */}
-        <a href={`/users/${user.id}/playlists`}>
+        <Link to={`/users/${user.id}/playlists`}>
           <div className="mypage-card playlist">
             <h3>{isOwner ? '내 플레이리스트' : '플레이리스트'}</h3>
             {(playlists == null || playlists.length === 0) ? (
@@ -37,7 +38,7 @@ const UserResource = ({albumList, artistList, badgeList, chartData, playlists, t
               </ul>
             )}
           </div>
-        </a>
+        </Link>
 
         <div className="chart-area">
           <h3>선호하는 장르</h3>
