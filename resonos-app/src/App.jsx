@@ -10,6 +10,10 @@ import Main from './pages/list/Main';
 import Mypage from './pages/user/Mypage';
 import AdminMembers from './pages/admin/AdminMembersPage';
 import AdminMemberDetail from './pages/admin/AdminMemberDetail';
+import NewAlbum from './pages/list/NewAlbum';
+import Edit from './pages/user/Edit';
+import JoinForm from './components/Login/JoinForm';
+import Join from './pages/Join';
 
 const App = () => {
 
@@ -23,7 +27,8 @@ const App = () => {
           <Route path='/login' element={<Login />} />
           <Route path="/list/main" element={<Main />} />
 
-
+          {/* 컨텐츠 목록 */}
+          <Route path="/list/new-albums" element={<NewAlbum />} />
 
           {/* 유저 */}
           <Route path="/mypage" element={<Mypage />} />
@@ -33,6 +38,8 @@ const App = () => {
           <Route path="/admin/members" element={<AdminMembers />} />
           <Route path="/admin/members/:id" element={<AdminMemberDetail />} />
           
+          <Route path="/users/edit" element={<Edit />} />
+          <Route path="/join" element={<Join />} />
         </Routes>
       </LoginContextProvider>
     </BrowserRouter>
