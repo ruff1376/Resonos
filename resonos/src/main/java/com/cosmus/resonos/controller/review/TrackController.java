@@ -71,7 +71,7 @@ public class TrackController {
 
     // 리뷰 수정시 업데이트된 리뷰와 점수리턴
     @PutMapping("/reviews")
-    public ResponseEntity<?> reviewUpdate(@RequestParam("id") String trackId, @RequestBody @Valid ReviewForm form) {
+    public ResponseEntity<?> reviewUpdate(@RequestParam("id") String trackId, @RequestBody ReviewForm form) {
         // 폼의 아이디는 리뷰아이디
         return combinedTrackService.reviewUpdate(form.getId(), form, trackId);
     }

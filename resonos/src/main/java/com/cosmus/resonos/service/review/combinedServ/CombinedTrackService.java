@@ -152,7 +152,7 @@ public class CombinedTrackService {
             TrackScore score = trackReviewService.getTrackScore(trackId);
             return new ResponseEntity<>(Map.of("review", reivew, "score", score), HttpStatus.OK);
         } else
-            return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
     }
 
     // 리뷰등록시 리뷰를 비동기로 반환
