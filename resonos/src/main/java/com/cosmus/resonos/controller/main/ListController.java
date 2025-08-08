@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -171,30 +172,30 @@ public class ListController {
     // }
 
     @GetMapping("/main")
-    public ResponseEntity<Map<String, Object>> mainAlbumTrackList() throws Exception {
-        Map<String, Object> result = new HashMap<>();
+    public ResponseEntity<?> mainAlbumTrackList() throws Exception {
+        Map<String, Object> response = new HashMap<>();
 
-        result.put("korHotReviewAlbumList", albumService.korHotReviewList());
-        result.put("worldHotReviewAlbumList", albumService.worldHotReviewList());
-        result.put("newAlbumList", albumService.mainNewList());
-        result.put("hotAlbumList", albumService.mainHotList());
-        result.put("newTrackList", trackService.mainNewList());
-        result.put("hotTrackList", trackService.mainHotList());
-        result.put("newPlaylistList", playlistService.mainNewList());
-        result.put("hotPlaylistList", playlistService.mainHotList());
+        response.put("korHotReviewAlbumList", albumService.korHotReviewList());
+        response.put("worldHotReviewAlbumList", albumService.worldHotReviewList());
+        response.put("newAlbumList", albumService.mainNewList());
+        response.put("hotAlbumList", albumService.mainHotList());
+        response.put("newTrackList", trackService.mainNewList());
+        response.put("hotTrackList", trackService.mainHotList());
+        response.put("newPlaylistList", playlistService.mainNewList());
+        response.put("hotPlaylistList", playlistService.mainHotList());
 
-        result.put("newAlbumCount", albumService.newCount());
-        result.put("hotAlbumCount", albumService.hotCount());
-        result.put("newTrackCount", trackService.newCount());
-        result.put("hotTrackCount", trackService.hotCount());
-        result.put("newPlaylistCount", playlistService.newCount());
-        result.put("hotPlaylistCount", playlistService.hotCount());
+        response.put("newAlbumCount", albumService.newCount());
+        response.put("hotAlbumCount", albumService.hotCount());
+        response.put("newTrackCount", trackService.newCount());
+        response.put("hotTrackCount", trackService.hotCount());
+        response.put("newPlaylistCount", playlistService.newCount());
+        response.put("hotPlaylistCount", playlistService.hotCount());
 
-        return ResponseEntity.ok(result);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/new-albums")
-    public ResponseEntity<Map<String, Object>> newAlbumList(
+    public ResponseEntity<?> newAlbumList(
         @RequestParam(value = "size", defaultValue = "30") int size,
         Pagination pagination) throws Exception {
 
@@ -204,11 +205,11 @@ public class ListController {
         Map<String, Object> response = new HashMap<>();
         response.put("pagination", pagination);
         response.put("newAlbumList", list);
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/hot-albums")
-    public ResponseEntity<Map<String, Object>> hotAlbumList(
+    public ResponseEntity<?> hotAlbumList(
         @RequestParam(value = "size", defaultValue = "30") int size,
         Pagination pagination) throws Exception {
 
@@ -218,11 +219,11 @@ public class ListController {
         Map<String, Object> response = new HashMap<>();
         response.put("pagination", pagination);
         response.put("hotAlbumList", list);
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/new-tracks")
-    public ResponseEntity<Map<String, Object>> newTrackList(
+    public ResponseEntity<?> newTrackList(
         @RequestParam(value = "size", defaultValue = "30") int size,
         Pagination pagination) throws Exception {
 
@@ -232,11 +233,11 @@ public class ListController {
         Map<String, Object> response = new HashMap<>();
         response.put("pagination", pagination);
         response.put("newTrackList", list);
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/hot-tracks")
-    public ResponseEntity<Map<String, Object>> hotTrackList(
+    public ResponseEntity<?> hotTrackList(
         @RequestParam(value = "size", defaultValue = "30") int size,
         Pagination pagination) throws Exception {
 
@@ -246,11 +247,11 @@ public class ListController {
         Map<String, Object> response = new HashMap<>();
         response.put("pagination", pagination);
         response.put("hotTrackList", list);
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/new-playlists")
-    public ResponseEntity<Map<String, Object>> newPlaylistList(
+    public ResponseEntity<?> newPlaylistList(
         @RequestParam(value = "size", defaultValue = "30") int size,
         Pagination pagination) throws Exception {
 
@@ -260,11 +261,11 @@ public class ListController {
         Map<String, Object> response = new HashMap<>();
         response.put("pagination", pagination);
         response.put("newPlaylistList", list);
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/hot-playlists")
-    public ResponseEntity<Map<String, Object>> hotPlaylistList(
+    public ResponseEntity<?> hotPlaylistList(
         @RequestParam(value = "size", defaultValue = "30") int size,
         Pagination pagination) throws Exception {
 
@@ -274,7 +275,7 @@ public class ListController {
         Map<String, Object> response = new HashMap<>();
         response.put("pagination", pagination);
         response.put("hotPlaylistList", list);
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }

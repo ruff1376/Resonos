@@ -6,7 +6,7 @@ import {
     Legend
 } from 'chart.js';
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './MainForm.css'
 

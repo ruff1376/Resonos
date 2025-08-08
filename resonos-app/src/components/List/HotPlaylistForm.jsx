@@ -1,11 +1,3 @@
-import {
-    Chart,
-    DoughnutController,
-    ArcElement,
-    Tooltip,
-    Legend
-} from 'chart.js';
-Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './MainForm.css'
 import Pagination from '../Pagination/Pagination';

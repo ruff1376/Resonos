@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
 import api from '../../apis/api'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import NewAlbumForm from '../../components/List/NewAlbumForm'
 
 const NewAlbum = () => {
@@ -10,7 +10,6 @@ const NewAlbum = () => {
     const [newAlbumCount, setNewAlbumCount] = useState({});
     const [pagination, setPagination] = useState({});
     const [searchParams, setSearchParams] = useSearchParams();
-    const navigate = useNavigate();
 
     const page = parseInt(searchParams.get('page')) || 1;
 

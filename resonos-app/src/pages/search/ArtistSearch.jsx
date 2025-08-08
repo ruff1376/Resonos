@@ -3,40 +3,46 @@ import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
 import api from '../../apis/api'
 import { useSearchParams } from 'react-router-dom'
-import HotAlbumForm from '../../components/List/HotAlbumForm'
+import ArtistSearchForm from '../../components/Search/ArtistSearchForm'
 
-const HotAlbum = () => {
-    const [hotAlbumList, setHotAlbumList] = useState([]);
-    const [hotAlbumCount, setHotAlbumCount] = useState({});
+const ArtistSearch = () => {
+    const [artistSearchList, setArtistSearchList] = useState([]);
+    const [artistSearchCount, setArtistSearchCount] = useState(0);
     const [pagination, setPagination] = useState({});
     const [searchParams, setSearchParams] = useSearchParams();
 
+    const q = searchParams.get('q');
     const page = parseInt(searchParams.get('page')) || 1;
 
     useEffect(() => {
-        api.get(`/list/hot-albums?page=${page}`)
+        api.get(`/search/artists?q=${q}&page=${page}`)
             .then((res) => {
                 const data = res.data;
                 console.log('받은 데이터:', data);
-                setHotAlbumList(data.hotAlbumList);
-                setHotAlbumCount(data.hotAlbumCount);
+                setArtistSearchList(data.artistSearchList);
+                setArtistSearchCount(data.artistSearchCount);
                 setPagination(data.pagination);
             })
             .catch((error) => {
                 console.error('메인 데이터 불러오기 실패:', error);
             });
-    }, [page]);
+    }, [q, page]);
+
+    const handleKeywordSearch = (keyword) => {
+        setSearchParams({ q: keyword })
+    };
 
     const handlePageChange = (pageNum) => {
-        setSearchParams({ page: pageNum });
+        setSearchParams({ q, page: pageNum });
     };
 
     return (
         <>
             <Header />
-            <HotAlbumForm
-                hotAlbumList={hotAlbumList}
-                hotAlbumCount={hotAlbumCount}
+            <ArtistSearchForm
+                keyword={q}
+                artistSearchList={artistSearchList}
+                artistSearchCount={artistSearchCount}
                 pagination={pagination}
                 onPageChange={handlePageChange}
             />
@@ -45,4 +51,4 @@ const HotAlbum = () => {
     )
 }
 
-export default HotAlbum
+export default ArtistSearch
