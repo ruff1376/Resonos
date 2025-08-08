@@ -67,7 +67,7 @@ const UserEditForm = ({badgeList, badgeName, user, onSubmit, result, success}) =
         preview.src = ''
       }
     });
-  })
+  }, [])
 
   return (
     <div className="con edit d-flex justify-content-center">
