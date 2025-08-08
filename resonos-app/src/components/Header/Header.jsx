@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Header.css';
@@ -8,6 +8,8 @@ import { LoginContext } from '../../contexts/LoginContextProvider';
 const Header = ({ currentUser = {} }) => {
     const location = useLocation();
     const { isLogin } = useContext(LoginContext)
+    const [searchValue, setSearchValue] = useState("");
+    const navigate = useNavigate();
 
     // 로그인 버튼 클릭 시 현재 페이지 기억
     useEffect(() => {
@@ -22,16 +24,16 @@ const Header = ({ currentUser = {} }) => {
     }, [location]);
 
     // 검색 유효성 검사
-    const handleSearchSubmit = (e) => {
-        const input = document.getElementById("searchInput");
-        const trimmed = input.value.trim();
+    const validateSearch = (e) => {
+        e.preventDefault();
+        const trimmed = searchValue.trim();
 
         if (trimmed.length === 0) {
-            e.preventDefault();
             alert("검색어를 입력하세요.");
-        } else {
-            input.value = trimmed;
+            return;
         }
+
+        navigate(`/search?q=${encodeURIComponent(trimmed)}`);
     };
 
     return (
@@ -78,10 +80,17 @@ const Header = ({ currentUser = {} }) => {
 
                     <div className="d-flex justify-content-end align-items-center header-gap mt-4 mb-4 gap-4" id="mainNav">
 
-                        <form className="position-relative d-flex align-items-center mb-0" style={{ width: '300px' }} method="get" action="/search">
-                            <input type="search" name="q" id="searchInput" className="form-control search-box" placeholder="앨범, 트랙, 아티스트..." />
+                        <form className="position-relative d-flex align-items-center mb-0" style={{ width: '300px' }} onSubmit={validateSearch}>
+                            <input
+                                type="search"
+                                name="q"
+                                className="form-control search-box"
+                                placeholder="앨범, 트랙, 아티스트..."
+                                value={searchValue}
+                                onChange={(e) => setSearchValue(e.target.value)}
+                            />
                             <button type="submit" className="btn p-0 border-0 bg-transparent header-search-btn"
-                                style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)' }} tabIndex="-1">
+                                style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)' }}>
                                 <i className="bi bi-search header-search-icon"></i>
                             </button>
                         </form>

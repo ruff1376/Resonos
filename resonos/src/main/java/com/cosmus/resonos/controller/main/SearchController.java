@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -90,35 +92,7 @@ public class SearchController {
 
     //     return "search/search";
     // }
-
-    @GetMapping("")
-    public Map<String, Object> search(@RequestParam("q") String keyword) throws Exception {
-        keyword = keyword.trim();
-        Map<String, Object> result = new HashMap<>();
-
-        if (keyword.startsWith("#")) {
-            String tagName = keyword.substring(1);
-            List<Track> searchTracksByTagList = trackService.searchTracksByTag(tagName);
-            result.put("searchTracksByTagList", searchTracksByTagList);
-            result.put("keyword", keyword);
-            return result;
-        }
-
-        result.put("artistSearchList", artistService.searchList(keyword));
-        result.put("albumSearchList", albumService.searchList(keyword));
-        result.put("trackSearchList", trackService.searchList(keyword));
-        result.put("userSearchList", userService.searchList(keyword));
-        result.put("playlistSearchList", playlistService.searchList(keyword));
-
-        result.put("artistCount", artistService.searchCount(keyword));
-        result.put("albumCount", albumService.searchCount(keyword));
-        result.put("trackCount", trackService.searchCount(keyword));
-        result.put("userCount", userService.searchCount(keyword));
-        result.put("playlistCount", playlistService.searchCount(keyword));
-
-        return result;
-    }
-
+    
     // @GetMapping("/artists")
     // public String artistSearch(
     //     @RequestParam("q") String keyword,
@@ -158,33 +132,7 @@ public class SearchController {
 
     //     return "search/search_artist";
     // }
-
-    @GetMapping("/artists")
-    public Map<String, Object> artistSearch(
-        @RequestParam("q") String keyword,
-        @RequestParam(defaultValue = "30") int size,
-        @RequestParam(defaultValue = "1") int page,
-        Pagination pagination) throws Exception {
-
-        keyword = keyword.trim();
-        pagination.setSize(size);
-        pagination.setPage(page);
-        pagination.setCount(10);
-
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("keyword", keyword);
-        paramMap.put("index", pagination.getIndex());
-        paramMap.put("size", pagination.getSize());
-        paramMap.put("pagination", pagination);
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("artists", artistService.allSearchList(paramMap));
-        result.put("count", artistService.searchCount(keyword));
-        result.put("pagination", pagination);
-
-        return result;
-    }
-
+    
     // @GetMapping("/albums")
     // public String albumSearch(
     //     @RequestParam("q") String keyword,
@@ -227,28 +175,7 @@ public class SearchController {
 
     //     return "search/search_album";
     // }
-
-    @GetMapping("/albums")
-    public Map<String, Object> albumSearch(
-        @RequestParam("q") String keyword,
-        @RequestParam(defaultValue = "30") int size,
-        @RequestParam(defaultValue = "1") int page,
-        @RequestParam(defaultValue = "relevance") String sort,
-        Pagination pagination) throws Exception {
-
-        keyword = keyword.trim();
-        pagination.setSize(size);
-        pagination.setPage(page);
-        pagination.setCount(10);
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("albums", albumService.allSearchList(keyword, pagination, sort));
-        result.put("count", albumService.searchCount(keyword));
-        result.put("pagination", pagination);
-
-        return result;
-    }
-
+    
     // @GetMapping("/tracks")
     // public String trackSearch(
     //     @RequestParam("q") String keyword,
@@ -291,28 +218,7 @@ public class SearchController {
 
     //     return "search/search_track";
     // }
-
-    @GetMapping("/tracks")
-    public Map<String, Object> trackSearch(
-        @RequestParam("q") String keyword,
-        @RequestParam(defaultValue = "30") int size,
-        @RequestParam(defaultValue = "1") int page,
-        @RequestParam(defaultValue = "relevance") String sort,
-        Pagination pagination) throws Exception {
-
-        keyword = keyword.trim();
-        pagination.setSize(size);
-        pagination.setPage(page);
-        pagination.setCount(10);
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("tracks", trackService.allSearchList(keyword, pagination, sort));
-        result.put("count", trackService.searchCount(keyword));
-        result.put("pagination", pagination);
-
-        return result;
-    }
-
+    
     // @GetMapping("/users")
     // public String userSearch(
     //     @RequestParam("q") String keyword,
@@ -352,33 +258,7 @@ public class SearchController {
 
     //     return "search/search_user";
     // }
-
-    @GetMapping("/users")
-    public Map<String, Object> userSearch(
-        @RequestParam("q") String keyword,
-        @RequestParam(defaultValue = "30") int size,
-        @RequestParam(defaultValue = "1") int page,
-        Pagination pagination) throws Exception {
-
-        keyword = keyword.trim();
-        pagination.setSize(size);
-        pagination.setPage(page);
-        pagination.setCount(10);
-
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("keyword", keyword);
-        paramMap.put("index", pagination.getIndex());
-        paramMap.put("size", pagination.getSize());
-        paramMap.put("pagination", pagination);
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("users", userService.allSearchList(paramMap));
-        result.put("count", userService.searchCount(keyword));
-        result.put("pagination", pagination);
-
-        return result;
-    }
-
+    
     // @GetMapping("/playlists")
     // public String playlistSearch(
     //     @RequestParam("q") String keyword,
@@ -422,25 +302,132 @@ public class SearchController {
     //     return "search/search_playlist";
     // }
 
-    @GetMapping("/playlists")
-    public Map<String, Object> playlistSearch(
+    @GetMapping("")
+    public ResponseEntity<?> search(@RequestParam("q") String keyword) throws Exception {
+        keyword = keyword.trim();
+        Map<String, Object> response = new HashMap<>();
+
+        if (keyword.startsWith("#")) {
+            String tagName = keyword.substring(1);
+            List<Track> searchTracksByTagList = trackService.searchTracksByTag(tagName);
+            response.put("searchTracksByTagList", searchTracksByTagList);
+            response.put("keyword", keyword);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+        response.put("artistSearchList", artistService.searchList(keyword));
+        response.put("albumSearchList", albumService.searchList(keyword));
+        response.put("trackSearchList", trackService.searchList(keyword));
+        response.put("userSearchList", userService.searchList(keyword));
+        response.put("playlistSearchList", playlistService.searchList(keyword));
+
+        response.put("artistSearchCount", artistService.searchCount(keyword));
+        response.put("albumSearchCount", albumService.searchCount(keyword));
+        response.put("trackSearchCount", trackService.searchCount(keyword));
+        response.put("userSearchCount", userService.searchCount(keyword));
+        response.put("playlistSearchCount", playlistService.searchCount(keyword));
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/artists")
+    public ResponseEntity<?> artistSearch(
         @RequestParam("q") String keyword,
-        @RequestParam(defaultValue = "30") int size,
-        @RequestParam(defaultValue = "1") int page,
-        @RequestParam(defaultValue = "relevance") String sort,
+        @RequestParam(value = "size", defaultValue = "30") int size,
+        // @RequestParam(value = "page", defaultValue = "1") int page,
         Pagination pagination) throws Exception {
 
         keyword = keyword.trim();
         pagination.setSize(size);
-        pagination.setPage(page);
-        pagination.setCount(10);
+        // pagination.setPage(page);
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("playlists", playlistService.allSearchList(keyword, pagination, sort));
-        result.put("count", playlistService.searchCount(keyword));
-        result.put("pagination", pagination);
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("keyword", keyword);
+        // paramMap.put("index", pagination.getIndex());
+        // paramMap.put("size", pagination.getSize());
+        paramMap.put("pagination", pagination);
 
-        return result;
+        Map<String, Object> response = new HashMap<>();
+        response.put("artistSearchList", artistService.allSearchList(paramMap));
+        response.put("artistSearchCount", artistService.searchCount(keyword));
+        response.put("pagination", pagination);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/albums")
+    public ResponseEntity<?> albumSearch(
+        @RequestParam("q") String keyword,
+        @RequestParam(value = "size", defaultValue = "30") int size,
+        @RequestParam(value = "sort", defaultValue = "relevance") String sort,
+        Pagination pagination) throws Exception {
+
+        keyword = keyword.trim();
+        pagination.setSize(size);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("albumSearchList", albumService.allSearchList(keyword, pagination, sort));
+        response.put("albumSearchCount", albumService.searchCount(keyword));
+        response.put("pagination", pagination);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/tracks")
+    public ResponseEntity<?> trackSearch(
+        @RequestParam("q") String keyword,
+        @RequestParam(value = "size", defaultValue = "30") int size,
+        @RequestParam(value = "sort", defaultValue = "relevance") String sort,
+        Pagination pagination) throws Exception {
+
+        keyword = keyword.trim();
+        pagination.setSize(size);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("trackSearchList", trackService.allSearchList(keyword, pagination, sort));
+        response.put("trackSearchCount", trackService.searchCount(keyword));
+        response.put("pagination", pagination);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<?> userSearch(
+        @RequestParam("q") String keyword,
+        @RequestParam(value = "size", defaultValue = "30") int size,
+        Pagination pagination) throws Exception {
+
+        keyword = keyword.trim();
+        pagination.setSize(size);
+
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("keyword", keyword);
+        paramMap.put("pagination", pagination);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("userSearchList", userService.allSearchList(paramMap));
+        response.put("userSearchCount", userService.searchCount(keyword));
+        response.put("pagination", pagination);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/playlists")
+    public ResponseEntity<?> playlistSearch(
+        @RequestParam("q") String keyword,
+        @RequestParam(value = "size", defaultValue = "30") int size,
+        @RequestParam(value = "sort", defaultValue = "relevance") String sort,
+        Pagination pagination) throws Exception {
+
+        keyword = keyword.trim();
+        pagination.setSize(size);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("playlistSearchList", playlistService.allSearchList(keyword, pagination, sort));
+        response.put("playlistSearchCount", playlistService.searchCount(keyword));
+        response.put("pagination", pagination);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }

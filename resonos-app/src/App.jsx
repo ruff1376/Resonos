@@ -18,6 +18,10 @@ import NewTrack from './pages/list/NewTrack';
 import HotTrack from './pages/list/HotTrack';
 import NewPlaylist from './pages/list/NewPlaylist';
 import Playlist from './pages/user/Playlist';
+import Search from './pages/search/Search';
+import ArtistSearch from './pages/search/ArtistSearch';
+import AlbumSearch from './pages/search/AlbumSearch';
+import TrackSearch from './pages/search/TrackSearch';
 import NewPlaylist from './pages/user/NewPlaylist';
 
 const App = () => {
@@ -39,6 +43,12 @@ const App = () => {
           <Route path="/list/hot-tracks" element={<HotTrack />} />
           <Route path="/list/new-playlists" element={<NewPlaylist />} />
           <Route path="/list/hot-playlists" element={<HotPlaylist />} />
+
+          {/* 검색 목록 */}
+          <Route path="/search" element={<Search />} />
+          <Route path="/search/artists" element={<ArtistSearch />} />
+          <Route path="/search/albums" element={<AlbumSearch />} />
+          <Route path="/search/tracks" element={<TrackSearch />} />
 
           {/* 유저 */}
           <Route path="/join" element={<Join />} />

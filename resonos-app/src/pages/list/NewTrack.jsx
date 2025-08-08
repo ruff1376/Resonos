@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
 import api from '../../apis/api'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import NewTrackForm from '../../components/List/NewTrackForm'
 
 const NewTrack = () => {
@@ -10,7 +10,6 @@ const NewTrack = () => {
     const [newTrackCount, setNewTrackCount] = useState({});
     const [pagination, setPagination] = useState({});
     const [searchParams, setSearchParams] = useSearchParams();
-    const navigate = useNavigate();
 
     const page = parseInt(searchParams.get('page')) || 1;
 
