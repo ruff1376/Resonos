@@ -177,3 +177,10 @@ export const searchMyLikedPlaylist = async ({ userId, keyword, offset, limit }) 
     limit
   })
 }
+
+// 트랙리스트 요청
+export const searchTracks = async (data) => {
+  return await api.post('playlists/tracks', data, {
+    headers: { 'Content-Type': 'application/json' }
+  })
+}

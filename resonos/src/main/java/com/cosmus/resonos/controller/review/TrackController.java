@@ -48,7 +48,7 @@ public class TrackController {
     @PostMapping
     public ResponseEntity<?> trackReviewPost(@RequestParam("id") String trackId, ReviewForm f,
                         @AuthenticationPrincipal CustomUser user) {
-            
+
         return combinedTrackService.reviewPost(trackId, f, user);
     }
 
@@ -79,7 +79,7 @@ public class TrackController {
     // 리뷰 삭제시 트랙 점수 새로 리턴
     @DeleteMapping("/reviews")
     public ResponseEntity<?> deleteAndRefresh(@RequestParam("id") String trackId, @RequestBody Long reviewId ) {
-        
+
         return combinedTrackService.reviewDelete(reviewId, trackId);
     }
 
@@ -130,7 +130,7 @@ public class TrackController {
         return combinedTrackService.refreshPlaylist(id);
     }
 
-    
+
 
     // 트랙 화면
     // @GetMapping
@@ -484,24 +484,5 @@ public class TrackController {
             return new ResponseEntity<>(trackList, HttpStatus.OK);
 
         return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    /**
-     * 플레이리스트에 추가할 트랙 리스트 요청
-     *
-     * @param entity
-     * @return
-     * @throws Exception
-     */
-    @PostMapping(value = "/from-playlists", consumes = "application/json")
-    public ResponseEntity<?> getAjaxTracks(@RequestBody Map<String, String> data) throws Exception {
-        log.info("트랙 요청 들어옴.");
-        int offset = Integer.parseInt(data.get("offset").toString());
-        int limit = Integer.parseInt(data.get("limit").toString());
-        List<Track> trackList = trackService.addTrackList(data.get("keyword"), offset, limit);
-        if (trackList != null)
-            return new ResponseEntity<>(trackList, HttpStatus.OK);
-
-        return new ResponseEntity<>("리스트 요청 실패.", HttpStatus.BAD_REQUEST);
     }
 }

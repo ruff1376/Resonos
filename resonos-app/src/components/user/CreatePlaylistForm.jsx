@@ -4,7 +4,7 @@ import * as ur from '../../apis/user'
 import * as Swal from '../../apis/alert'
 import { useNavigate } from 'react-router-dom'
 
-const NewPlaylistForm = () => {
+const CreatePlaylistForm = () => {
 
   const [isPublic, setIsPublic] = useState(true)
   const [thumbnail, setThumbnail] = useState(null)
@@ -49,6 +49,7 @@ const NewPlaylistForm = () => {
     }
   }
 
+  // 이미지 리뷰 함수
   useEffect(() => {
     document.getElementById('thumbnail').addEventListener('change', function (event) {
       const file = event.target.files[0]
@@ -166,4 +167,4 @@ const NewPlaylistForm = () => {
   )
 }
 
-export default NewPlaylistForm
+export default CreatePlaylistForm
