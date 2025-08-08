@@ -283,7 +283,7 @@
         WHERE id = #{id}
     </update>
 
-    <delete id="delete">
+    <delete id="delete" resultType="int">
         DELETE FROM album_review WHERE id = #{id}
     </delete>
 

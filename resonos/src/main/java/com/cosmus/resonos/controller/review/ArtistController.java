@@ -37,7 +37,7 @@ public class ArtistController {
 
     @GetMapping
     public ResponseEntity<?> artistInfo(@RequestParam("id") String artistId, @AuthenticationPrincipal CustomUser user) {
-        return combinedArtistService.artistPageGet(artistId, user.getId());
+        return combinedArtistService.artistPageGet(artistId, user);
     }
 
     @PostMapping("/toggle-like")

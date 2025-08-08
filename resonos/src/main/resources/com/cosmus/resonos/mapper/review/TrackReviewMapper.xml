@@ -292,7 +292,7 @@
         WHERE id = #{id}
     </update>
 
-    <delete id="delete">
+    <delete id="delete" resultType="int">
         DELETE FROM track_review WHERE id = #{id}
     </delete>
 

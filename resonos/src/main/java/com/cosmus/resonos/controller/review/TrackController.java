@@ -41,7 +41,7 @@ public class TrackController {
     @GetMapping
     public ResponseEntity<?> trackInfo(@RequestParam("id") String trackId, @AuthenticationPrincipal CustomUser user) {
 
-        return combinedTrackService.trackPage(trackId, user.getId());
+        return combinedTrackService.trackPage(trackId, user);
     }
 
     // 트랙 리뷰 작성

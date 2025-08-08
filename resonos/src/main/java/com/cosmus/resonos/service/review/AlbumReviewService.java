@@ -30,7 +30,7 @@ public interface AlbumReviewService {
 
     boolean update(Long id, ReviewForm form);
 
-    void delete(Long id);
+    boolean delete(Long id);
 
     AlbumReview findById(Long id);
 
