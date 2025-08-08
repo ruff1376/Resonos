@@ -1,6 +1,5 @@
 package com.cosmus.resonos.service.review.combinedServ;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,22 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Pagination;
-import com.cosmus.resonos.domain.review.Album;
 import com.cosmus.resonos.domain.review.AlbumReview;
 import com.cosmus.resonos.domain.review.AlbumScore;
 import com.cosmus.resonos.domain.review.ChartElement;
 import com.cosmus.resonos.domain.review.LikedAlbum;
 import com.cosmus.resonos.domain.review.responseDTO.AlbumPageDTO;
-import com.cosmus.resonos.domain.user.Playlist;
 import com.cosmus.resonos.domain.user.Users;
 import com.cosmus.resonos.service.review.AlbumReviewService;
 import com.cosmus.resonos.service.review.AlbumService;
@@ -36,7 +27,6 @@ import com.cosmus.resonos.service.user.LikedAlbumService;
 import com.cosmus.resonos.service.user.PlaylistService;
 import com.cosmus.resonos.validation.ReviewForm;
 
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @Service
