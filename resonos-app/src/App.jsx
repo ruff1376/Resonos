@@ -19,6 +19,7 @@ import HotTrack from './pages/list/HotTrack';
 import NewPlaylist from './pages/list/NewPlaylist';
 import Playlist from './pages/user/Playlist';
 import NewPlaylist from './pages/user/NewPlaylist';
+import PlaylistDetail from './pages/user/PlaylistDetail';
 
 const App = () => {
 
@@ -48,6 +49,7 @@ const App = () => {
           <Route path="/users/:id/playlists" element={<Playlist />} />
           <Route path="/users/playlists" element={<Playlist />} />
           <Route path="/playlists/new" element={<NewPlaylist />} />
+          <Route path="/playlists/:id" element={<PlaylistDetail />} />
         </Routes>
       </LoginContextProvider>
     </BrowserRouter>
