@@ -206,7 +206,7 @@ public class PlaylistController {
         }
         catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>("이미 플레이리스트에 있는 트랙입니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("이미 플레이리스트에 존재합니다.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

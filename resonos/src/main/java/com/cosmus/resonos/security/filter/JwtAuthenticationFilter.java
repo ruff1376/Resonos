@@ -46,8 +46,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
    */
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-      throws AuthenticationException {
-
+  throws AuthenticationException {
     log.info("username : " + request.getParameter("username") );
     log.info("password : " + request.getParameter("password") );
 
@@ -60,6 +59,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     // 인증 (로그인)
     authentication = authenticationManager.authenticate(authentication);
+    log.info("attempt 실행");
 
     log.info("authenticationManager : " + authenticationManager );
     log.info("authentication : " + authentication );
