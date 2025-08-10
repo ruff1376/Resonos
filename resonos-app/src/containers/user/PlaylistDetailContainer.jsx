@@ -16,6 +16,7 @@ const PlaylistDetailContainer = () => {
   const [owner, setOwner] = useState({})
   const [trackList, setTrackList] = useState([])
   const [onModal, setOnModal] = useState(false)
+  const [userId, setUserId] = useState()
   const params = useParams()
 
   const dragListRef = useRef(null)
@@ -32,7 +33,7 @@ const PlaylistDetailContainer = () => {
           icon: "success",
           title: "플레이리스트에 추가되었습니다.",
           showConfirmButton: false,
-          timer: 800,
+          timer: 1000,
           customClass: {
             popup: 'follow-popup',
             icon: 'success-icon',
@@ -41,15 +42,26 @@ const PlaylistDetailContainer = () => {
         })
         setTimeout(() => {
           setOnModal(false)
-        }, 900)
+        }, 1100)
       }
     } catch(e) {
-      console.error('error :', e)
+      MySwal.fire({
+        position: "center",
+        icon: "warning",
+        title: e.response.data,
+        showConfirmButton: false,
+        timer: 1000,
+        customClass: {
+          popup: 'follow-popup',
+          icon: 'success-icon',
+          title: 'alert-title'
+        }
+      })
     }
   }
 
   // 트랙 검색, 요청 함수
-  const onSearchTrack = useCallback(async (keyword, offsetRef, limitRef, loadingRef, allLoadedRef) => {
+  const onSearchTrack = async (keyword, offsetRef, limitRef, loadingRef, allLoadedRef) => {
     console.log(keyword)
     if (loadingRef.current || allLoadedRef.current) return
 
@@ -82,7 +94,7 @@ const PlaylistDetailContainer = () => {
     } finally {
       loadingRef.current = false
     }
-  }, [])
+  }
 
   // 플레이리스트 상세 정보 요청
   const getPlaylistDetail = async () => {
@@ -94,6 +106,8 @@ const PlaylistDetailContainer = () => {
       setLastPath(data.lastPath)
       setIsOwner(data.isOwner)
       setAlreadyLiked(data.alreadyLiked)
+      setOwner(data.owner)
+      setUserId(data.userId)
     } catch(e) {
       console.error('error :', e)
     }
@@ -146,6 +160,33 @@ const PlaylistDetailContainer = () => {
     }
   }
 
+  // 트랙 좋아요 요청
+  const onLike = async (trackId) => {
+    try {
+      const response = await ur.likeTrack({userId, trackId})
+      const data = response.data
+      if(response.status === 200) {
+        const liked = data.liked
+        const text = liked ? '좋아요를 완료했습니다.' : '좋아요를 취소했습니다.'
+        MySwal.fire({
+          position: "center",
+          icon: "success",
+          title: text,
+          showConfirmButton: false,
+          timer: 800,
+          customClass: {
+            popup: 'follow-popup',
+            icon: 'success-icon',
+            title: 'alert-title'
+          }
+        })
+      }
+    } catch(e) {
+      console.error('error :', e)
+    }
+  }
+
+  // 트랙 순서 바꾸기
   useEffect(() => {
     if (!isOwner || !dragListRef.current) return
 
@@ -175,6 +216,7 @@ const PlaylistDetailContainer = () => {
     }
   }, [isOwner])
 
+  // 첫 마운트시 데이터 요청
   useEffect(() => {
     getPlaylistDetail()
   }, [])
@@ -196,6 +238,7 @@ const PlaylistDetailContainer = () => {
         setOnModal={setOnModal}
         onDelete={onDelete}
         dragListRef={dragListRef}
+        onLike={onLike}
       />
     </div>
   )

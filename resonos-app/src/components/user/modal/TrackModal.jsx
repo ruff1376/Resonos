@@ -15,7 +15,7 @@ function useDebounce(value, delay) {
   return debouncedValue
 }
 
-const TrackModal = ({onModal, onAddTrack, onSearchTrack, trackList, setTrackList}) => {
+const TrackModal = ({onModal, onAddTrack, onSearchTrack, trackList, setTrackList, setOnModal}) => {
 
   const [keyword, setKeyword] = useState('')
   const debouncedKeyword = useDebounce(keyword, 300)
@@ -71,7 +71,7 @@ const TrackModal = ({onModal, onAddTrack, onSearchTrack, trackList, setTrackList
       .finally(() => {
         loadingRef.current = false
       })
-  }, [debouncedKeyword, onSearchTrack, setTrackList])
+  }, [debouncedKeyword, setTrackList])
 
   // 키워드 state 변경 함수
   const handleSearchTrack = (e) => {
@@ -105,10 +105,29 @@ const TrackModal = ({onModal, onAddTrack, onSearchTrack, trackList, setTrackList
     })
   }
 
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.key === "Escape") {
+        setOnModal(false);
+      }
+    };
+
+    // ESC 키 이벤트 등록
+    window.addEventListener("keydown", handleEsc);
+
+    // 컴포넌트 unmount 시 이벤트 제거
+    return () => {
+      window.removeEventListener("keydown", handleEsc);
+    };
+  }, [setOnModal]);
+
   return (
     <>
       <section className={`modal-track ${onModal ? ' action' : ''}`}>
-        <button id="close-modal" type="button">×</button>
+        <button id="close-modal" type="button"
+          onClick={() => setOnModal(false)}
+        >×
+        </button>
         <div className="modal-contents">
           <div className="text-center position-relative">
             <i className="bi bi-search search-icon position-absolute"></i>

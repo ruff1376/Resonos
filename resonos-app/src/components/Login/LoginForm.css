@@ -821,7 +821,7 @@ button.like {background-color: inherit; border: none;}
   transition: all 0.2s;
 }
 #addTrack:hover {transform: scale(1.1);}
-.order-no {min-width: 20px; color: #bbb;}
+.order-no {min-width: 20px; color: #bbb; font-size: 1.4rem}
 .search-icon {
   position: absolute;
   left: 10px;

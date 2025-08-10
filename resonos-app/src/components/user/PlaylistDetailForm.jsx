@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import MypageTab from './MypageTab';
 import TrackModal from './modal/TrackModal';
 import TrackCard from './card/TrackCard';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-const PlaylistDetailForm = ({playlist, lastPath, isOwner, alreadyLiked, owner, onUpdate, onAddTrack, onSearchTrack, trackList, setTrackList, onModal, setOnModal, onDelete, dragListRef}) => {
+const PlaylistDetailForm = ({playlist, lastPath, isOwner, alreadyLiked, owner, onUpdate, onAddTrack, onSearchTrack, trackList, setTrackList, onModal, setOnModal, onDelete, dragListRef, onLike}) => {
 
   const [isPublic, setIsPublic] = useState(false);
   const [thumbnail, setThumbnail] = useState(null)
@@ -30,27 +30,36 @@ const PlaylistDetailForm = ({playlist, lastPath, isOwner, alreadyLiked, owner, o
     onUpdate(formData)
   }
 
-  // 이미지 리뷰 함수
   useEffect(() => {
-    const thumbnailInput = document.getElementById('thumbnail')
-    if(thumbnailInput) {
-      thumbnailInput.addEventListener('change', function (event) {
-        const file = event.target.files[0]
-        const preview = document.querySelector('.profile-img.edit')
+    const thumbnailInput = document.getElementById('thumbnail');
 
-        if (file) {
-          const reader = new FileReader()
-          reader.onload = function (e) {
-            preview.src = e.target.result
-            setThumbnail(file)
-          }
-          reader.readAsDataURL(file)
-        } else {
-          preview.src = ''
-        }
-      })
+    const handleChange = (event) => {
+      const file = event.target.files[0];
+      const preview = document.querySelector('.profile-img.edit');
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          preview.src = e.target.result;
+          setThumbnail(file);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        preview.src = '';
+      }
+    };
+
+    if (thumbnailInput) {
+      thumbnailInput.addEventListener('change', handleChange);
     }
-  }, [playlist.thumbnailUrl])
+
+    return () => {
+      if (thumbnailInput) {
+        thumbnailInput.removeEventListener('change', handleChange);
+      }
+    };
+  }, [playlist.thumbnailUrl]);
+
 
   useEffect(() => {
     setIsPublic(playlist.isPublic)
@@ -80,10 +89,10 @@ const PlaylistDetailForm = ({playlist, lastPath, isOwner, alreadyLiked, owner, o
 
           {!isOwner && owner && (
             <div className="owner-info">
-              <a href={`/users/${owner.id}`}>
+              <Link to={`/users/${owner.id}`}>
                 <img src={owner.profileImage} alt="프로필이미지" />
-                <p>{owner.nickname}</p>
-              </a>
+                <p className='name-user'>{owner.nickname}</p>
+              </Link>
             </div>
           )}
 
@@ -226,6 +235,7 @@ const PlaylistDetailForm = ({playlist, lastPath, isOwner, alreadyLiked, owner, o
                             isOwner={isOwner}
                             key={track.id}
                             onDelete={onDelete}
+                            onLike={onLike}
                           />
                         )
                     )}
@@ -255,6 +265,7 @@ const PlaylistDetailForm = ({playlist, lastPath, isOwner, alreadyLiked, owner, o
         onSearchTrack={onSearchTrack}
         trackList={trackList}
         setTrackList={setTrackList}
+        setOnModal={setOnModal}
       />
     </main>
     </>
