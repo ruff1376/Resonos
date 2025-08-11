@@ -28,10 +28,6 @@ const ArtistSearch = () => {
             });
     }, [q, page]);
 
-    const handleKeywordSearch = (keyword) => {
-        setSearchParams({ q: keyword })
-    };
-
     const handlePageChange = (pageNum) => {
         setSearchParams({ q, page: pageNum });
     };

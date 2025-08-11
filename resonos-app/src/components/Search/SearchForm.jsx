@@ -9,6 +9,7 @@ Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 import { useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../List/MainForm.css'
+import ScrollToTop from '../ScrollToTop/ScrollToTop';
 
 const chartInstances = new Map();
 
@@ -396,7 +397,7 @@ export default function SearchForm({
                             </div>
                         </div>
                     ) : (
-                        <div className="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-0 m-0 justify-content-start">
+                        <div className="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-0 m-0 justify-content-start" style={{ rowGap: "4rem", padding: "50px 0" }}>
                             {playlistSearchList.map((playlist) => (
                                 <div className="col d-flex justify-content-center" key={playlist.id}>
                                     <div
@@ -489,12 +490,7 @@ export default function SearchForm({
                 </section>
             )}
 
-            {/* 위로가기 플로팅 버튼 */}
-            <div className="floating">
-                <a href="#">
-                    <i className="bi bi-caret-up-fill"></i>
-                </a>
-            </div>
+            <ScrollToTop />
         </div>
     );
 }

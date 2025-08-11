@@ -48,27 +48,27 @@ public class UserFollowController {
     }
 
     // 등록 처리
-    @PostMapping
-    public String createPost(
-        @ModelAttribute UserFollow follow, Model model,
-        @AuthenticationPrincipal CustomUser customUser
-    ) throws Exception {
-        log.info("[UserFollowController] 팔로우 등록 시도: {}", follow);
-        boolean success = userFollowService.insert(follow);
+    // @PostMapping
+    // public String createPost(
+    //     @ModelAttribute UserFollow follow, Model model,
+    //     @AuthenticationPrincipal CustomUser customUser
+    // ) throws Exception {
+    //     log.info("[UserFollowController] 팔로우 등록 시도: {}", follow);
+    //     boolean success = userFollowService.insert(follow);
 
-        // 팔로우 등록 성공 시 배지 자동 지급 트리거 호출
-        if (success && customUser != null) {
-            badgeGrantService.checkAndGrantBadges(customUser.getUser().getId());
-        }
+    //     // 팔로우 등록 성공 시 배지 자동 지급 트리거 호출
+    //     if (success && customUser != null) {
+    //         badgeGrantService.checkAndGrantBadges(customUser.getUser().getId());
+    //     }
 
-        if (success) {
-            log.info("[UserFollowController] 팔로우 등록 성공: {}", follow);
-            return "redirect:/user-follows";
-        }
-        log.warn("[UserFollowController] 팔로우 등록 실패: {}", follow);
-        model.addAttribute("error", "등록 실패");
-        return "userfollow/form";
-    }
+    //     if (success) {
+    //         log.info("[UserFollowController] 팔로우 등록 성공: {}", follow);
+    //         return "redirect:/user-follows";
+    //     }
+    //     log.warn("[UserFollowController] 팔로우 등록 실패: {}", follow);
+    //     model.addAttribute("error", "등록 실패");
+    //     return "userfollow/form";
+    // }
 
 
     // 수정 폼
@@ -100,11 +100,12 @@ public class UserFollowController {
     }
 
     // 삭제 처리
-    @DeleteMapping("/{id}")
+    @DeleteMapping()
     public ResponseEntity<?> delete(
         @AuthenticationPrincipal CustomUser loginUser,
-        @PathVariable("id") Long id
+        @RequestBody Long id
     ) throws Exception {
+        log.info("요청 들어옴.");
         boolean result = userFollowService.delete(loginUser.getId(), id);
         if(result)
             return new ResponseEntity<>("팔로우 취소하였습니다.", HttpStatus.OK);
@@ -118,14 +119,15 @@ public class UserFollowController {
      * @return
      * @throws Exception
      */
-    @PostMapping(value = "{id}")
+    @PostMapping()
     public ResponseEntity<?> postMethodName(
         @AuthenticationPrincipal CustomUser loginUser,
-        @PathVariable("id") Long id
+        @RequestBody Long id
     ) throws Exception {
         if(loginUser == null) {
             return new ResponseEntity<>("로그인이 필요한 서비스입니다.", HttpStatus.BAD_REQUEST);
         }
+        log.info("팔로우 요청 들어옴.");
 
         UserFollow uf = new UserFollow();
         uf.setFollowerId(loginUser.getId());

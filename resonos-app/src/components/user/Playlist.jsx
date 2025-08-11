@@ -1,10 +1,80 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import MypageTab from './MypageTab'
 import { Link, useNavigate } from 'react-router-dom'
 import MyPlaylistCard from './card/MyPlaylistCard'
 import LikedPlaylistCard from './card/LikedPlaylistCard'
 
-const Playlist = ({likedPlaylists, myPlaylists, lastPath, isOwner, handleLike, handleDelete, handleNavigate}) => {
+// onChange 이벤트 디바운스
+function useDebounce(value, delay) {
+  const [debouncedValue, setDebouncedValue] = useState(value)
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value)
+    }, delay)
+    return () => {
+      clearTimeout(handler)
+    }
+  }, [value, delay])
+  return debouncedValue
+}
+
+const Playlist = ({likedPlaylists, setLikedPlaylists, myPlaylists, lastPath, isOwner, handleLike, handleDelete, handleNavigate, onSearchPlaylist}) => {
+
+  const [keyword, setKeyword] = useState()
+  const debouncedKeyword = useDebounce(keyword, 300)
+
+  const offsetRef = useRef(0);
+  const limitRef = useRef(20);
+  const loadingRef = useRef(false);
+  const allLoadedRef = useRef(false);
+
+  const isFirstRender = useRef(true)
+
+  // 스크롤로 트랙 20개씩 추가 요청
+  const handleScroll = useCallback(() => {
+    if (loadingRef.current || allLoadedRef.current) return
+    const container = document.querySelector('.info-section.lp')
+    const nearBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 150
+    if (nearBottom && !loadingRef.current && !allLoadedRef.current) {
+      console.log('데이터 요청')
+      onSearchPlaylist(debouncedKeyword, offsetRef, limitRef, loadingRef, allLoadedRef, 'ar')
+    }
+  }, [onSearchPlaylist, debouncedKeyword])
+
+  // 스크롤 함수 추가
+  useEffect(() => {
+    const container = document.querySelector('.info-section.ar');
+    if (!container) return;
+
+    container.addEventListener('scroll', handleScroll);
+    return () => {
+      const container = document.querySelector('.info-section.ar');
+      if (container) {
+        container.removeEventListener('scroll', handleScroll);
+      }
+    }
+  }, [handleScroll])
+
+  // 키워드 바뀌면 offset 0 으로 초기화
+  useEffect(() => {
+    offsetRef.current = 0
+    allLoadedRef.current = false
+  }, [debouncedKeyword])
+
+  // 키워드 바뀌면 새로 참조할 수 있게 요청 초기화
+  useEffect(() => {
+
+    if(isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
+
+    offsetRef.current = 0
+    allLoadedRef.current = false
+    setLikedPlaylists([])
+
+    onSearchPlaylist(debouncedKeyword, offsetRef, limitRef, loadingRef, allLoadedRef, 'ar')
+  }, [debouncedKeyword, setLikedPlaylists])
 
   return (
     <main className="con con-music position-relative">
@@ -77,6 +147,7 @@ const Playlist = ({likedPlaylists, myPlaylists, lastPath, isOwner, handleLike, h
                 className="basic-input"
                 name="keyword"
                 placeholder="키워드를 입력하세요."
+                onChange={e => setKeyword(e.target.value)}
               />
             </div>
           </div>
