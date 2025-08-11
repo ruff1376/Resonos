@@ -9,6 +9,7 @@ Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 import { useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './MainForm.css'
+import ScrollToTop from '../ScrollToTop/ScrollToTop';
 
 const chartInstances = new Map();
 
@@ -96,11 +97,7 @@ export default function MainForm({
             <GridSection title="최신 플레이리스트" contentList={newPlaylistList} count={newPlaylistCount} moreLink="/list/new-playlists" isPlaylist />
             <GridSection title="인기 플레이리스트" contentList={hotPlaylistList} count={hotPlaylistCount} moreLink="/list/hot-playlists" isPlaylist />
 
-            <div className="floating">
-                <a href="#">
-                    <i className="bi bi-caret-up-fill"></i>
-                </a>
-            </div>
+            <ScrollToTop />
         </div>
     );
 }
@@ -147,7 +144,7 @@ function GridSection({ title, contentList, count, moreLink, isTrack = false, isP
             <div className="d-flex flex-row align-items-center px-4 mb-3" style={{ height: 50 }}>
                 <div className="section-title flex-grow-1">{title}</div>
             </div>
-            <div className="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-0 m-0 justify-content-start">
+            <div className="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-0 m-0 justify-content-start" style={isPlaylist ? { rowGap: "4rem", padding: "50px 0" } : {}}>
                 {contentList.map((content) => (
                     <div key={content.id} className="col d-flex justify-content-center">
                         <div className={`card align-items-center ${isPlaylist ? 'p-3' : 'gap-2 mt-3'}`} style={{ width: 228, height: isPlaylist ? 240 : 340 }}>

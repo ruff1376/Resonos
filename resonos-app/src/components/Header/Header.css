@@ -107,6 +107,7 @@
 .site-header .header-submenu li a {
     font-family: inherit;
     font-size: 1.2rem;
+    text-align: center;
 }
 
 .site-header .profile-dropdown .dropdown-toggle {
@@ -176,13 +177,67 @@
 }
 
 .header-menu-wrapper {
+    width: 100px;
+    height: 75px;
+    line-height: 75px;
+    text-align: center;
     position: relative;
+    list-style: none;
 }
 
-.header-submenu-container {
+.header-menu-wrapper a {
+    color: white;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.header-menu-wrapper:hover {
+    background-color: var(--background-color);
+}
+
+.header-menu-wrapper:hover > a {
+    color: var(--main-color);
+}
+
+.header-submenu {
+    display: none;
+    overflow: hidden;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100px;
+    z-index: 1000;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    background-color: var(--background-color);
+}
+
+/* 서브메뉴 항목 */
+.header-submenu li {
+    list-style: none;
+    height: 40px;
+    line-height: 40px;
+}
+
+.header-submenu li a {
+    display: block;
+    width: 100%;
+    color: white;
+    text-decoration: none;
+}
+
+.header-submenu li:hover a {
+    color: var(--main-color);
+}
+
+.sub {
+    display: none;
+}
+
+/* .header-submenu-container {
     position: absolute;
     top: 75px;
-    /* 상단 메뉴 높이만큼 내려옴 */
     left: 0;
     background-color: var(--background-color);
     padding: 10px 20px;
@@ -191,17 +246,11 @@
     z-index: 1000;
     border-radius: 1.5rem;
     box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.3);
-    width: 100px; /* 너비 지정 */
-    text-align: center; /* 전체 내부 텍스트 가운데 정렬 */
-}
+    width: 100px;
+    text-align: center;
+} */
 
-.header-submenu {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-}
-
-.header-submenu li {
+/* .header-submenu li {
     list-style: none;
 }
 
@@ -215,9 +264,9 @@
 
 .header-submenu li a:hover {
     color: #D4B97F;
-}
+} */
 
 /* 메뉴 hover 시 해당 하단 메뉴만 보이기 */
-.header-menu-wrapper:hover .header-submenu-container {
+/* .header-menu-wrapper:hover .header-submenu-container {
     display: block;
-}
+} */

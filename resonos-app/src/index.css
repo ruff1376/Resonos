@@ -45,9 +45,7 @@ body::before {
 
 button {cursor: pointer;}
 
-
-
-
+p {font-size: 1.3rem;}
 
 ul.custom-pagination {
     display: flex;

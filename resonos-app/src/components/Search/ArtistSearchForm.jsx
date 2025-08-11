@@ -1,6 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../List/MainForm.css'
 import Pagination from '../Pagination/Pagination';
+import ScrollToTop from '../ScrollToTop/ScrollToTop';
 
 export default function ArtistSearchForm({
     keyword,
@@ -47,7 +48,7 @@ export default function ArtistSearchForm({
                         </div>
                     </div>
                 ) : (
-                    <div className="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-0 m-0 justify-content-start">
+                    <div className="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-0 m-0 justify-content-start" style={{ rowGap: "3rem" }}>
                         {artistSearchList.map((artist) => (
                             <div className="col d-flex justify-content-center" key={artist.id}>
                                 <div
@@ -77,12 +78,7 @@ export default function ArtistSearchForm({
                 <Pagination pagination={pagination} onPageChange={onPageChange} />
             </section>
 
-            {/* 위로가기 플로팅 버튼 */}
-            <div className="floating">
-                <a href="#">
-                    <i className="bi bi-caret-up-fill"></i>
-                </a>
-            </div>
+            <ScrollToTop />
         </div>
     );
 }

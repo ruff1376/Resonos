@@ -4,6 +4,8 @@ import * as ur from '../../apis/user'
 import {MySwal} from '../../apis/alert'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
 
 
 const PlaylistContainer = () => {
@@ -12,12 +14,14 @@ const PlaylistContainer = () => {
   const [myPlaylists, setMyPlaylists] = useState([])
   const [lastPath, setLastPath] = useState('')
   const [isOwner, setIsOwner] = useState(false)
+  const [userId, setUserId] = useState()
 
   const params = useParams()
   const location = useLocation()
 
   const navigate = useNavigate()
 
+  // 플레이리스트 좋아요 요청
   const handleLike = async (id, isLiked) => {
     try {
       let response
@@ -47,6 +51,7 @@ const PlaylistContainer = () => {
     }
   }
 
+  // 내 플레이리스트 삭제 요청
   const handleDelete = async (id) => {
     try {
       const response = await ur.deletePlaylist(id)
@@ -71,8 +76,44 @@ const PlaylistContainer = () => {
     }
   }
 
+  // 플레이리스트 상세 페이지 이동
   const handleNavigate = (id) => {
     navigate(`/playlists/${id}`)
+  }
+
+  // 좋아요한 플레이리스트 검색, 요청
+  const onSearchPlaylist = async (keyword, offsetRef, limitRef, loadingRef, allLoadedRef) => {
+    console.log(keyword)
+    if (loadingRef.current || allLoadedRef.current) return
+
+    loadingRef.current = true
+
+    try {
+      const { data } = await ur.searchMyLikedPlaylist({
+        userId,
+        keyword,
+        offset: offsetRef.current,
+        limit: limitRef.current,
+      })
+
+      setLikedPlaylists(prev => {
+        const existingIds = new Set(prev.map(t => t.id))
+        const filteredData = data.filter(t => !existingIds.has(t.id))
+        return [...prev, ...filteredData]
+      })
+
+      offsetRef.current += limitRef.current
+
+      console.log(offsetRef.current)
+
+      if (data.length < limitRef.current) {
+        allLoadedRef.current = true
+      }
+    } catch (err) {
+      console.error(err)
+    } finally {
+      loadingRef.current = false
+    }
   }
 
   // 플레이리스트 데이터 요청
@@ -86,26 +127,32 @@ const PlaylistContainer = () => {
       setMyPlaylists(data.myPlaylists)
       setLastPath(data.lastPath)
       setIsOwner(data.isOwner)
+      setUserId(data.userId)
     } catch(e) {
       console.error('error :', e)
     }
   }
 
+  // 마운트 시 데이터 요청
   useEffect(() => {
     getPlaylists()
   }, [])
 
   return (
     <div className='container'>
+      <Header />
       <Playlist
         likedPlaylists={likedPlaylists}
+        setLikedPlaylists={setLikedPlaylists}
         myPlaylists={myPlaylists}
         lastPath={lastPath}
         isOwner={isOwner}
         handleLike={handleLike}
         handleDelete={handleDelete}
         handleNavigate={handleNavigate}
+        onSearchPlaylist={onSearchPlaylist}
       />
+      <Footer />
     </div>
   )
 }

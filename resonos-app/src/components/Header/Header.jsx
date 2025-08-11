@@ -4,12 +4,32 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Header.css';
 import { LoginContext } from '../../contexts/LoginContextProvider';
+import $ from 'jquery';
 
 const Header = ({ currentUser = {} }) => {
     const location = useLocation();
     const { isLogin } = useContext(LoginContext)
     const [searchValue, setSearchValue] = useState("");
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const mainMenu = $(".menu-group > .header-menu-wrapper");
+        // mouseenter
+        mainMenu.on("mouseenter", () => {
+            $(".sub").stop(true, true).slideDown();
+        });
+
+        // mouseleave
+        mainMenu.on("mouseleave", () => {
+            $(".sub").stop(true, true).slideUp();
+        });
+
+        // cleanup
+        return () => {
+            mainMenu.off("mouseenter");
+            mainMenu.off("mouseleave");
+        };
+    }, []);
 
     // 로그인 버튼 클릭 시 현재 페이지 기억
     useEffect(() => {
@@ -50,30 +70,31 @@ const Header = ({ currentUser = {} }) => {
                         <div className="menu-group d-flex position-relative ms-5">
 
                             {/* 앨범 메뉴 + 하단 메뉴 */}
-                            <div className="header-menu-wrapper position-relative">
-                                <div className="d-flex justify-content-center align-items-center" style={{ width: '100px', height: '75px' }}>
-                                    <a href="/list/new-albums" className="submenu-item" style={{ fontSize: '1.6rem', color: 'white' }}>앨범</a>
-                                </div>
-                                <div className="header-submenu-container">
-                                    <ul className="header-submenu d-flex flex-column justify-content-center">
-                                        <li><a href="/list/new-albums">최신 앨범</a></li>
-                                        <li><a href="/list/hot-albums">인기 앨범</a></li>
-                                    </ul>
-                                </div>
-                            </div>
+                            <li className="header-menu-wrapper">
+                                <a href="/list/new-albums" className="submenu-item" style={{ fontSize: '1.6rem', color: 'white' }}>앨범</a>
+                                <ul className="header-submenu d-flex flex-column justify-content-center">
+                                    <li className="header-menu-wrapper sub"><a href="/list/new-albums">최신 앨범</a></li>
+                                    <li className="header-menu-wrapper sub"><a href="/list/hot-albums">인기 앨범</a></li>
+                                </ul>
+                            </li>
 
                             {/* 트랙 메뉴 + 하단 메뉴 */}
-                            <div className="header-menu-wrapper position-relative">
-                                <div className="d-flex justify-content-center align-items-center" style={{ width: '100px', height: '75px' }}>
-                                    <a href="/list/new-tracks" className="submenu-item" style={{ fontSize: '1.6rem', color: 'white' }}>트랙</a>
-                                </div>
-                                <div className="header-submenu-container">
-                                    <ul className="header-submenu d-flex flex-column justify-content-center">
-                                        <li><a href="/list/new-tracks">최신 트랙</a></li>
-                                        <li><a href="/list/hot-tracks">인기 트랙</a></li>
-                                    </ul>
-                                </div>
-                            </div>
+                            <li className="header-menu-wrapper position-relative">
+                                <a href="/list/new-tracks" className="submenu-item" style={{ fontSize: '1.6rem', color: 'white' }}>트랙</a>
+                                <ul className="header-submenu d-flex flex-column justify-content-center">
+                                    <li className="header-menu-wrapper sub"><a href="/list/new-tracks">최신 트랙</a></li>
+                                    <li className="header-menu-wrapper sub"><a href="/list/hot-tracks">인기 트랙</a></li>
+                                </ul>
+                            </li>
+
+                            {/* 플레이리스트 메뉴 + 하단 메뉴 */}
+                            <li className="header-menu-wrapper position-relative">
+                                <a href="/list/new-playlists" className="submenu-item" style={{ fontSize: '1.6rem', color: 'white' }}>플레이리스트</a>
+                                <ul className="header-submenu d-flex flex-column justify-content-center">
+                                    <li className="header-menu-wrapper sub"><a href="/list/new-playlists">최신 플레이리스트</a></li>
+                                    <li className="header-menu-wrapper sub"><a href="/list/hot-playlists">인기 플레이리스트</a></li>
+                                </ul>
+                            </li>
 
                         </div>
                     </div>
