@@ -1,6 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './MainForm.css'
 import Pagination from '../Pagination/Pagination';
+import ScrollToTop from '../ScrollToTop/ScrollToTop';
 
 export default function HotPlaylistForm({
     hotPlaylistList = [],
@@ -18,11 +19,7 @@ export default function HotPlaylistForm({
                 onPageChange={onPageChange}
             />
 
-            <div className="floating">
-                <a href="#">
-                    <i className="bi bi-caret-up-fill"></i>
-                </a>
-            </div>
+            <ScrollToTop />
         </div>
     );
 }
@@ -33,7 +30,7 @@ function GridSection({ title, playlistList, pagination, onPageChange}) {
             <div className="d-flex flex-row align-items-center px-4 mb-3" style={{ height: 50 }}>
                 <div className="section-title flex-grow-1">{title}</div>
             </div>
-            <div className="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-0 m-0 justify-content-start">
+            <div className="album-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-0 m-0 justify-content-start" style={{ rowGap: "4rem", padding: "50px 0" }}>
                 {playlistList.map((playlist) => (
                     <div key={playlist.id} className="col d-flex justify-content-center">
                         <div className={'card align-items-center gap-2 mt-3'} style={{ width: 228, height: 240 }}>

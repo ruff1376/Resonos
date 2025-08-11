@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './MainForm.css'
 import Pagination from '../Pagination/Pagination';
+import ScrollToTop from '../ScrollToTop/ScrollToTop';
 
 const chartInstances = new Map();
 
@@ -83,11 +84,7 @@ export default function HotTrackForm({
                 onPageChange={onPageChange}
             />
 
-            <div className="floating">
-                <a href="#">
-                    <i className="bi bi-caret-up-fill"></i>
-                </a>
-            </div>
+            <ScrollToTop />
         </div>
     );
 }
