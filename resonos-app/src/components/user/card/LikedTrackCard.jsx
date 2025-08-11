@@ -12,7 +12,7 @@ const LikedTrackCard = ({track, isOwner, onLikeTrack}) => {
       setIsLiked(!isLiked)
       return
     }
-    navigate(`/tracks/${track.id}`)
+    navigate(`/tracks?id=${track.id}`)
   }
 
   return (

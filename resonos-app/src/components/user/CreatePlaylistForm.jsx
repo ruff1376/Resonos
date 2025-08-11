@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import MypageTab from './MypageTab'
 import * as ur from '../../apis/user'
 import * as Swal from '../../apis/alert'
@@ -8,6 +8,7 @@ const CreatePlaylistForm = () => {
 
   const [isPublic, setIsPublic] = useState(true)
   const [thumbnail, setThumbnail] = useState(null)
+  const inputRef = useRef()
 
   const navigate = useNavigate()
 
@@ -66,6 +67,8 @@ const CreatePlaylistForm = () => {
         preview.src = ''
       }
     })
+
+    inputRef.current.focus()
   }, [])
 
 
@@ -104,6 +107,7 @@ const CreatePlaylistForm = () => {
                   id="title"
                   name="title"
                   className="form-control"
+                  ref={inputRef}
                 />
 
                 <label className="profile-edit-label" htmlFor="description">

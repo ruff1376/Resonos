@@ -12,7 +12,7 @@ const LikedAlbumCard = ({album, isOwner, onLikeAlbum}) => {
       setIsLiked(!isLiked)
       return
     }
-    navigate(`/albums/${album.id}`)
+    navigate(`/albums?id=${album.id}`)
   }
 
   return (

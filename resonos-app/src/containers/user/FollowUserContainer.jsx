@@ -4,6 +4,7 @@ import * as ur from '../../apis/user'
 import { MySwal } from '../../apis/alert';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
+import { useParams } from 'react-router-dom';
 
 const FollowUserContainer = () => {
 
@@ -14,6 +15,8 @@ const FollowUserContainer = () => {
   const [myFollower, setMyFollower] = useState([])
   const isOwner = useRef()
   const userId = useRef()
+
+  const params = useParams()
 
   // 팔로우 한 아티스트 추가 요청
   const onSearchUsers = async (keyword, offsetRef, limitRef, loadingRef, allLoadedRef, choice) => {
@@ -83,6 +86,8 @@ const FollowUserContainer = () => {
             title: 'alert-title'
           }
         })
+
+        setFollowCount(prev => !isFollowed ? prev + 1 : prev - 1)
       }
 
     } catch(e) {
@@ -95,7 +100,10 @@ const FollowUserContainer = () => {
   const getUserFollows = async () => {
     let response
     try {
-      response = await ur.getUserFollows()
+      if(params.id)
+        response = await ur.getUserFollows(params.id)
+      else
+        response = await ur.getUserFollows()
       console.log(response.data)
       if(response.status === 200) {
         const data = response.data

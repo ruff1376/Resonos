@@ -48,7 +48,7 @@ const UserResource = ({albumList, artistList, badgeList, chartData, playlists, t
 
       <section className="mypage-grid">
         {/* 좋아요 한 앨범 */}
-        <a className="grid-item" href={`/users/${user.id}/liked-music`}>
+        <Link className="grid-item" to={`/users/${user.id}/liked-music`}>
           <div className="mypage-card album">
             <h3>좋아요 한 앨범</h3>
             {(albumList == null || albumList.length === 0) ? (
@@ -66,10 +66,10 @@ const UserResource = ({albumList, artistList, badgeList, chartData, playlists, t
               </ul>
             )}
           </div>
-        </a>
+        </Link>
 
         {/* 좋아요 한 트랙 */}
-        <a className="grid-item" href={`/users/${user.id}/liked-music`}>
+        <Link className="grid-item" to={`/users/${user.id}/liked-music`}>
           <div className="mypage-card track">
             <h3>좋아요 한 트랙</h3>
             {(trackList == null || trackList.length === 0) ? (
@@ -87,10 +87,10 @@ const UserResource = ({albumList, artistList, badgeList, chartData, playlists, t
               </ul>
             )}
           </div>
-        </a>
+        </Link>
 
         {/* 팔로우 한 아티스트 */}
-        <a className="grid-item" href={`/users/${user.id}/follow-artist`}>
+        <Link className="grid-item" to={`/users/${user.id}/follow-artist`}>
           <div className="mypage-card artist">
             <h3>팔로우 아티스트</h3>
             {(artistList == null || artistList.length === 0) ? (
@@ -108,11 +108,11 @@ const UserResource = ({albumList, artistList, badgeList, chartData, playlists, t
               </ul>
             )}
           </div>
-        </a>
+        </Link>
 
         {/* 내 활동 (isOwner일 때만) */}
         {isOwner && (
-          <a className="grid-item" href="/users/activity">
+          <Link className="grid-item" to="/users/Linkctivity">
             <div className="mypage-card activate">
               <h3>내 활동</h3>
               <ul>
@@ -126,12 +126,12 @@ const UserResource = ({albumList, artistList, badgeList, chartData, playlists, t
                 </li>
               </ul>
             </div>
-          </a>
+          </Link>
         )}
 
         {/* 배지 (isOwner일 때만) */}
         {isOwner && (
-          <a className="grid-item" href="/users/badge">
+          <Link className="grid-item" to="/users/badge">
             <div className="mypage-card badge-area">
               <h3>배지</h3>
               <h4>최근 획득한 배지</h4>
@@ -149,12 +149,12 @@ const UserResource = ({albumList, artistList, badgeList, chartData, playlists, t
                 </ul>
               )}
             </div>
-          </a>
+          </Link>
         )}
 
         {/* 계정 / 보안 (isOwner일 때만) */}
         {isOwner && (
-          <a className="grid-item" href="/users/security">
+          <Link className="grid-item" to="/users/security">
             <div className="mypage-card security">
               <h3>계정 / 보안</h3>
               <ul>
@@ -164,7 +164,7 @@ const UserResource = ({albumList, artistList, badgeList, chartData, playlists, t
                 </li>
               </ul>
             </div>
-          </a>
+          </Link>
         )}
       </section>
     </>

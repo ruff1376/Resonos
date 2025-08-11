@@ -94,7 +94,9 @@ const App = () => {
           <Route path="/users/liked-music" element={<LikedMusic />} />
           <Route path="/users/:id/liked-music" element={<LikedMusic />} />
           <Route path="/users/follow-artist" element={<FollowArtist />} />
+          <Route path="/users/:id/follow-artist" element={<FollowArtist />} />
           <Route path="/users/follow-user" element={<FollowUser />} />
+          <Route path="/users/:id/follow-user" element={<FollowUser />} />
           <Route path="/users/:id/liked-music" element={<FollowArtist />} />
           <Route path="/playlists/new" element={<CreatePlaylist />} />
           <Route path="/playlists/:id" element={<PlaylistDetail />} />

@@ -4,7 +4,7 @@ import UserResource from '../../components/user/UserResource'
 import * as ur from '../../apis/user'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
-import * as Swal from '../../apis/alert'
+import {MySwal} from '../../apis/alert'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 const MypageContainer = () => {
@@ -27,6 +27,41 @@ const MypageContainer = () => {
   const [trackList, setTrackList] = useState([]);
   const [user, setUser] = useState({});
   const [utl, setUtl] = useState({});
+  const [alreadyFollow, setAlreadyFollow] = useState()
+
+
+
+  // 팔로우 요청
+  const onFollowUser = async (id, isFollowed) => {
+    let response
+    try {
+      if(isFollowed)
+        response = await ur.followUserCancle(id)
+      else
+        response = await ur.followUser(id)
+
+      if(response.status === 200) {
+        MySwal.fire({
+          position: "center",
+          icon: "success",
+          title: response.data,
+          showConfirmButton: false,
+          timer: 800,
+          customClass: {
+            popup: 'follow-popup',
+            icon: 'success-icon',
+            title: 'alert-title'
+          }
+        })
+
+        setFollowerCount(prev => !isFollowed ? prev + 1 : prev - 1)
+        setAlreadyFollow(!alreadyFollow)
+      }
+
+    } catch(e) {
+      console.error('error :', e.response)
+    }
+  }
 
   const getUserInfo = async () => {
 
@@ -54,11 +89,12 @@ const MypageContainer = () => {
       setTrackList(data.trackList || []);
       setUser(data.user || {});
       setUtl(data.utl || {});
+      setAlreadyFollow(data.alreadyFollow)
 
     } catch(e) {
       console.log(e.response)
       if(e.response.status == 401 && location.pathname === '/mypage') {
-        Swal.MySwal.fire({
+        MySwal.fire({
           position: "center",
           icon: "warning",
           title: "로그인이 필요한 서비스입니다.",
@@ -93,6 +129,8 @@ const MypageContainer = () => {
           user={user}
           isOwner={isOwner}
           countAllReview={countAllReview}
+          alreadyFollow={alreadyFollow}
+          onFollowUser={onFollowUser}
         />
         <UserResource
           albumList={albumList}
