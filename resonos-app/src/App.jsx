@@ -26,6 +26,9 @@ import AlbumSearch from './pages/search/AlbumSearch';
 import TrackSearch from './pages/search/TrackSearch';
 import PlaylistDetail from './pages/user/PlaylistDetail';
 import CreatePlaylist from './pages/user/CreatePlaylist';
+import Track from './pages/review/Track';
+import Album from './pages/review/Album';
+import Artist from './pages/review/Artist';
 import AdminReportsContainer from './pages/admin/AdminReportsPage';
 import AdminMusicContainer from './containers/admin/AdminMusicContainer';
 import UserSearch from './pages/search/UserSearch';
@@ -55,6 +58,11 @@ const App = () => {
           <Route path="/list/hot-tracks" element={<HotTrack />} />
           <Route path="/list/new-playlists" element={<NewPlaylist />} />
           <Route path="/list/hot-playlists" element={<HotPlaylist />} />
+
+          {/* 리뷰 */}
+          <Route path="/artists" element={<Artist />} />
+          <Route path="/albums" element={<Album />} />
+          <Route path="/tracks" element={<Track />} />
 
           {/* 검색 목록 */}
           <Route path="/search" element={<Search />} />

@@ -1,0 +1,845 @@
+*{margin: 0; padding: 0; box-sizing: border-box;}
+li {list-style-type: none;}
+
+
+/* 애니메이션 */
+@keyframes spin360 {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* 컨테이너 */
+.song-img {
+  position: relative;          /* 안쪽 절대좌표 기준 */
+  width: 250px; height: 250px; /* LP 크기 */
+  border-radius: 50%;
+  overflow: hidden;            /* 이미지 둥글게 자르기 */
+}
+
+/* LP 이미지 */
+.song-img .disc {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  animation: spin360 10s linear infinite;
+}
+
+/* 심(스핀들) */
+.song-img .center-pin {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 40px; height: 40px;      /* 원 크기 */
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: var(--background-color);
+    box-shadow: 0 0 4px rgba(0,0,0,.3);
+    z-index: 2;                     /* 디스크 위로 */
+    pointer-events: none;           /* 클릭 방지 */
+    opacity: 0.95;
+}
+.song-img img {
+  /* 중심축(50%·50%)을 기준으로 회전 */
+  transform-origin: 50% 50%;
+  /* 10초에 한 바퀴 · 선형 · 무한 반복 */
+  animation: spin360 10s linear infinite;
+  /* 선택: 이미지 크기 조절 예시 */
+  object-fit: cover;
+}
+/* 애니메이션 끝 */
+
+/* 좋아요 애니메이션 */
+.like-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  padding: 4px;
+}
+
+.pop-heart {
+  animation: pop 0.3s ease;
+}
+
+@keyframes pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.6); }
+  100% { transform: scale(1); }
+}
+/* 좋아요 끝 */
+
+.wrapper { width: 100%; display: flex; flex-direction: column; gap: 30px; align-items: center; margin-bottom: 30px;}
+body {
+    background-color: var(--background-color);
+    color: white;
+}
+.report {color: red; text-decoration: underline;}
+
+.headline {font-size: 2.4rem; font-weight: bold; color: var(--main-color);}
+.subtitle {font-size: 2rem;}
+.btn-gold {
+    appearance: none;      /* 브라우저 기본 라디오 버튼 제거 */
+    border: 1px solid var(--main-color);
+    color: var(--main-color);
+    border-radius: 10px;
+    background: transparent;
+    font-weight: bold;
+    font-size: 1.6rem;
+}
+.btn-gold:hover,
+.btn-gold.selected {
+    background: var(--main-color);
+    color: var(--background-color);
+}
+/* .btn-gold {
+  background-color: var(--main-color);
+  color: black;
+  border: 1px solid goldenrod;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.btn-gold:hover {
+  background-color: goldenrod;
+  color: white;
+  border-color: goldenrod;
+} */
+canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+p {
+    word-break: break-word;
+    white-space: normal;
+    font-size: 1.6rem;
+    display: block;
+    width: fit-content;
+}
+img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+a { display: inline-block;}
+.song-card {
+    margin-top: 50px;
+    display: flex;
+    max-width: 1350px;
+    width: 100%;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+    padding: 10px;
+    align-items: center;
+}
+.song-card .song-overall {
+    display: flex;
+    max-width: 400px;
+    min-width: 350px;
+    height: 250px;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+.song-card .song-overall .song-img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--main-color);
+}
+.song-card .song-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-start;
+}
+/* 점수 */
+.score-bar {
+  height: 24px;
+  width: 100%;
+  max-width: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+
+  /* ✅ 외곽선처럼 보이지만 실제 영역을 차지하지 않음 */
+  outline: 2px solid var(--main-color);
+  outline-offset: 2px;  /* 바깥쪽으로 떨어뜨림 */
+}
+
+.score-fill {
+  height: 100%;
+  width: 87%; /* 예시 점수 */
+  background-color: var(--main-color);
+  color: var(--background-color);
+  font-size: 14px;
+  font-weight: bolder;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  line-height: 1;
+}
+/* 점수 끝 */
+.review-card {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    max-width: 1350px;
+    width: 100%;
+    display: flex;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+    background-color: var(--background-color);
+}
+.review-card > p {
+    margin: 0;
+}
+.review-score {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 10px;
+}
+.like-btn,
+.report-btn {
+    display: inline-block; /* 필수 */
+    background-color: transparent;
+    font-size: 24px; /* 적당한 크기 */
+    transition: transform 0.3s ease; /* 애니메이션 효과 */
+    border: none;
+}
+.review-score h1 {
+    font-size: 3.4rem !important;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.name-and-score {
+    display: flex;
+    align-items: center;
+}
+.name-and-score > p:first-child {
+    font-weight: bold;
+    color: var(--main-color);
+}
+.name-and-score > span:last-child {
+    padding-left: 5px;
+}
+.review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.comment {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+    border-bottom: 1px solid var(--main-color);
+}
+.comment p {
+    margin: 0;
+}
+.review-util {
+    display: flex;
+    align-items: center;
+}
+.review-util > *:not(:first-child) {
+    padding: 3px;
+    margin-left: 3px;
+}
+.reply {
+    display: flex;
+    height: 100px;
+    max-width: 1326px;
+    padding: 10px;
+}
+.reply form {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+}
+.score-fill {
+  transition: width 0.5s ease-in-out;
+}
+.reply form textarea {
+    display: flex;
+    padding: 5px;
+    resize: none;
+    max-width: 1350px;
+    flex: 1;
+    border-radius: 10px;
+    border: 2px solid var(--main-color);
+}
+.reply form .score-and-submit {
+    width: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.score-and-submit {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.score-and-submit input {
+    border-radius: 5px;
+    padding-left: 5px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    border: 2px solid var(--main-color);
+}
+.reply form textarea,
+.score-and-submit input {
+    background: transparent;
+    color: white;
+}
+.button-box .btn-danger {
+    font-weight: bold;
+    min-width: 100px;
+    font-size: 2rem;
+}
+.edit-form {
+    width: 100%;
+}
+.edit-form .reply {
+    display: flex;
+    height: 100px;
+    max-width: 1326px;
+    padding: 10px;
+    gap: 10px;
+}
+.edit-form textarea.edit-content {
+    flex: 1;
+    padding: 5px;
+    resize: none;
+    max-width: 1300px;
+    border-radius: 10px;
+    border: 2px solid var(--main-color);
+    background: transparent;
+    color: white;
+}
+.edit-form .edit-rating {
+    border-radius: 5px;
+    padding: 5px;
+    border: 2px solid var(--main-color);
+    background: transparent;
+    color: white;
+}
+
+.iframe-card {
+    display: flex;
+    padding: 10px;
+    max-width: 1350px;
+    width: 100%;
+    display: flex;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 10px;
+}
+.spotify{
+  flex:1 1 auto;        /* 👉 grow 1 / shrink 1 / basis 500px  */
+  min-width:260px;       /* 더 작아질 때의 하한선(선택사항)      */
+  height:152px;          /* 고정 높이 유지                       */
+  max-width: 510px;
+}
+.spotify iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 12px;
+}
+/* 공유 */
+.info-card {
+    display: flex;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 10px;
+    max-width: 1350px;
+    width: 100%;
+    justify-content: space-between;
+    gap: 15px;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+}
+.info {
+    padding-top: 5px;
+    padding-bottom: 10px;
+    padding-right: 15px;
+    display: flex;
+    flex:1 1 33%;
+    flex-direction: column;
+    border-right: 2px solid var(--main-color);
+    gap: 5px;
+}
+.album-moods {
+    flex: 1 1 auto;         /* 유연하게 줄어들고 늘어남 */
+    max-width: 300px;       /* 최대 너비 제한 */
+    min-width: 250px;
+    gap: 10px;
+    margin-left: 10px;
+}
+.top5track > p:first-child,
+.arg-vote p ,
+.mood-vote p ,
+.review-card > p:first-child, 
+.album-moods > p:first-child, 
+.pl-list > p:first-child {
+    margin-bottom: 5px;
+    border-bottom: 1px solid var(--main-color);
+}
+.vote-header {
+    width: 100%;
+    margin-bottom: 10px;
+}
+.vote-header p {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.info:last-child {
+    border: none;
+}
+.info p {
+    padding: 0;
+    margin: 0;
+}
+.top5track {
+  display: flex;
+  align-items: flex-start
+}
+.score-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-weight: bold;
+}
+.score-info div {
+  display: flex;
+  gap: 3px;
+}
+.score-info div p {
+  width: 90px;
+}
+.score-info div span {
+  width: 20px;
+  text-align: end;
+}
+.pl-list>p:first-child {
+    font-weight: bold;
+    font-size: 2.2rem !important;
+    color: var(--main-color);
+}
+.pl-list a {
+  width: fit-content;
+}
+.hottest-card {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+    max-width: 1350px;
+    width: 100%;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+    justify-content: space-between;
+}
+.youtube {
+    border-radius: 10px;
+    border: 2px solid var(--main-color);
+    overflow: hidden;
+    height: 315px;
+    width: 560px;
+}
+.chart {
+    width: 400px;
+    height: 400px;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+    overflow: hidden;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.arg-card {
+    max-width: 1350px;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+    gap: 30px;
+    padding-left: 20px;
+}
+.mood-card {
+    max-width: 1350px;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+    gap: 30px;
+    padding-left: 20px;
+}
+.arg-list {
+    display: flex;
+    height: 100%;
+    padding: 5px;
+    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+.mood-list {
+    display: flex;
+    max-height: 100%;
+    padding: 5px;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+.mood-list a {
+  display: inline-block !important;
+}
+.arg-vote {
+    display: flex;
+    flex:1;
+    flex-direction: column;
+    height: 400px;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+}
+.mood-vote {
+    display: flex;
+    flex:1;
+    flex-direction: column;
+    height: 400px;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+}
+.args {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    height: 100%;
+    width: 100%;
+    align-items:flex-start;
+    justify-content:flex-start;
+    align-content: flex-start;
+}
+.moods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    height: 100%;
+    width: 100%;
+    align-items:flex-start;
+    justify-content:flex-start;
+    align-content: flex-start;
+}
+.arg-vote button {
+    width: 100%;
+    max-width: 470px;
+    align-items: center;
+    justify-content: center;
+}
+.mood-vote button {
+    width: 100%;
+    max-width: 470px;
+    align-items: center;
+    justify-content: center;
+}
+.args .btn{
+  flex:0 0 auto;           /* grow 0, shrink 0, basis auto */
+}
+.moods .btn{
+  flex:0 0 auto;           /* grow 0, shrink 0, basis auto */
+}
+/* 애니메이션 */
+@keyframes spin360 {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.track:hover {          /* 카드 확대 */
+  transform: scale(1.05);
+}
+
+.track:hover .track-img img {          /* 이미지 회전 */
+  animation: spin360 6s linear infinite;
+}
+/* 컨테이너 */
+.track-img {
+  position: relative;          /* 안쪽 절대좌표 기준 */
+  width: 100px; height: 100px; /* LP 크기 */
+  border-radius: 50%;
+  border: 2px solid var(--main-color);
+  overflow: hidden;            /* 이미지 둥글게 자르기 */
+}
+
+/* LP 이미지 */
+.track-img .disc {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  animation: spin360 10s linear infinite;
+}
+.track-header {
+    padding-left: 10px;
+}
+/* 심(스핀들) */
+.track-img .center-pin {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 25px; height: 25px;      /* 원 크기 */
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--background-color);
+  box-shadow: 0 0 4px rgba(0,0,0,.3);
+  z-index: 2;                     /* 디스크 위로 */
+  pointer-events: none;           /* 클릭 방지 */
+  opacity: 0.95;
+}
+.track-img img {
+  /* 중심축(50%·50%)을 기준으로 회전 */
+  transform-origin: 50% 50%;
+  /* 선택: 이미지 크기 조절 예시 */
+  object-fit: cover;
+  animation: none;
+}
+.track-graphy {
+    overflow: hidden;
+    padding: 10px;
+}
+.track-container a {
+    display: inline-block;
+    width: 270px;
+}
+.track-container::-webkit-scrollbar {
+  display: none;          /* 크롬, 사파리, 오페라용 스크롤바 숨기기 */
+}
+.track-container {
+    display: flex;
+    padding: 10px;
+    gap: 20px;
+    max-width: 780px;
+    overflow-x: auto;
+}
+.track {
+    display: flex;
+    border: 2px solid var(--main-color);
+    border-radius: 10px;
+    padding: 10px;
+    gap: 20px;
+    transition: transform 0.3s ease;
+}
+.track-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+.track-info p {
+    width: 130px;
+    white-space: nowrap;         /* 줄 바꿈 안 함 */
+    overflow: hidden;            /* 넘치는 부분 숨김 */
+    text-overflow: ellipsis !important;     /* ... 표시 */
+    margin: 0;
+}
+/* 애니메이션 끝 */
+@media (max-width: 960px) {
+  .track-graphy {
+    display: none !important;
+  }
+}
+
+/* 점수 슬라이더 css */
+.arg-card input[type="range"] {
+  -webkit-appearance: none;
+  width: 200px;
+  height: 10px;
+  background: transparent;
+  border: 2px solid var(--main-color);
+  border-radius: 5px;
+  outline: none;
+}
+
+/* 트랙 (전체 라인) */
+.arg-card input[type="range"]::-webkit-slider-runnable-track {
+  height: 6px;
+  background: var(--main-color);
+  border-radius: 5px;
+}
+
+/* 슬라이더 핸들 */
+.arg-card input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--main-color);
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -4px; /* 가운데 정렬 보정 */
+}
+
+/* Firefox 대응 */
+.arg-card input[type="range"]::-moz-range-track {
+  height: 6px;
+  background: var(--main-color);
+}
+.arg-card input[type="range"]::-moz-range-thumb {
+  background: var(--main-color);
+  border: 2px solid white;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+.arg-card input[type="number"] {
+  width: 40px;
+  background-color: transparent;
+  color: white;
+  border: 2px solid var(--main-color);
+  border-radius: 5px;
+  text-align: center;
+  outline: none;
+}
+
+/* Chrome & Edge에서 숫자 스핀 제거 */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox에서 숫자 스핀 제거 */
+.arg-card input[type="number"] {
+  -moz-appearance: textfield;
+}
+.vote-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 360px;
+    justify-content: space-between;
+    height: 280px;
+}
+.vote-row {
+  display: flex;
+  align-items: center;
+}
+.vote-label {
+  min-width: 90px;
+  color: white;
+  font-weight: bold;
+}
+.vote-row input[type="number"] {
+    margin-left: 10px;
+}
+.vote-result-view {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    font-weight: bold;
+    color: var(--main-color);
+    height: 280px;
+    max-width: 135px;
+
+}
+.vote-result-view ul {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 !important;
+    height: 230px;
+}
+.vote-result-view>ul li {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 10px;
+    height: 28px;
+}
+.vote-result-view>ul li span:first-child {
+    width: 95px;
+    color: white;
+}
+.vote-result-view>ul li span:last-child {
+    width: 30px;
+    color: var(--main-color);
+}
+/* 슬라이드바 박스 슬라이드 */
+.vote-form {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: all 0.4s ease;
+  display: none;
+}
+
+.vote-form.active {
+  display: block;
+  opacity: 1;
+  transform: translateX(0);
+}
+.vote-form.slide-in {
+    display: block;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* 요소 간 간격 */
+.vote-row {
+    margin-bottom: 13px;
+    min-width: 100px;
+}
+/* 스윗 얼럿 css */
+.swal2-popup {
+  background: var(--background-color) !important;
+  padding: 20px !important;
+  border-radius: 20px !important;
+  border : 2px solid var(--main-color) !important;
+}
+.swal2-title {
+  color: var(--main-color) !important;
+  font-size: 2.0rem !important;
+  margin-bottom: 20px !important;
+}
+.swal2-confirm {
+  background-color: var(--main-color) !important;
+  color: var(--background-color) !important;
+  font-size: 1.6rem !important;
+  font-weight: bold !important;
+}
+.swal2-cancel {
+  background-color: var(--main-color) !important;
+  color: var(--background-color) !important;
+  font-size: 1.6rem !important;
+  font-weight: bold !important;
+}
+.swal2-content {
+  color: white !important;
+}
+.swal2-html-container {
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 1.3rem !important;
+}
+.swal2-select {
+  background-color: var(--background-color) !important;
+}
+.swal2-icon {
+  margin-top: 10px !important;
+}
+

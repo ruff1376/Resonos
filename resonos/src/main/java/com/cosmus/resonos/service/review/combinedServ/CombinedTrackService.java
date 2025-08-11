@@ -35,8 +35,10 @@ import com.cosmus.resonos.service.user.PlaylistService;
 import com.cosmus.resonos.validation.ReviewForm;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @AllArgsConstructor
 public class CombinedTrackService {
 
@@ -55,7 +57,6 @@ public class CombinedTrackService {
     // TrackPageDTO
     public ResponseEntity<?> trackPage(String trackId, CustomUser user) {
         TrackPageDTO trackPageDTO = new TrackPageDTO();
-
         int page = 1;
         int size = 10;
 

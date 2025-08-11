@@ -28,7 +28,9 @@ import com.cosmus.resonos.service.user.PlaylistService;
 import com.cosmus.resonos.validation.ReviewForm;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class CombinedAlbumService {
@@ -78,6 +80,7 @@ public class CombinedAlbumService {
                 ChartElement userVote = null;
                 userVote = chartElementService.getUserVote(loginUser.getId(), albumId);
                 pageDTO.setUserVote(userVote);
+                pageDTO.setUserId(loginUser.getId());
             }
             // 로그인시 리뷰 좋아요 여부 매핑
             if (loginUser != null && reviews != null && !reviews.isEmpty()) {

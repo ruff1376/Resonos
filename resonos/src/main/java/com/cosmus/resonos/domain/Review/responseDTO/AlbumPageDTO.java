@@ -57,8 +57,10 @@ public class AlbumPageDTO {
 
     // 유저 관련 항목
     private boolean isAdmin;
+    private Long userId;
 
     // 리뷰 타입
     private final String reviewType = "ALBUM";
+
 
 }
