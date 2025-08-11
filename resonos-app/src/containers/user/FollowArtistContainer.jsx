@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import FollowArtist from '../../components/user/FollowArtist'
 import {useParams} from 'react-router-dom'
 import * as ur from '../../apis/user'
+import { MySwal } from '../../apis/alert';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
-import { MySwal } from '../../apis/alert';
 
 const FollowArtistContainer = () => {
 
@@ -17,9 +17,8 @@ const FollowArtistContainer = () => {
   const params = useParams()
 
 
-  // 좋아요 한 앨범 검색, 요청 함수
+  // 팔로우 한 아티스트 추가 요청
   const onSearchArtist = async (keyword, offsetRef, limitRef, loadingRef, allLoadedRef) => {
-    (keyword)
     if (loadingRef.current || allLoadedRef.current) return
 
     loadingRef.current = true
@@ -47,30 +46,6 @@ const FollowArtistContainer = () => {
       console.error(err)
     } finally {
       loadingRef.current = false
-    }
-  }
-
-
-  // 팔로우 아티스트 데이터 요청
-  const getFollowedArtists = async () => {
-    let response
-    try {
-      if(params.id)
-        response = await ur.getFollowedArtists(params.id)
-      else
-        response = await ur.getFollowedArtists()
-
-      if(response.status === 200) {
-        const data = response.data
-        setArtistList(data.artistList)
-        setCount(data.count)
-        setLastPath(data.lastPath)
-        setUserId(data.userId)
-        setIsOwner(data.isOwner)
-      }
-
-    } catch(e) {
-      console.error('error :', e)
     }
   }
 
@@ -102,10 +77,34 @@ const FollowArtistContainer = () => {
     }
   }
 
+  // 팔로우 아티스트 데이터 요청
+  const getFollowedArtists = async () => {
+    let response
+    try {
+      if(params.id)
+        response = await ur.getFollowedArtists(params.id)
+      else
+        response = await ur.getFollowedArtists()
+
+      if(response.status === 200) {
+        const data = response.data
+        setArtistList(data.artistList)
+        setCount(data.count)
+        setLastPath(data.lastPath)
+        setUserId(data.userId)
+        setIsOwner(data.isOwner)
+      }
+
+    } catch(e) {
+      console.error('error :', e)
+    }
+  }
+
   // 마운트 시 데이터 요청
   useEffect(() => {
     getFollowedArtists()
   }, [])
+
   return (
     <div className="container">
       <Header />

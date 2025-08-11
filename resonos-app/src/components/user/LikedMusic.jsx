@@ -5,7 +5,7 @@ import LikedTrackCard from './card/LikedTrackCard'
 import LikedAlbumSection from './section/LikedAlbumSection'
 import LikedTrackSection from './section/LikedTrackSection'
 
-const LikedMusic = ({countAlbum, countTrack, isOwner, lastPath,likedAlbumList, likedTrackList, userId, setLikedAlbumList, setLikedTrackList, onLikeTrack, onLikeAlbum}) => {
+const LikedMusic = ({countAlbum, countTrack, isOwner, lastPath,likedAlbumList, likedTrackList, userId, setLikedAlbumList, setLikedTrackList, onLikeTrack, onLikeAlbum, onSearchLikedAlbum,onSearchLikedTrack}) => {
 
   return (
     <main className="con con-music position-relative">
@@ -20,6 +20,7 @@ const LikedMusic = ({countAlbum, countTrack, isOwner, lastPath,likedAlbumList, l
         setLikedAlbumList={setLikedAlbumList}
         userId={userId}
         onLikeAlbum={onLikeAlbum}
+        onSearchLikedAlbum={onSearchLikedAlbum}
       />
 
       {/* 트랙 섹션 */}
@@ -30,6 +31,7 @@ const LikedMusic = ({countAlbum, countTrack, isOwner, lastPath,likedAlbumList, l
         setLikedTrackList={setLikedTrackList}
         userId={userId}
         onLikeTrack={onLikeTrack}
+        onSearchLikedTrack={onSearchLikedTrack}
       />
     </main>
   )

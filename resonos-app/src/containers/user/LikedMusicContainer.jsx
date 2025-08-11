@@ -40,6 +40,40 @@ const LikedMusicContainer = () => {
     }
   }
 
+  // 좋아요 한 앨범 검색, 요청 함수
+  const onSearchLikedTrack = async (keyword, offsetRef, limitRef, loadingRef, allLoadedRef) => {
+    if (loadingRef.current || allLoadedRef.current) return
+
+    loadingRef.current = true
+
+    try {
+      const { data } = await ur.searchLikedTrack({
+        userId,
+        keyword,
+        offset: offsetRef.current,
+        limit: limitRef.current
+      })
+
+      setLikedTrackList(prev => {
+        const existingIds = new Set(prev.map(t => t.id))
+        const filteredData = data.filter(t => !existingIds.has(t.id))
+        return [...prev, ...filteredData]
+      })
+
+      offsetRef.current += limitRef.current
+
+      console.log(offsetRef.current)
+
+      if (data.length < limitRef.current) {
+        allLoadedRef.current = true
+      }
+    } catch (err) {
+      console.error(err)
+    } finally {
+      loadingRef.current = false
+    }
+  }
+
   // 트랙 좋아요 요청
   const onLikeTrack = async (trackId) => {
     try {
@@ -64,6 +98,39 @@ const LikedMusicContainer = () => {
       }
     } catch(e) {
       console.error('error :', e)
+    }
+  }
+
+  // 좋아요 한 앨범 검색, 요청 함수
+  const onSearchLikedAlbum = async (keyword, offsetRef, limitRef, loadingRef, allLoadedRef) => {
+    (keyword)
+    if (loadingRef.current || allLoadedRef.current) return
+
+    loadingRef.current = true
+
+    try {
+      const { data } = await ur.searchLikedAlbum({
+        userId,
+        keyword,
+        offset: offsetRef.current,
+        limit: limitRef.current
+      })
+
+      setLikedAlbumList(prev => {
+        const existingIds = new Set(prev.map(t => t.id))
+        const filteredData = data.filter(t => !existingIds.has(t.id))
+        return [...prev, ...filteredData]
+      })
+
+      offsetRef.current += limitRef.current
+
+      if (data.length < limitRef.current) {
+        allLoadedRef.current = true
+      }
+    } catch (err) {
+      console.error(err)
+    } finally {
+      loadingRef.current = false
     }
   }
 
@@ -114,6 +181,8 @@ const LikedMusicContainer = () => {
         userId={userId}
         onLikeAlbum={onLikeAlbum}
         onLikeTrack={onLikeTrack}
+        onSearchLikedAlbum={onSearchLikedAlbum}
+        onSearchLikedTrack={onSearchLikedTrack}
       />
       <Footer />
     </div>
