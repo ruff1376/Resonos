@@ -11,6 +11,12 @@ export const getAlbumPage = async (id) => {
 };
 
 // 앨범 좋아요시 좋아요 여부와 좋아요 수 리턴
-export const likeAlbum = async (id) => {
-  return await api.post(`/albums/like`)
+export const toggleLike = async (userId, albumId) => {
+  const data = {
+    userId: userId,
+    albumId: albumId
+  };
+  return await api.post(`/albums/like`, data)
 }
+
+// 앨범 리뷰 작성시 리뷰와 갱신된 점수 반환
