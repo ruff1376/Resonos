@@ -4,6 +4,10 @@ import { Link, useParams, useSearchParams } from 'react-router-dom'
 import Info from '../../components/review/common/Info';
 import styles from './Album.module.css'
 import AlbumInfo from '../../components/review/album/AlbumInfo';
+import swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content'
+
+
 
 const Album = () => {
 
@@ -104,16 +108,13 @@ const Album = () => {
     } catch (error) {
       console.error(error);
       // 에러 Swal 띄울예정
+      swal.fire('실패', '좋아요 실패', 'error')
     }
   }
 
   const handleLikeClick = (userId, album) => {
     toggleLike(userId, album);
   }
-
-  useEffect(() => {
-    // 좋아요 Swal 띄울예정
-  }, [isAlbumLikedByUser, albumLikeCount])
 
   // 앨범 리뷰 작성
 
@@ -122,9 +123,9 @@ const Album = () => {
       <div className={styles.albumWrapper}>
         {/* 앨범 트랙리스트 분위기 뭐뭐.. */}
         <AlbumInfo handleLikeClick={handleLikeClick} styles={styles}
-                  album={album} artist={artist} 
-                  isAlbumLikedByUser={isAlbumLikedByUser} albumLikeCount={albumLikeCount}
-                  tracks={tracks} userId={userId} />
+          album={album} artist={artist}
+          isAlbumLikedByUser={isAlbumLikedByUser} albumLikeCount={albumLikeCount}
+          tracks={tracks} userId={userId} />
         <div className={styles.infoCard}>
           <div className={`${styles.info} ${styles.top5track}`}>
             <p className={styles.headline}>{`${album.title}💽 TOP${top5List.length}🔥`}</p>
@@ -146,6 +147,7 @@ const Album = () => {
               </Link>
             ))}
           </div>
+
           <div className={`${styles.info} ${styles.albumMoods}`}>
             <p className={styles.headline}>앨범의 평균 점수</p>
             {isArgEmpty ? (
@@ -161,7 +163,21 @@ const Album = () => {
               </div>
             )}
           </div>
-
+          <div className="info pl-list">
+            <p className={styles.headline}>{`${album.title}💽의 트랙이 포함된 플리🎶`}</p>
+            {emptyPlayList || playLists.length === 0 ? (
+              <>
+                <p>해당 음원을 포함한</p>
+                <p>플레이리스트를 만들어보세요! 🤩</p>
+              </>
+            ) : (
+              playLists.map((playList) => (
+                <Link key={playList.id} to={`/playlists/${playList.id}`}>
+                  <p>{`${playList.title} ❤️${playList.likeCount}`}</p>
+                </Link>
+              ))
+            )}
+          </div>
         </div>
         {/* 앨범 트랙리스트 분위기 뭐뭐.. 끝 */}
 
