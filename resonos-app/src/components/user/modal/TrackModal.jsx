@@ -39,6 +39,56 @@ const TrackModal = ({onModal, onAddTrack, onSearchTrack, trackList, setTrackList
 
   }, [onSearchTrack, debouncedKeyword])
 
+  // 키워드 state 변경 함수
+  const handleSearchTrack = (e) => {
+    setKeyword(e.target.value)
+  }
+
+  // 선택한 모달 트랙 목록 토글
+  const toggleSelectTrack = (id, title) => {
+    setSelectedTrackIds(prev =>
+      prev.some(track => track.id === id)
+        ? prev.filter(track => track.id !== id)
+        : [...prev, { id, title }]
+    )
+  }
+
+  // 추가하기 버튼 클릭 시 선택된 트랙 ID만 전달
+  const handleAddTracks = () => {
+    if(selectedTrackIds.length === 0) {
+      MySwal.fire({
+        position: "center",
+        icon: "warning",
+        title: "추가할 트랙을 선택해주세요.",
+        showConfirmButton: false,
+        timer: 1000,
+        customClass: {
+          popup: 'follow-popup',
+          icon: 'success-icon',
+          title: 'alert-title'
+        }
+      })
+      return
+    }
+    MySwal.fire({
+      title: `선택한 ${selectedTrackIds.length}개의 트랙을 추가합니다.`,
+      showCancelButton: true,
+      confirmButtonText: "확인",
+      cancelButtonText: "취소",
+      reverseButtons: true,
+      customClass: {
+      popup: 'follow-popup',
+      icon: 'warning-icon',
+      title: 'alert-title no-icon',
+      confirmButton: 'alert-button',
+      cancelButton: 'alert-cancle-button'
+    }
+    }).then((result) => {
+      if (result.isConfirmed) onAddTrack(selectedTrackIds.map(track => track.id))
+      setSelectedTrackIds([])
+    })
+  }
+
   // 스크롤 함수 추가
   useEffect(() => {
     const container = document.querySelector('.ul-list.modall');
@@ -55,11 +105,12 @@ const TrackModal = ({onModal, onAddTrack, onSearchTrack, trackList, setTrackList
 
   // 키워드 바뀌면 offset 0 으로 초기화
   useEffect(() => {
+
     offsetRef.current = 0
     allLoadedRef.current = false
   }, [debouncedKeyword])
 
-  // 키워드 바뀌면 새로 참조할 수 있게 요청 초기화
+  // 키워드 바뀌면 새로 참조할 수 있게 트랙리스트 초기화
   useEffect(() => {
     if (!debouncedKeyword) return
 
@@ -72,38 +123,6 @@ const TrackModal = ({onModal, onAddTrack, onSearchTrack, trackList, setTrackList
         loadingRef.current = false
       })
   }, [debouncedKeyword, setTrackList])
-
-  // 키워드 state 변경 함수
-  const handleSearchTrack = (e) => {
-    setKeyword(e.target.value)
-  }
-
-  // 트랙 클릭 시 선택/해제
-  const toggleSelectTrack = (id) => {
-    setSelectedTrackIds(prev =>
-      prev.includes(id) ? prev.filter(trackId => trackId !== id) : [...prev, id]
-    )
-  }
-
-  // 추가하기 버튼 클릭 시 선택된 트랙 ID만 전달
-  const handleAddTracks = () => {
-    MySwal.fire({
-      title: `선택한 ${selectedTrackIds.length}개의 트랙을 추가합니다.`,
-      showCancelButton: true,
-      confirmButtonText: "확인",
-      cancelButtonText: "취소",
-      reverseButtons: true,
-      customClass: {
-      popup: 'follow-popup',
-      icon: 'warning-icon',
-      title: 'alert-title no-icon',
-      confirmButton: 'alert-button',
-      cancelButton: 'alert-cancle-button'
-    }
-    }).then((result) => {
-      if (result.isConfirmed) onAddTrack(selectedTrackIds)
-    })
-  }
 
   useEffect(() => {
     const handleEsc = (event) => {
@@ -140,11 +159,29 @@ const TrackModal = ({onModal, onAddTrack, onSearchTrack, trackList, setTrackList
               onChange={handleSearchTrack}
             />
           </div>
+          <div>
+            <div className='d-flex align-items-center mb-1'>
+              <p className='modal-title-title'>선택한 트랙 목록</p>
+              <button
+                className='mybtn-gold-sm'
+                onClick={() => setSelectedTrackIds([])}
+              >
+                초기화
+              </button>
+            </div>
+            <ul className='modal-title-list'>
+              {
+                selectedTrackIds.map((item, index) => (
+                  <li>{`${item.title}${index === selectedTrackIds.length-1 ? '' : '  ,'}`}</li>
+                ))
+              }
+            </ul>
+          </div>
           <ul className="ul-list modall">
             {trackList.map(track => (
-              <li className={`list-item ${selectedTrackIds.includes(track.id) ? ' selected' : ''}`}
+              <li className={`list-item ${selectedTrackIds.some(item => item.id === track.id) ? 'selected' : ''}`}
                   key={track.id}
-                  onClick={() => toggleSelectTrack(track.id)}
+                  onClick={() => toggleSelectTrack(track.id, track.title)}
               >
                 <input type="hidden" value={track.id} />
                 <img src={track.coverImage} className="follow-img" alt={track.title} />

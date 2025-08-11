@@ -1059,6 +1059,34 @@ h2 + #bio {
   white-space: nowrap;
   text-overflow: ellipsis; */
 }
+.modal-title-list {
+  padding: 0;
+  max-height: 50px;
+  margin: 0;
+}
+.modal-title-list li {
+  list-style: none;
+  display: inline-block;
+  font-size: 1.3rem;
+  color: white;
+}
+.modal-title-list li:not(:first-child) {
+  margin-left: 10px;
+}
+.modal-title-title {
+  font-size: 1.4rem;
+  display: inline-block;
+}
+.modal-title-title + .mybtn-gold-sm {
+  color: white;
+  display: inline-block;
+  margin-top: 0;
+  margin-left: 15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+
 
 /* sweet alert */
 .follow-popup {
