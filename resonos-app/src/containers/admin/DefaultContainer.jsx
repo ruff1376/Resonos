@@ -1,215 +1,246 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from "react";
+import SearchForm from "../../components/admin/first/SearchForm";
+import TableColumnHeader from "../../components/admin/first/TableColumnHeader";
+import Pagination from "../../components/admin/Pagination";
+import {
+  getAnPData,
+  createApiKey,
+  deleteApiKey,
+  toggleApiKey,
+  createPlugin,
+  deletePlugin,
+  togglePlugin
+} from "../../apis/admin";
 
-// Pagination, SearchForm, TableHeader, TableContent, DetailForm 등은 아래 임포트
-// 실제 프로젝트에 맞게 경로 및 내용 수정하세요
-import Pagination from '../../components/admin/Pagination';
-import SearchForm from '../../components/admin/first/SearchForm';
-import TableColumnHeader from '../../components/admin/first/TableColumnHeader';
-import TableContent from '../../components/admin/first/TableContent';
-import DetailForm from '../../components/admin/first/DetailForm';
-
-const DefaultContainer = ({
-  listApi,              // (page, size, keyword) => Promise<{items: [], pagination: {}, ...}>
-  selectApi,            // (id) => Promise<item>
-  updateApi,            // (item) => Promise<void>
-  deleteApi,            // (id) => Promise<void>
-  insertApi,            // (item) => Promise<void>
-  columns,              // 테이블 컬럼 정의 [{ label, key, style }]
-  size = 10,            // 페이지당 기본 아이템 수
-  detailKey = 'id',     // 상세 아이템 식별 키명, 기본 'id'
-  showAddButton = true, // 회원 등록(추가) 버튼 노출 여부
-  renderDetailExtra,    // 상세폼 커스텀 영역 렌더 함수(item) => JSX
-  renderTableExtra,     // 테이블 하단 추가 엘리먼트 렌더 함수 (예: bulk action 등)
-}) => {
-  const [items, setItems] = useState([]);
-  const [pagination, setPagination] = useState({
-    page: 1,
-    size,
-    total: 0,
-    totalPages: 1,
-  });
-  const [keyword, setKeyword] = useState('');
-  const [page, setPage] = useState(1);
+const AdminAnPManageContainer = () => {
+  const [apiKeys, setApiKeys] = useState([]);
+  const [plugins, setPlugins] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [showAddForm, setShowAddForm] = useState(false);
 
-  // 상세보기
-  const [detailId, setDetailId] = useState(null);
-  const [detailData, setDetailData] = useState(null);
-  const [originalDetailData, setOriginalDetailData] = useState(null);
+  const [page, setPage] = useState(1);
+  const [size] = useState(10);
+  const [paginationApi, setPaginationApi] = useState({ totalPages: 1, total: 0 });
+  const [paginationPlugin, setPaginationPlugin] = useState({ totalPages: 1, total: 0 });
 
-  // 리스트 조회 함수
-  const fetchList = async (pageNum = 1, pageSize = size, kw = '') => {
+  // 검색 키워드
+  const [keyword, setKeyword] = useState("");
+  const pageUri = `/admin/AnP?keyword=${encodeURIComponent(keyword)}`;
+
+  // 신규 입력 값
+  const [newApi, setNewApi] = useState({ apiKey: "", provider: "", secret: "" });
+  const [newPlugin, setNewPlugin] = useState({ name: "", configJson: "" });
+
+  const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await listApi(pageNum, pageSize, kw);
-      // res는 { items: [], pagination: { page, size, total, totalPages } } 형태로 간주
-      setItems(res.items || []);
-      const p = res.pagination || {};
-      setPagination({
-        page: p.page ?? pageNum,
-        size: p.size ?? pageSize,
-        total: p.total ?? 0,
-        totalPages: p.totalPages ?? 1,
+      const res = await getAnPData();
+      // 실제로는 서버에서 페이징된 결과를 받아야 하지만,
+      // 여기선 전체목록 받아서 slice
+      setApiKeys(res.data.apiKeys || []);
+      setPlugins(res.data.plugins || []);
+      setPaginationApi({
+        total: res.data.apiKeys?.length || 0,
+        totalPages: 1,
+        page
       });
-      setPage(p.page ?? pageNum);
+      setPaginationPlugin({
+        total: res.data.plugins?.length || 0,
+        totalPages: 1,
+        page
+      });
     } catch (e) {
-      console.error('목록 조회 실패:', e);
+      console.error("데이터 조회 실패", e);
     } finally {
       setLoading(false);
     }
   };
 
-  // 상세 조회 함수
-  const fetchDetail = async (id) => {
-    if (!id) {
-      setDetailData(null);
-      setOriginalDetailData(null);
-      setDetailId(null);
-      return;
-    }
-    try {
-      const res = await selectApi(id);
-      setDetailData(res);
-      setOriginalDetailData(res);
-      setDetailId(id);
-    } catch (e) {
-      alert('상세 정보 불러오기 실패');
-    }
-  };
+  useEffect(() => {
+    fetchData();
+  }, [keyword, page]);
 
-  // 페이지 변경 핸들러
-  const onPageChange = (newPage) => {
-    if (newPage === page) return;
-    setPage(newPage);
-    fetchList(newPage, size, keyword);
-  };
-
-  // 검색 핸들러
-  const onSearch = (kw) => {
+  const handleSearch = (kw) => {
     setKeyword(kw);
     setPage(1);
-    fetchList(1, size, kw);
   };
 
-  // 상세 데이터 변경 처리
-  const onDetailChange = (field, value) => {
-    setDetailData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+  // API 키 CRUD
+  const handleCreateApi = async (e) => {
+    e.preventDefault();
+    await createApiKey(newApi);
+    setNewApi({ apiKey: "", provider: "", secret: "" });
+    fetchData();
+  };
+  const handleDeleteApi = async (id) => {
+    if (!window.confirm("삭제하시겠습니까?")) return;
+    await deleteApiKey(id);
+    fetchData();
+  };
+  const handleToggleApi = async (id) => {
+    await toggleApiKey(id);
+    fetchData();
   };
 
-  // 상세 저장
-  const onDetailSubmit = async () => {
-    if (!detailData) return;
-    try {
-      await updateApi(detailData);
-      alert('저장되었습니다.');
-      setDetailId(null);
-      setDetailData(null);
-      fetchList(page, size, keyword);
-    } catch (e) {
-      alert('저장 실패: ' + (e.message || e));
-    }
+  // 플러그인 CRUD
+  const handleCreatePlugin = async (e) => {
+    e.preventDefault();
+    await createPlugin(newPlugin);
+    setNewPlugin({ name: "", configJson: "" });
+    fetchData();
+  };
+  const handleDeletePlugin = async (id) => {
+    if (!window.confirm("삭제하시겠습니까?")) return;
+    await deletePlugin(id);
+    fetchData();
+  };
+  const handleTogglePlugin = async (id) => {
+    await togglePlugin(id);
+    fetchData();
   };
 
-  // 삭제
-  const onDelete = async () => {
-    if (!detailId) return;
-    if (!window.confirm('정말 삭제하시겠습니까?')) return;
-    try {
-      await deleteApi(detailId);
-      alert('삭제되었습니다.');
-      setDetailId(null);
-      setDetailData(null);
-      fetchList(page, size, keyword);
-    } catch (e) {
-      alert('삭제 실패: ' + (e.message || e));
-    }
-  };
+  /** 컬럼 정의 */
+  const apiColumns = [
+    { label: "번호", style: { flexBasis: "5%", minWidth: "40px" } },
+    { label: "API 키", style: { flexBasis: "25%", minWidth: "200px" } },
+    { label: "설명", style: { flexBasis: "20%", minWidth: "150px" } },
+    { label: "등록일", style: { flexBasis: "12%", minWidth: "100px" } },
+    { label: "상태", style: { flexBasis: "10%", minWidth: "80px" } },
+    { label: "관리", style: { flexBasis: "10%", minWidth: "80px" } }
+  ];
 
-  // 추가 등록 폼 제출
-  const onAddSubmit = async (newData) => {
-    try {
-      await insertApi(newData);
-      alert('등록되었습니다.');
-      setShowAddForm(false);
-      fetchList(page, size, keyword);
-    } catch (e) {
-      alert('등록 실패: ' + (e.message || e));
-    }
-  };
-
-  // 상세 열고 닫기 토글
-  const toggleDetail = (id) => {
-    if (detailId === id) {
-      setDetailId(null);
-      setDetailData(null);
-      setOriginalDetailData(null);
-    } else {
-      fetchDetail(id);
-    }
-  };
-
-  // 초기 리스트 로드
-  useEffect(() => {
-    fetchList(page, size, keyword);
-  }, []);
+  const pluginColumns = [
+    { label: "번호", style: { flexBasis: "5%", minWidth: "40px" } },
+    { label: "이름", style: { flexBasis: "20%", minWidth: "120px" } },
+    { label: "설정", style: { flexBasis: "25%", minWidth: "150px" } },
+    { label: "등록일", style: { flexBasis: "12%", minWidth: "100px" } },
+    { label: "상태", style: { flexBasis: "10%", minWidth: "80px" } },
+    { label: "관리", style: { flexBasis: "10%", minWidth: "80px" } }
+  ];
 
   return (
-    <div>
-      {showAddButton && !showAddForm && (
-        <button onClick={() => setShowAddForm(true)}>등록하기</button>
-      )}
-      {showAddForm && (
-        <DetailForm
-          data={{}}
-          onCancel={() => setShowAddForm(false)}
-          onSubmit={onAddSubmit}
-          readOnly={false}
-        />
-      )}
-      <SearchForm onSearch={onSearch} />
+    <div className="container" style={{ maxWidth: 950 }}>
+      <h2 className="mb-3 text-light-gold">오픈 API 및 Plugin 관리</h2>
+      <span style={{ color: "#D4B97F" }}>※ API 키 노출에 주의하세요.</span>
+
+      <SearchForm onSearch={handleSearch} />
+
       {loading ? (
         <div>로딩중...</div>
       ) : (
         <>
-          <TableColumnHeader columns={columns} />
-          <TableContent
-            items={items}
-            columns={columns}
-            onRowClick={(item) => toggleDetail(item[detailKey])}
-          />
-          {renderTableExtra && renderTableExtra({ items, pagination })}
-          <Pagination
-            page={page}
-            first={1}
-            last={pagination.totalPages}
-            prev={page > 1 ? page - 1 : 1}
-            next={page < pagination.totalPages ? page + 1 : pagination.totalPages}
-            start={Math.max(1, page - 4)}
-            end={Math.min(pagination.totalPages, page + 5)}
-            pageUri={`?keyword=${encodeURIComponent(keyword)}`}
-            onPageChange={onPageChange}
-          />
-          {detailId && detailData && (
-            <DetailForm
-              data={detailData}
-              originalData={originalDetailData}
-              onChange={onDetailChange}
-              onSubmit={onDetailSubmit}
-              onDelete={onDelete}
-              onCancel={() => setDetailId(null)}
-              readOnly={false}
-              // 상세 추가 커스텀 영역 렌더 함수 전달 가능
-              renderExtra={renderDetailExtra}
+          {/* API 키 관리 */}
+          <div className="resonos-card p-4 mb-5">
+            <h3 className="mb-3 text-light-gold">API 관리</h3>
+            <form className="mb-4 d-flex gap-2 align-items-center" onSubmit={handleCreateApi}>
+              <input
+                className="api-key-input"
+                placeholder="신규 API 키"
+                value={newApi.apiKey}
+                onChange={e => setNewApi({ ...newApi, apiKey: e.target.value })}
+              />
+              <input
+                className="api-key-input"
+                placeholder="설명"
+                value={newApi.provider}
+                onChange={e => setNewApi({ ...newApi, provider: e.target.value })}
+              />
+              <input
+                className="api-key-input"
+                placeholder="API Secret"
+                value={newApi.secret}
+                onChange={e => setNewApi({ ...newApi, secret: e.target.value })}
+              />
+              <button className="btn btn-gold btn-sm" type="submit">등록</button>
+            </form>
+
+            <TableColumnHeader columns={apiColumns} />
+            {apiKeys.length > 0 ? apiKeys.map((api, idx) => (
+              <div key={api.id} className="list-group-item bg-dark text-light d-flex text-center">
+                <div style={apiColumns[0].style}>{idx + 1}</div>
+                <div style={apiColumns[1].style}>{api.apiKey}</div>
+                <div style={apiColumns[2].style}>{api.provider}</div>
+                <div style={apiColumns[3].style}>{api.createdAt?.slice(0, 10)}</div>
+                <div style={apiColumns[4].style}>
+                  <button className={`btn btn-sm ${api.enabled ? 'btn-outline-gold' : 'btn-gold'}`} onClick={() => handleToggleApi(api.id)}>
+                    {api.enabled ? "비활성" : "활성"}
+                  </button>
+                </div>
+                <div style={apiColumns[5].style}>
+                  <button className="btn btn-outline-gold btn-sm" onClick={() => handleDeleteApi(api.id)}>삭제</button>
+                </div>
+              </div>
+            )) : (
+              <div className="text-center text-secondary py-3">등록된 API 키가 없습니다.</div>
+            )}
+
+            <Pagination
+              page={page}
+              first={1}
+              last={paginationApi.totalPages}
+              prev={page > 1 ? page - 1 : 1}
+              next={page < paginationApi.totalPages ? page + 1 : paginationApi.totalPages}
+              start={1}
+              end={paginationApi.totalPages}
+              pageUri={pageUri}
+              onPageChange={setPage}
             />
-          )}
+          </div>
+
+          {/* 플러그인 관리 */}
+          <div className="resonos-card p-4">
+            <h3 className="mb-3 text-light-gold">플러그인 관리</h3>
+            <form className="mb-4 d-flex gap-2 align-items-center" onSubmit={handleCreatePlugin}>
+              <input
+                className="api-key-input"
+                placeholder="플러그인 이름"
+                value={newPlugin.name}
+                onChange={e => setNewPlugin({ ...newPlugin, name: e.target.value })}
+              />
+              <input
+                className="api-key-input"
+                placeholder="설정(JSON)"
+                value={newPlugin.configJson}
+                onChange={e => setNewPlugin({ ...newPlugin, configJson: e.target.value })}
+              />
+              <button className="btn btn-gold btn-sm" type="submit">등록</button>
+            </form>
+
+            <TableColumnHeader columns={pluginColumns} />
+            {plugins.length > 0 ? plugins.map((plugin, idx) => (
+              <div key={plugin.id} className="list-group-item bg-dark text-light d-flex text-center">
+                <div style={pluginColumns[0].style}>{idx + 1}</div>
+                <div style={pluginColumns[1].style}>{plugin.name}</div>
+                <div style={pluginColumns[2].style}>{plugin.configJson}</div>
+                <div style={pluginColumns[3].style}>{plugin.createdAt?.slice(0, 10)}</div>
+                <div style={pluginColumns[4].style}>
+                  <button className={`btn btn-sm ${plugin.enabled ? 'btn-outline-gold' : 'btn-gold'}`} onClick={() => handleTogglePlugin(plugin.id)}>
+                    {plugin.enabled ? "비활성" : "활성"}
+                  </button>
+                </div>
+                <div style={pluginColumns[5].style}>
+                  <button className="btn btn-outline-gold btn-sm" onClick={() => handleDeletePlugin(plugin.id)}>삭제</button>
+                </div>
+              </div>
+            )) : (
+              <div className="text-center text-secondary py-3">등록된 플러그인이 없습니다.</div>
+            )}
+
+            <Pagination
+              page={page}
+              first={1}
+              last={paginationPlugin.totalPages}
+              prev={page > 1 ? page - 1 : 1}
+              next={page < paginationPlugin.totalPages ? page + 1 : paginationPlugin.totalPages}
+              start={1}
+              end={paginationPlugin.totalPages}
+              pageUri={pageUri}
+              onPageChange={setPage}
+            />
+          </div>
         </>
       )}
     </div>
   );
 };
 
-export default DefaultContainer;
+export default AdminAnPManageContainer;

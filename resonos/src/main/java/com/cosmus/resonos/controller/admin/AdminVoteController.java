@@ -1,20 +1,22 @@
 package com.cosmus.resonos.controller.admin;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.cosmus.resonos.service.admin.ArtistVoteStatsService;
 import com.cosmus.resonos.service.review.ArtistMoodVoteService;
 import com.cosmus.resonos.service.review.TrackMoodVoteService;
 
-@Controller
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@CrossOrigin("*")
+@RestController
 @RequestMapping("/admin/vote")
 public class AdminVoteController {
 
@@ -27,21 +29,40 @@ public class AdminVoteController {
     @Autowired
     private ArtistVoteStatsService artistVoteStatsService;
 
+    /** 투표 통계 (트랙/앨범/아티스트) */
     @GetMapping("")
-    public String voteStats(
-        @RequestParam(value = "tab", defaultValue = "track") String tab,
-        Model model
+    public ResponseEntity<?> voteStats(
+        @RequestParam(name = "tab", defaultValue = "track") String tab
     ) {
-        List<Map<String, Object>> stats = null;
-        if ("album".equals(tab)) {
-            stats = artistMoodVoteService.getArtistMoodStats();
-        } else if ("artist".equals(tab)) {
-            stats = artistVoteStatsService.getArtistMoodVoteStats();
-        } else {
-            stats = trackMoodVoteService.getTrackMoodStats();
+        Map<String, Object> res = new HashMap<>();
+        try {
+            List<Map<String, Object>> stats;
+
+            switch (tab) {
+                case "album":
+                    stats = artistMoodVoteService.getArtistMoodStats();
+                    break;
+                case "artist":
+                    stats = artistVoteStatsService.getArtistMoodVoteStats();
+                    break;
+                case "track":
+                default:
+                    stats = trackMoodVoteService.getTrackMoodStats();
+                    break;
+            }
+
+            res.put("success", true);
+            res.put("tab", tab);
+            res.put("stats", stats != null ? stats : List.of());
+
+        } catch (Exception e) {
+            log.error("투표 통계 조회 오류", e);
+            res.put("success", false);
+            res.put("message", "투표 통계 조회 중 오류가 발생했습니다.");
+            res.put("tab", tab);
+            res.put("stats", List.of());
         }
-        model.addAttribute("stats", stats);
-        model.addAttribute("tab", tab);
-        return "admin/vote";
+
+        return ResponseEntity.ok(res);
     }
 }

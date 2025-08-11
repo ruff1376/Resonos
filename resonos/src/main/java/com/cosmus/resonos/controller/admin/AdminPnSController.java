@@ -6,8 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.cosmus.resonos.domain.admin.Policy;
@@ -18,173 +17,121 @@ import com.cosmus.resonos.service.admin.SettingService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Controller
+@CrossOrigin("*")
+@RestController
 @RequestMapping("/admin/PolicySetting")
 public class AdminPnSController {
 
     @Autowired
     private PolicyService policyService;
-
     @Autowired
     private SettingService settingService;
 
-    // 메인 화면 정책 및 설정 조회
+    /** 정책 + 설정 목록 조회 */
     @GetMapping
-    public String main(Model model) throws Exception {
+    public ResponseEntity<Map<String, Object>> main() throws Exception {
         List<Policy> policies = policyService.list();
         List<Setting> settings = settingService.list();
-
         Map<String, Setting> settingMap = settings.stream()
-            .collect(Collectors.toMap(Setting::getName, s -> s));
+                .collect(Collectors.toMap(Setting::getName, s -> s));
 
-        model.addAttribute("policies", policies);
-        model.addAttribute("settings", settingMap);
-        return "/admin/PolicySetting";
+        return ResponseEntity.ok(Map.of(
+                "success", true,
+                "policies", policies,
+                "settings", settingMap
+        ));
     }
 
-    // 정책 리스트 (중복, main과 동일하므로 생략 가능)
-    @GetMapping("/policy")
-    public String list(Model model) throws Exception {
-        return main(model);
-    }
-
-    // 정책 상세
+    /** 정책 단건 조회 */
     @GetMapping("/policy/{id}")
-    public String detail(@PathVariable Long id, Model model) throws Exception {
+    public ResponseEntity<?> getPolicy(@PathVariable("id") Long id) throws Exception {
         Policy policy = policyService.select(id);
-        if (policy == null) return "redirect:/admin/PolicySetting?error=notfound";
-        model.addAttribute("policy", policy);
-        return "/admin/PolicySetting";
+        if (policy == null) {
+            return ResponseEntity.status(404).body(Map.of("success", false, "message", "정책을 찾을 수 없습니다."));
+        }
+        return ResponseEntity.ok(Map.of("success", true, "policy", policy));
     }
 
-    // 정책 등록 폼
-    @GetMapping("/policy/create")
-    public String create(Model model) {
-        model.addAttribute("policy", new Policy());
-        return "/admin/PolicySetting";
-    }
-
-    // 정책 등록 처리
-    @PostMapping("/policy/create")
-    public String createPost(@ModelAttribute Policy policy, Model model) throws Exception {
+    /** 정책 등록 */
+    @PostMapping("/policy")
+    public ResponseEntity<?> createPolicy(@RequestBody Policy policy) throws Exception {
         boolean success = policyService.insert(policy);
-        if (success) return "redirect:/admin/PolicySetting";
-        model.addAttribute("error", "등록 실패");
-        return "/admin/PolicySetting";
+        return ResponseEntity.ok(Map.of("success", success, "message", success ? "등록 완료" : "등록 실패"));
     }
 
-    // 정책 수정 폼
-    @GetMapping("/policy/update/{id}")
-    public String update(@PathVariable Long id, Model model) throws Exception {
-        Policy policy = policyService.select(id);
-        if (policy == null) return "redirect:/admin/PolicySetting?error=notfound";
-        model.addAttribute("policy", policy);
-        return "/admin/PolicySetting";
-    }
-
-    // 정책 수정 처리
-    @PostMapping("/policy/update/{id}")
-    public String updatePost(@PathVariable Long id, @ModelAttribute Policy policy, Model model) throws Exception {
+    /** 정책 수정 */
+    @PutMapping("/policy/{id}")
+    public ResponseEntity<?> updatePolicy(@PathVariable("id") Long id,
+                                          @RequestBody Policy policy) throws Exception {
         policy.setId(id);
-        if (policyService.update(policy)) return "redirect:/admin/PolicySetting";
-        model.addAttribute("error", "수정 실패");
-        return "/admin/PolicySetting";
+        boolean success = policyService.update(policy);
+        return ResponseEntity.ok(Map.of("success", success, "message", success ? "수정 완료" : "수정 실패"));
     }
 
-    // 정책 삭제
-    @PostMapping("/policy/delete/{id}")
-    public String delete(@PathVariable Long id) throws Exception {
+    /** 정책 삭제 */
+    @DeleteMapping("/policy/{id}")
+    public ResponseEntity<?> deletePolicy(@PathVariable("id") Long id) throws Exception {
         policyService.delete(id);
-        return "redirect:/admin/PolicySetting";
+        return ResponseEntity.ok(Map.of("success", true, "message", "삭제 완료"));
     }
 
-    // 환경설정 리스트 (중복, main과 동일하므로 생략 가능)
-    @GetMapping("/setting")
-    public String settingList(Model model) throws Exception {
-        return main(model);
-    }
-
-    // 환경설정 상세
+    /** 환경설정 단건 조회 */
     @GetMapping("/setting/{id}")
-    public String settingDetail(@PathVariable Long id, Model model) throws Exception {
+    public ResponseEntity<?> getSetting(@PathVariable("id") Long id) throws Exception {
         Setting setting = settingService.select(id);
-        if (setting == null) return "redirect:/admin/PolicySetting?error=notfound";
-        model.addAttribute("setting", setting);
-        return "/admin/PolicySetting";
+        if (setting == null) {
+            return ResponseEntity.status(404).body(Map.of("success", false, "message", "설정을 찾을 수 없습니다."));
+        }
+        return ResponseEntity.ok(Map.of("success", true, "setting", setting));
     }
 
-    /**
-     * 환경설정 저장/수정 헬퍼: name 으로 조회 후 없으면 insert, 있으면 update 처리
-     */
-    private void saveOrUpdateSetting(String value, String name, String description) throws Exception {
-        log.debug("saveOrUpdateSetting 호출: value={}, name={}, description={}", value, name, description);
-
-        // selectByName 으로 변경 권장 (value 로 조회는 논리 오류 가능성 있음)
-        Setting setting = settingService.selectByName(name); // 이름 기준 조회
-
-        Date now = new Date();
-    if (setting == null) {
-        setting = new Setting();
-        setting.setName(name);
-        setting.setDescription(description);
-        setting.setValue(value);
-        setting.setCreatedAt(now);
-        setting.setUpdatedAt(now);
-
-        settingService.insert(setting);
-        log.info("새 설정 삽입: name={}, value={}", name, value);
-    } else {
-        setting.setDescription(description);
-        setting.setValue(value);
-        setting.setUpdatedAt(now);
-
-        settingService.update(setting);
-        log.info("기존 설정 수정: id={}, name={}, 값={}", setting.getId(), name, value);
-    }
-
-    }
-
-    // 환경설정 등록 폼
-    @GetMapping("/setting/create")
-    public String createSetting(Model model) {
-        model.addAttribute("setting", new Setting());
-        return "/admin/PolicySetting";
-    }
-
-    // 환경설정 등록 처리
-    @PostMapping("/setting/create")
-    public String createSettingPost(@ModelAttribute Setting setting, Model model) throws Exception {
+    /** 환경설정 등록 */
+    @PostMapping("/setting")
+    public ResponseEntity<?> createSetting(@RequestBody Setting setting) throws Exception {
         boolean success = settingService.insert(setting);
-        if (success) return "redirect:/admin/PolicySetting";
-        model.addAttribute("error", "등록 실패");
-        return "/admin/PolicySetting";
+        return ResponseEntity.ok(Map.of("success", success, "message", success ? "등록 완료" : "등록 실패"));
     }
 
-    // 환경설정 업데이트 (체크박스 등 폼 파라미터 수신 후 저장)
-    @PostMapping("/setting/update")
-    public String updateSetting(
-            @RequestParam(value = "allow_registration", required = false) String allowRegistration,
-            @RequestParam(value = "community_board_enabled", required = false) String communityBoardEnabled,
-            @RequestParam(value = "external_music_data_sync", required = false) String externalMusicDataSync,
-            @RequestParam(value = "default_theme", required = false) String defaultTheme,
-            @RequestParam(value = "notice", required = false) String notice) throws Exception {
+    /** 환경설정 수정/저장 (name 기준 - 기존 saveOrUpdateSetting 로직 활용) */
+    @PostMapping("/setting/update-batch")
+    public ResponseEntity<?> updateSettings(@RequestBody Map<String, String> params) throws Exception {
+        log.info("updateSetting 호출 : {}", params);
 
-        log.info("updateSetting 호출 : allow_registration={}, community_board_enabled={}, external_music_data_sync={}, default_theme={}, notice={}",
-                allowRegistration, communityBoardEnabled, externalMusicDataSync, defaultTheme, notice);
+        saveOrUpdateSetting(params.get("allow_registration") != null ? "yes" : "no", "allow_registration", "신규 가입 허용 여부");
+        saveOrUpdateSetting(params.get("community_board_enabled") != null ? "yes" : "no", "community_board_enabled", "커뮤니티 게시판 활성화 여부");
+        saveOrUpdateSetting(params.get("external_music_data_sync") != null ? "yes" : "no", "external_music_data_sync", "음악 데이터 외부 연동 활성화 여부");
+        saveOrUpdateSetting(params.getOrDefault("default_theme", "dark"), "default_theme", "기본 테마 설정 (다크/라이트)");
+        saveOrUpdateSetting(params.getOrDefault("notice", ""), "notice", "공지사항");
 
-        saveOrUpdateSetting(allowRegistration != null ? "yes" : "no", "allow_registration", "신규 가입 허용 여부");
-        saveOrUpdateSetting(communityBoardEnabled != null ? "yes" : "no", "community_board_enabled", "커뮤니티 게시판 활성화 여부");
-        saveOrUpdateSetting(externalMusicDataSync != null ? "yes" : "no", "external_music_data_sync", "음악 데이터 외부 연동 활성화 여부");
-        saveOrUpdateSetting(defaultTheme != null ? defaultTheme : "dark", "default_theme", "기본 테마 설정 (다크/라이트)");
-        saveOrUpdateSetting(notice != null ? notice : "", "notice", "공지사항");
-
-        return "redirect:/admin/PolicySetting";
+        return ResponseEntity.ok(Map.of("success", true, "message", "설정 업데이트 완료"));
     }
 
-    // 환경설정 삭제
-    @PostMapping("/setting/delete/{id}")
-    public String deleteSetting(@PathVariable Long id) throws Exception {
+    /** 환경설정 삭제 */
+    @DeleteMapping("/setting/{id}")
+    public ResponseEntity<?> deleteSetting(@PathVariable("id") Long id) throws Exception {
         settingService.delete(id);
-        return "redirect:/admin/PolicySetting";
+        return ResponseEntity.ok(Map.of("success", true, "message", "삭제 완료"));
+    }
+
+    // ---------------------- 내부 헬퍼 메서드 ----------------------
+    private void saveOrUpdateSetting(String value, String name, String description) throws Exception {
+        Setting setting = settingService.selectByName(name);
+        Date now = new Date();
+        if (setting == null) {
+            setting = new Setting();
+            setting.setName(name);
+            setting.setDescription(description);
+            setting.setValue(value);
+            setting.setCreatedAt(now);
+            setting.setUpdatedAt(now);
+            settingService.insert(setting);
+            log.info("새 설정 삽입: name={}, value={}", name, value);
+        } else {
+            setting.setDescription(description);
+            setting.setValue(value);
+            setting.setUpdatedAt(now);
+            settingService.update(setting);
+            log.info("기존 설정 수정: id={}, name={}, 값={}", setting.getId(), name, value);
+        }
     }
 }

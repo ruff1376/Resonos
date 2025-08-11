@@ -177,3 +177,220 @@ export const getTop5TracksInSameAlbum = (id) =>
 
 
 // admin - 음악데이터관리 페이지  하단 ##########################################################################################
+// admin - 권한 역할 페이지  상단 ##########################################################################################
+
+// 기본 경로
+const roleBasePath = '/admin/role';
+
+// 회원 목록
+export const getRoleMemberList = (page = 1, size = 10) =>
+  axios.get(roleBasePath, { params: { page, size } });
+
+// 권한 목록
+export const getUserAuthList = (username) =>
+  axios.get(`${roleBasePath}/auth/${encodeURIComponent(username)}`);
+
+// 권한 추가
+export const addUserAuth = (username, auth) =>
+  axios.post(`${roleBasePath}/auth`, { username, auth });
+
+// 권한 삭제
+export const deleteUserAuth = (username, auth) =>
+  axios.delete(`${roleBasePath}/auth`, { data: { username, auth } });
+
+// 권한 일괄 수정
+export const updateUserAuths = (username, auths) =>
+  axios.put(`${roleBasePath}/auth`, { username, auths });
+
+// Admin 권한 토글
+export const toggleAdminRole = (username, grant) =>
+  axios.post(`${roleBasePath}/auth/toggle`, { username, grant });
+
+// admin - 권한 역할 페이지  하단 ##########################################################################################
+// admin - 오픈 api 관리 페이지  상단 ##########################################################################################
+
+const basePath = "/admin/AnP";
+
+// API 키/플러그인 목록
+export const getAnPData = () => axios.get(basePath);
+
+// API 키 추가/삭제/토글
+export const createApiKey = (data) => axios.post(`${basePath}/api`, data);
+export const deleteApiKey = (id) => axios.delete(`${basePath}/api/${id}`);
+export const toggleApiKey = (id) => axios.post(`${basePath}/api/toggle/${id}`);
+
+// 플러그인 추가/삭제/토글
+export const createPlugin = (data) => axios.post(`${basePath}/plugin`, data);
+export const deletePlugin = (id) => axios.delete(`${basePath}/plugin/${id}`);
+export const togglePlugin = (id) => axios.post(`${basePath}/plugin/toggle/${id}`);
+
+// TODO : 수정 API 추가(updateApiKey, updatePlugin)
+export const updateApiKey = (id, data) => axios.put(`/api/admin/AnP/api/${id}`, data);
+export const updatePlugin = (id, data) => axios.put(`/api/admin/AnP/plugin/${id}`, data);
+
+
+
+
+// admin - 오픈 api 관리 페이지  하단 ##########################################################################################
+// admin - 정책 및 세팅 관리 페이지  상단 ##########################################################################################
+
+
+const pnsPath = "/admin/PolicySetting";
+
+// 정책 + 환경설정 전체 조회
+export const getPnsData = () => axios.get(pnsPath);
+
+// ------------------------
+// 정책 관련 API
+// ------------------------
+export const createPnsPolicy = (data) =>
+  axios.post(`${pnsPath}/policy`, data);
+
+export const updatePnsPolicy = (id, data) =>
+  axios.put(`${pnsPath}/policy/${id}`, data);
+
+export const deletePnsPolicy = (id) =>
+  axios.delete(`${pnsPath}/policy/${id}`);
+
+// ------------------------
+// 환경설정 관련 API
+// ------------------------
+export const createPnsSetting = (data) =>
+  axios.post(`${pnsPath}/setting`, data);
+
+export const updatePnsSettingBatch = (data) =>
+  axios.post(`${pnsPath}/setting/update-batch`, data);
+
+export const deletePnsSetting = (id) =>
+  axios.delete(`${pnsPath}/setting/${id}`);
+
+
+
+
+
+// admin - 정책 및 세팅 관리 페이지  하단 ##########################################################################################
+// admin - 배지 관리 페이지  상단 ##########################################################################################
+
+
+const badgePath = "/admin/badge";
+
+// 배지 목록
+export const getBadgeData = (msg) =>
+  axios.get(badgePath, { params: { msg } });
+
+// 배지 등록 (JSON)
+export const insertBadgeCondition = (data) =>
+  axios.post(`${badgePath}/insert`, data, {
+    headers: { "Content-Type": "application/json" },
+  });
+
+
+// 배지 수정
+export const updateBadgeCondition = (data) =>
+  axios.put(`${badgePath}/update`, null, { params: data });
+
+// 배지 삭제
+export const deleteBadge = (id) =>
+  axios.delete(`${badgePath}/delete/badge/${id}`);
+
+// 조건 삭제
+export const deleteBadgeCondition = (id) =>
+  axios.delete(`${badgePath}/delete/condition/${id}`);
+
+// 지급
+export const grantBadge = (userId, badgeId) =>
+  axios.post(`${badgePath}/grant`, null, { params: { userId, badgeId } });
+
+// 회수
+export const revokeBadge = (userId, badgeId) =>
+  axios.post(`${badgePath}/revoke`, null, { params: { userId, badgeId } });
+
+// 일괄 지급
+export const grantBadgesAuto = (type) =>
+  axios.post(`${badgePath}/grant-auto`, null, { params: { type } });
+
+// 지급자 목록
+export const getBadgeUsers = (badgeId) =>
+  axios.get(`${badgePath}/badge/${badgeId}/users`);
+
+// 유저 보유 배지
+export const getUserBadges = (userId) =>
+  axios.get(`${badgePath}/user/${userId}`);
+
+// 지급/회수 로그
+export const getBadgeLogs = (userId, badgeId) =>
+  axios.get(`${badgePath}/log`, { params: { userId, badgeId } });
+
+// admin - 배지 관리 페이지  하단 ##########################################################################################
+// admin - 테그 페이지  상단 ##########################################################################################
+
+const tagPath = "/admin/tags";
+
+// 목록 (페이징)
+export const listTags = (page = 1, size = 10, keyword = "") =>
+  axios.get(tagPath, { params: { page, size, keyword } });
+
+// 등록
+export const addTag = (data) =>
+  axios.post(`${tagPath}/add`, data, {
+    headers: { "Content-Type": "application/json" },
+  });
+
+// 수정
+export const updateTag = (id, data) =>
+  axios.put(`${tagPath}/${id}`, data, {
+    headers: { "Content-Type": "application/json" },
+  });
+
+// 삭제
+export const deleteTag = (id) => axios.delete(`${tagPath}/${id}`);
+
+// 검색
+export const searchTags = (keyword) =>
+  axios.get(`${tagPath}/search`, { params: { keyword } });
+
+
+
+// admin - 테그 페이지  하단 ##########################################################################################
+// admin - 투표 페이지  상단 ##########################################################################################
+
+// 예: 트랙 통계 조회
+axios.get("/admin/vote", { params: { tab: "track" } })
+  .then(res => {
+    if (res.data.success) {
+      console.log(res.data.stats);
+    }
+  });
+
+// 예: 아티스트 통계 조회
+axios.get("/admin/vote", { params: { tab: "artist" } });
+
+
+
+
+// admin - 투표 페이지  하단 ##########################################################################################
+// admin - 알람 페이지  상단 ##########################################################################################
+
+const notificationPath = "/admin/notifications";
+
+// 알림 목록 조회 (검색, 페이징 포함)
+export const getNotifications = (page = 1, size = 10, keyword = "") => {
+  return axios.get(notificationPath, {
+    params: { page, size, keyword },
+  });
+};
+
+// 새 알림 등록 (JSON)
+export const createNotification = (data) => {
+  return axios.post(notificationPath, data, {
+    headers: { "Content-Type": "application/json" },
+  });
+};
+
+
+
+
+// admin - 알람 페이지  하단 ##########################################################################################
+
+
+

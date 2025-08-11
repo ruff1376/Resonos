@@ -34,6 +34,15 @@ import AdminMusicContainer from './containers/admin/AdminMusicContainer';
 import UserSearch from './pages/search/UserSearch';
 import PlaylistSearch from './pages/search/PlaylistSearch';
 import Activity from './pages/user/activity';
+import AdminRoleManagePage from './pages/admin/AdminRoleManagePage';
+import AdminAnPManagePage from './pages/admin/AdminAnPManagePage';
+import AdminPnSManagePage from './pages/admin/AdminPnSManagePage'
+import AdminBadgeManagePage from './pages/admin/AdminBadgeManagePage';
+import BadgeUsersPage from './pages/admin/BadgeUsersPage';
+import AdminTagManagePage from './pages/admin/AdminTagManagePage';
+import VoteStatsPage from './pages/admin/VoteStatsPage';
+import ReviewReportManagePage from './pages/admin/ReviewReportManagePage';
+import AdminNotificationPage from './pages/admin/AdminNotificationPage';
 import Notification from './pages/user/Notification';
 import LikedMusic from './pages/user/LikedMusic';
 import FollowArtist from './pages/user/FollowArtist';
@@ -98,6 +107,15 @@ const App = () => {
           <Route path="/admin/test/" element={<AdminTest />} />
           <Route path="/admin/report" element={<AdminReportsContainer />} />
           <Route path="/admin/music" element={<AdminMusicContainer />} />
+          <Route path="/admin/role" element={<AdminRoleManagePage />} />
+          <Route path="/admin/AnP" element={<AdminAnPManagePage />} />
+          <Route path="/admin/PolicySetting" element={<AdminPnSManagePage />} />
+          <Route path="/admin/Badge" element={<AdminBadgeManagePage />} />
+          <Route path="/admin/badge/:badgeId/users" element={<BadgeUsersPage />} />
+          <Route path="/admin/tags" element={<AdminTagManagePage />} />
+          <Route path="/admin/vote" element={<VoteStatsPage />} />
+          <Route path="/admin/report/review" element={<ReviewReportManagePage />} />
+          <Route path="/admin/notifications" element={<AdminNotificationPage />} />
 
         </Routes>
       </LoginContextProvider>

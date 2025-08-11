@@ -2,111 +2,164 @@ package com.cosmus.resonos.controller.admin;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.admin.Tag;
 import com.cosmus.resonos.service.admin.TagService;
 
-@Controller
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@CrossOrigin("*")
+@RestController
 @RequestMapping("/admin/tags")
 public class AdminTagController {
 
     @Autowired
     private TagService tagService;
 
-    // 페이징 처리된 태그 목록 페이지
+    /** 페이징 처리된 태그 목록 조회 */
     @GetMapping
-    public String list(
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size,
-            @RequestParam(value = "keyword", required = false) String keyword,
-            Model model) throws Exception {
-
-        if (page < 1) page = 1;
-        if (size < 1) size = 10;
-        if (keyword == null) keyword = "";
-
+    public ResponseEntity<?> list(
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size,
+            @RequestParam(name = "keyword", required = false) String keyword
+    ) {
+        Map<String, Object> res = new HashMap<>();
         try {
-            // 전체 태그 개수 조회 (검색 키워드 반영)
+            if (page < 1) page = 1;
+            if (size < 1) size = 10;
+            if (keyword == null) keyword = "";
+
+            // 전체 개수 조회
             long total = (!keyword.isBlank()) ? tagService.countByKeyword(keyword) : tagService.countAll();
 
-            // 페이징 객체 생성 (현재 페이지, 페이지 크기, 페이지 링크 개수, 전체 개수)
+            // 페이징 객체
             Pagination pagination = new Pagination(page, size, 10, total);
 
-            // 페이징 적용된 태그 리스트 조회
+            // 목록 조회
             List<Tag> tags = (!keyword.isBlank())
                     ? tagService.searchByNamePaging(keyword, pagination.getIndex(), pagination.getSize())
                     : tagService.listPaging(pagination.getIndex(), pagination.getSize());
 
-            model.addAttribute("tags", tags);
-            model.addAttribute("pagination", pagination);
-            model.addAttribute("keyword", keyword);
+            res.put("success", true);
+            res.put("tags", tags != null ? tags : List.of());
+            res.put("pagination", pagination);
+            res.put("keyword", keyword);
 
-            // 페이징 링크용 URI 생성 (size, keyword 유지)
+            // pageUri 생성
             String pageUri = "/admin/tags?size=" + size;
             if (!keyword.isBlank()) {
                 pageUri += "&keyword=" + URLEncoder.encode(keyword, StandardCharsets.UTF_8);
             }
-            model.addAttribute("pageUri", pageUri);
+            res.put("pageUri", pageUri);
 
         } catch (Exception e) {
-            model.addAttribute("errorMessage", "태그 목록 조회 중 오류가 발생했습니다.");
-            model.addAttribute("tags", List.of());
-            model.addAttribute("pagination", new Pagination(1, size, 10, 0));
-            model.addAttribute("keyword", keyword);
-            model.addAttribute("pageUri", "/admin/tags");
+            log.error("태그 목록 조회 오류", e);
+            res.put("success", false);
+            res.put("message", "태그 목록 조회 중 오류가 발생했습니다.");
+            res.put("tags", List.of());
+            res.put("pagination", new Pagination(1, size, 10, 0));
+            res.put("keyword", keyword);
+            res.put("pageUri", "/admin/tags");
         }
-
-        return "admin/tags"; // thymeleaf template path
+        return ResponseEntity.ok(res);
     }
 
-    // 태그 등록 처리
+    /** 태그 등록 */
     @PostMapping("/add")
-    public String add(@RequestParam("name") String name) throws Exception {
-        Tag tag = new Tag();
-        tag.setName(name);
-        tagService.insert(tag);
-        return "redirect:/admin/tags";
-    }
+    public ResponseEntity<?> add(@RequestBody Map<String, Object> body) {
+        Map<String, Object> res = new HashMap<>();
+        try {
+            String name = body.get("name") != null ? body.get("name").toString() : null;
+            if (name == null || name.isBlank()) {
+                res.put("success", false);
+                res.put("message", "태그명을 입력하세요.");
+                return ResponseEntity.badRequest().body(res);
+            }
+            Tag tag = new Tag();
+            tag.setName(name);
+            tagService.insert(tag);
 
-    // 태그 수정 폼
-    @GetMapping("/{id}/edit")
-    public String editForm(@PathVariable("id") Long id, Model model) throws Exception {
-        Tag tag = tagService.select(id);
-        if (tag == null) {
-            return "redirect:/admin/tags?error=notfound";
+            res.put("success", true);
+            res.put("message", "등록 완료");
+        } catch (Exception e) {
+            log.error("태그 등록 오류", e);
+            res.put("success", false);
+            res.put("message", e.getMessage());
+            return ResponseEntity.internalServerError().body(res);
         }
-        model.addAttribute("tag", tag);
-        return "admin/tags";
+        return ResponseEntity.ok(res);
     }
 
-    // 태그 수정 처리
-    @PostMapping("/{id}/edit")
-    public String edit(@PathVariable("id") Long id, @RequestParam("name") String name) throws Exception {
-        Tag tag = new Tag();
-        tag.setId(id);
-        tag.setName(name);
-        tagService.update(tag);
-        return "redirect:/admin/tags";
+    /** 태그 수정 */
+    @PutMapping("/{id}")
+    public ResponseEntity<?> edit(
+            @PathVariable(name = "id") Long id,
+            @RequestBody Map<String, Object> body
+    ) {
+        Map<String, Object> res = new HashMap<>();
+        try {
+            String name = body.get("name") != null ? body.get("name").toString() : null;
+            if (name == null || name.isBlank()) {
+                res.put("success", false);
+                res.put("message", "태그명을 입력하세요.");
+                return ResponseEntity.badRequest().body(res);
+            }
+            Tag tag = new Tag();
+            tag.setId(id);
+            tag.setName(name);
+            tagService.update(tag);
+
+            res.put("success", true);
+            res.put("message", "수정 완료");
+        } catch (Exception e) {
+            log.error("태그 수정 오류", e);
+            res.put("success", false);
+            res.put("message", e.getMessage());
+            return ResponseEntity.internalServerError().body(res);
+        }
+        return ResponseEntity.ok(res);
     }
 
-    // 태그 삭제 처리
-    @PostMapping("/{id}/delete")
-    public String delete(@PathVariable("id") Long id) throws Exception {
-        tagService.delete(id);
-        return "redirect:/admin/tags";
+    /** 태그 삭제 */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable(name = "id") Long id) {
+        Map<String, Object> res = new HashMap<>();
+        try {
+            tagService.delete(id);
+            res.put("success", true);
+            res.put("message", "삭제 완료");
+        } catch (Exception e) {
+            log.error("태그 삭제 오류", e);
+            res.put("success", false);
+            res.put("message", e.getMessage());
+            return ResponseEntity.internalServerError().body(res);
+        }
+        return ResponseEntity.ok(res);
     }
 
-    // 단일 검색 (Ajax 용)
+    /** 단일 검색 (Ajax 용) */
     @GetMapping("/search")
-    @ResponseBody
-    public List<Tag> search(@RequestParam("keyword") String keyword) {
-        return tagService.searchByName(keyword);
+    public ResponseEntity<?> search(@RequestParam(name = "keyword") String keyword) {
+        Map<String, Object> res = new HashMap<>();
+        try {
+            List<Tag> tags = tagService.searchByName(keyword);
+            res.put("success", true);
+            res.put("tags", tags != null ? tags : List.of());
+        } catch (Exception e) {
+            log.error("태그 검색 오류", e);
+            res.put("success", false);
+            res.put("message", e.getMessage());
+            return ResponseEntity.internalServerError().body(res);
+        }
+        return ResponseEntity.ok(res);
     }
 }
