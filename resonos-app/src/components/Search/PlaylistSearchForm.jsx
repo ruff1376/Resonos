@@ -2,6 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../List/MainForm.css'
 import Pagination from '../Pagination/Pagination';
 import ScrollToTop from '../ScrollToTop/ScrollToTop';
+import { Link } from 'react-router-dom';
 
 export default function PlaylistSearchForm({
     keyword,
@@ -55,20 +56,20 @@ export default function PlaylistSearchForm({
                                     className="card align-items-center p-3"
                                     style={{ width: 228, height: 240 }}
                                 >
-                                    <a href={`/playlists/${playlist.id}`}>
+                                    <Link to={`/playlists/${playlist.id}`}>
                                         <img
                                             src={playlist.thumbnailUrl}
                                             className="card-img-top"
                                             alt="썸네일"
                                         />
-                                    </a>
+                                    </Link>
                                     <div className="card-body d-flex flex-column align-items-center">
-                                        <a href={`/playlists/${playlist.id}`} className="card-title">
+                                        <Link to={`/playlists/${playlist.id}`} className="card-title">
                                             {playlist.title}
-                                        </a>
-                                        <a href={`/users/${playlist.userId}`} className="card-artist">
+                                        </Link>
+                                        <Link to={`/users/${playlist.userId}`} className="card-artist">
                                             제작자 : {playlist.maker}
-                                        </a>
+                                        </Link>
                                         <div className="card-artist">♥ {formatNumber(playlist.likeCount)}</div>
                                     </div>
                                 </div>

@@ -1,3 +1,7 @@
+.welcome {
+    padding-top: 100px;
+}
+
 .welcome body::before {
     content: '';
     height: 100vh;
@@ -39,7 +43,7 @@
 }
 
 .welcome .logo-text {
-    font-size: 2rem;
+    font-size: 20px;
     font-weight: bold;
     color: #D4B97F;
     letter-spacing: 2px;
@@ -49,7 +53,7 @@
     color: #D4B97F;
     text-decoration: none;
     margin: 0 18px;
-    font-size: 1.1rem;
+    font-size: 11px;
     transition: color 0.2s;
 }
 
@@ -63,14 +67,14 @@
 }
 
 .welcome .hero h1 {
-    font-size: 2.7rem;
+    font-size: 44px;
     color: #fffbe6;
     margin-bottom: 0.7em;
 }
 
 .welcome .hero p {
     color: #D4B97F;
-    font-size: 1.2rem;
+    font-size: 20px;
     margin-bottom: 2em;
 }
 
@@ -96,7 +100,7 @@
 .welcome .main-cards {
     display: flex;
     justify-content: center;
-    gap: 5rem;
+    gap: 75px;
     margin: 40px 0 60px 0;
     overflow: visible;
 }
@@ -122,6 +126,16 @@
     animation: fadeInUp 0.9s cubic-bezier(0.23, 1, 0.32, 1) forwards;
     animation-delay: 0.2s;
     will-change: transform;
+}
+
+.welcome .main-card h2 {
+    font-size: 32px; /* 추가: 카드 제목 크기 */
+    color: #fffbe6;
+    margin-bottom: 0.5em;
+}
+
+.welcome .main-card p {
+    font-size: 16px;
 }
 
 .welcome .main-card img {
@@ -167,10 +181,12 @@
 }
 
 .welcome main,
-.welcome .hero,
+.welcome .hero h1,
+.welcome .hero p,
 .welcome .main-cards,
 .welcome .main-card,
-.welcome .btn-gold {
+.welcome .btn-gold,
+.nickname-welcome {
     opacity: 0;
     animation: fadeInUp 0.9s cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }
@@ -180,7 +196,8 @@
     animation-delay: 0.1s;
 }
 
-.welcome .hero {
+.welcome .hero h1,
+.welcome .hero p {
     animation-delay: 0.2s;
 }
 
@@ -196,6 +213,12 @@
     animation-delay: 0.55s;
 }
 
-.welcome .btn-gold {
+.welcome .btn-gold,
+.nickname-welcome {
     animation-delay: 0.6s;
+}
+
+.nickname-welcome {
+    color: #fffbe6;
+    font-size: 32px;
 }

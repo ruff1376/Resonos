@@ -2,6 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../List/MainForm.css'
 import Pagination from '../Pagination/Pagination';
 import ScrollToTop from '../ScrollToTop/ScrollToTop';
+import { Link } from 'react-router-dom';
 
 export default function UserSearchForm({
     keyword,
@@ -55,17 +56,17 @@ export default function UserSearchForm({
                                     className="card align-items-center p-3"
                                     style={{ width: 228, height: 230 }}
                                 >
-                                    <a href={`/users/${user.id}`}>
+                                    <Link to={`/users/${user.id}`}>
                                         <img
                                             src={user.profileImage}
                                             className="card-img-top rounded-circle"
                                             alt="프로필 이미지"
                                         />
-                                    </a>
+                                    </Link>
                                     <div className="card-body">
-                                        <a href={`/users/${user.id}`} className="card-title">
+                                        <Link to={`/users/${user.id}`} className="card-title">
                                             {user.nickname}
-                                        </a>
+                                        </Link>
                                         <div className="card-artist">
                                             {formatNumber(user.followerCount)} 팔로워
                                         </div>

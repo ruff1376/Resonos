@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import './ScrollToTop.css'
 
 export default function ScrollToTop() {
@@ -12,9 +13,9 @@ export default function ScrollToTop() {
 
     return (
         <div className="floating">
-            <a href="#!" onClick={scrollToTop}>
+            <Link to="#!" onClick={scrollToTop}>
                 <i className="bi bi-caret-up-fill"></i>
-            </a>
+            </Link>
         </div>
     );
 }

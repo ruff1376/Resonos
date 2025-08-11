@@ -11,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './MainForm.css'
 import Pagination from '../Pagination/Pagination';
 import ScrollToTop from '../ScrollToTop/ScrollToTop';
+import { Link } from 'react-router-dom';
 
 const chartInstances = new Map();
 
@@ -99,16 +100,16 @@ function GridSection({ title, albumList, pagination, onPageChange}) {
                 {albumList.map((album) => (
                     <div key={album.id} className="col d-flex justify-content-center">
                         <div className={'card align-items-center gap-2 mt-3'} style={{ width: 228, height: 340 }}>
-                            <a href={'/albums?id=' + album.id}>
+                            <Link to={'/albums?id=' + album.id}>
                                 <img src={album.coverImage} className="card-img-top" alt="앨범커버" />
-                            </a>
+                            </Link>
                             <div className="card-body d-flex flex-column align-items-center">
-                                <a href={'/albums?id=' + album.id} className="card-title">
+                                <Link to={'/albums?id=' + album.id} className="card-title">
                                     {album.title}
-                                </a>
-                                <a href={'/artists?id=' + album.artistId} className="card-artist">
+                                </Link>
+                                <Link to={'/artists?id=' + album.artistId} className="card-artist">
                                     {album.artistName}
-                                </a>
+                                </Link>
                             </div>
                             <div className="d-flex justify-content-center mb-4">
                                 {album.avgRating != null ? (

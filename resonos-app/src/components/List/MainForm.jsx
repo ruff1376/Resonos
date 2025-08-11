@@ -7,6 +7,7 @@ import {
 } from 'chart.js';
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './MainForm.css'
 import ScrollToTop from '../ScrollToTop/ScrollToTop';
@@ -108,7 +109,7 @@ function AlbumSection({ title, albumList }) {
             <div className="main-title py-3 px-4 w-100">{title}</div>
             <div className="d-flex flex-column justify-content-start gap-3 w-100" style={{ margin: '20px 10px' }}>
                 {albumList.map((album, idx) => (
-                    <a key={album.id} href={`/albums?id=${album.id}`} className={`album-card${idx === 0 ? '' : ' secondary'} d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4 w-100 position-relative`}>
+                    <Link key={album.id} to={`/albums?id=${album.id}`} className={`album-card${idx === 0 ? '' : ' secondary'} d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4 w-100 position-relative`}>
                         <div className="d-flex align-items-center gap-4 flex-shrink-1" style={{ minWidth: 0 }}>
                             <div className={`album-rank ${idx === 0 ? 'top' : ''}`}>{idx + 1}</div>
                             <img src={album.coverImage} alt="앨범커버" className="album-img" />
@@ -131,7 +132,7 @@ function AlbumSection({ title, albumList }) {
                                 <span className="no-rating me-4 fw-bold fs-2">NR</span>
                             )}
                         </div>
-                    </a>
+                    </Link>
                 ))}
             </div>
         </div>
@@ -148,18 +149,43 @@ function GridSection({ title, contentList, count, moreLink, isTrack = false, isP
                 {contentList.map((content) => (
                     <div key={content.id} className="col d-flex justify-content-center">
                         <div className={`card align-items-center ${isPlaylist ? 'p-3' : 'gap-2 mt-3'}`} style={{ width: 228, height: isPlaylist ? 240 : 340 }}>
-                            <a href={`/${isPlaylist ? 'playlists' : isTrack ? 'tracks' : 'albums'}${isPlaylist ? '/' + content.id : '?id=' + content.id}`}>
+                            <Link to={`/${isPlaylist ? 'playlists' : isTrack ? 'tracks' : 'albums'}${isPlaylist ? '/' + content.id : '?id=' + content.id}`}>
                                 <img src={isPlaylist ? content.thumbnailUrl : content.coverImage} className="card-img-top" alt="썸네일" />
-                            </a>
+                            </Link>
                             <div className="card-body d-flex flex-column align-items-center">
-                                <a href={`/${isPlaylist ? 'playlists' : isTrack ? 'tracks' : 'albums'}${isPlaylist ? '/' + content.id : '?id=' + content.id}`} className="card-title">
+                                <Link to={`/${isPlaylist ? 'playlists' : isTrack ? 'tracks' : 'albums'}${isPlaylist ? '/' + content.id : '?id=' + content.id}`} className="card-title">
                                     {content.title}
-                                </a>
-                                <a href={`/${isPlaylist ? 'users' : 'artists'}${isPlaylist ? '/' + content.userId : '?id=' + content.artistId}`} className="card-artist">
+                                </Link>
+                                {isPlaylist ? (
+                                    // <div className="card-artist no-hover">제작자 : <Link to={`/users/${content.userId}`} className="card-artist">{content.maker}</Link></div>
+                                    <div className="card-artist no-hover">
+                                        <span>제작자 : </span>
+                                        <Link to={`/users/${content.userId}`} className="card-artist">
+                                            {content.maker}
+                                        </Link>
+                                    </div>
+                                    // <span>
+                                    //     제작자 :
+                                    //     <span
+                                    //         className="card-artist"
+                                    //         onClick={() => goMakerPage(content.makerId)}
+                                    //     >
+                                    //         {content.maker}
+                                    //     </span>
+                                    // </span>
+                                ) : (
+                                    <Link
+                                        to={`/artists?id=${content.artistId}`}
+                                        className="card-artist"
+                                    >
+                                        {content.artistName}
+                                    </Link>
+                                )}
+                                {/* <Link to={`/${isPlaylist ? 'users' : 'artists'}${isPlaylist ? '/' + content.userId : '?id=' + content.artistId}`} className="card-artist">
                                     {isPlaylist ? `제작자 : ${content.maker}` : content.artistName}
-                                </a>
+                                </Link> */}
                                 {isPlaylist && (
-                                    <div className="card-artist">♥ {content.likeCount?.toLocaleString() ?? 0}</div>
+                                    <div className="card-artist no-hover">♥ {content.likeCount?.toLocaleString() ?? 0}</div>
                                 )}
                             </div>
                             {!isPlaylist && (
@@ -183,7 +209,7 @@ function GridSection({ title, contentList, count, moreLink, isTrack = false, isP
             </div>
             {count > 12 && (
                 <div className="d-flex flex-row align-items-center justify-content-end px-4 mb-3" style={{ height: 50 }}>
-                    <a href={moreLink} className="more-link">더 보기 &gt;</a>
+                    <Link to={moreLink} className="more-link">더 보기 &gt;</Link>
                 </div>
             )}
         </section>
