@@ -25,6 +25,7 @@ import PlaylistDetail from './pages/user/PlaylistDetail';
 import CreatePlaylist from './pages/user/CreatePlaylist';
 import UserSearch from './pages/search/UserSearch';
 import PlaylistSearch from './pages/search/PlaylistSearch';
+import Activity from './pages/user/activity';
 
 const App = () => {
 
@@ -54,10 +55,12 @@ const App = () => {
           <Route path="/search/users" element={<UserSearch />} />
           <Route path="/search/playlists" element={<PlaylistSearch />} />
 
-          {/* 유저 */}
+          {/* 공용 */}
           <Route path="/join" element={<Join />} />
+          {/* 유저 */}
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/users/:id" element={<Mypage />} />
+          <Route path="/users/activity" element={<Activity />} />
           <Route path="/users/edit" element={<Edit />} />
           <Route path="/users/:id/playlists" element={<Playlist />} />
           <Route path="/users/playlists" element={<Playlist />} />
