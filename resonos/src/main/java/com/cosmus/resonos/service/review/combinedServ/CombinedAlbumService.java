@@ -141,6 +141,9 @@ public class CombinedAlbumService {
     // 앨범 좋아요
     public ResponseEntity<?> toggleAlbumLike(LikedAlbum dto) {
         try {
+            if(dto.getUserId() == null || dto.getAlbumId() == null) {
+                return new ResponseEntity<>("User is null", HttpStatus.BAD_REQUEST);
+            }
             boolean liked = likedAlbumService.toggleLike(dto.getUserId(), dto.getAlbumId());
             int count = likedAlbumService.getAlbumLikeCount(dto.getAlbumId());
             Map<String, Object> result = new HashMap<>();

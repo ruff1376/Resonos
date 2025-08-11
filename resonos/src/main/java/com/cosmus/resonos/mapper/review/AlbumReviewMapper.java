@@ -5,10 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.cosmus.resonos.domain.review.Album;
 import com.cosmus.resonos.domain.review.AlbumReview;
 import com.cosmus.resonos.domain.review.AlbumScore;
-import com.cosmus.resonos.domain.review.ReviewReport;
 
 @Mapper
 public interface AlbumReviewMapper {
