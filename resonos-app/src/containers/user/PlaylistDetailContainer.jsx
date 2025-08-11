@@ -6,6 +6,8 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {MySwal} from '../../apis/alert'
 import Sortable from 'sortablejs';
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
 
 const PlaylistDetailContainer = () => {
 
@@ -21,6 +23,36 @@ const PlaylistDetailContainer = () => {
 
   const dragListRef = useRef(null)
 
+
+  // 플레이리스트 좋아요 요청
+  const onPlaylistLike = async (id, isLiked) => {
+    try {
+      let response
+      if(isLiked)
+        response = await ur.cancelLikePlaylist(id)
+      else
+        response = await ur.likePlaylist(id)
+
+      if(response.status === 200) {
+        // 성공시
+        const text = response.data
+        MySwal.fire({
+          position: "center",
+          icon: "success",
+          title: text,
+          showConfirmButton: false,
+          timer: 800,
+          customClass: {
+            popup: 'follow-popup',
+            icon: 'success-icon',
+            title: 'alert-title'
+          }
+        });
+      }
+    } catch(e) {
+      console.error('error :', e)
+    }
+  }
 
   // 플레이리스트 트랙 추가 요청
   const onAddTrack = async (idList) => {
@@ -93,23 +125,6 @@ const PlaylistDetailContainer = () => {
       console.error(err)
     } finally {
       loadingRef.current = false
-    }
-  }
-
-  // 플레이리스트 상세 정보 요청
-  const getPlaylistDetail = async () => {
-    try {
-      const response = await ur.getPlaylistDetail(params.id)
-      const data = response.data
-      console.log(data)
-      setPlaylist(data.playlist)
-      setLastPath(data.lastPath)
-      setIsOwner(data.isOwner)
-      setAlreadyLiked(data.alreadyLiked)
-      setOwner(data.owner)
-      setUserId(data.userId)
-    } catch(e) {
-      console.error('error :', e)
     }
   }
 
@@ -216,6 +231,23 @@ const PlaylistDetailContainer = () => {
     }
   }, [isOwner])
 
+  // 플레이리스트 상세 정보 요청
+  const getPlaylistDetail = async () => {
+    try {
+      const response = await ur.getPlaylistDetail(params.id)
+      const data = response.data
+      console.log(data)
+      setPlaylist(data.playlist)
+      setLastPath(data.lastPath)
+      setIsOwner(data.isOwner)
+      setAlreadyLiked(data.alreadyLiked)
+      setOwner(data.owner)
+      setUserId(data.userId)
+    } catch(e) {
+      console.error('error :', e)
+    }
+  }
+
   // 첫 마운트시 데이터 요청
   useEffect(() => {
     getPlaylistDetail()
@@ -223,6 +255,7 @@ const PlaylistDetailContainer = () => {
 
   return (
     <div className="container">
+      <Header />
       <PlaylistDetailForm
         playlist={playlist}
         lastPath={lastPath}
@@ -239,7 +272,9 @@ const PlaylistDetailContainer = () => {
         onDelete={onDelete}
         dragListRef={dragListRef}
         onLike={onLike}
+        onPlaylistLike={onPlaylistLike}
       />
+      <Footer />
     </div>
   )
 }

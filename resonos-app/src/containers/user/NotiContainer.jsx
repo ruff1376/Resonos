@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import Notification from '../../components/user/Notification'
 import * as ur from '../../apis/user'
 import {MySwal} from '../../apis/alert'
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
 
 const NotiContainer = () => {
 
@@ -129,6 +131,7 @@ const NotiContainer = () => {
 
   return (
     <div className="container">
+      <Header />
       <Notification
         lastPath={lastPath}
         notiList={notiList}
@@ -137,6 +140,7 @@ const NotiContainer = () => {
         deleteAll={deleteAll}
         onToggleRead={onToggleRead}
       />
+      <Footer />
     </div>
   )
 }

@@ -181,9 +181,17 @@ export const searchTracks = async (data) => {
     headers: { 'Content-Type': 'application/json' }
   })
 }
-// 플레이리스트 트랙 좋아요
+
+// 트랙 좋아요
 export const likeTrack = async data => {
   return await api.post('/tracks/like', data, {
+    headers: { 'Content-Type': 'application/json' }
+  })
+}
+
+// 앨범 좋아요
+export const likeAlbum = async data => {
+  return await api.post('/albums/like', data, {
     headers: { 'Content-Type': 'application/json' }
   })
 }
@@ -207,4 +215,25 @@ export const deleteAll = async ids => {
     headers: { 'Content-Type': 'application/json' },
     data: ids
   })
+}
+
+/* 좋아요 한 음악 */
+// 좋아요 한 앨범 추가 요청파
+export const searchLikedAlbum = async data => {
+  return await api.post('/albums/search', data)
+}
+
+// 좋아요 한 트랙 추가 요청
+export const searchLikedTrack = async data => {
+  return await api.post('/tracks/search', data)
+}
+
+// 팔로우 한 아티스트 추가 요청
+export const searchArtist = async data => {
+  return await api.post('/artists/search', data)
+}
+
+// 팔로우 요청
+export const followArtist = async data => {
+  return await api.post('/artists/toggle-like', data)
 }
