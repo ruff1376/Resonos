@@ -11,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../List/MainForm.css'
 import Pagination from '../Pagination/Pagination';
 import ScrollToTop from '../ScrollToTop/ScrollToTop';
+import { Link } from 'react-router-dom';
 
 const chartInstances = new Map();
 
@@ -137,20 +138,20 @@ export default function TrackSearchForm({
                                     className="card align-items-center p-3"
                                     style={{ width: 228, height: 340 }}
                                 >
-                                    <a href={`/tracks?id=${track.id}`}>
+                                    <Link to={`/tracks?id=${track.id}`}>
                                         <img
                                             src={track.coverImage}
                                             className="card-img-top"
                                             alt="앨범커버"
                                         />
-                                    </a>
+                                    </Link>
                                     <div className="card-body d-flex flex-column align-items-center">
-                                        <a href={`/tracks?id=${track.id}`} className="card-title">
+                                        <Link to={`/tracks?id=${track.id}`} className="card-title">
                                             {track.title}
-                                        </a>
-                                        <a href={`/artists?id=${track.artistId}`} className="card-artist">
+                                        </Link>
+                                        <Link to={`/artists?id=${track.artistId}`} className="card-artist">
                                             {track.artistName}
-                                        </a>
+                                        </Link>
                                     </div>
                                     <div className="d-flex justify-content-center mb-4">
                                         {track.avgRating != null ? (

@@ -7,6 +7,7 @@ import {
 } from 'chart.js';
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../List/MainForm.css'
 import ScrollToTop from '../ScrollToTop/ScrollToTop';
@@ -130,17 +131,17 @@ export default function SearchForm({
                                         className="card align-items-center p-3"
                                         style={{ width: 228, height: 230 }}
                                     >
-                                        <a href={`/artists?id=${artist.id}`}>
+                                        <Link to={`/artists?id=${artist.id}`}>
                                             <img
                                                 src={artist.profileImage}
                                                 className="card-img-top rounded-circle"
                                                 alt="아티스트 이미지"
                                             />
-                                        </a>
+                                        </Link>
                                         <div className="card-body">
-                                            <a href={`/artists?id=${artist.id}`} className="card-title">
+                                            <Link to={`/artists?id=${artist.id}`} className="card-title">
                                                 {artist.name}
-                                            </a>
+                                            </Link>
                                             <div className="card-artist">
                                                 {formatNumber(artist.followerCount)} 팔로워
                                             </div>
@@ -155,9 +156,9 @@ export default function SearchForm({
                             className="d-flex flex-row align-items-center justify-content-end px-4 mb-3"
                             style={{ height: 50 }}
                         >
-                            <a href={`/search/artists?q=${keyword}`} className="more-link">
+                            <Link to={`/search/artists?q=${keyword}`} className="more-link">
                                 더 보기 &gt;
-                            </a>
+                            </Link>
                         </div>
                     )}
                 </section>
@@ -192,20 +193,20 @@ export default function SearchForm({
                                         className="card align-items-center gap-2 mt-3"
                                         style={{ width: 228, height: 340 }}
                                     >
-                                        <a href={`/albums?id=${album.id}`}>
+                                        <Link to={`/albums?id=${album.id}`}>
                                             <img
                                                 src={album.coverImage}
                                                 className="card-img-top"
                                                 alt="앨범커버"
                                             />
-                                        </a>
+                                        </Link>
                                         <div className="card-body d-flex flex-column align-items-center">
-                                            <a href={`/albums?id=${album.id}`} className="card-title">
+                                            <Link to={`/albums?id=${album.id}`} className="card-title">
                                                 {album.title}
-                                            </a>
-                                            <a href={`/artists?id=${album.artistId}`} className="card-artist">
+                                            </Link>
+                                            <Link to={`/artists?id=${album.artistId}`} className="card-artist">
                                                 {album.artistName}
-                                            </a>
+                                            </Link>
                                         </div>
                                         <div className="d-flex justify-content-center mb-4">
                                             {album.avgRating != null ? (
@@ -230,9 +231,9 @@ export default function SearchForm({
                             className="d-flex flex-row align-items-center justify-content-end px-4 mb-3"
                             style={{ height: 50 }}
                         >
-                            <a href={`/search/albums?q=${keyword}`} className="more-link">
+                            <Link to={`/search/albums?q=${keyword}`} className="more-link">
                                 더 보기 &gt;
-                            </a>
+                            </Link>
                         </div>
                     )}
                 </section>
@@ -267,20 +268,20 @@ export default function SearchForm({
                                         className="card align-items-center gap-2 mt-3"
                                         style={{ width: 228, height: 340 }}
                                     >
-                                        <a href={`/tracks?id=${track.id}`}>
+                                        <Link to={`/tracks?id=${track.id}`}>
                                             <img
                                                 src={track.coverImage}
                                                 className="card-img-top"
                                                 alt="앨범커버"
                                             />
-                                        </a>
+                                        </Link>
                                         <div className="card-body d-flex flex-column align-items-center">
-                                            <a href={`/tracks?id=${track.id}`} className="card-title">
+                                            <Link to={`/tracks?id=${track.id}`} className="card-title">
                                                 {track.title}
-                                            </a>
-                                            <a href={`/artists?id=${track.artistId}`} className="card-artist">
+                                            </Link>
+                                            <Link to={`/artists?id=${track.artistId}`} className="card-artist">
                                                 {track.artistName}
-                                            </a>
+                                            </Link>
                                         </div>
                                         <div className="d-flex justify-content-center mb-4">
                                             {track.avgRating != null ? (
@@ -305,9 +306,9 @@ export default function SearchForm({
                             className="d-flex flex-row align-items-center justify-content-end px-4 mb-3"
                             style={{ height: 50 }}
                         >
-                            <a href={`/search/tracks?q=${keyword}`} className="more-link">
+                            <Link to={`/search/tracks?q=${keyword}`} className="more-link">
                                 더 보기 &gt;
-                            </a>
+                            </Link>
                         </div>
                     )}
                 </section>
@@ -342,17 +343,17 @@ export default function SearchForm({
                                         className="card align-items-center p-3"
                                         style={{ width: 228, height: 230 }}
                                     >
-                                        <a href={`/users/${user.id}`}>
+                                        <Link to={`/users/${user.id}`}>
                                             <img
                                                 src={user.profileImage}
                                                 className="card-img-top rounded-circle"
                                                 alt="회원 이미지"
                                             />
-                                        </a>
+                                        </Link>
                                         <div className="card-body">
-                                            <a href={`/users/${user.id}`} className="card-title">
+                                            <Link to={`/users/${user.id}`} className="card-title">
                                                 {user.nickname}
-                                            </a>
+                                            </Link>
                                             <div className="card-artist">
                                                 {formatNumber(user.followerCount)} 팔로워
                                             </div>
@@ -367,9 +368,9 @@ export default function SearchForm({
                             className="d-flex flex-row align-items-center justify-content-end px-4 mb-3"
                             style={{ height: 50 }}
                         >
-                            <a href={`/search/users?q=${keyword}`} className="more-link">
+                            <Link to={`/search/users?q=${keyword}`} className="more-link">
                                 더 보기 &gt;
-                            </a>
+                            </Link>
                         </div>
                     )}
                 </section>
@@ -404,20 +405,20 @@ export default function SearchForm({
                                         className="card align-items-center p-3"
                                         style={{ width: 228, height: 240 }}
                                     >
-                                        <a href={`/playlists/${playlist.id}`}>
+                                        <Link to={`/playlists/${playlist.id}`}>
                                             <img
                                                 src={playlist.thumbnailUrl}
                                                 className="card-img-top"
                                                 alt="플레이리스트 썸네일"
                                             />
-                                        </a>
+                                        </Link>
                                         <div className="card-body">
-                                            <a href={`/playlists/${playlist.id}`} className="card-title">
+                                            <Link to={`/playlists/${playlist.id}`} className="card-title">
                                                 {playlist.title}
-                                            </a>
-                                            <a href={`/users/${playlist.userId}`} className="card-artist">
+                                            </Link>
+                                            <Link to={`/users/${playlist.userId}`} className="card-artist">
                                                 제작자 : {playlist.maker}
-                                            </a>
+                                            </Link>
                                             <div className="card-artist">♥ {formatNumber(playlist.likeCount)}</div>
                                         </div>
                                     </div>
@@ -430,9 +431,9 @@ export default function SearchForm({
                             className="d-flex flex-row align-items-center justify-content-end px-4 mb-3"
                             style={{ height: 50 }}
                         >
-                            <a href={`/search/playlists?q=${keyword}`} className="more-link">
+                            <Link to={`/search/playlists?q=${keyword}`} className="more-link">
                                 더 보기 &gt;
-                            </a>
+                            </Link>
                         </div>
                     )}
                 </section>
@@ -461,26 +462,26 @@ export default function SearchForm({
                                         className="card align-items-center gap-2 mt-3"
                                         style={{ width: 228 }}
                                     >
-                                        <a href={`/tracks?id=${track.id}`}>
+                                        <Link to={`/tracks?id=${track.id}`}>
                                             <img
                                                 src={track.coverImage}
                                                 className="card-img-top"
                                                 alt="앨범커버"
                                             />
-                                        </a>
+                                        </Link>
                                         <div className="card-body d-flex flex-column align-items-center">
-                                            <a href={`/tracks?id=${track.id}`} className="card-title">
+                                            <Link to={`/tracks?id=${track.id}`} className="card-title">
                                                 {track.title}
-                                            </a>
-                                            <a href={`/artists?id=${track.artistId}`} className="card-artist">
+                                            </Link>
+                                            <Link to={`/artists?id=${track.artistId}`} className="card-artist">
                                                 {track.artistName}
-                                            </a>
-                                            <a
+                                            </Link>
+                                            <span
                                                 className="card-artist"
                                                 style={{ textDecoration: "none", cursor: "default" }}
                                             >
                                                 {track.voteCount}
-                                            </a>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>

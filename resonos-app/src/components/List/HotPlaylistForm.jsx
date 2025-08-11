@@ -2,6 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './MainForm.css'
 import Pagination from '../Pagination/Pagination';
 import ScrollToTop from '../ScrollToTop/ScrollToTop';
+import { Link } from 'react-router-dom';
 
 export default function HotPlaylistForm({
     hotPlaylistList = [],
@@ -34,16 +35,16 @@ function GridSection({ title, playlistList, pagination, onPageChange}) {
                 {playlistList.map((playlist) => (
                     <div key={playlist.id} className="col d-flex justify-content-center">
                         <div className={'card align-items-center gap-2 mt-3'} style={{ width: 228, height: 240 }}>
-                            <a href={'/playlists/' + playlist.id}>
+                            <Link to={'/playlists/' + playlist.id}>
                                 <img src={playlist.thumbnailUrl} className="card-img-top" alt="썸네일" />
-                            </a>
+                            </Link>
                             <div className="card-body d-flex flex-column align-items-center">
-                                <a href={'/playlists/' + playlist.id} className="card-title">
+                                <Link to={'/playlists/' + playlist.id} className="card-title">
                                     {playlist.title}
-                                </a>
-                                <a href={'/users/' + playlist.maker} className="card-artist">
+                                </Link>
+                                <Link to={'/users/' + playlist.maker} className="card-artist">
                                     {playlist.maker}
-                                </a>
+                                </Link>
                                 <div className="card-artist">♥ {playlist.likeCount?.toLocaleString() ?? 0}</div>
                             </div>
                         </div>

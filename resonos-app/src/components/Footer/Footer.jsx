@@ -53,15 +53,15 @@ const Footer = () => {
                             className="d-flex flex-row justify-content-between align-items-center px-4 gap-2 mb-5"
                             style={{ width: '300px' }}
                         >
-                            <a href="#" className="footer-sns-icon">
+                            <Link to="https://www.youtube.com" className="footer-sns-icon" target="_blank" rel="noopener noreferrer">
                                 <i className="bi bi-youtube" style={{ fontSize: '4rem', color: 'var(--main-color)' }}></i>
-                            </a>
-                            <a href="#" className="footer-sns-icon">
+                            </Link>
+                            <Link to="https://www.instagram.com" className="footer-sns-icon" target="_blank" rel="noopener noreferrer">
                                 <i className="bi bi-instagram" style={{ fontSize: '4rem', color: 'var(--main-color)' }}></i>
-                            </a>
-                            <a href="#" className="footer-sns-icon">
+                            </Link>
+                            <Link to="https://www.spotify.com" className="footer-sns-icon" target="_blank" rel="noopener noreferrer">
                                 <i className="bi bi-spotify" style={{ fontSize: '4rem', color: 'var(--main-color)' }}></i>
-                            </a>
+                            </Link>
                         </div>
                     </div>
 

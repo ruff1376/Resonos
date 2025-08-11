@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Header.css';
@@ -61,38 +61,38 @@ const Header = ({ currentUser = {} }) => {
             <nav className="navbar navbar-expand-lg py-0">
                 <div className="container-fluid" style={{ maxWidth: '1440px' }}>
                     <div className="d-flex justify-content-start align-items-center">
-                        <a className="navbar-brand d-flex align-items-center" href="/list/main">
+                        <Link className="navbar-brand d-flex align-items-center" to="/list/main">
                             <img src="/img/resonosPlusLogo.png" alt="Main Page Logo" className="header-logo-img" />
-                        </a>
-                        <a className="navbar-brand d-flex align-items-center" href="/list/main">
+                        </Link>
+                        <Link className="navbar-brand d-flex align-items-center" to="/list/main">
                             <img src="/img/resonosLogo.png" alt="Sub Page Logo" className="header-logo-img-sub" />
-                        </a>
+                        </Link>
                         <div className="menu-group d-flex position-relative ms-5">
 
                             {/* 앨범 메뉴 + 하단 메뉴 */}
                             <li className="header-menu-wrapper">
-                                <a href="/list/new-albums" className="submenu-item" style={{ fontSize: '1.6rem', color: 'white' }}>앨범</a>
+                                <Link to="/list/new-albums" className="submenu-item" style={{ fontSize: '1.6rem', color: 'white' }}>앨범</Link>
                                 <ul className="header-submenu d-flex flex-column justify-content-center">
-                                    <li className="header-menu-wrapper sub"><a href="/list/new-albums">최신 앨범</a></li>
-                                    <li className="header-menu-wrapper sub"><a href="/list/hot-albums">인기 앨범</a></li>
+                                    <li className="header-menu-wrapper sub"><Link to="/list/new-albums">최신 앨범</Link></li>
+                                    <li className="header-menu-wrapper sub"><Link to="/list/hot-albums">인기 앨범</Link></li>
                                 </ul>
                             </li>
 
                             {/* 트랙 메뉴 + 하단 메뉴 */}
                             <li className="header-menu-wrapper position-relative">
-                                <a href="/list/new-tracks" className="submenu-item" style={{ fontSize: '1.6rem', color: 'white' }}>트랙</a>
+                                <Link to="/list/new-tracks" className="submenu-item" style={{ fontSize: '1.6rem', color: 'white' }}>트랙</Link>
                                 <ul className="header-submenu d-flex flex-column justify-content-center">
-                                    <li className="header-menu-wrapper sub"><a href="/list/new-tracks">최신 트랙</a></li>
-                                    <li className="header-menu-wrapper sub"><a href="/list/hot-tracks">인기 트랙</a></li>
+                                    <li className="header-menu-wrapper sub"><Link to="/list/new-tracks">최신 트랙</Link></li>
+                                    <li className="header-menu-wrapper sub"><Link to="/list/hot-tracks">인기 트랙</Link></li>
                                 </ul>
                             </li>
 
                             {/* 플레이리스트 메뉴 + 하단 메뉴 */}
                             <li className="header-menu-wrapper position-relative">
-                                <a href="/list/new-playlists" className="submenu-item" style={{ fontSize: '1.6rem', color: 'white' }}>플레이리스트</a>
+                                <Link to="/list/new-playlists" className="submenu-item" style={{ fontSize: '1.6rem', color: 'white' }}>플레이리스트</Link>
                                 <ul className="header-submenu d-flex flex-column justify-content-center">
-                                    <li className="header-menu-wrapper sub"><a href="/list/new-playlists">최신 플레이리스트</a></li>
-                                    <li className="header-menu-wrapper sub"><a href="/list/hot-playlists">인기 플레이리스트</a></li>
+                                    <li className="header-menu-wrapper sub"><Link to="/list/new-playlists">최신 플레이리스트</Link></li>
+                                    <li className="header-menu-wrapper sub"><Link to="/list/hot-playlists">인기 플레이리스트</Link></li>
                                 </ul>
                             </li>
 
@@ -121,10 +121,10 @@ const Header = ({ currentUser = {} }) => {
                                 // 비로그인 상태
                                 <>
                                     <div className="nav-item ms-lg-2">
-                                        <a id="login" href="/login" className="btn btn-outline-gold">로그인</a>
+                                        <Link id="login" to="/login" className="btn btn-outline-gold">로그인</Link>
                                     </div>
                                     <div className="nav-item ms-2">
-                                        <a href="/join" className="btn btn-outline-gold">회원가입</a>
+                                        <Link to="/join" className="btn btn-outline-gold">회원가입</Link>
                                     </div>
                                 </>
                             ) : (
@@ -139,7 +139,7 @@ const Header = ({ currentUser = {} }) => {
                                             <li><a className="dropdown-item" href="#">알림2</a></li>
                                             <li><a className="dropdown-item" href="#">알림3</a></li>
                                             <li><hr className="dropdown-divider" /></li>
-                                            <li><a className="dropdown-item" href="/users/notifications">전체 알림 보기</a></li>
+                                            <li><Link className="dropdown-item" to="/users/notifications">전체 알림 보기</Link></li>
                                         </ul>
                                     </div>
                                     <div className="flex-shrink-0 dropdown profile-dropdown">
@@ -147,8 +147,8 @@ const Header = ({ currentUser = {} }) => {
                                             <img src={currentUser.profileImage || "/img/default-profile.png"} alt="프로필 이미지" width="32" height="32" className="rounded-circle" />
                                         </a>
                                         <ul className="dropdown-menu text-small shadow" style={{ background: '#181C23' }}>
-                                            <li><a className="dropdown-item" href="/users/mypage">마이페이지</a></li>
-                                            <li><a className="dropdown-item" href="/users/notifications/status">환경설정</a></li>
+                                            <li><Link className="dropdown-item" to="/users/mypage">마이페이지</Link></li>
+                                            <li><Link className="dropdown-item" to="/users/notifications/status">환경설정</Link></li>
                                             <li><hr className="dropdown-divider" /></li>
                                             <li>
                                                 <form action="/logout" method="post">
