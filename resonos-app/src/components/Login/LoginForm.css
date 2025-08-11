@@ -868,8 +868,8 @@ button.like {background-color: inherit; border: none;}
 .text-item {color: #fff; border-bottom: 0.5px dashed var(--main-color); padding: 15px 0; transition: all 0.3s; cursor: pointer;}
 .text-item:hover {transform: scale(1.01);}
 .ul-list .text-item:last-child {border-bottom: none;}
-.text-item .sm-title {color: var(--main-color);}
-.text-item .sm-content {overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-top: 5px;}
+.text-item .sm-title {color: var(--main-color); font-size: 1.4rem}
+.text-item .sm-content {overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-top: 5px; color: #fff;}
 .text-item .like {margin-left: 5px;}
 .text-item .sm-content, .text-item .date, .text-item .like {font-size: 1.4rem;}
 .text-item .like, .text-item .date {color: #bbb;}
