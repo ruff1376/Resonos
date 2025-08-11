@@ -33,7 +33,6 @@ const ActivityContainer = () => {
         type
       })
 
-      console.log(data)
       switch(type) {
         case 'ar':
           setAReviewList(prev => {

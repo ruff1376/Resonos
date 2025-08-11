@@ -70,7 +70,7 @@ public class NotificationController {
         @AuthenticationPrincipal CustomUser loginUser,
         @RequestBody List<Long> ids
     ) throws Exception {
-        if(ids.size() == 0) return new ResponseEntity<>("읽음 처리할 알림이 없음.", HttpStatus.BAD_REQUEST);
+        if(ids.size() == 0) return new ResponseEntity<>("읽음 처리할 알림이 없습니다.", HttpStatus.BAD_REQUEST);
         if(loginUser == null)
             return new ResponseEntity<>("권한이 없습니다.", HttpStatus.BAD_REQUEST);
 
@@ -103,7 +103,7 @@ public class NotificationController {
         @AuthenticationPrincipal CustomUser loginUser,
         @RequestBody List<Long> ids
     ) throws Exception {
-        if(ids.size() == 0) return new ResponseEntity<>("읽음 처리할 알림이 없음.", HttpStatus.BAD_REQUEST);
+        if(ids.size() == 0) return new ResponseEntity<>("삭제 처리할 알림이 없습니다.", HttpStatus.BAD_REQUEST);
         if(loginUser == null)
             return new ResponseEntity<>("권한이 없습니다.", HttpStatus.BAD_REQUEST);
 

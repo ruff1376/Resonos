@@ -26,6 +26,7 @@ import CreatePlaylist from './pages/user/CreatePlaylist';
 import UserSearch from './pages/search/UserSearch';
 import PlaylistSearch from './pages/search/PlaylistSearch';
 import Activity from './pages/user/activity';
+import Notification from './pages/user/Notification';
 
 const App = () => {
 
@@ -61,6 +62,7 @@ const App = () => {
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/users/:id" element={<Mypage />} />
           <Route path="/users/activity" element={<Activity />} />
+          <Route path="/users/notifications" element={<Notification />} />
           <Route path="/users/edit" element={<Edit />} />
           <Route path="/users/:id/playlists" element={<Playlist />} />
           <Route path="/users/playlists" element={<Playlist />} />

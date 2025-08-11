@@ -58,11 +58,6 @@ export const loadMoreUserReviews = async (data) => {
   return await api.post("/users/activity", data)
 }
 
-// 알림 리스트 조회
-export const getNotifications = async () => {
-  return await api.get("/users/notifications")
-}
-
 // 알림 설정 페이지
 export const getNotificationSettings = async () => {
   return await api.get("/users/notifications/status")
@@ -117,6 +112,8 @@ export const withdrawUser = async () => {
   return await api.delete("/users")
 }
 
+
+/* 플레이리스트 */
 // 플레이리스트 생성 (multipart/form-data)
 export const createPlaylist = async (formData) => {
   return await api.post('/playlists', formData, {
@@ -129,7 +126,7 @@ export const getPlaylistDetail = async (id) => {
   return await api.get(`/playlists/${id}`)
 }
 
-// 트랙 순서 변경
+// 플레이리스트 트랙 순서 변경
 export const changeTrackOrder = async (playlistId, orderList) => {
   return await api.put(`/playlists/${playlistId}/tracks/order`, orderList)
 }
@@ -168,7 +165,7 @@ export const cancelLikePlaylist = async (playlistId) => {
   return await api.delete(`/playlists/${playlistId}/like`)
 }
 
-// 비동기 좋아요한 플레이리스트 검색
+// 좋아요한 플레이리스트 검색
 export const searchMyLikedPlaylist = async ({ userId, keyword, offset, limit }) => {
   return await api.post('/playlists/search', {
     userId,
@@ -178,16 +175,36 @@ export const searchMyLikedPlaylist = async ({ userId, keyword, offset, limit }) 
   })
 }
 
-// 트랙리스트 요청
+// 플레이리스트 트랙리스트 요청
 export const searchTracks = async (data) => {
   return await api.post('/playlists/tracks', data, {
     headers: { 'Content-Type': 'application/json' }
   })
 }
-
-// 트랙 좋아요
+// 플레이리스트 트랙 좋아요
 export const likeTrack = async data => {
   return await api.post('/tracks/like', data, {
     headers: { 'Content-Type': 'application/json' }
+  })
+}
+
+/* 알림 */
+// 알림 리스트 조회
+export const getNotifications = async () => {
+  return await api.get("/users/notifications")
+}
+// 알림 단일 읽음 요청
+export const readOne = async id => {
+  return await api.put('/notifications', {id})
+}
+// 알림 전체 읽음 요청
+export const readAll = async ids => {
+  return await api.put('/notifications/all', ids)
+}
+// 알림 전체 삭제 요청
+export const deleteAll = async ids => {
+  return await api.delete('/notifications/all', {
+    headers: { 'Content-Type': 'application/json' },
+    data: ids
   })
 }
