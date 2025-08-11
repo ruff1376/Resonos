@@ -23,6 +23,8 @@ import AlbumSearch from './pages/search/AlbumSearch';
 import TrackSearch from './pages/search/TrackSearch';
 import PlaylistDetail from './pages/user/PlaylistDetail';
 import CreatePlaylist from './pages/user/CreatePlaylist';
+import UserSearch from './pages/search/UserSearch';
+import PlaylistSearch from './pages/search/PlaylistSearch';
 
 const App = () => {
 
@@ -49,6 +51,8 @@ const App = () => {
           <Route path="/search/artists" element={<ArtistSearch />} />
           <Route path="/search/albums" element={<AlbumSearch />} />
           <Route path="/search/tracks" element={<TrackSearch />} />
+          <Route path="/search/users" element={<UserSearch />} />
+          <Route path="/search/playlists" element={<PlaylistSearch />} />
 
           {/* 유저 */}
           <Route path="/join" element={<Join />} />
