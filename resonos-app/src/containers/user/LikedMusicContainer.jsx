@@ -42,6 +42,8 @@ const LikedMusicContainer = () => {
 
   // 좋아요 한 앨범 검색, 요청 함수
   const onSearchLikedTrack = async (keyword, offsetRef, limitRef, loadingRef, allLoadedRef) => {
+    console.log(offsetRef.current)
+
     if (loadingRef.current || allLoadedRef.current) return
 
     loadingRef.current = true
@@ -103,7 +105,7 @@ const LikedMusicContainer = () => {
 
   // 좋아요 한 앨범 검색, 요청 함수
   const onSearchLikedAlbum = async (keyword, offsetRef, limitRef, loadingRef, allLoadedRef) => {
-    (keyword)
+    console.log(offsetRef.current)
     if (loadingRef.current || allLoadedRef.current) return
 
     loadingRef.current = true

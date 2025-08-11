@@ -74,7 +74,7 @@ const FollowerSection = ({myFollower, isOwner, followerCount, onSearchUsers, set
   }, [debouncedKeyword, setMyFollower])
 
   return (
-    <section className={`info-wrapper ${!isOwner ? 'go-center' : ''}`}>
+    <section className={`info-wrapper ${!isOwner.current ? 'go-center' : ''}`}>
       <div className="info-section follower">
         <div className="title">
           <div>

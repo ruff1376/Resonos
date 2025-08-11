@@ -1,9 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const UserInfo = ({currentBadge, followCount, followerCount, user, isOwner, countAllReview}) => {
-
-  const alreadyFollow = false
+const UserInfo = ({currentBadge, followCount, followerCount, user, isOwner, countAllReview, alreadyFollow, onFollowUser}) => {
 
   return (
     <>
@@ -14,7 +12,7 @@ const UserInfo = ({currentBadge, followCount, followerCount, user, isOwner, coun
           <button
             id="btn-follow"
             className={`btn-gold ${alreadyFollow ? 'already' : ''}`}
-            // onClick={onFollowToggle}
+            onClick={() => onFollowUser(user.id, alreadyFollow)}
           >
             {alreadyFollow ? '언팔로우' : '팔로우'}
           </button>
@@ -48,25 +46,25 @@ const UserInfo = ({currentBadge, followCount, followerCount, user, isOwner, coun
 
       <div className="profile-meta">
         <div>
-          <a href={`/users/${user.id}/follow-user`}>
+          <Link to={`/users/${user.id}/follow-user`}>
             <b>팔로워</b>
             <br />
             <span id="follower-count">{followerCount}</span>
-          </a>
+          </Link>
         </div>
         <div>
-          <a href={`/users/${user.id}/follow-user`}>
+          <Link to={`/users/${user.id}/follow-user`}>
             <b>팔로우</b>
             <br />
             <span id="follow-count">{followCount}</span>
-          </a>
+          </Link>
         </div>
         <div>
-          <a href="#">
+          <Link to="#">
             <b>리뷰</b>
             <br />
             <span>{countAllReview}</span>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

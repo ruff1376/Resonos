@@ -75,7 +75,7 @@ setMyFollow, onFollowUser}) => {
   }, [debouncedKeyword, setMyFollow])
 
   return (
-    <section className={`info-wrapper ${!isOwner ? 'go-center' : ''}`}>
+    <section className={`info-wrapper ${!isOwner.current ? 'go-center' : ''}`}>
       <div className="info-section follow">
         <div className="title">
           <div>
