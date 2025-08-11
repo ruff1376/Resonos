@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/admin/report")
+@RequestMapping("/admin/report")
 public class AdminReportRestController {
 
     @Autowired

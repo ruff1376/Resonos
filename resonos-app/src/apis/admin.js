@@ -74,7 +74,7 @@ export const removeUserActivityLog = (id) =>
 
 // admin - 유저(members-log 로그 페이지 하단 ##########################################################################################
 // admin - 커뮤니티 report 페이지  상단 ##########################################################################################
-import axios from 'axios';
+// import axios from 'axios';
 
 // 리포트 API 기본 경로
 const reportBasePath = '/admin/report';
@@ -111,4 +111,69 @@ export const setReviewBlind = (type, id, blinded) =>
 export const deleteReview = (type, id) =>
   axios.delete(`${reviewBasePath}/${type}/${id}`);
 
-// admin - 커뮤니티 report 페이지  상단 ##########################################################################################
+// admin - 커뮤니티 report 페이지  하단 ##########################################################################################
+// admin - 음악데이터관리 페이지  상단 ##########################################################################################
+
+// 기본 경로
+const musicBasePath = '/admin/music';
+
+// 목록 조회
+export const getMusicData = (tab = 'track', page = 1, size = 10) =>
+  axios.get(musicBasePath, { params: { tab, page, size } });
+
+// 트랙
+export const saveTrack = (track) =>
+  axios.post(`${musicBasePath}/track`, track);
+export const deleteTrack = (id) =>
+  axios.delete(`${musicBasePath}/track/${id}`);
+
+// 앨범
+export const saveAlbum = (album) =>
+  axios.post(`${musicBasePath}/album`, album);
+export const deleteAlbum = (id) =>
+  axios.delete(`${musicBasePath}/album/${id}`);
+
+// 아티스트
+export const saveArtist = (artist) =>
+  axios.post(`${musicBasePath}/artist`, artist);
+export const deleteArtist = (id) =>
+  axios.delete(`${musicBasePath}/artist/${id}`);
+
+// Spotify 연동
+export const syncTrack = (spotifyTrackId) =>
+  axios.post(`${musicBasePath}/track/sync`, null, { params: { spotifyTrackId } });
+export const syncArtist = (spotifyArtistId) =>
+  axios.post(`${musicBasePath}/sync-artist`, null, { params: { spotifyArtistId } });
+export const syncTrackAjax = (spotifyTrackId) =>
+  axios.post(`${musicBasePath}/sync-track`, null, { params: { spotifyTrackId } });
+export const syncAlbumAjax = (spotifyAlbumId) =>
+  axios.post(`${musicBasePath}/sync-album`, null, { params: { spotifyAlbumId } });
+
+// Spotify 검색
+export const searchSpotifyArtist = (query) =>
+  axios.get(`${musicBasePath}/search-artist`, { params: { query } });
+export const searchSpotifyAlbum = (query) =>
+  axios.get(`${musicBasePath}/search-album`, { params: { query } });
+export const searchSpotifyTrack = (query) =>
+  axios.get(`${musicBasePath}/search-track`, { params: { query } });
+
+// DB 검색
+export const searchArtistList = (keyword = '') =>
+  axios.get(`${musicBasePath}/artist/list`, { params: { keyword } });
+export const searchAlbumList = (keyword = '') =>
+  axios.get(`${musicBasePath}/album/list`, { params: { keyword } });
+export const searchTrackList = (keyword = '') =>
+  axios.get(`${musicBasePath}/track/list`, { params: { keyword } });
+
+// 통계/상세
+export const getTopTracksByArtist = (id) =>
+  axios.get(`${musicBasePath}/artist/${id}/top-tracks`);
+export const getTrackCountByArtist = (id) =>
+  axios.get(`${musicBasePath}/artist/${id}/track-count`);
+export const getTop5TracksInSameAlbum = (id) =>
+  axios.get(`${musicBasePath}/track/${id}/same-album-top-tracks`);
+
+
+
+
+// admin - 음악데이터관리 페이지  하단 ##########################################################################################
