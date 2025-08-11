@@ -6,7 +6,7 @@ import {
     Legend
 } from 'chart.js';
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './MainForm.css'
 import Pagination from '../Pagination/Pagination';
@@ -75,7 +75,13 @@ export default function NewAlbumForm({
 
     return (
         <div className="container-fluid d-flex flex-column align-items-center px-0" style={{ maxWidth: 1440, paddingTop: 50, gap: 50 }}>
-            <GridSection title="최신 앨범" albumList={newAlbumList} count={newAlbumCount} />
+            <GridSection
+                title="최신 앨범"
+                albumList={newAlbumList}
+                count={newAlbumCount}
+                pagination={pagination}
+                onPageChange={onPageChange}
+            />
 
             <div className="floating">
                 <a href="#">

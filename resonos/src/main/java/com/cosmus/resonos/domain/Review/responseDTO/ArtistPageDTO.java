@@ -18,7 +18,7 @@ public class ArtistPageDTO {
     private Artist artist;
 
     // 팔로우 정보
-    private boolean isArtistFollowed; // 로그인 유저의 팔로우 여부
+    private boolean isArtistFollowed = false; // 로그인 유저의 팔로우 여부
     private Integer followCount; // 전체 팔로워 수
 
     // 앨범 정보

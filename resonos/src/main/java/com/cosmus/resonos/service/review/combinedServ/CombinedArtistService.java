@@ -8,10 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.review.ArtistMoodVote;
 import com.cosmus.resonos.domain.review.MoodStat;
 import com.cosmus.resonos.domain.review.RecentReview;
 import com.cosmus.resonos.domain.review.responseDTO.ArtistPageDTO;
+import com.cosmus.resonos.domain.user.Users;
 import com.cosmus.resonos.service.admin.TagService;
 import com.cosmus.resonos.service.review.AlbumService;
 import com.cosmus.resonos.service.review.ArtistMoodVoteService;
@@ -35,17 +37,20 @@ public class CombinedArtistService {
     private final MoodStatService moodStatService;
     private final TagService tagService;
     private final RecentReviewService recentReviewService;
-    
 
     // ArtistPageDTO
-    public ResponseEntity<?> artistPageGet(String ArtistId, Long UserId) {
+    public ResponseEntity<?> artistPageGet(String ArtistId, CustomUser user) {
 
         ArtistPageDTO ArtistPageDTO = new ArtistPageDTO();
         try {
+            Users loginUser = null;
+            if (user != null) {
+                loginUser = user.getUser();
+                // 아티스트 해당 유저가 아티스트 팔로우 여부
+                    ArtistPageDTO.setArtistFollowed(artistFollowService.isLikedByUser(loginUser.getId(), ArtistId));
+            }
             // 아티스트 기본 정보
             ArtistPageDTO.setArtist(artistService.selectById(ArtistId));
-            // 아티스트 해당 유저가 아티스트 팔로우 여부
-            ArtistPageDTO.setArtistFollowed(artistFollowService.isLikedByUser(UserId, ArtistId));
             // 아티스트의 팔로우 수
             ArtistPageDTO.setFollowCount(artistFollowService.getArtistFollowCount(ArtistId));
             // 아티스트의 앨범 정보
@@ -70,9 +75,11 @@ public class CombinedArtistService {
             }
 
             // 아티스트 분위기 투표가 비어있지않으면
-            if ( !ArtistPageDTO.isMoodEmpty() ) {
-                // 아티스트 분위기 투표했을시 분위기 id
-                ArtistPageDTO.setUserVotedMoodId(artistMoodVoteService.getUserVotedMoodId(UserId, ArtistId));
+            if (!ArtistPageDTO.isMoodEmpty()) {
+                if (loginUser != null) {
+                    // 로그인 시 아티스트의 분위기 투표했을시 분위기 id
+                    ArtistPageDTO.setUserVotedMoodId(artistMoodVoteService.getUserVotedMoodId(loginUser.getId(), ArtistId));
+                }
                 List<String> moodLabels = ArtistPageDTO.getMoodStats().stream().map(MoodStat::getMoodName).toList();
                 List<Integer> moodValues = ArtistPageDTO.getMoodStats().stream().map(MoodStat::getVoteCount).toList();
                 ArtistPageDTO.setMoodLabels(moodLabels);
@@ -98,7 +105,7 @@ public class CombinedArtistService {
     // 아티스트 페이지 좋아요 토글
     public ResponseEntity<?> toggleArtistLike(Long userId, String artistId) {
 
-        if(userId == null) {
+        if (userId == null) {
             return new ResponseEntity<>("User is null", HttpStatus.UNAUTHORIZED);
         } else {
             // ArtistFollow artistFollow = new ArtistFollow();
@@ -116,22 +123,21 @@ public class CombinedArtistService {
                 e.printStackTrace();
                 return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            
+
         }
-        
+
     }
 
     // 아티스트 분위기 투표
     public ResponseEntity<?> voteMood(ArtistMoodVote request) {
         // 로그인 안했을때
-        if(request.getUserId() == null) {
+        if (request.getUserId() == null) {
             return new ResponseEntity<>("User is null", HttpStatus.UNAUTHORIZED);
         }
         // 내부오류
         if (request.getArtistId() == null || request.getMood() == null) {
             return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        else {
+        } else {
             // 첫투표 혹은 수정
             artistMoodVoteService.saveOrUpdateVote(request.getUserId(), request.getArtistId(), request.getMood());
             // 자신이 투표한 분위기 아이디 가져오기

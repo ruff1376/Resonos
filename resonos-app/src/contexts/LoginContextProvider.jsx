@@ -55,7 +55,7 @@ const LoginContextProvider = ({children}) => {
         Swal.alert(`로그인 성공`, `메인 화면으로 이동합니다.`, `success`, () => {navigate('/')})
       }
     } catch (e) {
-      console.error(e)
+      console.error(e.response)
       navigate('/login?error=true')
     }
   }
@@ -96,7 +96,7 @@ const LoginContextProvider = ({children}) => {
       console.log('response :', response)
 
     } catch(e) {
-      console.error(`error123 : ${e}`)
+      console.error(`error : ${e}`)
       return
     }
 

@@ -78,7 +78,7 @@ const DoughnutChart = ({ chartData }) => {
     };
   }, [chartData]);
 
-  return <canvas ref={canvasRef} width={300} height={300} />
+  return <canvas ref={canvasRef} width={250} height={250} />
 };
 
 export default DoughnutChart;

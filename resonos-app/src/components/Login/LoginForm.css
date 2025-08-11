@@ -187,6 +187,7 @@ input::placeholder {color: #bbb !important;}
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  font-size: 1.4rem;
 }
 .profile-actions {
   display: flex;
@@ -820,7 +821,7 @@ button.like {background-color: inherit; border: none;}
   transition: all 0.2s;
 }
 #addTrack:hover {transform: scale(1.1);}
-.order-no {min-width: 20px; color: #bbb;}
+.order-no {min-width: 20px; color: #bbb; font-size: 1.4rem}
 .search-icon {
   position: absolute;
   left: 10px;
@@ -849,6 +850,16 @@ button.like {background-color: inherit; border: none;}
 .con-pli-detail .success-fail {
   position: static;
   width: auto;
+}
+.con-pli-detail .public-area {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+.con-pli-detail .public-area label {
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
 }
 
 
@@ -1016,7 +1027,7 @@ button.like {background-color: inherit; border: none;}
   font-size: 1.4rem;
   width: 100%;
 }
-.ul-list.modall {overflow: auto; padding: 20px 0 100px;}
+.ul-list.modall {overflow: auto; padding: 20px 0 100px; margin-bottom: 70px;}
 .ul-list.modall .list-item {border-color: var(--silver-color);}
 .ul-list.modall .list-item:hover {border-color: var(--main-color);}
 .modal-track .btn-area {
@@ -1032,7 +1043,7 @@ button.like {background-color: inherit; border: none;}
   justify-content: center;
   align-items: center;
 }
-.select {border-color: #4cd964 !important;}
+.selected {border-color: #4cd964 !important;}
 #close-modal {
   position: absolute;
   top: 10px;

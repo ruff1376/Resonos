@@ -50,24 +50,33 @@ const UserEditForm = ({badgeList, badgeName, user, onSubmit, result, success}) =
     }
   }, [user])
 
+   // 이미지 리뷰 함수
   useEffect(() => {
-    document.getElementById('profileImg').addEventListener('change', function (event) {
-      const file = event.target.files[0];
-      const preview = document.querySelector('.profile-img.edit');
+    const thumbnailInput = document.getElementById('profileImg')
+    if(thumbnailInput) {
+      thumbnailInput.addEventListener('change', function (event) {
+        const file = event.target.files[0]
+        const preview = document.querySelector('.profile-img.edit')
 
-      if (file) {
-        const reader = new FileReader()
-        reader.onload = function (e) {
-          preview.src = e.target.result
-          setProfileImg(file)
-          console.log(profileImg)
-        };
-        reader.readAsDataURL(file);
-      } else {
-        preview.src = ''
+        if (file) {
+          const reader = new FileReader()
+          reader.onload = function (e) {
+            preview.src = e.target.result
+            setProfileImg(file)
+          }
+          reader.readAsDataURL(file)
+        } else {
+          preview.src = ''
+        }
+      })
+    }
+
+    return () => {
+      if (thumbnailInput) {
+        thumbnailInput.removeEventListener('change', handleChange)
       }
-    });
-  })
+    }
+  }, [])
 
   return (
     <div className="con edit d-flex justify-content-center">

@@ -103,8 +103,8 @@ class AlbumReviewServiceImpl implements AlbumReviewService {
     }
 
     @Transactional
-    public void delete(Long id){
-        mapper.delete(id);
+    public boolean delete(Long id){
+        return mapper.delete(id) > 0;
     }
 
     @Override

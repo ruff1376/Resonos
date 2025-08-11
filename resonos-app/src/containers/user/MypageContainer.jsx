@@ -4,8 +4,13 @@ import UserResource from '../../components/user/UserResource'
 import * as ur from '../../apis/user'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
+import * as Swal from '../../apis/alert'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 const MypageContainer = () => {
+
+  const location = useLocation()
+  const params = useParams()
 
   const [albumList, setAlbumList] = useState([]);
   const [artistList, setArtistList] = useState([]);
@@ -23,8 +28,15 @@ const MypageContainer = () => {
   const [utl, setUtl] = useState({});
 
   const getUserInfo = async () => {
+
+    let response
+
     try {
-      const response = await ur.getMyPage()
+      if(location.pathname === '/mypage')
+        response = await ur.getMyPage()
+      else
+        response = await ur.getUserPage(params.id)
+
       const data = response.data
       console.log(data)
       setAlbumList(data.albumList || []);
@@ -43,6 +55,21 @@ const MypageContainer = () => {
       setUtl(data.utl || {});
 
     } catch(e) {
+      console.log(e.response)
+      if(e.response.status == 401 && location.pathname === '/mypage') {
+        Swal.MySwal.fire({
+          position: "center",
+          icon: "warning",
+          title: "로그인이 필요한 서비스입니다.",
+          showConfirmButton: false,
+          timer: 800,
+          customClass: {
+            popup: 'follow-popup',
+            icon: 'success-icon',
+            title: 'alert-title'
+          }
+        })
+      }
       console.error('error : ', e)
     }
   }
