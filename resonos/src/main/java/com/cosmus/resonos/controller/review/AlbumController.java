@@ -48,7 +48,7 @@ public class AlbumController {
     // 앨범 좋아요시 좋아요 여부와 좋아요 수 리턴
     @PostMapping("/like")
     public ResponseEntity<?> toggleAlbumLike(@RequestBody LikedAlbum dto) throws Exception {
-        
+
         return combinedAlbumService.toggleAlbumLike(dto);
     }
 
@@ -85,7 +85,7 @@ public class AlbumController {
     // @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, 'ALBUM', authentication)")
     public ResponseEntity<?> delete(@RequestParam("id") String albumId,
                                 @PathVariable("reviewId") Long reviewId) {
-        
+
         return combinedAlbumService.delete(albumId, reviewId);
     }
 
@@ -93,7 +93,7 @@ public class AlbumController {
     @PostMapping("/reviews/{reviewId}")
     public ResponseEntity<?> toggleReviewLike(@PathVariable("reviewId") Long reviewId,
             @AuthenticationPrincipal CustomUser user) {
-        
+
         return combinedAlbumService.toggleReviewLike(reviewId, user);
     }
 

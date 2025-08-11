@@ -11,6 +11,7 @@ const MypageContainer = () => {
 
   const location = useLocation()
   const params = useParams()
+  const navigate = useNavigate()
 
   const [albumList, setAlbumList] = useState([]);
   const [artistList, setArtistList] = useState([]);
@@ -69,6 +70,9 @@ const MypageContainer = () => {
             title: 'alert-title'
           }
         })
+        setTimeout(() => {
+          navigate('/login')
+        }, 900)
       }
       console.error('error : ', e)
     }

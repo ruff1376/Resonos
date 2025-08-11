@@ -5,14 +5,14 @@ const LikedPlaylistCard = ({lpl, isOwner, onLike, onNavigate}) => {
   const [isLiked, setIsLiked] = useState(true)
 
   const handleClick = (e) => {
-      if (e.target.tagName.toLowerCase() === 'button') {
-        onLike(lpl.id, isLiked)
-        setIsLiked(!isLiked)
-        e.stopPropagation();
-        return;
-      }
-      onNavigate(lpl.id);
+    if (e.target.tagName.toLowerCase() === 'button') {
+      onLike(lpl.id, isLiked)
+      setIsLiked(!isLiked)
+      e.stopPropagation();
+      return;
     }
+    onNavigate(lpl.id);
+  }
 
   return (
     <li className="list-item" key={lpl.id} onClick={handleClick}>

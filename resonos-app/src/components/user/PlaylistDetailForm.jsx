@@ -4,10 +4,11 @@ import TrackModal from './modal/TrackModal';
 import TrackCard from './card/TrackCard';
 import { Link, useNavigate } from 'react-router-dom';
 
-const PlaylistDetailForm = ({playlist, lastPath, isOwner, alreadyLiked, owner, onUpdate, onAddTrack, onSearchTrack, trackList, setTrackList, onModal, setOnModal, onDelete, dragListRef, onLike}) => {
+const PlaylistDetailForm = ({playlist, lastPath, isOwner, alreadyLiked, owner, onUpdate, onAddTrack, onSearchTrack, trackList, setTrackList, onModal, setOnModal, onDelete, dragListRef, onLike, onPlaylistLike}) => {
 
   const [isPublic, setIsPublic] = useState(false);
   const [thumbnail, setThumbnail] = useState(null)
+  const [isLiked, setIsLiked] = useState(alreadyLiked)
 
   const navigate = useNavigate()
 
@@ -30,6 +31,12 @@ const PlaylistDetailForm = ({playlist, lastPath, isOwner, alreadyLiked, owner, o
     onUpdate(formData)
   }
 
+  const handlePlaylistLike = () => {
+    onPlaylistLike(playlist.id, isLiked)
+    setIsLiked(!isLiked)
+  }
+
+  // 썸네일 변경 함수 추가
   useEffect(() => {
     const thumbnailInput = document.getElementById('thumbnail');
 
@@ -63,7 +70,8 @@ const PlaylistDetailForm = ({playlist, lastPath, isOwner, alreadyLiked, owner, o
 
   useEffect(() => {
     setIsPublic(playlist.isPublic)
-  }, [playlist.isPublic])
+    setIsLiked(alreadyLiked)
+  }, [playlist.isPublic, alreadyLiked])
 
   return (
     <>
@@ -129,9 +137,10 @@ const PlaylistDetailForm = ({playlist, lastPath, isOwner, alreadyLiked, owner, o
                   <button
                     type="button"
                     id="like-button"
-                    className={`like top-margin ${alreadyLiked ? 'already' : ''}`}
+                    className={`like top-margin ${isLiked ? 'already' : ''}`}
+                    onClick={handlePlaylistLike}
                   >
-                    {alreadyLiked ? (
+                    {isLiked ? (
                       <i className="bi bi-heart-fill"></i>
                     ) : (
                       <i className="bi bi-heart"></i>

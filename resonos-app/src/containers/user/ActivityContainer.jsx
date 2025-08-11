@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Activity from '../../components/user/Activity'
 import * as ur from '../../apis/user'
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
 
 const ActivityContainer = () => {
 
@@ -114,6 +116,7 @@ const ActivityContainer = () => {
 
   return (
     <div className="container">
+      <Header />
       <Activity
         utl={utl}
         countAReview={countAReview}
@@ -132,6 +135,7 @@ const ActivityContainer = () => {
         lastPath={lastPath}
         onSearchReview={onSearchReview}
       />
+      <Footer />
     </div>
   )
 }
