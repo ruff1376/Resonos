@@ -8,9 +8,12 @@ import LoginContextProvider from './contexts/LoginContextProvider';
 import Login from './pages/Login';
 import Main from './pages/list/Main';
 import Mypage from './pages/user/Mypage';
+import AdminMembers from './pages/admin/AdminMembersPage';
+import AdminMemberDetail from './pages/admin/AdminMemberDetail';
 import NewAlbum from './pages/list/NewAlbum';
 import Edit from './pages/user/Edit';
 import Join from './pages/Join';
+import AdminTest from './pages/admin/TestContainer'
 import HotPlaylist from './pages/list/HotPlaylist';
 import HotAlbum from './pages/list/HotAlbum';
 import NewTrack from './pages/list/NewTrack';
@@ -23,6 +26,8 @@ import AlbumSearch from './pages/search/AlbumSearch';
 import TrackSearch from './pages/search/TrackSearch';
 import PlaylistDetail from './pages/user/PlaylistDetail';
 import CreatePlaylist from './pages/user/CreatePlaylist';
+import AdminReportsContainer from './pages/admin/AdminReportsPage';
+import AdminMusicContainer from './containers/admin/AdminMusicContainer';
 import UserSearch from './pages/search/UserSearch';
 import PlaylistSearch from './pages/search/PlaylistSearch';
 import Activity from './pages/user/activity';
@@ -68,6 +73,16 @@ const App = () => {
           <Route path="/users/playlists" element={<Playlist />} />
           <Route path="/playlists/new" element={<CreatePlaylist />} />
           <Route path="/playlists/:id" element={<PlaylistDetail />} />
+
+
+
+          {/* 관리자 - 유저 관리 경로 */}
+          <Route path="/admin/members" element={<AdminMembers />} />
+          <Route path="/admin/members/logs/" element={<AdminMemberDetail />} />
+          <Route path="/admin/test/" element={<AdminTest />} />
+          <Route path="/admin/report" element={<AdminReportsContainer />} />
+          <Route path="/admin/music" element={<AdminMusicContainer />} />
+
         </Routes>
       </LoginContextProvider>
     </BrowserRouter>
