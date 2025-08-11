@@ -25,7 +25,7 @@ const AdminContainer = () => {
     { title: '통계/분석', link: '#', label: '통계 대시보드' },
     { title: '권한/역할 관리', link: '/admin/role', label: '권한 관리' },
     { title: '오픈 API 관리', link: '/admin/AnP', label: 'API 키/쿼터' },
-    { title: '정책/환경설정', link: '/admin/PolicySetting/policy', label: '설정' },
+    { title: '정책/환경설정', link: '/admin/PolicySetting', label: '설정' },
   ],
   [ // 3번째 줄
     { title: '배지 관리', link: '/admin/badge', label: '조건 관리' },

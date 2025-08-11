@@ -1,4 +1,4 @@
-package com.cosmus.resonos.mapper.admin;
+package com.cosmus.resonos.mapper.badge;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.badge.BadgeCondition;
-import com.cosmus.resonos.mapper.admin.BadgeConditionMapper;
+import com.cosmus.resonos.mapper.badge.BadgeConditionMapper;
 
 @Service
 public class BadgeConditionServiceImpl implements BadgeConditionService {
