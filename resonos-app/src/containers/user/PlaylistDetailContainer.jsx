@@ -59,6 +59,7 @@ const PlaylistDetailContainer = () => {
 
     try {
       const response = await ur.insertTracks(playlist.id, idList)
+      const newPlaylist = response.data
       if(response.status === 200) {
         MySwal.fire({
           position: "center",
@@ -75,6 +76,8 @@ const PlaylistDetailContainer = () => {
         setTimeout(() => {
           setOnModal(false)
         }, 1100)
+
+        setPlaylist(newPlaylist)
       }
     } catch(e) {
       MySwal.fire({
