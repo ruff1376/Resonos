@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../List/MainForm.css'
 import Pagination from '../Pagination/Pagination';
+import ScrollToTop from '../ScrollToTop/ScrollToTop';
 
 const chartInstances = new Map();
 
@@ -172,12 +173,7 @@ export default function TrackSearchForm({
                 <Pagination pagination={pagination} onPageChange={onPageChange} handleSortChange={handleSortChange} />
             </section>
 
-            {/* 위로가기 플로팅 버튼 */}
-            <div className="floating">
-                <a href="#">
-                    <i className="bi bi-caret-up-fill"></i>
-                </a>
-            </div>
+            <ScrollToTop />
         </div>
     );
 }
