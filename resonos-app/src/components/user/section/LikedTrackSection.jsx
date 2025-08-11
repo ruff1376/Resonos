@@ -16,7 +16,7 @@ function useDebounce(value, delay) {
   return debouncedValue
 }
 
-const LikedTrackSection = ({isOwner, likedTrackList, countTrack, setLikedTrackList, userId, onLikeTrack}) => {
+const LikedTrackSection = ({isOwner, likedTrackList, countTrack, setLikedTrackList, userId, onLikeTrack, onSearchLikedTrack}) => {
 
   const [keyword, setKeyword] = useState('')
   const debouncedKeyword = useDebounce(keyword, 300)
@@ -27,43 +27,6 @@ const LikedTrackSection = ({isOwner, likedTrackList, countTrack, setLikedTrackLi
   const allLoadedRef = useRef(false);
 
   const isFirstRender = useRef(true)
-
-  // 좋아요 한 앨범 검색, 요청 함수
-  const onSearchLikedTrack = async (keyword, offsetRef, limitRef, loadingRef, allLoadedRef) => {
-    console.log(keyword)
-    if (loadingRef.current || allLoadedRef.current) return
-
-    loadingRef.current = true
-
-    try {
-      const { data } = await ur.searchLikedTrack({
-        userId,
-        keyword,
-        offset: offsetRef.current,
-        limit: limitRef.current
-      })
-
-      console.log(data)
-
-      setLikedTrackList(prev => {
-        const existingIds = new Set(prev.map(t => t.id))
-        const filteredData = data.filter(t => !existingIds.has(t.id))
-        return [...prev, ...filteredData]
-      })
-
-      offsetRef.current += limitRef.current
-
-      console.log(offsetRef.current)
-
-      if (data.length < limitRef.current) {
-        allLoadedRef.current = true
-      }
-    } catch (err) {
-      console.error(err)
-    } finally {
-      loadingRef.current = false
-    }
-  }
 
   // 스크롤로 트랙 20개씩 추가 요청
   const handleScroll = useCallback(() => {

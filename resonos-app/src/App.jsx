@@ -34,6 +34,7 @@ import Activity from './pages/user/activity';
 import Notification from './pages/user/Notification';
 import LikedMusic from './pages/user/LikedMusic';
 import FollowArtist from './pages/user/FollowArtist';
+import FollowUser from './pages/user/FollowUser';
 
 const App = () => {
 
@@ -68,15 +69,16 @@ const App = () => {
           {/* 유저 */}
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/users/:id" element={<Mypage />} />
+          <Route path="/users/edit" element={<Edit />} />
           <Route path="/users/activity" element={<Activity />} />
           <Route path="/users/notifications" element={<Notification />} />
+          <Route path="/users/playlists" element={<Playlist />} />
+          <Route path="/users/:id/playlists" element={<Playlist />} />
           <Route path="/users/liked-music" element={<LikedMusic />} />
           <Route path="/users/:id/liked-music" element={<LikedMusic />} />
           <Route path="/users/follow-artist" element={<FollowArtist />} />
+          <Route path="/users/follow-user" element={<FollowUser />} />
           <Route path="/users/:id/liked-music" element={<FollowArtist />} />
-          <Route path="/users/edit" element={<Edit />} />
-          <Route path="/users/playlists" element={<Playlist />} />
-          <Route path="/users/:id/playlists" element={<Playlist />} />
           <Route path="/playlists/new" element={<CreatePlaylist />} />
           <Route path="/playlists/:id" element={<PlaylistDetail />} />
 

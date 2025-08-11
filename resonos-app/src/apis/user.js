@@ -36,28 +36,31 @@ export const getUserPage = async (id) => {
   return await api.get(`/users/${id}`)
 }
 
-// 회원 정보 편집 페이지 데이터
+/* 회원 정보 수정 페이지 */
+// 회원 정보 요청
 export const getUserEditInfo = async () => {
   return await api.get("/users/edit")
 }
 
-// 회원 정보 수정 요청 (PUT + multipart/form-data)
+// 회원 정보 수정 요청
 export const updateUserInfo = async (formData) => {
   return await api.put("/users/edit", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   })
 }
 
+/* 내 활동 페이지 */
 // 내 활동 페이지 데이터
 export const getUserActivity = async () => {
   return await api.get("/users/activity")
 }
 
-// 활동 내역 더 불러오기 (리뷰)
+// 활동 내역 추가 요청 (리뷰)
 export const loadMoreUserReviews = async (data) => {
   return await api.post("/users/activity", data)
 }
 
+/* 알림 설정 페이지 */
 // 알림 설정 페이지
 export const getNotificationSettings = async () => {
   return await api.get("/users/notifications/status")
@@ -68,25 +71,20 @@ export const updateNotificationSettings = async (userNoti) => {
   return await api.put("/users/notifications/status", userNoti)
 }
 
+/* 팔로우 아티스트 페이지 */
 // 팔로우한 아티스트 리스트 (자기 자신 또는 특정 유저)
 export const getFollowedArtists = async (id) => {
   return await api.get(id ? `/users/${id}/follow-artist` : `/users/follow-artist`)
 }
 
-// 플레이리스트 페이지
-export const getUserPlaylists = async (id) => {
-  return await api.get(id ? `/users/${id}/playlists` : `/users/playlists`)
-}
+
 
 // 좋아요한 앨범/트랙 페이지
 export const getLikedMusic = async (id) => {
   return await api.get(id ? `/users/${id}/liked-music` : `/users/liked-music`)
 }
 
-// 유저 팔로우 페이지
-export const getUserFollows = async (id) => {
-  return await api.get(id ? `/users/${id}/follow-user` : `/users/follow-user`)
-}
+
 
 // 배지 페이지
 export const getUserBadges = async () => {
@@ -113,7 +111,12 @@ export const withdrawUser = async () => {
 }
 
 
-/* 플레이리스트 */
+/* 플레이리스트 페이지 */
+// 플레이리스트 페이지
+export const getUserPlaylists = async (id) => {
+  return await api.get(id ? `/users/${id}/playlists` : `/users/playlists`)
+}
+
 // 플레이리스트 생성 (multipart/form-data)
 export const createPlaylist = async (formData) => {
   return await api.post('/playlists', formData, {
@@ -196,7 +199,7 @@ export const likeAlbum = async data => {
   })
 }
 
-/* 알림 */
+/* 알림 페이지 */
 // 알림 리스트 조회
 export const getNotifications = async () => {
   return await api.get("/users/notifications")
@@ -217,8 +220,8 @@ export const deleteAll = async ids => {
   })
 }
 
-/* 좋아요 한 음악 */
-// 좋아요 한 앨범 추가 요청파
+/* 좋아요 한 앨범/트랙 페이지 */
+// 좋아요 한 앨범 추가 요청
 export const searchLikedAlbum = async data => {
   return await api.post('/albums/search', data)
 }
@@ -233,7 +236,33 @@ export const searchArtist = async data => {
   return await api.post('/artists/search', data)
 }
 
-// 팔로우 요청
+// 아티스트 팔로우 요청
 export const followArtist = async data => {
   return await api.post('/artists/toggle-like', data)
+}
+
+// 유저 팔로우 요청
+export const followUser = async data => {
+  return await api.post('/user-follows', data, {
+    headers: { 'Content-Type': 'application/json' },
+  })
+}
+
+// 유저 팔로우 취소 요청
+export const followUserCancle = async data => {
+  return await api.delete('/user-follows', {
+    headers: { 'Content-Type': 'application/json' },
+    data: data
+  })
+}
+
+/* 유저 팔로워/팔로우 페이지 */
+// 유저 팔로우 페이지
+export const getUserFollows = async (id) => {
+  return await api.get(id ? `/users/${id}/follow-user` : `/users/follow-user`)
+}
+
+// 팔로우/팔로워 추가 요청
+export const searchUsers = async data => {
+  return await api.post('/user-follows/search', data)
 }
