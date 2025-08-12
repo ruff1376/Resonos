@@ -112,6 +112,7 @@ public class CombinedTrackService {
             Users loginUser = null;
             if (user != null) {
                 loginUser = user.getUser();
+                trackPageDTO.setUserId(loginUser.getId());
                 // 리뷰들 중에 유저가 좋아요한 리뷰찾아서 좋아요 여부 설정
                 if (loginUser != null && reviews != null && !reviews.isEmpty()) {
                     // 리뷰 아이디 들로 리스트 생성

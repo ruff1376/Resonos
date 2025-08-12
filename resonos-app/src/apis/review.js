@@ -20,3 +20,12 @@ export const toggleLike = async (userId, albumId) => {
 }
 
 // 앨범 리뷰 작성시 리뷰와 갱신된 점수 반환
+
+// 트랙 초기 페이지
+export const getTrackPage = async (id) => {
+  return await api.get('/tracks', {
+    params: {
+      id: id
+    }
+  });
+}

@@ -1,8 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import InfoScore from '../common/InfoScore'
 
 
-const AlbumInfo = ({ handleLikeClick,isAlbumLikedByUser, albumLikeCount, userId, styles, album, artist, tracks }) => {
+const AlbumInfo = ({ score, handleLikeClick,isAlbumLikedByUser, albumLikeCount, userId, styles, album, artist, tracks }) => {
   console.log(tracks)
   return (
     <>
@@ -22,7 +23,7 @@ const AlbumInfo = ({ handleLikeClick,isAlbumLikedByUser, albumLikeCount, userId,
           </Link>
           <p>{album.label}</p>
           <div className={styles.reviewSection}>
-            {/* <ReviewScore score={score} /> */}
+            <InfoScore styles={styles} score={score} />
           </div>
           <div style={{ display: 'flex', gap: '15px' }}>
             <button
