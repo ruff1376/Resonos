@@ -113,8 +113,14 @@ button.social-btn:hover {
   display: flex;
   justify-content: space-evenly;
 }
+.user-form .item {display: flex; align-items: center;}
 .user-form .item label {
   margin-left: 5px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.user-form input[type="checkbox"] {
+  margin-top: 0;
 }
 
 /* 회원가입 페이지 */
@@ -1061,8 +1067,13 @@ h2 + #bio {
 }
 .modal-title-list {
   padding: 0;
-  max-height: 50px;
+  max-height: 30px;
   margin: 0;
+  white-space: nowrap;
+  overflow-x: scroll;
+}
+.modal-title-list::-webkit-scrollbar {
+  display: none;
 }
 .modal-title-list li {
   list-style: none;

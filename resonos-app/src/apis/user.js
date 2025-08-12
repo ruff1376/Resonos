@@ -84,11 +84,14 @@ export const getLikedMusic = async (id) => {
   return await api.get(id ? `/users/${id}/liked-music` : `/users/liked-music`)
 }
 
-
-
 // 배지 페이지
 export const getUserBadges = async () => {
   return await api.get("/users/badge")
+}
+
+// 유저 정보 요청(보안페이지)
+export const getUserInfo = async () => {
+  return await api.get('/users/security')
 }
 
 // 비밀번호 체크 요청 (보안 페이지)
@@ -109,7 +112,6 @@ export const changePassword = async (formData) => {
 export const withdrawUser = async () => {
   return await api.delete("/users")
 }
-
 
 /* 플레이리스트 페이지 */
 // 플레이리스트 페이지
@@ -265,4 +267,9 @@ export const getUserFollows = async (id) => {
 // 팔로우/팔로워 추가 요청
 export const searchUsers = async data => {
   return await api.post('/user-follows/search', data)
+}
+
+// 로그아웃
+export const logout = async () => {
+  return await api.post('/users/logout')
 }

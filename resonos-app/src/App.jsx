@@ -47,6 +47,8 @@ import Notification from './pages/user/Notification';
 import LikedMusic from './pages/user/LikedMusic';
 import FollowArtist from './pages/user/FollowArtist';
 import FollowUser from './pages/user/FollowUser';
+import Badge from './pages/user/Badge';
+import Security from './pages/user/Security';
 
 const App = () => {
 
@@ -97,7 +99,8 @@ const App = () => {
           <Route path="/users/:id/follow-artist" element={<FollowArtist />} />
           <Route path="/users/follow-user" element={<FollowUser />} />
           <Route path="/users/:id/follow-user" element={<FollowUser />} />
-          <Route path="/users/:id/liked-music" element={<FollowArtist />} />
+          <Route path="/users/badge" element={<Badge />} />
+          <Route path="/users/security" element={<Security />} />
           <Route path="/playlists/new" element={<CreatePlaylist />} />
           <Route path="/playlists/:id" element={<PlaylistDetail />} />
 

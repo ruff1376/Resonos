@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.admin.Notification;
@@ -53,7 +51,8 @@ import com.cosmus.resonos.validation.EmailCheck;
 import com.cosmus.resonos.validation.NicknameCheck;
 import com.cosmus.resonos.validation.PasswordCheck;
 
-import io.micrometer.core.ipc.http.HttpSender.Response;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -530,6 +529,13 @@ public class UserController {
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
+  /**
+   * 알림 on/off 요청
+   * @param loginUser
+   * @param userNoti
+   * @return
+   * @throws Exception
+   */
   @PutMapping("/notifications/status")
   public ResponseEntity<?> putMethodName(
     @AuthenticationPrincipal CustomUser loginUser,
@@ -744,14 +750,14 @@ public class UserController {
 
     try {
       // 획득 배지 리스트
-      List<Badge> haveBagdeList = badgeService.haveBadge(loginUser.getId());
+      List<Badge> haveBadgeList = badgeService.haveBadge(loginUser.getId());
       // 미획득 배지 리스트
       List<Badge> notHaveBadgeList = badgeService.doesNotHaveBadge(loginUser.getId());
 
       Map<String, Object> response = new HashMap<>();
 
       response.put("lastPath", "badge");
-      response.put("haveBagdeList", haveBagdeList);
+      response.put("haveBadgeList", haveBadgeList);
       response.put("notHaveBadgeList", notHaveBadgeList);
 
       return new ResponseEntity<>(response, HttpStatus.OK);
@@ -763,33 +769,25 @@ public class UserController {
     return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
-  // /**
-  //  * 계정 / 보안 페이지 요청
-  //  * @param loginUser
-  //  * @return
-  //  * @throws Exception
-  //  */
-  // @GetMapping("/security")
-  // public ResponseEntity<?> security(
-  //   @AuthenticationPrincipal CustomUser loginUser
-  // ) throws Exception {
-  //   // 로그인 유저 정보
-  //   Users user = userService.select(loginUser.getUsername());
-  //   Boolean success = (Boolean) model.asMap().get("success");
-  //   log.info("success : {}", success);
+  /**
+   * 계정 / 보안 페이지 요청
+   * @param loginUser
+   * @return
+   * @throws Exception
+   */
+  @GetMapping("/security")
+  public ResponseEntity<?> security(
+    @AuthenticationPrincipal CustomUser loginUser
+  ) throws Exception {
+    // 로그인 유저 정보
+    Users user = userService.select(loginUser.getUsername());
 
-  //   Map<String, Object> response = new HashMap<>();
+    Map<String, Object> response = new HashMap<>();
+    response.put("lastPath", "security");
+    response.put("provider", user.getProvider());
 
-  //   if(success != null) {
-  //     response.put("vali", success);
-  //   } else {
-  //     response.put("vali", false);
-  //   }
-  //   response.put("lastPath", "security");
-  //   response.put("user", user);
-
-  //   return new ResponseEntity<>(response, HttpStatus.OK);
-  // }
+    return new ResponseEntity<>(response, HttpStatus.OK);
+  }
 
   /**
    * 비밀번호 체크 요청
@@ -801,17 +799,16 @@ public class UserController {
   @PostMapping("/check-password")
   public ResponseEntity<?> checkPassword(
     @AuthenticationPrincipal CustomUser loginUser,
-    @RequestParam("password") String password,
-    RedirectAttributes redirectAttributes
+    @RequestParam("password") String password
     ) throws Exception {
       if(loginUser == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
+      log.info("요청온 password : {}", password);
       String dbPassword =  userService.selectPasswordById(loginUser.getId());
       boolean result = userService.comparePassword(password, dbPassword);
       log.info("checkId : {}", result);
 
       if(result) {
-        // redirectAttributes.addFlashAttribute("success", true);
         return new ResponseEntity<>(HttpStatus.OK);
       } else {
         return new ResponseEntity<>("비밀번호가 일치하지 않음.", HttpStatus.BAD_REQUEST);
@@ -837,7 +834,7 @@ public class UserController {
     log.info("password : {}", password);
 
     if(br.hasErrors())
-      return new ResponseEntity<>("invalid", HttpStatus.BAD_REQUEST);
+      return ResponseEntity.badRequest().body(br.getFieldErrors());
 
     if(!password.equals(password2))
       return new ResponseEntity<>("different", HttpStatus.BAD_REQUEST);
@@ -860,4 +857,20 @@ public class UserController {
     return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
+  /**
+   * 로그아웃
+   * @param response
+   * @return
+   */
+  @PostMapping("/logout")
+  public ResponseEntity<?> logout(HttpServletResponse response) {
+      Cookie jwtCookie = new Cookie("jwt", null);
+      jwtCookie.setHttpOnly(true);
+      jwtCookie.setSecure(true); // HTTPS 환경이면 true로 설정
+      jwtCookie.setPath("/");
+      jwtCookie.setMaxAge(0); // 즉시 만료
+      response.addCookie(jwtCookie);
+
+      return ResponseEntity.ok("로그아웃 성공");
+  }
 }
