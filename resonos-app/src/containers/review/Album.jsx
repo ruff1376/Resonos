@@ -8,7 +8,6 @@ import withReactContent from 'sweetalert2-react-content'
 import AlbumStatus from '../../components/review/album/AlbumStatus';
 import MvAndStreaming from '../../components/review/common/MvAndStreaming';
 import Review from '../../components/review/common/Review';
-import Galaxy from '../../assets/Galaxy';
 
 
 
