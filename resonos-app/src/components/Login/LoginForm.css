@@ -925,7 +925,7 @@ button.like {background-color: inherit; border: none;}
 }
 .toggle-switch input:checked + .slider {background-color: #4cd964;}
 .toggle-switch input:checked + .slider::before {transform: translateX(22px);}
-.type {min-width: 10%;}
+.type {min-width: 10%; font-size: 1.4rem}
 
 /* 비어 있는 경우 */
 .empty-text {

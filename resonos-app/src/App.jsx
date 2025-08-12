@@ -49,6 +49,7 @@ import FollowArtist from './pages/user/FollowArtist';
 import FollowUser from './pages/user/FollowUser';
 import Badge from './pages/user/Badge';
 import Security from './pages/user/Security';
+import SetNotification from './pages/user/SetNotification';
 
 const App = () => {
 
@@ -93,6 +94,8 @@ const App = () => {
           <Route path="/users/notifications" element={<Notification />} />
           <Route path="/users/playlists" element={<Playlist />} />
           <Route path="/users/:id/playlists" element={<Playlist />} />
+          <Route path="/playlists/new" element={<CreatePlaylist />} />
+          <Route path="/playlists/:id" element={<PlaylistDetail />} />
           <Route path="/users/liked-music" element={<LikedMusic />} />
           <Route path="/users/:id/liked-music" element={<LikedMusic />} />
           <Route path="/users/follow-artist" element={<FollowArtist />} />
@@ -101,9 +104,7 @@ const App = () => {
           <Route path="/users/:id/follow-user" element={<FollowUser />} />
           <Route path="/users/badge" element={<Badge />} />
           <Route path="/users/security" element={<Security />} />
-          <Route path="/playlists/new" element={<CreatePlaylist />} />
-          <Route path="/playlists/:id" element={<PlaylistDetail />} />
-
+          <Route path="/users/notifications/status" element={<SetNotification />} />
 
 
           {/* 관리자 - 유저 관리 경로 */}

@@ -4,12 +4,15 @@ import * as ur from '../../apis/user'
 import {MySwal} from '../../apis/alert'
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
+import { useNavigate } from 'react-router-dom';
 
 const NotiContainer = () => {
 
   const [lastPath ,setLastPath] = useState('')
   const [notiList ,setNotiList] = useState([])
   const [count ,setCount] = useState(0)
+
+  const navigate = useNavigate()
 
   const readAll = async () => {
     const ids = notiList
@@ -120,6 +123,23 @@ const NotiContainer = () => {
       }
 
     } catch(e) {
+      if(e.status === 401) {
+        MySwal.fire({
+          position: "center",
+          icon: "warning",
+          title: "로그인이 필요한 서비스입니다.",
+          showConfirmButton: false,
+          timer: 800,
+          customClass: {
+            popup: 'follow-popup',
+            icon: 'success-icon',
+            title: 'alert-title'
+          }
+        })
+        setTimeout(() => {
+          navigate('/login')
+        }, 900)
+      }
       console.error('error :', e)
     }
   }
