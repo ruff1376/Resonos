@@ -110,6 +110,23 @@ const SecurityContainer = () => {
         setProvider(data.provider)
       }
     } catch(e) {
+      if(e.status === 401) {
+        MySwal.fire({
+          position: "center",
+          icon: "warning",
+          title: "로그인이 필요한 서비스입니다.",
+          showConfirmButton: false,
+          timer: 800,
+          customClass: {
+            popup: 'follow-popup',
+            icon: 'success-icon',
+            title: 'alert-title'
+          }
+        })
+        setTimeout(() => {
+          navigate('/login')
+        }, 900)
+      }
       console.error('error :', e)
     }
   }

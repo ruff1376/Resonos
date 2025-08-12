@@ -1,30 +1,42 @@
 import React, { useEffect, useState } from 'react'
+import SetNotification from '../../components/user/SetNotification'
 import * as ur from '../../apis/user'
 import {MySwal} from '../../apis/alert'
-import Badge from '../../components/user/Badge'
+import { useNavigate } from 'react-router-dom'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
-import { useNavigate } from 'react-router-dom'
 
+const SetNotificationContainer = () => {
 
-const BadgeContainer = () => {
-
-  const [haveBadgeList, setHaveBadgeList] = useState([])
-  const [notHaveBadgeList, setNotHaveBadgeList] = useState([])
+  const [notiList, setNotiList] = useState([])
+  const [notiType, setNotiType] = useState([])
   const [lastPath, setLastPath] = useState()
 
   const navigate = useNavigate()
 
-  const getUserBadges = async () => {
+  // 알림 on/off 요청
+  const onToggleNoti = async (type) => {
     let response
-
     try {
-      response = await ur.getUserBadges()
+      response = await ur.updateNotificationSettings(type)
+      if(response.status === 200) {
+        console.log(response)
+      }
+    } catch(e) {
+      console.log('error :', e)
+    }
+  }
+
+
+  // 알림 데이터 요청
+  const getNotificationSettings = async () => {
+    let response
+    try {
+      response = await ur.getNotificationSettings()
       if(response.status === 200) {
         const data = response.data
-        console.log(data)
-        setHaveBadgeList(data.haveBadgeList)
-        setNotHaveBadgeList(data.notHaveBadgeList)
+        setNotiList(data.notiList)
+        setNotiType(data.notiType)
         setLastPath(data.lastPath)
       }
     } catch(e) {
@@ -32,7 +44,7 @@ const BadgeContainer = () => {
         MySwal.fire({
           position: "center",
           icon: "warning",
-          title: "로그인이 필요한 서비스입니다.",
+          title: "권한이 없습니다.",
           showConfirmButton: false,
           timer: 800,
           customClass: {
@@ -49,21 +61,22 @@ const BadgeContainer = () => {
     }
   }
 
+  // 마운트 시 데이터 요청
   useEffect(() => {
-    getUserBadges()
+    getNotificationSettings()
   }, [])
-
   return (
     <div className="container">
       <Header />
-      <Badge
-        haveBadgeList={haveBadgeList}
-        notHaveBadgeList={notHaveBadgeList}
+      <SetNotification
+        notiList={notiList}
+        notiType={notiType}
         lastPath={lastPath}
+        onToggleNoti={onToggleNoti}
       />
       <Footer />
     </div>
   )
 }
 
-export default BadgeContainer
+export default SetNotificationContainer
