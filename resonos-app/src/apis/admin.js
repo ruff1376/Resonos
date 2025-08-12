@@ -355,12 +355,8 @@ export const searchTags = (keyword) =>
 // admin - 투표 페이지  상단 ##########################################################################################
 
 // 예: 트랙 통계 조회
-axios.get("/admin/vote", { params: { tab: "track" } })
-  .then(res => {
-    if (res.data.success) {
-      console.log(res.data.stats);
-    }
-  });
+export const getVoteStats = (tab = 'track') =>
+  axios.get('/admin/vote', { params: { tab } });
 
 // 예: 아티스트 통계 조회
 axios.get("/admin/vote", { params: { tab: "artist" } });
