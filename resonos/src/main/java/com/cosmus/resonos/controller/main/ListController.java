@@ -17,6 +17,7 @@ import com.cosmus.resonos.domain.review.Album;
 import com.cosmus.resonos.domain.review.Track;
 import com.cosmus.resonos.domain.user.Playlist;
 import com.cosmus.resonos.service.review.AlbumService;
+import com.cosmus.resonos.service.review.TrackMoodVoteService;
 import com.cosmus.resonos.service.review.TrackService;
 import com.cosmus.resonos.service.user.PlaylistService;
 
@@ -36,6 +37,9 @@ public class ListController {
 
     @Autowired
     private PlaylistService playlistService;
+
+    @Autowired
+    private TrackMoodVoteService trackMoodVoteService;
 
     // @GetMapping("/main")
     // public String mainAlbumTrackList(Model model) throws Exception {
@@ -177,6 +181,15 @@ public class ListController {
 
         response.put("korHotReviewAlbumList", albumService.korHotReviewList());
         response.put("worldHotReviewAlbumList", albumService.worldHotReviewList());
+
+        List<String> topTags = trackMoodVoteService.selectTop3TagsByMoodVote();
+        Map<String, List<Track>> topTracksByTag = new HashMap<>();
+        for (String tag : topTags) {
+            topTracksByTag.put(tag, trackService.selectTop5TracksByTag(tag));
+        }
+        response.put("topTags", topTags);
+        response.put("topTracksByTag", topTracksByTag);
+
         response.put("newAlbumList", albumService.mainNewList());
         response.put("hotAlbumList", albumService.mainHotList());
         response.put("newTrackList", trackService.mainNewList());

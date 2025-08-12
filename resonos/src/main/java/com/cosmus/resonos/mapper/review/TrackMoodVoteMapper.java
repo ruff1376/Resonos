@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.cosmus.resonos.domain.review.Track;
 import com.cosmus.resonos.domain.review.TrackMoodVote;
 @Mapper
 public interface TrackMoodVoteMapper {
@@ -26,4 +27,7 @@ public interface TrackMoodVoteMapper {
 
     // 수정
     void update(TrackMoodVote vote);
+
+    // 투표를 가장 많이 한 상위 3개 태그
+    public List<String> selectTop3TagsByMoodVote() throws Exception;
 }

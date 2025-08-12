@@ -85,4 +85,7 @@ public interface TrackService {
 
     // 태그로 트랙 검색
     public List<Track> searchTracksByTag(@Param("tagName") String tagName) throws Exception;
+
+    // 태그 별 인기 트랙 목록
+    public List<Track> selectTop5TracksByTag(@Param("tagName") String tagName) throws Exception;
 }
