@@ -726,7 +726,7 @@ textarea.form-control {
   padding: 3px 10px;
   margin-top: 4px;
 }
-.btn-outline-gold, .btn-outline-gold.btn-sm {
+.con .btn-outline-gold, .btn-outline-gold.btn-sm {
   background: none;
   color: #D4B97F;
   border: 1.5px solid #D4B97F;
