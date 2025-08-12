@@ -4,7 +4,7 @@ import styles from '../../components/admin/css/Admin.module.css'
 
 const AdminTagManagePage = () => {
   return (
-    <div className={styles.adminContainer}>
+  <div className="container">
       <TagManageContainer />
     </div>
   )

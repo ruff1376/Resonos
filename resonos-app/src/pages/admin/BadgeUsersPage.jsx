@@ -5,7 +5,7 @@ import styles from '../../components/admin/css/Admin.module.css'
 const BadgeUsersPage = () => {
   return (
     <>
-    <div className={styles['container']}>
+  <div className="container">
       <BadgeUsersContainer />
     </div>
     </>

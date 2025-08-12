@@ -1,6 +1,7 @@
 // components/admin/QuickMenu.jsx
 import React from "react";
 import styles from "../css/QuickMenu.module.css"; // 스타일 별도 관리
+import ThemeToggle from '../first/ThemeToggle'; // 새로 만든 테마 토글
 
   const menuData = [
   [ // 1번째 줄
@@ -33,17 +34,13 @@ const QuickMenu = () => {
   const flatMenu = menuData.flat();
   
   return (
-    <div className={styles["quick-menu"]}>
-      {flatMenu.map((item, idx) => (
-        <a
-          key={idx}
-          href={item.link}
-          className={styles["quick-menu-item"]}
-          title={item.title}
-        >
-          <span className={styles["quick-menu-label"]}>{item.label}</span>
+   <div className="quick-menu">
+      {menuData.map((item, idx) => (
+        <a key={idx} href={item.link} className="quick-menu-item">
+          {item.label}
         </a>
       ))}
+      <ThemeToggle className="quick-menu-item" />
     </div>
   );
 };
