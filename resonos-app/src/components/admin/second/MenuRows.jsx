@@ -13,7 +13,6 @@ const MenuRows = ({menuData}) => {
           </div>
         ))}
       </div>
-    <MenuCard menuData={menuData} />
     </>
   )
 }

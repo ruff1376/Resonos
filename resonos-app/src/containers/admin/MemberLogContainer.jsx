@@ -4,6 +4,7 @@ import LogTable from '../../components/admin/first/LogTable'; // 새로 제공�
 import { formatDate as formatDateTime } from '../../utils/format';
 import { getMemberLogsByUserId } from '../../apis/admin';
 
+
 const MemberLogContainer = ({ userId }) => {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(false);

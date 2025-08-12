@@ -47,6 +47,8 @@ import Notification from './pages/user/Notification';
 import LikedMusic from './pages/user/LikedMusic';
 import FollowArtist from './pages/user/FollowArtist';
 import FollowUser from './pages/user/FollowUser';
+import AdminNoticePage from './pages/admin/AdminNoticePage';
+import AdminQnAPage from './pages/admin/AdminQnAPage';
 
 const App = () => {
 
@@ -118,6 +120,9 @@ const App = () => {
           <Route path="/admin/vote" element={<VoteStatsPage />} />
           <Route path="/admin/report/review" element={<ReviewReportManagePage />} />
           <Route path="/admin/notifications" element={<AdminNotificationPage />} />
+          <Route path="/admin/notices" element={<AdminNoticePage />} />
+          <Route path="/admin/qna" element={<AdminQnAPage />} />
+
 
         </Routes>
       </LoginContextProvider>

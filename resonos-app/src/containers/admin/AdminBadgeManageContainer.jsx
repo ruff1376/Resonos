@@ -12,6 +12,7 @@ import TableColumnHeader from "../../components/admin/first/TableColumnHeader";
 import styles from "../../components/admin/css/admin.module.css";
 import { Link } from "react-router-dom";
 
+
 const AdminBadgeManageContainer = () => {
   const [badges, setBadges] = useState([]);
   const [badgeConditionsMap, setBadgeConditionsMap] = useState({});

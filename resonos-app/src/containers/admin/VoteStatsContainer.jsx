@@ -4,6 +4,7 @@ import TableColumnHeader from "../../components/admin/first/TableColumnHeader";
 import Pagination from "../../components/admin/Pagination";
 import styles from "../../components/admin/css/admin.module.css";
 
+
 /** 행 렌더링 전용 */
 const VoteStatsTableContent = ({ stats, idKey, titleKey, showMore, toggleMore }) => {
   const statsSize = stats.length;

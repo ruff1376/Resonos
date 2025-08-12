@@ -387,6 +387,67 @@ export const createNotification = (data) => {
 
 
 // admin - 알람 페이지  하단 ##########################################################################################
+// admin - 공지 페이지  상단 ##########################################################################################
+
+
+// 기본 경로
+const noticePath = "/admin/notices";
+
+// 공지 목록 조회 (페이징 + 검색 + 단일 id 조회)
+export const listNotices = (page = 1, size = 10, keyword = "", id = null) =>
+  axios.get(noticePath, {
+    params: { page, size, keyword, ...(id ? { id } : {}) }
+  });
+
+// 공지 등록/수정
+export const saveNotice = (data) =>
+  axios.post(`${noticePath}/save`, data, {
+    headers: { "Content-Type": "application/json" },
+  });
+
+// 공지 삭제
+export const deleteNotice = (id) =>
+  axios.delete(`${noticePath}/${id}`);
+
+
+
+
+
+// admin - 공지 페이지  하단 ##########################################################################################
+// admin - QnA 페이지  상단 ##########################################################################################
+
+// 기본 경로
+const qnaPath = "/admin/qna";
+
+// QnA 목록 조회 (선택적으로 qnaId 단건조회 지원)
+export const getQnaList = (page = 1, size = 10, keyword = "", qnaId = null) =>
+  axios.get(qnaPath, {
+    params: { page, size, keyword, ...(qnaId ? { qnaId } : {}) }
+  });
+
+// QnA 답변 등록
+export const createQnaAnswer = (qnaId, content) =>
+  axios.post(`${qnaPath}/${qnaId}/answer`, { content }, {
+    headers: { "Content-Type": "application/json" },
+  });
+
+// QnA 답변 수정
+export const updateQnaAnswer = (answerId, qnaId, content) =>
+  axios.put(`${qnaPath}/answer/${answerId}`, { qnaId, content }, {
+    headers: { "Content-Type": "application/json" },
+  });
+
+// QnA 답변 삭제
+export const deleteQnaAnswer = (answerId) =>
+  axios.delete(`${qnaPath}/answer/${answerId}`);
+
+// QnA 질문 삭제
+export const deleteQna = (id) =>
+  axios.delete(`${qnaPath}/${id}`);
+
+
+
+// admin - QnA 페이지  하단 ##########################################################################################
 
 
 

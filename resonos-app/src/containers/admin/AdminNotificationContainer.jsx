@@ -4,6 +4,7 @@ import Pagination from "../../components/admin/Pagination";
 import SearchForm from "../../components/admin/first/SearchForm";
 import TableColumnHeader from "../../components/admin/first/TableColumnHeader";
 import styles from "../../components/admin/css/admin.module.css";
+``
 
 const AdminNotificationContainer = () => {
   // 상태
