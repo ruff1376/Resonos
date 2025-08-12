@@ -5,7 +5,7 @@ import styles from '../../components/admin/css/Admin.module.css'
 const AdminRoleManagePage = () => {
   return (
     <>
-  <div className="container">
+  <div className="admin container">
       <AdminRoleManageContainer/>
     </div>
     </>

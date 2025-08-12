@@ -6,7 +6,7 @@ import QuickMenu from '../../components/admin/first/QuickMenu';
 const AdminAnPManagePage = () => {
   return (
     <>
-    <div className="container">
+    <div className="admin container">
       <AdminAnPManageContainer />
       <QuickMenu/>
     </div>

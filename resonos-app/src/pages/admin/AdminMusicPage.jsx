@@ -3,7 +3,7 @@ import AdminMusicContainer from '../../containers/admin/AdminMusicContainer';
 
 const AdminMusicPage = () => {
   return (
-  <div className="container">
+  <div className="admin container">
       <h1>음악 관리</h1>
       <AdminMusicContainer />
     </div>

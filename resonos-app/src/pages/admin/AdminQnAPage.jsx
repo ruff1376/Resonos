@@ -4,7 +4,7 @@ import styles from '../../components/admin/css/Admin.module.css'
 
 const AdminQnAPage = () => {
   return (
-  <div className="container">
+  <div className="admin container">
             <AdminQnAContainer/>
         </div>
   )

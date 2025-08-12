@@ -5,7 +5,7 @@ import styles from '../../components/admin/css/Admin.module.css'
 const AdminReportsPage = () => {
   return (
     <>
-  <div className="container">
+  <div className="admin container">
         <h2>Admin Dashboard</h2>
         <AdminReportsContainer />
       </div>

@@ -10,7 +10,7 @@ const AdminMemberDetail = () => {
   const userId = Number(queryParams.get("userId"));
 
   return (
-  <div className="container">
+  <div className="admin container">
       {/* userId를 MemberLogContainer에 전달 */}
       <MemberLogContainer userId={userId} />
       {/* 기타 상세 컴포넌트 내용 */}

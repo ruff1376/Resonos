@@ -5,7 +5,7 @@ import Header from '../components/Header/Header'
 
 const Join = () => {
   return (
-    <div className="container">
+    <div className="admin container">
       <Header />
       <JoinForm />
       <Footer />

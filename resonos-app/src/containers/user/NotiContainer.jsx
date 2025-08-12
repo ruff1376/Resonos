@@ -150,7 +150,7 @@ const NotiContainer = () => {
   }, [])
 
   return (
-    <div className="container">
+    <div className="admin container">
       <Header />
       <Notification
         lastPath={lastPath}

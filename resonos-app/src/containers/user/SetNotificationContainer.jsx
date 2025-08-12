@@ -66,7 +66,7 @@ const SetNotificationContainer = () => {
     getNotificationSettings()
   }, [])
   return (
-    <div className="container">
+    <div className="admin container">
       <Header />
       <SetNotification
         notiList={notiList}

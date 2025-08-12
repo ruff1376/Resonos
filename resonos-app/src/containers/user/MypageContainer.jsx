@@ -147,7 +147,7 @@ const MypageContainer = () => {
   }, [])
 
   return (
-    <div className="container">
+    <div className="admin container">
       <Header />
       <div className="con con-mypage">
         <UserInfo
