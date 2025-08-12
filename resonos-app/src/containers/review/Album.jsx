@@ -111,8 +111,11 @@ const Album = () => {
       setAlbumLikeCount(response.data.count)
     } catch (error) {
       console.error(error);
-      // 에러 Swal 띄울예정
-      swal.fire('실패', '좋아요 실패', 'error')
+      if (error.response.data === 'User is null') {
+        swal.fire('로그인이 필요합니다', '로그인시 사용 가능한 기능입니다.', 'warning')
+      } else {
+        swal.fire('실패', '좋아요 실패', 'error')
+      }
     }
   }
 
@@ -137,8 +140,9 @@ const Album = () => {
           playLists={playLists} />
         <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
           score={score} isAdmin={isAdmin} album={album} reviewType={reviewType} />
-
-
+        <Element styles={styles} album={album} isArgEmpty={isArgEmpty}
+          argValues={argValues} userVote={userVote} userId={userId}
+          isAdmin={isAdmin} />
       </div>
     </>
   )

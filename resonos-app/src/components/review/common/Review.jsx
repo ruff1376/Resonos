@@ -13,12 +13,18 @@ const Review = ({ reviewType, score, styles, reviews, hasNext, userId, isAdmin, 
         <p className={styles.headline}>평점 & 리뷰</p>
         <div className={styles.reviewScore}>
           {/* 리뷰칸 점수 컴포넌트 */}
-          <ReviewScore averageScore={score.averageScore} styles={styles}/>
+          <ReviewScore averageScore={score} styles={styles} />
         </div>
         <div className="review-container">
           <ul className={styles.reviewList}>
-            <Reviews reviews={reviews} reviewType={reviewType} size={5}
-             isAdmin={isAdmin} album={album} hasNext={hasNext} styles={styles} />
+            {reviews != null && reviews.length > 0 ? (
+              <Reviews reviews={reviews} reviewType={reviewType} size={5}
+                isAdmin={isAdmin} album={album} hasNext={hasNext} styles={styles} />
+            )
+              :
+              <>
+              </>
+            }
           </ul>
           {hasNext && (
             <div className="d-flex justify-content-center mb-1">

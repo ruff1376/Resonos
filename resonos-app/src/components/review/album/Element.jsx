@@ -1,7 +1,12 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
+import VoteForm from './VoteForm'
+import useRadarChart from '../../assets/useRadarChart'
 
 
-const Element = () => {
+const Element = ({ album, isArgEmpty, userVote, styles, userId, argValues }) => {
+    const canvasRef = useRef(null);
+    useRadarChart(canvasRef, argValues, isArgEmpty);
+
   return (
     <>
       {/* 요소 투표 */}
@@ -10,7 +15,7 @@ const Element = () => {
           {isArgEmpty ? (
             <p id="headline">아직 아무도 투표하지 않았어요</p>
           ) : (
-            <canvas id="hexRadarChart"></canvas>
+            <canvas ref={canvasRef}></canvas>
           )}
         </div>
         <div className="arg-vote" data-album-id={album.id}>
@@ -18,7 +23,7 @@ const Element = () => {
             <p id="headline">6요소 평가</p>
           </div>
           {/* 로그인 여부에 따른 투표 UI */}
-          {!isAdmin ? (
+          {userId === null ? (
             <p id="headline" style={{ paddingTop: '35px' }}>
               로그인후 점수투표가 가능합니다
             </p>
