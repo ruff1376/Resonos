@@ -4,7 +4,7 @@ import FollowerSection from './section/FollowerSection'
 import FollowSection from './section/FollowSection'
 
 const FollowUser = ({followCount, followerCount, lastPath, myFollow, myFollower, setMyFollow, setMyFollower, isOwner, userId, onSearchUsers, onFollowUser}) => {
-  console.log(isOwner)
+
   return (
     <main className={`con con-follow position-relative`}>
       {/* 왼쪽 리모컨 */}

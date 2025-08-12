@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import * as ur from '../../apis/user'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import PlaylistDetailForm from '../../components/user/PlaylistDetailForm'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -22,6 +22,8 @@ const PlaylistDetailContainer = () => {
   const params = useParams()
 
   const dragListRef = useRef(null)
+
+  const navigate = useNavigate()
 
 
   // 플레이리스트 좋아요 요청
@@ -50,6 +52,23 @@ const PlaylistDetailContainer = () => {
         });
       }
     } catch(e) {
+      if(e.status === 401) {
+        MySwal.fire({
+          position: "center",
+          icon: "warning",
+          title: "로그인이 필요한 서비스입니다.",
+          showConfirmButton: false,
+          timer: 800,
+          customClass: {
+            popup: 'follow-popup',
+            icon: 'success-icon',
+            title: 'alert-title'
+          }
+        })
+        setTimeout(() => {
+          navigate('/login')
+        }, 900)
+      }
       console.error('error :', e)
     }
   }

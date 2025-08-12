@@ -31,6 +31,14 @@ const MypageContainer = () => {
 
 
 
+  const onLogout = () => {
+    ur.logout()
+    sessionStorage.removeItem('isLogin')
+    sessionStorage.removeItem('roles')
+    sessionStorage.removeItem('userInfo')
+    navigate('/login')
+  }
+
   // 팔로우 요청
   const onFollowUser = async (id, isFollowed) => {
     let response
@@ -59,10 +67,29 @@ const MypageContainer = () => {
       }
 
     } catch(e) {
+      if(e.status === 401) {
+        MySwal.fire({
+          position: "center",
+          icon: "warning",
+          title: "로그인이 필요한 서비스입니다.",
+          showConfirmButton: false,
+          timer: 800,
+          customClass: {
+            popup: 'follow-popup',
+            icon: 'success-icon',
+            title: 'alert-title'
+          }
+        })
+        setTimeout(() => {
+          navigate('/login')
+        }, 900)
+      }
       console.error('error :', e.response)
     }
   }
 
+
+  // 유저 정보 요청
   const getUserInfo = async () => {
 
     let response
@@ -93,7 +120,7 @@ const MypageContainer = () => {
 
     } catch(e) {
       console.log(e.response)
-      if(e.response.status == 401 && location.pathname === '/mypage') {
+      if(e.status == 401 && location.pathname === '/mypage') {
         MySwal.fire({
           position: "center",
           icon: "warning",
@@ -114,6 +141,7 @@ const MypageContainer = () => {
     }
   }
 
+  // 마운트 시 데이터 요청
   useEffect(() => {
     getUserInfo()
   }, [])
@@ -131,6 +159,7 @@ const MypageContainer = () => {
           countAllReview={countAllReview}
           alreadyFollow={alreadyFollow}
           onFollowUser={onFollowUser}
+          onLogout={onLogout}
         />
         <UserResource
           albumList={albumList}

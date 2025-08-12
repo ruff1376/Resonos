@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cosmus.resonos.domain.review.Track;
 import com.cosmus.resonos.domain.review.TrackMoodVote;
 import com.cosmus.resonos.mapper.review.TrackMoodVoteMapper;
 
@@ -49,5 +50,10 @@ public class TrackMoodVoteServiceImpl implements TrackMoodVoteService {
     public Long getUserVotedMoodId(Long userId, String trackId) {
         TrackMoodVote vote = trackMoodVoteMapper.findByUserAndTrack(userId, trackId);
     return vote != null ? vote.getMood() : null;
+    }
+
+    @Override
+    public List<String> selectTop3TagsByMoodVote() throws Exception {
+        return trackMoodVoteMapper.selectTop3TagsByMoodVote();
     }
 }

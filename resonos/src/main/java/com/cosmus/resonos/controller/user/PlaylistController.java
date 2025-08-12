@@ -319,7 +319,7 @@ public class PlaylistController {
         @PathVariable("playlistId") Long playlistId,
         @AuthenticationPrincipal CustomUser loginUser
     ) throws Exception {
-        if(loginUser == null) return new ResponseEntity<>("로그인이 필요한 서비스입니다.", HttpStatus.FORBIDDEN);
+        if(loginUser == null) return new ResponseEntity<>("로그인이 필요한 서비스입니다.", HttpStatus.UNAUTHORIZED);
         boolean result = playlistService.likePlaylist(loginUser.getId(), playlistId);
         if(result)
             return new ResponseEntity<>("이 플레이리스트를 좋아요 합니다.", HttpStatus.OK);

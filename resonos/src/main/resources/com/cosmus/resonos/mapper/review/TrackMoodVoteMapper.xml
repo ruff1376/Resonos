@@ -59,4 +59,13 @@
         WHERE user_id = #{userId} AND track_id = #{trackId}
     </update>
 
+    <select id="selectTop3TagsByMoodVote" resultType="string">
+        SELECT tg.name
+        FROM track_mood_vote tmv
+        JOIN tag tg ON tmv.mood = tg.id
+        GROUP BY tg.name
+        ORDER BY COUNT(*) DESC
+        LIMIT 3
+    </select>
+
 </mapper>

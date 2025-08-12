@@ -49,9 +49,10 @@ import FollowArtist from './pages/user/FollowArtist';
 import FollowUser from './pages/user/FollowUser';
 import AdminNoticePage from './pages/admin/AdminNoticePage';
 import AdminQnAPage from './pages/admin/AdminQnAPage';
-
-
 import AdminLayout from './layouts/AdminLayout'; // /admin 경로 css 전역으로 적용 
+import Badge from './pages/user/Badge';
+import Security from './pages/user/Security';
+import SetNotification from './pages/user/SetNotification';
 
 const App = () => {
 
@@ -96,16 +97,17 @@ const App = () => {
           <Route path="/users/notifications" element={<Notification />} />
           <Route path="/users/playlists" element={<Playlist />} />
           <Route path="/users/:id/playlists" element={<Playlist />} />
+          <Route path="/playlists/new" element={<CreatePlaylist />} />
+          <Route path="/playlists/:id" element={<PlaylistDetail />} />
           <Route path="/users/liked-music" element={<LikedMusic />} />
           <Route path="/users/:id/liked-music" element={<LikedMusic />} />
           <Route path="/users/follow-artist" element={<FollowArtist />} />
           <Route path="/users/:id/follow-artist" element={<FollowArtist />} />
           <Route path="/users/follow-user" element={<FollowUser />} />
           <Route path="/users/:id/follow-user" element={<FollowUser />} />
-          <Route path="/users/:id/liked-music" element={<FollowArtist />} />
-          <Route path="/playlists/new" element={<CreatePlaylist />} />
-          <Route path="/playlists/:id" element={<PlaylistDetail />} />
-
+          <Route path="/users/badge" element={<Badge />} />
+          <Route path="/users/security" element={<Security />} />
+          <Route path="/users/notifications/status" element={<SetNotification />} />
 
 
           {/* 관리자 - 유저 관리 경로 */}

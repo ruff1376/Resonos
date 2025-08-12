@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Activity from '../../components/user/Activity'
 import * as ur from '../../apis/user'
+import {MySwal} from '../../apis/alert'
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
+import { useNavigate } from 'react-router-dom';
 
 const ActivityContainer = () => {
 
@@ -18,6 +20,8 @@ const ActivityContainer = () => {
 
   const [user, setUser] = useState({});
   const [lastPath, setLastPath] = useState();
+
+  const navigate = useNavigate()
 
 
   // 리뷰 검색, 요청 함수
@@ -102,6 +106,23 @@ const ActivityContainer = () => {
         setLastPath(data.lastPath);
       }
     } catch(e) {
+      if(e.status === 401) {
+        MySwal.fire({
+          position: "center",
+          icon: "warning",
+          title: "로그인이 필요한 서비스입니다.",
+          showConfirmButton: false,
+          timer: 800,
+          customClass: {
+            popup: 'follow-popup',
+            icon: 'success-icon',
+            title: 'alert-title'
+          }
+        })
+        setTimeout(() => {
+          navigate('/login')
+        }, 900)
+      }
       console.log('error :', e)
     }
   }
