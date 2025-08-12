@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './Welcome.css';
 import { LoginContext } from '../../contexts/LoginContextProvider';
 import { Link } from 'react-router-dom';
+import Galaxy from '../../assets/Galaxy';
 
 const Welcome = () => {
     useEffect(() => {
@@ -34,7 +35,13 @@ const Welcome = () => {
     const { isLogin, userInfo } = useContext(LoginContext)
 
     return (
-        <div className="welcome">
+        <div className="welcome" style={{ position: 'relative',paddingTop:'0' }}>
+            <div style={{ width: '100%', height: '100%', position: 'absolute', zIndex: -1 }}>
+                <Galaxy starSpeed={0.1}
+                        autoCenterRepulsion={13}
+                        glowIntensity={0.1}
+                        density={0.9} />
+            </div>
             <div className="bg">
                 <main>
                     <section className="hero">
