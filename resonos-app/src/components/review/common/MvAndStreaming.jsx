@@ -1,11 +1,11 @@
 import React from 'react'
 
-const MvAndStreaming = () => {
+const MvAndStreaming = ({ styles, tracks, topTrack }) => {
   return (
     <>
       {/* 유튭, 스포티파이 아이프레임 */}
-      <div className="iframe-card">
-        <div className="spotify">
+      <div className={styles.iframeCard}>
+        <div className={styles.spotify}>
           {tracks.length > 0 && (
             <iframe
               src={`https://open.spotify.com/embed/track/${tracks[0].id}?utm_source=generator`}
@@ -17,7 +17,7 @@ const MvAndStreaming = () => {
             ></iframe>
           )}
         </div>
-        <div className="youtube">
+        <div className={styles.youtube}>
           {topTrack.mvUrl ? (
             <div id="video-container" data-video-id={topTrack.mvUrl}>
               <iframe
