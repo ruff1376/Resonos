@@ -273,3 +273,8 @@ export const searchUsers = async data => {
 export const logout = async () => {
   return await api.post('/users/logout')
 }
+
+/* 아이디, 비번 찾기 */
+export const isExistsEmail = async (email) => {
+  return await api.post('/find-id', email)
+}

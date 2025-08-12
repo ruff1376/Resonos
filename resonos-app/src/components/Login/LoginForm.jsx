@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { LoginContext } from '../../contexts/LoginContextProvider'
-import { useLocation, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import './LoginForm.css'
 
 const LoginForm = () => {
@@ -89,12 +89,12 @@ const LoginForm = () => {
         </button>
 
         <div className="find-area">
-          <a href="/find-id" className="login-link d-block mt-2">
+          <Link to="/find-id" className="login-link d-block mt-2">
             아이디 찾기
-          </a>
-          <a href="/find-pw" className="login-link d-block mt-2">
+          </Link>
+          <Link to="/find-pw" className="login-link d-block mt-2">
             비밀번호 찾기
-          </a>
+          </Link>
         </div>
 
         <div className="text-secondary my-3">또는</div>
@@ -123,9 +123,9 @@ const LoginForm = () => {
 
         <div>
           <span className="text-secondary">아직 회원이 아니신가요?</span>
-          <a href="/join" className="login-link">
+          <Link to="/join" className="login-link">
             회원가입
-          </a>
+          </Link>
         </div>
       </form>
     </div>

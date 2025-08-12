@@ -50,6 +50,8 @@ import FollowUser from './pages/user/FollowUser';
 import Badge from './pages/user/Badge';
 import Security from './pages/user/Security';
 import SetNotification from './pages/user/SetNotification';
+import FindId from './pages/user/FindId';
+import FindPw from './pages/user/FindPw';
 
 const App = () => {
 
@@ -60,7 +62,6 @@ const App = () => {
           <Route path='/' element={<Home />} />
           <Route path='/admin' element={<AdminIndex />} />
           <Route path='/test' element={<Tailwindtest />} />
-          <Route path='/login' element={<Login />} />
           <Route path="/list/main" element={<Main />} />
 
           {/* 컨텐츠 목록 */}
@@ -85,7 +86,10 @@ const App = () => {
           <Route path="/search/playlists" element={<PlaylistSearch />} />
 
           {/* 공용 */}
+          <Route path='/login' element={<Login />} />
           <Route path="/join" element={<Join />} />
+          <Route path="/find-id" element={<FindId />} />
+          <Route path="/find-pw" element={<FindPw />} />
           {/* 유저 */}
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/users/:id" element={<Mypage />} />
