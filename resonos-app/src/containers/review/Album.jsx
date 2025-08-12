@@ -8,6 +8,7 @@ import withReactContent from 'sweetalert2-react-content'
 import AlbumStatus from '../../components/review/album/AlbumStatus';
 import MvAndStreaming from '../../components/review/common/MvAndStreaming';
 import Review from '../../components/review/common/Review';
+import Galaxy from '../../assets/Galaxy';
 
 
 
@@ -125,18 +126,19 @@ const Album = () => {
   return (
     <>
       <div className={styles.albumWrapper}>
+        
         <AlbumInfo handleLikeClick={handleLikeClick} styles={styles}
           album={album} artist={artist} score={score}
           isAlbumLikedByUser={isAlbumLikedByUser} albumLikeCount={albumLikeCount}
           tracks={tracks} userId={userId} />
-        <MvAndStreaming styles={styles} tracks={tracks} topTrack={topTrack}/>
+        <MvAndStreaming styles={styles} tracks={tracks} topTrack={topTrack} />
         <AlbumStatus styles={styles} album={album}
-        top5List={top5List} isArgEmpty={isArgEmpty} album6Elements={album6Elements}
-        argValues={argValues} emptyPlayList={emptyPlayList}
-        playLists={playLists} />
+          top5List={top5List} isArgEmpty={isArgEmpty} album6Elements={album6Elements}
+          argValues={argValues} emptyPlayList={emptyPlayList}
+          playLists={playLists} />
         <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
-        score={score} isAdmin={isAdmin} album={album} reviewType={reviewType} />
-        
+          score={score} isAdmin={isAdmin} album={album} reviewType={reviewType} />
+
 
       </div>
     </>
