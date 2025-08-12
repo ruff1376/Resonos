@@ -306,4 +306,9 @@ public class TrackServiceImpl implements TrackService {
         return trackMapper.searchTracksByTag(tagName);
     }
 
+    @Override
+    public List<Track> selectTop5TracksByTag(String tagName) throws Exception {
+        return trackMapper.selectTop5TracksByTag(tagName);
+    }
+
 }
