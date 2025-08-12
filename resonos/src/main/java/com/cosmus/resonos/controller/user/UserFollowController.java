@@ -125,7 +125,7 @@ public class UserFollowController {
         @RequestBody Long id
     ) throws Exception {
         if(loginUser == null) {
-            return new ResponseEntity<>("로그인이 필요한 서비스입니다.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("로그인이 필요한 서비스입니다.", HttpStatus.UNAUTHORIZED);
         }
         log.info("팔로우 요청 들어옴.");
 
