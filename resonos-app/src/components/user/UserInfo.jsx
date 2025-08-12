@@ -1,7 +1,32 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import {MySwal} from '../../apis/alert'
 
-const UserInfo = ({currentBadge, followCount, followerCount, user, isOwner, countAllReview, alreadyFollow, onFollowUser}) => {
+const UserInfo = ({currentBadge, followCount, followerCount, user, isOwner, countAllReview, alreadyFollow, onFollowUser, onLogout}) => {
+
+  const handleLogout = () => {
+    MySwal.fire({
+      title: "로그아웃 하시겠습니까?",
+      html: '<p class="alert-text">자동 로그인이 해제됩니다.</p>',
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "확인",
+      cancelButtonText: "취소",
+      reverseButtons: false,
+      customClass: {
+      popup: 'follow-popup',
+      icon: 'warning-icon',
+      title: 'alert-title',
+      text: 'alert-text',
+      confirmButton: 'alert-button',
+      cancelButton: 'alert-cancle-button'
+    }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        onLogout()
+      }
+    })
+  }
 
   return (
     <>
@@ -35,7 +60,8 @@ const UserInfo = ({currentBadge, followCount, followerCount, user, isOwner, coun
               <button
                 id="btn-logout"
                 className="mybtn-outline d-flex justify-content-center"
-                type="submit"
+                type="button"
+                onClick={handleLogout}
               >
                 로그아웃
               </button>

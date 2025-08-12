@@ -31,6 +31,14 @@ const MypageContainer = () => {
 
 
 
+  const onLogout = () => {
+    ur.logout()
+    sessionStorage.removeItem('isLogin')
+    sessionStorage.removeItem('roles')
+    sessionStorage.removeItem('userInfo')
+    navigate('/login')
+  }
+
   // 팔로우 요청
   const onFollowUser = async (id, isFollowed) => {
     let response
@@ -80,6 +88,8 @@ const MypageContainer = () => {
     }
   }
 
+
+  // 유저 정보 요청
   const getUserInfo = async () => {
 
     let response
@@ -131,6 +141,7 @@ const MypageContainer = () => {
     }
   }
 
+  // 마운트 시 데이터 요청
   useEffect(() => {
     getUserInfo()
   }, [])
@@ -148,6 +159,7 @@ const MypageContainer = () => {
           countAllReview={countAllReview}
           alreadyFollow={alreadyFollow}
           onFollowUser={onFollowUser}
+          onLogout={onLogout}
         />
         <UserResource
           albumList={albumList}
