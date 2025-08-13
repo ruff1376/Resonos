@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import * as albumApi from "../../apis/review"
+import * as api from "../../apis/review"
 import { Link, useParams, useSearchParams } from 'react-router-dom'
-import Info from '../../components/review/common/Info';
 import styles from './Album.module.css'
 import AlbumInfo from '../../components/review/album/AlbumInfo';
 import swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content'
+import AlbumStatus from '../../components/review/album/AlbumStatus';
+import MvAndStreaming from '../../components/review/common/MvAndStreaming';
+import Review from '../../components/review/common/Review';
 
 
 
@@ -44,6 +46,7 @@ const Album = () => {
   const [tags, setTags] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [userId, setUserId] = useState({});
+  const [reviewType, setReviewType] = useState("")
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,7 +54,7 @@ const Album = () => {
         console.log('API 호출 시작, ID:', id);
         try {
           // axios 응답 객체 전체를 받음
-          const response = await albumApi.getAlbumPage(id);
+          const response = await api.getAlbumPage(id);
           // console.log(await albumApi.albumPage(id))
           // 실제 데이터는 response.data에 들어있음
           const data = response.data;
@@ -80,6 +83,7 @@ const Album = () => {
           setTags(data.tags);
           setIsAdmin(data.isAdmin);
           setUserId(data.userId);
+          setReviewType(data.reviewType);
         } catch (error) {
           console.error('API 호출 실패:', error);
         }
@@ -101,7 +105,7 @@ const Album = () => {
   // 앨범 좋아요
   const toggleLike = async (userId, album) => {
     try {
-      const response = await albumApi.toggleLike(userId, album.id);
+      const response = await api.toggleLike(userId, album.id);
       console.log(response.data)
       setIsAlbumLikedByUser(response.data.liked);
       setAlbumLikeCount(response.data.count)
@@ -121,65 +125,19 @@ const Album = () => {
   return (
     <>
       <div className={styles.albumWrapper}>
-        {/* 앨범 트랙리스트 분위기 뭐뭐.. */}
+        
         <AlbumInfo handleLikeClick={handleLikeClick} styles={styles}
-          album={album} artist={artist}
+          album={album} artist={artist} score={score}
           isAlbumLikedByUser={isAlbumLikedByUser} albumLikeCount={albumLikeCount}
           tracks={tracks} userId={userId} />
-        <div className={styles.infoCard}>
-          <div className={`${styles.info} ${styles.top5track}`}>
-            <p className={styles.headline}>{`${album.title}💽 TOP${top5List.length}🔥`}</p>
-            {top5List.map((tops, index) => (
-              <Link key={tops.id} to={`/tracks?id=${tops.id}`}>
-                <div className="d-flex gap-3" style={{ maxHeight: 'fit-content' }}>
-                  <p
-                    style={{
-                      maxWidth: '300px',
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                    }}
-                  >
-                    {`${index + 1}. ${tops.title}`}
-                  </p>
-                  <span>{tops.formattedDuration}</span>
-                </div>
-              </Link>
-            ))}
-          </div>
+        <MvAndStreaming styles={styles} tracks={tracks} topTrack={topTrack} />
+        <AlbumStatus styles={styles} album={album}
+          top5List={top5List} isArgEmpty={isArgEmpty} album6Elements={album6Elements}
+          argValues={argValues} emptyPlayList={emptyPlayList}
+          playLists={playLists} />
+        <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
+          score={score} isAdmin={isAdmin} album={album} reviewType={reviewType} />
 
-          <div className={`${styles.info} ${styles.albumMoods}`}>
-            <p className={styles.headline}>앨범의 평균 점수</p>
-            {isArgEmpty ? (
-              <p>아직 아무도 투표하지 않았어요</p>
-            ) : (
-              <div className={styles.scoreInfo}>
-                {argValues && Object.keys(argValues).map((score, index) => (
-                  <div key={index}>
-                    <p>{`${album6Elements[index]}:`}</p>
-                    <span>{score}점</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="info pl-list">
-            <p className={styles.headline}>{`${album.title}💽의 트랙이 포함된 플리🎶`}</p>
-            {emptyPlayList || playLists.length === 0 ? (
-              <>
-                <p>해당 음원을 포함한</p>
-                <p>플레이리스트를 만들어보세요! 🤩</p>
-              </>
-            ) : (
-              playLists.map((playList) => (
-                <Link key={playList.id} to={`/playlists/${playList.id}`}>
-                  <p>{`${playList.title} ❤️${playList.likeCount}`}</p>
-                </Link>
-              ))
-            )}
-          </div>
-        </div>
-        {/* 앨범 트랙리스트 분위기 뭐뭐.. 끝 */}
 
       </div>
     </>

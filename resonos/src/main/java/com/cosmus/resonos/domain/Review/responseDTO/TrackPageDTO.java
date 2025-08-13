@@ -60,6 +60,8 @@ public class TrackPageDTO {
     private boolean isTrackLikedByUser;
     // 유저 플레이리스트
     private List<Playlist> userPlaylist;
+    // 유저 아이디
+    private Long userId;
 
     // 리뷰 타입
     private final String reviewType = "TRACK";
