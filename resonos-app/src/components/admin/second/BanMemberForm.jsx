@@ -50,77 +50,71 @@ const BanMemberForm = ({ userId, onComplete, onCancel }) => {
   };
 
   // JSX 반환
-  return (
-    <form
-      onSubmit={handleSubmit}
-      style={{ background: '#222', padding: '20px 15px', borderRadius: '7px', marginBottom: '15px' }}
+return (
+  <form
+    onSubmit={handleSubmit}
+    className="admin resonos-card p-3 mb-3"
+  >
+    <select
+      className="form-select mb-2"
+      value={type}
+      onChange={(e) => setType(e.target.value)}
+      required
+      disabled={loading}
     >
-      <select
-        className="form-select mb-2"
-        value={type}
-        onChange={e => setType(e.target.value)}
-        required
+      <option value="">제재 유형 선택</option>
+      <option value="warning">경고 (Warning)</option>
+      <option value="suspension">정지 (Suspension)</option>
+      <option value="ban">영구 제재 (Ban)</option>
+    </select>
+
+    <label htmlFor="startAt" className="form-label">시작일</label>
+    <input
+      id="startAt"
+      type="datetime-local"
+      className="form-control mb-2"
+      value={startAt}
+      onChange={(e) => setStartAt(e.target.value)}
+      required
+      disabled={loading}
+    />
+
+    <label htmlFor="endAt" className="form-label">종료일 (선택)</label>
+    <input
+      id="endAt"
+      type="datetime-local"
+      className="form-control mb-2"
+      value={endAt}
+      onChange={(e) => setEndAt(e.target.value)}
+      disabled={loading}
+    />
+
+    <textarea
+      className="form-control mb-2"
+      placeholder="제재 사유를 입력하세요 (필수)"
+      required
+      value={banReason}
+      onChange={(e) => setBanReason(e.target.value)}
+      style={{ height: '64px' }}
+      disabled={loading}
+    />
+
+    <div className="text-end">
+      <button type="submit" className="btn btn-outline-danger btn-sm me-2" disabled={loading}>
+        {loading ? '처리중...' : '제재'}
+      </button>
+      <button
+        type="button"
+        className="btn btn-outline-gold btn-sm"
+        onClick={onCancel}
         disabled={loading}
-        style={{ background: '#333', color: 'white' }}
       >
-        <option value="">제재 유형 선택</option>
-        <option value="warning">경고 (Warning)</option>
-        <option value="suspension">정지 (Suspension)</option>
-        <option value="ban">영구 제재 (Ban)</option>
-      </select>
+        취소
+      </button>
+    </div>
+  </form>
+);
 
-      <label htmlFor="startAt" className="form-label" style={{ color: '#fff' }}>
-        시작일
-      </label>
-      <input
-        id="startAt"
-        type="datetime-local"
-        className="form-control mb-2"
-        value={startAt}
-        onChange={e => setStartAt(e.target.value)}
-        required
-        disabled={loading}
-        style={{ background: '#333', color: 'white' }}
-      />
-
-      <label htmlFor="endAt" className="form-label" style={{ color: '#fff' }}>
-        종료일 (선택)
-      </label>
-      <input
-        id="endAt"
-        type="datetime-local"
-        className="form-control mb-2"
-        value={endAt}
-        onChange={e => setEndAt(e.target.value)}
-        disabled={loading}
-        style={{ background: '#333', color: 'white' }}
-      />
-
-      <textarea
-        className="form-control mb-2"
-        placeholder="제재 사유를 입력하세요 (필수)"
-        required
-        value={banReason}
-        onChange={e => setBanReason(e.target.value)}
-        style={{ height: '64px', color: 'white', background: '#333' }}
-        disabled={loading}
-      />
-
-      <div className="text-end">
-        <button type="submit" className="btn btn-danger btn-sm me-2" disabled={loading}>
-          {loading ? '처리중...' : '제재'}
-        </button>
-        <button
-          type="button"
-          className="btn btn-outline-gold btn-sm"
-          onClick={onCancel}
-          disabled={loading}
-        >
-          취소
-        </button>
-      </div>
-    </form>
-  );
 };
 
 export default BanMemberForm;

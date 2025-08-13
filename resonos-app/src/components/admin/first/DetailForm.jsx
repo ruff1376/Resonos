@@ -88,65 +88,49 @@ const DetailForm = ({
     );
   };
 
-  return (
-    <div
-      style={{
-        border: '1px solid #ccc',
-        padding: 16,
-        marginTop: 16,
-        borderRadius: 4,
-        backgroundColor: '#f9f9f9',
+return (
+  <div className="admin resonos-card">
+    <h3>상세 정보</h3>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (readOnly) return;
+        onSubmit();
       }}
     >
-      <h3>상세 정보</h3>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (readOnly) return;
-          onSubmit();
-        }}
-      >
-        {/* 폼 필드 렌더링 */}
-        {formState &&
-          Object.keys(formState).map((key) => {
-            // id나 key 필드는 편집 불가 처리 또는 제외 가능
-            if (key === 'id' || key === 'createdAt' || key === 'updatedAt') return null;
-            return renderField(key);
-          })}
-
-        {/* 커스텀 추가 영역 */}
-        {renderExtra && renderExtra(formState)}
-
-        <div style={{ marginTop: 16 }}>
-          {!readOnly && (
-            <>
-              <button type="submit" disabled={!isChanged()} style={{ marginRight: 8 }}>
-                저장
-              </button>
-              <button type="button" onClick={onCancel} style={{ marginRight: 8 }}>
-                취소
-              </button>
-              {onDelete && (
-                <button
-                  type="button"
-                  onClick={onDelete}
-                  style={{ backgroundColor: 'red', color: 'white' }}
-                >
-                  삭제
-                </button>
-              )}
-            </>
-          )}
-
-          {readOnly && (
-            <button type="button" onClick={onCancel}>
-              닫기
+      {formState &&
+        Object.keys(formState).map((key) => {
+          if (key === 'id' || key === 'createdAt' || key === 'updatedAt') return null;
+          return renderField(key);
+        })
+      }
+      {renderExtra && renderExtra(formState)}
+      <div className="mt-3 text-end">
+        {!readOnly && (
+          <>
+            <button type="submit" className="btn btn-gold btn-sm me-2" disabled={!isChanged()}>
+              저장
             </button>
-          )}
-        </div>
-      </form>
-    </div>
-  );
+            <button type="button" className="btn btn-outline-gold btn-sm me-2" onClick={onCancel}>
+              취소
+            </button>
+            {onDelete && (
+              <button type="button" className="btn btn-outline-danger btn-sm" onClick={onDelete}>
+                삭제
+              </button>
+            )}
+          </>
+        )}
+        {readOnly && (
+          <button type="button" className="btn btn-outline-gold btn-sm" onClick={onCancel}>
+            닫기
+          </button>
+        )}
+      </div>
+    </form>
+  </div>
+);
+
 };
 
 export default DetailForm;

@@ -11,185 +11,74 @@ const MemberDetailForm = ({
 }) => {
   if (!detailMemberData) return null;
 
-  return (
-<div
-  className="detail-info mt-3 p-3 border  rounded bg-var(--main-color); text-dark"
-  style={{ width: '100%' }}
->
+return (
+  <div className="member-detail-form resonos-card p-3">
+    <h5>회원 상세 정보</h5>
+    <form onSubmit={onSubmit}>
+      <div className="row">
+        {/* 기본 정보 입력 */}
+        <FormInput label="아이디:" name="username" value={detailMemberData.username || ''} onChange={onChange} required />
+        <FormInput label="닉네임:" name="nickname" value={detailMemberData.nickname || ''} onChange={onChange} required />
+        <FormInput label="이메일:" name="email" type="email" value={detailMemberData.email || ''} onChange={onChange} required />
+        <FormInput label="비밀번호 (변경시만 입력):" name="password" type="password" value={detailMemberData.password || ''} onChange={onChange} placeholder="변경할 비밀번호 입력" required={false} />
 
-      <h5>회원 상세 정보</h5>
-      <form onSubmit={onSubmit}>
-        <div className="row">
-          <FormInput
-            label="아이디:"
-            name="username"
-            value={detailMemberData.username || ''}
-            onChange={onChange}
-            required
-            autoComplete="off"
-          />
-          <FormInput
-            label="닉네임:"
-            name="nickname"
-            value={detailMemberData.nickname || ''}
-            onChange={onChange}
-            required
-            autoComplete="off"
-          />
-          <FormInput
-            label="이메일:"
-            name="email"
-            type="email"
-            value={detailMemberData.email || ''}
-            onChange={onChange}
-            required
-            autoComplete="off"
-          />
-          <FormInput
-            label="비밀번호 (변경시만 입력):"
-            name="password"
-            type="password"
-            value={detailMemberData.password || ''}
-            onChange={onChange}
-            placeholder="변경할 비밀번호를 입력하세요"
-            autoComplete="new-password"
-            required={false}
-          />
-          <FormInput
-            label="프로필 이미지 URL:"
-            name="profileImage"
-            value={detailMemberData.profileImage || ''}
-            onChange={onChange}
-            autoComplete="off"
-          />
-          {detailMemberData.profileImage && (
-            <div className="col-12 text-start mb-3">
-              <img
-                src={detailMemberData.profileImage}
-                alt="프로필"
-                style={{ maxWidth: '100px' }}
-              />
-            </div>
-          )}
+        <FormInput label="프로필 이미지 URL:" name="profileImage" value={detailMemberData.profileImage || ''} onChange={onChange} />
+        {detailMemberData.profileImage && (
           <div className="col-12 text-start mb-3">
-            <label className="form-label" htmlFor="bio">
-              소개(Bio):
-            </label>
-            <textarea
-              id="bio"
-              name="bio"
-              className="form-control"
-              value={detailMemberData.bio || ''}
-              onChange={onChange}
-              rows={3}
-              style={{ width: '100%' }}
-              placeholder="간단한 소개를 입력하세요"
-            />
+            <img src={detailMemberData.profileImage} alt="프로필" style={{ maxWidth: '100px' }} />
           </div>
-          <div className="col-md-6 text-start mb-3">
-            <label className="form-label" htmlFor="isPro">
-              전문가 여부(isPro):
-            </label>
-            <select
-              id="isPro"
-              name="isPro"
-              className="form-select"
-              value={detailMemberData.isPro ? 'true' : 'false'}
-              onChange={onChange}
-            >
-              <option value="true">예</option>
-              <option value="false">아니오</option>
-            </select>
-          </div>
-          <div className="col-md-6 text-start mb-3">
-            <label className="form-label" htmlFor="enabled">
-              상태:
-            </label>
-            <select
-              id="enabled"
-              name="enabled"
-              className="form-select"
-              value={detailMemberData.enabled ? 'true' : 'false'}
-              onChange={onChange}
-            >
-              <option value="true">정상</option>
-              <option value="false">휴면</option>
-            </select>
-          </div>
-          <div className="col-md-6 text-start mb-3">
-            <label className="form-label" htmlFor="auth">
-              권한:
-            </label>
-            <select
-              id="auth"
-              name="auth"
-              className="form-select"
-              value={detailMemberData.auth || ''}
-              onChange={onChange}
-            >
-              <option value="ROLE_USER">일반</option>
-              <option value="ROLE_ADMIN">운영자</option>
-            </select>
-          </div>
-          <FormInput
-            label="Provider:"
-            name="provider"
-            value={detailMemberData.provider || ''}
-            onChange={onChange}
-            autoComplete="off"
-            containerClassName="col-md-6 text-start mb-3"
-          />
-          <FormInput
-            label="Provider ID:"
-            name="providerId"
-            value={detailMemberData.providerId || ''}
-            onChange={onChange}
-            autoComplete="off"
-            containerClassName="col-md-6 text-start mb-3"
-          />
+        )}
 
-          {/* 제재 내역 출력 (있으면 리스트로) */}
-            <div className="col-12 text-start mb-3">
-            <label>제재 내역:</label>
-            {detailMemberData.sanctions && detailMemberData.sanctions.length > 0 ? (
-                <ul style={{ maxHeight: '150px', overflowY: 'auto', paddingLeft: '20px' }}>
-                {detailMemberData.sanctions.map((sanction, idx) => (
-                    <li key={idx} style={{ marginBottom: '8px' }}>
-                    <strong>타입:</strong> {sanction.type || '없음'}<br />
-                    <strong>사유:</strong> {sanction.reason || '없음'}<br />
-                    <strong>기간:</strong> {formatDate(sanction.startAt)}
-                    {sanction.endAt ? ` ~ ${formatDate(sanction.endAt)}` : ''}
-                    <br />
-                    <small style={{ color: '#666' }}>
-                        등록일: {formatDate(sanction.createdAt)}
-                    </small>
-                    </li>
-                ))}
-                </ul>
-            ) : (
-                <p>제재 내역이 없습니다.</p>
-            )}
-            </div>
-
-          <div className="col-12 text-end">
-            <button type="submit" className="btn btn-gold btn-sm me-2">
-              저장
-            </button>
-            <button
-              type="button"
-              className="btn btn-outline-secondary btn-sm me-2"
-              onClick={onClose}
-            >
-              닫기
-            </button>
-            <button type="button" className="btn btn-outline-danger btn-sm" onClick={onDelete}>
-              삭제
-            </button>
-          </div>
+        <div className="col-12 text-start mb-3">
+          <label className="form-label">소개(Bio):</label>
+          <textarea
+            name="bio"
+            className="form-control"
+            value={detailMemberData.bio || ''}
+            onChange={onChange}
+            rows={3}
+            placeholder="간단한 소개"
+          />
         </div>
-      </form>
-    </div>
-  );
+
+        {/* 셀렉트 필드 */}
+        <FormSelect label="전문가 여부(isPro)" name="isPro" value={detailMemberData.isPro ? 'true' : 'false'} onChange={onChange} options={[{ value: 'true', label: '예' }, { value: 'false', label: '아니오' }]} containerClassName="col-md-6 text-start mb-3" />
+        <FormSelect label="상태" name="enabled" value={detailMemberData.enabled ? 'true' : 'false'} onChange={onChange} options={[{ value: 'true', label: '정상' }, { value: 'false', label: '휴면' }]} containerClassName="col-md-6 text-start mb-3" />
+        <FormSelect label="권한" name="auth" value={detailMemberData.auth || ''} onChange={onChange} options={[{ value: 'ROLE_USER', label: '일반' }, { value: 'ROLE_ADMIN', label: '운영자' }]} containerClassName="col-md-6 text-start mb-3" />
+
+        <FormInput label="Provider:" name="provider" value={detailMemberData.provider || ''} onChange={onChange} containerClassName="col-md-6 text-start mb-3" />
+        <FormInput label="Provider ID:" name="providerId" value={detailMemberData.providerId || ''} onChange={onChange} containerClassName="col-md-6 text-start mb-3" />
+
+        {/* 제재 내역 */}
+        <div className="col-12 text-start mb-3">
+          <label>제재 내역:</label>
+          {detailMemberData.sanctions?.length > 0 ? (
+            <ul style={{ maxHeight: '150px', overflowY: 'auto', paddingLeft: '20px' }}>
+              {detailMemberData.sanctions.map((s, idx) => (
+                <li key={idx} style={{ marginBottom: '8px' }}>
+                  <strong>타입:</strong> {s.type || '없음'}<br />
+                  <strong>사유:</strong> {s.reason || '없음'}<br />
+                  <strong>기간:</strong> {formatDate(s.startAt)} {s.endAt && `~ ${formatDate(s.endAt)}`}<br />
+                  <small style={{ color: '#666' }}>등록일: {formatDate(s.createdAt)}</small>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>제재 내역이 없습니다.</p>
+          )}
+        </div>
+
+        {/* 버튼 */}
+        <div className="col-12 text-end">
+          <button type="submit" className="btn btn-gold btn-sm me-2">저장</button>
+          <button type="button" className="btn btn-outline-gold btn-sm me-2" onClick={onClose}>닫기</button>
+          <button type="button" className="btn btn-outline-danger btn-sm" onClick={onDelete}>삭제</button>
+        </div>
+      </div>
+    </form>
+  </div>
+);
+
 };
 
 export default MemberDetailForm;

@@ -26,72 +26,46 @@ const Pagination = ({
     pages.push(i);
   }
 
-  return (
-    <nav aria-label="Page navigation">
-      <ul className="custom-pagination">
-        
-        {/* 첫 페이지 */}
+return (
+  <nav className="admin" aria-label="Page navigation">
+    <ul className="custom-pagination">
+      <li>
+        <a href={`${pageUri}&page=${first}`} aria-label="First" onClick={e => handleClick(e, first)}>
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+
+      {page !== first && (
         <li>
-          <a
-            href={`${pageUri}&page=${first}`}
-            aria-label="First"
-            onClick={e => handleClick(e, first)}
-          >
-            <span aria-hidden="true">&laquo;</span>
+          <a href={`${pageUri}&page=${prev}`} aria-label="Previous" onClick={e => handleClick(e, prev)}>
+            <span aria-hidden="true">&lsaquo;</span>
           </a>
         </li>
+      )}
 
-        {/* 이전 페이지 (첫 페이지가 아니면) */}
-        {page !== first && (
-          <li>
-            <a
-              href={`${pageUri}&page=${prev}`}
-              aria-label="Previous"
-              onClick={e => handleClick(e, prev)}
-            >
-              <span aria-hidden="true">&lsaquo;</span>
-            </a>
-          </li>
-        )}
+      {pages.map(p => (
+        <li key={p} className={page === p ? 'active' : ''}>
+          <a href={`${pageUri}&page=${p}`} onClick={e => handleClick(e, p)}>{p}</a>
+        </li>
+      ))}
 
-        {/* 번호 페이지 */}
-        {pages.map(p => (
-          <li key={p} className={page === p ? 'active' : ''}>
-            <a
-              href={`${pageUri}&page=${p}`}
-              onClick={e => handleClick(e, p)}
-            >
-              {p}
-            </a>
-          </li>
-        ))}
-
-        {/* 다음 페이지 (마지막 페이지가 아니면) */}
-        {page !== last && (
-          <li>
-            <a
-              href={`${pageUri}&page=${next}`}
-              aria-label="Next"
-              onClick={e => handleClick(e, next)}
-            >
-              <span aria-hidden="true">&rsaquo;</span>
-            </a>
-          </li>
-        )}
-
-        {/* 마지막 페이지 */}
+      {page !== last && (
         <li>
-          <a
-            href={`${pageUri}&page=${last}`}
-            aria-label="Last"
-            onClick={e => handleClick(e, last)}
-          >
-            <span aria-hidden="true">&raquo;</span>
+          <a href={`${pageUri}&page=${next}`} aria-label="Next" onClick={e => handleClick(e, next)}>
+            <span aria-hidden="true">&rsaquo;</span>
           </a>
         </li>
-      </ul>
-    </nav>
-  );
+      )}
+
+      <li>
+        <a href={`${pageUri}&page=${last}`} aria-label="Last" onClick={e => handleClick(e, last)}>
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+);
+
 };
 
 export default Pagination;

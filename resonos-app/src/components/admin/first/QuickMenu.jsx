@@ -33,8 +33,8 @@ import ToMain from "./ToMain";
 const QuickMenu = () => {
   const flatMenu = menuData.flat();
   
-  return (
-  <div className="quick-menu">
+return (
+  <div className="admin quick-menu">
     {flatMenu.map((item, idx) => (
       <a key={idx} href={item.link} className="quick-menu-item">
         {item.label}
@@ -43,7 +43,8 @@ const QuickMenu = () => {
     <ThemeToggle className="quick-menu-item" />
     <ToMain className="quick-menu-item" />
   </div>
-  );
+);
+
 };
 
 export default QuickMenu;
