@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react'
 import VoteForm from './VoteForm'
-import useRadarChart from '../../assets/useRadarChart'
+import useRadarChart from '../../../assets/useRadarChart'
 
 
 const Element = ({ album, isArgEmpty, userVote, styles, userId, argValues }) => {
-    const canvasRef = useRef(null);
-    useRadarChart(canvasRef, argValues, isArgEmpty);
+  const canvasRef = useRef(null);
+  useRadarChart(canvasRef, argValues, isArgEmpty);
 
   return (
     <>

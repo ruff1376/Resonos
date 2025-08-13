@@ -16,9 +16,6 @@ const Album = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get('id');
 
-  // 앨범 6요소
-  const album6Elements = ['대중성', '음악성', '사운드', '가창력', '독창성', '수록곡'];
-
   // 앨범 기본 정보
   const [album, setAlbum] = useState({});
   const [artist, setArtist] = useState({});
@@ -133,16 +130,16 @@ const Album = () => {
           album={album} artist={artist} score={score}
           isAlbumLikedByUser={isAlbumLikedByUser} albumLikeCount={albumLikeCount}
           tracks={tracks} userId={userId} />
-        <MvAndStreaming styles={styles} tracks={tracks} topTrack={topTrack} />
+        <MvAndStreaming styles={styles} tracks={tracks} track={topTrack} />
         <AlbumStatus styles={styles} album={album}
-          top5List={top5List} isArgEmpty={isArgEmpty} album6Elements={album6Elements}
+          top5List={top5List} isArgEmpty={isArgEmpty}
           argValues={argValues} emptyPlayList={emptyPlayList}
           playLists={playLists} />
         <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
           score={score} isAdmin={isAdmin} album={album} reviewType={reviewType} />
-        <Element styles={styles} album={album} isArgEmpty={isArgEmpty}
+        {/* <Element styles={styles} album={album} isArgEmpty={isArgEmpty}
           argValues={argValues} userVote={userVote} userId={userId}
-          isAdmin={isAdmin} />
+          isAdmin={isAdmin} /> */}
       </div>
     </>
   )

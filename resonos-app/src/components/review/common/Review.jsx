@@ -5,7 +5,7 @@ import ReviewScore from './ReviewScore'
 import Reviews from './Reviews'
 import ReviewForm from './ReviewForm'
 
-const Review = ({ reviewType, score, styles, reviews, hasNext, userId, isAdmin, album }) => {
+const Review = ({ reviewType, score, styles, reviews, hasNext, userId, isAdmin, album, track }) => {
   return (
     <>
       {/* 평점 리뷰 */}
@@ -13,13 +13,13 @@ const Review = ({ reviewType, score, styles, reviews, hasNext, userId, isAdmin, 
         <p className={styles.headline}>평점 & 리뷰</p>
         <div className={styles.reviewScore}>
           {/* 리뷰칸 점수 컴포넌트 */}
-          <ReviewScore averageScore={score} styles={styles} />
+          <ReviewScore score={score} styles={styles} />
         </div>
         <div className="review-container">
           <ul className={styles.reviewList}>
             {reviews != null && reviews.length > 0 ? (
               <Reviews reviews={reviews} reviewType={reviewType} size={5}
-                isAdmin={isAdmin} album={album} hasNext={hasNext} styles={styles} />
+                isAdmin={isAdmin} hasNext={hasNext} styles={styles} />
             )
               :
               <>
@@ -46,7 +46,7 @@ const Review = ({ reviewType, score, styles, reviews, hasNext, userId, isAdmin, 
               </Link>
             </div>
           ) : (
-            <ReviewForm styles={styles} reviewType={reviewType} albumId={album.id} />
+            <ReviewForm styles={styles} reviewType={reviewType} albumId={album.id} trackId={track.id} />
           )}
         </div>
       </div>

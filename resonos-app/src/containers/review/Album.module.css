@@ -202,8 +202,8 @@ body {
     gap: 20px;
     padding-bottom: 10px;
 }
-.like-btn,
-.report-btn {
+.album-wrapper .like-btn,
+.album-wrapper .report-btn {
     display: inline-block; /* 필수 */
     background-color: transparent;
     font-size: 24px; /* 적당한 크기 */
