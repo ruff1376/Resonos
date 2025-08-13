@@ -169,7 +169,7 @@ const LikedMusicContainer = () => {
   }, [])
 
   return (
-    <div className="admin container">
+    <div className="container">
       <Header />
       <LikedMusic
         countAlbum={countAlbum}
