@@ -25,6 +25,6 @@ public class OAuth2FailureHandler implements AuthenticationFailureHandler {
             errorCode = oauth2Ex.getError().getErrorCode();
         }
 
-        response.sendRedirect("/login?error=" + errorCode);
+        response.sendRedirect("http://localhost:5173/login?error=" + errorCode);
     }
 }

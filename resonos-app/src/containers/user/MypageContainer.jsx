@@ -35,6 +35,9 @@ const MypageContainer = () => {
     sessionStorage.removeItem('isLogin')
     sessionStorage.removeItem('roles')
     sessionStorage.removeItem('userInfo')
+    localStorage.removeItem('rememberId')
+    localStorage.removeItem('rememberMe')
+    localStorage.removeItem('username')
     navigate('/login')
   }
 
