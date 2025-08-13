@@ -1,4 +1,3 @@
-import React from 'react';
 import './Pagination.css';
 
 export default function Pagination({
@@ -32,7 +31,7 @@ export default function Pagination({
         pageNumbers.push(i);
     }
 
-    const createLink = (pageNum) => `${pageUri}&page=${pageNum}`;
+    // const createLink = (pageNum) => `${pageUri}&page=${pageNum}`;
 
     return (
         <nav aria-label="Page navigation">

@@ -1,7 +1,12 @@
 import { Link } from "react-router-dom";
 import Pagination from "../../Pagination/Pagination";
 
-export default function PlaylistGridSection({ title, playlistList, pagination, onPageChange }) {
+export default function PlaylistGridSection({
+    title,
+    playlistList,
+    pagination,
+    onPageChange
+}) {
     return (
         <section className="main-section-bg w-100 py-4 mb-5">
             <div className="d-flex flex-row align-items-center px-4 mb-3" style={{ height: 50 }}>
@@ -18,10 +23,13 @@ export default function PlaylistGridSection({ title, playlistList, pagination, o
                                 <Link to={'/playlists/' + playlist.id} className="card-title">
                                     {playlist.title}
                                 </Link>
-                                <Link to={'/users/' + playlist.maker} className="card-artist">
-                                    {playlist.maker}
-                                </Link>
-                                <div className="card-artist">♥ {playlist.likeCount?.toLocaleString() ?? 0}</div>
+                                <div className="card-artist no-hover">
+                                    <span>제작자 : </span>
+                                    <Link to={'/users/' + playlist.maker} className="card-artist">
+                                        {playlist.maker}
+                                    </Link>
+                                </div>
+                                <div className="card-artist no-hover">♥ {playlist.likeCount?.toLocaleString() ?? 0}</div>
                             </div>
                         </div>
                     </div>

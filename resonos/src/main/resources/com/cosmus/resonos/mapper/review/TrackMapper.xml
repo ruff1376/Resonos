@@ -449,60 +449,60 @@
   </select>
 
   <select id="selectTop5TracksByTag" resultMap="Track">
-  SELECT
-    t.*,
-    ar.name AS artist_name,
-    al.cover_image,
-    ROUND(AVG(tr.rating)) AS avg_rating,
-    (COUNT(DISTINCT tr.id) * 3 +
-     COUNT(DISTINCT lt.id) +
-     COUNT(DISTINCT pd.id) +
-     COUNT(DISTINCT tmv.id)) AS popularity_score,
-    max_tag.tag_name AS max_tag_name,
-    max_tag.vote_count AS max_tag_vote_count
-  FROM track t
-  LEFT JOIN artist ar ON t.artist_id = ar.id
-  LEFT JOIN album al ON t.album_id = al.id
-  LEFT JOIN track_review tr ON t.id = tr.track_id
-  LEFT JOIN liked_track lt ON t.id = lt.track_id
-  LEFT JOIN playlist_detail pd ON t.id = pd.track_id
-  LEFT JOIN track_mood_vote tmv ON t.id = tmv.track_id
-  LEFT JOIN (
     SELECT
-      tmv.track_id,
-      tg.name AS tag_name,
-      COUNT(*) AS vote_count
-    FROM track_mood_vote tmv
-    JOIN tag tg ON tmv.mood = tg.id
-    GROUP BY tmv.track_id, tg.name
-  ) AS tag_votes ON t.id = tag_votes.track_id
-  LEFT JOIN (
-    SELECT
-      track_id,
-      tag_name,
-      vote_count
-    FROM (
+      t.*,
+      ar.name AS artist_name,
+      al.cover_image,
+      ROUND(AVG(tr.rating)) AS avg_rating,
+      (COUNT(DISTINCT tr.id) * 3 +
+      COUNT(DISTINCT lt.id) +
+      COUNT(DISTINCT pd.id) +
+      COUNT(DISTINCT tmv.id)) AS popularity_score,
+      max_tag.tag_name AS max_tag_name,
+      max_tag.vote_count AS max_tag_vote_count
+    FROM track t
+    LEFT JOIN artist ar ON t.artist_id = ar.id
+    LEFT JOIN album al ON t.album_id = al.id
+    LEFT JOIN track_review tr ON t.id = tr.track_id
+    LEFT JOIN liked_track lt ON t.id = lt.track_id
+    LEFT JOIN playlist_detail pd ON t.id = pd.track_id
+    LEFT JOIN track_mood_vote tmv ON t.id = tmv.track_id
+    LEFT JOIN (
+      SELECT
+        tmv.track_id,
+        tg.name AS tag_name,
+        COUNT(*) AS vote_count
+      FROM track_mood_vote tmv
+      JOIN tag tg ON tmv.mood = tg.id
+      GROUP BY tmv.track_id, tg.name
+    ) AS tag_votes ON t.id = tag_votes.track_id
+    LEFT JOIN (
       SELECT
         track_id,
         tag_name,
-        vote_count,
-        ROW_NUMBER() OVER (PARTITION BY track_id ORDER BY vote_count DESC) AS rn
+        vote_count
       FROM (
         SELECT
-          tmv.track_id,
-          tg.name AS tag_name,
-          COUNT(*) AS vote_count
-        FROM track_mood_vote tmv
-        JOIN tag tg ON tmv.mood = tg.id
-        GROUP BY tmv.track_id, tg.name
-      ) sub
-    ) ranked
-    WHERE rn = 1
-  ) AS max_tag ON t.id = max_tag.track_id
-  WHERE max_tag.tag_name = #{tagName}
-  GROUP BY t.id
-  ORDER BY popularity_score DESC
-  LIMIT 5
-</select>
+          track_id,
+          tag_name,
+          vote_count,
+          ROW_NUMBER() OVER (PARTITION BY track_id ORDER BY vote_count DESC) AS rn
+        FROM (
+          SELECT
+            tmv.track_id,
+            tg.name AS tag_name,
+            COUNT(*) AS vote_count
+          FROM track_mood_vote tmv
+          JOIN tag tg ON tmv.mood = tg.id
+          GROUP BY tmv.track_id, tg.name
+        ) sub
+      ) ranked
+      WHERE rn = 1
+    ) AS max_tag ON t.id = max_tag.track_id
+    WHERE max_tag.tag_name = #{tagName}
+    GROUP BY t.id
+    ORDER BY popularity_score DESC
+    LIMIT 5
+  </select>
 
 </mapper>

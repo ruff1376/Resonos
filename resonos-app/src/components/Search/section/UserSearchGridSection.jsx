@@ -53,7 +53,7 @@ export default function UserSearchGridSection({
                                     <Link to={`/users/${user.id}`} className="card-title">
                                         {user.nickname}
                                     </Link>
-                                    <div className="card-artist">
+                                    <div className="card-artist no-hover">
                                         {formatNumber(user.followerCount)} 팔로워
                                     </div>
                                 </div>
