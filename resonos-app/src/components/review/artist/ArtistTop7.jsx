@@ -3,9 +3,6 @@ import { Link } from 'react-router-dom';
 
 const ArtistTop7 = ({  styles, artist, top7Tracks, track }) => {
 
-  if(!artist || !top7Tracks || !track) {
-    return null
-  }
 
   return (
     <>
@@ -14,7 +11,7 @@ const ArtistTop7 = ({  styles, artist, top7Tracks, track }) => {
           <p className={styles.headline}>{`${artist.name}'s 🔥TOP ${top7Tracks ? top7Tracks.length : 0}`}</p>
           {/* 반복문 인기곡 */}
           {top7Tracks && top7Tracks.map((tops, index) => (
-            <Link key={tops.id} to={`/tracks/${tops.id}`}>
+            <Link key={tops.id} to={`/tracks?id=${tops.id}`}>
               <p>{`${index + 1}. ${tops.title}  `}</p>
               <span>{tops.formattedDuration}</span>
             </Link>
