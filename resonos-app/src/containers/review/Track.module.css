@@ -3,7 +3,16 @@
     padding: 0;
     box-sizing: border-box;
 }
+/* 애니메이션 */
+@keyframes spin360 {
+    from {
+        transform: rotate(0deg);
+    }
 
+    to {
+        transform: rotate(360deg);
+    }
+}
 .ta-wrapper {
     width: 100%;
     display: flex;
@@ -18,14 +27,8 @@ body {
     color: white;
 }
 
-.headline {
-    font-size: 2.4rem;
-    font-weight: bold;
-    color: var(--main-color);
-}
-.subtitle {
-    font-size: 2rem;
-}
+.headline {font-size: 2.4rem !important; font-weight: bold; color: var(--main-color);}
+.subtitle {font-size: 2rem !important;}
 
 /* 좋아요 애니메이션 */
 .ta-wrapper .like-btn {
@@ -62,6 +65,36 @@ body {
   width: 250px; height: 250px; /* LP 크기 */
   border-radius: 50%;
   overflow: hidden;            /* 이미지 둥글게 자르기 */
+}
+.ta-wrapper .btn-gold {
+    appearance: none;
+    /* 브라우저 기본 라디오 버튼 제거 */
+    border: 1px solid var(--main-color);
+    color: var(--main-color);
+    border-radius: 10px;
+    background: transparent;
+    font-weight: bold;
+    font-size: 1.6rem;
+}
+
+.ta-wrapper .btn-gold:hover,
+.ta-wrapper .btn-gold.selected {
+    background: var(--main-color);
+    color: var(--background-color);
+}
+
+.ta-wrapper canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.ta-wrapper p {
+    word-break: break-word;
+    white-space: normal;
+    font-size: 1.6rem;
+    display: block;
+    width: fit-content;
 }
 .ta-wrapper img {
     display: block;
@@ -159,6 +192,14 @@ body {
 }
 /* 점수 끝 */
 /* 리뷰 */
+.ta-wrapper .like-btn,
+.ta-wrapper .report-btn {
+    display: inline-block; /* 필수 */
+    background-color: transparent;
+    font-size: 24px; /* 적당한 크기 */
+    transition: transform 0.3s ease; /* 애니메이션 효과 */
+    border: none;
+}
 .review-card {
     padding: 10px;
     display: flex;
@@ -304,6 +345,7 @@ body {
     background: transparent;
     color: white;
 }
+
 /* 리뷰 끝 */
 /* 아이프레임 */
 .iframe-card {
@@ -336,4 +378,74 @@ body {
     overflow: hidden;
     height: 315px;
     width: 560px;
+}
+
+/* 분위기 */
+.mood-card {
+    max-width: 1350px;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+    gap: 30px;
+    padding-left: 20px;
+}
+.mood-list {
+    display: flex;
+    padding: 5px;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.mood-list a {
+    display: flex;
+}
+
+.mood-vote {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    height: 400px;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+}
+
+.moods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    height: 100%;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: flex-start;
+    align-content: flex-start;
+}
+
+.mood-vote button {
+    width: 100%;
+    max-width: 470px;
+    align-items: center;
+    justify-content: center;
+}
+
+.moods .btn {
+    flex: 0 0 auto;
+    /* grow 0, shrink 0, basis auto */
+}
+
+.vote-header {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.vote-header p {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

@@ -16,10 +16,10 @@ const TrackInfo = ({ styles, track, album, artist, score, userId, isTrackLikedBy
         <div className={styles.songInfo}>
           <p className={styles.headline}>{track.title}</p>
           <p>{new Date(album.releaseDate).toLocaleDateString()}</p>
-          <Link to={`/artists/${artist.id}`}>
+          <Link to={`/artists?id=${artist.id}`}>
             <p>{artist.name}</p>
           </Link>
-          <Link to={`/albums/${album.id}`}>
+          <Link to={`/albums?id=${album.id}`}>
             <p>{`${album.title}💽의 ${track.trackNo}th track`}</p>
           </Link>
           <div className="review-section">
@@ -29,7 +29,7 @@ const TrackInfo = ({ styles, track, album, artist, score, userId, isTrackLikedBy
             <button
               type="button"
               id="likeTrackBtn"
-              className="btn btn-gold"
+              className={`btn ${styles['btn-gold']}`}
               data-track-id={track.id}
               data-user-id={userId != null ? userId : 0}
               data-liked={isTrackLikedByUser}
@@ -37,7 +37,7 @@ const TrackInfo = ({ styles, track, album, artist, score, userId, isTrackLikedBy
               <span id="likeText">{isTrackLikedByUser ? '좋아요❤️' : '좋아요🤍'}</span>
               <span id="likeCount">{trackLikeCount}</span>
             </button>
-            <div className="btn btn-gold" id="addToPlaylistBtn" data-track-id={track.id}>
+            <div className={`btn ${styles['btn-gold']}`} id="addToPlaylistBtn" data-track-id={track.id}>
               저장 💾
             </div>
           </div>

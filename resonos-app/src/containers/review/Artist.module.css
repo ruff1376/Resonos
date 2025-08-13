@@ -18,14 +18,8 @@ body {
     color: white;
 }
 
-.headline {
-    font-size: 2.4rem;
-    font-weight: bold;
-    color: var(--main-color);
-}
-.subtitle {
-    font-size: 2rem;
-}
+.headline {font-size: 2.4rem !important; font-weight: bold; color: var(--main-color);}
+.subtitle {font-size: 2rem !important;}
 
 /* 애니메이션 */
 @keyframes spin360 {

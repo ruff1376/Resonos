@@ -6,7 +6,7 @@ const MvAndStreaming = ({ styles, tracks, track }) => {
       {/* 유튭, 스포티파이 아이프레임 */}
       <div className={styles.iframeCard}>
         <div className={styles.spotify}>
-        {tracks != null ? (
+        {tracks != null && tracks.length > 0 ? (
           <iframe
             src={`https://open.spotify.com/embed/track/${tracks[0].id}?utm_source=generator`}
             width="100%"

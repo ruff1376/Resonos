@@ -5,6 +5,7 @@ import styles from './Track.module.css'
 import TrackInfo from '../../components/review/track/TrackInfo';
 import MvAndStreaming from '../../components/review/common/MvAndStreaming';
 import Review from '../../components/review/common/Review';
+import MoodStatus from '../../components/review/common/MoodStatus';
 
 const Track = () => {
 
@@ -82,7 +83,9 @@ const Track = () => {
     <MvAndStreaming styles={styles} tracks={null} track={track} />
     <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
       score={score} isAdmin={isAdmin} album={album} track={track} reviewType={reviewType} />
-      
+    <MoodStatus styles={styles} isMoodEmpty={isMoodEmpty} tags={tags}
+                userId={userId} artist={artist} track={track}
+                userVotedMoodId={userVotedMoodId} moodLabels={moodLabels} />
     </div>
   )
 }

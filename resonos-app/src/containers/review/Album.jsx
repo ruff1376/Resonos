@@ -136,7 +136,7 @@ const Album = () => {
           argValues={argValues} emptyPlayList={emptyPlayList}
           playLists={playLists} />
         <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
-          score={score} isAdmin={isAdmin} album={album} reviewType={reviewType} />
+          score={score} isAdmin={isAdmin} album={album} reviewType={reviewType} track={null} />
         {/* <Element styles={styles} album={album} isArgEmpty={isArgEmpty}
           argValues={argValues} userVote={userVote} userId={userId}
           isAdmin={isAdmin} /> */}
