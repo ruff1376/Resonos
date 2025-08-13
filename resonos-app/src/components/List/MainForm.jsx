@@ -1,9 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './MainForm.css'
 import ScrollToTop from '../ScrollToTop/ScrollToTop';
-import AlbumSection from './section/AlbumSection';
 import GridSection from './section/GridSection';
 import useRatingCharts from './hooks/useRatingCharts';
+import HotReviewAlbumSection from './section/HotReviewAlbumSection';
 
 export default function MainForm(props) {
     const {
@@ -28,8 +28,8 @@ export default function MainForm(props) {
     return (
         <div className="container-fluid d-flex flex-column align-items-center px-0" style={{ maxWidth: 1440, paddingTop: 50, gap: 50 }}>
             <div className="d-flex flex-row mb-5 w-100" style={{ maxWidth: 1440, margin: '10px auto', gap: 10 }}>
-                <AlbumSection title="🔥🇰🇷리뷰 급상승 국내 앨범" albumList={korHotReviewAlbumList} />
-                <AlbumSection title="🔥🌎리뷰 급상승 해외 앨범" albumList={worldHotReviewAlbumList} />
+                <HotReviewAlbumSection title="🔥🇰🇷리뷰 급상승 국내 앨범" albumList={korHotReviewAlbumList} />
+                <HotReviewAlbumSection title="🔥🌎리뷰 급상승 해외 앨범" albumList={worldHotReviewAlbumList} />
             </div>
 
             <GridSection title="최신 앨범" contentList={newAlbumList} count={newAlbumCount} moreLink="/list/new-albums" />
