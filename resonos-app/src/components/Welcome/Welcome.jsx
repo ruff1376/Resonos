@@ -35,12 +35,17 @@ const Welcome = () => {
     const { isLogin, userInfo } = useContext(LoginContext)
 
     return (
-        <div className="welcome" style={{ position: 'relative',paddingTop:'0' }}>
-            <div style={{ width: '100%', height: '100%', position: 'absolute', zIndex: -1 }}>
-                <Galaxy starSpeed={0.1}
-                        autoCenterRepulsion={13}
-                        glowIntensity={0.1}
-                        density={0.9} />
+        <div className="welcome" style={{ position: 'relative' }}>
+            <div style={{ width: '100%', height: '100%', 
+                position: 'absolute', zIndex: -1, top: 0 }}>
+                <Galaxy
+                    density={1}
+                    glowIntensity={1}
+                    saturation={1}
+                    rotationSpeed={0.1}
+                    hueShift={150}
+                    starSpeed={0.2}
+                />
             </div>
             <div className="bg">
                 <main>
