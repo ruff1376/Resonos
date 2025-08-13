@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import SearchForm from "../../components/admin/first/SearchForm";
 import TableColumnHeader from "../../components/admin/first/TableColumnHeader";
 import Pagination from "../../components/admin/Pagination";
+
 import {
   getAnPData,
   createApiKey,
@@ -11,6 +12,7 @@ import {
   deletePlugin,
   togglePlugin
 } from "../../apis/admin";
+import QuickMenu from "../../components/admin/first/QuickMenu";
 
 const AdminAnPManageContainer = () => {
   const [apiKeys, setApiKeys] = useState([]);
@@ -239,6 +241,7 @@ const AdminAnPManageContainer = () => {
           </div>
         </>
       )}
+      <QuickMenu />
     </div>
   );
 };

@@ -1,5 +1,10 @@
-   /* 전역 공통 변수 / 테마 */
-/* 관리자 전용 변수 */
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Admin Button Example</title>
+<style>
+       /* 전역 공통 변수 / 테마 */
 :root {
   /* 기본(Dark) 테마 */
   --main-color: #D4B97F;
@@ -38,7 +43,7 @@ body {
   padding: 0;
 }
 
-.admin .container {
+.container {
   width: 100% !important;
   max-width: var(--container-width) !important;
   margin: auto !important;
@@ -46,73 +51,68 @@ body {
   box-sizing: border-box;
 }
 
-.admin a {
+a {
   text-decoration: none !important;
   color: inherit;
-  background-color: var(--background-color);
 }
 
 /* =========================
    Navbar
 ========================= */
-.admin .navbar {
+.navbar {
   background: var(--background-color) !important;
   border-bottom: 1px solid #222;
   position: sticky;
   top: 0;
   z-index: 1050;
 }
-.admin .navbar-brand span {
+.navbar-brand span {
   color: var(--main-color);
   font-weight: bold;
   letter-spacing: 2px;
 }
-.admin .navbar-nav .nav-link {
+.navbar-nav .nav-link {
   color: var(--main-color) !important;
   transition: color 0.2s;
 }
-.admin .navbar-nav .nav-link:hover,
-.admin .navbar-nav .nav-link:focus {
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link:focus {
   color: var(--silver-color) !important;
 }
 
    /* 카드 */
-.admin .resonos-card {
-  background: var(--card-bg) !important;
-  border: 1.5px solid var(--card-border) !important;
-  border-radius: 1.2rem !important;
-  padding: 2rem !important;
-  box-shadow: var(--shadow-soft) !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-  color: var(--text-color) !important;
-  text-align: center !important;
+.resonos-card {
+  background: var(--card-bg);
+  border: 1.5px solid var(--card-border);
+  border-radius: 1.2rem;
+  padding: 2rem;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: var(--text-color);
+  text-align: center;
 }
-.admin .resonos-card:hover {
+.resonos-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-strong);
 }
-.admin .card-title {
+.card-title {
   color: var(--main-color);
   font-size: 2rem;
   font-weight: bold;
 }
-.admin .card-sm-title {
+.card-sm-title {
   color: var(--main-color);
   font-size: 1.6rem;
   font-weight: 600;
 }
-.admin .card-value {
+.card-value {
   font-size: 2.4rem;
   font-weight: bold;
   color: var(--silver-color);
 }
 
-/* 버튼 */
-.admin .btn { 
-  color: var(--text-color) !important;
-  background: var(--main-color);
-}
-.admin .btn-gold {
+   /* 버튼 */
+.btn-gold {
   background: var(--main-color);
   color: var(--background-color);
   font-weight: bold;
@@ -122,11 +122,11 @@ body {
   font-size: 0.9rem;
   line-height: 1.2; /* 높이 줄이기 */
 }
-.admin .btn-gold:hover {
+.btn-gold:hover {
   background: #e5c888;
   transform: scale(1.05);
 }
-.admin .btn-outline-gold {
+.btn-outline-gold {
   background: none;
   color: var(--main-color);
   border: 1.5px solid var(--main-color);
@@ -136,27 +136,27 @@ body {
   font-size: 0.9rem;
   line-height: 1.2;
 }
-.admin .btn-outline-gold:hover {
+.btn-outline-gold:hover {
   background: var(--main-color);
   color: var(--background-color);
 }
-.admin .btn-xs {
+.btn-xs {
   font-size: 0.9rem;
   padding: 4px 10px;
 }
-.admin .btn-sm {
+.btn-sm {
   padding: 0.2rem 0.8rem !important; /* 세로 여백 감소 */
   font-size: 0.85rem !important;
   line-height: 1.1 !important;
 }
-.admin .btn-outline-gold.btn-sm,
-.admin .btn-gold.btn-sm {
+.btn-outline-gold.btn-sm,
+.btn-gold.btn-sm {
   padding: 0.2rem 0.8rem !important;
   font-size: 0.85rem !important;
   line-height: 1.1 !important;
 }
    /* 표 / 리스트 */
-.admin .list-group-item {
+.list-group-item {
   display: flex;
   align-items: center;
   min-height: 48px;
@@ -165,46 +165,46 @@ body {
   text-align: center;
   transition: background 0.2s ease, transform 0.15s ease;
 }
-.admin .list-group-item:hover {
+.list-group-item:hover {
   background: var(--hover-bg);
 }
-.admin .table-header,
-.admin .badge-table-header {
+.table-header,
+.badge-table-header {
   background: #1d2027;
   color: var(--main-color);
   font-weight: bold;
   display: flex;
   align-items: center;
 }
-.admin .badge-table-row:nth-child(even) {
+.badge-table-row:nth-child(even) {
   background: rgba(255, 255, 255, 0.03);
 }
-.admin .table-cell,
-.admin .badge-col {
+.table-cell,
+.badge-col {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
    /* 폼 요소 */
-.admin .form-control,
-.admin .form-select,
-.admin .api-key-input {
+.form-control,
+.form-select,
+.api-key-input {
   background: var(--background-color);
   color: var(--silver-color);
   border: 1px solid var(--main-color);
   border-radius: 8px;
   padding: 6px 12px;
 }
-.admin .form-control:focus,
-.admin .form-select:focus {
+.form-control:focus,
+.form-select:focus {
   outline: none;
   border-color: #e5c888;
   box-shadow: 0 0 4px rgba(229, 200, 136, 0.6);
 }
 
    /* QuickMenu */
-.admin .quick-menu {
+.quick-menu {
   position: fixed;
   top: 50%;
   left: 2%;
@@ -214,7 +214,7 @@ body {
   gap: 0.8rem;
   z-index: 2000;
 }
-.admin .quick-menu-item {
+.quick-menu-item {
   background-color: var(--background-color);
   color: var(--main-color);
   border: 1px solid var(--main-color);
@@ -229,13 +229,13 @@ body {
   font-weight: bold;
   transition: all 0.25s ease;
 }
-.admin .quick-menu-item:hover {
+.quick-menu-item:hover {
   background-color: var(--main-color);
   color: var(--background-color);
 }
 
 @media (max-width: 991px) {
-  .admin .quick-menu {
+  .quick-menu {
     bottom: 0;
     left: 0;
     top: auto;
@@ -246,7 +246,7 @@ body {
     border-top: 1px solid var(--main-color);
     padding: 4px 0;
   }
-  .admin .quick-menu-item {
+  .quick-menu-item {
     border: none;
     height: auto;
     padding: 6px 2px;
@@ -259,27 +259,27 @@ body {
    반응형 설정
 ========================= */
 @media (max-width: 991px) {
-  .admin .container {
+  .container {
     padding: 0 12px !important;
   }
-  .admin .resonos-card {
+  .resonos-card {
     padding: 1.4rem;
   }
 }
 @media (max-width: 768px) {
-  .admin .list-group-item {
+  .list-group-item {
     flex-wrap: wrap;
     text-align: left !important;
     padding: 8px 10px;
     font-size: 0.9rem;
   }
-  .admin .list-group-item > div {
+  .list-group-item > div {
     flex-basis: 100% !important;
     margin-bottom: 4px;
   }
 }
 @media (max-width: 576px) {
-  html.admin {
+  html {
     font-size: 58%;
   }
 }
@@ -287,7 +287,7 @@ body {
 /* =========================
    테마 토글 버튼
 ========================= */
-.admin .theme-toggle-btn {
+.theme-toggle-btn {
   border: 1px solid var(--main-color);
   background: none;
   color: var(--main-color);
@@ -296,7 +296,43 @@ body {
   font-size: 0.9rem;
   transition: all 0.25s ease;
 }
-.admin .theme-toggle-btn:hover {
+.theme-toggle-btn:hover {
   background: var(--main-color);
   color: var(--background-color);
 }
+
+</style>
+</head>
+<body>
+
+<div class="admin" style="padding: 20px; background: var(--background-color);">
+
+  <h2 style="color: var(--main-color)">버튼 스타일 예시</h2>
+
+  <!-- 기본 골드 버튼 -->
+  <button class="btn-gold">기본 골드 버튼</button>
+
+  <!-- 호버 확인용 -->
+  <button class="btn-gold">Hover 확인 (마우스 올리기)</button>
+
+  <!-- 아웃라인 골드 버튼 -->
+  <button class="btn-outline-gold">아웃라인 골드 버튼</button>
+
+  <!-- XS 사이즈 -->
+  <button class="btn-gold btn-xs">Gold XS</button>
+  <button class="btn-outline-gold btn-xs">Outline XS</button>
+
+  <!-- SM 사이즈 -->
+  <button class="btn-gold btn-sm">Gold Small</button>
+  <button class="btn-outline-gold btn-sm">Outline Small</button>
+
+  <!-- 버튼 그룹 예시 -->
+  <div style="margin-top: 20px;">
+    <button class="btn-gold btn-sm">확인</button>
+    <button class="btn-outline-gold btn-sm">취소</button>
+  </div>
+
+</div>
+
+</body>
+</html>

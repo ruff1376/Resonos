@@ -276,7 +276,7 @@ const PlaylistDetailContainer = () => {
   }, [])
 
   return (
-    <div className="container">
+    <div className="admin container">
       <Header />
       <PlaylistDetailForm
         playlist={playlist}

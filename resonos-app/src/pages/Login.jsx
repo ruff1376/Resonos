@@ -6,7 +6,7 @@ import Header from '../components/Header/Header'
 const Login = () => {
 
   return (
-    <div className="container">
+    <div className="admin container">
       <Header />
       <LoginForm />
       <Footer />

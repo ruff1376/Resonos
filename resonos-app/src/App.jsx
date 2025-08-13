@@ -47,11 +47,20 @@ import Notification from './pages/user/Notification';
 import LikedMusic from './pages/user/LikedMusic';
 import FollowArtist from './pages/user/FollowArtist';
 import FollowUser from './pages/user/FollowUser';
+import AdminNoticePage from './pages/admin/AdminNoticePage';
+import AdminQnAPage from './pages/admin/AdminQnAPage';
+import AdminLayout from './layouts/AdminLayout'; // /admin 경로 css 전역으로 적용 
 import Badge from './pages/user/Badge';
 import Security from './pages/user/Security';
 import SetNotification from './pages/user/SetNotification';
 import FindId from './pages/user/FindId';
 import FindPw from './pages/user/FindPw';
+
+
+
+// 범위 한정 css 적용 - 테스트 진행중 
+
+
 
 const App = () => {
 
@@ -60,7 +69,6 @@ const App = () => {
       <LoginContextProvider>
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/admin' element={<AdminIndex />} />
           <Route path='/test' element={<Tailwindtest />} />
           <Route path="/list/main" element={<Main />} />
 
@@ -112,20 +120,24 @@ const App = () => {
 
 
           {/* 관리자 - 유저 관리 경로 */}
-          <Route path="/admin/members" element={<AdminMembers />} />
-          <Route path="/admin/members/logs/" element={<AdminMemberDetail />} />
-          <Route path="/admin/test/" element={<AdminTest />} />
-          <Route path="/admin/report" element={<AdminReportsContainer />} />
-          <Route path="/admin/music" element={<AdminMusicContainer />} />
-          <Route path="/admin/role" element={<AdminRoleManagePage />} />
-          <Route path="/admin/AnP" element={<AdminAnPManagePage />} />
-          <Route path="/admin/PolicySetting" element={<AdminPnSManagePage />} />
-          <Route path="/admin/Badge" element={<AdminBadgeManagePage />} />
-          <Route path="/admin/badge/:badgeId/users" element={<BadgeUsersPage />} />
-          <Route path="/admin/tags" element={<AdminTagManagePage />} />
-          <Route path="/admin/vote" element={<VoteStatsPage />} />
-          <Route path="/admin/report/review" element={<ReviewReportManagePage />} />
-          <Route path="/admin/notifications" element={<AdminNotificationPage />} />
+          <Route path="/admin" element={<AdminLayout><AdminIndex /></AdminLayout>} />
+          <Route path="/admin/members" element={<AdminLayout><AdminMembers /></AdminLayout>} />
+          <Route path="/admin/members/logs" element={<AdminLayout><AdminMemberDetail /></AdminLayout>} />
+          <Route path="/admin/test" element={<AdminLayout><AdminTest /></AdminLayout>} />
+          <Route path="/admin/report" element={<AdminLayout><AdminReportsContainer /></AdminLayout>} />
+          <Route path="/admin/music" element={<AdminLayout><AdminMusicContainer /></AdminLayout>} />
+          <Route path="/admin/role" element={<AdminLayout><AdminRoleManagePage /></AdminLayout>} />
+          <Route path="/admin/AnP" element={<AdminLayout><AdminAnPManagePage /></AdminLayout>} />
+          <Route path="/admin/PolicySetting" element={<AdminLayout><AdminPnSManagePage /></AdminLayout>} />
+          <Route path="/admin/Badge" element={<AdminLayout><AdminBadgeManagePage /></AdminLayout>} />
+          <Route path="/admin/badge/:badgeId/users" element={<AdminLayout><BadgeUsersPage /></AdminLayout>} />
+          <Route path="/admin/tags" element={<AdminLayout><AdminTagManagePage /></AdminLayout>} />
+          <Route path="/admin/vote" element={<AdminLayout><VoteStatsPage /></AdminLayout>} />
+          <Route path="/admin/report/review" element={<AdminLayout><ReviewReportManagePage /></AdminLayout>} />
+          <Route path="/admin/notifications" element={<AdminLayout><AdminNotificationPage /></AdminLayout>} />
+          <Route path="/admin/notices" element={<AdminLayout><AdminNoticePage /></AdminLayout>} />
+          <Route path="/admin/qna" element={<AdminLayout><AdminQnAPage /></AdminLayout>} />
+
 
         </Routes>
       </LoginContextProvider>

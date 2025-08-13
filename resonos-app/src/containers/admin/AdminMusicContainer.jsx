@@ -4,6 +4,7 @@ import TableColumnHeader from '../../components/admin/first/TableColumnHeader';
 import Pagination from '../../components/admin/Pagination';
 import SearchForm from '../../components/admin/first/SearchForm';
 import MusicAddForm from '../../components/admin/second/MusicAddForm';
+
 import {
   getMusicData,
   deleteTrack, deleteAlbum, deleteArtist,
@@ -12,6 +13,7 @@ import {
   searchTrackList, searchAlbumList, searchArtistList,
    saveTrack, saveAlbum, saveArtist  
 } from '../../apis/admin';
+import QuickMenu from '../../components/admin/first/QuickMenu';
 
 /**
  * AdminMusicContainer
@@ -385,6 +387,7 @@ return (
       pageUri={`/admin/music?tab=${activeTab}&keyword=${encodeURIComponent(keyword)}`}
       onPageChange={onPageChange}
     />
+    <QuickMenu />
   </div>
 );
 

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { getBadgeUsers } from "../../apis/admin"; 
 import { useParams, Link } from "react-router-dom";
 import TableColumnHeader from "../../components/admin/first/TableColumnHeader";
-import styles from "../../components/admin/css/admin.module.css";
+import QuickMenu from "../../components/admin/first/QuickMenu";
+
 
 const BadgeUsersContainer = () => {
   const { badgeId } = useParams();
@@ -50,8 +51,9 @@ const BadgeUsersContainer = () => {
     <div className="container py-4">
       <h2 className="mb-4">
         배지 지급자 목록{" "}
-        <span style={{ color: "#4fc3f7" }}>(Badge ID: {badgeId})</span>
+        <span className="text-info">(Badge ID: {badgeId})</span>
       </h2>
+
       <div className="mb-3">
         <Link to="/admin/badge" className="btn btn-outline-primary btn-sm">
           &laquo; 배지 관리로
@@ -59,7 +61,7 @@ const BadgeUsersContainer = () => {
       </div>
 
       {/* 지급자(보유자) */}
-      <div className={`${styles["resonos-card"]} mb-4`}>
+      <div className="admin resonos-card mb-4">
         <div className="fw-semibold bg-resonos-dark text-light p-2">
           지급/보유자 현황
         </div>
@@ -73,15 +75,13 @@ const BadgeUsersContainer = () => {
                 key={u.userId}
                 className="d-flex border-bottom text-center align-items-center"
               >
-                <div style={userColumns[0].style}>{idx + 1}</div>
-                <div style={userColumns[1].style}>{u.userId}</div>
-                <div style={userColumns[2].style}>{u.userName}</div>
-                <div style={userColumns[3].style}>
-                  {u.grantedAt
-                    ? new Date(u.grantedAt).toLocaleString()
-                    : "-"}
+                <div className="flex-fill">{idx + 1}</div>
+                <div className="flex-fill">{u.userId}</div>
+                <div className="flex-fill">{u.userName}</div>
+                <div className="flex-fill">
+                  {u.grantedAt ? new Date(u.grantedAt).toLocaleString() : "-"}
                 </div>
-                <div style={userColumns[4].style}>
+                <div className="flex-fill">
                   <Link
                     to={`/admin/badge/user/${u.userId}`}
                     className="btn btn-info btn-xs"
@@ -100,7 +100,7 @@ const BadgeUsersContainer = () => {
       </div>
 
       {/* 지급/회수 이력 */}
-      <div className={`${styles["resonos-card"]} mb-4`}>
+      <div className="admin resonos-card mb-4">
         <div className="fw-semibold bg-resonos-dark text-light p-2">
           이 배지의 지급/회수 이력
         </div>
@@ -114,9 +114,9 @@ const BadgeUsersContainer = () => {
                 key={idx}
                 className="d-flex border-bottom text-center align-items-center"
               >
-                <div style={logColumns[0].style}>{idx + 1}</div>
-                <div style={logColumns[1].style}>{log.userId}</div>
-                <div style={logColumns[2].style}>
+                <div className="flex-fill">{idx + 1}</div>
+                <div className="flex-fill">{log.userId}</div>
+                <div className="flex-fill">
                   {log.action === "GRANT" ? (
                     <span className="badge bg-success">지급</span>
                   ) : log.action === "REVOKE" ? (
@@ -125,11 +125,9 @@ const BadgeUsersContainer = () => {
                     <span className="badge bg-secondary">기타</span>
                   )}
                 </div>
-                <div style={logColumns[3].style}>
-                  {log.actorId || "-자동-"}
-                </div>
-                <div style={logColumns[4].style}>{log.reason || "-"}</div>
-                <div style={logColumns[5].style}>
+                <div className="flex-fill">{log.actorId || "-자동-"}</div>
+                <div className="flex-fill">{log.reason || "-"}</div>
+                <div className="flex-fill">
                   {log.createdAt
                     ? new Date(log.createdAt).toLocaleString()
                     : "-"}
@@ -143,8 +141,11 @@ const BadgeUsersContainer = () => {
           </div>
         )}
       </div>
+
+      <QuickMenu />
     </div>
   );
+
 };
 
 export default BadgeUsersContainer;

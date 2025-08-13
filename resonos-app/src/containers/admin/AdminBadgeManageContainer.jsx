@@ -9,8 +9,9 @@ import {
 import FormInput from "../../components/admin/first/FormInput";
 import FormSelect from "../../components/admin/first/FormSelect";
 import TableColumnHeader from "../../components/admin/first/TableColumnHeader";
-import styles from "../../components/admin/css/admin.module.css";
 import { Link } from "react-router-dom";
+import QuickMenu from "../../components/admin/first/QuickMenu";
+
 
 const AdminBadgeManageContainer = () => {
   const [badges, setBadges] = useState([]);
@@ -110,110 +111,223 @@ const AdminBadgeManageContainer = () => {
     { label: "관리", style: { flexBasis: "18%", minWidth: "140px" } },
   ];
 
-  return (
-    <div className={`container ${styles["admin-content"]}`}>
-      {/* 왼쪽 - 배지 리스트 */}
-      <div className={styles["badge-list"]}>
-        <h2 className="text-light-gold mb-3">배지 관리</h2>
-        <TableColumnHeader columns={columns} />
-        {loading ? (
-          <div>로딩중...</div>
-        ) : badges.length > 0 ? (
-          badges.map((badge) => (
-            <div key={badge.id} className={`${styles["badge-table-row"]} d-flex`}>
-              <div style={columns[0].style}>
-                <img src={badge.iconUrl || "/static/img/default-badge.png"} alt="아이콘" className={styles["badge-icon-img"]} />
-              </div>
-              <div style={columns[1].style}>{badge.name}</div>
-              <div style={columns[2].style}>{badge.description}</div>
-              <div style={columns[3].style}>
-                {badgeConditionsMap[badge.id]?.length > 0
-                  ? `[${badgeConditionsMap[badge.id][0].conditionType}] ${badgeConditionsMap[badge.id][0].conditionValue}`
-                  : <span className="text-secondary">없음</span>}
-              </div>
-              <div style={columns[4].style}>{badgeUserCount[badge.id] || 0}</div>
-                <div style={columns[5].style}>
-                <button
-                    className="btn btn-outline-gold btn-xs me-1"
-                    onClick={() => {
-                    const cond = badgeConditionsMap[badge.id]?.[0] || {};
-                    setEditBadgeId(badge.id);
-                    setEditForm({
-                        id: cond.id,
-                        badgeId: badge.id,
-                        badgeName: badge.name,
-                        description: badge.description,
-                        conditionType: cond.conditionType,
-                        conditionValue: cond.conditionValue
-                    });
-                    }}
-                >
-                    수정
-                </button>
-                <button className="btn btn-danger btn-xs me-1" onClick={() => handleDelete(badge.id)}>삭제</button>
-                <button
-                    className="btn btn-success btn-xs me-1"
-                    onClick={() => handleGrantAuto(badgeConditionsMap[badge.id]?.[0]?.conditionType)}
-                >
-                    조건 일괄지급
-                </button>
-                <Link
-                    to={`/admin/badge/${badge.id}/users`}
-                    className="btn btn-info btn-xs"
-                >
-                    지급자 목록
-                </Link>
-                </div>
+return (
+  <div className="admin-content">
+    {/* 왼쪽 - 배지 리스트 */}
+    <div className="badge-list">
+      <h2 className="text-light-gold mb-3">배지 관리</h2>
+      <TableColumnHeader columns={columns} />
 
+      {loading ? (
+        <div>로딩중...</div>
+      ) : badges.length > 0 ? (
+        badges.map((badge) => (
+          <div key={badge.id} className="badge-table-row d-flex">
+            <div className="badge-col badge-col-icon">
+              <img
+                src={badge.iconUrl || "/static/img/default-badge.png"}
+                alt="아이콘"
+                className="badge-icon-img"
+              />
+            </div>
+            <div className="badge-col badge-col-name">{badge.name}</div>
+            <div className="badge-col badge-col-desc">{badge.description}</div>
+            <div className="badge-col badge-col-cond">
+              {badgeConditionsMap[badge.id]?.length > 0
+                ? `[${badgeConditionsMap[badge.id][0].conditionType}] ${badgeConditionsMap[badge.id][0].conditionValue}`
+                : <span className="text-secondary">없음</span>}
+            </div>
+            <div className="badge-col">{badgeUserCount[badge.id] || 0}</div>
 
-              {editBadgeId === badge.id && (
-                <div className={styles["edit-form-wrap"]}>
-                  <form onSubmit={handleUpdate} className="row g-2">
-                    <input type="hidden" name="id" value={editForm.id} />
-                    <input type="hidden" name="badgeId" value={editForm.badgeId} />
-                    <FormInput label="배지명" name="badgeName" value={editForm.badgeName} onChange={(e) => setEditForm({ ...editForm, badgeName: e.target.value })} required />
-                    <FormInput label="설명" name="description" value={editForm.description} onChange={(e) => setEditForm({ ...editForm, description: e.target.value })} required />
-                    <FormSelect label="조건유형" name="conditionType" value={editForm.conditionType} onChange={(e) => setEditForm({ ...editForm, conditionType: e.target.value })} options={[
+            <div className="badge-col badge-col-action">
+              <button
+                className="btn btn-outline-gold btn-xs me-1"
+                onClick={() => {
+                  const cond = badgeConditionsMap[badge.id]?.[0] || {};
+                  setEditBadgeId(badge.id);
+                  setEditForm({
+                    id: cond.id,
+                    badgeId: badge.id,
+                    badgeName: badge.name,
+                    description: badge.description,
+                    conditionType: cond.conditionType,
+                    conditionValue: cond.conditionValue
+                  });
+                }}
+              >
+                수정
+              </button>
+              <button
+                className="btn btn-danger btn-xs me-1"
+                onClick={() => handleDelete(badge.id)}
+              >
+                삭제
+              </button>
+              <button
+                className="btn btn-success btn-xs me-1"
+                onClick={() => handleGrantAuto(
+                  badgeConditionsMap[badge.id]?.[0]?.conditionType
+                )}
+              >
+                조건 일괄지급
+              </button>
+              <Link
+                to={`/admin/badge/${badge.id}/users`}
+                className="btn btn-info btn-xs"
+              >
+                지급자 목록
+              </Link>
+            </div>
+
+            {editBadgeId === badge.id && (
+              <div className="edit-form-wrap">
+                <form onSubmit={handleUpdate} className="row g-2">
+                  <input type="hidden" name="id" value={editForm.id} />
+                  <input type="hidden" name="badgeId" value={editForm.badgeId} />
+                  <FormInput
+                    label="배지명"
+                    name="badgeName"
+                    value={editForm.badgeName}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, badgeName: e.target.value })
+                    }
+                    required
+                  />
+                  <FormInput
+                    label="설명"
+                    name="description"
+                    value={editForm.description}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, description: e.target.value })
+                    }
+                    required
+                  />
+                  <FormSelect
+                    label="조건유형"
+                    name="conditionType"
+                    value={editForm.conditionType}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, conditionType: e.target.value })
+                    }
+                    options={[
                       { value: "POST_COUNT", label: "게시글 수" },
                       { value: "FOLLOWER_COUNT", label: "팔로워 수" },
                       { value: "COMMENT_COUNT", label: "댓글 수" },
-                    ]} />
-                    <FormInput label="조건 값" type="number" name="conditionValue" value={editForm.conditionValue} onChange={(e) => setEditForm({ ...editForm, conditionValue: e.target.value })} required />
-                    <div className="col-12 text-end mt-2">
-                      <button type="submit" className="btn btn-gold btn-sm me-2">저장</button>
-                      <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setEditBadgeId(null)}>취소</button>
-                    </div>
-                  </form>
-                </div>
-              )}
-            </div>
-          ))
-        ) : (
-          <div className="text-center text-secondary py-3">등록된 배지가 없습니다.</div>
-        )}
-      </div>
+                    ]}
+                  />
+                  <FormInput
+                    label="조건 값"
+                    type="number"
+                    name="conditionValue"
+                    value={editForm.conditionValue}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, conditionValue: e.target.value })
+                    }
+                    required
+                  />
+                  <div className="col-12 text-end mt-2">
+                    <button type="submit" className="btn btn-gold btn-sm me-2">
+                      저장
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary btn-sm"
+                      onClick={() => setEditBadgeId(null)}
+                    >
+                      취소
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+          </div>
+        ))
+      ) : (
+        <div className="text-center text-secondary py-3">
+          등록된 배지가 없습니다.
+        </div>
+      )}
+    </div>
 
-      {/* 오른쪽 - 등록폼 */}
-      <div className={styles["badge-add-form"]}>
-        <h4 className="mb-3">배지 및 조건 등록</h4>
-        <form onSubmit={handleCreate}>
-          <FormInput label="배지명" name="name" value={newBadge.name} onChange={(e) => setNewBadge({ ...newBadge, name: e.target.value })} required />
-          <FormInput label="설명" name="description" value={newBadge.description} onChange={(e) => setNewBadge({ ...newBadge, description: e.target.value })} required />
-          <FormInput label="아이콘 URL" name="iconUrl" value={newBadge.iconUrl} onChange={(e) => setNewBadge({ ...newBadge, iconUrl: e.target.value })} />
-          <FormSelect label="조건유형" name="conditionType" value={newBadge.conditionType} onChange={(e) => setNewBadge({ ...newBadge, conditionType: e.target.value })} required options={[
+    {/* 오른쪽 - 등록폼 */}
+    <div className="badge-add-form">
+      <h4 className="mb-3">배지 및 조건 등록</h4>
+      <form onSubmit={handleCreate}>
+        <FormInput
+          label="배지명"
+          name="name"
+          value={newBadge.name}
+          onChange={(e) =>
+            setNewBadge({ ...newBadge, name: e.target.value })
+          }
+          required
+        />
+        <FormInput
+          label="설명"
+          name="description"
+          value={newBadge.description}
+          onChange={(e) =>
+            setNewBadge({ ...newBadge, description: e.target.value })
+          }
+          required
+        />
+        <FormInput
+          label="아이콘 URL"
+          name="iconUrl"
+          value={newBadge.iconUrl}
+          onChange={(e) =>
+            setNewBadge({ ...newBadge, iconUrl: e.target.value })
+          }
+        />
+        <FormSelect
+          label="조건유형"
+          name="conditionType"
+          value={newBadge.conditionType}
+          onChange={(e) =>
+            setNewBadge({ ...newBadge, conditionType: e.target.value })
+          }
+          required
+          options={[
             { value: "POST_COUNT", label: "게시글 수" },
             { value: "FOLLOWER_COUNT", label: "팔로워 수" },
             { value: "COMMENT_COUNT", label: "댓글 수" },
-          ]} />
-          <FormInput label="조건 값" type="number" name="conditionValue" value={newBadge.conditionValue} onChange={(e) => setNewBadge({ ...newBadge, conditionValue: e.target.value })} required />
-          <div className="text-end mt-3">
-            <button className="btn btn-primary btn-sm me-2">등록</button>
-            <button type="reset" className="btn btn-secondary btn-sm" onClick={() => setNewBadge({ name: "", description: "", iconUrl: "", conditionType: "", conditionValue: "" })}>취소</button>
-          </div>
-        </form>
-      </div>
+          ]}
+        />
+        <FormInput
+          label="조건 값"
+          type="number"
+          name="conditionValue"
+          value={newBadge.conditionValue}
+          onChange={(e) =>
+            setNewBadge({ ...newBadge, conditionValue: e.target.value })
+          }
+          required
+        />
+        <div className="text-end mt-3">
+          <button className="btn btn-primary btn-sm me-2">등록</button>
+          <button
+            type="reset"
+            className="btn btn-secondary btn-sm"
+            onClick={() =>
+              setNewBadge({
+                name: "",
+                description: "",
+                iconUrl: "",
+                conditionType: "",
+                conditionValue: ""
+              })
+            }
+          >
+            취소
+          </button>
+        </div>
+      </form>
     </div>
-  );
+
+    <QuickMenu />
+  </div>
+);
+
 };
 
 export default AdminBadgeManageContainer;

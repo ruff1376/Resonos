@@ -1,6 +1,5 @@
 import React from 'react';
 import StatsCards from './second/StatusCards';
-import styles from './css/admin.module.css'
 
 
 const Index = ({ stats }) => {

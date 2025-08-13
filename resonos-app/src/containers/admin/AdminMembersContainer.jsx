@@ -7,7 +7,9 @@ import TableContent from '../../components/admin/first/TableContent'; // 수정 
 import { list, insert, update, toggleEnable, banUser, remove, select } from '../../apis/admin';
 import MemberDetailForm from '../../components/admin/second/MemberDetailForm';
 
+
 import Pagination from '../../components/admin/Pagination';
+import QuickMenu from '../../components/admin/first/QuickMenu';
 
 const AdminMembersContainer = () => {
   const [members, setMembers] = useState([]);
@@ -305,6 +307,7 @@ const handleDetailSubmit = async (e) => {
               pageUri={pageUri}
               onPageChange={onPageChange}
             />
+                     <QuickMenu />
         </>
       )}
     </div>

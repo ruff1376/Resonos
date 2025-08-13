@@ -9,16 +9,18 @@ const AddButton = ({
   style,
 }) => {
   return (
-    <div className="mb-3 text-end">
-      <button
-        type={type}
-        className={className}
-        id={id}
+    <div className="admin">
+      <div className="mb-3 text-end">
+        <button
+          type={type}
+          className={className}
+          id={id}
         onClick={onClick}
         style={style}
       >
         {label}
       </button>
+    </div>
     </div>
   );
 };

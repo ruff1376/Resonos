@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import TableColumnHeader from "../../components/admin/first/TableColumnHeader";
 import Pagination from "../../components/admin/Pagination";
-import styles from "../../components/admin/css/admin.module.css";
+import QuickMenu from "../../components/admin/first/QuickMenu";
+
 
 /** 행 렌더링 전용 */
 const VoteStatsTableContent = ({ stats, idKey, titleKey, showMore, toggleMore }) => {
@@ -119,63 +120,72 @@ const fetchStats = async (selectedTab, pageNum = 1) => {
     { label: "", style: { flexBasis: "10%", minWidth: "60px" } },
   ];
 
-  return (
-    <main className="py-5 bg-resonos-dark">
-      <div className="container" style={{ maxWidth: 950 }}>
-        <h2 className="mb-3 text-light-gold">태그/분위기 투표 현황</h2>
+return (
+  <main className="py-5 bg-resonos-dark">
+    <div className="container max-w-950">
+      <h2 className="mb-3 text-light-gold">태그/분위기 투표 현황</h2>
 
-        {/* 탭 제네릭 */}
-        <ul className="nav nav-tabs mb-4">
-          {tabs.map((t) => (
-            <li className="nav-item" key={t.key}>
-              <button
-                className={`nav-link ${tab === t.key ? "active" : ""}`}
-                onClick={() => { setTab(t.key); setPage(1); }}
-              >
-                {t.label}
-              </button>
-            </li>
-          ))}
-        </ul>
+      {/* 탭 제네릭 */}
+      <ul className="nav nav-tabs mb-4">
+        {tabs.map((t) => (
+          <li className="nav-item" key={t.key}>
+            <button
+              className={`nav-link ${tab === t.key ? "active" : ""}`}
+              onClick={() => {
+                setTab(t.key);
+                setPage(1);
+              }}
+            >
+              {t.label}
+            </button>
+          </li>
+        ))}
+      </ul>
 
-        {loading ? (
-          <div>로딩중...</div>
-        ) : (
-          <div className={`${styles["resonos-card"]} p-4`} style={{ padding: "2.5rem" }}>
-            <TableColumnHeader columns={columns} />
-            <VoteStatsTableContent
-              stats={stats}
-              idKey={currentTab.idKey}
-              titleKey={currentTab.titleKey}
-              toggleMore={toggleMore}
-              showMore={showMore}
-            />
-            {stats.length === 0 && (
-              <div className="vote-table-row text-center text-secondary">
-                <div className="vote-col-id" style={{ flex: 1 }}>
-                  투표 현황 데이터가 없습니다.
-                </div>
+      {loading ? (
+        <div>로딩중...</div>
+      ) : (
+        <div className="admin resonos-card p-4">
+          <TableColumnHeader columns={columns} />
+          <VoteStatsTableContent
+            stats={stats}
+            idKey={currentTab.idKey}
+            titleKey={currentTab.titleKey}
+            toggleMore={toggleMore}
+            showMore={showMore}
+          />
+          {stats.length === 0 && (
+            <div className="vote-table-row text-center text-secondary">
+              <div className="vote-col-id flex-fill">
+                투표 현황 데이터가 없습니다.
               </div>
-            )}
+            </div>
+          )}
 
-            {pagination.totalPages > 1 && (
-              <Pagination
-                page={page}
-                first={1}
-                last={pagination.totalPages}
-                prev={page > 1 ? page - 1 : 1}
-                next={page < pagination.totalPages ? page + 1 : pagination.totalPages}
-                start={Math.max(1, page - 4)}
-                end={Math.min(pagination.totalPages, page + 5)}
-                pageUri={`/admin/vote?tab=${tab}`}
-                onPageChange={(newPage) => setPage(newPage)}
-              />
-            )}
-          </div>
-        )}
-      </div>
-    </main>
-  );
+          {pagination.totalPages > 1 && (
+            <Pagination
+              page={page}
+              first={1}
+              last={pagination.totalPages}
+              prev={page > 1 ? page - 1 : 1}
+              next={
+                page < pagination.totalPages
+                  ? page + 1
+                  : pagination.totalPages
+              }
+              start={Math.max(1, page - 4)}
+              end={Math.min(pagination.totalPages, page + 5)}
+              pageUri={`/admin/vote?tab=${tab}`}
+              onPageChange={(newPage) => setPage(newPage)}
+            />
+          )}
+        </div>
+      )}
+    </div>
+    <QuickMenu />
+  </main>
+);
+
 };
 
 export default VoteStatsContainer;

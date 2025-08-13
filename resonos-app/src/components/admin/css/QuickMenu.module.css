@@ -1,0 +1,57 @@
+/* 퀵 메뉴 컨테이너 */
+.quick-menu {
+  position: fixed;
+  top: 50%;
+  left: 2%; /* 화면 왼쪽 비율 단위 */
+  transform: translateY(-50%);
+  display: grid;
+  grid-template-columns: repeat(2, auto); /* 2열 */
+  gap: 0.8rem;
+  z-index: 2000;
+}
+
+/* 메뉴 아이템 */
+.quick-menu-item {
+  background-color: var(--background-color);
+  color: var(--main-color);
+  border: 0.1rem solid var(--main-color);
+  border-radius: 10px; /* 직사각형 모서리 둥글게 */
+  min-width: 80px;
+  height: 40px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.quick-menu-item:hover {
+  background-color: var(--main-color);
+  color: var(--background-color);
+  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(212, 185, 127, 0.7);
+}
+
+/* 라벨 */
+.quick-menu-label {
+  padding: 0.25rem;
+}
+
+/* 🔹 화면이 작을 때(예: 태블릿 이하)는 숨김 */
+@media (max-width: 991px) {
+  .quick-menu {
+    display: none;
+  }
+}
+
+/* 🔹 화면이 클 때만 표시 */
+/* @media (min-width: 1440px) {
+  .quick-menu {
+    display: grid;
+  }
+} */

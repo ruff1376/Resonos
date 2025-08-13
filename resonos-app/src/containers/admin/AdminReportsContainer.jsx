@@ -12,6 +12,7 @@ import {
   deleteReport, 
   updateReportStatus
 } from '../../apis/admin';
+import QuickMenu from '../../components/admin/first/QuickMenu';
 
 const AdminReportsContainer = () => {
   // 상태
@@ -204,7 +205,7 @@ const fetchReports = async (tab = selectedTab, pageNum = page, size = pagination
         pageUri={pageUri}
         onPageChange={onPageChange}
         />
-
+<QuickMenu />
     </>
   );
 };

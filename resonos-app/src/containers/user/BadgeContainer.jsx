@@ -54,7 +54,7 @@ const BadgeContainer = () => {
   }, [])
 
   return (
-    <div className="container">
+    <div className="admin container">
       <Header />
       <Badge
         haveBadgeList={haveBadgeList}

@@ -3,7 +3,8 @@ import StatusCards from '../../components/admin/second/StatusCards';
 import MenuRows from '../../components/admin/second/MenuRows';
 import { getAdminIndex } from '../../apis/admin';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import styles from '../../components/admin/css/admin.module.css'
+import QuickMenu from '../../components/admin/first/QuickMenu';
+
 
 const AdminContainer = () => {
   // dashboard
@@ -60,11 +61,11 @@ const AdminContainer = () => {
 
     fetchStats();
   }, []);
-// <div className={styles['resonos-card']}>
   return ( 
     <>
         <StatusCards stats={stats} />
         <MenuRows menuData={menuData} />
+         <QuickMenu menuData={menuData} />
     </>
   ) 
 };

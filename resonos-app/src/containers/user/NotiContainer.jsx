@@ -151,8 +151,8 @@ const NotiContainer = () => {
   }, [])
 
   return (
-    <div className="container">
-      <Header/>
+    <div className="admin container">
+      <Header />
       <Notification
         lastPath={lastPath}
         notiList={notiList}

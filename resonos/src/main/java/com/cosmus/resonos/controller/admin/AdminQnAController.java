@@ -1,131 +1,157 @@
 package com.cosmus.resonos.controller.admin;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.cosmus.resonos.domain.admin.QnaAnswer;
 import com.cosmus.resonos.domain.user.Qna;
-import com.cosmus.resonos.domain.user.Users;
+import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.service.admin.QnaAnswerService;
 import com.cosmus.resonos.service.user.QnaService;
-import com.cosmus.resonos.domain.CustomUser;
-
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.*;
 
-@Controller
+@Slf4j
+@CrossOrigin("*")
+@RestController
 @RequestMapping("/admin/qna")
 public class AdminQnAController {
 
     @Autowired
     private QnaService qnaService;
+
     @Autowired
     private QnaAnswerService qnaAnswerService;
 
-
+    /** QnA 목록 조회 (전체, 답변있음, 없음 포함) */
     @GetMapping
-    public String listQnaTabs(Model model, @RequestParam(value = "qnaId", required = false) Long qnaId) throws Exception {
+    public Map<String, Object> listQnaTabs(
+            @RequestParam(name = "qnaId", required = false) Long qnaId) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            List<Qna> allQnaList = qnaService.list();
+            List<Qna> answeredQnaList = qnaService.listAnswered();
+            List<Qna> noAnswerQnaList = qnaService.listNoAnswer();
 
-        // 전체 문의 리스트
-        List<Qna> allQnaList = qnaService.list();
+            result.put("success", true);
+            result.put("allQnaList", allQnaList);
+            result.put("answeredQnaList", answeredQnaList);
+            result.put("noAnswerQnaList", noAnswerQnaList);
 
-        // 답변이 존재하는 문의
-        List<Qna> answeredQnaList = qnaService.listAnswered();   // 서비스단에서 구현 필요
+            // 선택된 QnA
+            Qna currentQna = null;
+            if (qnaId != null) {
+                currentQna = qnaService.select(qnaId);
+            }
+            if (currentQna == null && !allQnaList.isEmpty()) {
+                currentQna = allQnaList.get(0);
+            }
+            result.put("currentQna", currentQna);
 
-        // 답변이 없는 문의
-        List<Qna> noAnswerQnaList = qnaService.listNoAnswer();    // 서비스단에서 구현 필요
+            // 선택 QnA 답변
+            if (currentQna != null) {
+                List<QnaAnswer> answers = qnaAnswerService.findByQnaId(currentQna.getId());
+                result.put("answers", answers);
+            }
 
-        model.addAttribute("allQnaList", allQnaList);
-        model.addAttribute("answeredQnaList", answeredQnaList);
-        model.addAttribute("noAnswerQnaList", noAnswerQnaList);
-
-        // 선택된 QnA 상세 - 필요시 qnaId로 상세 데이터 로드
-        Qna currentQna = null;
-        if (qnaId != null) {
-            currentQna = qnaService.select(qnaId);
+        } catch (Exception e) {
+            log.error("QnA 목록 조회 실패", e);
+            result.put("success", false);
+            result.put("message", "QnA 목록 조회 중 오류");
         }
-        if (currentQna == null && !allQnaList.isEmpty()) {
-            currentQna = allQnaList.get(0);
-        }
-        model.addAttribute("currentQna", currentQna);
-
-        // 선택 질문 관련 답변
-        if (currentQna != null) {
-            List<QnaAnswer> answers = qnaAnswerService.findByQnaId(currentQna.getId());
-            model.addAttribute("answers", answers);
-        }
-
-        model.addAttribute("answerForm", new QnaAnswer());
-        return "admin/qna";
+        return result;
     }
+
+    /** QnA 답변 등록 */
     @PostMapping("/{qnaId}/answer")
-    public String createAnswer(@PathVariable("qnaId") Long qnaId,
-                            @Validated @ModelAttribute("answerForm") QnaAnswer answer,
-                            BindingResult result,
-                            @AuthenticationPrincipal CustomUser loginUser) throws Exception {
-        if (result.hasErrors()) {
-            return "redirect:/admin/qna?qnaId=" + qnaId;
-        }
-        answer.setQnaId(qnaId);
+    public Map<String, Object> createAnswer(
+            @PathVariable(name = "qnaId") Long qnaId,
+            @RequestBody Map<String, Object> payload,
+            @AuthenticationPrincipal CustomUser loginUser) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            if (loginUser == null) {
+                throw new IllegalStateException("인증정보가 없습니다.");
+            }
+            QnaAnswer answer = new QnaAnswer();
+            answer.setQnaId(qnaId);
+            answer.setContent((String) payload.get("content"));
+            answer.setAdminId(loginUser.getUser().getId());
 
-        if (loginUser == null) {
-            throw new IllegalStateException("인증정보가 없습니다.");
+            qnaAnswerService.insert(answer);
+            result.put("success", true);
+            result.put("answer", answer);
+        } catch (Exception e) {
+            log.error("QnA 답변 등록 실패", e);
+            result.put("success", false);
+            result.put("message", "답변 등록 중 오류");
         }
-        answer.setAdminId(loginUser.getUser().getId());  // CustomUser 내 실제 Users 도메인 참조 구조에 맞게 조정
-
-        qnaAnswerService.insert(answer);
-        return "redirect:/admin/qna?qnaId=" + qnaId;
+        return result;
     }
 
-    @PostMapping("/answer/{answerId}/edit")
-    public String updateAnswer(@PathVariable("answerId") Long answerId,
-                            @Validated @ModelAttribute("answerForm") QnaAnswer answer,
-                            BindingResult result,
-                            @AuthenticationPrincipal CustomUser loginUser) throws Exception {
-        if (result.hasErrors()) {
-            return "redirect:/admin/qna?qnaId=" + answer.getQnaId();
-        }
-        answer.setId(answerId);
+    /** QnA 답변 수정 */
+    @PutMapping("/answer/{answerId}")
+    public Map<String, Object> updateAnswer(
+            @PathVariable(name = "answerId") Long answerId,
+            @RequestBody Map<String, Object> payload,
+            @AuthenticationPrincipal CustomUser loginUser) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            if (loginUser == null) {
+                throw new IllegalStateException("인증정보가 없습니다.");
+            }
+            QnaAnswer answer = new QnaAnswer();
+            answer.setId(answerId);
+            answer.setQnaId(Long.valueOf(payload.get("qnaId").toString()));
+            answer.setContent((String) payload.get("content"));
+            answer.setAdminId(loginUser.getUser().getId());
 
-        if (loginUser == null) {
-            throw new IllegalStateException("인증정보가 없습니다.");
+            qnaAnswerService.update(answer);
+            result.put("success", true);
+            result.put("answer", answer);
+        } catch (Exception e) {
+            log.error("QnA 답변 수정 실패", e);
+            result.put("success", false);
+            result.put("message", "답변 수정 중 오류");
         }
-        answer.setAdminId(loginUser.getUser().getId());
-
-        qnaAnswerService.update(answer);
-        return "redirect:/admin/qna?qnaId=" + answer.getQnaId();
+        return result;
     }
 
-
-    // 답변 삭제 처리
-    @PostMapping("/answer/{answerId}/delete")
-    public String deleteAnswer(@PathVariable("answerId") Long answerId) throws Exception {
-        QnaAnswer answer = qnaAnswerService.select(answerId);
-        if (answer != null) {
-            qnaAnswerService.delete(answerId);
-            return "redirect:/admin/qna?qnaId=" + answer.getQnaId();
+    /** QnA 답변 삭제 */
+    @DeleteMapping("/answer/{answerId}")
+    public Map<String, Object> deleteAnswer(@PathVariable(name = "answerId") Long answerId) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            QnaAnswer answer = qnaAnswerService.select(answerId);
+            if (answer != null) {
+                qnaAnswerService.delete(answerId);
+                result.put("success", true);
+                result.put("qnaId", answer.getQnaId());
+            } else {
+                result.put("success", false);
+                result.put("message", "답변을 찾을 수 없습니다.");
+            }
+        } catch (Exception e) {
+            log.error("QnA 답변 삭제 실패", e);
+            result.put("success", false);
+            result.put("message", "답변 삭제 중 오류");
         }
-        return "redirect:/admin/qna";
+        return result;
     }
 
-    // 질문 삭제 처리
-    @PostMapping("/{id}/delete")
-    public String deleteQna(@PathVariable Long id) throws Exception {
-        qnaService.delete(id);
-        return "redirect:/admin/qna";
+    /** QnA 질문 삭제 */
+    @DeleteMapping("/{id}")
+    public Map<String, Object> deleteQna(@PathVariable(name = "id") Long id) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            qnaService.delete(id);
+            result.put("success", true);
+        } catch (Exception e) {
+            log.error("QnA 삭제 실패", e);
+            result.put("success", false);
+            result.put("message", "질문 삭제 중 오류");
+        }
+        return result;
     }
 }
