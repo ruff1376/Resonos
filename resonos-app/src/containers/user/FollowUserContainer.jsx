@@ -126,7 +126,7 @@ const FollowUserContainer = () => {
   }, [])
 
   return (
-    <div className="admin container">
+    <div className="container">
       <Header />
       <FollowUser
         followCount={followCount}

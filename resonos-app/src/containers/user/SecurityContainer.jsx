@@ -173,7 +173,7 @@ const SecurityContainer = () => {
   }, [])
 
   return (
-    <div className="admin container">
+    <div className="container">
       <Header />
       <Security
         lastPath={lastPath}

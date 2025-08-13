@@ -106,7 +106,7 @@ const FollowArtistContainer = () => {
   }, [])
 
   return (
-    <div className="admin container">
+    <div className="container">
       <Header />
       <FollowArtist
         artistList={artistList}
