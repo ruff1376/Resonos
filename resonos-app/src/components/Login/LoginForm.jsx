@@ -14,6 +14,7 @@ const LoginForm = () => {
 
   const location = useLocation()
   const query = new URLSearchParams(location.search)
+
   const error = query.get("error")
 
   const onLogin = e => {
@@ -115,21 +116,30 @@ const LoginForm = () => {
         <button
           type="button"
           className="btn social-btn"
-          onClick={() => (window.location.href = '/api/oauth2/authorization/google')}
+          onClick={() => {
+            localStorage.setItem('rememberMe', true)
+            window.location.href = '/api/oauth2/authorization/google'
+          }}
         >
           Google로 로그인
         </button>
         <button
           type="button"
           className="btn social-btn"
-          onClick={() => (window.location.href = '/api/oauth2/authorization/kakao')}
+          onClick={() => {
+            localStorage.setItem('rememberMe', true)
+            window.location.href = '/api/oauth2/authorization/kakao'
+          }}
         >
           Kakao로 로그인
         </button>
         <button
           type="button"
           className="btn social-btn"
-          onClick={() => (window.location.href = '/api/oauth2/authorization/naver')}
+          onClick={() => {
+            localStorage.setItem('rememberMe', true)
+            window.location.href = '/api/oauth2/authorization/naver'
+          }}
         >
           Naver로 로그인
         </button>
