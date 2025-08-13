@@ -34,7 +34,7 @@ const LoginContextProvider = ({children}) => {
   const navigate = useNavigate()
 
   // 🔐 로그인 함수
-  const login = async (username, password) => {
+  const login = async (username, password, rememberId, rememberMe) => {
     console.log(`username : ${username}`)
     console.log(`password : ${password}`)
 
@@ -47,6 +47,17 @@ const LoginContextProvider = ({children}) => {
 
       // 로그인 성공 ✅
       if(status == 200) {
+
+        if(rememberId) {
+          localStorage.setItem('username', username)
+          localStorage.setItem('rememberId', true)
+        } else {
+          localStorage.removeItem('username')
+          localStorage.removeItem('rememberId')
+        }
+
+        if(rememberMe) localStorage.setItem('rememberMe', true)
+        else localStorage.removeItem('rememberMe')
 
         // 로그인 세팅 - loginSetting()
         loginSetting(data)
@@ -161,6 +172,9 @@ const LoginContextProvider = ({children}) => {
 
   useEffect(() => {
     const savedIsLogin = sessionStorage.getItem('isLogin')
+    const rememberMe = localStorage.getItem('rememberMe')
+    console.log("자동 로그인 :", rememberMe)
+    if(!rememberMe) return
     if(!savedIsLogin || savedIsLogin == false) {
       autoLogin()
     }

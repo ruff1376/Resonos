@@ -3,7 +3,7 @@ import React from 'react'
 const InfoScore = ({ score, styles }) => {
   return (
     <div className="review-section">
-      {score.averageScore == null ? (
+      {score == null ? (
         <p>아직 리뷰가 없어요 😅</p>
       ) : (
         <p>

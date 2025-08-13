@@ -8,7 +8,7 @@ import $ from 'jquery';
 
 const Header = ({ currentUser = {} }) => {
     const location = useLocation();
-    const { isLogin } = useContext(LoginContext)
+    const { isLogin, userInfo } = useContext(LoginContext)
     const [searchValue, setSearchValue] = useState("");
     const navigate = useNavigate();
 
@@ -144,7 +144,7 @@ const Header = ({ currentUser = {} }) => {
                                     </div>
                                     <div className="flex-shrink-0 dropdown profile-dropdown">
                                         <a href="#" className="dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <img src={currentUser.profileImage || "/img/default-profile.png"} alt="프로필 이미지" width="32" height="32" className="rounded-circle" />
+                                            <img src={userInfo.profileImage || "/img/profileImg.png"} alt="프로필 이미지" width="32" height="32" className="rounded-circle" />
                                         </a>
                                         <ul className="dropdown-menu text-small shadow" style={{ background: '#181C23' }}>
                                             <li><Link className="dropdown-item" to="/users/mypage">마이페이지</Link></li>

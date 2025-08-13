@@ -158,7 +158,7 @@ const PlaylistDetailContainer = () => {
         MySwal.fire({
           position: "center",
           icon: "success",
-          title: "플레이리스트가 변경되었습니다.",
+          title: "플레이리스트가 수정되었습니다.",
           showConfirmButton: false,
           timer: 800,
           customClass: {

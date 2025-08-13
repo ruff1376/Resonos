@@ -29,13 +29,15 @@ const MypageContainer = () => {
   const [utl, setUtl] = useState({});
   const [alreadyFollow, setAlreadyFollow] = useState()
 
-
-
+  // 로그아웃 요청
   const onLogout = () => {
     ur.logout()
     sessionStorage.removeItem('isLogin')
     sessionStorage.removeItem('roles')
     sessionStorage.removeItem('userInfo')
+    localStorage.removeItem('rememberId')
+    localStorage.removeItem('rememberMe')
+    localStorage.removeItem('username')
     navigate('/login')
   }
 
@@ -120,7 +122,8 @@ const MypageContainer = () => {
 
     } catch(e) {
       console.log(e.response)
-      if(e.status == 401 && location.pathname === '/mypage') {
+      console.log(location.pathname)
+      if(e.status == 401 && location.pathname === '/users/mypage') {
         MySwal.fire({
           position: "center",
           icon: "warning",

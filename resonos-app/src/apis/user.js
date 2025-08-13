@@ -26,14 +26,20 @@ export const checkPw = async password => {
 }
 
 
-// 마이페이지 (내 정보)
+/* 마이페이지 */
+// 내정보 요청
 export const getMyPage = async () => {
   return await api.get("/users/mypage")
 }
 
-// 다른 유저 마이페이지
+// 다른 유저 정보 요청
 export const getUserPage = async (id) => {
   return await api.get(`/users/${id}`)
+}
+
+// 로그아웃
+export const logout = async () => {
+  return await api.post('/users/logout')
 }
 
 /* 회원 정보 수정 페이지 */
@@ -77,21 +83,27 @@ export const getFollowedArtists = async (id) => {
   return await api.get(id ? `/users/${id}/follow-artist` : `/users/follow-artist`)
 }
 
-
-
-// 좋아요한 앨범/트랙 페이지
+/* 좋아요 한 앨범/트랙 페이지 */
 export const getLikedMusic = async (id) => {
   return await api.get(id ? `/users/${id}/liked-music` : `/users/liked-music`)
 }
 
-// 배지 페이지
+/* 배지 페이지 */
+// 배지 목록 요청
 export const getUserBadges = async () => {
   return await api.get("/users/badge")
 }
 
-// 유저 정보 요청(보안페이지)
+
+/* 보안 페이지 */
+// 유저 정보 요청(보안 페이지)
 export const getUserInfo = async () => {
   return await api.get('/users/security')
+}
+
+// 회원 탈퇴
+export const withdrawUser = async () => {
+  return await api.delete("/users")
 }
 
 // 비밀번호 체크 요청 (보안 페이지)
@@ -108,10 +120,7 @@ export const changePassword = async (formData) => {
   })
 }
 
-// 회원 탈퇴
-export const withdrawUser = async () => {
-  return await api.delete("/users")
-}
+
 
 /* 플레이리스트 페이지 */
 // 플레이리스트 페이지
@@ -187,19 +196,7 @@ export const searchTracks = async (data) => {
   })
 }
 
-// 트랙 좋아요
-export const likeTrack = async data => {
-  return await api.post('/tracks/like', data, {
-    headers: { 'Content-Type': 'application/json' }
-  })
-}
 
-// 앨범 좋아요
-export const likeAlbum = async data => {
-  return await api.post('/albums/like', data, {
-    headers: { 'Content-Type': 'application/json' }
-  })
-}
 
 /* 알림 페이지 */
 // 알림 리스트 조회
@@ -233,6 +230,21 @@ export const searchLikedTrack = async data => {
   return await api.post('/tracks/search', data)
 }
 
+// 트랙 좋아요
+export const likeTrack = async data => {
+  return await api.post('/tracks/like', data, {
+    headers: { 'Content-Type': 'application/json' }
+  })
+}
+
+// 앨범 좋아요
+export const likeAlbum = async data => {
+  return await api.post('/albums/like', data, {
+    headers: { 'Content-Type': 'application/json' }
+  })
+}
+
+/* 팔로우 한 아티스트 페이지 */
 // 팔로우 한 아티스트 추가 요청
 export const searchArtist = async data => {
   return await api.post('/artists/search', data)
@@ -241,6 +253,20 @@ export const searchArtist = async data => {
 // 아티스트 팔로우 요청
 export const followArtist = async data => {
   return await api.post('/artists/toggle-like', data)
+}
+
+/* 유저 팔로우 페이지 */
+
+
+/* 유저 팔로워/팔로우 페이지 */
+// 유저 팔로우 리스트 요청
+export const getUserFollows = async (id) => {
+  return await api.get(id ? `/users/${id}/follow-user` : `/users/follow-user`)
+}
+
+// 팔로우/팔로워 추가 요청
+export const searchUsers = async data => {
+  return await api.post('/user-follows/search', data)
 }
 
 // 유저 팔로우 요청
@@ -258,23 +284,23 @@ export const followUserCancle = async data => {
   })
 }
 
-/* 유저 팔로워/팔로우 페이지 */
-// 유저 팔로우 페이지
-export const getUserFollows = async (id) => {
-  return await api.get(id ? `/users/${id}/follow-user` : `/users/follow-user`)
-}
-
-// 팔로우/팔로워 추가 요청
-export const searchUsers = async data => {
-  return await api.post('/user-follows/search', data)
-}
-
-// 로그아웃
-export const logout = async () => {
-  return await api.post('/users/logout')
-}
-
 /* 아이디, 비번 찾기 */
+// 이메일 존재 유무 체크
 export const isExistsEmail = async (email) => {
   return await api.post('/find-id', email)
+}
+
+// 이메일 확인 후 인증번호 보내기
+export const sendMail = async data => {
+  return await api.post('/send-certi', data)
+}
+
+// 아이디 존재 유무 체크
+export const isExistsUsername = async data => {
+  return await api.post('/find-pw', data)
+}
+
+// 비밀번호 변경 + 이메일 보내기
+export const changePwAndSendMail = async data => {
+  return await api.post('/send-pw', data)
 }

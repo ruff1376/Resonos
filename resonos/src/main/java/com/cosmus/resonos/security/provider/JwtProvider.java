@@ -128,6 +128,7 @@ public class JwtProvider {
               if( userInfo != null ) {
                   user.setNickname(userInfo.getNickname());
                   user.setEmail(userInfo.getEmail());
+                  user.setProfileImage(userInfo.getProfileImage());
               }
           } catch (Exception e) {
               log.error(e.getMessage());

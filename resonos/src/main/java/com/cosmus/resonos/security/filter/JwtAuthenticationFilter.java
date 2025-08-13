@@ -95,6 +95,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     CustomUser customUser = (CustomUser) authentication.getPrincipal();
 
     Users user = customUser.getUser();
+    log.info("유저 정보 : {}", user);
+
     Long id = user.getId();
     String username = user.getUsername();
     List<String> roles = customUser.getAuthorities()

@@ -112,7 +112,7 @@ const UserResource = ({albumList, artistList, badgeList, chartData, playlists, t
 
         {/* 내 활동 (isOwner일 때만) */}
         {isOwner && (
-          <Link className="grid-item" to="/users/Linkctivity">
+          <Link className="grid-item" to="/users/activity">
             <div className="mypage-card activate">
               <h3>내 활동</h3>
               <ul>

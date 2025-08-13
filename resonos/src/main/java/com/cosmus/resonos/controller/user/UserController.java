@@ -846,6 +846,12 @@ public class UserController {
     return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
+  /**
+   * 회원탈퇴
+   * @param loginUser
+   * @return
+   * @throws Exception
+   */
   @DeleteMapping("")
   public ResponseEntity<?> withdrawal(
     @AuthenticationPrincipal CustomUser loginUser

@@ -16,6 +16,42 @@ const SecurityContainer = () => {
 
   const navigate = useNavigate()
 
+  // 로그아웃 요청
+  const onLogout = () => {
+    ur.logout()
+    sessionStorage.removeItem('isLogin')
+    sessionStorage.removeItem('roles')
+    sessionStorage.removeItem('userInfo')
+    navigate('/login')
+  }
+
+  // 회원탈퇴 요청
+  const onWithdrawal = async () => {
+    let response
+    try {
+      response = await ur.withdrawUser()
+      if(response.status === 200) {
+        MySwal.fire({
+          position: "center",
+          icon: "success",
+          title: response.data,
+          showConfirmButton: false,
+          timer: 800,
+          customClass: {
+            popup: 'follow-popup',
+            icon: 'success-icon',
+            title: 'alert-title'
+          }
+        })
+        setTimeout(() => {
+          onLogout()
+        }, 900)
+      }
+    } catch(e) {
+      console.error('error :', e)
+    }
+  }
+
   // 비밀번호 확인 요청
   const onCheckPassword = async (e, password) => {
     e.preventDefault();
@@ -148,6 +184,7 @@ const SecurityContainer = () => {
         onChangePassword={onChangePassword}
         setError={setError}
         brError={brError}
+        onWithdrawal={onWithdrawal}
       />
       <Footer />
     </div>

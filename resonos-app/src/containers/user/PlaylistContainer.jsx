@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Playlist from '../../components/user/Playlist'
 import * as ur from '../../apis/user'
 import {MySwal} from '../../apis/alert'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
@@ -10,14 +10,18 @@ import Footer from '../../components/Footer/Footer';
 
 const PlaylistContainer = () => {
 
+
+
   const [likedPlaylists, setLikedPlaylists] = useState([])
+  const [likedPlaylistCount, setLikedPlaylistCount] = useState()
   const [myPlaylists, setMyPlaylists] = useState([])
   const [lastPath, setLastPath] = useState('')
   const [isOwner, setIsOwner] = useState(false)
   const [userId, setUserId] = useState()
 
+  console.log(likedPlaylistCount)
+
   const params = useParams()
-  const location = useLocation()
 
   const navigate = useNavigate()
 
@@ -45,6 +49,10 @@ const PlaylistContainer = () => {
             title: 'alert-title'
           }
         });
+        if(isLiked)
+          setLikedPlaylistCount(prev => prev - 1)
+        else
+          setLikedPlaylistCount(prev => prev + 1)
       }
     } catch(e) {
       console.error('error :', e)
@@ -138,6 +146,11 @@ const PlaylistContainer = () => {
     getPlaylists()
   }, [])
 
+  // count 바인딩
+  useEffect(() => {
+    setLikedPlaylistCount(likedPlaylists.length)
+  }, [likedPlaylists])
+
   return (
     <div className='container'>
       <Header />
@@ -151,6 +164,7 @@ const PlaylistContainer = () => {
         handleDelete={handleDelete}
         handleNavigate={handleNavigate}
         onSearchPlaylist={onSearchPlaylist}
+        likedPlaylistCount={likedPlaylistCount}
       />
       <Footer />
     </div>

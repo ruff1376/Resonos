@@ -14,6 +14,7 @@ const NotiContainer = () => {
 
   const navigate = useNavigate()
 
+  // 전체 읽음 요청
   const readAll = async () => {
     const ids = notiList
                 .filter(noti => noti.isRead == false)
@@ -44,7 +45,7 @@ const NotiContainer = () => {
     }
   }
 
-
+  // 전체 삭제 요청
   const deleteAll = async () => {
 
     MySwal.fire({
@@ -95,7 +96,7 @@ const NotiContainer = () => {
     })
   }
 
-
+  // 단일 읽음 요청
   const onToggleRead = async (id, isRead) => {
     if(isRead != false) return
 
