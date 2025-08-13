@@ -6,6 +6,7 @@ import TrackInfo from '../../components/review/track/TrackInfo';
 import MvAndStreaming from '../../components/review/common/MvAndStreaming';
 import Review from '../../components/review/common/Review';
 import MoodStatus from '../../components/review/common/MoodStatus';
+import TextPressure from '../../assets/TextPressure';
 
 const Track = () => {
 
@@ -34,10 +35,11 @@ const Track = () => {
   const [userPlaylist, setUserPlaylist] = useState([]);
   const [userId, setUserId] = useState(null);
   const [reviewType, setReviewType] = useState("");
-
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const fetchTrackData = async () => {
+      setLoading(true);
       try {
         const response = await api.getTrackPage(id);
         console.log(response.data);
@@ -65,7 +67,7 @@ const Track = () => {
         setUserPlaylist(data.userPlaylist);
         setUserId(data.userId);
         setReviewType(data.reviewType);
-
+        setLoading(false);
 
       } catch (err) {
         console.error(err)
@@ -74,18 +76,35 @@ const Track = () => {
     fetchTrackData();
   }, [id]);
 
-
+  if (loading) {
+    return (
+      <div style={{ position: 'relative', height: '300px' }}>
+        <TextPressure
+          text="LOADING...!"
+          flex={true}
+          alpha={false}
+          stroke={false}
+          width={true}
+          weight={true}
+          italic={true}
+          textColor="#ffffff"
+          strokeColor="#ff0000"
+          minFontSize={36}
+        />
+      </div>
+    )
+  }
 
   return (
     <div className={styles.taWrapper}>
-    <TrackInfo styles={styles} track={track} album={album} artist={artist} score={score}
-      userId={userId} isTrackLikedByUser={isTrackLikedByUser} trackLikeCount={trackLikeCount} />
-    <MvAndStreaming styles={styles} tracks={null} track={track} />
-    <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
-      score={score} isAdmin={isAdmin} album={album} track={track} reviewType={reviewType} />
-    <MoodStatus styles={styles} isMoodEmpty={isMoodEmpty} tags={tags}
-                userId={userId} artist={artist} track={track}
-                userVotedMoodId={userVotedMoodId} moodLabels={moodLabels} />
+      <TrackInfo styles={styles} track={track} album={album} artist={artist} score={score}
+        userId={userId} isTrackLikedByUser={isTrackLikedByUser} trackLikeCount={trackLikeCount} />
+      <MvAndStreaming styles={styles} tracks={null} track={track} />
+      <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
+        score={score} isAdmin={isAdmin} album={album} track={track} reviewType={reviewType} />
+      <MoodStatus styles={styles} isMoodEmpty={isMoodEmpty} tags={tags}
+        userId={userId} artist={artist} track={track}
+        userVotedMoodId={userVotedMoodId} moodLabels={moodLabels} />
     </div>
   )
 }

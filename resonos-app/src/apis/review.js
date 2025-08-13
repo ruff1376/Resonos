@@ -31,4 +31,11 @@ export const getTrackPage = async (id) => {
 }
 
 
-// 
+// 아티스트 초기 페이지
+export const getArtistPage = async (id) => {
+  return await api.get('/artists', {
+    params : {
+      id : id
+    }
+  })
+}
