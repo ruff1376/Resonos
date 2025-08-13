@@ -259,7 +259,7 @@ public class HomeController {
   public ResponseEntity<?> findPwPost(@RequestBody Users user) throws Exception {
     Users checkUser = userService.select(user.getUsername());
 
-    if(checkUser != null) return new ResponseEntity<>("성공.", HttpStatus.OK);
+    if(checkUser != null) return new ResponseEntity<>("아이디가 확인되었습니다.", HttpStatus.OK);
 
     log.info("findPwPost : 존재하지 않는 아이디");
     return new ResponseEntity<>("존재하지 않는 아이디입니다.", HttpStatus.BAD_REQUEST);

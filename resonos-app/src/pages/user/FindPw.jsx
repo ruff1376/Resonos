@@ -1,8 +1,9 @@
 import React from 'react'
+import FindPwContainer from '../../containers/user/FindPwContainer'
 
 const FindPw = () => {
   return (
-    <div>FindPw</div>
+    <FindPwContainer />
   )
 }
 

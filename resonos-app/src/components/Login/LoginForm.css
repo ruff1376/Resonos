@@ -514,7 +514,7 @@ a:hover > .mypage-card {
   border-radius: 30px;
   font-weight: bold;
   font-size: 1.05rem;
-  padding: 10px 0;
+  padding: 12px 0;
   width: 100%;
   margin-bottom: 10px;
   transition: all 0.3s;
@@ -531,6 +531,7 @@ a:hover > .mypage-card {
   display: block;
   margin-bottom: 6px;
   margin-top: 10px;
+  font-size: 1.4rem;
 }
 .text-secondary {
   color: #B0B6BE !important;
@@ -734,7 +735,7 @@ textarea.form-control {
   border-radius: 30px;
   font-weight: bold;
   font-size: 0.97rem;
-  padding: 7px 18px;
+  padding: 12px 0;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
 }
@@ -954,9 +955,13 @@ button.like {background-color: inherit; border: none;}
 #certi-button {
   position: absolute;
   width: 80px;
-  top: 24px;
+  top: 30px;
   right: 5px;
   transition: all 0.3s;
+}
+#certi-button.disabled {
+  pointer-events: none;
+  background-color: #b1b1b1;
 }
 .non-event {
   pointer-events: none;

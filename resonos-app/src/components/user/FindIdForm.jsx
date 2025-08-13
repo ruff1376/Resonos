@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 // onChange 이벤트 디바운스
 function useDebounce(value, delay) {
-  console.log('useDebounce 호출')
   const [debouncedValue, setDebouncedValue] = useState(value)
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -16,7 +15,7 @@ function useDebounce(value, delay) {
   return debouncedValue
 }
 
-const FindIdForm = ({emailError, onCheckEmail}) => {
+const FindIdForm = ({emailError, onCheckEmail, emailCheck, onSendEmail, certiNum, username}) => {
 
   const [email, setEmail] = useState("");
   const debounceKeyword = useDebounce(email, 300)
@@ -25,11 +24,13 @@ const FindIdForm = ({emailError, onCheckEmail}) => {
   const [certiInput, setCertiInput] = useState("");
   const [certiError, setCertiError] = useState("");
   const [idVisible, setIdVisible] = useState(false);
-  const [username, setUsername] = useState("");
 
   const isFirstRender = useRef(true)
 
-  const handleSendCerti = () => {
+  // 인증번호 이메일로 보내기
+  const handleSendEmail = () => {
+    onSendEmail(email)
+    setCertiVisible(true)
   }
 
   // 이메일 입력시 이메일 체크 요청
@@ -41,6 +42,18 @@ const FindIdForm = ({emailError, onCheckEmail}) => {
 
     onCheckEmail(email)
   }, [debounceKeyword])
+
+  // 인증번호 입력시 인증번호 체크
+  useEffect(() => {
+    if(certiNum.current != certiInput) {
+      setCertiError('올바른 인증번호가 아닙니다.')
+      setIdVisible(false)
+      return
+    }
+
+    setCertiError('인증되었습니다.')
+    setIdVisible(true)
+  }, [certiInput])
 
   return (
     <main className="con con-find-id d-flex justify-content-center">
@@ -62,13 +75,13 @@ const FindIdForm = ({emailError, onCheckEmail}) => {
             />
             <button
               id="certi-button"
-              className="btn btn-gold"
+              className={`btn btn-gold ${emailCheck.current ? '' : 'disabled'}`}
               type="button"
-              onClick={handleSendCerti}
+              onClick={handleSendEmail}
             >
               인증번호 전송
             </button>
-            <p className="fail-vali">{emailError != '' && emailError}</p>
+            <p className={`fail-vali ${emailCheck.current ? 'success' : ''}`}>{emailError != '' && emailError}</p>
           </div>
 
           {/* 인증번호 입력 */}
@@ -84,7 +97,7 @@ const FindIdForm = ({emailError, onCheckEmail}) => {
                 value={certiInput}
                 onChange={(e) => setCertiInput(e.target.value)}
               />
-              <p className="fail-vali">{certiError}</p>
+              <p className={`fail-vali ${idVisible ? 'success' : ''}`}>{certiError}</p>
             </div>
           )}
 

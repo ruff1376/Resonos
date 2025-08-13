@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
+import {Link} from 'react-router-dom'
 
 const UserEditForm = ({badgeList, badgeName, user, onSubmit, result, success}) => {
-
-  console.log(success)
 
   const [profileImage, setProfileImage] = useState()
   const [profileImg, setProfileImg] = useState()
@@ -52,30 +51,34 @@ const UserEditForm = ({badgeList, badgeName, user, onSubmit, result, success}) =
 
    // 이미지 리뷰 함수
   useEffect(() => {
-    const thumbnailInput = document.getElementById('profileImg')
-    if(thumbnailInput) {
-      thumbnailInput.addEventListener('change', function (event) {
-        const file = event.target.files[0]
-        const preview = document.querySelector('.profile-img.edit')
 
-        if (file) {
-          const reader = new FileReader()
-          reader.onload = function (e) {
-            preview.src = e.target.result
-            setProfileImg(file)
-          }
-          reader.readAsDataURL(file)
-        } else {
-          preview.src = ''
-        }
-      })
+    const thumbnailInput = document.getElementById('profileImg');
+
+    const handleChange = (event) => {
+      const file = event.target.files[0];
+      const preview = document.querySelector('.profile-img.edit');
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          preview.src = e.target.result;
+          setThumbnail(file);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        preview.src = '';
+      }
+    };
+
+    if (thumbnailInput) {
+      thumbnailInput.addEventListener('change', handleChange);
     }
 
     return () => {
       if (thumbnailInput) {
-        thumbnailInput.removeEventListener('change', handleChange)
+        thumbnailInput.removeEventListener('change', handleChange);
       }
-    }
+    };
   }, [])
 
   return (
@@ -168,7 +171,7 @@ const UserEditForm = ({badgeList, badgeName, user, onSubmit, result, success}) =
 
         <div className="btn-area">
           <button className="btn btn-gold" type="submit">정보 수정</button>
-          <a href="/users/mypage" className="btn btn-outline-gold">마이페이지</a>
+          <Link to="/users/mypage" className="btn btn-outline-gold">마이페이지</Link>
         </div>
       </form>
     </div>

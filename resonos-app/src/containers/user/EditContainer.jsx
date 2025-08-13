@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import * as ur from '../../apis/user'
 import UserEditForm from '../../components/user/UserEditForm'
+import Header from '../../components/Header/Header'
+import Footer from '../../components/Footer/Footer'
 
 const EditContainer = () => {
 
@@ -10,20 +12,7 @@ const EditContainer = () => {
   const [result, setResult] = useState({})
   const [success, setSuccess] = useState()
 
-  const getUserInfo = async () => {
-    try {
-      const response = await ur.getUserEditInfo()
-      const data = response.data
-      console.log(data)
-
-      setBadgeList(data.badgeList)
-      setBadgeName(data.badgeName)
-      setUser(data.user)
-    } catch(e) {
-      console.error(e)
-    }
-  }
-
+  // 회원정보 수정 요청
   const onSubmit = async (data) => {
     try {
       const response = await ur.updateUserInfo(data)
@@ -36,19 +25,38 @@ const EditContainer = () => {
     }
   }
 
+  // 유저 정보 요청
+  const getUserInfo = async () => {
+    try {
+      const response = await ur.getUserEditInfo()
+      const data = response.data
+
+      setBadgeList(data.badgeList)
+      setBadgeName(data.badgeName)
+      setUser(data.user)
+    } catch(e) {
+      console.error(e)
+    }
+  }
+
+  // 마운트 시 데이터 요청
   useEffect(() => {
     getUserInfo()
   }, [])
 
   return (
-    <UserEditForm
-      badgeList={badgeList}
-      badgeName={badgeName}
-      user={user}
-      onSubmit={onSubmit}
-      result={result}
-      success={success}
-    />
+    <div className="container">
+      <Header />
+      <UserEditForm
+        badgeList={badgeList}
+        badgeName={badgeName}
+        user={user}
+        onSubmit={onSubmit}
+        result={result}
+        success={success}
+      />
+      <Footer />
+    </div>
   )
 }
 

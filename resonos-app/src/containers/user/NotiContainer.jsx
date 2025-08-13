@@ -151,7 +151,7 @@ const NotiContainer = () => {
 
   return (
     <div className="container">
-      <Header />
+      <Header/>
       <Notification
         lastPath={lastPath}
         notiList={notiList}
