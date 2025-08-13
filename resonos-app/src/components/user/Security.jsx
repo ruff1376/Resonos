@@ -1,11 +1,36 @@
 import React, { useEffect, useState } from 'react'
 import MypageTab from './MypageTab'
+import {MySwal} from '../../apis/alert'
 
-const Security = ({provider, lastPath, vali, error, onCheckPassword, onChangePassword, setError, brError }) => {
+const Security = ({provider, lastPath, vali, error, onCheckPassword, onChangePassword, setError, brError, onWithdrawal }) => {
 
 
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
+
+  const handleWithdrawal = () => {
+    MySwal.fire({
+      title: "정말 탈퇴하시겠습니까?",
+      html: '<p class="alert-text">회원탈퇴한 계정 정보는 복구가 어렵습니다😥</p>',
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "예",
+      cancelButtonText: "아니오",
+      reverseButtons: false,
+      customClass: {
+      popup: 'follow-popup',
+      icon: 'warning-icon',
+      title: 'alert-title',
+      text: 'alert-text',
+      confirmButton: 'alert-button',
+      cancelButton: 'alert-cancle-button'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        onWithdrawal()
+      }
+    })
+  }
 
   useEffect(() => {
     if(password != password2) {
@@ -26,7 +51,7 @@ const Security = ({provider, lastPath, vali, error, onCheckPassword, onChangePas
               <h2 className="text-start">계정 / 보안</h2>
             </div>
             {(vali || provider) && (
-              <button type="button" id="btn-withdrawal">
+              <button type="button" id="btn-withdrawal" onClick={handleWithdrawal}>
                 회원탈퇴
               </button>
             )}

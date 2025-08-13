@@ -111,26 +111,26 @@
 
       document.getElementById('btn-withdrawal').addEventListener('click', () => {
         Swal.fire({
-            title: "정말 탈퇴하시겠습니까?",
-            html: '<p class="alert-text">회원탈퇴한 계정 정보는 복구가 어렵습니다.</p>',
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "예",
-            cancelButtonText: "아니오",
-            reverseButtons: false,
-            customClass: {
-            popup: 'follow-popup',
-            icon: 'warning-icon',
-            title: 'alert-title',
-            text: 'alert-text',
-            confirmButton: 'alert-button',
-            cancelButton: 'alert-cancle-button'
+          title: "정말 탈퇴하시겠습니까?",
+          html: '<p class="alert-text">회원탈퇴한 계정 정보는 복구가 어렵습니다.</p>',
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "예",
+          cancelButtonText: "아니오",
+          reverseButtons: false,
+          customClass: {
+          popup: 'follow-popup',
+          icon: 'warning-icon',
+          title: 'alert-title',
+          text: 'alert-text',
+          confirmButton: 'alert-button',
+          cancelButton: 'alert-cancle-button'
           }
-          }).then((result) => {
-            if (result.isConfirmed) {
-              withdrawal()
-            }
-          })
+        }).then((result) => {
+          if (result.isConfirmed) {
+            withdrawal()
+          }
+        })
       })
 
       async function withdrawal() {

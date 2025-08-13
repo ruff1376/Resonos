@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import * as ur from '../../apis/user'
 import * as Swal from '../../apis/alert'
 import { useNavigate } from 'react-router-dom'
 
 function JoinForm() {
+
+  const debounceRef = useRef(null)
 
   const [formData, setFormData] = useState({
     username: '',
@@ -25,10 +27,14 @@ function JoinForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    console.log(name)
     setFormData(prev => ({ ...prev, [name]: value }))
-    // 유효성 검증
-    checkField(name, value)
+
+    if(debounceRef.current) clearTimeout(debounceRef.current)
+
+    debounceRef.current = setTimeout(() => {
+      // 유효성 검증
+      checkField(name, value)
+    }, 300)
   }
 
   // 필드별 유효성 검증 함수
@@ -62,7 +68,6 @@ function JoinForm() {
     }
     if(response) {
       errorMsg = response.data
-      console.log(response)
     }
     setErrors(prev => ({ ...prev, [name]: errorMsg }))
   }
