@@ -53,10 +53,13 @@ export default function PlaylistSearchGridSection({
                                     <Link to={`/playlists/${playlist.id}`} className="card-title">
                                         {playlist.title}
                                     </Link>
-                                    <Link to={`/users/${playlist.userId}`} className="card-artist">
-                                        제작자 : {playlist.maker}
-                                    </Link>
-                                    <div className="card-artist">♥ {formatNumber(playlist.likeCount)}</div>
+                                    <div className="card-artist no-hover">
+                                        <span>제작자 : </span>
+                                        <Link to={'/users/' + playlist.maker} className="card-artist">
+                                            {playlist.maker}
+                                        </Link>
+                                    </div>
+                                    <div className="card-artist no-hover">♥ {formatNumber(playlist.likeCount)}</div>
                                 </div>
                             </div>
                         </div>

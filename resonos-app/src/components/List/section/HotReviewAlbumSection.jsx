@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 
-export default function HotReviewAlbumSection({ title, albumList }) {
+export default function HotReviewAlbumSection({
+    title,
+    albumList
+}) {
     return (
         <div
             className="d-flex flex-column align-items-start justify-content-start p-0"
