@@ -62,7 +62,7 @@ const UserEditForm = ({badgeList, badgeName, user, onSubmit, result, success}) =
         const reader = new FileReader();
         reader.onload = (e) => {
           preview.src = e.target.result;
-          setThumbnail(file);
+          setProfileImg(file);
         };
         reader.readAsDataURL(file);
       } else {
