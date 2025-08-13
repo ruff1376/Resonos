@@ -275,6 +275,22 @@ export const logout = async () => {
 }
 
 /* 아이디, 비번 찾기 */
+// 이메일 존재 유무 체크
 export const isExistsEmail = async (email) => {
   return await api.post('/find-id', email)
+}
+
+// 이메일 확인 후 인증번호 보내기
+export const sendMail = async data => {
+  return await api.post('/send-certi', data)
+}
+
+// 아이디 존재 유무 체크
+export const isExistsUsername = async data => {
+  return await api.post('/find-pw', data)
+}
+
+// 비밀번호 변경 + 이메일 보내기
+export const changePwAndSendMail = async data => {
+  return await api.post('/send-pw', data)
 }
