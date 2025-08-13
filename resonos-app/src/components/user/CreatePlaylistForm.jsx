@@ -156,8 +156,7 @@ const CreatePlaylistForm = () => {
                   className="btn btn-outline-gold"
                   type="button"
                   onClick={() => {
-                    if (onCancel) onCancel()
-                    else window.history.back()
+                    navigate(-1)
                   }}
                 >
                   취소

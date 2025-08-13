@@ -1,9 +1,13 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { LoginContext } from '../../contexts/LoginContextProvider'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import './LoginForm.css'
 
 const LoginForm = () => {
+
+  const [rememberId, setRememberId] = useState(false)
+  const [rememberMe, setRememberMe] = useState(false)
+  const [username, setUsername] = useState('')
 
   // 🚚 LoginContext - 로그인 함수
   const {login} = useContext(LoginContext)
@@ -18,8 +22,15 @@ const LoginForm = () => {
     const username = form.username.value
     const password = form.password.value
 
-    login(username, password)
+    login(username, password, rememberId, rememberMe)
   }
+
+  // 아이디 저장, 자동 로그인 체크
+  useEffect(() => {
+    setUsername(localStorage.getItem('username'))
+    setRememberId(localStorage.getItem('rememberId'))
+    setRememberMe(localStorage.getItem('rememberMe'))
+  }, [])
 
   return (
     <div className="con d-flex justify-content-center">
@@ -37,6 +48,7 @@ const LoginForm = () => {
           name="username"
           className="form-control mb-3 w-80"
           placeholder="아이디"
+          defaultValue={username ?? ''}
           required
         />
 
@@ -64,8 +76,8 @@ const LoginForm = () => {
               className="form-check-input"
               type="checkbox"
               id="remember-id-check"
-              // checked={rememberId}
-              // onChange={() => setRememberId(!rememberId)}
+              checked={rememberId ? true : false}
+              onChange={() => setRememberId(!rememberId)}
             />
             <label className="form-check-label" htmlFor="remember-id-check">
               아이디 저장
@@ -76,7 +88,8 @@ const LoginForm = () => {
               className="form-check-input"
               type="checkbox"
               id="remember-me-check"
-              // onChange={} // 자동 로그인 기능 처리 필요 시 구현
+              checked={rememberMe ? true : false}
+              onChange={() => setRememberMe(!rememberMe)}
             />
             <label className="form-check-label" htmlFor="remember-me-check">
               자동 로그인

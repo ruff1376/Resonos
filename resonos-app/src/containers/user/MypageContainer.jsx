@@ -120,7 +120,8 @@ const MypageContainer = () => {
 
     } catch(e) {
       console.log(e.response)
-      if(e.status == 401 && location.pathname === '/mypage') {
+      console.log(location.pathname)
+      if(e.status == 401 && location.pathname === '/users/mypage') {
         MySwal.fire({
           position: "center",
           icon: "warning",

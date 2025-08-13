@@ -18,7 +18,7 @@ function useDebounce(value, delay) {
   return debouncedValue
 }
 
-const Playlist = ({likedPlaylists, setLikedPlaylists, myPlaylists, lastPath, isOwner, handleLike, handleDelete, handleNavigate, onSearchPlaylist}) => {
+const Playlist = ({likedPlaylists, setLikedPlaylists, myPlaylists, lastPath, isOwner, handleLike, handleDelete, handleNavigate, onSearchPlaylist, likedPlaylistCount}) => {
 
   const [keyword, setKeyword] = useState()
   const debouncedKeyword = useDebounce(keyword, 300)
@@ -137,7 +137,7 @@ const Playlist = ({likedPlaylists, setLikedPlaylists, myPlaylists, lastPath, isO
           <div className="title">
             <div>
               <h2 className="text-start">좋아요 한 플레이리스트</h2>
-              <span className="count">{likedPlaylists.length}</span>
+              <span className="count">{likedPlaylistCount}</span>
             </div>
             <div className="text-center position-relative">
               <i className="bi bi-search search-icon position-absolute"></i>

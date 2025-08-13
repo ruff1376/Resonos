@@ -88,7 +88,7 @@ const UserEditForm = ({badgeList, badgeName, user, onSubmit, result, success}) =
         className="profile-edit-box"
         encType="multipart/form-data"
       >
-        {success != null && (
+        {/* {success != null && (
           <p
             className={`success-fail${success === false ? ' error' : ''}`}
           >
@@ -96,7 +96,7 @@ const UserEditForm = ({badgeList, badgeName, user, onSubmit, result, success}) =
               ? '업데이트 실패하였습니다.'
               : '업데이트 완료되었습니다.'}
           </p>
-        )}
+        )} */}
         <h3>프로필 편집</h3>
 
         <label id="profileBtn" htmlFor="profileImg">
