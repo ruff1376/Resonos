@@ -29,8 +29,7 @@ const MypageContainer = () => {
   const [utl, setUtl] = useState({});
   const [alreadyFollow, setAlreadyFollow] = useState()
 
-
-
+  // 로그아웃 요청
   const onLogout = () => {
     ur.logout()
     sessionStorage.removeItem('isLogin')
