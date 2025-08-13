@@ -35,7 +35,7 @@ const Reviews = ({ styles, reviews, reviewType, size, isAdmin, loginUser, hasNex
                       className="btn btn-gold show-blind-btn"
                       data-review-id={rv.id}
                       style={{ fontSize: '1.4rem' }}
-                      onClick={() => handleShowBlindContent(rv.id)}
+                      // onClick={() => handleShowBlindContent(rv.id)}
                     >
                       블라인드 내용 보기
                     </button>
@@ -44,7 +44,7 @@ const Reviews = ({ styles, reviews, reviewType, size, isAdmin, loginUser, hasNex
                     className="blind-content"
                     id={`blind-content-${rv.id}`}
                     style={{
-                      display: showBlindContent[rv.id] ? 'block' : 'none',
+                      // display: showBlindContent[rv.id] ? 'block' : 'none',
                       color: 'gray',
                       marginTop: '0.5rem',
                     }}

@@ -1,6 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import * as api from "../../apis/review"
+import styles from './Track.module.css'
+import TrackInfo from '../../components/review/track/TrackInfo';
+import MvAndStreaming from '../../components/review/common/MvAndStreaming';
+import Review from '../../components/review/common/Review';
+import MoodStatus from '../../components/review/common/MoodStatus';
 
 const Track = () => {
 
@@ -8,10 +13,10 @@ const Track = () => {
   const id = searchParams.get('id');
 
   // DTO의 모든 필드를 개별 useState로 분리
-  const [track, setTrack] = useState(null);
-  const [album, setAlbum] = useState(null);
+  const [track, setTrack] = useState({});
+  const [album, setAlbum] = useState({});
   const [top5List, setTop5List] = useState([]);
-  const [artist, setArtist] = useState(null);
+  const [artist, setArtist] = useState({});
   const [score, setScore] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [hasNext, setHasNext] = useState(false);
@@ -28,8 +33,8 @@ const Track = () => {
   const [isTrackLikedByUser, setIsTrackLikedByUser] = useState(false);
   const [userPlaylist, setUserPlaylist] = useState([]);
   const [userId, setUserId] = useState(null);
+  const [reviewType, setReviewType] = useState("");
 
-  const reviewType = track.reviewType;
 
   useEffect(() => {
     const fetchTrackData = async () => {
@@ -59,6 +64,8 @@ const Track = () => {
         setIsTrackLikedByUser(data.isTrackLikedByUser);
         setUserPlaylist(data.userPlaylist);
         setUserId(data.userId);
+        setReviewType(data.reviewType);
+
 
       } catch (err) {
         console.error(err)
@@ -70,7 +77,16 @@ const Track = () => {
 
 
   return (
-    <div>Track</div>
+    <div className={styles.taWrapper}>
+    <TrackInfo styles={styles} track={track} album={album} artist={artist} score={score}
+      userId={userId} isTrackLikedByUser={isTrackLikedByUser} trackLikeCount={trackLikeCount} />
+    <MvAndStreaming styles={styles} tracks={null} track={track} />
+    <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
+      score={score} isAdmin={isAdmin} album={album} track={track} reviewType={reviewType} />
+    <MoodStatus styles={styles} isMoodEmpty={isMoodEmpty} tags={tags}
+                userId={userId} artist={artist} track={track}
+                userVotedMoodId={userVotedMoodId} moodLabels={moodLabels} />
+    </div>
   )
 }
 

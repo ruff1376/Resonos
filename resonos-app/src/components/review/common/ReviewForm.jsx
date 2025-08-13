@@ -1,10 +1,16 @@
 import React from 'react'
 
-const ReviewForm = ({ styles, albumId, handleSubmit}) => {
+const ReviewForm = ({ styles, albumId, trackId, handleSubmit}) => {
   return (
     <div className={styles.reply}>
       <form id="reviewForm" onSubmit={handleSubmit}>
-        <input type="hidden" id="albumId" value={albumId} />
+        {albumId != null ? (
+          <input type="hidden" id="albumId" value={albumId} />
+        ) :
+        (
+          <input type="hidden" id="trackId" value={trackId} />
+        )
+        }
         <textarea
           id="content"
           placeholder="리뷰를 입력해주세요"
@@ -12,7 +18,7 @@ const ReviewForm = ({ styles, albumId, handleSubmit}) => {
           // value={content}
           onChange={(e) => setContent(e.target.value)}
         ></textarea>
-        <div className="score-and-submit">
+        <div className={styles.scoreAndSubmit}>
           <input
             type="number"
             id="rating"
@@ -23,7 +29,7 @@ const ReviewForm = ({ styles, albumId, handleSubmit}) => {
             // value={rating}
             onChange={(e) => setRating(e.target.value)}
           />
-          <button type="submit" className="btn btn-gold">
+          <button type="submit" className={`btn ${styles['btn-gold']}`}>
             리뷰작성
           </button>
         </div>
