@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import * as ur from '../../apis/user'
+import {MySwal} from '../../apis/alert'
 import UserEditForm from '../../components/user/UserEditForm'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
@@ -16,8 +17,20 @@ const EditContainer = () => {
   const onSubmit = async (data) => {
     try {
       const response = await ur.updateUserInfo(data)
-      console.log(response)
-      setSuccess(true)
+      if(response.status === 200) {
+        MySwal.fire({
+          position: "center",
+          icon: "success",
+          title: "프로필이 변경되었습니다.",
+          showConfirmButton: false,
+          timer: 800,
+          customClass: {
+            popup: 'follow-popup',
+            icon: 'success-icon',
+            title: 'alert-title'
+          }
+        })
+      }
     } catch(e) {
       console.error(e)
       setResult(e.response.data)
