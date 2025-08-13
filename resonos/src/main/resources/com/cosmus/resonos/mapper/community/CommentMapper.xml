@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.community.CommentMapper">
+
+  <resultMap id="CommentResultMap" type="com.cosmus.resonos.domain.community.Comment">
+    <id property="id" column="id"/>
+    <result property="content" column="content"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="userId" column="user_id"/>
+    <result property="type" column="type"/>
+    <result property="targetId" column="target_id"/>
+  </resultMap>
+
+  <select id="list" resultMap="CommentResultMap">
+    SELECT * FROM comment ORDER BY created_at DESC
+  </select>
+
+  <select id="select" resultMap="CommentResultMap">
+    SELECT * FROM comment WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO comment (content, created_at, user_id, type, target_id)
+    VALUES (#{content}, #{createdAt}, #{userId}, #{type}, #{targetId})
+  </insert>
+
+  <update id="update" >
+    UPDATE comment
+    SET content = #{content},
+        user_id = #{userId},
+        type = #{type},
+        target_id = #{targetId}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM comment WHERE id = #{id}
+  </delete>
+
+  <select id="findByTarget" resultMap="CommentResultMap">
+    SELECT * FROM comment WHERE type = #{type} AND target_id = #{targetId} ORDER BY created_at DESC
+  </select>
+  <!-- 댓글 개수 조회 -->
+  <select id="countByUserId" resultType="int">
+    SELECT COUNT(*) FROM comment WHERE user_id = #{userId}
+  </select>
+</mapper>

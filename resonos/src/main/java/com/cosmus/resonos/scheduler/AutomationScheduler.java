@@ -2,11 +2,13 @@ package com.cosmus.resonos.scheduler;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import com.cosmus.resonos.service.admin.UserBadgeService;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import com.cosmus.resonos.service.UserBadgeService;
 
 import lombok.extern.slf4j.Slf4j;
-// import com.cosmus.resonos.service.UserLevelService; 미구현 
+// import com.cosmus.resonos.service.UserLevelService; 미구현
 // 필요시 다른 서비스도 추가
 @Slf4j
 @Component
@@ -16,7 +18,7 @@ public class AutomationScheduler {
     // 추가 자동화 서비스들
 
     // @Scheduled(cron = "0 0 3 * * *") // 매일 새벽 3시
-    @Scheduled(cron = "0 */5 * * * *") // 5분마다 0초에 실행 
+    @Scheduled(cron = "0 */5 * * * *") // 5분마다 0초에 실행
     public void dailyAutomationTasks() throws Exception {
         log.info("[자동화] 일일 자동화 작업 시작");
         int b1 = userBadgeService.grantPostBadges();

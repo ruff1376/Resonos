@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.admin.UserSanctionMapper">
+
+  <resultMap id="UserSanctionResultMap" type="com.cosmus.resonos.domain.admin.UserSanction">
+    <id property="id" column="id"/>
+    <result property="type" column="type"/>
+    <result property="reason" column="reason"/>
+    <result property="startAt" column="start_at"/>
+    <result property="endAt" column="end_at"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="userId" column="user_id"/>
+    <result property="adminId" column="admin_id"/>
+  </resultMap>
+
+  <select id="list" resultMap="UserSanctionResultMap">
+    SELECT * FROM user_sanction ORDER BY created_at DESC
+  </select>
+
+  <select id="select" resultMap="UserSanctionResultMap">
+    SELECT * FROM user_sanction WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO user_sanction (user_id, type, reason, start_at, end_at, created_at, admin_id)
+    VALUES (#{userId}, #{type}, #{reason}, #{startAt}, #{endAt}, #{createdAt}, #{adminId})
+  </insert>
+
+
+  <update id="update">
+    UPDATE user_sanction
+    SET type = #{type},
+        reason = #{reason},
+        start_at = #{startAt},
+        end_at = #{endAt},
+        created_at = #{createdAt},
+        user_id = #{userId},
+        admin_id = #{adminId}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM user_sanction WHERE id = #{id}
+  </delete>
+  <!-- 특정 유저의 제재 기록 조회 -->
+  <select id="getSanctionsByUserId" resultMap="UserSanctionResultMap">
+    SELECT * FROM user_sanction WHERE user_id = #{userId} ORDER BY created_at DESC
+  </select>
+  <!-- 반복 제재 자동화 -->
+  <select id="countBanInPeriod" resultType="int">
+    SELECT COUNT(*) FROM user_sanction
+    WHERE user_id = #{userId}
+      AND type = 'BAN'
+      AND created_at >= DATE_SUB(NOW(), INTERVAL #{days} DAY)
+  </select>
+  <update id="setBanByRepeat">
+      UPDATE user
+      SET ban = TRUE,
+          ban_reason = '반복 제재 자동 처리',
+          ban_at = NOW()
+      WHERE id = #{userId}
+  </update>
+  <!-- 최근 제재 횟수 카운트 -->
+  <select id="countRecentBan" resultType="int">
+    SELECT COUNT(*) FROM user_sanction
+    WHERE user_id = #{userId}
+      AND type = 'BAN'
+      AND created_at >= DATE_SUB(NOW(), INTERVAL #{days} DAY)
+  </select>
+  <!-- 제재 로그 기록 -->
+  <insert id="insertBanLog">
+    INSERT INTO user_sanction (user_id, type, reason, start_at, end_at, created_at, admin_id)
+    VALUES (
+      #{userId},
+      'BAN',
+      #{reason},
+      #{startAt},
+      #{endAt},
+      #{createdAt},
+      #{adminId}
+    )
+  </insert>
+
+  <!-- 반복 제재 유저 조회 -->
+  <select id="findRepeatOffenders" resultType="long">
+    SELECT user_id FROM (
+      SELECT user_id, COUNT(*) as ban_cnt
+      FROM user_sanction
+      WHERE type = 'BAN'
+        AND created_at >= DATE_SUB(NOW(), INTERVAL #{days} DAY)
+      GROUP BY user_id
+      HAVING ban_cnt >= #{limit}
+    ) t
+  </select>
+
+</mapper>

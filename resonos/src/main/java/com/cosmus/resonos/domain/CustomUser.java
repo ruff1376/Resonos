@@ -13,6 +13,9 @@ import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import com.cosmus.resonos.domain.user.UserAuth;
+import com.cosmus.resonos.domain.user.Users;
+
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 

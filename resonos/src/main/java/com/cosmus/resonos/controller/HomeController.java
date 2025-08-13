@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.cosmus.resonos.domain.CustomUser;
-import com.cosmus.resonos.domain.Users;
-import com.cosmus.resonos.service.UserService;
+import com.cosmus.resonos.domain.user.Users;
+import com.cosmus.resonos.service.user.UserService;
 import com.cosmus.resonos.util.EmailService;
 import com.cosmus.resonos.util.RandomPassword;
 import com.cosmus.resonos.validation.EmailCheck;
@@ -99,24 +99,14 @@ public class HomeController {
     }
 
   /**
-   * 회원가입 페이지 요청
-   * @return
-   */
-  @GetMapping("/join")
-  public String join(@ModelAttribute Users user) {
-
-    return "/join";
-  }
-
-  /**
    * 회원가입 요청
    * @param user
    * @return
    * @throws Exception
    */
   @PostMapping("/join")
-  public String joinPost(@Validated({UsernameCheck.class, EmailCheck.class, PasswordCheck.class, NicknameCheck.class})
-  @ModelAttribute Users user, BindingResult br, HttpServletRequest request) throws Exception {
+  public ResponseEntity<?> joinPost(@Validated({UsernameCheck.class, EmailCheck.class, PasswordCheck.class, NicknameCheck.class})
+  @RequestBody Users user, BindingResult br, HttpServletRequest request) throws Exception {
 
     log.info("회원가입 시도 유저 정보 : {}", user);
 
@@ -125,7 +115,7 @@ public class HomeController {
     boolean checkNickname = userService.findByNickname(user.getNickname());
     if (br.hasErrors() || checkUsername || checkNickname) {
       log.info("유효성 검사 실패");
-      return "/join";
+      return new ResponseEntity<>("실패", HttpStatus.BAD_REQUEST);
     }
 
     /* 회원가입 */
@@ -140,12 +130,12 @@ public class HomeController {
     }
 
     // 로그인 성공시 메인 화면
-    if(loginResult) return "redirect:/";
+    if(loginResult) return new ResponseEntity<>("성공", HttpStatus.OK);
     // 로그인 실패시 로그인 화면
-    if(result) return "redirect:/login";
+    if(result) return new ResponseEntity<>("실패", HttpStatus.BAD_REQUEST);
 
     // 회원가입 실패
-    return "redirect:/join?error=true";
+    return new ResponseEntity<>("실패", HttpStatus.BAD_REQUEST);
   }
 
   /**
@@ -168,7 +158,7 @@ public class HomeController {
     boolean checkUsername = userService.findByUsername(user.getUsername());
     if(checkUsername) {
       log.info("아이디 중복");
-      return ResponseEntity.badRequest().body(List.of(Map.of("value", "중복된 아이디입니다.", "key", "username")));
+      return ResponseEntity.badRequest().body(List.of(Map.of("defaultMessage", "중복된 아이디입니다.", "key", "username")));
     }
 
     return new ResponseEntity<>("사용가능한 아이디입니다.", HttpStatus.OK);
@@ -194,7 +184,7 @@ public class HomeController {
     boolean checkNickname = userService.findByNickname(user.getNickname());
     if(checkNickname) {
       log.info("닉네임 중복");
-      return ResponseEntity.badRequest().body(List.of(Map.of("value", "중복된 닉네임입니다.", "key", "nickname")));
+      return ResponseEntity.badRequest().body(List.of(Map.of("defaultMessage", "중복된 닉네임입니다.", "key", "nickname")));
     }
 
     return new ResponseEntity<>("사용가능한 닉네임입니다.", HttpStatus.OK);
@@ -220,7 +210,7 @@ public class HomeController {
 
     String result = userService.findId(user.getEmail());
     if(result != null)
-      return ResponseEntity.badRequest().body(List.of(Map.of("value", "중복된 이메일입니다.", "key", "email")));
+      return ResponseEntity.badRequest().body(List.of(Map.of("defaultMessage", "중복된 이메일입니다.", "key", "email")));
 
     return new ResponseEntity<>("유효한 이메일입니다.", HttpStatus.OK);
   }
@@ -269,7 +259,7 @@ public class HomeController {
   public ResponseEntity<?> findPwPost(@RequestBody Users user) throws Exception {
     Users checkUser = userService.select(user.getUsername());
 
-    if(checkUser != null) return new ResponseEntity<>("성공.", HttpStatus.OK);
+    if(checkUser != null) return new ResponseEntity<>("아이디가 확인되었습니다.", HttpStatus.OK);
 
     log.info("findPwPost : 존재하지 않는 아이디");
     return new ResponseEntity<>("존재하지 않는 아이디입니다.", HttpStatus.BAD_REQUEST);

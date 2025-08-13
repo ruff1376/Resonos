@@ -1,0 +1,88 @@
+
+/* tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 기본 폰트 사이즈 */
+html {font-size: 62.5%;}
+body {font-size: 1.6rem;}
+
+:root {
+  /* 메인 컬러 */
+  --main-color: #D4B97F;
+  /* 실버 컬러 */
+  --silver-color: #fffbe6;
+  /* 백그라운드 컬러 */
+  --background-color : #181C23;
+  /* 컨테이너 크기 */
+  --container : 1440px;
+}
+
+body {
+  color: #fff;
+  background-color: var(--background-color);
+}
+
+/* 컨테이너 기본 크기 */
+.container {width: 100% !important; max-width: var(--container) !important; margin: auto !important; padding: 0 !important;}
+a {text-decoration: none !important; color: inherit;}
+
+body::before {
+  content: '';
+  height: 100vh; /* 브라우저 창 높이에 딱 맞게 */
+  background-image: url('/img/main_bg.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: auto 100vh;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.1;
+}
+
+button {cursor: pointer;}
+
+p {font-size: 1.3rem;}
+
+ul.custom-pagination {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+ul.custom-pagination li {
+    display: inline;
+}
+ul.custom-pagination a {
+    color: #B1B1B1;
+    font-size: 2.4rem;
+    text-decoration: none;
+    background: none;
+    border: none;
+    padding: 0 4px;
+    margin: 0;
+    cursor: pointer;
+    transition: color 0.2s;
+    box-shadow: none;
+    border-radius: 0;
+    outline: none;
+}
+ul.custom-pagination li.active a {
+    color: var(--main-color);
+    font-weight: bold;
+    pointer-events: none;
+}
+ul.custom-pagination span {
+    font-size: 3rem;
+}
+
+
+/* 기본 + 헤더 + 푸터 + 페이지네이션 */
+
+

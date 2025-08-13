@@ -5,8 +5,8 @@ import java.util.UUID;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.cosmus.resonos.domain.Playlist;
-import com.cosmus.resonos.domain.Users;
+import com.cosmus.resonos.domain.user.Playlist;
+import com.cosmus.resonos.domain.user.Users;
 
 public class UploadImage {
 

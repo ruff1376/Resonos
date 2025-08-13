@@ -1,0 +1,224 @@
+.welcome {
+    padding-top: 100px;
+}
+
+.welcome body::before {
+    content: '';
+    height: 100vh;
+    /* 브라우저 창 높이에 딱 맞게 */
+    background-image: url('/img/main_bg.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: auto 100vh;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.15;
+}
+
+.welcome body.bg {
+    background: #181C23;
+    color: #D4B97F;
+    font-family: 'Segoe UI', 'Pretendard', sans-serif;
+    margin-top: 200px;
+    min-height: 100vh;
+}
+
+.welcome main {
+    margin-bottom: 300px;
+}
+
+.welcome .logo {
+    display: flex;
+    align-items: center;
+}
+
+.welcome .logo-img {
+    height: 40px;
+    margin-right: 16px;
+    border-radius: 6px;
+    background: #181C23;
+}
+
+.welcome .logo-text {
+    font-size: 20px;
+    font-weight: bold;
+    color: #D4B97F;
+    letter-spacing: 2px;
+}
+
+.welcome nav a {
+    color: #D4B97F;
+    text-decoration: none;
+    margin: 0 18px;
+    font-size: 11px;
+    transition: color 0.2s;
+}
+
+.welcome nav a:hover {
+    color: #fffbe6;
+}
+
+.welcome .hero {
+    text-align: center;
+    margin: 80px 0 40px 0;
+}
+
+.welcome .hero h1 {
+    font-size: 44px;
+    color: #fffbe6;
+    margin-bottom: 0.7em;
+}
+
+.welcome .hero p {
+    color: #D4B97F;
+    font-size: 20px;
+    margin-bottom: 2em;
+}
+
+.welcome .btn-gold {
+    width: 150px;
+    background: #D4B97F;
+    color: #181C23;
+    border: none;
+    padding: 14px 38px;
+    border-radius: 40px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(212, 185, 127, 0.15);
+    transition: background 0.2s, color 0.2s;
+}
+
+.welcome .btn-gold:hover {
+    background: #fffbe6;
+    color: #181C23;
+}
+
+.welcome .main-cards {
+    display: flex;
+    justify-content: center;
+    gap: 75px;
+    margin: 40px 0 60px 0;
+    overflow: visible;
+}
+
+.welcome .main-card {
+    width: 400px;
+    height: 450px;
+    background: rgba(24, 28, 35, 0.85);
+    border: 1.5px solid #D4B97F;
+    border-radius: 20px;
+    padding: 32px 28px;
+    text-align: center;
+    box-shadow: 0 2px 16px rgba(24, 28, 35, 0.16);
+    color: #fffbe6;
+    transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s, opacity 0.18s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 30px;
+    box-sizing: border-box;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeInUp 0.9s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    animation-delay: 0.2s;
+    will-change: transform;
+}
+
+.welcome .main-card h2 {
+    font-size: 32px; /* 추가: 카드 제목 크기 */
+    color: #fffbe6;
+    margin-bottom: 0.5em;
+}
+
+.welcome .main-card p {
+    font-size: 16px;
+}
+
+.welcome .main-card img {
+    width: 300px;
+    height: 200px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.welcome .main-card:hover {
+    transform: translateY(-8px) scale(1.04);
+    border-color: #fffbe6;
+    box-shadow: 0 8px 32px rgba(212, 185, 127, 0.18);
+    opacity: 1 !important;
+    z-index: 1;
+}
+
+.welcome footer {
+    height: 200px;
+    text-align: center;
+    color: #B0B6BE;
+    padding: 24px 0 8px 0;
+    font-size: 1rem;
+    background: none;
+    border-top: 1px solid #D4B97F;
+}
+
+.welcome .footer-navbar {
+    border-top: 1px solid var(--main-color);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.welcome main,
+.welcome .hero h1,
+.welcome .hero p,
+.welcome .main-cards,
+.welcome .main-card,
+.welcome .btn-gold,
+.nickname-welcome {
+    opacity: 0;
+    animation: fadeInUp 0.9s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+/* 순차적 딜레이 */
+.welcome main {
+    animation-delay: 0.1s;
+}
+
+.welcome .hero h1,
+.welcome .hero p {
+    animation-delay: 0.2s;
+}
+
+.welcome .main-cards {
+    animation-delay: 0.3s;
+}
+
+.welcome .main-card {
+    animation-delay: 0.4s;
+}
+
+.welcome .main-card:nth-child(2) {
+    animation-delay: 0.55s;
+}
+
+.welcome .btn-gold,
+.nickname-welcome {
+    animation-delay: 0.6s;
+}
+
+.nickname-welcome {
+    color: #fffbe6;
+    font-size: 32px;
+}

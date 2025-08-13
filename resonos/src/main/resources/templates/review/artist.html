@@ -120,7 +120,7 @@
                         <span class="review-icon" th:text="${review.type == 'TRACK' ? '[🎵]' : '[💽]'}"></span>
                         <strong class="review-title" th:text="${review.name}">제목</strong>
                         <span class="review-content" th:text="${review.content}">내용</span>
-                        <span class="review-box" th:text="|❤️ ${review.likeCount}|">❤️ 0</span>
+                        <span class="review-box review-rating" th:text="|🔮 ${review.rating}|">점수 0</span>
                         <span class="review-box"
                             th:text="${#temporals.format(review.createdAt, 'yyyy.MM.dd HH:mm')}">날짜</span>
                     </a>
@@ -370,7 +370,7 @@
             }
 
             const maxValue = Math.max(...values);
-            const roundedMax = Math.ceil(maxValue / 10) * 10;
+            const roundedMax = Math.ceil(maxValue / 5) * 5;
 
             // ✅ 6개로 고정 (많으면 자르고, 적으면 채우기)
             labels = labels.slice(0, 6);

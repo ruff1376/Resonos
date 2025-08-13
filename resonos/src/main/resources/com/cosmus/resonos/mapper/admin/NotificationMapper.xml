@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.admin.NotificationMapper">
+
+  <resultMap id="NotificationResultMap" type="com.cosmus.resonos.domain.admin.Notification">
+    <id property="id" column="id"/>
+    <result property="type" column="type"/>
+    <result property="message" column="message"/>
+    <result property="content" column="content"/>
+    <result property="isRead" column="is_read"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="targetId" column="target_id"/>
+    <result property="userId" column="user_id"/>
+  </resultMap>
+
+  <select id="list" resultMap="NotificationResultMap">
+    SELECT * FROM notification ORDER BY created_at DESC
+  </select>
+
+  <select id="select" resultMap="NotificationResultMap">
+    SELECT * FROM notification WHERE id = #{id}
+  </select>
+
+  <!-- 전체 읽음 권한 확인 -->
+  <select id="selectByIds" resultMap="NotificationResultMap">
+    SELECT *
+    FROM notification
+    WHERE id IN
+    <foreach item="id" collection="ids" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </select>
+
+  <insert id="insert">
+    INSERT INTO notification (type, message, content, is_read, created_at, target_id, user_id)
+    VALUES (#{type}, #{message}, #{content}, #{isRead}, #{createdAt}, #{targetId}, #{userId})
+  </insert>
+
+  <update id="update">
+    UPDATE notification
+    SET is_read = 1
+    WHERE id = #{id}
+  </update>
+
+  <!-- 전체 읽음 처리 -->
+  <update id="updateIsReadByIds">
+    UPDATE notification
+    SET is_read = 1
+    WHERE id IN
+    <foreach item="id" collection="ids" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </update>
+
+  <delete id="delete">
+    DELETE FROM notification WHERE id = #{id}
+  </delete>
+
+  <!-- 전체 삭제 -->
+  <update id="deleteAll">
+    DELETE FROM notification
+    WHERE id IN
+    <foreach item="id" collection="ids" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </update>
+
+  <!-- 유저의 알림 -->
+  <select id="findByUser" resultMap="NotificationResultMap">
+    SELECT * FROM notification WHERE user_id = #{userId} ORDER BY created_at DESC
+  </select>
+
+  <!-- 읽지 않은 알림 수 -->
+  <select id="countUnread" resultType="int">
+    SELECT COUNT(*)
+    FROM notification
+    WHERE user_id = #{userId}
+    AND is_read = 0
+  </select>
+<!--
+  <insert id="createPolicyViolationNotification">
+    INSERT INTO notification (user_id, type, message, content, is_read, created_at, target_id)
+    VALUES (#{userId}, 'POLICY_VIOLATION', '정책 위반 알림', #{banword}, FALSE, NOW(), #{targetId})
+  </insert>
+
+  <insert id="createNotification">
+    INSERT INTO notification (user_id, type, message, content, is_read, created_at, target_id)
+    VALUES (#{userId}, #{type}, #{message}, #{content}, FALSE, NOW(), #{targetId})
+  </insert> -->
+
+<!-- public long countByKeyword(@Param("keyword") String keyword) throws Exception; -->
+  <select id="countByKeyword" resultType="long">
+    SELECT COUNT(*)
+    FROM notification
+    WHERE message LIKE CONCAT('%', #{keyword}, '%')
+    OR content LIKE CONCAT('%', #{keyword}, '%')
+  </select>
+
+<!--     public long countAll() throws Exception; -->
+  <select id="countAll" resultType="long">
+    SELECT COUNT(*)
+    FROM notification
+  </select>
+   <!--     public List<Notification> searchByKeywordPaging(
+        @Param("keyword") String keyword,
+        @Param("index") long index,
+        @Param("size") long size
+    ) throws Exception; -->
+  <select id="searchByKeywordPaging" resultMap="NotificationResultMap">
+    SELECT *
+    FROM notification
+    WHERE message LIKE CONCAT('%', #{keyword}, '%')
+    OR content LIKE CONCAT('%', #{keyword}, '%')
+    ORDER BY created_at DESC
+    LIMIT #{index}, #{size}
+  </select>
+
+<!--    public List<Notification> listPaging(
+        @Param("index") long index,
+        @Param("size") long size
+    ) throws Exception; -->
+  <select id="listPaging" resultMap="NotificationResultMap">
+    SELECT *
+    FROM notification
+    ORDER BY created_at DESC
+    LIMIT #{index}, #{size}
+  </select>
+
+
+
+</mapper>

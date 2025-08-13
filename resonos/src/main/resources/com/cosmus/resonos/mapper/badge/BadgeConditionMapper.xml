@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.badge.BadgeConditionMapper">
+
+  <!-- BadgeCondition 객체 매핑 -->
+  <resultMap id="BadgeConditionResultMap" type="com.cosmus.resonos.domain.badge.BadgeCondition">
+    <id property="id" column="id"/>
+    <result property="badgeId" column="badge_id"/>
+    <result property="badgeName" column="badge_name"/>
+    <result property="description" column="description"/>
+    <result property="conditionType" column="condition_type"/>
+    <result property="conditionValue" column="condition_value"/>
+  </resultMap>
+
+  <!-- 조건 등록 -->
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO badge_condition
+      (badge_id, badge_name, description, condition_type, condition_value)
+    VALUES
+      (#{badgeId}, #{badgeName}, #{description}, #{conditionType}, #{conditionValue})
+  </insert>
+
+  <!-- 조건 수정 -->
+  <update id="update">
+    UPDATE badge_condition
+    SET badge_name = #{badgeName},
+        description = #{description},
+        condition_type = #{conditionType},
+        condition_value = #{conditionValue}
+    WHERE id = #{id}
+  </update>
+
+  <!-- 조건 삭제 -->
+  <delete id="delete">
+    DELETE FROM badge_condition WHERE id = #{id}
+  </delete>
+
+  <!-- 단일 조건 조회 -->
+  <select id="select" resultMap="BadgeConditionResultMap">
+    SELECT * FROM badge_condition WHERE id = #{id}
+  </select>
+
+  <!-- 전체 조건 목록 -->
+  <select id="selectAll" resultMap="BadgeConditionResultMap">
+    SELECT * FROM badge_condition ORDER BY id DESC
+  </select>
+
+  <!-- 특정 배지의 조건 목록 -->
+  <select id="selectByBadgeId" resultMap="BadgeConditionResultMap">
+    SELECT * FROM badge_condition WHERE badge_id = #{badgeId}
+  </select>
+
+  <!-- 특정 배지의 조건 삭제 -->
+  <delete id="deleteByBadgeId">
+    DELETE FROM badge_condition WHERE badge_id = #{badgeId}
+  </delete>
+
+  <!-- 사용자의 게시글 수 기준 배지 ID 조회 -->
+  <select id="selectBadgeIdsForPostCount" resultType="long">
+    <![CDATA[
+      SELECT badge_id
+        FROM badge_condition
+      WHERE condition_type = 'post_count'
+        AND condition_value <= #{postCount}
+    ]]>
+  </select>
+
+  <!-- 사용자의 댓글 수 기준 배지 ID 조회 -->
+  <select id="selectBadgeIdsForCommentCount" resultType="long">
+    <![CDATA[
+      SELECT badge_id
+        FROM badge_condition
+      WHERE condition_type = 'comment_count'
+        AND condition_value <= #{commentCount}
+    ]]>
+  </select>
+
+  <!-- 조건 중복 여부 체크(중복이면 1 이상) -->
+  <select id="existsByTypeAndValue" parameterType="map" resultType="int">
+    SELECT COUNT(*) FROM badge_condition
+    WHERE condition_type = #{conditionType}
+      AND condition_value = #{conditionValue}
+  </select>
+
+
+
+</mapper>

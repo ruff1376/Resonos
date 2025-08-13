@@ -136,11 +136,11 @@
                     th:text="${auth.auth == 'ROLE_ADMIN' ? '운영자' : '일반'}">권한</span>
             </div>
             <div style="flex-basis:14%;min-width:120px;">
-              <span th:each="log, stat : ${member.logs}" style="display:block; font-size:12px; color:#ccc;">
+              <!-- <span th:each="log, stat : ${member.logs}" style="display:block; font-size:12px; color:#ccc;">
                 <span th:text="${#dates.format(log.createdAt, 'MM-dd HH:mm')}"></span>
                 <span th:text="${log.action}"></span>
                 <span th:text="${log.detail}"></span>
-              </span>
+              </span> -->
               <a th:href="@{/admin/members/logs(userId=${member.id})}" class="btn btn-outline-gold btn-sm mt-1">전체보기</a>
             </div>
             <div style="flex-basis:9%;min-width:80px;">

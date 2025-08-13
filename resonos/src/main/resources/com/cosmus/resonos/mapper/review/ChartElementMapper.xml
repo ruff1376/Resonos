@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.review.ChartElementMapper">
+
+  <resultMap id="ChartElementResultMap" type="com.cosmus.resonos.domain.review.ChartElement">
+    <id property="id" column="id"/>
+    <result property="userId" column="user_id"/>
+    <result property="lyric" column="lyric"/>
+    <result property="sound" column="sound"/>
+    <result property="melody" column="melody"/>
+    <result property="storytelling" column="storytelling"/>
+    <result property="cohesiveness" column="cohesiveness"/>
+    <result property="creativity" column="creativity"/>
+    <result property="albumId" column="album_id"/>
+  </resultMap>
+
+  <!-- 유저 + 앨범으로 평가 조회 -->
+  <select id="findByUserAndAlbum" resultMap="ChartElementResultMap">
+    SELECT * FROM chart_element
+    WHERE user_id = #{userId} AND album_id = #{albumId}
+    LIMIT 1
+  </select>
+
+  <!-- 유저 평가 삽입 -->
+  <insert id="insert">
+    INSERT INTO chart_element (
+      id, user_id, lyric, sound, melody, storytelling, cohesiveness, creativity, album_id
+    )
+    VALUES (
+      #{id}, #{userId}, #{lyric}, #{sound}, #{melody},
+      #{storytelling}, #{cohesiveness}, #{creativity}, #{albumId}
+    )
+  </insert>
+
+  <!-- 유저 평가 수정 -->
+  <update id="update">
+    UPDATE chart_element
+    SET lyric = #{lyric},
+        sound = #{sound},
+        melody = #{melody},
+        storytelling = #{storytelling},
+        cohesiveness = #{cohesiveness},
+        creativity = #{creativity}
+    WHERE user_id = #{userId} AND album_id = #{albumId}
+  </update>
+
+  <!-- 평균 점수 가져오기 -->
+  <select id="getAverageScoresByAlbumId" resultType="map">
+    SELECT
+      ROUND(AVG(lyric)) AS lyric,
+      ROUND(AVG(sound)) AS sound,
+      ROUND(AVG(melody)) AS melody,
+      ROUND(AVG(storytelling)) AS storytelling,
+      ROUND(AVG(cohesiveness)) AS cohesiveness,
+      ROUND(AVG(creativity)) AS creativity
+    FROM chart_element
+    WHERE album_id = #{albumId}
+  </select>
+
+</mapper>

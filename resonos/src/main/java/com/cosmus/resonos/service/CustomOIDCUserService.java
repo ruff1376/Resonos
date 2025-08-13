@@ -14,8 +14,9 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.CustomUser;
-import com.cosmus.resonos.domain.UserAuth;
-import com.cosmus.resonos.domain.Users;
+import com.cosmus.resonos.domain.user.UserAuth;
+import com.cosmus.resonos.domain.user.Users;
+import com.cosmus.resonos.service.user.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 

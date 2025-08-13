@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.user.PlaylistMapper">
+
+  <resultMap id="PlaylistResultMap" type="com.cosmus.resonos.domain.user.Playlist">
+    <id property="id" column="id"/>
+    <result property="userId" column="user_id"/>
+    <result property="title" column="title"/>
+    <result property="description" column="description"/>
+    <result property="thumbnailUrl" column="thumbnail_url"/>
+    <result property="isPublic" column="is_public"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="trackId" column="track_id"/>
+    <result property="maker" column="maker"/>
+    <result property="likeCount" column="like_count"/>
+  </resultMap>
+
+  <!-- 플레이리스트 + 트랙  -->
+  <resultMap id="trackOfPlaylistMap" type="com.cosmus.resonos.domain.user.PlaylistDTO">
+    <id column="id" property="id"/>
+    <result column="title" property="title"/>
+    <result column="user_id" property="userId"/>
+    <result column="description" property="description"/>
+    <result column="thumbnail_url" property="thumbnailUrl"/>
+    <result column="is_public" property="isPublic"/>
+    <result column="created_at" property="createdAt"/>
+    <result column="likeCount" property="likeCount"/>
+
+    <collection property="trackList" ofType="com.cosmus.resonos.domain.review.Track">
+      <id column="trackId" property="id"/>
+      <result column="trackTitle" property="title"/>
+      <result column="cover_image" property="coverImage"/>
+      <result column="order_no" property="orderNo"/>
+      <result column="artistName" property="artistName"/>
+      <result column="liked" property="liked"/>
+    </collection>
+  </resultMap>
+
+  <select id="list" resultMap="PlaylistResultMap">
+    SELECT * FROM playlist ORDER BY created_at DESC
+  </select>
+
+  <select id="select" resultMap="PlaylistResultMap">
+    SELECT * FROM playlist WHERE id = #{id}
+  </select>
+
+  <!-- 플레이리스트 생성 -->
+  <insert id="insert" >
+    INSERT INTO playlist
+      (user_id, title, description, thumbnail_url, is_public)
+    VALUES
+      (#{userId}, #{title}, #{description}, #{thumbnailUrl}, #{isPublic})
+  </insert>
+
+  <update id="update" >
+    UPDATE playlist
+    SET
+        title = #{title},
+        description = #{description},
+        thumbnail_url = #{thumbnailUrl},
+        is_public = #{isPublic}
+    WHERE id = #{id}
+  </update>
+
+  <!-- 플레이리스트 삭제 -->
+  <delete id="delete">
+    DELETE FROM playlist WHERE id = #{id}
+  </delete>
+
+  <!-- 마이페이지 플레이리스트 (3개) -->
+  <select id="usersPlaylist3" resultType="Playlist">
+    SELECT p.*, IFNULL(sub.like_count, 0) AS likeCount
+    FROM playlist p
+      LEFT JOIN (
+        SELECT playlist_id, COUNT(*) AS like_count
+        FROM liked_playlist
+        GROUP BY playlist_id
+      ) sub ON p.id = sub.playlist_id
+    WHERE p.user_id = #{userId}
+    ORDER BY created_at DESC
+    LIMIT 3
+  </select>
+
+  <!-- 마이페이지 플레이리스트 (3개) 비공개 필터링 -->
+  <select id="publicUsersPlaylist3" resultType="Playlist">
+    SELECT p.*, IFNULL(sub.like_count, 0) AS likeCount
+    FROM playlist p
+      LEFT JOIN (
+        SELECT playlist_id, COUNT(*) AS like_count
+        FROM liked_playlist
+        GROUP BY playlist_id
+      ) sub ON p.id = sub.playlist_id
+    WHERE p.user_id = #{userId}
+    AND p.is_public = TRUE
+    ORDER BY created_at DESC
+    LIMIT 3
+  </select>
+
+  <!-- 마이페이지 플레이리스트 (전체) -->
+  <select id="usersPlaylist" resultType="Playlist">
+    SELECT p.*, IFNULL(sub.like_count, 0) AS likeCount
+    FROM playlist p
+      LEFT JOIN (
+        SELECT playlist_id, COUNT(*) AS like_count
+        FROM liked_playlist
+        GROUP BY playlist_id
+      ) sub ON p.id = sub.playlist_id
+    WHERE p.user_id = #{userId}
+    ORDER BY created_at DESC
+  </select>
+
+  <!-- 마이페이지 플레이리스트 (전체) 공개 필터링 -->
+  <select id="publicUsersPlaylist" resultType="Playlist">
+    SELECT p.*, IFNULL(sub.like_count, 0) AS likeCount
+    FROM playlist p
+      LEFT JOIN (
+        SELECT playlist_id, COUNT(*) AS like_count
+        FROM liked_playlist
+        GROUP BY playlist_id
+      ) sub ON p.id = sub.playlist_id
+    WHERE p.user_id = #{userId}
+    AND p.is_public = TRUE
+    ORDER BY created_at DESC
+  </select>
+
+  <!-- 좋아요 한 플레이리스트 -->
+  <select id="likedPlaylist" resultType="Playlist">
+    SELECT p.*, u.nickname AS ownerName
+    FROM liked_playlist lp
+      INNER JOIN playlist p ON p.id = lp.playlist_id
+      INNER JOIN user u ON p.user_id = u.id
+    WHERE lp.user_id = #{userId}
+    AND p.is_public = 1
+    <if test="keyword != null and keyword != ''">
+      AND (
+        p.title LIKE CONCAT('%', #{keyword}, '%')
+        OR u.nickname LIKE CONCAT ('%', #{keyword}, '%')
+      )
+    </if>
+    ORDER BY
+    <choose>
+      <when test="keyword != null and keyword != ''">
+        CASE
+          WHEN p.title LIKE CONCAT(#{keyword}, '%') THEN 0
+          WHEN p.title LIKE CONCAT('%', #{keyword}, '%') THEN 1
+          WHEN u.nickname LIKE CONCAT(#{keyword}, '%') THEN 2
+          WHEN u.nickname LIKE CONCAT('%', #{keyword}, '%') THEN 3
+          ELSE 4
+        END,
+        lp.created_at DESC
+      </when>
+      <otherwise>
+        lp.created_at DESC
+      </otherwise>
+    </choose>
+    LIMIT #{offset}, #{limit}
+  </select>
+
+  <!-- 좋아요 한 플레이리스트 수 -->
+  <select id="countLikedPlaylist" resultType="int">
+    SELECT COUNT(*)
+    FROM liked_playlist lp
+      INNER JOIN playlist p ON p.id = lp.playlist_id
+      INNER JOIN user u ON p.user_id = u.id
+    WHERE lp.user_id = #{userId}
+  </select>
+
+  <!-- 플레이리스트's 트랙 -->
+  <select id="trackOfPlaylist" resultMap="trackOfPlaylistMap">
+    SELECT p.*, pd.order_no, t.id AS trackId, t.title as trackTitle, a.cover_image, art.name AS artistName,
+    CASE
+      WHEN lt.user_id IS NOT NULL THEN TRUE
+      ELSE FALSE
+    END AS liked
+    FROM playlist p
+      LEFT JOIN playlist_detail pd ON p.id = pd.playlist_id
+      LEFT JOIN track t ON pd.track_id = t.id
+      LEFT JOIN album a ON t.album_id = a.id
+      LEFT JOIN artist art ON t.artist_id = art.id
+      LEFT JOIN liked_track lt ON t.id = lt.track_id
+                              AND lt.user_id = #{loginUserId}
+    WHERE p.id = #{playlistId}
+    ORDER BY pd.order_no;
+  </select>
+
+  <!-- 플레이리스트의 트랙 순서 바꾸기 -->
+  <!-- <update id="updateTrackOrder" parameterType="map">
+    <foreach collection="orderList" item="item" separator=";">
+      UPDATE playlist_detail
+      SET order_no = #{item.orderNo}
+      WHERE playlist_id = #{playlistId}
+        AND track_id = #{item.trackId}
+    </foreach>
+  </update> -->
+  <update id="updateTrackOrder">
+    UPDATE playlist_detail
+    SET order_no =
+    <trim prefix="CASE" suffix="END">
+      <foreach collection="orderList" item="item">
+        WHEN track_id = #{item.trackId} THEN #{item.orderNo}
+      </foreach>
+    </trim>
+    WHERE playlist_id = #{playlistId}
+      AND track_id IN
+      <foreach collection="orderList" item="item" open="(" separator="," close=")">
+        #{item.trackId}
+      </foreach>
+  </update>
+
+  <!-- 플레이리스트 트랙 추가 -->
+  <insert id="insertTracks" >
+    INSERT INTO playlist_detail (playlist_id, track_id, order_no)
+    VALUES
+    <foreach collection="list" item="item" separator=",">
+      (#{item.playlistId}, #{item.trackId}, #{item.orderNo})
+    </foreach>
+  </insert>
+
+  <!-- 플레이리스트 트랙 삭제 -->
+  <delete id="deleteTracks">
+    DELETE FROM playlist_detail
+    WHERE playlist_id = #{playlistId}
+    AND order_no = #{orderNo}
+  </delete>
+
+  <!-- MAX 값 조회 -->
+  <select id="getMaxOrderNo" resultType="int">
+    SELECT COALESCE(MAX(order_no), 0)
+    FROM playlist_detail
+    WHERE playlist_id = #{playlistId}
+  </select>
+
+  <!-- 순서 재정렬 -->
+  <update id="updateTrackOrderNo" parameterType="map">
+    <foreach collection="list" item="track" separator=";">
+      UPDATE playlist_detail
+      SET order_no = #{track.orderNo}
+      WHERE playlist_id = #{playlistId} AND track_id = #{track.id}
+    </foreach>
+  </update>
+
+  <!-- 플레이리스트 좋아요 -->
+  <insert id="likePlaylist">
+    INSERT INTO liked_playlist (user_id, playlist_id)
+    VALUES (#{loginUserId}, #{playlistId})
+  </insert>
+
+  <!-- 플레이리스트 좋아요 취소 -->
+  <insert id="cancleLikePlaylist">
+    DELETE FROM liked_playlist WHERE user_id = #{loginUserId} AND playlist_id = #{playlistId}
+  </insert>
+
+  <!-- 플레이 리스트 좋아요 유무 -->
+  <select id="alreadyLikedPlaylist" resultType="int">
+    SELECT COUNT(*)
+    FROM liked_playlist
+    WHERE user_id = #{loginUserId}
+    AND playlist_id = #{playlistId}
+  </select>
+
+  <!-- 검색 결과 메인 -->
+  <!-- <select id="searchList" resultMap="PlaylistResultMap">
+    SELECT p.*, u.nickname AS maker,
+          COUNT(DISTINCT lp.id) AS like_count
+    FROM playlist p
+    LEFT JOIN user u ON p.user_id = u.id
+    LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+    LEFT JOIN playlist_detail pd ON p.id = pd.playlist_id
+    LEFT JOIN track t ON t.id = pd.track_id
+    WHERE p.title LIKE CONCAT('%', #{keyword}, '%')
+        OR u.nickname LIKE CONCAT('%', #{keyword}, '%')
+        OR t.title LIKE CONCAT('%', #{keyword}, '%')
+    GROUP BY p.id
+    ORDER BY
+      CASE
+        WHEN p.title = #{keyword} THEN 1
+        WHEN t.title = #{keyword} THEN 2
+        WHEN u.nickname = #{keyword} THEN 3
+        WHEN p.title LIKE CONCAT(#{keyword}, '%') THEN 4
+        WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 5
+        WHEN u.nickname LIKE CONCAT(#{keyword}, '%') THEN 6
+        WHEN p.title LIKE CONCAT('%', #{keyword}, '%') THEN 7
+        WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 8
+        WHEN u.nickname LIKE CONCAT('%', #{keyword}, '%') THEN 9
+        ELSE 10
+      END,
+      like_count DESC,
+      p.title ASC,
+      u.nickname ASC
+    LIMIT 12
+  </select> -->
+  <select id="searchList" resultMap="PlaylistResultMap">
+      SELECT *
+      FROM (
+          SELECT p.*, u.nickname AS maker,
+              COUNT(DISTINCT lp.id) AS like_count,
+              MAX(t.title) AS track_title
+          FROM playlist p
+          LEFT JOIN user u ON p.user_id = u.id
+          LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+          LEFT JOIN playlist_detail pd ON p.id = pd.playlist_id
+          LEFT JOIN track t ON t.id = pd.track_id
+          WHERE p.is_public = 1 AND (
+              p.title LIKE CONCAT('%', #{keyword}, '%')
+              OR u.nickname LIKE CONCAT('%', #{keyword}, '%')
+              OR t.title LIKE CONCAT('%', #{keyword}, '%')
+          )
+          GROUP BY p.id
+      ) sub
+      ORDER BY
+        CASE
+          WHEN title = #{keyword} THEN 1
+          WHEN track_title = #{keyword} THEN 2
+          WHEN maker = #{keyword} THEN 3
+          WHEN title LIKE CONCAT(#{keyword}, '%') THEN 4
+          WHEN track_title LIKE CONCAT(#{keyword}, '%') THEN 5
+          WHEN maker LIKE CONCAT(#{keyword}, '%') THEN 6
+          WHEN title LIKE CONCAT('%', #{keyword}, '%') THEN 7
+          WHEN track_title LIKE CONCAT('%', #{keyword}, '%') THEN 8
+          WHEN maker LIKE CONCAT('%', #{keyword}, '%') THEN 9
+          ELSE 10
+        END,
+        like_count DESC,
+        title ASC,
+        maker ASC
+      LIMIT 12
+  </select>
+
+  <!-- 검색 결과 전체 -->
+  <!-- <select id="allSearchList" resultMap="PlaylistResultMap">
+    SELECT p.*, u.nickname AS maker,
+          COUNT(DISTINCT lp.id) AS like_count
+    FROM playlist p
+    LEFT JOIN user u ON p.user_id = u.id
+    LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+    LEFT JOIN playlist_detail pd ON p.id = pd.playlist_id
+    LEFT JOIN track t ON t.id = pd.track_id
+    WHERE p.title LIKE CONCAT('%', #{keyword}, '%')
+        OR u.nickname LIKE CONCAT('%', #{keyword}, '%')
+        OR t.title LIKE CONCAT('%', #{keyword}, '%')
+    GROUP BY p.id
+    <choose>
+        <when test="sort == 'latest'">
+            ORDER BY p.created_at DESC
+        </when>
+        <when test="sort == 'popular'">
+            ORDER BY like_count DESC
+        </when>
+        <otherwise>
+            ORDER BY
+              CASE
+                WHEN p.title = #{keyword} THEN 1
+                WHEN t.title = #{keyword} THEN 2
+                WHEN u.nickname = #{keyword} THEN 3
+                WHEN p.title LIKE CONCAT(#{keyword}, '%') THEN 4
+                WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 5
+                WHEN u.nickname LIKE CONCAT(#{keyword}, '%') THEN 6
+                WHEN p.title LIKE CONCAT('%', #{keyword}, '%') THEN 7
+                WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 8
+                WHEN u.nickname LIKE CONCAT('%', #{keyword}, '%') THEN 9
+                ELSE 10
+              END,
+              like_count DESC,
+              p.title ASC,
+              u.nickname ASC
+        </otherwise>
+    </choose>
+    LIMIT #{pagination.index}, #{pagination.size}
+  </select> -->
+  <select id="allSearchList" resultMap="PlaylistResultMap">
+      SELECT *
+      FROM (
+          SELECT p.*, u.nickname AS maker,
+              COUNT(DISTINCT lp.id) AS like_count,
+              MAX(t.title) AS track_title,  -- 트랙 제목 중 하나(정렬용)
+              MAX(u.nickname) AS user_nickname -- 유저 닉네임(정렬용)
+          FROM playlist p
+          LEFT JOIN user u ON p.user_id = u.id
+          LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+          LEFT JOIN playlist_detail pd ON p.id = pd.playlist_id
+          LEFT JOIN track t ON t.id = pd.track_id
+          WHERE p.is_public = 1 AND (
+              p.title LIKE CONCAT('%', #{keyword}, '%')
+              OR u.nickname LIKE CONCAT('%', #{keyword}, '%')
+              OR t.title LIKE CONCAT('%', #{keyword}, '%')
+          )
+          GROUP BY p.id
+      ) sub
+      <choose>
+          <when test="sort == 'latest'">
+              ORDER BY created_at DESC
+          </when>
+          <when test="sort == 'popular'">
+              ORDER BY like_count DESC
+          </when>
+          <otherwise>
+              ORDER BY
+                CASE
+                  WHEN title = #{keyword} THEN 1
+                  WHEN track_title = #{keyword} THEN 2
+                  WHEN maker = #{keyword} THEN 3
+                  WHEN title LIKE CONCAT(#{keyword}, '%') THEN 4
+                  WHEN track_title LIKE CONCAT(#{keyword}, '%') THEN 5
+                  WHEN maker LIKE CONCAT(#{keyword}, '%') THEN 6
+                  WHEN title LIKE CONCAT('%', #{keyword}, '%') THEN 7
+                  WHEN track_title LIKE CONCAT('%', #{keyword}, '%') THEN 8
+                  WHEN maker LIKE CONCAT('%', #{keyword}, '%') THEN 9
+                  ELSE 10
+                END,
+                like_count DESC,
+                title ASC,
+                maker ASC
+          </otherwise>
+      </choose>
+      LIMIT #{pagination.index}, #{pagination.size}
+  </select>
+
+  <!-- 검색 데이터 수 -->
+  <select id="searchCount" resultType="long">
+    SELECT COUNT(DISTINCT p.id)
+    FROM playlist p
+    LEFT JOIN user u ON p.user_id = u.id
+    LEFT JOIN playlist_detail pd ON p.id = pd.playlist_id
+    LEFT JOIN track t ON t.id = pd.track_id
+    WHERE p.is_public = 1 AND (
+          p.title LIKE CONCAT('%', #{keyword}, '%')
+          OR u.nickname LIKE CONCAT('%', #{keyword}, '%')
+          OR t.title LIKE CONCAT('%', #{keyword}, '%')
+    )
+  </select>
+
+  <select id="mainNewList" resultMap="PlaylistResultMap">
+    SELECT p.*, u.nickname AS maker,
+          COUNT(DISTINCT lp.id) AS like_count
+    FROM playlist p
+    LEFT JOIN user u ON p.user_id = u.id
+    LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+    WHERE p.created_at >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+      AND p.is_public = 1
+    GROUP BY p.id
+    ORDER BY p.created_at DESC
+    LIMIT 12
+  </select>
+
+  <select id="newList" resultMap="PlaylistResultMap">
+    SELECT p.*, u.nickname AS maker,
+          COUNT(DISTINCT lp.id) AS like_count
+    FROM playlist p
+    LEFT JOIN user u ON p.user_id = u.id
+    LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+    WHERE p.created_at >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+      AND p.is_public = 1
+    GROUP BY p.id
+    ORDER BY p.created_at DESC
+    LIMIT #{index}, #{size}
+  </select>
+
+  <select id="mainHotList" resultMap="PlaylistResultMap">
+    SELECT p.*, u.nickname AS maker,
+          COUNT(DISTINCT lp.id) AS like_count
+    FROM playlist p
+    LEFT JOIN user u ON p.user_id = u.id
+    LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+    WHERE p.is_public = 1
+    GROUP BY p.id
+    HAVING COUNT(lp.id) > 0
+    ORDER BY like_count DESC
+    LIMIT 12
+  </select>
+
+  <select id="hotList" resultMap="PlaylistResultMap">
+    SELECT p.*, u.nickname AS maker,
+          COUNT(DISTINCT lp.id) AS like_count
+    FROM playlist p
+    LEFT JOIN user u ON p.user_id = u.id
+    LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+    WHERE p.is_public = 1
+    GROUP BY p.id
+    HAVING COUNT(lp.id) > 0
+    ORDER BY like_count DESC, p.created_at DESC
+    LIMIT #{index}, #{size}
+  </select>
+
+  <select id="newCount" resultType="long">
+    SELECT COUNT(*) FROM playlist
+    WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+      AND is_public = 1
+  </select>
+
+  <select id="hotCount" resultType="long">
+    SELECT COUNT(*) FROM (
+      SELECT p.id
+      FROM playlist p
+      LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+      WHERE p.is_public = 1
+      GROUP BY p.id
+      HAVING COUNT(lp.id) > 0
+    ) AS filtered
+  </select>
+
+  <!-- 트랙 ID 기준 -->
+  <select id="getPlaylistsByTrackId" resultType="Playlist">
+      SELECT
+          p.id,
+          p.user_id AS userId,
+          p.title,
+          p.description,
+          p.thumbnail_url AS thumbnailUrl,
+          p.is_public AS isPublic,
+          p.created_at AS createdAt,
+          COUNT(lp.id) AS likeCount
+      FROM playlist p
+      JOIN playlist_detail pd ON p.id = pd.playlist_id
+      LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+      WHERE pd.track_id = #{trackId}
+        AND p.is_public = TRUE
+      GROUP BY p.id
+      ORDER BY likeCount DESC
+      LIMIT 6
+  </select>
+
+  <!-- 앨범 ID 기준 (앨범에 속한 트랙 포함하는 공개 플레이리스트들) -->
+  <select id="getPlaylistsByAlbumId" resultType="Playlist">
+      SELECT
+          p.id,
+          p.user_id AS userId,
+          p.title,
+          p.description,
+          p.thumbnail_url AS thumbnailUrl,
+          p.is_public AS isPublic,
+          p.created_at AS createdAt,
+          COUNT(lp.id) AS likeCount
+      FROM playlist p
+      JOIN playlist_detail pd ON p.id = pd.playlist_id
+      JOIN track t ON pd.track_id = t.id
+      LEFT JOIN liked_playlist lp ON p.id = lp.playlist_id
+      WHERE t.album_id = #{albumId}
+        AND p.is_public = TRUE
+      GROUP BY p.id
+      ORDER BY likeCount DESC
+      LIMIT 6
+  </select>
+
+  <!-- 트랙리뷰화면에서 단건 가져오기 -->
+  <insert id="insertSingleTrack">
+    INSERT INTO playlist_detail (playlist_id, track_id, order_no)
+    VALUES (#{playlistId}, #{trackId}, #{orderNo})
+  </insert>
+
+
+</mapper>

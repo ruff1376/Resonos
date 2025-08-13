@@ -1,0 +1,38 @@
+ul.custom-pagination {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin-top: 30px;
+    list-style: none;
+}
+ul.custom-pagination li {
+    display: inline;
+}
+ul.custom-pagination button {
+    color: #B1B1B1;
+    font-size: 2.4rem;
+    text-decoration: none;
+    background: none;
+    border: none;
+    padding: 0 4px;
+    margin: 0;
+    cursor: pointer;
+    transition: color 0.2s;
+    box-shadow: none;
+    border-radius: 0;
+    outline: none;
+}
+ul.custom-pagination button:hover {
+    text-decoration: underline;
+    font-weight: bold;
+}
+ul.custom-pagination li.active button {
+    color: var(--main-color);
+    font-weight: bold;
+    pointer-events: none;
+}
+ul.custom-pagination span {
+    font-size: 3rem;
+}

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.admin.TagMapper">
+
+  <resultMap id="TagResultMap" type="com.cosmus.resonos.domain.admin.Tag">
+    <id property="id" column="id"/>
+    <result property="name" column="name"/>
+  </resultMap>
+
+  <select id="list" resultMap="TagResultMap">
+    SELECT * FROM tag ORDER BY name
+  </select>
+
+  <select id="select" resultMap="TagResultMap">
+    SELECT * FROM tag WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO tag ( name) VALUES ( #{name})
+  </insert>
+
+  <update id="update">
+    UPDATE tag SET name = #{name} WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM tag WHERE id = #{id}
+  </delete>
+
+  <!-- searchByName -->
+  <select id="searchByName" resultMap="TagResultMap">
+    SELECT * FROM tag WHERE name LIKE CONCAT('%', #{keyword}, '%')
+  </select>
+
+  <!-- countAll -->
+  <select id="countAll" resultType="long">
+    SELECT COUNT(*) FROM tag
+  </select>
+
+  <!-- countByKeyword -->
+  <select id="countByKeyword" resultType="long">
+    SELECT COUNT(*) FROM tag WHERE name LIKE CONCAT('%', #{keyword}, '%')
+  </select>
+  <!-- listPaging -->
+  <select id="listPaging" resultMap="TagResultMap">
+    SELECT * FROM tag ORDER BY name LIMIT #{offset}, #{size}
+  </select>
+  <!-- searchByNamePaging -->
+  <select id="searchByNamePaging" resultMap="TagResultMap">
+    SELECT * FROM tag WHERE name LIKE CONCAT('%', #{keyword}, '%') ORDER BY name LIMIT #{offset}, #{size}
+  </select>
+
+</mapper>

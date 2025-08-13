@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.cosmus.resonos.domain.CustomUser;
-import com.cosmus.resonos.domain.Users;
-import com.cosmus.resonos.service.UserService;
+import com.cosmus.resonos.domain.user.Users;
+import com.cosmus.resonos.service.user.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -240,7 +240,7 @@
           li.classList.add('text-item')
 
           li.innerHTML = `
-              <a href="/tracks?id=${review.albumId}&reviewId=${review.id}">
+              <a href="/albums?id=${review.albumId}&reviewId=${review.id}">
                 <p class="sm-title">${review.title}</p>
                 <p class="sm-content">${review.content}</p>
                 <span class="date">${formatDate(review.createdAt)}</span>
@@ -330,7 +330,7 @@
           li.classList.add('text-item')
 
           li.innerHTML = `
-              <a href="/tracks?id=${review.albumId}&reviewId=${review.id}">
+              <a href="/albums?id=${review.albumId}&reviewId=${review.id}">
                 <p class="sm-title">${review.title}</p>
                 <p class="sm-content">${review.content}</p>
                 <span class="rv-name">${review.reviewer.nickname}</span>

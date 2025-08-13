@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.review.TrackMapper">
+
+  <resultMap id="Track" type="com.cosmus.resonos.domain.review.Track">
+    <id property="id" column="id"/>
+    <result property="title" column="title"/>
+    <result property="duration" column="duration"/>
+    <result property="genre" column="genre"/>
+    <result property="streamingUrl" column="streaming_url"/>
+    <result property="mvUrl" column="mv_url"/>
+    <result property="albumId" column="album_id"/>
+    <result property="artistId" column="artist_id"/>
+    <result property="popularity" column="popularity"/>
+    <result property="trackNo" column="track_no"/>
+    <result property="artistName" column="artist_name"/>
+    <result property="coverImage" column="cover_image"/>
+    <result property="releaseDate" column="release_date"/>
+    <result property="likeCount" column="like_count"/>
+    <result property="followerCount" column="follower_count"/>
+    <result property="popularityScore" column="popularity_score"/>
+    <result property="avgRating" column="avg_rating"/>
+    <result property="voteCount" column="vote_count"/>
+  </resultMap>
+
+  <select id="selectAll" resultMap="Track">
+    SELECT * FROM track
+  </select>
+
+  <select id="mainNewList" resultMap="Track">
+    SELECT t.*, ar.name AS artist_name, al.cover_image, ROUND(AVG(tr.rating)) AS avg_rating,
+          (COUNT(DISTINCT tr.id) * 3 + COUNT(DISTINCT lt.id) + COUNT(DISTINCT pd.id) + COUNT(DISTINCT tmv.id)) AS popularity_score
+    FROM track t
+    LEFT JOIN artist ar ON t.artist_id = ar.id
+    LEFT JOIN album al ON t.album_id = al.id
+    LEFT JOIN track_review tr ON t.id = tr.track_id
+    LEFT JOIN liked_track lt ON t.id = lt.track_id
+    LEFT JOIN playlist_detail pd ON t.id = pd.track_id
+    LEFT JOIN track_mood_vote tmv ON t.id = tmv.track_id
+    WHERE al.release_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+    GROUP BY t.id
+    ORDER BY al.release_date DESC, popularity_score DESC, t.track_no DESC
+    LIMIT 12
+  </select>
+
+  <select id="newList" resultMap="Track">
+    SELECT t.*, ar.name AS artist_name, al.cover_image, ROUND(AVG(tr.rating)) AS avg_rating,
+          (COUNT(DISTINCT tr.id) * 3 + COUNT(DISTINCT lt.id) + COUNT(DISTINCT pd.id) + COUNT(DISTINCT tmv.id)) AS popularity_score
+    FROM track t
+    LEFT JOIN artist ar ON t.artist_id = ar.id
+    LEFT JOIN album al ON t.album_id = al.id
+    LEFT JOIN track_review tr ON t.id = tr.track_id
+    LEFT JOIN liked_track lt ON t.id = lt.track_id
+    LEFT JOIN playlist_detail pd ON t.id = pd.track_id
+    LEFT JOIN track_mood_vote tmv ON t.id = tmv.track_id
+    WHERE al.release_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+    GROUP BY t.id
+    ORDER BY al.release_date DESC, popularity_score DESC, t.track_no DESC
+    LIMIT #{index}, #{size}
+  </select>
+
+  <select id="mainHotList" resultMap="Track">
+    SELECT t.*,
+          (COUNT(DISTINCT tr.id) * 3 +
+            COUNT(DISTINCT lt.id) +
+            COUNT(DISTINCT pd.id) +
+            COUNT(DISTINCT tmv.id)) AS popularity_score,
+          ar.name AS artist_name,
+          al.cover_image,
+          ROUND(AVG(tr.rating)) AS avg_rating
+    FROM track t
+    LEFT JOIN artist ar ON t.artist_id = ar.id
+    LEFT JOIN album al ON t.album_id = al.id
+    LEFT JOIN track_review tr ON t.id = tr.track_id
+    LEFT JOIN liked_track lt ON t.id = lt.track_id
+    LEFT JOIN playlist_detail pd ON t.id = pd.track_id
+    LEFT JOIN track_mood_vote tmv ON t.id = tmv.track_id
+    GROUP BY t.id
+    HAVING popularity_score >= 25
+    <!-- HAVING popularity_score >= 1 -->
+    ORDER BY popularity_score DESC, avg_rating DESC
+    LIMIT 12
+  </select>
+
+  <select id="hotList" resultMap="Track">
+    SELECT t.*,
+          (COUNT(DISTINCT tr.id) * 3 +
+            COUNT(DISTINCT lt.id) +
+            COUNT(DISTINCT pd.id) +
+            COUNT(DISTINCT tmv.id)) AS popularity_score,
+          ar.name AS artist_name,
+          al.cover_image,
+          ROUND(AVG(tr.rating)) AS avg_rating
+    FROM track t
+    LEFT JOIN artist ar ON t.artist_id = ar.id
+    LEFT JOIN album al ON t.album_id = al.id
+    LEFT JOIN track_review tr ON t.id = tr.track_id
+    LEFT JOIN liked_track lt ON t.id = lt.track_id
+    LEFT JOIN playlist_detail pd ON t.id = pd.track_id
+    LEFT JOIN track_mood_vote tmv ON t.id = tmv.track_id
+    GROUP BY t.id
+    HAVING popularity_score >= 25
+    <!-- HAVING popularity_score >= 1 -->
+    ORDER BY popularity_score DESC, avg_rating DESC
+    LIMIT #{index}, #{size}
+  </select>
+
+  <select id="count" resultType="long">
+    SELECT COUNT(*)
+    FROM track
+  </select>
+
+  <select id="newCount" resultType="long">
+    SELECT COUNT(*)
+    FROM track t
+    LEFT JOIN album al ON t.album_id = al.id
+    WHERE al.release_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+  </select>
+
+  <select id="hotCount" resultType="long">
+    SELECT COUNT(*)
+    FROM (
+      SELECT t.id,
+            (COUNT(DISTINCT tr.id) * 3 + COUNT(DISTINCT lt.id) + COUNT(DISTINCT pd.id) + COUNT(DISTINCT tmv.id)) AS popularity_score
+      FROM track t
+      LEFT JOIN track_review tr ON t.id = tr.track_id
+      LEFT JOIN liked_track lt ON t.id = lt.track_id
+      LEFT JOIN playlist_detail pd ON t.id = pd.track_id
+      LEFT JOIN track_mood_vote tmv ON t.id = tmv.track_id
+      GROUP BY t.id
+      HAVING popularity_score >= 25
+      <!-- HAVING popularity_score >= 1 -->
+    ) AS filtered
+  </select>
+
+  <select id="selectById"  resultMap="Track">
+    SELECT * FROM track WHERE id = #{id}
+  </select>
+
+  <insert id="insert" >
+    INSERT INTO track
+      (id, title, duration, genre, streaming_url, mv_url, album_id, artist_id, popularity, track_no)
+    VALUES
+      (#{id}, #{title}, #{duration}, #{genre}, #{streamingUrl}, #{mvUrl}, #{albumId}, #{artistId}, #{popularity}, #{trackNo})
+  </insert>
+
+  <update id="update" >
+    UPDATE track
+    SET title = #{title},
+        duration = #{duration},
+        genre = #{genre},
+        streaming_url = #{streamingUrl},
+        mv_url = #{mvUrl},
+        album_id = #{albumId},
+        artist_id = #{artistId},
+        popularity = #{popularity},
+        track_no = #{trackNo}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete" >
+    DELETE FROM track WHERE id = #{id}
+  </delete>
+
+  <select id="list" resultMap="Track">
+    SELECT * FROM track
+    ORDER BY id DESC
+  </select>
+
+  <select id="exists" resultType="int" >
+    SELECT COUNT(*) FROM track WHERE id = #{id}
+  </select>
+
+  <!-- artistId -->
+  <!-- 아티스트 별 TOP 7 인기 트랙 -->
+  <select id="selectTop7TracksByArtist"
+
+          resultType="Track">
+      SELECT
+          title,
+          mv_url,
+          duration,
+          id
+      FROM track
+      WHERE artist_id = #{artistId}
+      ORDER BY popularity DESC
+      LIMIT 7
+  </select>
+
+  <!-- 아티스트별 곡수 -->
+  <select id="countTracksByArtist"
+
+          resultType="int">
+      SELECT COUNT(*)
+      FROM track
+      WHERE artist_id = #{artistId}
+  </select>
+
+  <!-- trackId 같은 앨범 내 인기순 Top-5 트랙 -->
+  <!-- (선택) 자기 자신 제외 -->
+  <select id="findTop5TracksInSameAlbum"
+
+          resultType="Track">
+    <![CDATA[
+    SELECT t.*
+    FROM   track t
+    JOIN   track base ON base.id = #{trackId}
+    WHERE  t.album_id = base.album_id
+      AND  t.id <> #{trackId}
+    ORDER BY t.popularity DESC
+    LIMIT 5
+    ]]>
+  </select>
+
+  <!-- trackId → 아티스트 이름 한 건 -->
+  <select id="findArtistNameByTrackId"
+
+          resultType="string">
+    SELECT ar.name
+    FROM   artist ar
+    JOIN   track  t ON t.artist_id = ar.id
+    WHERE  t.id = #{trackId}
+    LIMIT 1
+  </select>
+
+  <!-- 앨범아이디로 모든트랙 -->
+  <select id="findTracksByAlbumId"
+
+          resultMap="Track">
+    <![CDATA[
+      SELECT *
+      FROM   track
+      WHERE  album_id = #{albumId}
+      ORDER BY track_no ASC
+    ]]>
+  </select>
+  <!-- 앨범아이디로 트랙중 인기 5 (리스트) -->
+  <select id="findTop5TracksByAlbumId"
+
+          resultMap="Track">
+    <![CDATA[
+      SELECT *
+      FROM   track
+      WHERE  album_id = #{albumId}
+      ORDER BY popularity DESC
+      LIMIT 5
+    ]]>
+  </select>
+
+  <!-- 앨범아이디로 트랙중 인기 1 (객체) -->
+  <select id="findTopTrackByAlbumId"
+
+          resultMap="Track">
+    <![CDATA[
+      SELECT *
+      FROM   track
+      WHERE  album_id = #{albumId}
+      ORDER BY popularity DESC
+      LIMIT 1
+    ]]>
+  </select>
+
+  <select id="searchList" resultMap="Track">
+    SELECT t.*, ar.name AS artist_name, al.cover_image,
+          COUNT(DISTINCT lt.id) AS like_count,
+          COUNT(DISTINCT af.id) AS follower_count,
+          ROUND(AVG(tr.rating)) AS avg_rating
+    FROM track t
+    LEFT JOIN artist ar ON t.artist_id = ar.id
+    LEFT JOIN album al ON t.album_id = al.id
+    LEFT JOIN liked_track lt ON t.id = lt.track_id
+    LEFT JOIN artist_follow af ON ar.id = af.artist_id
+    LEFT JOIN track_review tr ON t.id = tr.track_id
+    WHERE 1=1
+      <if test="keyword != null and keyword != ''">
+        AND (t.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%'))
+      </if>
+    GROUP BY t.id
+    ORDER BY
+      CASE
+        WHEN t.title = #{keyword} THEN 1
+        WHEN ar.name = #{keyword} THEN 2
+        WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 3
+        WHEN ar.name LIKE CONCAT(#{keyword}, '%') THEN 4
+        WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 5
+        WHEN ar.name LIKE CONCAT('%', #{keyword}, '%') THEN 6
+        ELSE 7
+      END,
+      like_count DESC,
+      follower_count DESC,
+      t.title ASC,
+      ar.name ASC
+      LIMIT 12
+  </select>
+
+
+  <select id="allSearchList" resultMap="Track">
+    SELECT t.*, ar.name AS artist_name, al.cover_image,
+          COUNT(DISTINCT lt.id) AS like_count,
+          COUNT(DISTINCT af.id) AS follower_count,
+          ROUND(AVG(tr.rating)) AS avg_rating,
+          (COUNT(DISTINCT tr.id) * 3 +
+            COUNT(DISTINCT lt.id) +
+            COUNT(DISTINCT pd.id) +
+            COUNT(DISTINCT tmv.id)) AS popularity_score
+    FROM track t
+    LEFT JOIN artist ar ON t.artist_id = ar.id
+    LEFT JOIN album al ON t.album_id = al.id
+    LEFT JOIN liked_track lt ON t.id = lt.track_id
+    LEFT JOIN artist_follow af ON ar.id = af.artist_id
+    LEFT JOIN track_review tr ON t.id = tr.track_id
+    LEFT JOIN playlist_detail pd ON t.id = pd.track_id
+    LEFT JOIN track_mood_vote tmv ON t.id = tmv.track_id
+    WHERE t.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
+    GROUP BY t.id
+    <choose>
+        <when test="sort == 'latest'">
+            ORDER BY al.release_date DESC, al.title DESC, t.track_no DESC
+        </when>
+        <when test="sort == 'popular'">
+            ORDER BY popularity_score DESC
+        </when>
+        <otherwise>
+            ORDER BY
+              CASE
+                WHEN t.title = #{keyword} THEN 1
+                WHEN ar.name = #{keyword} THEN 2
+                WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 3
+                WHEN ar.name LIKE CONCAT(#{keyword}, '%') THEN 4
+                WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 5
+                WHEN ar.name LIKE CONCAT('%', #{keyword}, '%') THEN 6
+                ELSE 7
+              END,
+              like_count DESC,
+              follower_count DESC,
+              t.title ASC,
+              ar.name ASC
+        </otherwise>
+    </choose>
+    LIMIT #{pagination.index}, #{pagination.size}
+  </select>
+
+  <select id="searchCount" resultType="long">
+    SELECT COUNT(DISTINCT t.id)
+    FROM track t
+    LEFT JOIN artist ar ON t.artist_id = ar.id
+    WHERE t.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
+  </select>
+
+  <!-- 마이페이지: 플레이리스트에 추가할 트랙 리스트 요청 -->
+  <select id="addTrackList" resultMap="Track" >
+    SELECT t.*, ar.name AS artist_name, al.cover_image
+    FROM track t
+      LEFT JOIN artist ar ON t.artist_id = ar.id
+      LEFT JOIN album al ON t.album_id = al.id
+    WHERE t.title LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
+    OR ar.name LIKE CONCAT('%', #{keyword}, '%') OR ar.name LIKE CONCAT('%', #{keyword}, '%')
+    ORDER BY
+      CASE
+          WHEN t.title = #{keyword} THEN 1
+          WHEN ar.name = #{keyword} THEN 2
+          WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 3
+          WHEN ar.name LIKE CONCAT(#{keyword}, '%') THEN 4
+          WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 5
+          WHEN ar.name LIKE CONCAT('%', #{keyword}, '%') THEN 6
+          ELSE 7
+      END,
+      t.title ASC,
+      ar.name ASC
+      LIMIT #{offset}, #{limit}
+  </select>
+
+  <!-- 마이페이지: 좋아요 표시한 트랙 3개 -->
+  <select id="likedTracksTop3" resultType="Track">
+    SELECT t.*, lt.created_at, a.cover_image
+    FROM track t
+      INNER JOIN liked_track lt ON lt.track_id = t.id
+      INNER JOIN album a ON t.album_id = a.id
+    WHERE lt.user_id = #{id}
+    ORDER BY lt.created_at DESC
+    LIMIT 3
+  </select>
+
+  <!-- 마이페이지: 좋아요 표시한 트랙 전체 -->
+  <select id="likedTracks" resultType="Track">
+    SELECT t.*, lt.created_at, a.cover_image, art.name AS artistName
+    FROM liked_track lt
+      INNER JOIN track t ON lt.track_id = t.id
+      INNER JOIN album a ON t.album_id = a.id
+      INNER JOIN artist art ON t.artist_id = art.id
+    WHERE lt.user_id = #{id}
+    <if test="keyword != null and keyword != ''">
+      AND (
+        t.title LIKE CONCAT('%', #{keyword}, '%')
+        OR art.name LIKE CONCAT('%', #{keyword}, '%')
+      )
+    </if>
+    ORDER BY
+    <choose>
+      <when test="keyword != null and keyword != ''">
+        CASE
+          WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 0
+          WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 1
+          WHEN art.name LIKE CONCAT(#{keyword}, '%') THEN 2
+          WHEN art.name LIKE CONCAT('%', #{keyword}, '%') THEN 3
+          ELSE 4
+        END,
+        lt.created_at DESC
+      </when>
+      <otherwise>
+        lt.created_at DESC
+      </otherwise>
+    </choose>
+    LIMIT #{offset}, #{limit}
+  </select>
+
+  <!-- 마이페이지: 좋아요 표시한 트랙 수 -->
+  <select id="countLikedTracks" resultType="int">
+    SELECT COUNT(*)
+    FROM liked_track lt
+    WHERE lt.user_id = #{id}
+  </select>
+
+  <!-- 페이징 전체 데이터 -->
+  <select id="getAllTracks" resultMap="Track">
+    SELECT * FROM track
+    ORDER BY popularity DESC
+    LIMIT #{index}, #{size}
+  </select>
+
+  <!-- mv_url 업데이트 -->
+  <update id="updateMvUrl">
+      UPDATE track SET mv_url = #{mvUrl} WHERE id = #{id}
+  </update>
+
+  <select id="searchTracksByTag" resultMap="Track">
+    SELECT t.*, COUNT(tmv.id) AS vote_count, ar.name AS artist_name, al.cover_image, tg.name AS tag
+    FROM track_mood_vote tmv
+    JOIN tag tg ON tmv.mood = tg.id
+    JOIN track t ON t.id = tmv.track_id
+    JOIN artist ar ON ar.id = t.artist_id
+    JOIN album al ON t.album_id = al.id
+    WHERE tg.name = #{tagName}
+    GROUP BY t.id
+    ORDER BY vote_count DESC
+    LIMIT 6
+  </select>
+
+  <select id="selectTop5TracksByTag" resultMap="Track">
+    SELECT
+      t.*,
+      ar.name AS artist_name,
+      al.cover_image,
+      ROUND(AVG(tr.rating)) AS avg_rating,
+      (COUNT(DISTINCT tr.id) * 3 +
+      COUNT(DISTINCT lt.id) +
+      COUNT(DISTINCT pd.id) +
+      COUNT(DISTINCT tmv.id)) AS popularity_score,
+      max_tag.tag_name AS max_tag_name,
+      max_tag.vote_count AS max_tag_vote_count
+    FROM track t
+    LEFT JOIN artist ar ON t.artist_id = ar.id
+    LEFT JOIN album al ON t.album_id = al.id
+    LEFT JOIN track_review tr ON t.id = tr.track_id
+    LEFT JOIN liked_track lt ON t.id = lt.track_id
+    LEFT JOIN playlist_detail pd ON t.id = pd.track_id
+    LEFT JOIN track_mood_vote tmv ON t.id = tmv.track_id
+    LEFT JOIN (
+      SELECT
+        tmv.track_id,
+        tg.name AS tag_name,
+        COUNT(*) AS vote_count
+      FROM track_mood_vote tmv
+      JOIN tag tg ON tmv.mood = tg.id
+      GROUP BY tmv.track_id, tg.name
+    ) AS tag_votes ON t.id = tag_votes.track_id
+    LEFT JOIN (
+      SELECT
+        track_id,
+        tag_name,
+        vote_count
+      FROM (
+        SELECT
+          track_id,
+          tag_name,
+          vote_count,
+          ROW_NUMBER() OVER (PARTITION BY track_id ORDER BY vote_count DESC) AS rn
+        FROM (
+          SELECT
+            tmv.track_id,
+            tg.name AS tag_name,
+            COUNT(*) AS vote_count
+          FROM track_mood_vote tmv
+          JOIN tag tg ON tmv.mood = tg.id
+          GROUP BY tmv.track_id, tg.name
+        ) sub
+      ) ranked
+      WHERE rn = 1
+    ) AS max_tag ON t.id = max_tag.track_id
+    WHERE max_tag.tag_name = #{tagName}
+    GROUP BY t.id
+    ORDER BY popularity_score DESC
+    LIMIT 5
+  </select>
+
+</mapper>

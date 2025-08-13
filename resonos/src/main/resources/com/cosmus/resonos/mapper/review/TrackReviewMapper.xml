@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cosmus.resonos.mapper.review.TrackReviewMapper">
+
+    <!-- ─────────────────────── TrackReview → 도메인 매핑 -->
+    <resultMap id="TrackReview" type="com.cosmus.resonos.domain.review.TrackReview">
+        <id     property="id"        column="id"/>
+        <result property="rating"    column="rating"/>
+        <result property="content"   column="content"/>
+        <result property="blinded"   column="blinded"/>
+        <result property="likes"     column="likes"/>
+        <result property="dislikes"  column="dislikes"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="critic"    column="critic"/>
+        <result property="userId"    column="user_id"/>
+        <result property="trackId"   column="track_id"/>
+        <result property="title"     column="title"/>
+            <association property="reviewer" javaType="com.cosmus.resonos.domain.review.Reviewer">
+                <id property="id" column="reviewer_id"/>
+                <result property="nickname" column="reviewer_nickname"/>
+                <result property="profileImage" column="reviewer_profile_image"/>
+                <result property="pro" column="reviewer_is_pro"/>
+            </association>
+    </resultMap>
+
+    <!-- ─────────────────────── TrackScore → 집계 매핑 -->
+    <resultMap id="TrackScore" type="com.cosmus.resonos.domain.review.TrackScore">
+        <id property="trackId"      column="track_id"/>
+        <result property="averageScore" column="avg_score"/>
+        <result property="criticCount"  column="critic_count"/>
+        <result property="userCount"    column="user_count"/>
+    </resultMap>
+
+    <!-- insert -->
+    <insert id="insert"  useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO track_review(
+            rating, content, blinded, likes, dislikes, created_at, critic, user_id, track_id)
+        VALUES (#{rating}, #{content}, #{blinded}, #{likes}, #{dislikes}, #{createdAt}, #{critic}, #{userId}, #{trackId})
+    </insert>
+
+    <!-- find by id -->
+    <select id="findById"  resultMap="TrackReview">
+        SELECT * FROM track_review WHERE id = #{id}
+    </select>
+
+    <!-- find reviews for track (blinded 제외) -->
+    <select id="findByTrackId"  resultMap="TrackReview">
+        SELECT *
+        FROM track_review
+        WHERE track_id = #{trackId}
+          AND blinded = 0
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="reviewWithReviewerByTrackId" parameterType="string" resultMap="TrackReview">
+        SELECT
+            tr.id,
+            tr.rating,
+            tr.content,
+            tr.blinded,
+            tr.created_at,
+            tr.critic,
+            tr.user_id,
+            tr.track_id,
+            u.id AS reviewer_id,
+            u.nickname AS reviewer_nickname,
+            u.profile_image AS reviewer_profile_image,
+            u.is_pro AS reviewer_is_pro,
+            (SELECT COUNT(*) FROM review_like WHERE review_id = tr.id AND review_type = 'TRACK') AS likes,
+            (SELECT COUNT(*) FROM review_report WHERE review_id = tr.id AND review_type = 'TRACK') AS dislikes
+        FROM track_review tr
+        JOIN user u ON u.id = tr.user_id
+        WHERE tr.track_id = #{trackId}
+        AND tr.blinded = 0
+        ORDER BY tr.critic DESC,
+            likes DESC,
+            tr.created_at ASC
+    </select>
+
+    <select id="selectPagedReviewsWithReviewer" parameterType="map" resultMap="TrackReview">
+        SELECT
+            tr.id,
+            tr.rating,
+            tr.content,
+            tr.blinded,
+            tr.created_at,
+            tr.critic,
+            tr.user_id,
+            tr.track_id,
+            u.id AS reviewer_id,
+            u.nickname AS reviewer_nickname,
+            u.profile_image AS reviewer_profile_image,
+            u.is_pro AS reviewer_is_pro,
+            (SELECT COUNT(*) FROM review_like WHERE review_id = tr.id AND review_type = 'TRACK') AS likes,
+            (SELECT COUNT(*) FROM review_report WHERE review_id = tr.id AND review_type = 'TRACK') AS dislikes
+        FROM track_review tr
+        JOIN user u ON u.id = tr.user_id
+        <where>
+            <if test="trackId != null">
+                tr.track_id = #{trackId}
+            </if>
+        </where>
+        ORDER BY tr.critic DESC, likes DESC, tr.created_at ASC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+
+    <select id="getLastestReview"
+            parameterType="map"
+            resultMap="TrackReview">
+        SELECT
+            tr.id,
+            tr.rating,
+            tr.content,
+            tr.blinded,
+            tr.created_at,
+            tr.critic,
+            tr.user_id,
+            tr.track_id,
+            u.id AS reviewer_id,
+            u.nickname AS reviewer_nickname,
+            u.profile_image AS reviewer_profile_image,
+            u.is_pro AS reviewer_is_pro,
+            (SELECT COUNT(*) FROM review_like WHERE review_id = tr.id AND review_type = 'TRACK') AS likes,
+            (SELECT COUNT(*) FROM review_report WHERE review_id = tr.id AND review_type = 'TRACK') AS dislikes
+
+        FROM track_review tr
+        JOIN user u ON u.id = tr.user_id
+
+        WHERE tr.track_id = #{trackId}
+        AND tr.user_id = #{userId}
+
+        LIMIT 1
+    </select>
+    <!-- 페이징된 리뷰 목록 -->
+    <!-- <select id="selectPagedReviews" parameterType="map" resultMap="TrackReviewResultMap">
+        SELECT * FROM track_review
+        WHERE track_id = #{trackId}
+        ORDER BY created_at DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select> -->
+
+
+    <!-- 마이페이지: 유저의 트랙 리뷰 -->
+    <select id="reviewWithReviewerByUserId" parameterType="Long" resultMap="TrackReview">
+        SELECT
+            tr.id,
+            tr.rating,
+            tr.content,
+            tr.blinded,
+            tr.created_at,
+            tr.critic,
+            tr.user_id,
+            tr.track_id,
+            u.id AS reviewer_id,
+            u.nickname AS reviewer_nickname,
+            u.profile_image AS reviewer_profile_image,
+            u.is_pro AS reviewer_is_pro,
+            (SELECT COUNT(*) FROM review_like WHERE review_id = tr.id AND review_type = 'TRACK') AS likes,
+            (SELECT COUNT(*) FROM review_report WHERE review_id = tr.id AND review_type = 'TRACK') AS dislikes,
+            t.title
+        FROM track_review tr
+        JOIN user u ON u.id = tr.user_id
+        JOIN track t ON tr.track_id = t.id
+        WHERE tr.user_id = #{loginUserId}
+        <if test="keyword != null and keyword != ''">
+        AND (
+            t.title LIKE CONCAT('%', #{keyword}, '%')
+            OR tr.content LIKE CONCAT('%', #{keyword}, '%')
+        )
+        </if>
+        ORDER BY
+        <choose>
+            <when test="keyword != null and keyword != ''">
+                CASE
+                WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 0
+                WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 1
+                WHEN tr.content LIKE CONCAT(#{keyword}, '%') THEN 2
+                WHEN tr.content LIKE CONCAT('%', #{keyword}, '%') THEN 3
+                ELSE 4
+                END,
+                tr.created_at DESC
+            </when>
+            <otherwise>
+                tr.created_at DESC
+            </otherwise>
+        </choose>
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <!-- 마이페이지: 트랙 리뷰 수  -->
+    <select id="countTrackReview" resultType="int">
+        SELECT COUNT(*)
+        FROM track_review tr
+        WHERE tr.user_id = #{loginUserId}
+    </select>
+
+    <!-- 마이페이지: 유저의 좋아요한 트랙 리뷰 -->
+    <select id="likedReviewByUserId" resultMap="TrackReview">
+        SELECT
+            tr.id,
+            tr.rating,
+            tr.content,
+            tr.blinded,
+            tr.created_at,
+            tr.critic,
+            tr.user_id,
+            tr.track_id,
+            u.id AS reviewer_id,
+            u.nickname AS reviewer_nickname,
+            u.profile_image AS reviewer_profile_image,
+            u.is_pro AS reviewer_is_pro,
+            (SELECT COUNT(*) FROM review_like WHERE review_id = tr.id AND review_type = 'TRACK') AS likes,
+            (SELECT COUNT(*) FROM review_report WHERE review_id = tr.id AND review_type = 'TRACK') AS dislikes,
+            t.title
+        FROM review_like rl
+        JOIN track_review tr ON tr.id = rl.review_id
+        JOIN user u ON tr.user_id = u.id
+        JOIN track t ON tr.track_id = t.id
+        WHERE rl.user_id = #{loginUserId}
+        AND rl.review_type = 'TRACK'
+        <if test="keyword != null and keyword != ''">
+        AND (
+            t.title LIKE CONCAT('%', #{keyword}, '%')
+            OR tr.content LIKE CONCAT('%', #{keyword}, '%')
+            OR u.nickname LIKE CONCAT('%', #{keyword}, '%')
+        )
+        </if>
+        ORDER BY
+        <choose>
+            <when test="keyword != null and keyword != ''">
+                CASE
+                WHEN t.title LIKE CONCAT(#{keyword}, '%') THEN 0
+                WHEN t.title LIKE CONCAT('%', #{keyword}, '%') THEN 1
+                WHEN tr.content LIKE CONCAT(#{keyword}, '%') THEN 2
+                WHEN tr.content LIKE CONCAT('%', #{keyword}, '%') THEN 3
+                WHEN u.nickname LIKE CONCAT('%', #{keyword}, '%') THEN 4
+                WHEN u.nickname LIKE CONCAT('%', #{keyword}, '%') THEN 5
+                ELSE 6
+                END,
+                rl.created_at DESC
+            </when>
+            <otherwise>
+                rl.created_at DESC
+            </otherwise>
+        </choose>
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <!-- 마이페이지: 좋아요한 트랙 리뷰 수  -->
+    <select id="countLikedTrackReview" resultType="int">
+        SELECT COUNT(*)
+        FROM review_like rl
+        WHERE rl.user_id = 1
+        AND review_type = 'TRACK'
+    </select>
+
+    <!-- update blind status -->
+    <update id="updateBlindStatus">
+        UPDATE track_review SET blinded = #{blinded} WHERE id = #{id}
+    </update>
+
+    <!-- like / dislike -->
+    <update id="incrementLikes">
+        UPDATE track_review SET likes = likes + 1 WHERE id = #{id}
+    </update>
+
+    <update id="incrementDislikes">
+        UPDATE track_review SET dislikes = dislikes + 1 WHERE id = #{id}
+    </update>
+
+    <!-- ───────── TrackScore Aggregation -->
+    <select id="findScoreByTrackId"  resultMap="TrackScore">
+        <![CDATA[
+        SELECT  track_id,
+                ROUND(AVG(rating))                         AS avg_score,
+                SUM(CASE WHEN critic = 1 THEN 1 ELSE 0 END)   AS critic_count,
+                SUM(CASE WHEN critic = 0 THEN 1 ELSE 0 END)   AS user_count
+        FROM    track_review
+        WHERE   track_id = #{trackId}
+        AND   blinded = 0
+        GROUP BY track_id
+        ]]>
+    </select>
+
+    <update id="update">
+        UPDATE track_review
+        SET rating  = #{rating},
+            content = #{content}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM track_review WHERE id = #{id}
+    </delete>
+
+    <!-- 중복 방지 -->
+    <select id="existsByUserAndTrack" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM track_review
+        WHERE user_id = #{userId}
+        AND track_id = #{trackId}
+    </select>
+
+    <!-- 전체 리뷰 수 -->
+    <select id="countByTrackId" resultType="long">
+        SELECT COUNT(*) FROM track_review
+        WHERE track_id = #{trackId}
+        AND blinded = 0
+    </select>
+
+    <!-- 페이징된 리뷰 목록 -->
+    <!-- <select id="selectPagedReviews" parameterType="map" resultMap="TrackReviewResultMap">
+        SELECT * FROM track_review
+        WHERE track_id = #{trackId}
+        ORDER BY created_at DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select> -->
+
+    <!-- 전체 리뷰 수 -->
+    <select id="countAll" resultType="long">
+        SELECT COUNT(*) FROM track_review
+    </select>
+
+    <!-- 찾는 리뷰가 몇 번째인지 -->
+    <select id="findMyReview" resultType="int">
+        SELECT COUNT(*)
+        FROM album_review ar
+        JOIN album_review target ON target.id = #{reviewId}
+        WHERE ar.album_id = target.album_id
+        AND (
+            (
+            (SELECT COUNT(*) FROM review_like WHERE review_id = ar.id AND review_type = 'TRACK')
+            >
+            (SELECT COUNT(*) FROM review_like WHERE review_id = target.id AND review_type = 'TRACK')
+            )
+            OR (
+            (SELECT COUNT(*) FROM review_like WHERE review_id = ar.id AND review_type = 'TRACK')
+            =
+            (SELECT COUNT(*) FROM review_like WHERE review_id = target.id AND review_type = 'TRACK')
+            AND ar.created_at &lt; target.created_at
+            )
+        )
+    </select>
+</mapper>

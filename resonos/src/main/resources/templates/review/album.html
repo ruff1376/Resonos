@@ -94,22 +94,6 @@
                         style="object-fit:cover;">
                 </th:block>
             </div>
-
-            <script>
-                function handleIframeError(iframe) {
-                    const container = iframe.parentElement;
-                    const videoId = container.getAttribute("data-video-id");
-
-                    container.innerHTML = `
-        <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" rel="noopener noreferrer">
-            <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" 
-                 alt="유튜브 썸네일" width="560" height="315" style="cursor:pointer; object-fit:cover;">
-            <p style="text-align:center; font-weight:bold;">🔗 유튜브에서 영상 보기</p>
-        </a>
-    `;
-                }
-            </script>
-
         </div>
         <!-- iframe 카드 끝 -->
 

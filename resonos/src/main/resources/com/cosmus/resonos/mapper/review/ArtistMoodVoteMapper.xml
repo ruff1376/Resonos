@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.review.ArtistMoodVoteMapper">
+
+    <resultMap id="ArtistMoodVoteMap" type="com.cosmus.resonos.domain.review.ArtistMoodVote">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="artistId" column="artist_id"/>
+        <result property="mood" column="mood"/>
+    </resultMap>
+
+    <select id="getArtistMoodStats" resultType="map">
+        SELECT
+            a.artist_id,
+            ar.name AS artist_name,
+            tg.name AS mood_name,
+            COUNT(*) AS vote_count
+        FROM artist_mood_vote a
+        JOIN tag tg ON a.mood = tg.id
+        JOIN artist ar ON a.artist_id = ar.id
+        GROUP BY a.artist_id, ar.name, tg.name
+        ORDER BY a.artist_id, vote_count DESC
+    </select>
+
+    <select id="findAll" resultMap="ArtistMoodVoteMap">
+        SELECT id, user_id, artist_id, mood
+        FROM artist_mood_vote
+        ORDER BY id DESC
+    </select>
+
+    <select id="findByArtistId" resultMap="ArtistMoodVoteMap">
+        SELECT id, user_id, artist_id, mood
+        FROM artist_mood_vote
+        WHERE artist_id = #{artistId}
+        ORDER BY id DESC
+    </select>
+
+    <select id="findByUserAndArtist" resultMap="ArtistMoodVoteMap">
+        SELECT *
+        FROM artist_mood_vote
+        WHERE user_id = #{userId} AND artist_id = #{artistId}
+        LIMIT 1
+    </select>
+
+    <insert id="insert" parameterType="com.cosmus.resonos.domain.review.ArtistMoodVote">
+        INSERT INTO artist_mood_vote (user_id, artist_id, mood)
+        VALUES (#{userId}, #{artistId}, #{mood})
+    </insert>
+
+    <update id="update" parameterType="com.cosmus.resonos.domain.review.ArtistMoodVote">
+        UPDATE artist_mood_vote
+        SET mood = #{mood}
+        WHERE user_id = #{userId} AND artist_id = #{artistId}
+    </update>
+
+</mapper>
