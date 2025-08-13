@@ -136,7 +136,7 @@ const ActivityContainer = () => {
 
 
   return (
-    <div className="admin container">
+    <div className="container">
       <Header />
       <Activity
         utl={utl}
