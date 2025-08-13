@@ -8,6 +8,7 @@ import withReactContent from 'sweetalert2-react-content'
 import AlbumStatus from '../../components/review/album/AlbumStatus';
 import MvAndStreaming from '../../components/review/common/MvAndStreaming';
 import Review from '../../components/review/common/Review';
+import TextPressure from '../../assets/TextPressure';
 
 
 
@@ -45,11 +46,14 @@ const Album = () => {
   const [userId, setUserId] = useState({});
   const [reviewType, setReviewType] = useState("")
 
+  const [loading, setLoading] = useState(false)
+
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
         console.log('API 호출 시작, ID:', id);
         try {
+          setLoading(true);
           // axios 응답 객체 전체를 받음
           const response = await api.getAlbumPage(id);
           // console.log(await albumApi.albumPage(id))
@@ -83,6 +87,8 @@ const Album = () => {
           setReviewType(data.reviewType);
         } catch (error) {
           console.error('API 호출 실패:', error);
+        } finally {
+          setLoading(false);
         }
       }
     };
@@ -120,8 +126,24 @@ const Album = () => {
     toggleLike(userId, album);
   }
 
-  // 앨범 리뷰 작성
-
+  if (loading) {
+    return (
+      <div style={{ position: 'relative', height: '300px' }}>
+        <TextPressure
+          text="LOADING...!"
+          flex={true}
+          alpha={false}
+          stroke={false}
+          width={true}
+          weight={true}
+          italic={true}
+          textColor="#ffffff"
+          strokeColor="#ff0000"
+          minFontSize={36}
+        />
+      </div>
+    )
+  }
   return (
     <>
       <div className={styles.albumWrapper}>
