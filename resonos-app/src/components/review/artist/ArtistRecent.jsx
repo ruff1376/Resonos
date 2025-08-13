@@ -4,20 +4,7 @@ import BandsintownWidget from './BandsInTown';
 
 const ArtistRecent = ({ styles, artist, recentReviews }) => {
 
-  useEffect(() => {
-    // artistName이 유효해지고, Bandsintown 스크립트가 로드되었을 때
-    if (artist.name && window.Bandsintown) {
-      // 위젯 초기화 함수를 호출
-      window.Bandsintown.init();
-    }
-  }, [artist.name]); // artistName이 변경되면 재실행
 
-  // artistName이 유효할 때만 위젯 div 렌더링
-  if (!artist.name) {
-    return null;
-  }
-
-  
   return (
     <>
       <div className={styles.infoCard}>
