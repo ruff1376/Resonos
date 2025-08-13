@@ -13,6 +13,7 @@ import {
   searchTrackList, searchAlbumList, searchArtistList,
    saveTrack, saveAlbum, saveArtist  
 } from '../../apis/admin';
+import QuickMenu from '../../components/admin/first/QuickMenu';
 
 /**
  * AdminMusicContainer
@@ -386,6 +387,7 @@ return (
       pageUri={`/admin/music?tab=${activeTab}&keyword=${encodeURIComponent(keyword)}`}
       onPageChange={onPageChange}
     />
+    <QuickMenu />
   </div>
 );
 

@@ -6,6 +6,7 @@ import TableContentGeneric from "../../components/admin/first/TableContentGeneri
 import Pagination from "../../components/admin/Pagination";
 import FormInput from "../../components/admin/first/FormInput";
 import FormSelect from "../../components/admin/first/FormSelect";
+import QuickMenu from "../../components/admin/first/QuickMenu";
 
 
 const initialForm = {
@@ -215,6 +216,7 @@ const fetchNotices = async (page = 1, size = 10, kw = keyword) => {
 
         </div>
       </div>
+      <QuickMenu />
     </main>
   );
 };

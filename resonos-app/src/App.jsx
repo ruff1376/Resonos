@@ -56,6 +56,12 @@ import SetNotification from './pages/user/SetNotification';
 import FindId from './pages/user/FindId';
 import FindPw from './pages/user/FindPw';
 
+
+
+// 범위 한정 css 적용 - 테스트 진행중 
+
+
+
 const App = () => {
 
   return (
@@ -63,7 +69,6 @@ const App = () => {
       <LoginContextProvider>
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/admin' element={<AdminIndex />} />
           <Route path='/test' element={<Tailwindtest />} />
           <Route path="/list/main" element={<Main />} />
 

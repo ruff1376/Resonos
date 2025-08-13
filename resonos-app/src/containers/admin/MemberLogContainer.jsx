@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import LogTable from '../../components/admin/first/LogTable'; // 새로 제공된 컴포넌트
 import { formatDate as formatDateTime } from '../../utils/format';
 import { getMemberLogsByUserId } from '../../apis/admin';
+import QuickMenu from '../../components/admin/first/QuickMenu';
 
 
 const MemberLogContainer = ({ userId }) => {
@@ -62,6 +63,7 @@ useEffect(() => {
           회원 목록으로
         </a>
       </div>
+      <QuickMenu />
     </main>
   );
 };

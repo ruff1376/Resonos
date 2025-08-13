@@ -6,7 +6,7 @@ import {
 } from "../../apis/admin"; // api 유틸 import
 import TableColumnHeader from "../../components/admin/first/TableColumnHeader";
 import Pagination from "../../components/admin/Pagination";
-import styles from "../../components/admin/css/admin.module.css";
+import QuickMenu from "../../components/admin/first/QuickMenu";
 
 const ReviewReportManageContainer = () => {
   const [type, setType] = useState("album"); // 'album' or 'track'
@@ -255,6 +255,7 @@ const ReviewReportManageContainer = () => {
           </div>
         )}
       </div>
+      <QuickMenu />
     </main>
   );
 };

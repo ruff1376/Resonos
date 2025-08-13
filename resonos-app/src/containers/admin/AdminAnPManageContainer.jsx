@@ -14,6 +14,7 @@ import {
   updateApiKey,
   updatePlugin
 } from "../../apis/admin";
+import QuickMenu from "../../components/admin/first/QuickMenu";
 
 const PAGE_SIZE = 5; // 페이지당 아이템 수
 
@@ -220,6 +221,7 @@ const AdminAnPManageContainer = () => {
               pageUri={"#"}
               onPageChange={setPluginPage}
             />
+            <QuickMenu />
           </div>
         </>
       )}

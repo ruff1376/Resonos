@@ -1,11 +1,13 @@
 // src/layouts/AdminLayout.jsx
 import React from "react";
-import styles from "../components/admin/css/admin.module.css"; // 한 번만 import
+import "../styles/admin.css"; // admin 전용 CSS
 
 export default function AdminLayout({ children }) {
   return (
-    <div className={styles.container}>
-      {children}
+    <div className="admin">
+      <div className="container">
+        {children}
+      </div>
     </div>
   );
 }

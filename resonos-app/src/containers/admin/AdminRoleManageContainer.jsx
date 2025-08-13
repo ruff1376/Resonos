@@ -8,6 +8,7 @@ import {
 } from '../../apis/admin';
 import Pagination from '../../components/admin/Pagination';
 import SearchForm from '../../components/admin/first/SearchForm';
+import QuickMenu from '../../components/admin/first/QuickMenu';
 
 
 const AdminRoleManageContainer = () => {
@@ -260,6 +261,7 @@ const AdminRoleManageContainer = () => {
           />
         </>
       )}
+      <QuickMenu />
     </div>
   );
 };

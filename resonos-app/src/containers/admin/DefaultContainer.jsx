@@ -12,6 +12,7 @@ import {
   deletePlugin,
   togglePlugin
 } from "../../apis/admin";
+import QuickMenu from "../../components/admin/first/QuickMenu";
 
 const AdminAnPManageContainer = () => {
   const [apiKeys, setApiKeys] = useState([]);
@@ -240,6 +241,7 @@ const AdminAnPManageContainer = () => {
           </div>
         </>
       )}
+      <QuickMenu />
     </div>
   );
 };

@@ -10,6 +10,7 @@ import TableColumnHeader from "../../components/admin/first/TableColumnHeader";
 import SearchForm from "../../components/admin/first/SearchForm";
 import Pagination from "../../components/admin/Pagination";
 import FormInput from "../../components/admin/first/FormInput";
+import QuickMenu from "../../components/admin/first/QuickMenu";
 
 
 const TagManageContainer = () => {
@@ -228,6 +229,7 @@ const fetchData = async (page = 1, size = 10, kw = "") => {
           />
         )}
       </div>
+      <QuickMenu />
     </div>
   );
 };

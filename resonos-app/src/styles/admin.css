@@ -12,13 +12,20 @@
   --card-border: var(--main-color);
   --border-color: #2b2f36;
   --hover-bg: rgba(255, 255, 255, 0.04);
+  --danger-color: #ff4d4f;
 
   --font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
   --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.15);
   --shadow-strong: 0 4px 14px rgba(0, 0, 0, 0.25);
+
+  --font-size-sm: 1.6rem;
+  --font-size-md: 2.0rem;
+  --font-size-lg: 2.4rem;
+
 }
 
 html[data-theme='light'] {
+    font-size: 62.5%; /* 16px × 62.5% = 10px → 1rem = 10px */
   --main-color: #C28B00;
   --silver-color: #333;
   --background-color: #f8f9fa;
@@ -31,6 +38,7 @@ html[data-theme='light'] {
 
    /* 전역 / 기본 레이아웃 */
 body {
+    font-size: 1.6rem; 
   font-family: var(--font-family);
   background-color: var(--background-color);
   color: var(--text-color);
@@ -49,12 +57,11 @@ body {
 .admin a {
   text-decoration: none !important;
   color: inherit;
-  background-color: var(--background-color);
 }
 
-/* =========================
-   Navbar
-========================= */
+   /* Navbar */
+
+
 .admin .navbar {
   background: var(--background-color) !important;
   border-bottom: 1px solid #222;
@@ -77,15 +84,20 @@ body {
 }
 
    /* 카드 */
+
 .admin .resonos-card {
-  background: var(--card-bg) !important;
-  border: 1.5px solid var(--card-border) !important;
-  border-radius: 1.2rem !important;
-  padding: 2rem !important;
-  box-shadow: var(--shadow-soft) !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-  color: var(--text-color) !important;
-  text-align: center !important;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    background: var(--card-bg) !important;
+    border: 1.5px solid var(--card-border) !important;
+    border-radius: 1.2rem !important;
+    padding: 2rem !important;
+    box-shadow: var(--shadow-soft) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    color: var(--text-color) !important;
+    text-align: center !important;
 }
 .admin .resonos-card:hover {
   transform: translateY(-2px);
@@ -93,24 +105,25 @@ body {
 }
 .admin .card-title {
   color: var(--main-color);
-  font-size: 2rem;
+  font-size: var(--font-size-lg);
   font-weight: bold;
 }
 .admin .card-sm-title {
   color: var(--main-color);
-  font-size: 1.6rem;
+  font-size: var(--font-size-md);
   font-weight: 600;
 }
 .admin .card-value {
-  font-size: 2.4rem;
+  font-size: var(--font-size-lg);
   font-weight: bold;
   color: var(--silver-color);
 }
-
 /* 버튼 */
 .admin .btn { 
-  color: var(--text-color) !important;
-  background: var(--main-color);
+    background: var(--main-color) !important;
+    color: var(--text-color) !important;
+    padding: auto !important;
+    margin: 0.2rem !important;
 }
 .admin .btn-gold {
   background: var(--main-color);
@@ -145,15 +158,31 @@ body {
   padding: 4px 10px;
 }
 .admin .btn-sm {
-  padding: 0.2rem 0.8rem !important; /* 세로 여백 감소 */
-  font-size: 0.85rem !important;
+  padding: 0.4rem 1rem !important; /* 세로 여백 감소 */
+  font-size: 1.6rem !important;
   line-height: 1.1 !important;
+  width: fit-content;
+  border: 1px solid var(--main-color);
+  background: none;
+  color: var(--main-color);
+  border-radius: 30px;
+  padding: 4px 10px;
+  font-size: 1rem;
+  transition: all 0.25s ease;
 }
 .admin .btn-outline-gold.btn-sm,
 .admin .btn-gold.btn-sm {
-  padding: 0.2rem 0.8rem !important;
-  font-size: 0.85rem !important;
-  line-height: 1.1 !important;
+  font-size: 1.6rem ;
+}
+.admin .btn-outline-danger {
+  border: 1.5px solid var(--danger-color);
+  background-color: var(--border-color) !important;
+  color: var(--danger-color);
+  border-radius: 30px;
+  padding: 0.3rem 1rem;
+  font-size: 0.9rem;
+  line-height: 1.2;
+
 }
    /* 표 / 리스트 */
 .admin .list-group-item {
@@ -208,6 +237,9 @@ body {
   position: fixed;
   top: 50%;
   left: 2%;
+  border: 5px solid var(--main-color);
+  border-radius: 10px;
+  padding: 1rem;
   transform: translateY(-50%);
   display: grid;
   grid-template-columns: repeat(2, auto);
@@ -219,13 +251,13 @@ body {
   color: var(--main-color);
   border: 1px solid var(--main-color);
   border-radius: 10px;
-  min-width: 80px;
-  height: 40px;
-  padding: 0 12px;
+  min-width: 50px;
+  height: 30px;
   display: flex;
+  padding: 0 6px;
   align-items: center;
   justify-content: center;
-  font-size: 0.82rem;
+  font-size: 1.6rem;
   font-weight: bold;
   transition: all 0.25s ease;
 }
@@ -250,7 +282,7 @@ body {
     border: none;
     height: auto;
     padding: 6px 2px;
-    font-size: 0.75rem;
+    font-size: 1.6rem;
     border-radius: 0;
   }
 }
@@ -299,4 +331,194 @@ body {
 .admin .theme-toggle-btn:hover {
   background: var(--main-color);
   color: var(--background-color);
+}
+
+
+
+/********************************
+ * 공통 레이아웃 / 컨테이너
+ ********************************/
+.admin-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.max-w-950 { max-width: 950px; }
+.max-w-900 { max-width: 900px; }
+.max-w-1200 { max-width: 1200px; }
+
+.min-vh-80 { min-height: 80vh; }
+.min-vh-100 { min-height: 100vh; }
+
+/********************************
+ * 제목 / 색상
+ ********************************/
+.text-light-gold {
+  color: var(--main-color);
+  font-weight: bold;
+}
+.text-info { color: #4fc3f7 !important; }
+
+/********************************
+ * 카드형 섹션
+ ********************************/
+.resonos-card {
+  background: var(--card-bg, #23262e);
+  border: 1px solid var(--border-color, #444);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-soft);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-color, #fff);
+}
+
+/********************************
+ * 리스트 / 표
+ ********************************/
+.list-group-item {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  border-bottom: 1px solid var(--border-color, #444);
+  padding: 0.5rem;
+}
+.list-group-item > div {
+  padding: 0.3rem;
+}
+
+/* 테이블 칼럼 공통 */
+.table-col {
+  flex: 1;
+  padding: 0.3rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/********************************
+ * VoteStats 테이블
+ ********************************/
+.vote-table-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color, #444);
+}
+.vote-col-id    { flex-basis: 22%; min-width: 120px; }
+.vote-col-title { flex-basis: 28%; min-width: 100px; }
+.vote-col-mood  { flex-basis: 30%; min-width: 90px; }
+.vote-col-count { flex-basis: 10%; min-width: 60px; }
+.vote-col-more  { flex-basis: 10%; min-width: 60px; }
+
+/* more-moods 행 */
+.more-moods {
+  display: none;
+}
+.more-moods.show {
+  display: block;
+}
+
+/********************************
+ * 배지 테이블
+ ********************************/
+.badge-table-row {
+  display: flex;
+  align-items: center;
+  background: #23262e;
+  border-bottom: 1px solid #292d36;
+}
+.badge-col {
+  padding: 8px 6px;
+  text-align: center;
+}
+.badge-col-icon { flex-basis: 54px; min-width: 54px; }
+.badge-col-name { flex-basis: 18%; }
+.badge-col-desc { flex-basis: 32%; }
+.badge-col-cond { flex-basis: 18%; }
+.badge-col-action { flex-basis: 18%; }
+.badge-icon-img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: var(--background-color, #1a1a1a);
+}
+
+/********************************
+ * 버튼 스타일
+ ********************************/
+.btn-gold {
+  background: var(--main-color);
+  color: var(--background-color, #1a1a1a);
+  font-weight: bold;
+  border-radius: 30px;
+  border: none;
+  padding: 0.3rem 1rem;
+}
+.btn-outline-gold {
+  background: none;
+  color: var(--main-color);
+  border: 1.5px solid var(--main-color);
+  border-radius: 30px;
+  padding: 0.3rem 1rem;
+  font-weight: bold;
+}
+.btn-xs {
+  font-size: 0.85rem;
+  padding: 0.15rem 0.5rem;
+}
+
+/********************************
+ * 폼 / 입력창
+ ********************************/
+.api-key-input {
+  background: var(--background-color, #1a1a1a);
+  color: var(--text-color, #fff);
+  border: 1px solid var(--border-color, #444);
+  border-radius: 5px;
+  padding: 0.3rem 0.5rem;
+  min-width: 150px;
+}
+.search-bar {
+  flex: 1;
+  padding: 0.3rem 0.5rem;
+  border-radius: 5px;
+  border: 1px solid var(--border-color, #444);
+}
+
+/********************************
+ * QnA 상세
+ ********************************/
+.qna-detail {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/********************************
+ * 반응형
+ ********************************/
+@media (max-width: 768px) {
+  .vote-col-id,
+  .vote-col-title,
+  .vote-col-mood,
+  .vote-col-count,
+  .vote-col-more {
+    flex-basis: auto;
+    min-width: 60px;
+  }
+}
+
+
+/* 추가 - test.css에서 가져옴 */
+.pre-wrap { white-space: pre-wrap; }
+.max-w-1100 { max-width: 1100px; }
+
+/* 리스트/테이블 - test.css 추가 부분 */
+.admin .list-group-item > div {
+  padding: 0.3rem;
+}
+
+/* 반응형 - test.css 추가 부분 */
+@media (max-width: 991px) {
+  .admin-content { flex-direction: column; }
 }

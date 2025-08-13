@@ -1,7 +1,6 @@
 import React from 'react'
 import { useLocation } from "react-router-dom";
 import MemberLogContainer from '../../containers/admin/MemberLogContainer'
-import styles from '../../components/admin/css/Admin.module.css'
 
 const AdminMemberDetail = () => {
 
