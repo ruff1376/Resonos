@@ -44,7 +44,7 @@ const Artist = () => {
   // 태그 정보
   const [allTags, setAllTags] = useState([]);
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때, 또는 artistId가 변경될 때 API를 호출합니다.

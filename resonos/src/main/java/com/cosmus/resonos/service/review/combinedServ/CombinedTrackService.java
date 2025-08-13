@@ -122,7 +122,8 @@ public class CombinedTrackService {
 
                     if (!reviewIds.isEmpty()) {
                         // 리뷰아이디로 해당 유저가 좋아요 했을시 좋아요 여부 표시
-                        List<Long> likedReviewIds = reviewLikeService.getUserLikedReviewIds("TRACK", reviewIds, loginUser.getId());
+                        List<Long> likedReviewIds = reviewLikeService.getUserLikedReviewIds("TRACK", reviewIds,
+                                loginUser.getId());
                         reviews.forEach(
                                 review -> review.setIsLikedByCurrentUser(likedReviewIds.contains(review.getId())));
                     }
@@ -132,6 +133,10 @@ public class CombinedTrackService {
                 trackPageDTO.setUserVotedMoodId(trackMoodVoteService.getUserVotedMoodId(loginUser.getId(), trackId));
                 // 유저의 트랙 좋아요 유무
                 trackPageDTO.setTrackLikedByUser(likedTrackService.isLikedByUser(loginUser.getId(), trackId));
+            }
+            else {
+                // 비로그인유저는 그냥 리뷰
+                trackPageDTO.setReviews(reviews);
             }
 
         } catch (Exception e) {
@@ -158,27 +163,29 @@ public class CombinedTrackService {
     }
 
     // 리뷰등록시 리뷰를 비동기로 반환
-    // public ResponseEntity<?> getMyReviewFragment(String trackId, CustomUser user) {
-    //     // Map<String,?> myReview = new HashMap<>();
-    //     if (user != null) {
-    //         // model.addAttribute("loginUser", loginUser = user.getUser());
-    //         // boolean isAdmin = user.getAuthorities()
-    //         // .stream()
-    //         // .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-    //         // myReview.put("isAdmin",isAdmin);
+    // public ResponseEntity<?> getMyReviewFragment(String trackId, CustomUser user)
+    // {
+    // // Map<String,?> myReview = new HashMap<>();
+    // if (user != null) {
+    // // model.addAttribute("loginUser", loginUser = user.getUser());
+    // // boolean isAdmin = user.getAuthorities()
+    // // .stream()
+    // // .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+    // // myReview.put("isAdmin",isAdmin);
 
-    //     }
-    //     TrackReview myReview = trackReviewService.getLastestReview(trackId, user.getId());
-    //     // Track track = trackService.selectById(trackId);
-    //     if (myReview == null) {
-    //         return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
-    //     }
+    // }
+    // TrackReview myReview = trackReviewService.getLastestReview(trackId,
+    // user.getId());
+    // // Track track = trackService.selectById(trackId);
+    // if (myReview == null) {
+    // return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
+    // }
 
-    //     // myreview.put("reviewType", "TRACK");
-    //     // myreview.put("track", track);
-    //     // myreview.put("review", List.of(myReview)); // 리스트 형태로 전달
-    //     // myreview.put("hasNext", false); // 의미 없지만 구조 유지
-    //     return new ResponseEntity<>(myReview, HttpStatus.OK);
+    // // myreview.put("reviewType", "TRACK");
+    // // myreview.put("track", track);
+    // // myreview.put("review", List.of(myReview)); // 리스트 형태로 전달
+    // // myreview.put("hasNext", false); // 의미 없지만 구조 유지
+    // return new ResponseEntity<>(myReview, HttpStatus.OK);
     // }
 
     // 트랙 리뷰 수정

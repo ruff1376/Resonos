@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 const ArtistInfo = ({ styles, artist, albumCount, trackCount, userId, isArtistFollowed, followCount, albums }) => {
 
-
   return (
     <>
       <div className={styles.artistCard}>
@@ -39,7 +38,7 @@ const ArtistInfo = ({ styles, artist, albumCount, trackCount, userId, isArtistFo
           <div className={styles.albumContainer}>
             {/* 반복문 구간 */}
             {albums && albums.map((album) => (
-              <Link key={album.id} to={`/albums/${album.id}`}>
+              <Link key={album.id} to={`/albums?id=${album.id}`}>
                 <div className={styles.album}>
                   <div className={styles.albumImg}>
                     <img src={album.coverImage} alt="" />
