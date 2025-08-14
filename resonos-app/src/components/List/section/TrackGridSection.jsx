@@ -1,7 +1,12 @@
 import { Link } from "react-router-dom";
 import Pagination from "../../Pagination/Pagination";
 
-export default function TrackGridSection({ title, trackList, pagination, onPageChange }) {
+export default function TrackGridSection({
+    title,
+    trackList,
+    pagination,
+    onPageChange
+}) {
     return (
         <section className="main-section-bg w-100 py-4 mb-5">
             <div className="d-flex flex-row align-items-center px-4 mb-3" style={{ height: 50 }}>

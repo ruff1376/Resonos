@@ -91,6 +91,9 @@ public class CombinedAlbumService {
                     review.setIsLikedByCurrentUser(likedReviewIds.contains(review.getId()));
                     pageDTO.setReviews(reviews);
                 }
+            } else {
+                // 비로그인시 리뷰 좋아요 매핑 안함
+                pageDTO.setReviews(reviews);
             }
             Map<String, Integer> chart = chartElementService.getAverageScoresByAlbumId(albumId);
             if(chart != null && !chart.isEmpty()) {

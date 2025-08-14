@@ -4,6 +4,7 @@ import ScrollToTop from '../ScrollToTop/ScrollToTop';
 import GridSection from './section/GridSection';
 import useRatingCharts from './hooks/useRatingCharts';
 import HotReviewAlbumSection from './section/HotReviewAlbumSection';
+import TopTracksByTagGridSection from './section/TopTracksByTagGridSection';
 
 export default function MainForm(props) {
     const {
@@ -15,6 +16,8 @@ export default function MainForm(props) {
         hotTrackList = [],
         newPlaylistList = [],
         hotPlaylistList = [],
+        topTracksByTag = {},
+        topTags = [],
         newAlbumCount = 0,
         hotAlbumCount = 0,
         newTrackCount = 0,
@@ -38,6 +41,7 @@ export default function MainForm(props) {
             <GridSection title="인기 트랙" contentList={hotTrackList} count={hotTrackCount} moreLink="/list/hot-tracks" isTrack />
             <GridSection title="최신 플레이리스트" contentList={newPlaylistList} count={newPlaylistCount} moreLink="/list/new-playlists" isPlaylist />
             <GridSection title="인기 플레이리스트" contentList={hotPlaylistList} count={hotPlaylistCount} moreLink="/list/hot-playlists" isPlaylist />
+            <TopTracksByTagGridSection topTracksByTag={topTracksByTag} topTags={topTags} />
 
             <ScrollToTop />
         </div>

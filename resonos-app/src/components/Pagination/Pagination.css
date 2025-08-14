@@ -24,6 +24,10 @@ ul.custom-pagination button {
     border-radius: 0;
     outline: none;
 }
+ul.custom-pagination button:hover {
+    text-decoration: underline;
+    font-weight: bold;
+}
 ul.custom-pagination li.active button {
     color: var(--main-color);
     font-weight: bold;

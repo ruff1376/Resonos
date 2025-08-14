@@ -37,7 +37,8 @@ public class ArtistPageDTO {
     private List<Integer> moodValues; // 상위 6개 분위기의 투표 수
     private List<MoodStat> moodStats; // 상위 6개 분위기
 
-
+    // 유저
+    private Long userId;
 
     // 리뷰 정보
     private List<RecentReview> recentReviews;

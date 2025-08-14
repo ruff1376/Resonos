@@ -13,12 +13,12 @@ body {
     margin-bottom: 16px;
     height: 100px;
     padding: 0 !important;
-    transition: transform 0.18s cubic-bezier(0.4,0,0.2,1), box-shadow 0.18s cubic-bezier(0.4,0,0.2,1);
+    transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.18s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .album-card:hover {
     transform: scale(1.04);
-    box-shadow: 0 6px 24px 0 rgba(0,0,0,0.18);
+    box-shadow: 0 6px 24px 0 rgba(0, 0, 0, 0.18);
     z-index: 2;
 }
 
@@ -168,10 +168,16 @@ body {
     font-size: 12px;
     color: #B1B1B1;
     display: block;
-    width: 100%;
+    /* width: 100%; */
     text-align: center;
     word-break: break-all;
     white-space: normal;
+}
+
+.card-artist {
+    display: flex !important;
+    justify-content: center;
+    gap: 3px;
 }
 
 .card-artist:hover {
@@ -202,4 +208,56 @@ body {
     align-items: center;
     justify-content: flex-end;
     height: 35px;
+}
+
+.more-link:hover {
+    text-decoration: underline !important;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.track-tag-grid {
+    max-width: 1440px;
+    border-top: 1px solid var(--main-color);
+    border-bottom: 1px solid var(--main-color);
+    padding: 40px 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.track-tag-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    
+}
+
+.tag {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    margin-bottom: 20px;
+    width: 100px;
+    height: 40px;
+    font-size: 16px;
+    border: 1px solid #B1B1B1;
+    border-radius: 50px;
+    color: #B1B1B1;
+}
+
+.track-card {
+    display: flex;
+    flex-direction: column;
+    /* box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 40px;
+    width: 400px;
+    height: 70px;
+    background: #222;
+    border: 2px solid #B1B1B1;
+    border-radius: 20px; */
 }

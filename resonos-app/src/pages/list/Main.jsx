@@ -13,6 +13,8 @@ const Main = () => {
     const [hotTrackList, setHotTrackList] = useState([]);
     const [newPlaylistList, setNewPlaylistList] = useState([]);
     const [hotPlaylistList, setHotPlaylistList] = useState([]);
+    const [topTracksByTag, setTopTracksByTag] = useState({});
+    const [topTags, setTopTags] = useState([]);
     const [newAlbumCount, setNewAlbumCount] = useState({});
     const [hotAlbumCount, setHotAlbumCount] = useState({});
     const [newTrackCount, setNewTrackCount] = useState({});
@@ -33,6 +35,8 @@ const Main = () => {
                 setHotTrackList(data.hotTrackList);
                 setNewPlaylistList(data.newPlaylistList);
                 setHotPlaylistList(data.hotPlaylistList);
+                setTopTracksByTag(data.topTracksByTag);
+                setTopTags(data.topTags);
                 setNewAlbumCount(data.newAlbumCount);
                 setHotAlbumCount(data.hotAlbumCount);
                 setNewTrackCount(data.newTrackCount);
@@ -57,6 +61,8 @@ const Main = () => {
                 hotTrackList={hotTrackList}
                 newPlaylistList={newPlaylistList}
                 hotPlaylistList={hotPlaylistList}
+                topTracksByTag={topTracksByTag}
+                topTags={topTags}
                 newAlbumCount={newAlbumCount}
                 hotAlbumCount={hotAlbumCount}
                 newTrackCount={newTrackCount}

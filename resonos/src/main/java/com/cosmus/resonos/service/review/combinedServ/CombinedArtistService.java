@@ -38,60 +38,61 @@ public class CombinedArtistService {
     private final TagService tagService;
     private final RecentReviewService recentReviewService;
 
-    // ArtistPageDTO
+    // artistPageDTO
     public ResponseEntity<?> artistPageGet(String ArtistId, CustomUser user) {
 
-        ArtistPageDTO ArtistPageDTO = new ArtistPageDTO();
+        ArtistPageDTO artistPageDTO = new ArtistPageDTO();
         try {
             Users loginUser = null;
             if (user != null) {
                 loginUser = user.getUser();
+                artistPageDTO.setUserId(loginUser.getId());
                 // 아티스트 해당 유저가 아티스트 팔로우 여부
-                    ArtistPageDTO.setArtistFollowed(artistFollowService.isLikedByUser(loginUser.getId(), ArtistId));
+                    artistPageDTO.setArtistFollowed(artistFollowService.isLikedByUser(loginUser.getId(), ArtistId));
             }
             // 아티스트 기본 정보
-            ArtistPageDTO.setArtist(artistService.selectById(ArtistId));
+            artistPageDTO.setArtist(artistService.selectById(ArtistId));
             // 아티스트의 팔로우 수
-            ArtistPageDTO.setFollowCount(artistFollowService.getArtistFollowCount(ArtistId));
+            artistPageDTO.setFollowCount(artistFollowService.getArtistFollowCount(ArtistId));
             // 아티스트의 앨범 정보
-            ArtistPageDTO.setAlbums(albumService.findAlbumsByArtistId(ArtistId));
+            artistPageDTO.setAlbums(albumService.findAlbumsByArtistId(ArtistId));
             // 아티스트의 앨범 수
-            ArtistPageDTO.setAlbumCount(albumService.countAlbumsByArtist(ArtistId));
+            artistPageDTO.setAlbumCount(albumService.countAlbumsByArtist(ArtistId));
             // 해당 아티스트의 트랙 수
-            ArtistPageDTO.setTrackCount(trackService.countTracksByArtist(ArtistId));
+            artistPageDTO.setTrackCount(trackService.countTracksByArtist(ArtistId));
             // 해당 아티스트의 인기곡 상위 7개
-            ArtistPageDTO.setTop7Tracks(trackService.selectTop7TracksByArtistAndFetchMv(ArtistId));
+            artistPageDTO.setTop7Tracks(trackService.selectTop7TracksByArtistAndFetchMv(ArtistId));
             // 해당 아티스트의 제일 인기곡
-            ArtistPageDTO.setTrack(ArtistPageDTO.getTop7Tracks().get(0));
+            artistPageDTO.setTrack(artistPageDTO.getTop7Tracks().get(0));
             // 아티스트의 분위기 투표 상위 6개
-            ArtistPageDTO.setMoodStats(moodStatService.getTop6MoodsByArtistId(ArtistId));
+            artistPageDTO.setMoodStats(moodStatService.getTop6MoodsByArtistId(ArtistId));
             // 아티스트의 분위기 투표 존재 여부
-            if (ArtistPageDTO.getMoodStats() != null) {
+            if (artistPageDTO.getMoodStats() != null) {
                 // 그 다음 비어 있는지 확인
-                ArtistPageDTO.setMoodEmpty(ArtistPageDTO.getMoodStats().isEmpty());
+                artistPageDTO.setMoodEmpty(artistPageDTO.getMoodStats().isEmpty());
             } else {
                 // null이면 비어있다고 간주
-                ArtistPageDTO.setMoodEmpty(true);
+                artistPageDTO.setMoodEmpty(true);
             }
 
             // 아티스트 분위기 투표가 비어있지않으면
-            if (!ArtistPageDTO.isMoodEmpty()) {
+            if (!artistPageDTO.isMoodEmpty()) {
                 if (loginUser != null) {
                     // 로그인 시 아티스트의 분위기 투표했을시 분위기 id
-                    ArtistPageDTO.setUserVotedMoodId(artistMoodVoteService.getUserVotedMoodId(loginUser.getId(), ArtistId));
+                    artistPageDTO.setUserVotedMoodId(artistMoodVoteService.getUserVotedMoodId(loginUser.getId(), ArtistId));
                 }
-                List<String> moodLabels = ArtistPageDTO.getMoodStats().stream().map(MoodStat::getMoodName).toList();
-                List<Integer> moodValues = ArtistPageDTO.getMoodStats().stream().map(MoodStat::getVoteCount).toList();
-                ArtistPageDTO.setMoodLabels(moodLabels);
-                ArtistPageDTO.setMoodValues(moodValues);
+                List<String> moodLabels = artistPageDTO.getMoodStats().stream().map(MoodStat::getMoodName).toList();
+                List<Integer> moodValues = artistPageDTO.getMoodStats().stream().map(MoodStat::getVoteCount).toList();
+                artistPageDTO.setMoodLabels(moodLabels);
+                artistPageDTO.setMoodValues(moodValues);
             }
             // 모든 태그정보
-            ArtistPageDTO.setAllTags(tagService.list());
+            artistPageDTO.setAllTags(tagService.list());
 
             // 아티스트의 최근 리뷰
             List<RecentReview> recentReviews = recentReviewService.getRecentReviewsByArtistId(ArtistId);
             if (!recentReviews.isEmpty() || recentReviews != null) {
-                ArtistPageDTO.setRecentReviews(recentReviews);
+                artistPageDTO.setRecentReviews(recentReviews);
             }
 
         } catch (Exception e) {
@@ -99,7 +100,7 @@ public class CombinedArtistService {
             return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return ResponseEntity.ok(ArtistPageDTO);
+        return ResponseEntity.ok(artistPageDTO);
     }
 
     // 아티스트 페이지 좋아요 토글
