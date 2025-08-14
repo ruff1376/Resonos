@@ -521,10 +521,10 @@ a:hover > .mypage-card {
   margin-bottom: 10px;
   transition: all 0.3s;
 }
-.con .btn-outline-gold:hover, .btn-outline-gold:focus {
-  background: #D4B97F;
-  border-color: var(--silver-color);
-  color: #181C23;
+.con .btn-outline-gold:hover, .con .btn-outline-gold:focus {
+  background: #D4B97F !important;
+  border-color: var(--silver-color) !important;
+  color: #181C23 !important;
 }
 .con .profile-edit-label {
   color: #D4B97F;

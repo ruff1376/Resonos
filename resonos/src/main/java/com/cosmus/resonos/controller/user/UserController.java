@@ -386,7 +386,7 @@ public class UserController {
    * @return
    * @throws Exception
    */
-  @GetMapping("/activity")
+  @GetMapping("/activities")
   public ResponseEntity<?> activity(
     @AuthenticationPrincipal CustomUser loginUser
     ) throws Exception {
@@ -439,7 +439,7 @@ public class UserController {
    * @return
    * @throws Exception
    */
-  @PostMapping("/activity")
+  @PostMapping("/activities")
   public ResponseEntity<?> usersTrackReview (
       @AuthenticationPrincipal CustomUser loingUser,
       @RequestBody Map<String, Object> data
@@ -562,7 +562,7 @@ public class UserController {
    * @return
    * @throws Exception
    */
-  @GetMapping({"follow-artist", "/{id}/follow-artist"})
+  @GetMapping({"follow-artists", "/{id}/follow-artists"})
   public ResponseEntity<?> followArtists(
     @AuthenticationPrincipal CustomUser loginUser,
     @PathVariable(value = "id", required = false) Long id

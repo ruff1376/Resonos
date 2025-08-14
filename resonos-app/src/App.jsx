@@ -49,7 +49,7 @@ import FollowArtist from './pages/user/FollowArtist';
 import FollowUser from './pages/user/FollowUser';
 import AdminNoticePage from './pages/admin/AdminNoticePage';
 import AdminQnAPage from './pages/admin/AdminQnAPage';
-import AdminLayout from './layouts/AdminLayout'; // /admin 경로 css 전역으로 적용 
+import AdminLayout from './layouts/AdminLayout'; // /admin 경로 css 전역으로 적용
 import Badge from './pages/user/Badge';
 import Security from './pages/user/Security';
 import SetNotification from './pages/user/SetNotification';
@@ -58,7 +58,7 @@ import FindPw from './pages/user/FindPw';
 
 
 
-// 범위 한정 css 적용 - 테스트 진행중 
+// 범위 한정 css 적용 - 테스트 진행중
 
 
 
@@ -102,7 +102,7 @@ const App = () => {
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/users/:id" element={<Mypage />} />
           <Route path="/users/edit" element={<Edit />} />
-          <Route path="/users/activity" element={<Activity />} />
+          <Route path="/users/activities" element={<Activity />} />
           <Route path="/users/notifications" element={<Notification />} />
           <Route path="/users/playlists" element={<Playlist />} />
           <Route path="/users/:id/playlists" element={<Playlist />} />
@@ -110,11 +110,11 @@ const App = () => {
           <Route path="/playlists/:id" element={<PlaylistDetail />} />
           <Route path="/users/liked-music" element={<LikedMusic />} />
           <Route path="/users/:id/liked-music" element={<LikedMusic />} />
-          <Route path="/users/follow-artist" element={<FollowArtist />} />
-          <Route path="/users/:id/follow-artist" element={<FollowArtist />} />
-          <Route path="/users/follow-user" element={<FollowUser />} />
-          <Route path="/users/:id/follow-user" element={<FollowUser />} />
-          <Route path="/users/badge" element={<Badge />} />
+          <Route path="/users/follow-artists" element={<FollowArtist />} />
+          <Route path="/users/:id/follow-artists" element={<FollowArtist />} />
+          <Route path="/users/follow-users" element={<FollowUser />} />
+          <Route path="/users/:id/follow-users" element={<FollowUser />} />
+          <Route path="/users/badges" element={<Badge />} />
           <Route path="/users/security" element={<Security />} />
           <Route path="/users/notifications/status" element={<SetNotification />} />
 
