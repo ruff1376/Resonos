@@ -12,4 +12,5 @@ public class BoardPost {
     private Date createdAt;
     private Long communityId;
     private Long userId;
+    private Long views;
 }

@@ -11,4 +11,6 @@ public class Comment {
     private Long userId;
     private String type;    // 'posts', 'playlist', 'comment'
     private Long targetId;
+    private Long boardPostId;
+    private Long parentCommentId;
 }
