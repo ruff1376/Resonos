@@ -152,22 +152,24 @@ const PlaylistContainer = () => {
   }, [likedPlaylists])
 
   return (
-    <div className='container'>
+    <>
       <Header />
-      <Playlist
-        likedPlaylists={likedPlaylists}
-        setLikedPlaylists={setLikedPlaylists}
-        myPlaylists={myPlaylists}
-        lastPath={lastPath}
-        isOwner={isOwner}
-        handleLike={handleLike}
-        handleDelete={handleDelete}
-        handleNavigate={handleNavigate}
-        onSearchPlaylist={onSearchPlaylist}
-        likedPlaylistCount={likedPlaylistCount}
-      />
+      <div className='container'>
+        <Playlist
+          likedPlaylists={likedPlaylists}
+          setLikedPlaylists={setLikedPlaylists}
+          myPlaylists={myPlaylists}
+          lastPath={lastPath}
+          isOwner={isOwner}
+          handleLike={handleLike}
+          handleDelete={handleDelete}
+          handleNavigate={handleNavigate}
+          onSearchPlaylist={onSearchPlaylist}
+          likedPlaylistCount={likedPlaylistCount}
+        />
+      </div>
       <Footer />
-    </div>
+    </>
   )
 }
 

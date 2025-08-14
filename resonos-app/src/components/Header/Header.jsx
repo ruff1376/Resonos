@@ -8,7 +8,7 @@ import $ from 'jquery';
 
 const Header = ({ currentUser = {} }) => {
     const location = useLocation();
-    const { isLogin, userInfo } = useContext(LoginContext)
+    const { isLogin, userInfo, path } = useContext(LoginContext)
     const [searchValue, setSearchValue] = useState("");
     const navigate = useNavigate();
 
@@ -61,12 +61,30 @@ const Header = ({ currentUser = {} }) => {
             <nav className="navbar navbar-expand-lg py-0">
                 <div className="container-fluid" style={{ maxWidth: '1440px' }}>
                     <div className="d-flex justify-content-start align-items-center">
-                        <Link className="navbar-brand d-flex align-items-center" to="/list/main">
-                            <img src="/img/resonosPlusLogo.png" alt="Main Page Logo" className="header-logo-img" />
-                        </Link>
-                        <Link className="navbar-brand d-flex align-items-center" to="/list/main">
-                            <img src="/img/resonosLogo.png" alt="Sub Page Logo" className="header-logo-img-sub" />
-                        </Link>
+                        {/* 위치 바꾸기
+                            TODO: 컨테이너에서 prpos 내려줘야 함
+                        */}
+                        {
+                            path !== 'community'
+                            ?
+                            <>
+                                <Link className="navbar-brand d-flex align-items-center" to="/list/main">
+                                    <img src="/img/resonosPlusLogo.png" alt="Main Page Logo" className="header-logo-img" />
+                                </Link>
+                                <Link className="navbar-brand d-flex align-items-center" to="/community">
+                                    <img src="/img/resonosLogo.png" alt="Sub Page Logo" className="header-logo-img-sub" />
+                                </Link>
+                            </>
+                            :
+                            <>
+                                <Link className="navbar-brand d-flex align-items-center" to="/community">
+                                    <img src="/img/resonosLogo.png" alt="Main Page" className="header-logo-img" />
+                                </Link>
+                                <Link className="navbar-brand d-flex align-items-center" to="/list/main">
+                                    <img src="/img/resonosPlusLogo.png" alt="LogoSub Page Logo" className="header-logo-img-sub" />
+                                </Link>
+                            </>
+                        }
                         <div className="menu-group d-flex position-relative ms-5">
 
                             {/* 앨범 메뉴 + 하단 메뉴 */}

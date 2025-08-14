@@ -151,18 +151,20 @@ const NotiContainer = () => {
   }, [])
 
   return (
-    <div className="container">
+    <>
       <Header />
-      <Notification
-        lastPath={lastPath}
-        notiList={notiList}
-        count={count}
-        readAll={readAll}
-        deleteAll={deleteAll}
-        onToggleRead={onToggleRead}
-      />
+      <div className="container">
+        <Notification
+          lastPath={lastPath}
+          notiList={notiList}
+          count={count}
+          readAll={readAll}
+          deleteAll={deleteAll}
+          onToggleRead={onToggleRead}
+        />
+      </div>
       <Footer />
-    </div>
+    </>
   )
 }
 

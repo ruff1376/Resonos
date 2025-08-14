@@ -1,0 +1,82 @@
+/* 커뮤니티 공통 inner */
+.com {
+  max-width: 1440px;
+  width: 100%;
+}
+
+/* 인덱스 페이지 */
+.com.index {
+  display: flex;
+  padding: 20px;
+  justify-content: space-between;
+  border: 2px solid var(--main-color);
+  border-radius: 20px;
+}
+.com.index li {cursor: pointer;}
+
+/* 왼쪽 */
+.com.index .left {
+  min-width: 0;
+  flex: 0.75;
+}
+/* 오른쪽 */
+.com.index .right {
+  flex: 0.2;
+  margin-left: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* 주요 소식 */
+.com.index .main-news {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 150px;
+}
+.com.index .main-news h2 {color: var(--main-color);}
+
+/* 최신글, 인기글, 갤러리 */
+.com.index .post-area {
+  padding: 20px 30px;
+  background-color: #1C202A;
+  border-radius: 20px;
+}
+.com.index .post-area {margin-top: 15px;}
+.com.index .post-area h3, .com.index .right-card h3 {
+  color: var(--main-color); margin-bottom: 10px;
+}
+.com.index .post-area ul {padding-left: 0;}
+.com.index .post-area li {display: flex; padding: 10px 0; justify-content: space-between}
+.com.index .post-area li p:first-child {
+  font-size: 1.6rem;
+  width: 75%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.com.index .post-name, .com.index .date {
+  font-size: 1.4rem;
+  color: #b1b1b1;
+}
+.com.index .date {margin-left: 15px;}
+
+/* 실시간 인기글, 게시판 순위, 신설 게시판 */
+.com.index .right-card {
+  max-width: 100%;
+  width: 100%;
+  background-color: #1C202A;
+  padding: 20px;
+  border-radius: 20px;
+}
+.com.index .right-card ul {padding-left: 0;}
+.com.index .right-card li {padding: 5px 0;}
+.com.index .right-card.ranking li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.com.index .right-card.ranking p {font-size: 1.6rem}
+

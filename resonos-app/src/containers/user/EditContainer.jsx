@@ -58,18 +58,20 @@ const EditContainer = () => {
   }, [])
 
   return (
-    <div className="container">
+    <>
       <Header />
-      <UserEditForm
-        badgeList={badgeList}
-        badgeName={badgeName}
-        user={user}
-        onSubmit={onSubmit}
-        result={result}
-        success={success}
-      />
+      <div className="container">
+        <UserEditForm
+          badgeList={badgeList}
+          badgeName={badgeName}
+          user={user}
+          onSubmit={onSubmit}
+          result={result}
+          success={success}
+        />
+      </div>
       <Footer />
-    </div>
+    </>
   )
 }
 

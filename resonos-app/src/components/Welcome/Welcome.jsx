@@ -71,7 +71,7 @@ const Welcome = () => {
                     </section>
 
                     <section className="main-cards">
-                        <Link id="free" to="/list/main" style={{ textDecoration: 'none', color: 'inherit' }} onClick={handleFreeClick}>
+                        <Link id="free" to="/community" style={{ textDecoration: 'none', color: 'inherit' }}>
                             <div className="main-card">
                                 <img src="/img/resonosLogo.png" alt="main" />
                                 <h2>자유 커뮤니티</h2>

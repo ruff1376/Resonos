@@ -150,35 +150,37 @@ const MypageContainer = () => {
   }, [])
 
   return (
-    <div className="container">
+    <>
       <Header />
-      <div className="con con-mypage">
-        <UserInfo
-          currentBadge={currentBadge}
-          followCount={followCount}
-          followerCount={followerCount}
-          user={user}
-          isOwner={isOwner}
-          countAllReview={countAllReview}
-          alreadyFollow={alreadyFollow}
-          onFollowUser={onFollowUser}
-          onLogout={onLogout}
-        />
-        <UserResource
-          albumList={albumList}
-          artistList={artistList}
-          badgeList={badgeList}
-          playlists={playlists}
-          trackList={trackList}
-          utl={utl}
-          isOwner={isOwner}
-          user={user}
-          countAllReview={countAllReview}
-          chartData={chartData}
-        />
+      <div className="container">
+        <div className="con con-mypage">
+          <UserInfo
+            currentBadge={currentBadge}
+            followCount={followCount}
+            followerCount={followerCount}
+            user={user}
+            isOwner={isOwner}
+            countAllReview={countAllReview}
+            alreadyFollow={alreadyFollow}
+            onFollowUser={onFollowUser}
+            onLogout={onLogout}
+          />
+          <UserResource
+            albumList={albumList}
+            artistList={artistList}
+            badgeList={badgeList}
+            playlists={playlists}
+            trackList={trackList}
+            utl={utl}
+            isOwner={isOwner}
+            user={user}
+            countAllReview={countAllReview}
+            chartData={chartData}
+          />
+        </div>
       </div>
-      {/* <Footer /> */}
-    </div>
+      <Footer />
+    </>
   )
 }
 

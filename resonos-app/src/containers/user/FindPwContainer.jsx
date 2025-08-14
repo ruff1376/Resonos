@@ -53,16 +53,18 @@ const FindPwContainer = () => {
   }
 
   return (
-    <div className="container">
+    <>
       <Header />
-      <FindPwForm
-        usernameError={usernameError}
-        checkUsername={checkUsername}
-        onCheckUsername={onCheckUsername}
-        onChangePwSendMail={onChangePwSendMail}
-      />
+      <div className="container">
+        <FindPwForm
+          usernameError={usernameError}
+          checkUsername={checkUsername}
+          onCheckUsername={onCheckUsername}
+          onChangePwSendMail={onChangePwSendMail}
+        />
+      </div>
       <Footer />
-    </div>
+    </>
   )
 }
 
