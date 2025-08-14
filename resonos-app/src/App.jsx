@@ -55,6 +55,7 @@ import Security from './pages/user/Security';
 import SetNotification from './pages/user/SetNotification';
 import FindId from './pages/user/FindId';
 import FindPw from './pages/user/FindPw';
+import Index from './pages/community/Index';
 
 
 
@@ -137,6 +138,9 @@ const App = () => {
           <Route path="/admin/notifications" element={<AdminLayout><AdminNotificationPage /></AdminLayout>} />
           <Route path="/admin/notices" element={<AdminLayout><AdminNoticePage /></AdminLayout>} />
           <Route path="/admin/qna" element={<AdminLayout><AdminQnAPage /></AdminLayout>} />
+
+          {/* 자유 커뮤니티 */}
+          <Route path="/community" element={<Index />} />
 
 
         </Routes>

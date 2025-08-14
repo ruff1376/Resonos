@@ -169,25 +169,27 @@ const LikedMusicContainer = () => {
   }, [])
 
   return (
-    <div className="container">
+    <>
       <Header />
-      <LikedMusic
-        countAlbum={countAlbum}
-        countTrack={countTrack}
-        isOwner={isOwner}
-        lastPath={lastPath}
-        likedAlbumList={likedAlbumList}
-        likedTrackList={likedTrackList}
-        setLikedAlbumList={setLikedAlbumList}
-        setLikedTrackList={setLikedTrackList}
-        userId={userId}
-        onLikeAlbum={onLikeAlbum}
-        onLikeTrack={onLikeTrack}
-        onSearchLikedAlbum={onSearchLikedAlbum}
-        onSearchLikedTrack={onSearchLikedTrack}
-      />
+      <div className="container">
+        <LikedMusic
+          countAlbum={countAlbum}
+          countTrack={countTrack}
+          isOwner={isOwner}
+          lastPath={lastPath}
+          likedAlbumList={likedAlbumList}
+          likedTrackList={likedTrackList}
+          setLikedAlbumList={setLikedAlbumList}
+          setLikedTrackList={setLikedTrackList}
+          userId={userId}
+          onLikeAlbum={onLikeAlbum}
+          onLikeTrack={onLikeTrack}
+          onSearchLikedAlbum={onSearchLikedAlbum}
+          onSearchLikedTrack={onSearchLikedTrack}
+        />
+      </div>
       <Footer />
-    </div>
+    </>
   )
 }
 

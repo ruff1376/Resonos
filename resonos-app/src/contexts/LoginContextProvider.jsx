@@ -3,12 +3,19 @@ import api from '../apis/api'
 import * as auth from '../apis/auth'
 import * as Swal from '../apis/alert'
 import Cookies from 'js-cookie'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 // 🚚 컨텍스트 생성
 export const LoginContext = createContext()
 
 const LoginContextProvider = ({children}) => {
+
+  const location = useLocation()
+
+  const [path, setPath] = useState(location.pathname.split('/')[1])
+  useEffect(() => {
+    setPath(location.pathname.split('/')[1])
+  }, [location])
 
   // state
   // 로그인 여부
@@ -183,7 +190,7 @@ const LoginContextProvider = ({children}) => {
 
   return (
     // 컨텍스 값 지정 -> value{?, ?}
-    <LoginContext.Provider value={{isLogin, login, userInfo, roles, isLoading, logout, api}}>
+    <LoginContext.Provider value={{isLogin, login, userInfo, roles, isLoading, logout, api, path}}>
       {children}
     </LoginContext.Provider>
   )

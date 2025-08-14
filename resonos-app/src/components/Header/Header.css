@@ -37,6 +37,7 @@
     height: 66px;
     border-radius: 6px;
     object-fit: contain;
+    opacity: 0.5;
 }
 
 .site-header .search-box {

@@ -6,11 +6,13 @@ import Header from '../components/Header/Header'
 const Login = () => {
 
   return (
-    <div className="container">
+    <>
       <Header />
-      <LoginForm />
+      <div className="container">
+        <LoginForm />
+      </div>
       <Footer />
-    </div>
+    </>
   )
 }
 
