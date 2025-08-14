@@ -1,12 +1,13 @@
-   /* 전역 공통 변수 / 테마 */
-/* 관리자 전용 변수 */
+/* ======================
+   전역 변수 / 테마 설정
+====================== */
 :root {
   /* 기본(Dark) 테마 */
   --main-color: #D4B97F;
   --silver-color: #fffbe6;
   --background-color: #181C23;
   --text-color: #fff;
-  --container-width: 1024px;
+  --container-width: 1280px;
 
   --card-bg: var(--background-color);
   --card-border: var(--main-color);
@@ -22,10 +23,15 @@
   --font-size-md: 2.0rem;
   --font-size-lg: 2.4rem;
 
+  /* 라이트/다크 모드 전용 변수 */
+  --color-bg-dark: #212529;
+  --color-text-dark: #fff;
+  --color-bg-light: #fff;
+  --color-text-light: #000;
 }
 
 html[data-theme='light'] {
-    font-size: 62.5%; /* 16px × 62.5% = 10px → 1rem = 10px */
+  font-size: 62.5%;
   --main-color: #C28B00;
   --silver-color: #333;
   --background-color: #f8f9fa;
@@ -36,13 +42,25 @@ html[data-theme='light'] {
   --hover-bg: rgba(0, 0, 0, 0.05);
 }
 
-   /* 전역 / 기본 레이아웃 */
+/* 다크/라이트 모드 적용 */
+body.dark-mode {
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-dark);
+}
+body.light-mode {
+  background-color: var(--color-bg-light);
+  color: var(--color-text-light);
+}
+
+/* ======================
+   전역 / 기본 레이아웃
+====================== */
 body {
-    font-size: 1.6rem; 
+  font-size: 1.6rem;
   font-family: var(--font-family);
   background-color: var(--background-color);
   color: var(--text-color);
-  margin: 0;
+  margin-top: 50px;
   padding: 0;
 }
 
@@ -59,9 +77,9 @@ body {
   color: inherit;
 }
 
-   /* Navbar */
-
-
+/* ======================
+   Navbar
+====================== */
 .admin .navbar {
   background: var(--background-color) !important;
   border-bottom: 1px solid #222;
@@ -83,25 +101,32 @@ body {
   color: var(--silver-color) !important;
 }
 
-   /* 카드 */
-
+/* ======================
+   카드
+====================== */
 .admin .resonos-card {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    background: var(--card-bg) !important;
-    border: 1.5px solid var(--card-border) !important;
-    border-radius: 1.2rem !important;
-    padding: 2rem !important;
-    box-shadow: var(--shadow-soft) !important;
-    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-    color: var(--text-color) !important;
-    text-align: center !important;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  background: var(--card-bg) !important;
+  border: 1.5px solid var(--card-border) !important;
+  border-radius: 1.2rem !important;
+  padding: 2rem !important;
+  box-shadow: var(--shadow-soft) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  color: var(--text-color) !important;
+  text-align: center !important;
 }
 .admin .resonos-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-strong);
+}
+section.resonos-card {
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  background-color: var(--bs-dark);
+  border-radius: 0.5rem;
 }
 .admin .card-title {
   color: var(--main-color);
@@ -118,62 +143,51 @@ body {
   font-weight: bold;
   color: var(--silver-color);
 }
-/* 버튼 */
+
+/* ======================
+   버튼
+====================== */
 .admin .btn { 
-    background: var(--main-color) !important;
+  background: var(--main-color) !important;
+  color: var(--text-color) !important;
+  margin: 0.2rem !important;
+}
+.admin .btn-default { 
     color: var(--text-color) !important;
     padding: auto !important;
     margin: 0.2rem !important;
+    border: 1px solid var(--main-color);
+    border-radius: 10px;
+    padding: 0.1rem 0.5rem !important;
+    font-size: 1rem;
 }
+.admin .btn-default:hover { 
+  background: var(--main-color) !important;
+  color: var(--text-color) !important;
+}
+
 .admin .btn-gold {
   background: var(--main-color);
   color: var(--background-color);
   font-weight: bold;
   border: none;
   border-radius: 30px;
-  padding: 0.3rem 1rem; /* 기존보다 상하 padding 줄임 */
+  padding: 0.3rem 1rem;
   font-size: 0.9rem;
-  line-height: 1.2; /* 높이 줄이기 */
+  line-height: 1.2;
 }
-.admin .btn-gold:hover {
-  background: #e5c888;
-  transform: scale(1.05);
-}
+.admin .btn-gold:hover { background: #e5c888; transform: scale(1.05);}
 .admin .btn-outline-gold {
   background: none;
   color: var(--main-color);
   border: 1.5px solid var(--main-color);
   font-weight: bold;
   border-radius: 30px;
-  padding: 0.3rem 1rem !important;  /* 기존보다 얇게 */
+  padding: 0.3rem 1rem !important;
   font-size: 0.9rem;
   line-height: 1.2;
 }
-.admin .btn-outline-gold:hover {
-  background: var(--main-color);
-  color: var(--background-color);
-}
-.admin .btn-xs {
-  font-size: 0.9rem;
-  padding: 4px 10px;
-}
-.admin .btn-sm {
-  padding: 0.4rem 1rem !important; /* 세로 여백 감소 */
-  font-size: 1.6rem !important;
-  line-height: 1.1 !important;
-  width: fit-content;
-  border: 1px solid var(--main-color);
-  background: none;
-  color: var(--main-color);
-  border-radius: 30px;
-  padding: 4px 10px;
-  font-size: 1rem;
-  transition: all 0.25s ease;
-}
-.admin .btn-outline-gold.btn-sm,
-.admin .btn-gold.btn-sm {
-  font-size: 1.6rem ;
-}
+.admin .btn-outline-gold:hover { background: var(--main-color); color: var(--background-color);}
 .admin .btn-outline-danger {
   border: 1.5px solid var(--danger-color);
   background-color: var(--border-color) !important;
@@ -181,10 +195,16 @@ body {
   border-radius: 30px;
   padding: 0.3rem 1rem;
   font-size: 0.9rem;
-  line-height: 1.2;
-
 }
-   /* 표 / 리스트 */
+.btn-active { background-color: #ffcc00; color: #000; }
+.btn-inactive { background-color: #666; color: #ccc; }
+.status-btn-wait { background-color: #ffc107; border-color: #ffc107; color: #000; }
+.status-btn-done { background-color: #28a745; border-color: #28a745; }
+.status-btn-rejected { background-color: #dc3545; border-color: #dc3545; }
+
+/* ======================
+   테이블 / 리스트
+====================== */
 .admin .list-group-item {
   display: flex;
   align-items: center;
@@ -192,30 +212,52 @@ body {
   border-bottom: 1px solid var(--border-color);
   padding: 0 12px;
   text-align: center;
-  transition: background 0.2s ease, transform 0.15s ease;
+  transition: background 0.2s ease;
+  color: white;
+  padding-bottom: 5px;
 }
-.admin .list-group-item:hover {
-  background: var(--hover-bg);
-}
-.admin .table-header,
-.admin .badge-table-header {
-  background: #1d2027;
-  color: var(--main-color);
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-}
-.admin .badge-table-row:nth-child(even) {
-  background: rgba(255, 255, 255, 0.03);
-}
-.admin .table-cell,
-.admin .badge-col {
+.admin .list-group-item:hover { background: var(--hover-bg); }
+.table-col, .list-group-item > div {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-   /* 폼 요소 */
+/* spotify 검색 결과물  */
+div.admin .list-group-item {
+  background-color: var(--background-color);
+  border-color: var(--main-color);
+  color: white;
+}
+/* 구체적으로 admin 클래스와 mb-3가 같이 있는 div를 지정 */
+div.admin.mb-3 {
+  color: white !important; /* 모든 텍스트 기본색을 흰색으로 강제 */
+}
+
+/* list-group-item 도 포함해서 흰색 적용 */
+div.admin.mb-3 .list-group-item {
+  color: white !important;
+}
+
+/* 내부 span, b, p 등 텍스트 요소 전부 흰색 */
+div.admin.mb-3 span,
+div.admin.mb-3 b,
+div.admin.mb-3 p {
+  color: white !important;
+}
+
+/* 버튼 텍스트도 흰색으로 */
+div.admin.mb-3 button {
+  color: white !important;
+}
+
+
+
+.report-table .col-date { min-width: 120px; white-space: nowrap; }
+
+/* ======================
+   폼 
+====================== */
 .admin .form-control,
 .admin .form-select,
 .admin .api-key-input {
@@ -232,11 +274,15 @@ body {
   box-shadow: 0 0 4px rgba(229, 200, 136, 0.6);
 }
 
-   /* QuickMenu */
+/* ======================
+   QuickMenu
+====================== */
+/* 넓은화면 (기본) : 세로 2열 사이드바 */
 .admin .quick-menu {
   position: fixed;
   top: 50%;
-  left: 2%;
+  /* container 폭 + 양 옆 여백을 고려해서 위치 조정 */
+  left: max(calc((100% - var(--container-width)) / 2 - 300px), 10px);
   border: 5px solid var(--main-color);
   border-radius: 10px;
   padding: 1rem;
@@ -245,7 +291,9 @@ body {
   grid-template-columns: repeat(2, auto);
   gap: 0.8rem;
   z-index: 2000;
+  background-color: var(--background-color);
 }
+
 .admin .quick-menu-item {
   background-color: var(--background-color);
   color: var(--main-color);
@@ -261,64 +309,153 @@ body {
   font-weight: bold;
   transition: all 0.25s ease;
 }
+
 .admin .quick-menu-item:hover {
   background-color: var(--main-color);
   color: var(--background-color);
 }
 
-@media (max-width: 991px) {
+
+/* 1440px 이하: 왼쪽에서 '전체 메뉴' 글씨만 보이게 + hover 시 전체 메뉴 */
+@media (max-width: 1440px) {
   .admin .quick-menu {
-    bottom: 0;
-    left: 0;
-    top: auto;
-    transform: none;
+    position: fixed;
+    top: 50%;
+    /* 컨테이너 좌측 옆 위치에서 -65px 만큼 숨김 */
+    left: calc(
+      max((100% - var(--container-width)) / 2 - 80px, 10px) - 65px
+    );
+    transform: translateY(-50%);
+    grid-template-columns: repeat(4, 1fr);
+    flex-wrap: wrap;
+    background-color: var(--background-color);
+    border: 1px solid var(--main-color);
+    border-left: none;
+    border-radius: 0 10px 10px 0;
+    padding: 0;
+    z-index: 2000;
+    transition: left 0.3s ease-in-out;
+    overflow: hidden;
+  }
+
+  /* 라벨을 맨 아래에 표시 */
+  .admin .quick-menu::after {
+    content: "전체 메뉴";
+    display: block;
     width: 100%;
-    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    text-align: center;
+    color: var(--main-color);
+    font-weight: bold;
+    font-size: 1.4rem;
+    padding: 6px 0;
     background-color: var(--background-color);
     border-top: 1px solid var(--main-color);
-    padding: 4px 0;
   }
+
+  /* hover 시 컨테이너 옆으로 완전히 노출 */
+  .admin .quick-menu:hover {
+    left: max(calc((100% - var(--container-width)) / 2 - 80px), 10px);
+  }
+
+  /* hover 시 라벨 제거 */
+  .admin .quick-menu:hover::after {
+    display: none;
+  }
+
   .admin .quick-menu-item {
     border: none;
     height: auto;
     padding: 6px 2px;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     border-radius: 0;
   }
 }
 
-/* =========================
-   반응형 설정
-========================= */
-@media (max-width: 991px) {
-  .admin .container {
-    padding: 0 12px !important;
-  }
-  .admin .resonos-card {
-    padding: 1.4rem;
-  }
-}
-@media (max-width: 768px) {
-  .admin .list-group-item {
+
+
+
+
+/* 1280px 이하: 상단에서 '퀵메뉴' 글씨만 보이게 + hover 시 전체 메뉴 */
+@media (max-width: 1280px) {
+  .admin .quick-menu {
+    position: fixed;
+    top: -65px; /* 일부 숨김 */
+    left: 0;
+    width: 100%;
+    grid-template-columns: repeat(4, 1fr);
     flex-wrap: wrap;
-    text-align: left !important;
-    padding: 8px 10px;
-    font-size: 0.9rem;
+    background-color: var(--background-color);
+    border-bottom: 1px solid var(--main-color);
+    padding: 0; /* 라벨과 메뉴 구분 위해 0 처리 */
+    z-index: 2000;
+    transition: top 0.3s ease-in-out;
+    overflow: hidden;
   }
-  .admin .list-group-item > div {
-    flex-basis: 100% !important;
-    margin-bottom: 4px;
+
+  /* 퀵메뉴 라벨 (맨 아래) */
+  .admin .quick-menu::after {
+    content: "전체 메뉴";
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: var(--main-color);
+    font-weight: bold;
+    font-size: 1.4rem;
+    padding: 6px 0;
+    background-color: var(--background-color);
+    border-top: 1px solid var(--main-color);
   }
-}
-@media (max-width: 576px) {
-  html.admin {
-    font-size: 58%;
+
+  /* hover 시 메뉴 전체 노출 */
+  .admin .quick-menu:hover {
+    top: 80px;
+  }
+
+  /* hover 시 라벨 제거 */
+  .admin .quick-menu:hover::after {
+    display: none;
+  }
+
+  .admin .quick-menu-item {
+    border: none;
+    height: auto;
+    padding: 6px 2px;
+    font-size: 1.4rem;
+    border-radius: 0;
   }
 }
 
-/* =========================
-   테마 토글 버튼
-========================= */
+
+
+
+/* 가장 작은 화면: 숨김 처리 */
+@media (max-width: 576px) {
+  .admin .quick-menu {
+    display: none !important;
+  }
+}
+
+
+/* ======================
+   반응형
+====================== */
+@media (max-width: 991px) {
+  .admin .container { padding: 0 12px !important; }
+  .admin .resonos-card { padding: 1.4rem; }
+  .admin-content { flex-direction: column; }
+}
+@media (max-width: 768px) {
+  .admin .list-group-item { flex-wrap: wrap; text-align: left !important; padding: 8px 10px; font-size: 0.9rem; }
+  .admin .list-group-item > div { flex-basis: 100% !important; margin-bottom: 4px; }
+  .vote-col-id, .vote-col-title, .vote-col-mood, .vote-col-count, .vote-col-more { flex-basis: auto; min-width: 60px; }
+}
+@media (max-width: 576px) {
+  html.admin { font-size: 58%; }
+}
+
+/* ======================
+   테마 토글
+====================== */
 .admin .theme-toggle-btn {
   border: 1px solid var(--main-color);
   background: none;
@@ -328,197 +465,150 @@ body {
   font-size: 0.9rem;
   transition: all 0.25s ease;
 }
-.admin .theme-toggle-btn:hover {
-  background: var(--main-color);
-  color: var(--background-color);
+.admin .theme-toggle-btn:hover { background: var(--main-color); color: var(--background-color); }
+
+/* =====================
+   요구사항 반영 패치
+===================== */
+.member-detail-form,
+.member-detail-form label,
+.member-detail-form input,
+.member-detail-form select,
+.member-detail-form textarea { color: #fff !important; }
+.report-detail-panel { line-height: 1.7; padding: 14px; white-space: pre-wrap; }
+.album-release-date { min-width: 110px; text-align: center; white-space: nowrap; }
+.spotify-result-item img { margin-right: 8px; }
+.spotify-result-item { display: flex; align-items: center; gap: 8px; }
+.admin-role-manage .btn-sm { padding: 0.375rem 0.75rem; font-size: 0.9rem; }
+.admin-role-manage select { min-width: 120px; }
+.policy-list pre { max-width: 90%; max-height: 200px; overflow-y: auto; white-space: pre-wrap; }
+.service-setting-form { text-align: left; }
+.service-setting-form label { justify-content: flex-start; }
+.badge-col-icon { flex: 0 0 54px; }
+.badge-col-name, .badge-col-desc, .badge-col-cond, .badge-col-action { padding: 4px; }
+.badge-edit-form { margin-top: 10px; }
+.tag-edit-input { width: 100%; }
+.review-report-content { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.review-report-btn { padding: 0.375rem 0.75rem; }
+.alarm-form-hidden { display: none; }
+.notice-form .btn { min-width: 90px; padding: 0.375rem 0.75rem; }
+.qna-list-row { cursor: pointer; }
+.qna-list-row:hover { background-color: rgba(255,255,255,0.05); }
+
+
+/* 회원관리 추가  */
+.width-100 { 
+  width: 100%;
 }
 
-
-
-/********************************
- * 공통 레이아웃 / 컨테이너
- ********************************/
-.admin-container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.max-w-950 { max-width: 950px; }
-.max-w-900 { max-width: 900px; }
-.max-w-1200 { max-width: 1200px; }
-
-.min-vh-80 { min-height: 80vh; }
-.min-vh-100 { min-height: 100vh; }
-
-/********************************
- * 제목 / 색상
- ********************************/
-.text-light-gold {
-  color: var(--main-color);
-  font-weight: bold;
-}
-.text-info { color: #4fc3f7 !important; }
-
-/********************************
- * 카드형 섹션
- ********************************/
-.resonos-card {
-  background: var(--card-bg, #23262e);
-  border: 1px solid var(--border-color, #444);
-  border-radius: 1rem;
-  box-shadow: var(--shadow-soft);
-  padding: 2rem;
-  margin-bottom: 1.5rem;
-  color: var(--text-color, #fff);
-}
-
-/********************************
- * 리스트 / 표
- ********************************/
-.list-group-item {
+.admin .right { 
   display: flex;
+  justify-content: flex-end;
   align-items: center;
-  text-align: center;
-  border-bottom: 1px solid var(--border-color, #444);
-  padding: 0.5rem;
+  gap: 5px;
 }
-.list-group-item > div {
-  padding: 0.3rem;
-}
-
-/* 테이블 칼럼 공통 */
-.table-col {
-  flex: 1;
-  padding: 0.3rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.admin .left { 
+  display: flex !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  gap: 5px !important;
 }
 
-/********************************
- * VoteStats 테이블
- ********************************/
-.vote-table-row {
+
+/* 배지 */
+/* admin-content를 flex 컨테이너로 */
+.admin-content {
   display: flex;
-  align-items: center;
-  border-bottom: 1px solid var(--border-color, #444);
-}
-.vote-col-id    { flex-basis: 22%; min-width: 120px; }
-.vote-col-title { flex-basis: 28%; min-width: 100px; }
-.vote-col-mood  { flex-basis: 30%; min-width: 90px; }
-.vote-col-count { flex-basis: 10%; min-width: 60px; }
-.vote-col-more  { flex-basis: 10%; min-width: 60px; }
-
-/* more-moods 행 */
-.more-moods {
-  display: none;
-}
-.more-moods.show {
-  display: block;
+  gap: 20px;               /* 좌우 간격 */
+  align-items: flex-start; /* 높이 위쪽 맞춤 */
 }
 
-/********************************
- * 배지 테이블
- ********************************/
+/* 왼쪽 리스트: 화면 70% */
+.admin-content .badge-list {
+  flex: 7;                 /* 70% */
+  min-width: 0;            /* flex overflow 방지 */
+}
+
+/* 오른쪽 등록폼: 화면 30% */
+.admin-content .badge-add-form {
+  flex: 3;                 /* 30% */
+  min-width: 250px;        /* 최소 너비 */
+}
+
+/* 각 컬럼 내부의 행 스타일 안정화 */
 .badge-table-row {
   display: flex;
   align-items: center;
-  background: #23262e;
-  border-bottom: 1px solid #292d36;
 }
+
+/* 글자 줄바꿈 방지 & 빈 공간 채우기 */
 .badge-col {
-  padding: 8px 6px;
-  text-align: center;
-}
-.badge-col-icon { flex-basis: 54px; min-width: 54px; }
-.badge-col-name { flex-basis: 18%; }
-.badge-col-desc { flex-basis: 32%; }
-.badge-col-cond { flex-basis: 18%; }
-.badge-col-action { flex-basis: 18%; }
-.badge-icon-img {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-  border-radius: 8px;
-  background: var(--background-color, #1a1a1a);
+  padding: 4px 8px;
+  word-break: keep-all;
 }
 
-/********************************
- * 버튼 스타일
- ********************************/
-.btn-gold {
-  background: var(--main-color);
-  color: var(--background-color, #1a1a1a);
-  font-weight: bold;
-  border-radius: 30px;
-  border: none;
-  padding: 0.3rem 1rem;
+/* 관리 버튼 2줄 레이아웃 */
+.action-btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
 }
-.btn-outline-gold {
-  background: none;
-  color: var(--main-color);
-  border: 1.5px solid var(--main-color);
-  border-radius: 30px;
-  padding: 0.3rem 1rem;
-  font-weight: bold;
+
+.action-btn-group .btn {
+  flex: 1 1 calc(50% - 4px); /* 한 줄에 버튼 2개씩 */
+  white-space: nowrap;
 }
-.btn-xs {
+
+
+/* 태그관리 */
+/* admin.css 하단에 추가 */
+.admin .form-inline-consistent input[type="text"],
+.admin .form-inline-consistent input[type="search"],
+.admin .form-inline-consistent .form-control,
+.admin .form-inline-consistent .search-bar {
+  height: 32px;
+  font-size: 0.9rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  line-height: 1.4;
+}
+
+.admin .form-inline-consistent button {
+  height: 32px;
   font-size: 0.85rem;
-  padding: 0.15rem 0.5rem;
-}
-
-/********************************
- * 폼 / 입력창
- ********************************/
-.api-key-input {
-  background: var(--background-color, #1a1a1a);
-  color: var(--text-color, #fff);
-  border: 1px solid var(--border-color, #444);
-  border-radius: 5px;
-  padding: 0.3rem 0.5rem;
-  min-width: 150px;
-}
-.search-bar {
-  flex: 1;
-  padding: 0.3rem 0.5rem;
-  border-radius: 5px;
-  border: 1px solid var(--border-color, #444);
-}
-
-/********************************
- * QnA 상세
- ********************************/
-.qna-detail {
-  max-height: 70vh;
-  overflow-y: auto;
-}
-
-/********************************
- * 반응형
- ********************************/
-@media (max-width: 768px) {
-  .vote-col-id,
-  .vote-col-title,
-  .vote-col-mood,
-  .vote-col-count,
-  .vote-col-more {
-    flex-basis: auto;
-    min-width: 60px;
-  }
+  padding: 0 12px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
 }
 
 
-/* 추가 - test.css에서 가져옴 */
-.pre-wrap { white-space: pre-wrap; }
-.max-w-1100 { max-width: 1100px; }
-
-/* 리스트/테이블 - test.css 추가 부분 */
-.admin .list-group-item > div {
-  padding: 0.3rem;
+/* 등록폼 + 검색폼 인라인 스타일 통일 */
+.admin .form-inline-consistent form,
+.admin .form-inline-consistent {
+  display: flex;
+  gap: 8px; /* 요소 간 거리 */
 }
 
-/* 반응형 - test.css 추가 부분 */
-@media (max-width: 991px) {
-  .admin-content { flex-direction: column; }
+/* 내부 인풋 */
+.admin .form-inline-consistent .form-control,
+.admin .form-inline-consistent .search-bar {
+  height: 34px;         /* 높이 통일 */
+  font-size: 0.9rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: var(--background-color);
+  color: var(--silver-color);
+  border: 1px solid var(--main-color);
+}
+
+/* 내부 버튼 */
+.admin .form-inline-consistent button {
+  height: 34px;         /* input과 동일 높이 */
+  font-size: 0.85rem;
+  padding: 0 12px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
 }

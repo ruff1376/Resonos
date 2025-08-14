@@ -17,36 +17,33 @@ const TableContentGeneric = ({
   renderDetail,
   renderExtraRow,
 }) => {
-  return (
-    <>
-      {items.map((item, index) => (
-        <React.Fragment key={item.id || index}>
-          {/* 메인 행 */}
-          <div
-            id={`row-${item.id || index}`}
-            className="list-group-item bg-dark text-light border-secondary mb-2 rounded-0 d-flex flex-nowrap align-items-center text-center justify-content-center"
-          >
-            {columns.map(({ style, render }, colIndex) => (
-              <div
-                key={colIndex}
-                style={{ flexBasis: style?.flexBasis, minWidth: style?.minWidth }}
-              >
-                {typeof render === 'function'
-                  ? render(item, index, pagination)
-                  : item[render] ?? '-'}
-              </div>
-            ))}
-          </div>
+return (
+  <>
+    {items.map((item, index) => (
+      <React.Fragment key={item.id || index}>
+        <div
+          id={`row-${item.id || index}`}
+          className="admin list-group-item width-100"
+        >
+          {columns.map(({ style, render }, colIndex) => (
+            <div
+              key={colIndex}
+              style={{ flexBasis: style?.flexBasis, minWidth: style?.minWidth }}
+            >
+              {typeof render === 'function'
+                ? render(item, index, pagination)
+                : item[render] ?? '-'}
+            </div>
+          ))}
+        </div>
 
-          {/* 부가 UI: 확장행 */}
-          {typeof renderExtraRow === 'function' && renderExtraRow(item)}
+        {typeof renderExtraRow === 'function' && renderExtraRow(item)}
+        {typeof renderDetail === 'function' && renderDetail(item)}
+      </React.Fragment>
+    ))}
+  </>
+);
 
-          {/* 상세 UI: 상세행 */}
-          {typeof renderDetail === 'function' && renderDetail(item)}
-        </React.Fragment>
-      ))}
-    </>
-  );
 };
 
 export default TableContentGeneric;

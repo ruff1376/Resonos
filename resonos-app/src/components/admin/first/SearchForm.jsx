@@ -18,20 +18,21 @@ const SearchForm = ({
     onSearch(keyword.trim());
   };
 
-  return (
-    <form className="mb-3 d-flex gap-2" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        className="search-bar"
-        placeholder={placeholder}
-        value={keyword}
-        onChange={(e) => setKeyword(e.target.value)}
-      />
-      <button className="btn btn-gold btn-sm" type="submit">
-        {buttonLabel}
-      </button>
-    </form>
-  );
+return (
+  <form className="admin mb-3 d-flex gap-2" onSubmit={handleSubmit}>
+    <input
+      type="text"
+      className="form-control search-bar"
+      placeholder={placeholder}
+      value={keyword}
+      onChange={(e) => setKeyword(e.target.value)}
+    />
+    <button className="btn btn-gold btn-sm" type="submit">
+      {buttonLabel}
+    </button>
+  </form>
+);
+
 };
 
 export default SearchForm;

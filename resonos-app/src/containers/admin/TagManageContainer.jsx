@@ -5,13 +5,12 @@ import {
   updateTag,
   deleteTag,
   searchTags,
-} from "../../apis/admin"; // tag API 유틸
+} from "../../apis/admin";
 import TableColumnHeader from "../../components/admin/first/TableColumnHeader";
 import SearchForm from "../../components/admin/first/SearchForm";
 import Pagination from "../../components/admin/Pagination";
 import FormInput from "../../components/admin/first/FormInput";
 import QuickMenu from "../../components/admin/first/QuickMenu";
-
 
 const TagManageContainer = () => {
   const [tags, setTags] = useState([]);
@@ -23,27 +22,29 @@ const TagManageContainer = () => {
   const [editTagId, setEditTagId] = useState(null);
   const [editName, setEditName] = useState("");
 
+  // 공통 컬럼 정의
+  const columns = [
+    { label: "ID", style: { flexBasis: "12%", minWidth: "60px" } },
+    { label: "이름", style: { flexBasis: "50%", minWidth: "120px" } },
+    { label: "수정", style: { flexBasis: "18%", minWidth: "80px" } },
+    { label: "삭제", style: { flexBasis: "20%", minWidth: "80px" } },
+  ];
+
   // 목록 조회
-const fetchData = async (page = 1, size = 10, kw = "") => {
-  setLoading(true);
-  try {
-    const res = await listTags(page, size, kw);
-    setTags(res.data.tags || []);
-
-    const p = res.data.pagination || {};
-    const totalPages = p.size && p.total ? Math.ceil(p.total / p.size) : 1;
-
-    setPagination({
-      ...p,
-      totalPages
-    });
-  } catch (err) {
-    console.error("태그 목록 조회 실패:", err);
-  } finally {
-    setLoading(false);
-  }
-};
-
+  const fetchData = async (page = 1, size = 10, kw = "") => {
+    setLoading(true);
+    try {
+      const res = await listTags(page, size, kw);
+      setTags(res.data.tags || []);
+      const p = res.data.pagination || {};
+      const totalPages = p.size && p.total ? Math.ceil(p.total / p.size) : 1;
+      setPagination({ ...p, totalPages });
+    } catch (err) {
+      console.error("태그 목록 조회 실패:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchData(1, 10, keyword);
@@ -101,51 +102,49 @@ const fetchData = async (page = 1, size = 10, kw = "") => {
     }
   };
 
-  // 페이지 이동
+  // 페이지 변경
   const onPageChange = (newPage) => {
     if (newPage === pagination.page) return;
     fetchData(newPage, pagination.size || 10, keyword);
   };
-  
-
-  const columns = [
-    { label: "ID", style: { flexBasis: "12%", minWidth: "60px" } },
-    { label: "이름", style: { flexBasis: "50%", minWidth: "120px" } },
-    { label: "수정", style: { flexBasis: "18%", minWidth: "80px" } },
-    { label: "삭제", style: { flexBasis: "20%", minWidth: "80px" } },
-  ];
 
   return (
     <div className="container py-4" style={{ maxWidth: 950 }}>
       <h2 className="mb-3 text-light-gold">태그/분위기 관리</h2>
-      <div className="resonos-card p-4">
-        <h3 className="mb-3 text-light-gold">등록 및 검색</h3>
-        <div className="d-flex justify-content-between mb-2">
-          {/* 등록 폼 */}
-          <form onSubmit={handleAdd} className="d-flex gap-2">
-            <FormInput
-              name="name"
-              value={newTag}
-              onChange={(e) => setNewTag(e.target.value)}
-              placeholder="새 태그/분위기명"
-              required
-              maxLength={50}
-              containerClassName=""
-              className="api-key-input"
-            />
-            <button className="btn btn-gold btn-sm">등록</button>
-          </form>
-          {/* 검색폼 */}
-          <SearchForm
-            initialKeyword={keyword}
-            placeholder="태그/분위기명 검색"
-            buttonLabel="검색"
-            onSearch={handleSearch}
-          />
-        </div>
 
+      <div className="resonos-card p-4">
+        {/* 등록 및 검색 */}
+<div className="d-flex justify-content-between mb-3 gap-2 form-inline-consistent">
+  {/* 등록 폼 */}
+  <form onSubmit={handleAdd} className="d-flex gap-2">
+    <FormInput
+      name="name"
+      value={newTag}
+      onChange={(e) => setNewTag(e.target.value)}
+      placeholder="새 태그/분위기명"
+      required
+      maxLength={50}
+      containerClassName=""
+      className="form-control"
+    />
+    <button className="btn btn-gold btn-sm">등록</button>
+  </form>
+
+  {/* 검색폼 */}
+  <SearchForm
+    initialKeyword={keyword}
+    placeholder="태그/분위기명 검색"
+    buttonLabel="검색"
+    onSearch={handleSearch}
+  />
+</div>
+
+
+
+        {/* 테이블 헤더 */}
         <div className="resonos-card p-3">
           <TableColumnHeader columns={columns} />
+
           {loading ? (
             <div className="p-3">로딩중...</div>
           ) : tags.length > 0 ? (
@@ -164,7 +163,7 @@ const fetchData = async (page = 1, size = 10, kw = "") => {
                       required
                       maxLength={50}
                       containerClassName=""
-                      className="form-control"
+                      className="form-control form-control-sm"
                     />
                   ) : (
                     tag.name
@@ -192,7 +191,7 @@ const fetchData = async (page = 1, size = 10, kw = "") => {
                 </div>
                 <div style={columns[3].style}>
                   <button
-                    className="btn btn-outline-gold btn-xs"
+                    className="btn btn-outline-danger btn-xs"
                     onClick={() => handleDelete(tag.id)}
                   >
                     삭제
@@ -229,6 +228,7 @@ const fetchData = async (page = 1, size = 10, kw = "") => {
           />
         )}
       </div>
+
       <QuickMenu />
     </div>
   );

@@ -122,7 +122,7 @@ return (
         <div className="col-12 col-lg-6">
           <div className="resonos-card p-4 text-start">
             <h3 className="mb-3 text-light-gold">정책 관리</h3>
-            <form className="border rounded p-3 bg-dark mb-4" onSubmit={handleCreatePolicy}>
+            <form className="border rounded p-3 bg-dark mb-4 width-100" onSubmit={handleCreatePolicy}>
               <FormInput
                 label="정책명"
                 name="type"
@@ -153,7 +153,7 @@ return (
             </form>
 
             {policies.map((p) => (
-              <div key={p.id} className="policy-list mb-4">
+              <div key={p.id} className="policy-list mb-4 width-100">
                 <h5>{p.type}</h5>
                 <div className="d-flex justify-content-between align-items-center">
                   <span className="text-secondary">
@@ -191,24 +191,26 @@ return (
                         onChange={(e) => setEditPolicy({ ...editPolicy, content: e.target.value })}
                       />
                     </div>
-                    <button
-                      className="btn btn-gold btn-sm me-2"
-                      onClick={() => handleSavePolicy(p.id)}
-                    >
-                      저장
-                    </button>
-                    <button
-                      className="btn btn-outline-secondary btn-sm"
-                      onClick={() => setEditPolicyId(null)}
-                    >
-                      취소
-                    </button>
-                    <button
-                      className="btn btn-outline-danger btn-sm ms-2"
-                      onClick={() => handleDeletePolicy(p.id)}
-                    >
-                      삭제
-                    </button>
+                    <div className="admin right">
+                      <button
+                        className="btn btn-gold btn-sm me-2"
+                        onClick={() => handleSavePolicy(p.id)}
+                      >
+                        저장
+                      </button>
+                      <button
+                        className="btn btn-outline-secondary btn-sm"
+                        onClick={() => setEditPolicyId(null)}
+                      >
+                        취소
+                      </button>
+                      <button
+                        className="btn btn-outline-danger btn-sm ms-2"
+                        onClick={() => handleDeletePolicy(p.id)}
+                      >
+                        삭제
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <pre className="text-start">{p.content}</pre>
@@ -221,7 +223,10 @@ return (
         {/* 환경설정 관리 */}
         <div className="col-12 col-lg-6">
           <div className="resonos-card p-4 text-start">
+            <div className="admin left">
             <h3 className="mb-3 text-light-gold">서비스 환경설정</h3>
+
+            </div>
             <form className="mb-4" onSubmit={handleSaveSettings}>
               <div className="mb-2">
                 <label className="me-3">신규 가입 허용</label>

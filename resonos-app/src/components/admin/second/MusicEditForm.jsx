@@ -46,30 +46,20 @@ const MusicEditForm = ({ type, initialData, onSubmit, onCancel }) => {
     onSubmit(formData);
   };
 
-  return (
-    <form className="border rounded p-3 bg-dark text-light" onSubmit={handleSubmit}>
-      <div className="row g-2">
-        {fieldsMap[type].map((f, idx) => (
-          <FormInput
-            key={idx}
-            label={f.label}
-            name={f.name}
-            type={f.type || 'text'}
-            value={formData[f.name] || ''}
-            onChange={handleChange}
-            required={f.required}
-            containerClassName="col-md-3"
-          />
-        ))}
-      </div>
-      <div className="text-end mt-2">
-        <button className="btn btn-gold btn-sm" type="submit">저장</button>
-        <button type="button" className="btn btn-outline-secondary btn-sm ms-2" onClick={onCancel}>
-          취소
-        </button>
-      </div>
-    </form>
-  );
+return (
+  <form className="admin resonos-card p-3 mb-4" onSubmit={handleSubmit}>
+    <div className="row g-2">
+      {fieldsMap[type].map((f, idx) => (
+        <FormInput key={idx} label={f.label} name={f.name} type={f.type || 'text'} value={formData[f.name] || ''} onChange={handleChange} required={f.required} containerClassName="col-md-3" />
+      ))}
+    </div>
+    <div className="text-end mt-2">
+      <button className="btn btn-gold btn-sm" type="submit">저장</button>
+      <button type="button" className="btn btn-outline-gold btn-sm ms-2" onClick={onCancel}>취소</button>
+    </div>
+  </form>
+);
+
 };
 
 export default MusicEditForm;

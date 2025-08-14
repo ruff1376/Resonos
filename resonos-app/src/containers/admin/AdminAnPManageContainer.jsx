@@ -221,7 +221,6 @@ const AdminAnPManageContainer = () => {
               pageUri={"#"}
               onPageChange={setPluginPage}
             />
-            <QuickMenu />
           </div>
         </>
       )}

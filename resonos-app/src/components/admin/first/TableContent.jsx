@@ -215,7 +215,7 @@ return (
       <React.Fragment key={member.id}>
         <div
           id={`row-${member.id}`}
-          className="list-group-item bg-dark text-light border-secondary mb-2 rounded-0 d-flex flex-nowrap align-items-center text-center justify-content-center"
+          className="admin list-group-item"
         >
           {cols.map(({ style, render }, colIndex) => (
             <div key={colIndex} style={{ flexBasis: style.flexBasis, minWidth: style.minWidth }}>
@@ -224,28 +224,23 @@ return (
           ))}
         </div>
 
-        {/* 제재 폼 */}
         {banFormUserId === member.id && (
-          <div style={{ marginLeft: '5%', marginBottom: '20px' }}>
+          <div className="admin mt-2 ms-3">
             <BanMemberForm
               userId={member.id}
               onCancel={() => setBanFormUserId(null)}
               onComplete={() => {
                 setBanFormUserId(null);
-                // 멤버 리스트 상태에서 제재 상태 업데이트
                 setMembers(prev =>
                   prev.map(m => (m.id === member.id ? { ...m, ban: true } : m))
                 );
-                // 필요시 목록 다시 불러오는 함수 호출 가능
-                // fetchMembers(pagination.index + 1, 10, keyword);
               }}
             />
           </div>
         )}
 
-        {/* 상세 폼 */}
         {detailMemberId === member.id && detailMemberData && (
-          <div style={{ marginLeft: '5%', marginBottom: '20px' }}>
+          <div className="admin mt-2 ms-3">
             <MemberDetailForm
               detailMemberData={detailMemberData}
               onChange={onDetailChange}
@@ -259,6 +254,7 @@ return (
     ))}
   </>
 );
+
 }
 
 export default TableContent;

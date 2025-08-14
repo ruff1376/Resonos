@@ -8,26 +8,27 @@ const FormInput = ({
   onChange,
   required = false,
   className = 'form-control',
-  containerClassName = 'col-md-6 text-start',
+  containerClassName = 'col-md-6 text-start width-100',
   ...rest
 }) => {
-  return (
-    <div className={containerClassName}>
-      <label className="form-label" htmlFor={name}>
-        {label}
-      </label>
-      <input
-        id={name}
-        name={name}
-        type={type}
-        className={className}
-        value={value}
-        onChange={onChange}
-        required={required}
-        {...rest}
-      />
-    </div>
-  );
+return (
+  <div className={`admin ${containerClassName}`}>
+    <label className="form-label" htmlFor={name}>
+      {label}
+    </label>
+    <input
+      id={name}
+      name={name}
+      type={type}
+      className={`form-control ${className || ''}`}
+      value={value}
+      onChange={onChange}
+      required={required}
+      {...rest}
+    />
+  </div>
+);
+
 };
 
 export default FormInput;

@@ -23,15 +23,14 @@ const ThemeToggle = ({ className = "" }) => {
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
 
-  return (
-    <button
-      className={`theme-toggle-btn ${className}`}
-      onClick={toggleTheme}
-      aria-label="Toggle Theme"
-    >
-      {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
-    </button>
-  );
+<button
+  className={`admin theme-toggle-btn ${className || ''}`}
+  onClick={toggleTheme}
+  aria-label="Toggle Theme"
+>
+  {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
+</button>
+
 };
 
 export default ThemeToggle;

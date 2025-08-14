@@ -1,0 +1,711 @@
+   /* 전역 공통 변수 / 테마 */
+/* 관리자 전용 변수 */
+:root {
+  /* 기본(Dark) 테마 */
+  --main-color: #D4B97F;
+  --silver-color: #fffbe6;
+  --background-color: #181C23;
+  --text-color: #fff;
+  --container-width: 1280px;
+
+  --card-bg: var(--background-color);
+  --card-border: var(--main-color);
+  --border-color: #2b2f36;
+  --hover-bg: rgba(255, 255, 255, 0.04);
+  --danger-color: #ff4d4f;
+
+  --font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.15);
+  --shadow-strong: 0 4px 14px rgba(0, 0, 0, 0.25);
+
+  --font-size-sm: 1.6rem;
+  --font-size-md: 2.0rem;
+  --font-size-lg: 2.4rem;
+
+}
+
+html[data-theme='light'] {
+    font-size: 62.5%; /* 16px × 62.5% = 10px → 1rem = 10px */
+  --main-color: #C28B00;
+  --silver-color: #333;
+  --background-color: #f8f9fa;
+  --text-color: #000;
+  --card-bg: #fff;
+  --card-border: #ddd;
+  --border-color: #ccc;
+  --hover-bg: rgba(0, 0, 0, 0.05);
+}
+
+   /* 전역 / 기본 레이아웃 */
+body {
+    font-size: 1.6rem; 
+  font-family: var(--font-family);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+}
+
+.admin .container {
+  width: 100% !important;
+  max-width: var(--container-width) !important;
+  margin: auto !important;
+  padding: 0 20px !important;
+  box-sizing: border-box;
+}
+
+.admin a {
+  text-decoration: none !important;
+  color: inherit;
+}
+
+   /* Navbar */
+
+
+.admin .navbar {
+  background: var(--background-color) !important;
+  border-bottom: 1px solid #222;
+  position: sticky;
+  top: 0;
+  z-index: 1050;
+}
+.admin .navbar-brand span {
+  color: var(--main-color);
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+.admin .navbar-nav .nav-link {
+  color: var(--main-color) !important;
+  transition: color 0.2s;
+}
+.admin .navbar-nav .nav-link:hover,
+.admin .navbar-nav .nav-link:focus {
+  color: var(--silver-color) !important;
+}
+
+   /* 카드 */
+
+.admin .resonos-card {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    background: var(--card-bg) !important;
+    border: 1.5px solid var(--card-border) !important;
+    border-radius: 1.2rem !important;
+    padding: 2rem !important;
+    box-shadow: var(--shadow-soft) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    color: var(--text-color) !important;
+    text-align: center !important;
+}
+.admin .resonos-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-strong);
+}
+.admin .card-title {
+  color: var(--main-color);
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+}
+.admin .card-sm-title {
+  color: var(--main-color);
+  font-size: var(--font-size-md);
+  font-weight: 600;
+}
+.admin .card-value {
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+  color: var(--silver-color);
+}
+/* 버튼 */
+.admin .btn { 
+    background: var(--main-color) !important;
+    color: var(--text-color) !important;
+    padding: auto !important;
+    margin: 0.2rem !important;
+}
+.admin .btn-gold {
+  background: var(--main-color);
+  color: var(--background-color);
+  font-weight: bold;
+  border: none;
+  border-radius: 30px;
+  padding: 0.3rem 1rem; /* 기존보다 상하 padding 줄임 */
+  font-size: 0.9rem;
+  line-height: 1.2; /* 높이 줄이기 */
+}
+.admin .btn-gold:hover {
+  background: #e5c888;
+  transform: scale(1.05);
+}
+.admin .btn-outline-gold {
+  background: none;
+  color: var(--main-color);
+  border: 1.5px solid var(--main-color);
+  font-weight: bold;
+  border-radius: 30px;
+  padding: 0.3rem 1rem !important;  /* 기존보다 얇게 */
+  font-size: 0.9rem;
+  line-height: 1.2;
+}
+.admin .btn-outline-gold:hover {
+  background: var(--main-color);
+  color: var(--background-color);
+}
+.admin .btn-xs {
+  font-size: 0.9rem;
+  padding: 4px 10px;
+}
+.admin .btn-sm {
+  padding: 0.4rem 1rem !important; /* 세로 여백 감소 */
+  font-size: 1.6rem !important;
+  line-height: 1.1 !important;
+  width: fit-content;
+  border: 1px solid var(--main-color);
+  background: none;
+  color: var(--main-color);
+  border-radius: 30px;
+  padding: 4px 10px;
+  font-size: 1rem;
+  transition: all 0.25s ease;
+}
+.admin .btn-outline-gold.btn-sm,
+.admin .btn-gold.btn-sm {
+  font-size: 1.6rem ;
+}
+.admin .btn-outline-danger {
+  border: 1.5px solid var(--danger-color);
+  background-color: var(--border-color) !important;
+  color: var(--danger-color);
+  border-radius: 30px;
+  padding: 0.3rem 1rem;
+  font-size: 0.9rem;
+  line-height: 1.2;
+
+}
+   /* 표 / 리스트 */
+.admin .list-group-item {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 12px;
+  text-align: center;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+.admin .list-group-item:hover {
+  background: var(--hover-bg);
+}
+.admin .table-header,
+.admin .badge-table-header {
+  background: #1d2027;
+  color: var(--main-color);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+.admin .badge-table-row:nth-child(even) {
+  background: rgba(255, 255, 255, 0.03);
+}
+.admin .table-cell,
+.admin .badge-col {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+   /* 폼 요소 */
+.admin .form-control,
+.admin .form-select,
+.admin .api-key-input {
+  background: var(--background-color);
+  color: var(--silver-color);
+  border: 1px solid var(--main-color);
+  border-radius: 8px;
+  padding: 6px 12px;
+}
+.admin .form-control:focus,
+.admin .form-select:focus {
+  outline: none;
+  border-color: #e5c888;
+  box-shadow: 0 0 4px rgba(229, 200, 136, 0.6);
+}
+
+   /* QuickMenu */
+.admin .quick-menu {
+  position: fixed;
+  top: 50%;
+  left: 2%;
+  border: 5px solid var(--main-color);
+  border-radius: 10px;
+  padding: 1rem;
+  transform: translateY(-50%);
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 0.8rem;
+  z-index: 2000;
+}
+.admin .quick-menu-item {
+  background-color: var(--background-color);
+  color: var(--main-color);
+  border: 1px solid var(--main-color);
+  border-radius: 10px;
+  min-width: 50px;
+  height: 30px;
+  display: flex;
+  padding: 0 6px;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: bold;
+  transition: all 0.25s ease;
+}
+.admin .quick-menu-item:hover {
+  background-color: var(--main-color);
+  color: var(--background-color);
+}
+
+@media (max-width: 991px) {
+  .admin .quick-menu {
+    bottom: 0;
+    left: 0;
+    top: auto;
+    transform: none;
+    width: 100%;
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    background-color: var(--background-color);
+    border-top: 1px solid var(--main-color);
+    padding: 4px 0;
+  }
+  .admin .quick-menu-item {
+    border: none;
+    height: auto;
+    padding: 6px 2px;
+    font-size: 1.6rem;
+    border-radius: 0;
+  }
+}
+
+/* =========================
+   반응형 설정
+========================= */
+@media (max-width: 991px) {
+  .admin .container {
+    padding: 0 12px !important;
+  }
+  .admin .resonos-card {
+    padding: 1.4rem;
+  }
+}
+@media (max-width: 768px) {
+  .admin .list-group-item {
+    flex-wrap: wrap;
+    text-align: left !important;
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+  .admin .list-group-item > div {
+    flex-basis: 100% !important;
+    margin-bottom: 4px;
+  }
+}
+@media (max-width: 576px) {
+  html.admin {
+    font-size: 58%;
+  }
+}
+
+/* =========================
+   테마 토글 버튼
+========================= */
+.admin .theme-toggle-btn {
+  border: 1px solid var(--main-color);
+  background: none;
+  color: var(--main-color);
+  border-radius: 30px;
+  padding: 4px 10px;
+  font-size: 0.9rem;
+  transition: all 0.25s ease;
+}
+.admin .theme-toggle-btn:hover {
+  background: var(--main-color);
+  color: var(--background-color);
+}
+
+
+
+/********************************
+ * 공통 레이아웃 / 컨테이너
+ ********************************/
+.admin-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.max-w-950 { max-width: 950px; }
+.max-w-900 { max-width: 900px; }
+.max-w-1200 { max-width: 1200px; }
+
+.min-vh-80 { min-height: 80vh; }
+.min-vh-100 { min-height: 100vh; }
+
+/********************************
+ * 제목 / 색상
+ ********************************/
+.text-light-gold {
+  color: var(--main-color);
+  font-weight: bold;
+}
+.text-info { color: #4fc3f7 !important; }
+
+/********************************
+ * 카드형 섹션
+ ********************************/
+.resonos-card {
+  background: var(--card-bg, #23262e);
+  border: 1px solid var(--border-color, #444);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-soft);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-color, #fff);
+}
+
+/********************************
+ * 리스트 / 표
+ ********************************/
+.list-group-item {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  border-bottom: 1px solid var(--border-color, #444);
+  padding: 0.5rem;
+}
+.list-group-item > div {
+  padding: 0.3rem;
+}
+
+/* 테이블 칼럼 공통 */
+.table-col {
+  flex: 1;
+  padding: 0.3rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/********************************
+ * VoteStats 테이블
+ ********************************/
+.vote-table-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color, #444);
+}
+.vote-col-id    { flex-basis: 22%; min-width: 120px; }
+.vote-col-title { flex-basis: 28%; min-width: 100px; }
+.vote-col-mood  { flex-basis: 30%; min-width: 90px; }
+.vote-col-count { flex-basis: 10%; min-width: 60px; }
+.vote-col-more  { flex-basis: 10%; min-width: 60px; }
+
+/* more-moods 행 */
+.more-moods {
+  display: none;
+}
+.more-moods.show {
+  display: block;
+}
+
+/********************************
+ * 배지 테이블
+ ********************************/
+.badge-table-row {
+  display: flex;
+  align-items: center;
+  background: #23262e;
+  border-bottom: 1px solid #292d36;
+}
+.badge-col {
+  padding: 8px 6px;
+  text-align: center;
+}
+.badge-col-icon { flex-basis: 54px; min-width: 54px; }
+.badge-col-name { flex-basis: 18%; }
+.badge-col-desc { flex-basis: 32%; }
+.badge-col-cond { flex-basis: 18%; }
+.badge-col-action { flex-basis: 18%; }
+.badge-icon-img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: var(--background-color, #1a1a1a);
+}
+
+/********************************
+ * 버튼 스타일
+ ********************************/
+.btn-gold {
+  background: var(--main-color);
+  color: var(--background-color, #1a1a1a);
+  font-weight: bold;
+  border-radius: 30px;
+  border: none;
+  padding: 0.3rem 1rem;
+}
+.btn-outline-gold {
+  background: none;
+  color: var(--main-color);
+  border: 1.5px solid var(--main-color);
+  border-radius: 30px;
+  padding: 0.3rem 1rem;
+  font-weight: bold;
+}
+.btn-xs {
+  font-size: 0.85rem;
+  padding: 0.15rem 0.5rem;
+}
+
+/********************************
+ * 폼 / 입력창
+ ********************************/
+.api-key-input {
+  background: var(--background-color, #1a1a1a);
+  color: var(--text-color, #fff);
+  border: 1px solid var(--border-color, #444);
+  border-radius: 5px;
+  padding: 0.3rem 0.5rem;
+  min-width: 150px;
+}
+.search-bar {
+  flex: 1;
+  padding: 0.3rem 0.5rem;
+  border-radius: 5px;
+  border: 1px solid var(--border-color, #444);
+}
+
+/********************************
+ * QnA 상세
+ ********************************/
+.qna-detail {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/********************************
+ * 반응형
+ ********************************/
+@media (max-width: 768px) {
+  .vote-col-id,
+  .vote-col-title,
+  .vote-col-mood,
+  .vote-col-count,
+  .vote-col-more {
+    flex-basis: auto;
+    min-width: 60px;
+  }
+}
+
+
+/* 추가 - test.css에서 가져옴 */
+.pre-wrap { white-space: pre-wrap; }
+.max-w-1100 { max-width: 1100px; }
+
+/* 리스트/테이블 - test.css 추가 부분 */
+.admin .list-group-item > div {
+  padding: 0.3rem;
+}
+
+/* 반응형 - test.css 추가 부분 */
+@media (max-width: 991px) {
+  .admin-content { flex-direction: column; }
+}
+
+
+
+
+
+/* ####################################################################################### */
+/* 1) 회원 상세 - 글씨를 white로 변경 */
+.member-detail-form,
+.member-detail-form label,
+.member-detail-form input,
+.member-detail-form select,
+.member-detail-form textarea {
+  color: #fff !important;
+}
+
+/* 2) 게시글 신고 - 날짜 컬럼 깨짐 방지 */
+.report-table .col-date {
+  min-width: 120px;
+  white-space: nowrap;
+}
+
+/* 3) 게시글 신고 - 상세 내용 글씨 간격 띄우기 */
+.report-detail-panel {
+  line-height: 1.7;
+  padding: 14px;
+  white-space: pre-wrap;
+}
+
+/* 4) 전체 버튼 "대기" 등 상태 버튼 색상 통일 */
+.status-btn-wait {
+  background-color: #ffc107;
+  border-color: #ffc107;
+  color: #000;
+}
+.status-btn-done {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+.status-btn-rejected {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+/* 5) 음악데이터 - 긴 텍스트 ellipsis 처리 */
+.table-col,
+.list-group-item > div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 6) 앨범 발매일 날짜 컬럼 폭 확장 */
+.album-release-date {
+  min-width: 110px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* 7) Spotify 검색 결과 썸네일 간격 */
+.spotify-result-item img {
+  margin-right: 8px;
+}
+.spotify-result-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 8) 권한 관리 - 버튼/Select 크기 확대 */
+.admin-role-manage .btn-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.9rem;
+}
+.admin-role-manage select {
+  min-width: 120px;
+}
+
+/* 9) API 키/플러그인 관리 활성/비활성 구분 */
+.btn-active {
+  background-color: #ffcc00;
+  color: #000;
+}
+.btn-inactive {
+  background-color: #666;
+  color: #ccc;
+}
+
+/* 10) 정책/환경설정 - content scroll */
+.policy-list pre {
+  max-width: 90%;
+  max-height: 200px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+/* 11) 서비스환경설정 - 왼쪽 정렬 */
+.service-setting-form {
+  text-align: left;
+}
+.service-setting-form label {
+  justify-content: flex-start;
+}
+
+/* 12) 배지관리 - 컬럼 비율 및 수정폼 버튼 위치 */
+.badge-col-icon {
+  flex: 0 0 54px;
+}
+.badge-col-name,
+.badge-col-desc,
+.badge-col-cond,
+.badge-col-action {
+  padding: 4px;
+}
+.badge-edit-form {
+  margin-top: 10px;
+}
+
+/* 13) 태그관리 - input width 100% */
+.tag-edit-input {
+  width: 100%;
+}
+
+/* 14) 리뷰 신고 관리 - ellipsis 처리 + 버튼 크기 */
+.review-report-content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.review-report-btn {
+  padding: 0.375rem 0.75rem;
+}
+
+/* 15) 알람관리 - 등록폼 숨김 */
+.alarm-form-hidden {
+  display: none;
+}
+
+/* 16) 공지사항 - 버튼 크기 */
+.notice-form .btn {
+  min-width: 90px;
+  padding: 0.375rem 0.75rem;
+}
+
+/* 17) QnA - 리스트 Hover, Cursor */
+.qna-list-row {
+  cursor: pointer;
+}
+.qna-list-row:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* 18) 퀵메뉴 반응형 */
+.quick-menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+@media (max-width: 768px) {
+  .quick-menu {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+/* 19) card → section로 변경시 padding 유지 */
+section.resonos-card {
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  background-color: var(--bs-dark);
+  border-radius: 0.5rem;
+}
+
+/* 20) 다크/라이트 모드 변수화 */
+:root {
+  --color-bg-dark: #212529;
+  --color-text-dark: #fff;
+  --color-bg-light: #fff;
+  --color-text-light: #000;
+}
+body.dark-mode {
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-dark);
+}
+body.light-mode {
+  background-color: var(--color-bg-light);
+  color: var(--color-text-light);
+}

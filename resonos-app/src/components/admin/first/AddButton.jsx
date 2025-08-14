@@ -8,21 +8,22 @@ const AddButton = ({
   id,
   style,
 }) => {
-  return (
-    <div className="admin">
-      <div className="mb-3 text-end">
-        <button
-          type={type}
-          className={className}
-          id={id}
+return (
+  <div className="admin">
+    <div className="mb-3 text-end">
+      <button
+        type={type}
+        className={`btn btn-gold ${className || ''}`}
+        id={id}
         onClick={onClick}
         style={style}
       >
         {label}
       </button>
     </div>
-    </div>
-  );
+  </div>
+);
+
 };
 
 export default AddButton;

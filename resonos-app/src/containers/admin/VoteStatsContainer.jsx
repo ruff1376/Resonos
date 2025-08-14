@@ -6,7 +6,7 @@ import QuickMenu from "../../components/admin/first/QuickMenu";
 
 
 /** 행 렌더링 전용 */
-const VoteStatsTableContent = ({ stats, idKey, titleKey, showMore, toggleMore }) => {
+const VoteStatsTableContent = ({ stats, columns, idKey, titleKey, showMore, toggleMore }) => {
   const statsSize = stats.length;
 
   return (
@@ -17,55 +17,74 @@ const VoteStatsTableContent = ({ stats, idKey, titleKey, showMore, toggleMore })
 
         const hasMore = idx + 1 < statsSize && stats[idx + 1][idKey] === stat[idKey];
 
-        return (
-          <React.Fragment key={`row-${idx}`}>
-            <div
-              className={`vote-table-row track-group-start ${idx === 0 ? "first-track" : ""}`}
-              style={{ fontWeight: 600 }}
-            >
-              <div className="vote-col-id">{stat[idKey]}</div>
-              <div className="vote-col-title">{stat[titleKey]}</div>
-              <div className="vote-col-mood">{stat.mood_name}</div>
-              <div className="vote-col-count">{stat.vote_count}</div>
-              <div className="vote-col-more">
-                {hasMore && (
+        // 메인 행
+        const mainRow = (
+          <div className="list-group-item bg-dark text-light d-flex text-center width-100" key={`main-${idx}`}>
+            {columns.map((col, ci) => {
+              let value = '';
+              switch (ci) {
+                case 0: value = stat[idKey]; break;
+                case 1: value = stat[titleKey]; break;
+                case 2: value = stat.mood_name; break;
+                case 3: value = stat.vote_count; break;
+                case 4: value = hasMore && (
                   <button
                     type="button"
                     className="btn btn-outline-gold btn-more"
                     onClick={() => toggleMore(idx)}
-                    style={{ fontSize: "1.1em", padding: "2px 16px" }}
                   >
                     {showMore[idx] ? "닫기" : "더보기"}
                   </button>
-                )}
-              </div>
-            </div>
+                ); break;
+                default: break;
+              }
+              return (
+                <div key={ci} style={col.style}>
+                  {value}
+                </div>
+              );
+            })}
+          </div>
+        );
 
-            {/* 더보기 영역 */}
-            <div className={`more-moods ${showMore[idx] ? "show" : ""}`}>
-              {stats.map((moreStat, moreIdx) => {
-                if (moreStat[idKey] !== stat[idKey] || moreIdx === idx) return null;
-                return (
-                  <div
-                    key={`more-${moreIdx}`}
-                    className="vote-table-row"
-                    style={{ background: "#181c23", color: "#ffde7a" }}
-                  >
-                    <div className="vote-col-id"></div>
-                    <div className="vote-col-title"></div>
-                    <div className="vote-col-mood">{moreStat.mood_name}</div>
-                    <div className="vote-col-count">{moreStat.vote_count}</div>
-                    <div className="vote-col-more"></div>
-                  </div>
-                );
-              })}
-            </div>
+        // 더보기 행
+        const moreRows = showMore[idx]
+          ? stats
+              .filter((m, mi) => m[idKey] === stat[idKey] && mi !== idx)
+              .map((moreStat, moreIdx) => (
+                <div
+                  key={`more-${moreIdx}`}
+                  className="list-group-item bg-dark  d-flex text-center width-100"
+                  style={{ background: "#181c23", color: "#ffde7a" }}
+                >
+                  {columns.map((col, ci) => {
+                    let value = '';
+                    switch (ci) {
+                      case 2: value = moreStat.mood_name; break;
+                      case 3: value = moreStat.vote_count; break;
+                      default: value = ''; break;
+                    }
+                    return (
+                      <div key={ci} style={col.style}>
+                        {value}
+                      </div>
+                    );
+                  })}
+                </div>
+              ))
+          : null;
+
+        return (
+          <React.Fragment key={`group-${idx}`}>
+            {mainRow}
+            {moreRows}
           </React.Fragment>
         );
       })}
     </>
   );
 };
+
 
 /** 메인 컨테이너 */
 const VoteStatsContainer = () => {
@@ -111,21 +130,22 @@ const fetchStats = async (selectedTab, pageNum = 1) => {
     { key: "artist", label: "아티스트 투표", idKey: "artist_id", titleKey: "artist_name" },
   ];
 
-  const currentTab = tabs.find((t) => t.key === tab);
-  const columns = [
-    { label: currentTab.idKey.toUpperCase(), style: { flexBasis: "22%", minWidth: "120px" } },
-    { label: currentTab.titleKey.replace("_", " "), style: { flexBasis: "28%", minWidth: "100px" } },
-    { label: "태그/분위기", style: { flexBasis: "30%", minWidth: "90px" } },
-    { label: "투표수", style: { flexBasis: "10%", minWidth: "60px" } },
-    { label: "", style: { flexBasis: "10%", minWidth: "60px" } },
-  ];
+const currentTab = tabs.find((t) => t.key === tab);
+const columns = [
+  { label: currentTab.idKey.toUpperCase(), style: { flexBasis: "22%", minWidth: "120px" } },
+  { label: currentTab.titleKey.replace("_", " "), style: { flexBasis: "28%", minWidth: "100px" } },
+  { label: "태그/분위기", style: { flexBasis: "30%", minWidth: "90px" } },
+  { label: "투표수", style: { flexBasis: "10%", minWidth: "60px" } },
+  { label: "", style: { flexBasis: "10%", minWidth: "60px" } },
+];
+
 
 return (
   <main className="py-5 bg-resonos-dark">
     <div className="container max-w-950">
       <h2 className="mb-3 text-light-gold">태그/분위기 투표 현황</h2>
 
-      {/* 탭 제네릭 */}
+      {/* 탭 */}
       <ul className="nav nav-tabs mb-4">
         {tabs.map((t) => (
           <li className="nav-item" key={t.key}>
@@ -147,18 +167,19 @@ return (
       ) : (
         <div className="admin resonos-card p-4">
           <TableColumnHeader columns={columns} />
-          <VoteStatsTableContent
-            stats={stats}
-            idKey={currentTab.idKey}
-            titleKey={currentTab.titleKey}
-            toggleMore={toggleMore}
-            showMore={showMore}
-          />
-          {stats.length === 0 && (
-            <div className="vote-table-row text-center text-secondary">
-              <div className="vote-col-id flex-fill">
-                투표 현황 데이터가 없습니다.
-              </div>
+
+          {stats.length > 0 ? (
+            <VoteStatsTableContent
+              stats={stats}
+              columns={columns}               // ✅ columns 전달
+              idKey={currentTab.idKey}
+              titleKey={currentTab.titleKey}
+              toggleMore={toggleMore}
+              showMore={showMore}
+            />
+          ) : (
+            <div className="list-group-item text-center text-secondary">
+              데이터가 없습니다.
             </div>
           )}
 
@@ -168,11 +189,7 @@ return (
               first={1}
               last={pagination.totalPages}
               prev={page > 1 ? page - 1 : 1}
-              next={
-                page < pagination.totalPages
-                  ? page + 1
-                  : pagination.totalPages
-              }
+              next={page < pagination.totalPages ? page + 1 : pagination.totalPages}
               start={Math.max(1, page - 4)}
               end={Math.min(pagination.totalPages, page + 5)}
               pageUri={`/admin/vote?tab=${tab}`}
@@ -185,6 +202,7 @@ return (
     <QuickMenu />
   </main>
 );
+
 
 };
 

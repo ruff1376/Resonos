@@ -5,17 +5,17 @@ const TableColumnHeader = ({ columns=[] }) => {
     borderRadius: '8px 8px 0 0',
   };
   const baseClass =
-    'list-group-item bg-secondary text-dark fw-bold d-flex flex-nowrap align-items-center text-center justify-content-center';
+    'list-group-item bg-secondary text-dark fw-bold d-flex flex-nowrap align-items-center text-center justify-content-center width-100';
+return (
+  <div className={`admin ${baseClass}`} style={containerStyle}>
+    {columns.map(({ label, style }, index) => (
+      <div key={index} style={{ flexBasis: style.flexBasis, minWidth: style.minWidth }}>
+        {label}
+      </div>
+    ))}
+  </div>
+);
 
-  return (
-    <div className={baseClass} style={containerStyle}>
-      {columns.map(({ label, style }, index) => (
-        <div key={index} style={{ flexBasis: style.flexBasis, minWidth: style.minWidth }}>
-          {label}
-        </div>
-      ))}
-    </div>
-  );
 };
 
 TableColumnHeader.defaultProps = {
