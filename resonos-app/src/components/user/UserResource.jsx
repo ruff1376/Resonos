@@ -90,7 +90,7 @@ const UserResource = ({albumList, artistList, badgeList, chartData, playlists, t
         </Link>
 
         {/* 팔로우 한 아티스트 */}
-        <Link className="grid-item" to={`/users/${user.id}/follow-artist`}>
+        <Link className="grid-item" to={`/users/${user.id}/follow-artists`}>
           <div className="mypage-card artist">
             <h3>팔로우 아티스트</h3>
             {(artistList == null || artistList.length === 0) ? (
@@ -112,7 +112,7 @@ const UserResource = ({albumList, artistList, badgeList, chartData, playlists, t
 
         {/* 내 활동 (isOwner일 때만) */}
         {isOwner && (
-          <Link className="grid-item" to="/users/activity">
+          <Link className="grid-item" to="/users/activities">
             <div className="mypage-card activate">
               <h3>내 활동</h3>
               <ul>
@@ -131,7 +131,7 @@ const UserResource = ({albumList, artistList, badgeList, chartData, playlists, t
 
         {/* 배지 (isOwner일 때만) */}
         {isOwner && (
-          <Link className="grid-item" to="/users/badge">
+          <Link className="grid-item" to="/users/badges">
             <div className="mypage-card badge-area">
               <h3>배지</h3>
               <h4>최근 획득한 배지</h4>

@@ -72,14 +72,14 @@ const UserInfo = ({currentBadge, followCount, followerCount, user, isOwner, coun
 
       <div className="profile-meta">
         <div>
-          <Link to={`/users/${user.id}/follow-user`}>
+          <Link to={`/users/${user.id}/follow-users`}>
             <b>팔로워</b>
             <br />
             <span id="follower-count">{followerCount}</span>
           </Link>
         </div>
         <div>
-          <Link to={`/users/${user.id}/follow-user`}>
+          <Link to={`/users/${user.id}/follow-users`}>
             <b>팔로우</b>
             <br />
             <span id="follow-count">{followCount}</span>
