@@ -180,54 +180,70 @@ return (
           onSearch={handleSearch}
         />
 
-        {/* 리스트 */}
-        <section className="resonos-card p-3">
-          <TableColumnHeader columns={columns} />
-          {notifications.length > 0 ? (
-            notifications.map((noti) => (
-              <div
-                key={noti.id}
-                className="list-group-item bg-dark text-light border-secondary mb-2 d-flex flex-nowrap align-items-center text-center"
-              >
-                <div className="table-col">{noti.id}</div>
-                <div className="table-col">{noti.userId}</div>
-                <div className="table-col">{noti.type}</div>
-                <div className="table-col">{noti.message}</div>
-                <div className="table-col">{noti.content}</div>
-                <div className="table-col">{noti.targetId || "-"}</div>
-                <div className="table-col">{noti.isRead ? "읽음" : "읽지 않음"}</div>
-                <div className="table-col">
-                  {new Date(noti.createdAt).toLocaleString("ko-KR", {
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="list-group-item text-center text-secondary bg-dark">
-              등록된 알림이 없습니다.
+{/* 리스트 */}
+<section className="resonos-card p-3">
+  <TableColumnHeader columns={columns} />
+  {notifications.length > 0 ? (
+    notifications.map((noti, idx) => (
+      <div
+        key={noti.id}
+        className="list-group-item bg-dark text-light border-secondary mb-2 d-flex text-center width-100"
+      >
+        {columns.map((col, ci) => {
+          let value = "";
+          switch (ci) {
+            case 0: value = noti.id; break;
+            case 1: value = noti.userId; break;
+            case 2: value = noti.type; break;
+            case 3: value = noti.message; break;
+            case 4: value = noti.content; break;
+            case 5: value = noti.targetId || "-"; break;
+            case 6: value = noti.isRead ? "읽음" : "읽지 않음"; break;
+            case 7:
+              value = new Date(noti.createdAt).toLocaleString("ko-KR", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+              });
+              break;
+            default: break;
+          }
+          return (
+            <div key={ci} style={col.style}>
+              {value}
             </div>
-          )}
+          );
+        })}
+      </div>
+    ))
+  ) : (
+    <div className="list-group-item text-center text-secondary bg-dark">
+      등록된 알림이 없습니다.
+    </div>
+  )}
 
-          {/* 페이지네이션 */}
-          {pagination.totalPages > 1 && (
-            <Pagination
-              page={pagination.page}
-              first={1}
-              last={pagination.totalPages}
-              prev={pagination.page > 1 ? pagination.page - 1 : 1}
-              next={pagination.page < pagination.totalPages ? pagination.page + 1 : pagination.totalPages}
-              start={Math.max(1, (pagination.page || 1) - 4)}
-              end={Math.min(pagination.totalPages, (pagination.page || 1) + 5)}
-              pageUri={`/admin/notifications?keyword=${encodeURIComponent(keyword)}`}
-              onPageChange={handlePageChange}
-            />
-          )}
-        </section>
+  {/* 페이지네이션 */}
+  {pagination.totalPages > 1 && (
+    <Pagination
+      page={pagination.page}
+      first={1}
+      last={pagination.totalPages}
+      prev={pagination.page > 1 ? pagination.page - 1 : 1}
+      next={
+        pagination.page < pagination.totalPages
+          ? pagination.page + 1
+          : pagination.totalPages
+      }
+      start={Math.max(1, (pagination.page || 1) - 4)}
+      end={Math.min(pagination.totalPages, (pagination.page || 1) + 5)}
+      pageUri={`/admin/notifications?keyword=${encodeURIComponent(keyword)}`}
+      onPageChange={handlePageChange}
+    />
+  )}
+</section>
+
       </div>
     </main>
     <QuickMenu />

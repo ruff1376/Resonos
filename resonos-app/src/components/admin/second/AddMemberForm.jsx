@@ -47,21 +47,21 @@ const AddMemberForm = ({ onSubmit, onCancel }) => {
   };
 
 return (
-  <div id="add-member-form-area" className="admin">
-    <form className="resonos-card p-3 mb-4" onSubmit={handleSubmit}>
-      <div className="row mb-3">
+  <div id="add-member-form-area " className="admin">
+    <form className="resonos-card p-2 mb-2" onSubmit={handleSubmit}>
+      <div className="row mb-3 width-100">
         <FormInput label="아이디(Username)" name="username" value={formData.username} onChange={handleChange} required />
         <FormInput label="닉네임" name="nickname" value={formData.nickname} onChange={handleChange} required />
       </div>
-      <div className="row mb-3">
+      <div className="row mb-3 width-100">
         <FormInput label="이메일" name="email" type="email" value={formData.email} onChange={handleChange} required />
         <FormInput label="비밀번호" name="password" type="password" value={formData.password} onChange={handleChange} required />
       </div>
-      <div className="row mb-3">
+      <div className="row mb-3 width-100">
         <FormInput label="프로필 이미지 URL" name="profileImage" value={formData.profileImage} onChange={handleChange} />
         <FormInput label="소개(Bio)" name="bio" value={formData.bio} onChange={handleChange} />
       </div>
-      <div className="row mb-3">
+      <div className="row mb-3 width-100">
         <FormSelect label="전문가 여부(isPro)" name="isPro" value={formData.isPro} onChange={handleChange}
           options={[{ value: 'false', label: '아니오' }, { value: 'true', label: '예' }]} />
         <FormSelect label="상태" name="enabled" value={formData.enabled} onChange={handleChange}
@@ -69,7 +69,7 @@ return (
         <FormSelect label="권한" name="auth" value={formData.auth} onChange={handleChange}
           options={[{ value: 'ROLE_USER', label: '일반' }, { value: 'ROLE_ADMIN', label: '운영자' }]} />
       </div>
-      <div className="row mb-3">
+      <div className="row mb-3 width-100">
         <FormInput label="Provider" name="provider" value={formData.provider} onChange={handleChange} />
         <FormInput label="Provider ID" name="providerId" value={formData.providerId} onChange={handleChange} />
       </div>

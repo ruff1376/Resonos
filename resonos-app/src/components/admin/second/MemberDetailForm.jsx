@@ -1,6 +1,7 @@
 import React from 'react';
 import FormInput from '../first/FormInput'; // 경로는 실제 위치에 맞게 조정 필요
 import { formatDate } from '../../../utils/format';  // format.js 위치에 맞게 경로 조정
+import FormSelect from '../first/FormSelect';
 
 const MemberDetailForm = ({
   detailMemberData,

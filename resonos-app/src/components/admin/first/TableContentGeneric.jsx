@@ -23,7 +23,7 @@ return (
       <React.Fragment key={item.id || index}>
         <div
           id={`row-${item.id || index}`}
-          className="admin list-group-item"
+          className="admin list-group-item width-100"
         >
           {columns.map(({ style, render }, colIndex) => (
             <div

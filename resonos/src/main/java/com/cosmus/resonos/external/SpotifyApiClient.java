@@ -18,9 +18,9 @@ import com.cosmus.resonos.domain.review.Track;
 @Component
 public class SpotifyApiClient {
 
-    // @Value("${spotify.client-id}")
+    @Value("${spotify.client-id}")
     private String clientId;
-    // @Value("${spotify.client-secret}")
+    @Value("${spotify.client-secret}")
     private String clientSecret;
 
     private final WebClient webClient = WebClient.create("https://api.spotify.com/v1");

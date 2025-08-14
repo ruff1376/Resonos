@@ -8,7 +8,7 @@ const FormInput = ({
   onChange,
   required = false,
   className = 'form-control',
-  containerClassName = 'col-md-6 text-start',
+  containerClassName = 'col-md-6 text-start width-100',
   ...rest
 }) => {
 return (

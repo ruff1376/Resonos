@@ -6,7 +6,7 @@ const ReportDetailPanel = ({ report, onStatusChange, onDelete }) => {
 return (
   <div className="admin resonos-card mb-3">
     <h5 className="text-light-gold mb-3">신고 상세 정보</h5>
-    <div className="row">
+    <div className="row width-100">
       <div className="col-md-6 text-start">
         <p><strong>신고 ID:</strong> {report.id}</p>
         <p>
