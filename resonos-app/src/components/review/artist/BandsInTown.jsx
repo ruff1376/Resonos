@@ -1,13 +1,26 @@
 import React, { useEffect } from 'react';
 
 const BandsintownWidget = ({ artistName }) => {
+
   useEffect(() => {
-    // 컴포넌트가 마운트되면 위젯 초기화
-    // window.Bandsintown이 존재할 때만 실행되도록 조건 추가
-    if (window.Bandsintown) {
-      window.Bandsintown.init();
+    if (artistName) {
+      const timer = setTimeout(() => {
+        if (window.Bandsintown) {
+          window.Bandsintown.init();
+          console.log("밴즈인타운 초기화 성공! 🥳");
+        } else {
+          console.warn("Bandsintown 스크립트가 아직 로드되지 않았습니다.");
+        }
+      }, 500); // 3초는 너무 길 수 있으니 0.5초로 조정
+
+      return () => clearTimeout(timer);
     }
-  }, []); // ✅ 의존성 배열을 비워서 컴포넌트 마운트 시에만 실행
+  }, [artistName]);
+
+  // artistName이 유효할 때만 위젯 div를 반환
+  if (!artistName) {
+    return null;
+  }
 
   return (
     <div

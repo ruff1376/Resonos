@@ -1,7 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-// Chart.js 라이브러리가 설치되어 있다고 가정합니다.
-// import { Chart } from 'chart.js/auto';
 
 const MoodStatus = ({ styles, isMoodEmpty, tags, userId, artist, track, userVotedMoodId, moodLabels }) => {
   const chartRef = useRef(null);
@@ -59,11 +57,7 @@ const MoodStatus = ({ styles, isMoodEmpty, tags, userId, artist, track, userVote
         </div>
         <div className={styles.albumMoods}>
           <p className={styles.headline}>분위기로 노래찾기</p>
-          {!moodLabels || moodLabels.length === 0 ? (
-            <p style={{ color: 'var(--main-color)' }} id="noVoteMessage">
-              아직 아무도 분위기에 투표하지 않았어요 😅
-            </p>
-          ) : (
+          {isMoodEmpty != null && !isMoodEmpty ? (
             <div className={styles.moodList}>
               {moodLabels.map(topMood => (
                 <Link
@@ -74,6 +68,10 @@ const MoodStatus = ({ styles, isMoodEmpty, tags, userId, artist, track, userVote
                 </Link>
               ))}
             </div>
+          ) : (
+            <p style={{ color: 'var(--main-color)' }} id="noVoteMessage">
+              아직 아무도 분위기에 투표하지 않았어요 😅
+            </p>
           )}
         </div>
       </div>

@@ -380,7 +380,39 @@ body {
     width: 560px;
 }
 
+.recent-review>p:first-child,
+.mood-vote p,
+.simillar-artist>p:first-child,
+.album-moods>p:first-child,
+.concert-schedule>p:first-child {
+    margin-bottom: 5px;
+    border-bottom: 1px solid var(--main-color);
+}
+
 /* 분위기 */
+
+.album-moods {
+    border: 2px solid var(--main-color);
+    border-radius: 20px;
+    padding: 10px;
+    padding-top: 0;
+}
+@media (max-width: 1230px) {
+    .album-moods {
+        display: none !important;
+    }
+}
+.chart {
+    width: 400px;
+    height: 400px;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+    overflow: hidden;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .mood-card {
     max-width: 1350px;
     width: 100%;
