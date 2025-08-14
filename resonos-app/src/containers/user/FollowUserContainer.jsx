@@ -126,23 +126,25 @@ const FollowUserContainer = () => {
   }, [])
 
   return (
-    <div className="container">
+    <>
       <Header />
-      <FollowUser
-        followCount={followCount}
-        followerCount={followerCount}
-        lastPath={lastPath}
-        myFollow={myFollow}
-        myFollower={myFollower}
-        setMyFollow={setMyFollow}
-        setMyFollower={setMyFollower}
-        isOwner={isOwner}
-        userId={userId}
-        onSearchUsers={onSearchUsers}
-        onFollowUser={onFollowUser}
-      />
+      <div className="container">
+        <FollowUser
+          followCount={followCount}
+          followerCount={followerCount}
+          lastPath={lastPath}
+          myFollow={myFollow}
+          myFollower={myFollower}
+          setMyFollow={setMyFollow}
+          setMyFollower={setMyFollower}
+          isOwner={isOwner}
+          userId={userId}
+          onSearchUsers={onSearchUsers}
+          onFollowUser={onFollowUser}
+        />
+      </div>
       <Footer />
-    </div>
+    </>
   )
 }
 

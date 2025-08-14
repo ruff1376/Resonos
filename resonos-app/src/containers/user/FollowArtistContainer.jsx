@@ -106,20 +106,22 @@ const FollowArtistContainer = () => {
   }, [])
 
   return (
-    <div className="container">
+    <>
       <Header />
-      <FollowArtist
-        artistList={artistList}
-        setArtistList={setArtistList}
-        count={count}
-        lastPath={lastPath}
-        userId={userId}
-        isOwner={isOwner}
-        onSearchArtist={onSearchArtist}
-        onFollow={onFollow}
-      />
+      <div className="container">
+        <FollowArtist
+          artistList={artistList}
+          setArtistList={setArtistList}
+          count={count}
+          lastPath={lastPath}
+          userId={userId}
+          isOwner={isOwner}
+          onSearchArtist={onSearchArtist}
+          onFollow={onFollow}
+        />
+      </div>
       <Footer />
-    </div>
+    </>
   )
 }
 

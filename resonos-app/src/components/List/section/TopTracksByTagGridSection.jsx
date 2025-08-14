@@ -4,7 +4,7 @@ export default function TopTracksByTagGridSection({
     topTracksByTag = {},
     topTags = []
 }) {
-    
+
     if (!topTags || topTags.length === 0) return null;
 
     return (
@@ -16,51 +16,98 @@ export default function TopTracksByTagGridSection({
                 <div className="section-title flex-grow-1">태그 별 인기 트랙</div>
             </div>
 
-            {topTags.map((tag) => {
+            <div className="track-tag-grid">
+                {topTags.map((tag) => {
 
-                const trackList = topTracksByTag[tag] || [];
+                    const trackList = topTracksByTag[tag] || [];
 
-                if (trackList.length === 0) return null;
+                    if (trackList.length === 0) return null;
 
-                return trackList.map((track, idx) => {
                     return (
-                        <div className="track-tag-grid">
-                            <div className="track-tag-card" key={`${tag}-${track.id}`}>
-                                <Link to={`/search?q=${encodeURIComponent('#' + tag)}`} className="tag">
-                                    #{tag}
-                                </Link>
-                                <div className="track-card">
-                                    <Link
-                                        to={`/tracks?id=${track.id}`}
-                                        className="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4 w-100 position-relative"
-                                    >
-                                        <div
-                                            className="d-flex align-items-center gap-4 flex-shrink-1"
-                                            style={{ minWidth: 0 }}
+                        <div className="track-tag-card" key={tag}>
+                            <Link
+                                to={`/search?q=${encodeURIComponent("#" + tag)}`}
+                                className="tag"
+                            >
+                                #{tag}
+                            </Link>
+
+                            <div className="track-card-list">
+                                {trackList.map((track, idx) => (
+                                    <div className="track-card" key={track.id}>
+                                        <Link
+                                            to={`/tracks?id=${track.id}`}
+                                            className="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4 w-100 position-relative"
                                         >
-                                            <div className={`album-rank ${idx === 0 ? "top" : ""}`}>
-                                                {idx + 1}
-                                            </div>
-                                            <img src={track.coverImage} alt="앨범커버" className="album-img" />
                                             <div
-                                                className="d-flex flex-column justify-content-center"
-                                                style={{
-                                                    minWidth: 180,
-                                                    maxWidth: 400,
-                                                    overflow: "hidden",
-                                                }}
+                                                className="d-flex align-items-center gap-4 flex-shrink-1"
+                                                style={{ minWidth: 0 }}
                                             >
-                                                <div className="album-title">{track.title}</div>
-                                                <div className="album-artist">{track.artistName}</div>
+                                                <div className="album-rank">
+                                                    {idx + 1}
+                                                </div>
+                                                <img
+                                                    src={track.coverImage}
+                                                    alt="앨범커버"
+                                                    className="album-img"
+                                                />
+                                                <div
+                                                    className="d-flex flex-column justify-content-center"
+                                                    style={{
+                                                        minWidth: 180,
+                                                        maxWidth: 400,
+                                                        overflow: "hidden",
+                                                    }}
+                                                >
+                                                    <div className="album-title">{track.title}</div>
+                                                    <div className="album-artist">{track.artistName}</div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </Link>
-                                </div>
+                                        </Link>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     );
-                });
-            })}
+
+                    // <div className="track-tag-card" key={`${tag}-${track.id}`}>
+                    //     <Link to={`/search?q=${encodeURIComponent('#' + tag)}`} className="tag">
+                    //         #{tag}
+                    //     </Link>
+                    //     return trackList.map((track, idx) => {
+                    //         return (
+                    //             <div className="track-card">
+                    //                 <Link
+                    //                     to={`/tracks?id=${track.id}`}
+                    //                     className="album-card secondary d-flex flex-row align-items-center justify-content-between px-4 py-3 gap-4 w-100 position-relative"
+                    //                 >
+                    //                     <div
+                    //                         className="d-flex align-items-center gap-4 flex-shrink-1"
+                    //                         style={{ minWidth: 0 }}
+                    //                     >
+                    //                         <div className={`album-rank ${idx === 0 ? "top" : ""}`}>
+                    //                             {idx + 1}
+                    //                         </div>
+                    //                         <img src={track.coverImage} alt="앨범커버" className="album-img" />
+                    //                         <div
+                    //                             className="d-flex flex-column justify-content-center"
+                    //                             style={{
+                    //                                 minWidth: 180,
+                    //                                 maxWidth: 400,
+                    //                                 overflow: "hidden",
+                    //                             }}
+                    //                         >
+                    //                             <div className="album-title">{track.title}</div>
+                    //                             <div className="album-artist">{track.artistName}</div>
+                    //                         </div>
+                    //                     </div>
+                    //                 </Link>
+                    //             </div>
+                    //         );
+                    //     });
+                    // </div>
+                })}
+            </div>
         </section>
     );
 }

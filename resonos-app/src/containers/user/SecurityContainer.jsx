@@ -173,21 +173,23 @@ const SecurityContainer = () => {
   }, [])
 
   return (
-    <div className="container">
+    <>
       <Header />
-      <Security
-        lastPath={lastPath}
-        provider={provider}
-        vali={vali}
-        error={error}
-        onCheckPassword={onCheckPassword}
-        onChangePassword={onChangePassword}
-        setError={setError}
-        brError={brError}
-        onWithdrawal={onWithdrawal}
-      />
+      <div className="container">
+        <Security
+          lastPath={lastPath}
+          provider={provider}
+          vali={vali}
+          error={error}
+          onCheckPassword={onCheckPassword}
+          onChangePassword={onChangePassword}
+          setError={setError}
+          brError={brError}
+          onWithdrawal={onWithdrawal}
+        />
+      </div>
       <Footer />
-    </div>
+    </>
   )
 }
 

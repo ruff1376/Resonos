@@ -8,7 +8,7 @@ import $ from 'jquery';
 
 const Header = ({ currentUser = {} }) => {
     const location = useLocation();
-    const { isLogin, userInfo } = useContext(LoginContext)
+    const { isLogin, userInfo, path } = useContext(LoginContext)
     const [searchValue, setSearchValue] = useState("");
     const navigate = useNavigate();
 
@@ -61,12 +61,30 @@ const Header = ({ currentUser = {} }) => {
             <nav className="navbar navbar-expand-lg py-0">
                 <div className="container-fluid" style={{ maxWidth: '1440px' }}>
                     <div className="d-flex justify-content-start align-items-center">
-                        <Link className="navbar-brand d-flex align-items-center" to="/list/main">
-                            <img src="/img/resonosPlusLogo.png" alt="Main Page Logo" className="header-logo-img" />
-                        </Link>
-                        <Link className="navbar-brand d-flex align-items-center" to="/list/main">
-                            <img src="/img/resonosLogo.png" alt="Sub Page Logo" className="header-logo-img-sub" />
-                        </Link>
+                        {/* 위치 바꾸기
+                            TODO: 컨테이너에서 prpos 내려줘야 함
+                        */}
+                        {
+                            path !== 'community'
+                            ?
+                            <>
+                                <Link className="navbar-brand d-flex align-items-center" to="/list/main">
+                                    <img src="/img/resonosPlusLogo.png" alt="Main Page Logo" className="header-logo-img" />
+                                </Link>
+                                <Link className="navbar-brand d-flex align-items-center" to="/community">
+                                    <img src="/img/resonosLogo.png" alt="Sub Page Logo" className="header-logo-img-sub" />
+                                </Link>
+                            </>
+                            :
+                            <>
+                                <Link className="navbar-brand d-flex align-items-center" to="/community">
+                                    <img src="/img/resonosLogo.png" alt="Main Page" className="header-logo-img" />
+                                </Link>
+                                <Link className="navbar-brand d-flex align-items-center" to="/list/main">
+                                    <img src="/img/resonosPlusLogo.png" alt="LogoSub Page Logo" className="header-logo-img-sub" />
+                                </Link>
+                            </>
+                        }
                         <div className="menu-group d-flex position-relative ms-5">
 
                             {/* 앨범 메뉴 + 하단 메뉴 */}
@@ -121,7 +139,7 @@ const Header = ({ currentUser = {} }) => {
                                 // 비로그인 상태
                                 <>
                                     <div className="nav-item ms-lg-2">
-                                        <Link id="login" to="/login" className="btn btn-outline-gold">로그인</Link>
+                                        <Link id="toLogin" to="/login" className="btn btn-outline-gold">로그인</Link>
                                     </div>
                                     <div className="nav-item ms-2">
                                         <Link to="/join" className="btn btn-outline-gold">회원가입</Link>
@@ -144,7 +162,7 @@ const Header = ({ currentUser = {} }) => {
                                     </div>
                                     <div className="flex-shrink-0 dropdown profile-dropdown">
                                         <a href="#" className="dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <img src={userInfo.profileImage || "/img/profileImg.png"} alt="프로필 이미지" width="32" height="32" className="rounded-circle" />
+                                            <img src={userInfo?.profileImage || "/img/profileImg.png"} alt="프로필 이미지" width="32" height="32" className="rounded-circle" />
                                         </a>
                                         <ul className="dropdown-menu text-small shadow" style={{ background: '#181C23' }}>
                                             <li><Link className="dropdown-item" to="/users/mypage">마이페이지</Link></li>

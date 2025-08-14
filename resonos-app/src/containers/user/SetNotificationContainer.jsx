@@ -66,16 +66,18 @@ const SetNotificationContainer = () => {
     getNotificationSettings()
   }, [])
   return (
-    <div className="container">
+    <>
       <Header />
-      <SetNotification
-        notiList={notiList}
-        notiType={notiType}
-        lastPath={lastPath}
-        onToggleNoti={onToggleNoti}
-      />
+      <div className="container">
+        <SetNotification
+          notiList={notiList}
+          notiType={notiType}
+          lastPath={lastPath}
+          onToggleNoti={onToggleNoti}
+        />
+      </div>
       <Footer />
-    </div>
+    </>
   )
 }
 

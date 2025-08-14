@@ -276,28 +276,30 @@ const PlaylistDetailContainer = () => {
   }, [])
 
   return (
-    <div className="container">
+    <>
       <Header />
-      <PlaylistDetailForm
-        playlist={playlist}
-        lastPath={lastPath}
-        isOwner={isOwner}
-        alreadyLiked={alreadyLiked}
-        owner={owner}
-        onUpdate={onUpdate}
-        onAddTrack={onAddTrack}
-        onSearchTrack={onSearchTrack}
-        trackList={trackList}
-        setTrackList={setTrackList}
-        onModal={onModal}
-        setOnModal={setOnModal}
-        onDelete={onDelete}
-        dragListRef={dragListRef}
-        onLike={onLike}
-        onPlaylistLike={onPlaylistLike}
-      />
+      <div className="container">
+        <PlaylistDetailForm
+          playlist={playlist}
+          lastPath={lastPath}
+          isOwner={isOwner}
+          alreadyLiked={alreadyLiked}
+          owner={owner}
+          onUpdate={onUpdate}
+          onAddTrack={onAddTrack}
+          onSearchTrack={onSearchTrack}
+          trackList={trackList}
+          setTrackList={setTrackList}
+          onModal={onModal}
+          setOnModal={setOnModal}
+          onDelete={onDelete}
+          dragListRef={dragListRef}
+          onLike={onLike}
+          onPlaylistLike={onPlaylistLike}
+        />
+      </div>
       <Footer />
-    </div>
+    </>
   )
 }
 

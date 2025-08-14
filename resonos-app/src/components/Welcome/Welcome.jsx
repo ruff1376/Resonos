@@ -36,7 +36,7 @@ const Welcome = () => {
 
     return (
         <div className="welcome" style={{ position: 'relative' }}>
-            <div style={{ width: '100%', height: '100%', 
+            <div style={{ width: '100%', height: '100%',
                 position: 'absolute', zIndex: -1, top: 0 }}>
                 <Galaxy
                     density={1}
@@ -64,14 +64,14 @@ const Welcome = () => {
                                 </>
                             ) : (
                                 <span className="nickname-welcome">
-                                    {userInfo.nickname} 님, 환영합니다.
+                                    {userInfo?.nickname} 님, 환영합니다.
                                 </span>
                             )}
                         </div>
                     </section>
 
                     <section className="main-cards">
-                        <Link id="free" to="/list/main" style={{ textDecoration: 'none', color: 'inherit' }} onClick={handleFreeClick}>
+                        <Link id="free" to="/community" style={{ textDecoration: 'none', color: 'inherit' }}>
                             <div className="main-card">
                                 <img src="/img/resonosLogo.png" alt="main" />
                                 <h2>자유 커뮤니티</h2>

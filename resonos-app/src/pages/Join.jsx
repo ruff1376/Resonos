@@ -5,11 +5,13 @@ import Header from '../components/Header/Header'
 
 const Join = () => {
   return (
-    <div className="container">
+    <>
       <Header />
-      <JoinForm />
+      <div className="container">
+        <JoinForm />
+      </div>
       <Footer />
-    </div>
+    </>
   )
 }
 

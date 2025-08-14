@@ -61,18 +61,20 @@ const FindIdContainer = () => {
   }
 
   return (
-    <div className="container">
+    <>
       <Header />
-      <FindIdForm
-        onCheckEmail={onCheckEmail}
-        emailError={emailError}
-        emailCheck={emailCheck}
-        username={username}
-        onSendEmail={onSendEmail}
-        certiNum={certiNum}
-      />
+      <div className="container">
+        <FindIdForm
+          onCheckEmail={onCheckEmail}
+          emailError={emailError}
+          emailCheck={emailCheck}
+          username={username}
+          onSendEmail={onSendEmail}
+          certiNum={certiNum}
+        />
+      </div>
       <Footer />
-    </div>
+    </>
   )
 }
 

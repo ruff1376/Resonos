@@ -28,7 +28,7 @@ const MypageTab = ({ lastPath }) => {
 
   return (
     <section className="mypage-tabs">
-      <Link to="/users/activity" className={`tab ${lastPath === "activity" ? "active" : ""}`}>
+      <Link to="/users/activities" className={`tab ${lastPath === "activity" ? "active" : ""}`}>
         내 활동
       </Link>
       <Link to="/users/notifications" className={`tab ${lastPath === "noti" ? "active" : ""}`}>
@@ -40,13 +40,13 @@ const MypageTab = ({ lastPath }) => {
       <Link to="/users/liked-music" className={`tab ${lastPath === "liked-music" ? "active" : ""}`}>
         앨범 / 트랙
       </Link>
-      <Link to="/users/follow-artist" className={`tab ${lastPath === "artist-follows" ? "active" : ""}`}>
+      <Link to="/users/follow-artists" className={`tab ${lastPath === "artist-follows" ? "active" : ""}`}>
         팔로우 아티스트
       </Link>
-      <Link to="/users/follow-user" className={`tab ${lastPath === "user-follows" ? "active" : ""}`}>
+      <Link to="/users/follow-users" className={`tab ${lastPath === "user-follows" ? "active" : ""}`}>
         팔로워 / 팔로우
       </Link>
-      <Link to="/users/badge" className={`tab ${lastPath === "badge" ? "active" : ""}`}>
+      <Link to="/users/badges" className={`tab ${lastPath === "badge" ? "active" : ""}`}>
         배지
       </Link>
       <Link to="/users/security" className={`tab ${lastPath === "security" ? "active" : ""}`}>

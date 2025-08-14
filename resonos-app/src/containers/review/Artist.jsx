@@ -6,6 +6,7 @@ import { useSearchParams } from 'react-router-dom';
 import ArtistInfo from '../../components/review/artist/ArtistInfo';
 import ArtistTop7 from '../../components/review/artist/ArtistTop7';
 import ArtistRecent from '../../components/review/artist/ArtistRecent';
+import MoodStatus from '../../components/review/common/MoodStatus';
 
 const Artist = () => {
 
@@ -111,6 +112,9 @@ const Artist = () => {
       <ArtistTop7 styles={styles} artist={artist} top7Tracks={top7Tracks} 
                   track={track}/>
       <ArtistRecent styles={styles} artist={artist} recentReviews={recentReviews} />
+      <MoodStatus styles={styles} isMoodEmpty={isMoodEmpty} tags={allTags} userId={userId}
+                  artist={artist} track={track} userVotedMoodId={userVotedMoodId}
+                  moodLabels={moodLabels} moodValues={moodValues} moodStats={moodStats} />
     </div>
   )
 }

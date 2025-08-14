@@ -136,28 +136,30 @@ const ActivityContainer = () => {
 
 
   return (
-    <div className="container">
+    <>
       <Header />
-      <Activity
-        utl={utl}
-        countAReview={countAReview}
-        countLaReview={countLaReview}
-        countLtReview={countLtReview}
-        countTReview={countTReview}
-        aReviewList={aReviewList}
-        laReviewList={laReviewList}
-        ltReviewList={ltReviewList}
-        tReviewList={tReviewList}
-        setAReviewList={setAReviewList}
-        setLaReviewList={setLaReviewList}
-        setLtReviewList={setLtReviewList}
-        setTReviewList={setTReviewList}
-        user={user}
-        lastPath={lastPath}
-        onSearchReview={onSearchReview}
-      />
+      <div className="container">
+        <Activity
+          utl={utl}
+          countAReview={countAReview}
+          countLaReview={countLaReview}
+          countLtReview={countLtReview}
+          countTReview={countTReview}
+          aReviewList={aReviewList}
+          laReviewList={laReviewList}
+          ltReviewList={ltReviewList}
+          tReviewList={tReviewList}
+          setAReviewList={setAReviewList}
+          setLaReviewList={setLaReviewList}
+          setLtReviewList={setLtReviewList}
+          setTReviewList={setTReviewList}
+          user={user}
+          lastPath={lastPath}
+          onSearchReview={onSearchReview}
+        />
+      </div>
       <Footer />
-    </div>
+    </>
   )
 }
 

@@ -34,6 +34,7 @@ const ArtistCard = ({artist, isOwner, onFollow}) => {
       </div>
       {isOwner && (
         <button
+          id="btn-follow"
           className="btn-outline-gold btn-sm follow-artist"
         >
           {

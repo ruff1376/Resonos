@@ -6,8 +6,9 @@ import lombok.Data;
 @Data
 public class Community {
     private Long id;
+    private Long categoryId;
+    private Long creatorId;
     private String name;
     private String description;
     private Date createdAt;
-    private Long creatorId;
 }

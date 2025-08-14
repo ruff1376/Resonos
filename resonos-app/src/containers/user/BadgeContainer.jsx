@@ -54,15 +54,17 @@ const BadgeContainer = () => {
   }, [])
 
   return (
-    <div className="container">
+    <>
       <Header />
-      <Badge
-        haveBadgeList={haveBadgeList}
-        notHaveBadgeList={notHaveBadgeList}
-        lastPath={lastPath}
-      />
+      <div className="container">
+        <Badge
+          haveBadgeList={haveBadgeList}
+          notHaveBadgeList={notHaveBadgeList}
+          lastPath={lastPath}
+        />
+      </div>
       <Footer />
-    </div>
+    </>
   )
 }
 

@@ -58,12 +58,12 @@ export const updateUserInfo = async (formData) => {
 /* 내 활동 페이지 */
 // 내 활동 페이지 데이터
 export const getUserActivity = async () => {
-  return await api.get("/users/activity")
+  return await api.get("/users/activities")
 }
 
 // 활동 내역 추가 요청 (리뷰)
 export const loadMoreUserReviews = async (data) => {
-  return await api.post("/users/activity", data)
+  return await api.post("/users/activities", data)
 }
 
 /* 알림 설정 페이지 */
@@ -80,7 +80,7 @@ export const updateNotificationSettings = async (userNoti) => {
 /* 팔로우 아티스트 페이지 */
 // 팔로우한 아티스트 리스트 (자기 자신 또는 특정 유저)
 export const getFollowedArtists = async (id) => {
-  return await api.get(id ? `/users/${id}/follow-artist` : `/users/follow-artist`)
+  return await api.get(id ? `/users/${id}/follow-artists` : `/users/follow-artists`)
 }
 
 /* 좋아요 한 앨범/트랙 페이지 */
