@@ -82,6 +82,7 @@ const LoginContextProvider = ({children}) => {
     setIsLogin(true)
     sessionStorage.setItem("isLogin", "true")
     // 사용자 정보
+    setUserInfo(data)
     sessionStorage.setItem("userInfo", JSON.stringify(data))
     // 권한 정보
     const updateRoles = {isUser: false, isAdmin: false}
