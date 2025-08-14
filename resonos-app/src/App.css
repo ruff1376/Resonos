@@ -38,48 +38,94 @@
     border: none !important;
 }
 
-/* 스윗 얼럿 css */
-.swal2-popup {
+/* 스윗 트아 얼럿 css */
+.ta-wrapper .swal2-popup {
     background: var(--background-color) !important;
     padding: 20px !important;
     border-radius: 20px !important;
     border: 2px solid var(--main-color) !important;
 }
 
-.swal2-title {
+.ta-wrapper .swal2-title {
     color: var(--main-color) !important;
     font-size: 2.0rem !important;
     margin-bottom: 20px !important;
 }
 
-.swal2-confirm {
+.ta-wrapper .swal2-confirm {
     background-color: var(--main-color) !important;
     color: var(--background-color) !important;
     font-size: 1.6rem !important;
     font-weight: bold !important;
 }
 
-.swal2-cancel {
+.ta-wrapper .swal2-cancel {
     background-color: var(--main-color) !important;
     color: var(--background-color) !important;
     font-size: 1.6rem !important;
     font-weight: bold !important;
 }
 
-.swal2-content {
+.ta-wrapper .swal2-content {
     color: white !important;
 }
 
-.swal2-html-container {
+.ta-wrapper .swal2-html-container {
     color: white !important;
     font-weight: bold !important;
     font-size: 1.3rem !important;
 }
 
-.swal2-select {
+.ta-wrapper .swal2-select {
     background-color: var(--background-color) !important;
 }
 
-.swal2-icon {
+.ta-wrapper .swal2-icon {
+    margin-top: 10px !important;
+}
+
+/* 스윗 앨범 css */
+.album-wrapper .swal2-popup {
+    background: var(--background-color) !important;
+    padding: 20px !important;
+    border-radius: 20px !important;
+    border: 2px solid var(--main-color) !important;
+}
+
+.album-wrapper .swal2-title {
+    color: var(--main-color) !important;
+    font-size: 2.0rem !important;
+    margin-bottom: 20px !important;
+}
+
+.album-wrapper .swal2-confirm {
+    background-color: var(--main-color) !important;
+    color: var(--background-color) !important;
+    font-size: 1.6rem !important;
+    font-weight: bold !important;
+}
+
+.album-wrapper .swal2-cancel {
+    background-color: var(--main-color) !important;
+    color: var(--background-color) !important;
+    font-size: 1.6rem !important;
+    font-weight: bold !important;
+}
+
+.album-wrapper .swal2-content {
+    color: white !important;
+}
+
+.album-wrapper.swal2-html-container {
+    color: white !important;
+    font-weight: bold !important;
+    font-size: 1.3rem !important;
+}
+
+.album-wrapper .swal2-select {
+    background-color: var(--background-color) !important;
+}
+
+.album-wrapper .swal2-icon {
     margin-top: 10px !important;
 }
