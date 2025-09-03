@@ -117,6 +117,7 @@
 
 <details>
   <summary><h3>테이블 정의</h3></summary>
+  <a href="https://docs.google.com/spreadsheets/d/197UEqg--TpaKUv3LK0yC1JwajKhI-rdYyBE1SmXbPPc/edit?gid=702686551#gid=702686551">전체보기</a>
   
   ![Image](https://github.com/user-attachments/assets/f61cf7dd-5cb5-4c13-877d-af821a97abdf)
   ![Image](https://github.com/user-attachments/assets/d61c8135-15bc-477f-b373-b5d491b02eb7)
