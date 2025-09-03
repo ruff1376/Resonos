@@ -89,7 +89,8 @@
 
 <details>
   <summary><h3>요구사항 정의</h3></summary>
-  
+  <a href="https://docs.google.com/spreadsheets/d/197UEqg--TpaKUv3LK0yC1JwajKhI-rdYyBE1SmXbPPc/edit?gid=284806723#gid=284806723">전체보기</a>
+    
   ![Image](https://github.com/user-attachments/assets/7c49e4ce-648a-4de3-91e2-ca0c89b5abae)
 </details>
 
