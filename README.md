@@ -87,6 +87,25 @@
   ![Image](https://github.com/user-attachments/assets/2d9ccfbb-8b94-42b1-bf53-2f70743b3712)
 </details>
 
+<details>
+  <summary><h3>요구사항 정의</h3></summary>
+  
+  ![Image](https://github.com/user-attachments/assets/7c49e4ce-648a-4de3-91e2-ca0c89b5abae)
+</details>
+
+<details>
+  <summary><h3>기능 정의</h3></summary>
+  
+  ![Image](https://github.com/user-attachments/assets/61812d19-a8bf-4eda-8d38-c594871ecb7c)
+</details>
+
+<details>
+  <summary><h3>테이블 정의</h3></summary>
+  
+  ![Image](https://github.com/user-attachments/assets/f61cf7dd-5cb5-4c13-877d-af821a97abdf)
+  ![Image](https://github.com/user-attachments/assets/d61c8135-15bc-477f-b373-b5d491b02eb7)
+</details>
+
 
 
 
@@ -99,10 +118,6 @@
 ![Image](https://github.com/user-attachments/assets/d6db5e23-0cf5-493f-8f18-db62633ff622)
 ![Image](https://github.com/user-attachments/assets/d3f1204d-08c1-440a-84ab-8980edb639e9)
 ![Image](https://github.com/user-attachments/assets/f6753838-afe2-4250-95c6-5814b66dc9ee)
-![Image](https://github.com/user-attachments/assets/7c49e4ce-648a-4de3-91e2-ca0c89b5abae)
-![Image](https://github.com/user-attachments/assets/61812d19-a8bf-4eda-8d38-c594871ecb7c)
-![Image](https://github.com/user-attachments/assets/f61cf7dd-5cb5-4c13-877d-af821a97abdf)
-![Image](https://github.com/user-attachments/assets/d61c8135-15bc-477f-b373-b5d491b02eb7)
 ![Image](https://github.com/user-attachments/assets/62a4397b-c81c-4b67-aa55-6b65ba378a01)
 ![Image](https://github.com/user-attachments/assets/3099e6ae-f832-480a-b30d-f97a92b62cda)
 ![Image](https://github.com/user-attachments/assets/9f70da41-0782-4498-b6c3-5a8dfb5b1405)
