@@ -110,6 +110,19 @@
   ![Image](https://github.com/user-attachments/assets/d61c8135-15bc-477f-b373-b5d491b02eb7)
 </details>
 
+<details>
+  <summary><h3>개발 기간</h3></summary>
+  
+  ![Image](https://github.com/user-attachments/assets/1db7cba2-b2e1-4a8b-8219-71e2be0d2c3b)
+</details>
+
+
+<details>
+  <summary><h3>개발 소감</h3></summary>
+  
+  ![Image](https://github.com/user-attachments/assets/ac5d15cd-a34c-4b00-9008-75427cc1a562)
+</details>
+
 
 
 
@@ -136,9 +149,9 @@
 ![Image](https://github.com/user-attachments/assets/b2c07274-14cb-4fa3-a331-3da87996227a)
 ![Image](https://github.com/user-attachments/assets/e17768cd-8d1b-4f8a-a214-1f18de7f2aa4)
 
-![Image](https://github.com/user-attachments/assets/1db7cba2-b2e1-4a8b-8219-71e2be0d2c3b)
+
 ![Image](https://github.com/user-attachments/assets/456c31a0-96d5-4bde-89f3-00395cc8d809)
 ![Image](https://github.com/user-attachments/assets/4642f5e3-44f7-4fc4-9461-50b69f11b4bf)
 ![Image](https://github.com/user-attachments/assets/b3983335-6cb6-4d8f-af89-510f89e7ee47)
-![Image](https://github.com/user-attachments/assets/ac5d15cd-a34c-4b00-9008-75427cc1a562)
+
 ![Image](https://github.com/user-attachments/assets/79bad710-510f-4739-96c7-87105e4bf81a)
