@@ -80,6 +80,12 @@
 
 ---
 
+<details>
+  <summary><h3>팀원</h3></summary>
+  
+  ![Image](https://github.com/user-attachments/assets/d6db5e23-0cf5-493f-8f18-db62633ff622)
+  ![Image](https://github.com/user-attachments/assets/472c9b1d-1547-48da-b859-474c7da30082)
+</details>
 
 
 
@@ -90,8 +96,6 @@
 ![Image](https://github.com/user-attachments/assets/debc3d7d-cff3-41d2-be44-3083f9f3065d)
 ![Image](https://github.com/user-attachments/assets/73b99852-8607-432e-968e-11d8e3b2d4c0)
 ![Image](https://github.com/user-attachments/assets/eaa059af-b884-4823-bcc8-e5ea78c81775)
-![Image](https://github.com/user-attachments/assets/d6db5e23-0cf5-493f-8f18-db62633ff622)
-![Image](https://github.com/user-attachments/assets/472c9b1d-1547-48da-b859-474c7da30082)
 ![Image](https://github.com/user-attachments/assets/2d9ccfbb-8b94-42b1-bf53-2f70743b3712)
 ![Image](https://github.com/user-attachments/assets/d3f1204d-08c1-440a-84ab-8980edb639e9)
 ![Image](https://github.com/user-attachments/assets/f6753838-afe2-4250-95c6-5814b66dc9ee)
