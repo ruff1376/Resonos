@@ -81,6 +81,12 @@
 ---
 
 <details>
+  <summary><h3>개발 목적</h3></summary>
+  
+  ![Image](https://github.com/user-attachments/assets/73b99852-8607-432e-968e-11d8e3b2d4c0)
+</details>
+
+<details>
   <summary><h3>팀원</h3></summary>
   
   ![Image](https://github.com/user-attachments/assets/472c9b1d-1547-48da-b859-474c7da30082)
@@ -117,13 +123,29 @@
 </details>
 
 <details>
-  <summary><h3>핵심 기능</h3></summary>
+  <summary><h3>메인 페이지 기능</h3></summary>
+  
+  ![Image](https://github.com/user-attachments/assets/62a4397b-c81c-4b67-aa55-6b65ba378a01)
+  ![Image](https://github.com/user-attachments/assets/3099e6ae-f832-480a-b30d-f97a92b62cda)
+  ![Image](https://github.com/user-attachments/assets/9f70da41-0782-4498-b6c3-5a8dfb5b1405)
+  ![Image](https://github.com/user-attachments/assets/07b4ddbb-511d-408f-b868-9d01b736a7cb)
+  ![Image](https://github.com/user-attachments/assets/570a8ef7-f862-4cec-8f70-ea2533460edd)
+</details>
+
+<details>
+  <summary><h3>마이페이지 기능</h3></summary>
   
   ![Image](https://github.com/user-attachments/assets/ac5d15cd-a34c-4b00-9008-75427cc1a562)
 </details>
 
 <details>
-  <summary><h3>개인 소감</h3></summary>
+  <summary><h3>트랙, 앨범, 아티스트 페이지</h3></summary>
+  
+  ![Image](https://github.com/user-attachments/assets/ac5d15cd-a34c-4b00-9008-75427cc1a562)
+</details>
+
+<details>
+  <summary><h3>관리자 페이지 기능</h3></summary>
   
   ![Image](https://github.com/user-attachments/assets/ac5d15cd-a34c-4b00-9008-75427cc1a562)
 </details>
@@ -141,16 +163,12 @@
 
 ![Image](https://github.com/user-attachments/assets/bd669b2b-1996-4467-b3a7-971e9b7a52ff)
 ![Image](https://github.com/user-attachments/assets/debc3d7d-cff3-41d2-be44-3083f9f3065d)
-![Image](https://github.com/user-attachments/assets/73b99852-8607-432e-968e-11d8e3b2d4c0)
+
 ![Image](https://github.com/user-attachments/assets/eaa059af-b884-4823-bcc8-e5ea78c81775)
 ![Image](https://github.com/user-attachments/assets/d6db5e23-0cf5-493f-8f18-db62633ff622)
 ![Image](https://github.com/user-attachments/assets/d3f1204d-08c1-440a-84ab-8980edb639e9)
 ![Image](https://github.com/user-attachments/assets/f6753838-afe2-4250-95c6-5814b66dc9ee)
-![Image](https://github.com/user-attachments/assets/62a4397b-c81c-4b67-aa55-6b65ba378a01)
-![Image](https://github.com/user-attachments/assets/3099e6ae-f832-480a-b30d-f97a92b62cda)
-![Image](https://github.com/user-attachments/assets/9f70da41-0782-4498-b6c3-5a8dfb5b1405)
-![Image](https://github.com/user-attachments/assets/07b4ddbb-511d-408f-b868-9d01b736a7cb)
-![Image](https://github.com/user-attachments/assets/570a8ef7-f862-4cec-8f70-ea2533460edd)
+
 ![Image](https://github.com/user-attachments/assets/cf5b65db-2c7b-43e5-8fd5-a4fee978c828)
 ![Image](https://github.com/user-attachments/assets/918050b9-8f21-41b1-aefd-b2ca0862e53c)
 ![Image](https://github.com/user-attachments/assets/2c368398-9205-4968-9b51-8e09e93e20c5)
