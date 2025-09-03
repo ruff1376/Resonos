@@ -152,7 +152,7 @@
 <details>
   <summary><h3>관리자 페이지 기능</h3></summary>
   
-  ![Image](https://github.com/user-attachments/assets/ac5d15cd-a34c-4b00-9008-75427cc1a562)
+  ![Image](https://github.com/user-attachments/assets/e17768cd-8d1b-4f8a-a214-1f18de7f2aa4)
 </details>
 
 <details>
@@ -165,22 +165,15 @@
 
 
 
-
+<!--
 ![Image](https://github.com/user-attachments/assets/bd669b2b-1996-4467-b3a7-971e9b7a52ff)
 ![Image](https://github.com/user-attachments/assets/debc3d7d-cff3-41d2-be44-3083f9f3065d)
-
 ![Image](https://github.com/user-attachments/assets/eaa059af-b884-4823-bcc8-e5ea78c81775)
 ![Image](https://github.com/user-attachments/assets/d6db5e23-0cf5-493f-8f18-db62633ff622)
 ![Image](https://github.com/user-attachments/assets/d3f1204d-08c1-440a-84ab-8980edb639e9)
 ![Image](https://github.com/user-attachments/assets/f6753838-afe2-4250-95c6-5814b66dc9ee)
-
-
-
-![Image](https://github.com/user-attachments/assets/e17768cd-8d1b-4f8a-a214-1f18de7f2aa4)
-
-
 ![Image](https://github.com/user-attachments/assets/456c31a0-96d5-4bde-89f3-00395cc8d809)
 ![Image](https://github.com/user-attachments/assets/4642f5e3-44f7-4fc4-9461-50b69f11b4bf)
 ![Image](https://github.com/user-attachments/assets/b3983335-6cb6-4d8f-af89-510f89e7ee47)
-
 ![Image](https://github.com/user-attachments/assets/79bad710-510f-4739-96c7-87105e4bf81a)
+-->
