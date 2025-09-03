@@ -1,3 +1,91 @@
+# 🎶 Resonos
+
+> 음악(앨범, 아티스트, 트랙, 플레이리스트) 리뷰 및 커뮤니티 플랫폼  
+
+---
+
+## 🛠 기술 스택
+- **Backend**: Spring Boot (MVC, Security)
+- **Database**: MyBatis (DB 매퍼)
+- **Frontend**: Thymeleaf (뷰 템플릿)
+- **Scheduler**: 자동화 배지 지급
+- **Auth**: OAuth2 / OIDC 소셜 로그인 (Kakao, Naver, Google)
+- **External API**: Spotify, YouTube API
+
+---
+
+## 📌 주요 기능
+
+### 🎵 음악
+- 앨범, 아티스트, 트랙 엔티티 관리
+- Spotify API 동기화 (아티스트/앨범/트랙 데이터 가져오기)
+- 음악 검색, 인기/최신 목록
+- 좋아요 / 팔로우 시스템 (앨범, 아티스트, 트랙)
+- **차트 시스템**: 사용자 평가 기반 (`ChartElement`, `ChartEntry`)
+
+---
+
+### 📝 리뷰 & 평가
+- 앨범/트랙 리뷰 작성 & 평점
+- 리뷰 좋아요, 신고, 블라인드 처리
+- 차트 평가 항목 점수화 (가사, 사운드, 멜로디 등)
+- **배지 시스템 연동** (작성 수/댓글 수 기반 지급)
+
+---
+
+### 👤 회원 / 관리
+- 일반 회원가입 & 소셜 로그인 (OAuth2, OIDC)
+- 회원 검색 / 활성화 / 비활성화 / 제재(밴)
+- 회원 활동 로그 (`UserActivityLog`) 기록
+- 프로필 / 이미지 업로드
+
+---
+
+### 🏅 배지 시스템
+- 엔티티: `Badge`, `BadgeCondition`, `UserBadge`
+- 자동 지급 서비스 (`AutomationScheduler`, 5분 주기)
+- 조건 중복 방지 & 조건 기반 지급
+
+---
+
+### 📢 공지 & 알림
+- 공지사항 등록 및 노출 기간 관리
+  - 사용자별 읽음 처리  
+  - 전체 삭제  
+  - 페이징 조회  
+
+---
+
+### 🛡 관리자(Admin)
+- **대시보드**: 회원 수, 신고 수, 게시물 통계
+- 신고 관리 (`Report`) → 상태 (`PENDING / DONE / REJECTED`)
+- 음악 관리 (수정/삭제, 외부 동기화)
+- 정책 및 환경설정 (`AdminPnSController`)
+- 뱃지 / 권한(Role) 관리
+- 로그 시스템 (`AdminLog CRUD`)
+
+---
+
+## 🔒 보안
+- Spring Security + `CustomUser` (`UserDetails`)
+- `LoginSuccessHandler`, OAuth2/OIDC UserService
+- WebSocket 인증 기반 실시간 알림
+
+---
+
+## 🚀 향후 확장
+- Playlist 기능 확장 (협업 플레이리스트)
+- 추천 시스템 (사용자 취향 기반 음악 추천)
+- 글로벌 차트 및 지역별 트렌드 분석
+
+---
+
+
+
+
+
+
+
 ![Image](https://github.com/user-attachments/assets/bd669b2b-1996-4467-b3a7-971e9b7a52ff)
 ![Image](https://github.com/user-attachments/assets/debc3d7d-cff3-41d2-be44-3083f9f3065d)
 ![Image](https://github.com/user-attachments/assets/73b99852-8607-432e-968e-11d8e3b2d4c0)
