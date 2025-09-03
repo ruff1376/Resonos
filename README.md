@@ -135,13 +135,18 @@
 <details>
   <summary><h3>마이페이지 기능</h3></summary>
   
-  ![Image](https://github.com/user-attachments/assets/ac5d15cd-a34c-4b00-9008-75427cc1a562)
+  ![Image](https://github.com/user-attachments/assets/cf5b65db-2c7b-43e5-8fd5-a4fee978c828)
+  ![Image](https://github.com/user-attachments/assets/918050b9-8f21-41b1-aefd-b2ca0862e53c)
+  ![Image](https://github.com/user-attachments/assets/2c368398-9205-4968-9b51-8e09e93e20c5)
+  ![Image](https://github.com/user-attachments/assets/4b48a2c1-7b9f-4051-a8d4-a5e34f65e7c5)
 </details>
 
 <details>
   <summary><h3>트랙, 앨범, 아티스트 페이지</h3></summary>
   
-  ![Image](https://github.com/user-attachments/assets/ac5d15cd-a34c-4b00-9008-75427cc1a562)
+  ![Image](https://github.com/user-attachments/assets/a811649f-9672-4f85-bae8-9e57be375c32)
+  ![Image](https://github.com/user-attachments/assets/30e56cde-440a-4bcb-920d-25946f52a065)
+  ![Image](https://github.com/user-attachments/assets/b2c07274-14cb-4fa3-a331-3da87996227a)
 </details>
 
 <details>
@@ -169,13 +174,8 @@
 ![Image](https://github.com/user-attachments/assets/d3f1204d-08c1-440a-84ab-8980edb639e9)
 ![Image](https://github.com/user-attachments/assets/f6753838-afe2-4250-95c6-5814b66dc9ee)
 
-![Image](https://github.com/user-attachments/assets/cf5b65db-2c7b-43e5-8fd5-a4fee978c828)
-![Image](https://github.com/user-attachments/assets/918050b9-8f21-41b1-aefd-b2ca0862e53c)
-![Image](https://github.com/user-attachments/assets/2c368398-9205-4968-9b51-8e09e93e20c5)
-![Image](https://github.com/user-attachments/assets/4b48a2c1-7b9f-4051-a8d4-a5e34f65e7c5)
-![Image](https://github.com/user-attachments/assets/a811649f-9672-4f85-bae8-9e57be375c32)
-![Image](https://github.com/user-attachments/assets/30e56cde-440a-4bcb-920d-25946f52a065)
-![Image](https://github.com/user-attachments/assets/b2c07274-14cb-4fa3-a331-3da87996227a)
+
+
 ![Image](https://github.com/user-attachments/assets/e17768cd-8d1b-4f8a-a214-1f18de7f2aa4)
 
 
