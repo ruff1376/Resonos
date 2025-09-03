@@ -88,6 +88,12 @@
 </details>
 
 <details>
+  <summary><h3>개발 기간</h3></summary>
+  
+  ![Image](https://github.com/user-attachments/assets/1db7cba2-b2e1-4a8b-8219-71e2be0d2c3b)
+</details>
+
+<details>
   <summary><h3>요구사항 정의</h3></summary>
   <a href="https://docs.google.com/spreadsheets/d/197UEqg--TpaKUv3LK0yC1JwajKhI-rdYyBE1SmXbPPc/edit?gid=284806723#gid=284806723" target="">전체보기</a>
   <br>
@@ -111,14 +117,19 @@
 </details>
 
 <details>
-  <summary><h3>개발 기간</h3></summary>
+  <summary><h3>핵심 기능</h3></summary>
   
-  ![Image](https://github.com/user-attachments/assets/1db7cba2-b2e1-4a8b-8219-71e2be0d2c3b)
+  ![Image](https://github.com/user-attachments/assets/ac5d15cd-a34c-4b00-9008-75427cc1a562)
 </details>
 
+<details>
+  <summary><h3>개인 소감</h3></summary>
+  
+  ![Image](https://github.com/user-attachments/assets/ac5d15cd-a34c-4b00-9008-75427cc1a562)
+</details>
 
 <details>
-  <summary><h3>개발 소감</h3></summary>
+  <summary><h3>개인 소감</h3></summary>
   
   ![Image](https://github.com/user-attachments/assets/ac5d15cd-a34c-4b00-9008-75427cc1a562)
 </details>
