@@ -89,13 +89,16 @@
 
 <details>
   <summary><h3>요구사항 정의</h3></summary>
-  <a href="https://docs.google.com/spreadsheets/d/197UEqg--TpaKUv3LK0yC1JwajKhI-rdYyBE1SmXbPPc/edit?gid=284806723#gid=284806723">전체보기</a>
-    
+  <a href="https://docs.google.com/spreadsheets/d/197UEqg--TpaKUv3LK0yC1JwajKhI-rdYyBE1SmXbPPc/edit?gid=284806723#gid=284806723" target="">전체보기</a>
+  <br>
+  
   ![Image](https://github.com/user-attachments/assets/7c49e4ce-648a-4de3-91e2-ca0c89b5abae)
 </details>
 
 <details>
   <summary><h3>기능 정의</h3></summary>
+  <a href="https://docs.google.com/spreadsheets/d/197UEqg--TpaKUv3LK0yC1JwajKhI-rdYyBE1SmXbPPc/edit?gid=945099833#gid=945099833" taget="_blank">전체보기</a>
+  <br>
   
   ![Image](https://github.com/user-attachments/assets/61812d19-a8bf-4eda-8d38-c594871ecb7c)
 </details>
