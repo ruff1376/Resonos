@@ -135,6 +135,8 @@
 
 <details>
   <summary><h3>마이페이지 기능</h3></summary>
+  <a href="https://innate-rise-1ac.notion.site/Resonos-Spring-4449c9efda47420eb653a64ec16d725e">자세히 보기</a>
+  <br>
   
   ![Image](https://github.com/user-attachments/assets/cf5b65db-2c7b-43e5-8fd5-a4fee978c828)
   ![Image](https://github.com/user-attachments/assets/918050b9-8f21-41b1-aefd-b2ca0862e53c)
