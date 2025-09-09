@@ -7,7 +7,7 @@
 
 | 프로필 | 이름 | 역할 |
 |--------|------|------|
-| <img src="https://avatars.githubusercontent.com/ruff1376" width="40"> | [한지용](https://github.com/ruff1376) | 풀스택 |
+| <img src="https://avatars.githubusercontent.com/ruff1376" width="40"> | [한지용](https://github.com/ruff1376) | 컨텐츠 목록 표시, 검색 및 정렬, 페이지네이션, DB 설계 |
 | <img src="https://avatars.githubusercontent.com/GUNW-O-O" width="40"> | [고건우](https://github.com/GUNW-O-O) | 풀스택 |
 | <img src="https://avatars.githubusercontent.com/Lee-0210" width="40"> | [이준영](https://github.com/Lee-0210) | 풀스택 |
 | <img src="https://avatars.githubusercontent.com/skymin022" width="40"> | [윤홍민](https://github.com/skymin022) | 풀스택 |
